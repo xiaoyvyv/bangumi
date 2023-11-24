@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_today_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:drawableEnd="@drawable/ic_right"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="今日放送"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:drawableTint="?attr/colorOnSurface" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_today_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:drawableTint="?attr/colorOnSurface"
+        tools:text="今日上映 17 部。共 25511 人收看今日番组。" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_today"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_card_height"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/view_home_card_item" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_tomorrow_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:drawableEnd="@drawable/ic_right"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingTop="@dimen/ui_size_12"
+        android:text="明日放送"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:drawableTint="?attr/colorOnSurface" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_tomorrow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_card_height"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/view_home_card_item" />
+</androidx.appcompat.widget.LinearLayoutCompat>

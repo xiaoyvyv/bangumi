@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.ui
 
+import android.graphics.Color
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 

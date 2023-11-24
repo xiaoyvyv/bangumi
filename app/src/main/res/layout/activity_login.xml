@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="@string/login_title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/ui_size_50"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.xiaoyv.common.widget.image.AnimeImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="@dimen/ui_size_0"
+            android:background="@color/ui_transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="600:430"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.05"
+            app:layout_constraintWidth_percent="0.5"
+            app:srcCompat="@drawable/bg_login" />
+
+        <com.xiaoyv.common.widget.text.AnimeEditTextView
+            android:id="@+id/input_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_size_24"
+            android:background="@drawable/ui_shape_rectangle_corner_6"
+            android:backgroundTint="?attr/colorSurfaceContainer"
+            android:ellipsize="end"
+            android:hint="@string/login_input_email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_size_12"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+
+        <com.xiaoyv.common.widget.text.AnimeEditTextView
+            android:id="@+id/input_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_size_24"
+            android:background="@drawable/ui_shape_rectangle_corner_6"
+            android:backgroundTint="?attr/colorSurfaceContainer"
+            android:ellipsize="end"
+            android:hint="@string/login_input_password"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_size_12"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintTop_toBottomOf="@+id/input_email" />
+
+        <com.xiaoyv.common.widget.image.AnimeImageView
+            android:id="@+id/iv_verify"
+            android:layout_width="@dimen/ui_size_120"
+            android:layout_height="@dimen/ui_size_0"
+            app:layout_constraintBottom_toBottomOf="@+id/input_verify"
+            app:layout_constraintEnd_toStartOf="@+id/input_verify"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_verify"
+            app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+        <com.xiaoyv.common.widget.text.AnimeEditTextView
+            android:id="@+id/input_verify"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ui_size_24"
+            android:layout_marginTop="@dimen/ui_size_24"
+            android:background="@drawable/ui_shape_rectangle_corner_6"
+            android:backgroundTint="?attr/colorSurfaceContainer"
+            android:ellipsize="end"
+            android:hint="@string/login_input_verify"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_size_12"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_verify"
+            app:layout_constraintTop_toBottomOf="@+id/input_password" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_size_32"
+            android:gravity="center"
+            android:paddingVertical="@dimen/ui_size_12"
+            android:text="@string/login_btn_login"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_verify"
+            app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

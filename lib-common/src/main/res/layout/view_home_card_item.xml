@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/home_card_height"
     android:layout_marginHorizontal="@dimen/ui_size_8"
+    android:paddingVertical="@dimen/ui_layout_margin"
     tools:showIn="@layout/view_home_card">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/card_small"
-        android:visibility="visible"
         android:layout_width="@dimen/ui_size_120"
-        android:layout_height="@dimen/ui_size_150"
+        android:layout_height="match_parent"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"

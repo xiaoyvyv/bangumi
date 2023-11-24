@@ -7,5 +7,7 @@ package com.xiaoyv.common.api.parser.entity
  * @since 11/24/23
  */
 data class HomeIndexEntity(
-    var images: List<HomeImageCardEntity> = emptyList(),
+    var banner: HomeIndexBannerEntity = HomeIndexBannerEntity(),
+    var images: List<HomeIndexCardEntity> = emptyList(),
+    var calendar: HomeIndexCalendarEntity = HomeIndexCalendarEntity()
 )

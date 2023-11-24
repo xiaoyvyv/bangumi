@@ -1,0 +1,13 @@
+<resources>
+    <string name="login_title">登录 Bangumi</string>
+    <string name="login_result_tip">咕噜~咕噜~</string>
+    <string name="login_result_known">知道了</string>
+    <string name="login_result_error">登录出错</string>
+    <string name="login_input_error_email">请输入邮箱</string>
+    <string name="login_input_error_password">请输入密码</string>
+    <string name="login_input_error_verify">请输入验证码</string>
+    <string name="login_input_password">密码</string>
+    <string name="login_input_email">邮箱</string>
+    <string name="login_input_verify">验证码</string>
+    <string name="login_btn_login">登录</string>
+</resources>

@@ -66,10 +66,9 @@
         android:id="@+id/rv_small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/ui_size_150"
+        android:minHeight="@dimen/home_card_height"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/ui_size_8"
-        android:paddingVertical="@dimen/ui_layout_margin"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/card_big"
         tools:listitem="@layout/view_home_card_item" />

@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.ui.home
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.databinding.FragmentHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.widget.kts.useNotNull
 
 /**
  * Class: [HomeFragment]
@@ -15,6 +16,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
     private val contentAdapter by lazy { HomeAdapter() }
 
     override fun initView() {
+        binding.rvContent.setHasFixedSize(true)
         binding.rvContent.adapter = contentAdapter
     }
 
@@ -24,9 +26,16 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
 
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onHomeIndexLiveData.observe(this) {
-            val cardEntities = it?.images.orEmpty()
+            val contentItems: MutableList<Any> = it?.images.orEmpty().toMutableList()
+            useNotNull(it?.calendar) {
+                contentItems.add(0, this)
+            }
+            useNotNull(it?.banner) {
+                contentItems.add(0, this)
+            }
 
-            contentAdapter.submitList(cardEntities)
+            binding.rvContent.setItemViewCacheSize(contentItems.size)
+            contentAdapter.submitList(contentItems)
         }
     }
 

@@ -16,10 +16,13 @@ class CommonInterceptor : Interceptor {
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+
         return chain.proceed(
-            chain.request()
+            request
                 .newBuilder()
                 .addHeader("User-Agent", userAgent)
+                .addHeader("Referer", request.url.toString())
                 .build()
         )
     }

@@ -4,7 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.xiaoyv.common.api.parser.entity.HomeImageCardEntity
+import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
+import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.databinding.ViewHomeCardBinding
 import com.xiaoyv.common.databinding.ViewHomeCardItemBinding
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -26,16 +27,18 @@ class HomeCardView @JvmOverloads constructor(
     private val binding = ViewHomeCardBinding.inflate(LayoutInflater.from(context), this)
     private val itemAdapter by lazy { ItemAdapter() }
 
-    var data: HomeImageCardEntity? = null
+    var data: HomeIndexCardEntity? = null
         set(value) {
             field = value
             refreshCardImages()
         }
 
-    var onItemClick: (HomeImageCardEntity.HomeImageEntity) -> Unit = {}
+    var onItemClick: (BgmMediaEntity) -> Unit = {}
 
     init {
+        binding.rvSmall.setHasFixedSize(true)
         binding.rvSmall.adapter = itemAdapter
+
         itemAdapter.setOnDebouncedItemClickListener {
             onItemClick(it)
         }
@@ -60,8 +63,8 @@ class HomeCardView @JvmOverloads constructor(
     }
 
     class ItemAdapter :
-        BaseQuickBindingAdapter<HomeImageCardEntity.HomeImageEntity, ViewHomeCardItemBinding>() {
-        override fun BaseQuickBindingHolder<ViewHomeCardItemBinding>.converted(item: HomeImageCardEntity.HomeImageEntity) {
+        BaseQuickBindingAdapter<BgmMediaEntity, ViewHomeCardItemBinding>() {
+        override fun BaseQuickBindingHolder<ViewHomeCardItemBinding>.converted(item: BgmMediaEntity) {
             binding.cardSmall.loadImage(item.image)
             binding.cardSmallTitle.text = item.title
             binding.cardSmallAttention.text = item.attention

@@ -14,5 +14,6 @@ fun String.fetchStyleBackgroundUrl(): String {
 }
 
 fun String.optImageUrl(): String {
-    return replace("/r/(.*?)/".toRegex(), "/r/600/")
+    val imageUrl = if (startsWith("//")) "https:$this" else this
+    return imageUrl.replace("/r/(.*?)/".toRegex(), "/r/600/")
 }

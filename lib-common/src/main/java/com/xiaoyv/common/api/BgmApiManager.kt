@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.api.BgmWebApi
 import com.xiaoyv.common.api.converter.WebDocumentConverter
 import com.xiaoyv.common.api.converter.WebHtmlConverter
 import com.xiaoyv.common.api.interceptor.CommonInterceptor
+import okhttp3.CookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -39,22 +40,44 @@ class BgmApiManager {
             .build()
     }
 
-    private val retrofit by lazy {
+    private val noCookieHttpClient by lazy {
+        httpClient.newBuilder()
+            .cookieJar(CookieJar.NO_COOKIES)
+            .build()
+    }
+
+    /**
+     * 此 Retrofit 有 Cookie 持久化
+     */
+    private val webRetrofit by lazy {
         Retrofit.Builder()
             .addConverterFactory(WebHtmlConverter.create())
             .addConverterFactory(WebDocumentConverter.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
+            .baseUrl(URL_BASE_WEB)
+            .build()
+    }
+
+    /**
+     * 此 Retrofit 没有 Cookie 持久化
+     */
+    private val apiRetrofit by lazy {
+        Retrofit.Builder()
+            .addConverterFactory(WebHtmlConverter.create())
+            .addConverterFactory(WebDocumentConverter.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(noCookieHttpClient)
             .baseUrl(URL_BASE_API)
             .build()
     }
 
     private val bgmWebApi by lazy {
-        retrofit.create(BgmWebApi::class.java)
+        webRetrofit.create(BgmWebApi::class.java)
     }
 
     private val bgmJsonApi by lazy {
-        retrofit.create(BgmJsonApi::class.java)
+        apiRetrofit.create(BgmJsonApi::class.java)
     }
 
     companion object {

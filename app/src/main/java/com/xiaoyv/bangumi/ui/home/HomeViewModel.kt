@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.HomeParser.parserHome
+import com.xiaoyv.common.api.parser.HomeParser.parserHomePage
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,7 +27,7 @@ class HomeViewModel : BaseViewModel() {
             error = { it.printStackTrace() },
             block = {
                 onHomeIndexLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryMainPage().parserHome()
+                    BgmApiManager.bgmJsonApi.queryMainPage().parserHomePage()
                 }
 
 //                debugLog(document.text())

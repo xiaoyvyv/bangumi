@@ -26,7 +26,6 @@
         android:theme="@style/Theme.Bangumi"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -36,9 +35,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.HomeActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.login.LoginActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
     </application>

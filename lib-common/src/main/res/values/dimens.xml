@@ -1,3 +1,4 @@
 <resources>
     <dimen name="ui_layout_margin">16dp</dimen>
+    <dimen name="home_card_height">200dp</dimen>
 </resources>

@@ -16,6 +16,6 @@ class AnimeImageView @JvmOverloads constructor(
 ) : ShapeableImageView(context, attrs) {
 
     init {
-        setBackgroundColor(getColor(com.xiaoyv.widget.R.color.ui_text_c4))
+        if (background == null) setBackgroundColor(getColor(com.xiaoyv.widget.R.color.ui_text_c4))
     }
 }

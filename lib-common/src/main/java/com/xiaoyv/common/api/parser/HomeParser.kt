@@ -1,10 +1,15 @@
 package com.xiaoyv.common.api.parser
 
+import androidx.core.text.parseAsHtml
 import com.xiaoyv.blueprint.kts.toJson
-import com.xiaoyv.common.api.parser.entity.HomeImageCardEntity
+import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
+import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
+import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
+import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import com.xiaoyv.common.kts.debugLog
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * Class: [HomeParser]
@@ -14,11 +19,18 @@ import org.jsoup.nodes.Document
  */
 object HomeParser {
 
-    fun Document.parserHome(): HomeIndexEntity {
+    fun Document.parserHomePage(): HomeIndexEntity {
         val entity = HomeIndexEntity()
 
+        entity.banner = HomeIndexBannerEntity(
+            listOf(
+                "https://lain.bgm.tv/pic/cover/l/13/c5/400602_ZI8Y9.jpg",
+                "https://lain.bgm.tv/pic/cover/l/13/c5/400602_ZI8Y9.jpg",
+                "https://lain.bgm.tv/pic/cover/l/13/c5/400602_ZI8Y9.jpg"
+            )
+        )
         entity.images = select("#featuredItems li").map {
-            val imageCardEntity = HomeImageCardEntity()
+            val imageCardEntity = HomeIndexCardEntity()
 
             val titleRef = it.select("h2.title")
             imageCardEntity.title = titleRef.text()
@@ -43,7 +55,7 @@ object HomeParser {
                     imageUrl = item.select(".grid").attr("style")
                         .fetchStyleBackgroundUrl().optImageUrl()
                 }
-                HomeImageCardEntity.HomeImageEntity(
+                BgmMediaEntity(
                     title = title,
                     image = imageUrl,
                     attention = attention,
@@ -54,8 +66,31 @@ object HomeParser {
             imageCardEntity
         }
 
+        val tip = select("#home_calendar .tip").text()
+        entity.calendar = select("#home_calendar .week").let {
+            val today = it.getOrNull(0)
+            val tomorrow = it.getOrNull(1)
+
+            HomeIndexCalendarEntity(
+                tip = tip,
+                today = today.selectCalendarItem(),
+                tomorrow = tomorrow.selectCalendarItem()
+            )
+        }
+
         debugLog { entity.toJson(true) }
 
         return entity
+    }
+
+    private fun Element?.selectCalendarItem(): List<BgmMediaEntity> {
+        val element = this ?: return emptyList()
+        return element.select(".coverList .thumbTip").map {
+            BgmMediaEntity(
+                title = it.select("a").attr("title").parseAsHtml(),
+                id = it.select("a").attr("href").substringAfterLast("/"),
+                image = it.select("img").attr("src").optImageUrl()
+            )
+        }
     }
 }
