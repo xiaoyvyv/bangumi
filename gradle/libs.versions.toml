@@ -1,26 +1,54 @@
 [versions]
 agp = "8.3.0-alpha14"
+blueprint = "1.1.30"
+fragmentKtx = "1.6.2"
+jsoup = "1.16.2"
 kotlin = "1.9.0"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
+kspVersion = "4.15.1"
+lottieVersion = "6.1.0"
 material = "1.10.0"
-activity = "1.8.0"
 constraintlayout = "2.1.4"
+activity = "1.8.1"
+persistentcookiejar = "v1.0.1"
+swiperefreshlayout = "1.1.0"
+touchimageview = "3.2.1"
+ksp = "1.9.0-1.0.11"
+lifecycleLivedataKtx = "2.6.2"
+lifecycleViewmodelKtx = "2.6.2"
+navigationFragmentKtx = "2.7.5"
+navigationUiKtx = "2.7.5"
 
 [libraries]
+android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+blueprint = { module = "io.github.xiaoyvyv:blueprint", version.ref = "blueprint" }
+glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "kspVersion" }
+glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "kspVersion" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+persistent-cookie-jar = { module = "com.github.franmontiel:PersistentCookieJar", version.ref = "persistentcookiejar" }
+touch-image-view = { module = "com.github.MikeOrtiz:TouchImageView", version.ref = "touchimageview" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+googleKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 

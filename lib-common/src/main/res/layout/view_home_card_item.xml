@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/ui_size_8"
+    tools:showIn="@layout/view_home_card">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/card_small"
+        android:visibility="visible"
+        android:layout_width="@dimen/ui_size_120"
+        android:layout_height="@dimen/ui_size_150"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_bottom_edge_corner"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/card_small"
+        app:layout_constraintEnd_toEndOf="@+id/card_small"
+        app:layout_constraintStart_toStartOf="@+id/card_small">
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/card_small_attention"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/ui_size_8"
+            android:paddingTop="@dimen/ui_size_8"
+            android:textAppearance="?attr/textAppearanceOverline"
+            android:textColor="?attr/colorOnPrimary"
+            android:textStyle="bold"
+            tools:text="123923 人关注" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/card_small_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingHorizontal="@dimen/ui_size_8"
+            android:paddingVertical="@dimen/ui_size_8"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="?attr/colorOnPrimary"
+            android:textStyle="bold"
+            tools:text="从零开始的异世界生活" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

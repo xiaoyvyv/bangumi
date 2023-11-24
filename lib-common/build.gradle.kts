@@ -1,20 +1,19 @@
 plugins {
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.xiaoyv.bangumi"
+    namespace = "com.xiaoyv.common"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.xiaoyv.bangumi"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -26,7 +25,6 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -42,14 +40,23 @@ android {
 }
 
 dependencies {
-    implementation(project(":lib-common"))
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.material)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    api(libs.blueprint)
+    api(libs.android.lottie)
+    api(libs.androidx.swiperefreshlayout)
+    api(libs.touch.image.view)
+
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.appcompat)
+    api(libs.material)
+    api(libs.androidx.constraintlayout)
+    api(libs.androidx.activity)
+    api(libs.androidx.fragment.ktx)
+    api(libs.persistent.cookie.jar)
+
+    api(libs.jsoup)
+
+    ksp(libs.glide.ksp)
+    annotationProcessor(libs.glide.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
