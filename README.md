@@ -14,4 +14,4 @@ RN的体验效果并不是很好，我决定开发一款纯原生的 Android 客
 https://github.com/xiaoyvyv/Bangumi-for-Android
 
 ### 预览
-预计首个版本开发周期 3 个月
+预计首个版本开发周期 3 个月 (2024年2月下旬)
