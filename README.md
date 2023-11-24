@@ -13,5 +13,11 @@ RN的体验效果并不是很好，我决定开发一款纯原生的 Android 客
 ### 项目更新地址
 https://github.com/xiaoyvyv/Bangumi-for-Android
 
-### 预览
+### Deadline
 预计首个版本开发周期 3 个月 (2024年2月下旬)
+
+### Features
+
+- v1.0.0
+  实现官网的动画、音乐、游戏、三次元模块
+  登录模块
