@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="ui_layout_margin">16dp</dimen>
+</resources>
