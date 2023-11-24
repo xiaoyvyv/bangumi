@@ -1,0 +1,17 @@
+# Bangumi-for-Android
+重大消息，本宅作为一位资深的Android开发从业人员，于 2023年11月决定开发一款 Bangumi 的三方客户端。
+
+本人尝试使用过 https://github.com/czy0729/Bangumi 这为为爱奉献的小伙伴的项目。
+
+RN的体验效果并不是很好，我决定开发一款纯原生的 Android 客户端，达到B站、抖音等的软件般体验流畅度。
+
+### Bangumi
+[https://bgm.tv](https://bgm.tv)
+
+[https://bangumi.tv](https://bangumi.tv)
+
+### 项目更新地址
+https://github.com/xiaoyvyv/Bangumi-for-Android
+
+### 预览
+预计首个版本开发周期 3 个月
