@@ -6,9 +6,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.blankj.utilcode.util.ActivityUtils
 import com.xiaoyv.bangumi.databinding.ActivityMainBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.HomeActivity
-import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
-import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 class MainActivity : AppCompatActivity() {
@@ -27,10 +26,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.login.setOnFastLimitClickListener {
-            ActivityUtils.startActivity(LoginActivity::class.java)
+            RouteHelper.jumpLogin()
         }
+
         binding.calendar.setOnFastLimitClickListener {
-            ActivityUtils.startActivity(CalendarActivity::class.java)
+            RouteHelper.jumpCalendar()
+        }
+
+        binding.robot.setOnFastLimitClickListener {
+            RouteHelper.jumpRobot()
         }
     }
 }

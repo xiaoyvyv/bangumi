@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    api(project(":lib-live2d"))
+
     api(libs.blueprint)
     api(libs.android.lottie)
     api(libs.androidx.swiperefreshlayout)
@@ -57,6 +59,8 @@ dependencies {
 
     ksp(libs.glide.ksp)
     annotationProcessor(libs.glide.compiler)
+
+    compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
