@@ -31,6 +31,51 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class LAppDelegate implements GLSurfaceView.Renderer {
+
+    @SuppressLint("StaticFieldLeak")
+    private static LAppDelegate s_instance;
+
+    private Context context;
+
+    private final CubismFramework.Option cubismOption = new CubismFramework.Option();
+
+    private LAppTextureManager textureManager;
+    private LAppView view;
+    private int windowWidth;
+    private int windowHeight;
+    private boolean isActive = true;
+
+    /**
+     * Model Scene Index
+     */
+    private LAppDefine.ModelDir currentModel;
+
+    /**
+     * Are you clicking?
+     */
+    private boolean isCaptured;
+    /**
+     * X coordinate of the mouse
+     */
+    private float mouseX;
+
+    /**
+     * Y coordinate of the mouse
+     */
+    private float mouseY;
+
+    private LAppDelegate() {
+        currentModel = LAppDefine.ModelDir.values()[0];
+
+        // Set up Cubism SDK framework.
+        cubismOption.logFunction = new LAppPal.PrintLogFunction();
+        cubismOption.loggingLevel = LAppDefine.cubismLoggingLevel;
+
+        CubismFramework.cleanUp();
+        CubismFramework.startUp(cubismOption);
+    }
+
+
     public static LAppDelegate getInstance() {
         if (s_instance == null) {
             s_instance = new LAppDelegate();
@@ -54,8 +99,9 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
         isActive = false;
     }
 
-    public void onStart(Context context) {
+    public void onResume(Context context) {
         textureManager = new LAppTextureManager();
+
         view = new LAppView();
 
         this.context = context;
@@ -64,10 +110,6 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
     }
 
     public void onPause() {
-        currentModel = LAppLive2DManager.getInstance().getCurrentModel();
-    }
-
-    public void onStop() {
         view = null;
         textureManager = null;
 
@@ -77,6 +119,10 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
 
     public void onDestroy() {
         releaseInstance();
+    }
+
+    public void refreshModel() {
+        currentModel = LAppLive2DManager.getInstance().getCurrentModel();
     }
 
     @Override
@@ -121,7 +167,7 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
         LAppPal.updateTime();
 
         // 画面初期化
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, .0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearDepthf(1.0f);
 
@@ -232,46 +278,4 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
         return windowHeight;
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private static LAppDelegate s_instance;
-
-    private LAppDelegate() {
-        currentModel = LAppDefine.ModelDir.values()[0];
-
-        // Set up Cubism SDK framework.
-        cubismOption.logFunction = new LAppPal.PrintLogFunction();
-        cubismOption.loggingLevel = LAppDefine.cubismLoggingLevel;
-
-        CubismFramework.cleanUp();
-        CubismFramework.startUp(cubismOption);
-    }
-
-    private Context context;
-
-    private final CubismFramework.Option cubismOption = new CubismFramework.Option();
-
-    private LAppTextureManager textureManager;
-    private LAppView view;
-    private int windowWidth;
-    private int windowHeight;
-    private boolean isActive = true;
-
-    /**
-     * Model Scene Index
-     */
-    private LAppDefine.ModelDir currentModel;
-
-    /**
-     * Are you clicking?
-     */
-    private boolean isCaptured;
-    /**
-     * X coordinate of the mouse
-     */
-    private float mouseX;
-
-    /**
-     * Y coordinate of the mouse
-     */
-    private float mouseY;
 }

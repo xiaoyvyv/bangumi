@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.0-alpha14"
-blueprint = "1.1.30"
+blueprint = "1.1.31"
 fragmentKtx = "1.6.2"
 jsoup = "1.16.2"
 kotlin = "1.9.0"
@@ -29,6 +29,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 blueprint = { module = "io.github.xiaoyvyv:blueprint", version.ref = "blueprint" }
+blueprint-floater = { module = "io.github.xiaoyvyv:floater", version.ref = "blueprint" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "kspVersion" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "kspVersion" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }

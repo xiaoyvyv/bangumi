@@ -20,27 +20,35 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-// テクスチャの管理を行うクラス
+/**
+ * 负责管理纹理的类
+ */
 public class LAppTextureManager {
-    // 画像情報データクラス
+
+    /**
+     * 图片信息的列表
+     */
+    private final List<TextureInfo> textures = new ArrayList<>();
+
+    // 图片信息数据类
     public static class TextureInfo {
-        public int id;  // テクスチャID
-        public int width;   // 横幅
-        public int height;  // 高さ
-        public String filePath; // ファイル名
+        public int id;  // 纹理ID
+        public int width;   // 宽度
+        public int height;  // 高度
+        public String filePath; // 文件名
     }
 
-    // 画像読み込み
-    // imageFileOffset: glGenTexturesで作成したテクスチャの保存場所
+    // 读取图片
+    // imageFileOffset: 用于保存由 glGenTextures 创建的纹理的位置
     public TextureInfo createTextureFromPngFile(String filePath) {
-        // search loaded texture already
+        // 查找已加载的纹理
         for (TextureInfo textureInfo : textures) {
             if (textureInfo.filePath.equals(filePath)) {
                 return textureInfo;
             }
         }
 
-        // assetsフォルダの画像からビットマップを作成する
+        // 从 assets 文件夹中的图像创建位图
         AssetManager assetManager = LAppDelegate.getInstance().getActivity().getAssets();
         InputStream stream = null;
         try {
@@ -48,26 +56,26 @@ public class LAppTextureManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // decodeStreamは乗算済みアルファとして画像を読み込むようである
+        // decodeStream 似乎以预乘阿尔法的方式读取图像
         Bitmap bitmap = BitmapFactory.decodeStream(stream);
 
-        // Texture0をアクティブにする
+        // 激活 Texture0
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 
-        // OpenGLにテクスチャを生成
+        // 在 OpenGL 中生成纹理
         int[] textureId = new int[1];
         GLES20.glGenTextures(1, textureId, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
 
-        // メモリ上の2D画像をテクスチャに割り当てる
+        // 将内存中的 2D 图像分配给纹理
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 
-        // ミップマップを生成する
+        // 生成 Mipmap
         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
 
-        // 縮小時の補間設定
+        // 缩小时的插值设置
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR);
-        // 拡大時の補間設定
+        // 放大时的插值设置
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
         TextureInfo textureInfo = new TextureInfo();
@@ -78,16 +86,14 @@ public class LAppTextureManager {
 
         textures.add(textureInfo);
 
-        // bitmap解放
+        // 释放位图
         bitmap.recycle();
         bitmap = null;
 
         if (LAppDefine.DEBUG_LOG_ENABLE) {
-            CubismFramework.coreLogFunction("Create texture: " + filePath);
+            CubismFramework.coreLogFunction("创建纹理: " + filePath);
         }
 
         return textureInfo;
     }
-
-    private final List<TextureInfo> textures = new ArrayList<TextureInfo>();        // 画像情報のリスト
 }

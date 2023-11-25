@@ -18,27 +18,23 @@
           "File": "motion/doubt.motion3.json"
         }
       ],
-      "Flick": [
-        {
-          "File": "motion/smile.motion3.json"
-        }
-      ],
-      "FlickDown": [
+      "TapHair": [
         {
           "File": "motion/curious.motion3.json"
         }
       ],
-      "Tap": [
+      "TapFace": [
         {
           "File": "motion/suprise.motion3.json"
+        },
+        {
+          "File": "motion/smile.motion3.json"
         }
       ],
-      "Tap@Body": [
+      "TapBody": [
         {
           "File": "motion/anger.motion3.json"
-        }
-      ],
-      "Flick@Body": [
+        },
         {
           "File": "motion/sorrow.motion3.json"
         }

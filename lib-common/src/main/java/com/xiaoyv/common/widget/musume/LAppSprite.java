@@ -18,13 +18,29 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class LAppSprite {
+    private final Rect rect = new Rect();
+    private final int textureId;
+
+    private final int positionLocation;  // 位置アトリビュート
+    private final int uvLocation; // UVアトリビュート
+    private final int textureLocation;   // テクスチャアトリビュート
+    private final int colorLocation;     // カラーアトリビュート
+    private final float[] spriteColor = new float[4];   // 表示カラー
+
+    // vpMatrix is an abbreviation for "Model View Projection Matrix"
+    private final float[] mVPMatrix = new float[16];
+    private final float[] projectionMatrix = new float[16];
+    private final float[] viewMatrix = new float[16];
+
+    private int vPMatrixHandle;
+
     public LAppSprite(
-        float x,
-        float y,
-        float width,
-        float height,
-        int textureId,
-        int programId
+            float x,
+            float y,
+            float width,
+            float height,
+            int textureId,
+            int programId
     ) {
         rect.left = x - width * 0.5f;
         rect.right = x + width * 0.5f;
@@ -113,7 +129,7 @@ public class LAppSprite {
      * テクスチャIDを指定して描画する
      *
      * @param textureId テクスチャID
-     * @param uvVertex uv頂点座標
+     * @param uvVertex  uv頂点座標
      */
     public void renderImmediate(int textureId, final float[] uvVertex) {
         // attribute属性を有効にする
@@ -129,10 +145,10 @@ public class LAppSprite {
 
         // 頂点データ
         float[] positionVertex = {
-            (rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f),
-            (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f),
-            (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f),
-            (rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f)
+                (rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f),
+                (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.up - maxHeight * 0.5f) / (maxHeight * 0.5f),
+                (rect.left - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f),
+                (rect.right - maxWidth * 0.5f) / (maxWidth * 0.5f), (rect.down - maxHeight * 0.5f) / (maxHeight * 0.5f)
         };
 
         // attribute属性を登録
@@ -215,21 +231,4 @@ public class LAppSprite {
          */
         public float down;
     }
-
-
-    private final Rect rect = new Rect();
-    private final int textureId;
-
-    private final int positionLocation;  // 位置アトリビュート
-    private final int uvLocation; // UVアトリビュート
-    private final int textureLocation;   // テクスチャアトリビュート
-    private final int colorLocation;     // カラーアトリビュート
-    private final float[] spriteColor = new float[4];   // 表示カラー
-
-    // vpMatrix is an abbreviation for "Model View Projection Matrix"
-    private final float[] mVPMatrix = new float[16];
-    private final float[] projectionMatrix = new float[16];
-    private final float[] viewMatrix = new float[16];
-
-    private int vPMatrixHandle;
 }

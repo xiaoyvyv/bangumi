@@ -43,6 +43,7 @@ dependencies {
     api(project(":lib-live2d"))
 
     api(libs.blueprint)
+    api(libs.blueprint.floater)
     api(libs.android.lottie)
     api(libs.androidx.swiperefreshlayout)
     api(libs.touch.image.view)

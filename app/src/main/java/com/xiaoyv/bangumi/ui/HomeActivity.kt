@@ -1,8 +1,16 @@
 package com.xiaoyv.bangumi.ui
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
+import android.widget.PopupWindow
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
+import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.widget.musume.LAppMusumeView
+import com.xiaoyv.widget.kts.dpi
+import kotlinx.coroutines.delay
 
 /**
  * Class: [HomeActivity]
@@ -11,8 +19,10 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
  * @since 11/24/23
  */
 class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>() {
-
     private val vpAdapter by lazy { HomeAdapter(this) }
+
+    private lateinit var floatingView: LAppMusumeView
+    private var popupWindow: PopupWindow? = null
 
     override fun initView() {
         binding.vpView.isUserInputEnabled = false
@@ -21,6 +31,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
     }
 
     override fun initData() {
+        createRobot()
 
     }
 
@@ -34,6 +45,43 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
                 R.id.bottom_menu_profile -> binding.vpView.setCurrentItem(4, false)
             }
             true
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        floatingView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        floatingView.onPause()
+    }
+
+    override fun finish() {
+        super.finish()
+        popupWindow?.dismiss()
+        popupWindow = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        floatingView.release()
+    }
+
+    /**
+     * 创建春菜窗口
+     */
+    private fun createRobot() {
+        floatingView = LAppMusumeView(this).apply {
+            init()
+        }
+        popupWindow = PopupWindow(floatingView, 120.dpi, 200.dpi)
+        popupWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        launchUI {
+            delay(2000)
+            popupWindow?.showAsDropDown(binding.navView, 0, 0, Gravity.END)
         }
     }
 }

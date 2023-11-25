@@ -14,6 +14,41 @@ import com.live2d.sdk.cubism.framework.CubismFrameworkConfig.LogLevel;
  */
 public class LAppDefine {
     /**
+     * 是否验证MOC3的一致性。如果启用，则为true。
+     */
+    public static final boolean MOC_CONSISTENCY_VALIDATION_ENABLE = true;
+
+    /**
+     * 启用/禁用调试日志记录。
+     */
+    public static final boolean DEBUG_LOG_ENABLE = true;
+
+    /**
+     * 启用/禁用用于处理触摸信息的调试日志记录。
+     */
+    public static final boolean DEBUG_TOUCH_LOG_ENABLE = true;
+
+    /**
+     * 设置Framework的日志输出级别。
+     */
+    public static final LogLevel cubismLoggingLevel = LogLevel.VERBOSE;
+
+    /**
+     * 启用/禁用预乘阿尔法。
+     */
+    public static final boolean PREMULTIPLIED_ALPHA_ENABLE = true;
+
+    /**
+     * 标志是否绘制到LAppView持有的目标上。（如果USE_RENDER_TARGET和USE_MODEL_RENDER_TARGET都为true，则此变量优先于USE_MODEL_RENDER_TARGET。）
+     */
+    public static final boolean USE_RENDER_TARGET = false;
+
+    /**
+     * 标志是否绘制到每个LAppModel拥有的目标上。
+     */
+    public static final boolean USE_MODEL_RENDER_TARGET = false;
+
+    /**
      * Scaling rate.
      */
     public enum Scale {
@@ -170,13 +205,11 @@ public class LAppDefine {
          */
         IDLE("Idle"),
         /**
-         * ID of the motion to be played at tapping body.
+         * ID of the motion to be played at json config.
          */
-        Tap("Tap"),
-        TAP_BODY("Tap@Body"),
-        FLICK_DOWN("FlickDown"),
-        FLICK("Flick"),
-        FLICK_BODY("Flick@Body");
+        TAP_HAIR("TapHair"),
+        TAP_BODY("TapBody"),
+        TAP_FACE("TapFace");
 
         private final String id;
 
@@ -229,34 +262,4 @@ public class LAppDefine {
         }
     }
 
-    /**
-     * MOC3の整合性を検証するかどうか。有効ならtrue。
-     */
-    public static final boolean MOC_CONSISTENCY_VALIDATION_ENABLE = true;
-
-    /**
-     * Enable/Disable debug logging.
-     */
-    public static final boolean DEBUG_LOG_ENABLE = true;
-    /**
-     * Enable/Disable debug logging for processing tapping information.
-     */
-    public static final boolean DEBUG_TOUCH_LOG_ENABLE = true;
-    /**
-     * Setting the level of the log output from the Framework.
-     */
-    public static final LogLevel cubismLoggingLevel = LogLevel.VERBOSE;
-    /**
-     * Enable/Disable premultiplied alpha.
-     */
-    public static final boolean PREMULTIPLIED_ALPHA_ENABLE = true;
-
-    /**
-     * Flag whether to draw to the target held by LAppView. (If both USE_RENDER_TARGET and USE_MODEL_RENDER_TARGET are true, this variable is given priority over USE_MODEL_RENDER_TARGET.)
-     */
-    public static final boolean USE_RENDER_TARGET = false;
-    /**
-     * Flag whether to draw to the target that each LAppModel has.
-     */
-    public static final boolean USE_MODEL_RENDER_TARGET = false;
 }

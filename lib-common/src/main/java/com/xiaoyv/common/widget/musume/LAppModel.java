@@ -34,6 +34,75 @@ import java.util.Map;
 import java.util.Random;
 
 public class LAppModel extends CubismUserModel {
+
+    private ICubismModelSetting modelSetting;
+
+    /**
+     * 模型的主目录
+     */
+    private String modelHomeDirectory;
+
+    /**
+     * Delta时间的累积值[秒]
+     */
+    private float userTimeSeconds;
+
+    /**
+     * 模型上设置的眨眼功能用参数ID
+     */
+    private final List<CubismId> eyeBlinkIds = new ArrayList<>();
+
+    /**
+     * 模型上设置的LipSync功能用参数ID
+     */
+    private final List<CubismId> lipSyncIds = new ArrayList<>();
+
+    /**
+     * 已加载的动作映射
+     */
+    private final Map<String, ACubismMotion> motions = new HashMap<>();
+
+    /**
+     * 已加载的表情映射
+     */
+    private final Map<String, ACubismMotion> expressions = new HashMap<>();
+
+    /**
+     * 参数ID: ParamAngleX
+     */
+    private final CubismId idParamAngleX;
+
+    /**
+     * 参数ID: ParamAngleY
+     */
+    private final CubismId idParamAngleY;
+
+    /**
+     * 参数ID: ParamAngleZ
+     */
+    private final CubismId idParamAngleZ;
+
+    /**
+     * 参数ID: ParamBodyAngleX
+     */
+    private final CubismId idParamBodyAngleX;
+
+    /**
+     * 参数ID: ParamEyeBallX
+     */
+    private final CubismId idParamEyeBallX;
+
+    /**
+     * 参数ID: ParamEyeBallY
+     */
+    private final CubismId idParamEyeBallY;
+
+    /**
+     * 非帧缓冲区的渲染目标
+     */
+    private final CubismOffscreenSurfaceAndroid renderingBuffer = new CubismOffscreenSurfaceAndroid();
+
+
     public LAppModel() {
         if (LAppDefine.MOC_CONSISTENCY_VALIDATION_ENABLE) {
             mocConsistency = true;
@@ -55,26 +124,26 @@ public class LAppModel extends CubismUserModel {
 
     public void loadAssets(final String dir, final String fileName) {
         if (LAppDefine.DEBUG_LOG_ENABLE) {
-            LAppPal.printLog("load model setting: " + fileName);
+            LAppPal.printLog("加载模型设置：" + fileName);
         }
 
         modelHomeDirectory = dir;
         String filePath = modelHomeDirectory + fileName;
 
-        // json読み込み
+        // 读取JSON文件
         byte[] buffer = createBuffer(filePath);
 
         ICubismModelSetting setting = new CubismModelSettingJson(buffer);
 
-        // Setup model
+        // 配置模型
         setupModel(setting);
 
         if (model == null) {
-            LAppPal.printLog("Failed to loadAssets().");
+            LAppPal.printLog("加载资源失败。");
             return;
         }
 
-        // Setup renderer.
+        // 配置渲染器
         CubismRenderer renderer = CubismRendererAndroid.create();
         setupRenderer(renderer);
 
@@ -82,14 +151,14 @@ public class LAppModel extends CubismUserModel {
     }
 
     /**
-     * Delete the model which LAppModel has.
+     * 删除LAppModel所拥有的模型。
      */
     public void deleteModel() {
         delete();
     }
 
     /**
-     * モデルの更新処理。モデルのパラメーターから描画状態を決定する
+     * 模型更新处理。根据模型参数确定绘制状态。
      */
     public void update() {
         final float deltaTimeSeconds = LAppPal.getDeltaTime();
@@ -99,66 +168,66 @@ public class LAppModel extends CubismUserModel {
         dragX = dragManager.getX();
         dragY = dragManager.getY();
 
-        // モーションによるパラメーター更新の有無
+        // 是否通过动作更新参数
         boolean isMotionUpdated = false;
 
-//         前回セーブされた状態をロード
+        // 加载上次保存的状态
         model.loadParameters();
 
-        // モーションの再生がない場合、待機モーションの中からランダムで再生する
+        // 如果没有正在播放的动作，从待机动作中随机选择播放
         if (motionManager.isFinished()) {
             startRandomMotion(LAppDefine.MotionGroup.IDLE.getId(), LAppDefine.Priority.IDLE.getPriority());
         } else {
-            // モーションを更新
+            // 更新动作
             isMotionUpdated = motionManager.updateMotion(model, deltaTimeSeconds);
         }
 
-        // モデルの状態を保存
+        // 保存模型状态
         model.saveParameters();
 
         // 不透明度
         opacity = model.getModelOpacity();
 
-        // eye blink
-        // メインモーションの更新がないときだけまばたきする
+        // 眨眼
+        // 仅当主要动作没有更新时才进行眨眼
         if (!isMotionUpdated) {
             if (eyeBlink != null) {
                 eyeBlink.updateParameters(model, deltaTimeSeconds);
             }
         }
 
-        // expression
+        // 表情
         if (expressionManager != null) {
-            // 表情でパラメータ更新（相対変化）
+            // 通过表情更新参数（相对变化）
             expressionManager.updateMotion(model, deltaTimeSeconds);
         }
 
-        // ドラッグ追従機能
-        // ドラッグによる顔の向きの調整
-        model.addParameterValue(idParamAngleX, dragX * 30); // -30から30の値を加える
+        // 拖拽追踪功能
+        // 通过拖拽调整脸部方向
+        model.addParameterValue(idParamAngleX, dragX * 30); // 在-30到30的范围内添加值
         model.addParameterValue(idParamAngleY, dragY * 30);
         model.addParameterValue(idParamAngleZ, dragX * dragY * (-30));
 
-        // ドラッグによる体の向きの調整
-        model.addParameterValue(idParamBodyAngleX, dragX * 10); // -10から10の値を加える
+        // 通过拖拽调整身体方向
+        model.addParameterValue(idParamBodyAngleX, dragX * 10); // 在-10到10的范围内添加值
 
-        // ドラッグによる目の向きの調整
-        model.addParameterValue(idParamEyeBallX, dragX);  // -1から1の値を加える
+        // 通过拖拽调整眼睛方向
+        model.addParameterValue(idParamEyeBallX, dragX);  // 在-1到1的范围内添加值
         model.addParameterValue(idParamEyeBallY, dragY);
 
-        // Breath Function
+        // 呼吸功能
         if (breath != null) {
             breath.updateParameters(model, deltaTimeSeconds);
         }
 
-        // Physics Setting
+        // 物理设置
         if (physics != null) {
             physics.evaluate(model, deltaTimeSeconds);
         }
 
-        // Lip Sync Setting
+        // 唇同步设置
         if (lipSync) {
-            // リアルタイムでリップシンクを行う場合、システムから音量を取得して0~1の範囲で値を入力します
+            // 如果实时进行唇同步，从系统获取音量并在0~1范围内输入值
             float value = 0.0f;
 
             for (int i = 0; i < lipSyncIds.size(); i++) {
@@ -167,13 +236,14 @@ public class LAppModel extends CubismUserModel {
             }
         }
 
-        // Pose Setting
+        // 姿势设置
         if (pose != null) {
             pose.updateParameters(model, deltaTimeSeconds);
         }
 
         model.update();
     }
+
 
     /**
      * 开始播放指定参数的动作。
@@ -246,9 +316,7 @@ public class LAppModel extends CubismUserModel {
 
         // 加载音频文件
         String voice = modelSetting.getMotionSoundFileName(group, number);
-        if (debugMode) {
-            LAppPal.printLog("加载音频文件: " + group + "_" + number + ", voice: " + voice);
-        }
+
 
         if (!voice.isEmpty()) {
             String path = modelHomeDirectory + voice;
@@ -256,12 +324,46 @@ public class LAppModel extends CubismUserModel {
             // 在单独的线程中播放音频
             LAppWavFileHandler voicePlayer = new LAppWavFileHandler(path);
             voicePlayer.start();
+
+            if (debugMode) {
+                LAppPal.printLog("播放音频文件: " + group + "_" + number + ", voice: " + voice);
+            }
+        } else {
+            if (debugMode) {
+                LAppPal.printLog("音频文件未配置: " + group + "_" + number);
+            }
         }
 
         if (debugMode) {
             LAppPal.printLog("播放: " + group + "_" + number);
         }
         return motionManager.startMotionPriority(motion, priority);
+    }
+
+    public void startRandomSound(LAppDefine.HitAreaName hitAreaName) {
+        int[] group = new int[35];
+        switch (hitAreaName) {
+            case HAIR: {
+                group = new int[]{29, 30, 31, 39, 53};
+                break;
+            }
+            case FACE: {
+                group = new int[]{40, 43, 44, 45, 46, 48, 49, 50, 51, 52, 59};
+                break;
+            }
+            case BODY: {
+                group = new int[]{40, 41};
+                break;
+            }
+        }
+
+        Random random = new Random();
+        int number = random.nextInt(Integer.MAX_VALUE) % group.length;
+        String path = modelHomeDirectory + "sounds/wave" + group[number] + ".wav";
+
+        LAppWavFileHandler voicePlayer = new LAppWavFileHandler(path);
+
+        voicePlayer.start();
     }
 
     /**
@@ -416,26 +518,26 @@ public class LAppModel extends CubismUserModel {
 
     private static byte[] createBuffer(final String path) {
         if (LAppDefine.DEBUG_LOG_ENABLE) {
-            LAppPal.printLog("create buffer: " + path);
+            LAppPal.printLog("创建缓冲区: " + path);
         }
         return LAppPal.loadFileAsBytes(path);
     }
 
-    // model3.jsonからモデルを生成する
+    // 从model3.json文件中生成模型
     private void setupModel(ICubismModelSetting setting) {
         modelSetting = setting;
 
         isUpdated = true;
         isInitialized = false;
 
-        // Load Cubism Model
+        // 加载Cubism模型
         {
             String fileName = modelSetting.getModelFileName();
-            if (!fileName.equals("")) {
+            if (!fileName.isEmpty()) {
                 String path = modelHomeDirectory + fileName;
 
                 if (LAppDefine.DEBUG_LOG_ENABLE) {
-                    LAppPal.printLog("create model: " + modelSetting.getModelFileName());
+                    LAppPal.printLog("创建模型: " + modelSetting.getModelFileName());
                 }
 
                 byte[] buffer = createBuffer(path);
@@ -443,7 +545,7 @@ public class LAppModel extends CubismUserModel {
             }
         }
 
-        // load expression files(.exp3.json)
+        // 加载表情文件(.exp3.json)
         {
             if (modelSetting.getExpressionCount() > 0) {
                 final int count = modelSetting.getExpressionCount();
@@ -461,7 +563,7 @@ public class LAppModel extends CubismUserModel {
             }
         }
 
-        // Physics
+        // 物理效果
         {
             String path = modelSetting.getPhysicsFileName();
             if (!path.equals("")) {
@@ -472,7 +574,7 @@ public class LAppModel extends CubismUserModel {
             }
         }
 
-        // Pose
+        // 姿势
         {
             String path = modelSetting.getPoseFileName();
             if (!path.equals("")) {
@@ -482,12 +584,12 @@ public class LAppModel extends CubismUserModel {
             }
         }
 
-        // Load eye blink data
+        // 加载眨眼数据
         if (modelSetting.getEyeBlinkParameterCount() > 0) {
             eyeBlink = CubismEyeBlink.create(modelSetting);
         }
 
-        // Load Breath Data
+        // 加载呼吸数据
         breath = CubismBreath.create();
         List<CubismBreath.BreathParameterData> breathParameters = new ArrayList<CubismBreath.BreathParameterData>();
 
@@ -499,45 +601,44 @@ public class LAppModel extends CubismUserModel {
 
         breath.setParameters(breathParameters);
 
-        // Load UserData
+        // 加载用户数据
         {
             String path = modelSetting.getUserDataFile();
-            if (!path.equals("")) {
+            if (!path.isEmpty()) {
                 String modelPath = modelHomeDirectory + path;
                 byte[] buffer = createBuffer(modelPath);
                 loadUserData(buffer);
             }
         }
 
-
-        // EyeBlinkIds
+        // 眨眼参数
         int eyeBlinkIdCount = modelSetting.getEyeBlinkParameterCount();
         for (int i = 0; i < eyeBlinkIdCount; i++) {
             eyeBlinkIds.add(modelSetting.getEyeBlinkParameterId(i));
         }
 
-        // LipSyncIds
+        // LipSync参数
         int lipSyncIdCount = modelSetting.getLipSyncParameterCount();
         for (int i = 0; i < lipSyncIdCount; i++) {
             lipSyncIds.add(modelSetting.getLipSyncParameterId(i));
         }
 
         if (modelSetting == null || modelMatrix == null) {
-            LAppPal.printLog("Failed to setupModel().");
+            LAppPal.printLog("setupModel() 失败。");
             return;
         }
 
-        // Set layout
+        // 设置布局
         Map<String, Float> layout = new HashMap<String, Float>();
 
-        // レイアウト情報が存在すればその情報からモデル行列をセットアップする
+        // 如果存在布局信息，则使用该信息设置模型矩阵
         if (modelSetting.getLayoutMap(layout)) {
             modelMatrix.setupFromLayout(layout);
         }
 
         model.saveParameters();
 
-        // Load motions
+        // 加载动作
         for (int i = 0; i < modelSetting.getMotionGroupCount(); i++) {
             String group = modelSetting.getMotionGroupName(i);
             preLoadMotionGroup(group);
@@ -550,16 +651,16 @@ public class LAppModel extends CubismUserModel {
     }
 
     /**
-     * モーションデータをグループ名から一括でロードする。
-     * モーションデータの名前はModelSettingから取得する。
+     * 根据组名批量加载动作数据。
+     * 动作数据的名称从ModelSetting获取。
      *
-     * @param group モーションデータのグループ名
+     * @param group 动作数据的组名
      **/
     private void preLoadMotionGroup(final String group) {
         final int count = modelSetting.getMotionCount(group);
 
         for (int i = 0; i < count; i++) {
-            // ex) idle_0
+            // 例如：idle_0
             String name = group + "_" + i;
 
             String path = modelSetting.getMotionFileName(group, i);
@@ -567,13 +668,13 @@ public class LAppModel extends CubismUserModel {
                 String modelPath = modelHomeDirectory + path;
 
                 if (debugMode) {
-                    LAppPal.printLog("load motion: " + path + "==>[" + group + "_" + i + "]");
+                    LAppPal.printLog("加载动作: " + path + "==>[" + group + "_" + i + "]");
                 }
 
                 byte[] buffer;
                 buffer = createBuffer(modelPath);
 
-                // If a motion cannot be loaded, a process is skipped.
+                // 如果无法加载动作，则跳过该过程。
                 CubismMotion tmp = loadMotion(buffer);
                 if (tmp == null) {
                     continue;
@@ -598,16 +699,16 @@ public class LAppModel extends CubismUserModel {
     }
 
     /**
-     * OpenGLのテクスチャユニットにテクスチャをロードする
+     * 将纹理加载到OpenGL的纹理单元中
      */
     private void setupTextures() {
         for (int modelTextureNumber = 0; modelTextureNumber < modelSetting.getTextureCount(); modelTextureNumber++) {
-            // テクスチャ名が空文字だった場合はロード・バインド処理をスキップ
+            // 如果纹理名为空字符串，则跳过加载和绑定过程
             if (modelSetting.getTextureFileName(modelTextureNumber).equals("")) {
                 continue;
             }
 
-            // OpenGL ESのテクスチャユニットにテクスチャをロードする
+            // 将纹理加载到OpenGL ES的纹理单元中
             String texturePath = modelSetting.getTextureFileName(modelTextureNumber);
             texturePath = modelHomeDirectory + texturePath;
 
@@ -627,60 +728,4 @@ public class LAppModel extends CubismUserModel {
         }
     }
 
-    private ICubismModelSetting modelSetting;
-    /**
-     * モデルのホームディレクトリ
-     */
-    private String modelHomeDirectory;
-    /**
-     * デルタ時間の積算値[秒]
-     */
-    private float userTimeSeconds;
-
-    /**
-     * モデルに設定されたまばたき機能用パラメーターID
-     */
-    private final List<CubismId> eyeBlinkIds = new ArrayList<CubismId>();
-    /**
-     * モデルに設定されたリップシンク機能用パラメーターID
-     */
-    private final List<CubismId> lipSyncIds = new ArrayList<CubismId>();
-    /**
-     * 読み込まれているモーションのマップ
-     */
-    private final Map<String, ACubismMotion> motions = new HashMap<String, ACubismMotion>();
-    /**
-     * 読み込まれている表情のマップ
-     */
-    private final Map<String, ACubismMotion> expressions = new HashMap<String, ACubismMotion>();
-
-    /**
-     * パラメーターID: ParamAngleX
-     */
-    private final CubismId idParamAngleX;
-    /**
-     * パラメーターID: ParamAngleY
-     */
-    private final CubismId idParamAngleY;
-    /**
-     * パラメーターID: ParamAngleZ
-     */
-    private final CubismId idParamAngleZ;
-    /**
-     * パラメーターID: ParamBodyAngleX
-     */
-    private final CubismId idParamBodyAngleX;
-    /**
-     * パラメーターID: ParamEyeBallX
-     */
-    private final CubismId idParamEyeBallX;
-    /**
-     * パラメーターID: ParamEyeBallY
-     */
-    private final CubismId idParamEyeBallY;
-
-    /**
-     * フレームバッファ以外の描画先
-     */
-    private final CubismOffscreenSurfaceAndroid renderingBuffer = new CubismOffscreenSurfaceAndroid();
 }

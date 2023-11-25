@@ -153,7 +153,7 @@ public class LAppView {
         LAppLive2DManager live2dManager = LAppLive2DManager.getInstance();
         live2dManager.onUpdate();
 
-        // 各モデルが持つ描画ターゲットをテクスチャとする場合
+        // When the texture is the drawing target of each model
         if (renderingTarget == RenderingTarget.MODEL_FRAME_BUFFER && renderingSprite != null) {
             final float[] uvVertex = {
                     1.0f, 1.0f,
@@ -290,7 +290,7 @@ public class LAppView {
         float y = deviceToScreen.transformY(touchManager.getLastY());
 
         if (DEBUG_TOUCH_LOG_ENABLE) {
-            LAppPal.printLog("Touches ended x: " + x + ", y:" + y);
+            LAppPal.printLog("触摸结束 x: " + x + ", y:" + y);
         }
 
         live2DManager.onTap(x, y);

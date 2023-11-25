@@ -15,8 +15,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class LAppPal {
+
+    private static double s_currentFrame;
+    private static double _lastNanoTime;
+    private static double _deltaNanoTime;
+
+    private static final String TAG = "[Robot]";
+
+    private LAppPal() {
+    }
+
     /**
-     * Logging Function class to be registered in the CubismFramework's logging function.
+     * 用于在CubismFramework日志功能中注册的日志函数类。
      */
     public static class PrintLogFunction implements ICubismLogger {
         @Override
@@ -25,19 +35,19 @@ public class LAppPal {
         }
     }
 
-    // アプリケーションを中断状態にする。実行されるとonPause()イベントが発生する
+    // 将应用程序移至后台。执行此操作将触发onPause()事件。
     public static void moveTaskToBack() {
         // LAppDelegate.getInstance().getActivity().moveTaskToBack(true);
     }
 
-    // デルタタイムの更新
+    // 更新增量时间
     public static void updateTime() {
         s_currentFrame = getSystemNanoTime();
         _deltaNanoTime = s_currentFrame - _lastNanoTime;
         _lastNanoTime = s_currentFrame;
     }
 
-    // Reading a file as a sequence of bytes
+    // 作为字节序列读取文件
     public static byte[] loadFileAsBytes(final String path) {
         InputStream fileData = null;
         try {
@@ -52,7 +62,7 @@ public class LAppPal {
             e.printStackTrace();
 
             if (LAppDefine.DEBUG_LOG_ENABLE) {
-                printLog("File open error.");
+                printLog("文件打开错误。");
             }
 
             return new byte[0];
@@ -65,22 +75,22 @@ public class LAppPal {
                 e.printStackTrace();
 
                 if (LAppDefine.DEBUG_LOG_ENABLE) {
-                    printLog("File open error.");
+                    printLog("文件打开错误。");
                 }
             }
         }
     }
 
-    // デルタタイム(前回フレームとの差分)を取得する
+    // 获取增量时间（与上一帧的差异）
     public static float getDeltaTime() {
-        // ナノ秒を秒に変換
+        // 将纳秒转换为秒
         return (float) (_deltaNanoTime / 1000000000.0f);
     }
 
     /**
-     * Logging function
+     * 日志函数
      *
-     * @param message log message
+     * @param message 日志消息
      */
     public static void printLog(String message) {
         Log.d(TAG, message);
@@ -89,12 +99,5 @@ public class LAppPal {
     private static long getSystemNanoTime() {
         return System.nanoTime();
     }
-
-    private static double s_currentFrame;
-    private static double _lastNanoTime;
-    private static double _deltaNanoTime;
-
-    private static final String TAG = "[Robot]";
-
-    private LAppPal() {}
 }
+

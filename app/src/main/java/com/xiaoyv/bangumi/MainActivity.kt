@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.Utils
 import com.xiaoyv.bangumi.databinding.ActivityMainBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.HomeActivity
+import com.xiaoyv.bangumi.ui.feature.floater.FloatingWindowManger
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 class MainActivity : AppCompatActivity() {
@@ -36,5 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding.robot.setOnFastLimitClickListener {
             RouteHelper.jumpRobot()
         }
+
+//         FloatingWindowManger.init(Utils.getApp())
     }
 }

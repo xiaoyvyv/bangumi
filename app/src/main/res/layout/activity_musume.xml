@@ -25,9 +25,5 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.xiaoyv.common.widget.musume.LAppMusumeView
-            android:id="@+id/robot_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
