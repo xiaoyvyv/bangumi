@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurfaceContainer"
+    android:paddingHorizontal="@dimen/ui_size_12"
+    android:paddingVertical="@dimen/ui_size_6">
+
+    <androidx.appcompat.widget.AppCompatRatingBar
+        android:id="@+id/iv_star"
+        style="?attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:progressTint="@color/ui_pink"
+        android:rating="2"
+        android:stepSize="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/ui_size_6"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_label_big"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_star"
+        tools:text="User A said Book 1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

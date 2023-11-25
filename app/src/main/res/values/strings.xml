@@ -10,4 +10,5 @@
     <string name="login_input_email">邮箱</string>
     <string name="login_input_verify">验证码</string>
     <string name="login_btn_login">登录</string>
+    <string name="timeline_title">%s的时间胶囊</string>
 </resources>

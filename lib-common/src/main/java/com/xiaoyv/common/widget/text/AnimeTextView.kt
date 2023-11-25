@@ -2,7 +2,9 @@ package com.xiaoyv.common.widget.text
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.textview.MaterialTextView
+import com.xiaoyv.common.R
 
 /**
  * Class: [AnimeTextView]
@@ -12,4 +14,9 @@ import com.google.android.material.textview.MaterialTextView
  */
 class AnimeTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : MaterialTextView(context, attrs)
+) : MaterialTextView(context, attrs) {
+
+    init {
+//        runCatching { setTypeface(ResourcesCompat.getFont(context, R.font.font)) }
+    }
+}

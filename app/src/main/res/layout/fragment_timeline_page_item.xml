@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/ui_size_44"
+        android:layout_height="@dimen/ui_size_44"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:layout_marginBottom="@dimen/ui_size_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_character"
+        android:layout_width="@dimen/ui_size_44"
+        android:layout_height="@dimen/ui_size_44"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_size_12"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_action"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_size_12"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/iv_character"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="User A said Book 1" />
+
+    <com.xiaoyv.common.widget.star.StarCommentView
+        android:id="@+id/rating"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        app:layout_constraintEnd_toEndOf="@+id/tv_action"
+        app:layout_constraintStart_toStartOf="@+id/tv_action"
+        app:layout_constraintTop_toBottomOf="@+id/tv_action" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/ll_card"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardCornerRadius="@dimen/ui_size_6"
+        app:layout_constraintEnd_toEndOf="@+id/tv_action"
+        app:layout_constraintStart_toStartOf="@+id/tv_action"
+        app:layout_constraintTop_toBottomOf="@+id/rating"
+        app:strokeColor="@color/ui_transparent"
+        app:strokeWidth="@dimen/ui_size_0">
+
+        <com.xiaoyv.common.widget.image.AnimeImageView
+            android:id="@+id/iv_card_cover"
+            android:layout_width="@dimen/ui_size_80"
+            android:layout_height="@dimen/ui_size_120"
+            android:background="?attr/colorSurfaceVariant"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_card_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_size_6"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="@dimen/text_label_big"
+            android:textStyle="bold"
+            tools:text="User A said Book 1" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_card_rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="80dp"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_size_6"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="@dimen/text_label"
+            tools:text="User A said Book 1" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.xiaoyv.common.widget.image.AnimeGridImageView
+        android:id="@+id/image_grid"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/ui_size_6"
+        app:layout_constraintEnd_toEndOf="@+id/tv_action"
+        app:layout_constraintStart_toStartOf="@+id/tv_action"
+        app:layout_constraintTop_toBottomOf="@+id/ll_card"
+        tools:listitem="@layout/view_image_grid" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_time"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/ui_size_6"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_label"
+        app:layout_constraintEnd_toEndOf="@+id/tv_action"
+        app:layout_constraintStart_toStartOf="@+id/tv_action"
+        app:layout_constraintTop_toBottomOf="@+id/image_grid"
+        tools:text="User A said Book 1" />
+
+    <View
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0.5"
+        android:layout_marginTop="@dimen/ui_size_6"
+        android:alpha="0.1"
+        android:background="?attr/colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_action"
+        app:layout_constraintStart_toStartOf="@+id/tv_action"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,6 @@
 package com.xiaoyv.bangumi.ui
 
-import android.graphics.Color
-import androidx.activity.SystemBarStyle
-import androidx.activity.enableEdgeToEdge
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 
@@ -24,5 +22,15 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
 
     override fun initData() {
 
+    }
+
+    override fun initListener() {
+        binding.navView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.bottom_menu_home -> binding.vpView.setCurrentItem(0, false)
+                R.id.bottom_menu_timeline -> binding.vpView.setCurrentItem(1, false)
+            }
+            true
+        }
     }
 }

@@ -1,12 +1,14 @@
 package com.xiaoyv.common.api.api
 
-import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.config.annotation.TimelineType
 import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
 /**
@@ -17,28 +19,41 @@ import retrofit2.http.QueryMap
  */
 interface BgmWebApi {
 
-    @GET("${BgmApiManager.URL_BASE_WEB}/login")
+    @GET("/login")
     suspend fun queryLoginPage(): Document
 
     /**
      * 验证码
      */
-    @GET("${BgmApiManager.URL_BASE_WEB}/signup/captcha")
+    @GET("/signup/captcha")
     suspend fun queryLoginVerify(@QueryMap map: Map<String, String>): ResponseBody
 
     /**
      * 登录地址
      *
-     * - formhash	"14a86209"
-     * - referer	"https://bangumi.tv/"
-     * - dreferer	"https://bangumi.tv/"
-     * - email	"xxx@qq.com"
-     * - password	"xxx"
-     * - captcha_challenge_field	"dasdasd"
-     * - cookietime	"0"
-     * - loginsubmit	"登录"
+     * - progress
      */
     @FormUrlEncoded
-    @POST("${BgmApiManager.URL_BASE_WEB}/FollowTheRabbit")
+    @POST("$/FollowTheRabbit")
     suspend fun doLogin(@FieldMap query: Map<String, String>): Document
+
+    /**
+     * 查询事件时间胶囊
+     *
+     * - User Path: /user/837364/timeline
+     * - Public Path: /timeline
+     */
+    @GET("/{timeline}")
+    suspend fun queryTimeline(
+        @Path("timeline") path: String,
+        @Query("type") @TimelineType type: String,
+        @Query("ajax") ajax: String = "1"
+    ): Document
+
+    companion object {
+        fun timelineUrl(userId: String? = null): String {
+            return if (userId == null) "timeline"
+            else "/user/$userId/timeline"
+        }
+    }
 }

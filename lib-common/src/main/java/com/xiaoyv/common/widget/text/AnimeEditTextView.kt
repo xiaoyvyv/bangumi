@@ -13,5 +13,7 @@ import com.google.android.material.textfield.TextInputEditText
 class AnimeEditTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : TextInputEditText(context, attrs) {
-
+    init {
+//        runCatching { setTypeface(ResourcesCompat.getFont(context, R.font.font)) }
+    }
 }

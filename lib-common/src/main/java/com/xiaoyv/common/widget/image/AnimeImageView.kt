@@ -3,7 +3,8 @@ package com.xiaoyv.common.widget.image
 import android.content.Context
 import android.util.AttributeSet
 import com.google.android.material.imageview.ShapeableImageView
-import com.xiaoyv.widget.kts.getColor
+import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.widget.kts.getAttrColor
 
 /**
  * Class: [AnimeImageView]
@@ -16,6 +17,8 @@ class AnimeImageView @JvmOverloads constructor(
 ) : ShapeableImageView(context, attrs) {
 
     init {
-        if (background == null) setBackgroundColor(getColor(com.xiaoyv.widget.R.color.ui_text_c4))
+        if (background == null) {
+            setBackgroundColor(context.getAttrColor(GoogleAttr.colorSurfaceContainer))
+        }
     }
 }
