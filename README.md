@@ -13,6 +13,9 @@ RN的体验效果并不是很好，我决定开发一款纯原生的 Android 客
 ### 项目更新地址
 https://github.com/xiaoyvyv/Bangumi-for-Android
 
+### 项目最终目标
+实现 Bangumi tv 官网的全部功能（目前只包含主站，不包含天窗等旗下功能站点）
+
 ### Deadline
 预计首个版本开发周期 3 个月 (2024年2月下旬)
 
