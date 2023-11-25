@@ -1,5 +1,7 @@
 package com.xiaoyv.common.api.api
 
+import com.xiaoyv.common.config.annotation.BrowserSortType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TimelineType
 import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
@@ -34,7 +36,7 @@ interface BgmWebApi {
      * - progress
      */
     @FormUrlEncoded
-    @POST("$/FollowTheRabbit")
+    @POST("/FollowTheRabbit")
     suspend fun doLogin(@FieldMap query: Map<String, String>): Document
 
     /**
@@ -48,6 +50,19 @@ interface BgmWebApi {
         @Path("timeline") path: String,
         @Query("type") @TimelineType type: String,
         @Query("ajax") ajax: String = "1"
+    ): Document
+
+
+    /**
+     * @param orderby 按拼音排序，和 sort 互斥
+     */
+    @GET("/{mediaType}/browser/{subPath}")
+    suspend fun browserRank(
+        @Path("mediaType") @MediaType mediaType: String,
+        @Path("subPath") subPath: String,
+        @Query("sort") @BrowserSortType sortType: String,
+        @Query("page") page: Int = 1,
+        @Query("orderby") orderby: String? = null,
     ): Document
 
     companion object {

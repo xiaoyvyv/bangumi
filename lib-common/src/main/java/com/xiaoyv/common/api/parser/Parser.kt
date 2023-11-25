@@ -14,11 +14,16 @@ fun String.fetchStyleBackgroundUrl(): String {
 }
 
 /**
+ * https://lain.bgm.tv/pic/crt/s/b7/e5/27194_prsn_cXmHm.jpg
  * https://lain.bgm.tv/pic/crt/l/b7/e5/27194_prsn_cXmHm.jpg
+ *
+ * https://lain.bgm.tv/pic/cover/c/67/d1/876_dCfrd.jpg
+ * https://lain.bgm.tv/pic/cover/l/67/d1/876_dCfrd.jpg?
  */
 fun String.optImageUrl(): String {
     val imageUrl = if (startsWith("//")) "https:$this" else this
     return imageUrl
         .replace("/r/(.*?)/".toRegex(), "/r/600/")
         .replace("/pic/crt/s/", "/pic/crt/l/")
+        .replace("/pic/cover/c/", "/pic/cover/l/")
 }

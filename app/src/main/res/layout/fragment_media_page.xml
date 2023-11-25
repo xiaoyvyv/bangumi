@@ -6,12 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
         android:id="@+id/rv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        android:paddingVertical="@dimen/ui_size_8"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
         tools:itemCount="10"
-        tools:listitem="@layout/fragment_timeline_page_item" />
+        tools:listitem="@layout/fragment_media_page_item" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

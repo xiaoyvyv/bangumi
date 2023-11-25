@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.media
 
+import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 
 /**
@@ -10,4 +11,5 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
  */
 class MediaViewModel : BaseViewModel() {
 
+    internal val onOptionsItemLiveData = MutableLiveData<List<Any>?>()
 }

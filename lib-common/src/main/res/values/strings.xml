@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Bangumi</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="title_home">首页</string>
+    <string name="title_timeline">时间胶囊</string>
+    <string name="title_media">排行榜</string>
+    <string name="title_super">超展开</string>
+    <string name="title_profile">我的</string>
 </resources>

@@ -30,6 +30,9 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
         contentAdapter.addOnItemChildClickListener(R.id.tv_today_title) { _, _, _ ->
             RouteHelper.jumpCalendar()
         }
+        contentAdapter.addOnItemChildClickListener(R.id.tv_tomorrow_title) { _, _, _ ->
+            RouteHelper.jumpCalendar()
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {

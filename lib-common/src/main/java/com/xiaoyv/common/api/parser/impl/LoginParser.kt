@@ -1,4 +1,4 @@
-package com.xiaoyv.common.api.parser
+package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.LoginFormEntity

@@ -29,6 +29,9 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
             when (it.itemId) {
                 R.id.bottom_menu_home -> binding.vpView.setCurrentItem(0, false)
                 R.id.bottom_menu_timeline -> binding.vpView.setCurrentItem(1, false)
+                R.id.bottom_menu_media -> binding.vpView.setCurrentItem(2, false)
+                R.id.bottom_menu_discover -> binding.vpView.setCurrentItem(3, false)
+                R.id.bottom_menu_profile -> binding.vpView.setCurrentItem(4, false)
             }
             true
         }

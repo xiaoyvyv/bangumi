@@ -20,7 +20,7 @@ class HomeAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fra
     internal val bottomTabs = listOf(
         "广场",
         "时间胶囊",
-        "媒体",
+        "媒体排行",
         "讨论",
         "我的"
     )

@@ -1,4 +1,4 @@
-package com.xiaoyv.common.api.parser
+package com.xiaoyv.common.api.parser.impl
 
 import androidx.core.text.parseAsHtml
 import com.xiaoyv.blueprint.kts.toJson
@@ -7,6 +7,8 @@ import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
+import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.kts.debugLog
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element

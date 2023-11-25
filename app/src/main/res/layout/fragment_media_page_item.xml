@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="?attr/colorOnSurfaceInverse"
+    tools:showIn="@layout/fragment_media_page">
+
+    <FrameLayout
+        android:id="@+id/card_cover"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginHorizontal="@dimen/ui_size_8"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="?attr/colorSurfaceVariant"
+        app:layout_constraintDimensionRatio="2:3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/ui_transparent"
+        app:strokeWidth="@dimen/ui_size_0">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+        <FrameLayout
+            android:id="@+id/ll_edge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/shape_bottom_edge_corner"
+            android:paddingTop="@dimen/ui_size_24"
+            android:paddingBottom="@dimen/ui_size_6">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="@dimen/ui_size_6"
+                android:layout_marginEnd="@dimen/ui_size_44"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?attr/colorOnSurfaceInverse"
+                android:textSize="@dimen/text_label_big"
+                android:textStyle="bold"
+                tools:text="2023" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/ui_size_6"
+                android:drawablePadding="@dimen/ui_size_4"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:textColor="?attr/colorOnSurfaceInverse"
+                android:textSize="@dimen/text_label_big"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/ic_round_star"
+                tools:text="99" />
+        </FrameLayout>
+    </FrameLayout>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintTop_toBottomOf="@+id/card_cover"
+        tools:text="@tools:sample/lorem" />
+</androidx.constraintlayout.widget.ConstraintLayout>

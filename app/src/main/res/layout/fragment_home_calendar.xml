@@ -10,6 +10,7 @@
         android:id="@+id/tv_today_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
         android:background="?attr/selectableItemBackground"
         android:drawableEnd="@drawable/ic_right"
         android:paddingHorizontal="@dimen/ui_layout_margin"

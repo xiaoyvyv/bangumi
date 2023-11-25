@@ -1,6 +1,8 @@
-package com.xiaoyv.common.api.parser
+package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
+import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.optImageUrl
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
+import com.xiaoyv.bangumi.databinding.FragmentTimelinePageBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.bean.TimelineTab
@@ -19,7 +19,7 @@ import com.xiaoyv.widget.kts.getParcelObj
  * @since 11/24/23
  */
 class TimelinePageFragment :
-    BaseViewModelFragment<FragmentProfileBinding, TimelinePageViewModel>() {
+    BaseViewModelFragment<FragmentTimelinePageBinding, TimelinePageViewModel>() {
 
     private val contentAdapter by lazy { TimelinePageAdapter() }
 

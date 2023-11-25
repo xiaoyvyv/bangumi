@@ -5,8 +5,8 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.LoginParser.parseLoginResult
-import com.xiaoyv.common.api.parser.LoginParser.parserLoginForms
+import com.xiaoyv.common.api.parser.impl.LoginParser.parseLoginResult
+import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginForms
 import com.xiaoyv.common.api.parser.entity.LoginResultEntity
 import com.xiaoyv.common.kts.debugLog
 import kotlinx.coroutines.Dispatchers

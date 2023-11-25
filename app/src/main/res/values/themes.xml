@@ -1,5 +1,4 @@
 <resources>
-
     <style name="Theme.Bangumi.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

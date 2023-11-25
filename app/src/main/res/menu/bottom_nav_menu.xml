@@ -3,25 +3,25 @@
 
     <item
         android:id="@+id/bottom_menu_home"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_bottom_home"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/bottom_menu_timeline"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/ic_bottom_timeline"
+        android:title="@string/title_timeline" />
 
     <item
         android:id="@+id/bottom_menu_media"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/ic_bottom_rank"
+        android:title="@string/title_media" />
 
     <item
         android:id="@+id/bottom_menu_discover"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/ic_bottom_group"
+        android:title="@string/title_super" />
     <item
         android:id="@+id/bottom_menu_profile"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/ic_bottom_profile"
+        android:title="@string/title_profile" />
 </menu>

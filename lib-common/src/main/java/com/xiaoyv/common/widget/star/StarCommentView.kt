@@ -27,14 +27,20 @@ class StarCommentView @JvmOverloads constructor(
 
     private fun refreshRating() {
         // starlight stars7
-        val score = data?.score.orEmpty()
-            .split(" ")
-            .find { it.startsWith("stars") }.orEmpty()
-            .replace("stars", "")
-            .toFloatOrNull() ?: 0f
+        val score = parseScore(data?.score)
 
         binding.ivStar.rating = score / 2f
         binding.tvComment.text = data?.comment.orEmpty()
         binding.tvComment.isVisible = data?.comment.orEmpty().isNotBlank()
+    }
+
+    companion object {
+        fun parseScore(text: String?): Float {
+            return text.orEmpty()
+                .split(" ")
+                .find { it.startsWith("stars") }.orEmpty()
+                .replace("stars", "")
+                .toFloatOrNull() ?: 0f
+        }
     }
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.HomeParser.parserHomePage
+import com.xiaoyv.common.api.parser.impl.HomeParser.parserHomePage
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
