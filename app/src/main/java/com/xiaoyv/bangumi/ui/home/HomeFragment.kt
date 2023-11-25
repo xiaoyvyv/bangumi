@@ -1,7 +1,9 @@
 package com.xiaoyv.bangumi.ui.home
 
 import androidx.lifecycle.LifecycleOwner
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.widget.kts.useNotNull
 
@@ -22,6 +24,12 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
 
     override fun initData() {
 
+    }
+
+    override fun initListener() {
+        contentAdapter.addOnItemChildClickListener(R.id.tv_today_title) { _, _, _ ->
+            RouteHelper.jumpCalendar()
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {

@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/ui_size_12"
         android:layout_marginTop="@dimen/ui_size_12"
+        android:linksClickable="true"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
@@ -51,6 +52,7 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ui_size_12"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/tv_action"
         app:layout_constraintStart_toStartOf="@+id/tv_action"
         app:layout_constraintTop_toBottomOf="@+id/tv_action" />
@@ -73,6 +75,7 @@
             android:layout_width="@dimen/ui_size_80"
             android:layout_height="@dimen/ui_size_120"
             android:background="?attr/colorSurfaceVariant"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,6 +89,7 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="@dimen/text_label_big"
             android:textStyle="bold"
+            android:visibility="gone"
             tools:text="User A said Book 1" />
 
         <com.xiaoyv.common.widget.text.AnimeTextView
@@ -98,6 +102,7 @@
             android:paddingVertical="@dimen/ui_size_6"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="@dimen/text_label"
+            android:visibility="gone"
             tools:text="User A said Book 1" />
     </com.google.android.material.card.MaterialCardView>
 
@@ -106,6 +111,7 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:paddingVertical="@dimen/ui_size_6"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/tv_action"
         app:layout_constraintStart_toStartOf="@+id/tv_action"
         app:layout_constraintTop_toBottomOf="@+id/ll_card"

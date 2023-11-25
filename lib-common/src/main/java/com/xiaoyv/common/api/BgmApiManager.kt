@@ -81,7 +81,7 @@ class BgmApiManager {
     }
 
     companion object {
-        const val URL_BASE_WEB = "https://bgm.tv"
+        const val URL_BASE_WEB = "https://bangumi.tv"
         const val URL_BASE_API = "https://api.bgm.tv"
 
         private val instance by lazy { BgmApiManager() }

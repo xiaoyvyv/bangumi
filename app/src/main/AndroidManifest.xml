@@ -43,6 +43,10 @@
             android:name="com.xiaoyv.bangumi.ui.feature.login.LoginActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

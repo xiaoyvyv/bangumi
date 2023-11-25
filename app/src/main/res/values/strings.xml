@@ -11,4 +11,7 @@
     <string name="login_input_verify">验证码</string>
     <string name="login_btn_login">登录</string>
     <string name="timeline_title">%s的时间胶囊</string>
+    <string name="calendar_title">每日方送</string>
+    <string name="calendar_today_title">今日放送</string>
+    <string name="calendar_tomorrow_title">明日放送</string>
 </resources>
