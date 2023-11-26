@@ -5,10 +5,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.KeyboardUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityLoginBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.activity
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -32,7 +32,8 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
     }
 
     override fun initData() {
-
+        binding.inputEmail.setText(UserHelper.currentUser.email.toString())
+        binding.inputPassword.setText(UserHelper.currentUser.password.toString())
     }
 
     override fun initListener() {

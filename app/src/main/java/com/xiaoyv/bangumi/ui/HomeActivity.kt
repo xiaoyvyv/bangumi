@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.ui
 
 import android.view.MotionEvent
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding

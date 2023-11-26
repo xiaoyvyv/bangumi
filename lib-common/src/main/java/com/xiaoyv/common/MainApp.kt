@@ -3,6 +3,7 @@ package com.xiaoyv.common
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.BluePrint
+import com.xiaoyv.common.helper.UserHelper
 
 
 lateinit var currentApplication: MainApp
@@ -23,5 +24,7 @@ class MainApp : Application() {
         super.onCreate()
         currentApplication = this
         BluePrint.init(this, false)
+
+        UserHelper.initLoad()
     }
 }

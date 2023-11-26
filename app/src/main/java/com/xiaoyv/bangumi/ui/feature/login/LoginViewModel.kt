@@ -3,11 +3,11 @@ package com.xiaoyv.bangumi.ui.feature.login
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.impl.LoginParser.parseLoginResult
-import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginForms
 import com.xiaoyv.common.api.parser.entity.LoginResultEntity
+import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginResult
+import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginForms
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.debugLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -49,11 +49,15 @@ class LoginViewModel : BaseViewModel() {
                 onLoginResultLiveData.value = null
             },
             block = {
-                onLoginResultLiveData.value = withContext(Dispatchers.IO) {
-                    val formEntity = BgmApiManager.bgmWebApi.queryLoginPage().parserLoginForms()
-                    if (formEntity.hasLogin) {
+                val loginResult = withContext(Dispatchers.IO) {
+                    val formEntity = BgmApiManager.bgmWebApi.queryLoginPage()
+                        .parserLoginForms(email, password)
+
+                    val resultEntity = formEntity.loginInfo
+
+                    if (formEntity.hasLogin && resultEntity != null) {
                         debugLog { "当前用户已经登录成功，无需再登录" }
-                        return@withContext formEntity.loginInfo
+                        return@withContext resultEntity
                     }
 
                     val forms = formEntity.forms
@@ -61,10 +65,13 @@ class LoginViewModel : BaseViewModel() {
                     forms["password"] = password
                     forms["captcha_challenge_field"] = verifyCode
 
-                    BgmApiManager.bgmWebApi.doLogin(forms).parseLoginResult().apply {
-                        debugLog { toJson(true) }
-                    }
+                    BgmApiManager.bgmWebApi.doLogin(forms)
+                        .parserLoginResult(email, password)
                 }
+
+                UserHelper.onLogin(loginResult)
+
+                onLoginResultLiveData.value = loginResult
             }
         )
     }

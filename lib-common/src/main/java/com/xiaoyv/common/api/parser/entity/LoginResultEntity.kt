@@ -1,5 +1,7 @@
 package com.xiaoyv.common.api.parser.entity
 
+import com.xiaoyv.common.api.response.UserEntity
+
 /**
  * Class: [LoginResultEntity]
  *
@@ -9,5 +11,6 @@ package com.xiaoyv.common.api.parser.entity
 data class LoginResultEntity(
     var error: String? = null,
     var success: Boolean = false,
-    var message: String = ""
+    var message: String = "",
+    var userEntity: UserEntity = UserEntity(isLogout = true)
 )
