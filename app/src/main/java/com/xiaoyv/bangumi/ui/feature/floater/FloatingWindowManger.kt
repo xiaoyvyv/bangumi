@@ -6,7 +6,7 @@ import android.os.Build
 import android.view.WindowManager
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
-import com.xiaoyv.bangumi.MainActivity
+import com.xiaoyv.bangumi.StartActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeFloater
 import com.xiaoyv.floater.FloatyService
 import com.xiaoyv.floater.FloatyWindow
@@ -21,7 +21,7 @@ object FloatingWindowManger {
     fun init(context: Context) {
         FloatyService.start(
             context,
-            foregroundNotificationClickClass = MainActivity::class.java.name,
+            foregroundNotificationClickClass = StartActivity::class.java.name,
             foregroundNotificationChannelName = context.getString(com.xiaoyv.common.R.string.foreground_notification_channel_name),
             foregroundNotificationTitle = context.getString(
                 com.xiaoyv.common.R.string.foreground_notification_title,

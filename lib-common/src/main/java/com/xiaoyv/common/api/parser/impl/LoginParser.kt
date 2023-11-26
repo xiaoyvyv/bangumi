@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.parser.entity.LoginResultEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.response.UserEntity
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.orEmpty
 import org.jsoup.nodes.Document
 
@@ -17,11 +18,15 @@ import org.jsoup.nodes.Document
  */
 object LoginParser {
 
-    fun Document.parserLoginForms(email: String, password: String): LoginFormEntity {
+    fun Document.parserLoginForms(): LoginFormEntity {
         val formEntity = LoginFormEntity()
         val loginForm = select("#loginForm")
         if (loginForm.isEmpty()) {
-            val loginResult = parserLoginResult(email, password)
+            val loginResult = parserLoginResult(
+                email = UserHelper.currentUser.email.orEmpty(),
+                password = UserHelper.currentUser.password.orEmpty()
+            )
+
             if (loginResult.success) {
                 formEntity.hasLogin = true
                 formEntity.loginInfo = loginResult

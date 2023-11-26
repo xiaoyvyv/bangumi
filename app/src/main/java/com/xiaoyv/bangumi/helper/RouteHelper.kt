@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.helper
 
 import com.blankj.utilcode.util.ActivityUtils
+import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
@@ -23,5 +24,9 @@ object RouteHelper {
 
     fun jumpRobot() {
         ActivityUtils.startActivity(MusumeActivity::class.java)
+    }
+
+    fun jumpHome() {
+        ActivityUtils.startActivity(HomeActivity::class.java)
     }
 }

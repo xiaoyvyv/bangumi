@@ -31,7 +31,7 @@ class BgmApiManager {
     private val httpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(CommonInterceptor())
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .cookieJar(cookieJar)
             .callTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
