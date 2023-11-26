@@ -35,21 +35,23 @@
         <item name="android:includeFontPadding">false</item>
 
         <!-- Fix CollapsingToolbar with theme material3 -->
-        <item name="collapsingToolbarLayoutStyle">@style/Widget.App.CollapsingToolbar</item>
+        <item name="collapsingToolbarLayoutStyle">@style/Theme.Bangumi.CollapsingToolbar</item>
+        <item name="toolbarStyle">@style/Theme.Bangumi.Toolbar</item>
     </style>
 
+    <!-- Widget AppBarLayout -->
     <style name="Theme.Bangumi.AppBarTheme" parent="@style/Widget.Material3.AppBarLayout">
         <item name="liftOnScroll">false</item>
     </style>
 
-    <style name="Theme.Bangumi.ImageCornerSmall">
-        <item name="cornerFamily">?attr/shapeCornerFamily</item>
-        <item name="cornerSize">@dimen/ui_layout_radius</item>
-    </style>
+    <!-- Widget Toolbar -->
+    <style name="Theme.Bangumi.Toolbar" parent="Widget.Material3.Toolbar" />
 
-    <style name="Widget.App.CollapsingToolbar" parent="Widget.Material3.CollapsingToolbar">
+    <!-- Widget CollapsingToolbar -->
+    <style name="Theme.Bangumi.CollapsingToolbar" parent="Widget.Material3.CollapsingToolbar">
         <item name="forceApplySystemWindowInsetTop">false</item>
     </style>
+
 
     <style name="Theme.Bangumi.ToolbarTitle">
         <item name="android:fontFamily">@font/font</item>
@@ -65,4 +67,9 @@
     <style name="Theme.Bangumi.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Bangumi.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.Bangumi.ImageCornerSmall">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">@dimen/ui_layout_radius</item>
+    </style>
 </resources>

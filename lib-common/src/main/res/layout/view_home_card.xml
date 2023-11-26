@@ -44,7 +44,7 @@
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingTop="@dimen/ui_size_12"
             android:textAppearance="?attr/textAppearanceTitleSmall"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?attr/colorOnPrimarySurface"
             android:textStyle="bold"
             tools:text="123923 人关注" />
 
@@ -57,7 +57,7 @@
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_12"
             android:textAppearance="?attr/textAppearanceTitleLarge"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?attr/colorOnPrimarySurface"
             android:textStyle="bold"
             tools:text="从零开始的异世界生活" />
     </androidx.appcompat.widget.LinearLayoutCompat>

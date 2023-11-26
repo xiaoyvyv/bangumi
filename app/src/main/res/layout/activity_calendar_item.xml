@@ -26,7 +26,7 @@
         android:maxLines="3"
         android:paddingHorizontal="@dimen/ui_size_12"
         android:paddingVertical="@dimen/ui_size_12"
-        android:textColor="?attr/colorOnPrimary"
+        android:textColor="?attr/colorOnPrimarySurface"
         android:textSize="@dimen/text_label_big"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
