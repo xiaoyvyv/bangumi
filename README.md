@@ -1,4 +1,8 @@
 # Bangumi-for-Android
+ 
+![](https://github.com/xiaoyvyv/Bangumi-for-Android/workflows/Android%20CI/badge.svg)
+
+
 重大消息，本宅作为一位资深的Android开发从业人员，于 2023年11月决定开发一款 Bangumi 的三方客户端。
 
 本人尝试使用过 https://github.com/czy0729/Bangumi 这为为爱奉献的小伙伴的项目。
