@@ -14,19 +14,39 @@ import org.jsoup.nodes.Element
  */
 object TimeParser {
 
-    fun Document.parserTimelineForms(): List<TimelineEntity> {
+    fun Document.parserTimelineForms(isUser: Boolean): List<TimelineEntity> {
         val entities = arrayListOf<TimelineEntity>()
+
+        // 用户的时间线单独解析头像和ID
+        var userId = ""
+        var userAvatar = ""
+        if (isUser) {
+            userId =
+                select(".headerAvatar > a").attr("href")
+                    .substringAfterLast("/")
+            userAvatar = select(".headerAvatar > a > span").attr("style")
+                .fetchStyleBackgroundUrl().optImageUrl()
+        }
 
         select("#timeline ul > li").map {
             val entity = TimelineEntity()
 
-            entity.userId = it.select("li").attr("data-item-user")
-            entity.avatar = it.select("li a.avatar span").attr("style")
-                .fetchStyleBackgroundUrl().optImageUrl()
+            if (isUser) {
+                entity.userId = userId
+                entity.avatar = userAvatar
+            } else {
+                entity.userId = it.select("li").attr("data-item-user")
+                entity.avatar = it.select("li a.avatar span").attr("style")
+                    .fetchStyleBackgroundUrl().optImageUrl()
+            }
+
+
             entity.timeText = it.select(".post_actions").text()
 
             var infoUserActionText = ""
-            val infoSpan = it.select("li > .info")
+            val infoSpan = it.select("li > .info").ifEmpty {
+                it.select("li > .info_full")
+            }
 
             // 右侧人物解析
             var avatar = ""

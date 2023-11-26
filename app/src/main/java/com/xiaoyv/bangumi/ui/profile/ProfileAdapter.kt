@@ -5,8 +5,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.profile.page.ProfilePageFragment
+import com.xiaoyv.bangumi.ui.timeline.page.TimelinePageFragment
 import com.xiaoyv.common.config.annotation.ProfileType
+import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.ProfileTab
+import com.xiaoyv.common.helper.UserHelper
 
 /**
  * Class: [ProfileAdapter]
@@ -29,7 +32,16 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     )
 
     override fun createFragment(position: Int): Fragment {
-        return ProfilePageFragment.newInstance(tabs[position])
+        val profileTab = tabs[position]
+        val type = profileTab.type
+        return when (type) {
+            ProfileType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
+                TimelineType.TYPE_USER,
+                UserHelper.currentUser.id
+            )
+
+            else -> ProfilePageFragment.newInstance(profileTab)
+        }
     }
 
     override fun getItemCount(): Int {

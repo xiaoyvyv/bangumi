@@ -14,5 +14,7 @@ import kotlinx.parcelize.Parcelize
 data class TimelineTab(
     var title: String,
     @TimelineType
-    var timelineType: String
+    var timelineType: String,
+
+    var userId: Long = 0,
 ) : Parcelable

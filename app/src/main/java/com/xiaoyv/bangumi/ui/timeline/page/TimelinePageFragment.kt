@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xiaoyv.bangumi.databinding.FragmentTimelinePageBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.widget.kts.getAttrColor
@@ -58,6 +59,20 @@ class TimelinePageFragment :
         fun newInstance(timelineTab: TimelineTab): TimelinePageFragment {
             return TimelinePageFragment().apply {
                 arguments = bundleOf(NavKey.KEY_PARCELABLE to timelineTab)
+            }
+        }
+
+        /**
+         * 指定人物的时间胶囊
+         */
+        fun newInstance(@TimelineType timelineType: String, userId: Long): TimelinePageFragment {
+            return TimelinePageFragment().apply {
+                val timeline = TimelineTab(
+                    title = "User:$userId",
+                    timelineType = timelineType,
+                    userId = userId
+                )
+                arguments = bundleOf(NavKey.KEY_PARCELABLE to timeline)
             }
         }
     }

@@ -10,6 +10,7 @@ import androidx.annotation.StringDef
  */
 @StringDef(
     TimelineType.TYPE_ALL,
+    TimelineType.TYPE_USER,
     TimelineType.TYPE_SAY,
     TimelineType.TYPE_SUBJECT,
     TimelineType.TYPE_PROGRESS,
@@ -25,6 +26,7 @@ import androidx.annotation.StringDef
 annotation class TimelineType {
     companion object {
         const val TYPE_ALL = ""
+        const val TYPE_USER = ""
         const val TYPE_SAY = "say"
         const val TYPE_SUBJECT = "subject"
         const val TYPE_PROGRESS = "process"

@@ -5,10 +5,11 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.api.BgmWebApi
-import com.xiaoyv.common.api.parser.impl.TimeParser.parserTimelineForms
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
+import com.xiaoyv.common.api.parser.impl.TimeParser.parserTimelineForms
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
+import com.xiaoyv.widget.kts.orEmpty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -21,9 +22,13 @@ import kotlinx.coroutines.withContext
 class TimelinePageViewModel : BaseViewModel() {
     internal var timelineTab: TimelineTab? = null
 
-    internal val userId: String? = null
+    /**
+     * 是否指定了用户 ID
+     */
+    private val userId: Long
+        get() = timelineTab?.userId.orEmpty()
 
-    internal val timelineType: String
+    private val timelineType: String
         get() = timelineTab?.timelineType ?: TimelineType.TYPE_ALL
 
     internal val onTimelineLiveData = MutableLiveData<List<TimelineEntity>?>()
@@ -35,13 +40,17 @@ class TimelinePageViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
+                val forUser = userId > 0
+
                 onTimelineLiveData.value = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.queryTimeline(
                         path = BgmWebApi.timelineUrl(userId),
-                        type = timelineType
-                    ).parserTimelineForms()
+                        type = timelineType,
+                        ajax = if (forUser) 0 else 1
+                    ).parserTimelineForms(forUser)
                 }
             }
         )
     }
+
 }

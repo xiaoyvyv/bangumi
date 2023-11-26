@@ -45,12 +45,14 @@ interface BgmWebApi {
      *
      * - User Path: /user/837364/timeline
      * - Public Path: /timeline
+     *
+     * @param ajax 仅返回嵌套的 html
      */
     @GET("/{timeline}")
     suspend fun queryTimeline(
-        @Path("timeline") path: String,
+        @Path("timeline", encoded = true) path: String,
         @Query("type") @TimelineType type: String,
-        @Query("ajax") ajax: String = "1"
+        @Query("ajax") ajax: Long = 1
     ): Document
 
     /**
@@ -75,9 +77,13 @@ interface BgmWebApi {
     ): Document
 
     companion object {
-        fun timelineUrl(userId: String? = null): String {
-            return if (userId == null) "timeline"
-            else "/user/$userId/timeline"
+
+        /**
+         * 时间胶囊路径
+         */
+        fun timelineUrl(userId: Long): String {
+            return if (userId <= 0) "timeline"
+            else "user/$userId/timeline"
         }
     }
 }
