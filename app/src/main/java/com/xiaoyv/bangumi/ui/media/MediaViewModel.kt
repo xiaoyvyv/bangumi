@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.media
 
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.xiaoyv.common.config.bean.MediaOptionConfig
 
 /**
  * Class: [MediaViewModel]
@@ -10,6 +11,6 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
  * @since 11/24/23
  */
 class MediaViewModel : BaseViewModel() {
-
-    internal val onOptionsItemLiveData = MutableLiveData<List<Any>?>()
+    internal val currentSelectedOptionItem =
+        MutableLiveData<MutableMap<String, List<MediaOptionConfig.Config.Option.Item>>>(mutableMapOf())
 }

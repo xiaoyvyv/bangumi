@@ -15,6 +15,8 @@ import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.config.bean.MediaTab
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
 
@@ -57,7 +59,7 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh()
+        binding.srlRefresh.initRefresh { viewModel.isRefresh }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
     }
 
@@ -88,13 +90,14 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
             }
         }
 
-        viewModel.onBrowserOptionLiveData.observe(this) {
-            mediaFragment?.refreshOptions(it.orEmpty())
+        // 选项改变监听
+        mediaFragment?.regisOptionSelectedChange(this) {
+            viewModel.handleOption(it)
         }
     }
 
-    override fun onResumeExceptFirst() {
-        mediaFragment?.refreshOptions(viewModel.onBrowserOptionLiveData.value)
+    override fun createLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(requireActivity())
     }
 
     companion object {

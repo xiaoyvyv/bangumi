@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.config.annotation.MediaType
 import org.jsoup.nodes.Document
 
 /**
@@ -12,7 +13,7 @@ import org.jsoup.nodes.Document
  */
 object BrowserParser {
 
-    fun Document.parserBrowserPage(): BrowserEntity {
+    fun Document.parserBrowserPage(@MediaType mediaType: String): BrowserEntity {
         val browserEntity = BrowserEntity()
 
         browserEntity.items = select("#browserItemList > li").map {
@@ -36,27 +37,6 @@ object BrowserParser {
             item
         }
 
-        val groupMenu = select("#columnSubjectBrowserB .sideInner").firstOrNull()
-        if (groupMenu != null) {
-            val options = arrayListOf<BrowserEntity.Option>()
-            groupMenu.children().forEach {
-                if (it.hasClass("subtitle")) {
-                    val option = BrowserEntity.Option()
-                    option.title = it.text()
-
-                    val sibling = it.nextElementSibling()
-                    if (sibling != null && sibling.hasClass("grouped")) {
-                        option.items = sibling.select("li > a").map { a ->
-                            val path = a.attr("href")
-                            val name = a.text()
-                            BrowserEntity.OptionItem(path, name)
-                        }
-                    }
-                    options.add(option)
-                }
-            }
-            browserEntity.options = options
-        }
         return browserEntity
     }
 

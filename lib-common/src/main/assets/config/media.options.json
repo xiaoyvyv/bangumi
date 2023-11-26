@@ -1,0 +1,374 @@
+[
+  {
+    "mediaType": "anime",
+    "option": [
+      {
+        "title": "类型",
+        "pathIndex": 0,
+        "items": [
+          {
+            "groupTitle": "动画/类型",
+            "mediaType": "anime",
+            "title": "全部",
+            "value": "/"
+          },
+          {
+            "groupTitle": "动画/类型",
+            "mediaType": "anime",
+            "title": "TV",
+            "value": "/tv"
+          },
+          {
+            "groupTitle": "动画/类型",
+            "mediaType": "anime",
+            "title": "WEB",
+            "value": "/web"
+          },
+          {
+            "groupTitle": "动画/类型",
+            "mediaType": "anime",
+            "title": "OVA",
+            "value": "/ova"
+          },
+          {
+            "groupTitle": "动画/类型",
+            "mediaType": "anime",
+            "title": "剧场版",
+            "value": "/movie"
+          },
+          {
+            "groupTitle": "动画/类型",
+            "mediaType": "anime",
+            "title": "其他",
+            "value": "/misc"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "mediaType": "book",
+    "option": [
+      {
+        "title": "类型",
+        "pathIndex": 0,
+        "items": [
+          {
+            "groupTitle": "书籍/类型",
+            "mediaType": "book",
+            "title": "全部",
+            "value": "/"
+          },
+          {
+            "groupTitle": "书籍/类型",
+            "mediaType": "book",
+            "title": "漫画",
+            "value": "/comic"
+          },
+          {
+            "groupTitle": "书籍/类型",
+            "mediaType": "book",
+            "title": "小说",
+            "value": "/novel"
+          },
+          {
+            "groupTitle": "书籍/类型",
+            "mediaType": "book",
+            "title": "画集",
+            "value": "/illustration"
+          },
+          {
+            "groupTitle": "书籍/类型",
+            "mediaType": "book",
+            "title": "其他",
+            "value": "/misc"
+          }
+        ]
+      },
+      {
+        "title": "系列",
+        "pathIndex": 1,
+        "items": [
+          {
+            "groupTitle": "书籍/系列",
+            "mediaType": "book",
+            "title": "全部",
+            "value": "/"
+          },
+          {
+            "groupTitle": "书籍/系列",
+            "mediaType": "book",
+            "title": "系列",
+            "value": "/series"
+          },
+          {
+            "groupTitle": "书籍/系列",
+            "mediaType": "book",
+            "title": "单行本",
+            "value": "/offprint"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "mediaType": "music",
+    "option": [
+      {
+        "title": "类型",
+        "pathIndex": 0,
+        "items": []
+      }
+    ]
+  },
+  {
+    "mediaType": "game",
+    "option": [
+      {
+        "title": "类型",
+        "pathIndex": 0,
+        "items": [
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "全部",
+            "value": ""
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PC",
+            "value": "/pc"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Mac OS",
+            "value": "/mac"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PS5",
+            "value": "/ps5"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Xbox Series X/S",
+            "value": "/xbox_series_xs"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PS4",
+            "value": "/ps4"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Xbox One",
+            "value": "/xbox_one"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Nintendo Switch",
+            "value": "/ns"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Wii U",
+            "value": "/wii_u"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PS3",
+            "value": "/ps3"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Xbox360",
+            "value": "/xbox360"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Wii",
+            "value": "/wii"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PS Vita",
+            "value": "/psv"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "3DS",
+            "value": "/3ds"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "iOS",
+            "value": "/iphone"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Android",
+            "value": "/android"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "街机",
+            "value": "/arc"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "NDS",
+            "value": "/nds"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PSP",
+            "value": "/psp"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PS2",
+            "value": "/ps2"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "XBOX",
+            "value": "/xbox"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "GameCube",
+            "value": "/gamecube"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Dreamcast",
+            "value": "/dreamcast"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Nintendo 64",
+            "value": "/n64"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "PlayStation",
+            "value": "/ps"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "SFC",
+            "value": "/sfc"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "FC",
+            "value": "/fc"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "WonderSwan",
+            "value": "/ws"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "WonderSwan Color",
+            "value": "/wsc"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "NEOGEO Pocket Color",
+            "value": "/ngp"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "GBA",
+            "value": "/GBA"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "GB",
+            "value": "/GB"
+          },
+          {
+            "groupTitle": "游戏/类型",
+            "mediaType": "game",
+            "title": "Virtual Boy",
+            "value": "/vb"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "mediaType": "real",
+    "option": [
+      {
+        "title": "类型",
+        "pathIndex": 0,
+        "items": [
+          {
+            "groupTitle": "三次元/类型",
+            "mediaType": "real",
+            "title": "全部",
+            "value": ""
+          },
+          {
+            "groupTitle": "三次元/类型",
+            "mediaType": "real",
+            "title": "日剧",
+            "value": "/jp"
+          },
+          {
+            "groupTitle": "三次元/类型",
+            "mediaType": "real",
+            "title": "欧美剧",
+            "value": "/en"
+          },
+          {
+            "groupTitle": "三次元/类型",
+            "mediaType": "game",
+            "title": "华语剧",
+            "value": "/cn"
+          },
+          {
+            "groupTitle": "三次元/类型",
+            "mediaType": "real",
+            "title": "其他",
+            "value": "/misc"
+          }
+        ]
+      }
+    ]
+  }
+]

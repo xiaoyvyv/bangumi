@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/ui_size_8"
         android:paddingVertical="@dimen/ui_size_8"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager"
         app:spanCount="3"
         tools:itemCount="10"
         tools:listitem="@layout/fragment_media_page_item" />

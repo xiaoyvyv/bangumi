@@ -7,9 +7,10 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.api.parser.impl.BrowserParser.parserBrowserPage
-import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.bean.MediaOptionConfig
 import com.xiaoyv.common.config.bean.MediaTab
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.kts.copyAddAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,14 +25,23 @@ class MediaPageViewModel : BaseViewModel() {
     internal var mediaTable: MediaTab? = null
 
     internal val onBrowserRankLiveData = MutableLiveData<List<BrowserEntity.Item>?>()
-    internal val onBrowserOptionLiveData = MutableLiveData<List<BrowserEntity.Option>?>()
 
-    internal var current = 1
-    internal var sortType = BrowserSortType.TYPE_RANK
+    /**
+     * 搜索条件
+     */
+    private var current = 1
+    private var sortType: String? = null
+    private var orderBy: String? = null
+    private var subPath: String = ""
+
+    @MediaType
+    val mediaType: String
+        get() = mediaTable?.type ?: MediaType.TYPE_ANIME
 
     internal var loadingMoreState: LoadState = LoadState.None
 
-    internal val isRefresh get() = current == 1
+    internal val isRefresh: Boolean
+        get() = current == 1
 
     fun refresh() {
         current = 1
@@ -51,13 +61,16 @@ class MediaPageViewModel : BaseViewModel() {
                 onBrowserRankLiveData.value = null
             },
             block = {
+                buildSubPathAndQueryOrderBy()
+
                 val response = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.browserRank(
-                        mediaType = mediaTable?.type ?: MediaType.TYPE_ANIME,
-                        subPath = buildSubPath(),
+                        mediaType = mediaType,
+                        subPath = subPath,
                         page = current,
-                        sortType = sortType
-                    ).parserBrowserPage()
+                        sortType = sortType,
+                        orderby = orderBy
+                    ).parserBrowserPage(mediaType)
                 }
                 val responseList = response.items
 
@@ -73,14 +86,73 @@ class MediaPageViewModel : BaseViewModel() {
                 } else {
                     LoadState.NotLoading(responseList.isEmpty())
                 }
-
-                onBrowserOptionLiveData.value = response.options
             }
         )
     }
 
-    private fun buildSubPath(): String {
-        return ""
+    /**
+     * 构建媒体下的分类等相对路径
+     *
+     * - /
+     * - /tv
+     * - /airtime/2019
+     */
+    private fun buildSubPathAndQueryOrderBy() {
+
+
+//        debugLog { "optionUrl: $optionUrl, path: $path, subPath: $subPath" }
     }
 
+    /**
+     * 处理查询条件
+     */
+    fun handleOption(it: Map<String, List<MediaOptionConfig.Config.Option.Item>>?) {
+        val optionItemMap = it.orEmpty()
+        if (!optionItemMap.containsKey(mediaType)) {
+            return
+        }
+
+        val items = requireNotNull(optionItemMap[mediaType]).toMutableList()
+        val pinYin = items.find { it.isSortPinYin }
+        if (pinYin != null) {
+            items.remove(pinYin)
+        }
+
+        val sortOption = items.find { it.isSortOption }
+        if (sortOption != null) {
+            items.remove(sortOption)
+        }
+
+        val path = items
+            .filter { it.value.orEmpty().isNotBlank() }
+            .map {
+                when {
+                    it.isYear -> "/airtime/" + it.value
+                    else -> it.value
+                }
+            }
+
+        val targetSubPath = path.joinToString("")
+            .replace("//", "")
+            .removeSuffix("/")
+            .removePrefix("/")
+
+        val orderByPinYin = pinYin?.value
+
+        val targetSortType = sortOption?.value
+
+        // 没有变化不更新
+        if (targetSubPath == subPath && orderByPinYin == orderBy && sortType == targetSortType) {
+            debugLog { "没有变化不更新: $subPath, $orderBy" }
+            return
+        }
+
+        subPath = targetSubPath
+        orderBy = orderByPinYin
+        sortType = targetSortType
+
+        debugLog { "更新: $subPath, $orderBy" }
+
+        refresh()
+    }
 }

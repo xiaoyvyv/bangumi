@@ -9,6 +9,8 @@ import com.xiaoyv.blueprint.kts.toJson
 
 
 typealias GoogleAttr = com.google.android.material.R.attr
+typealias CommonDrawable = com.xiaoyv.common.R.drawable
+typealias CommonString = com.xiaoyv.common.R.string
 
 val gson by lazy { Gson() }
 

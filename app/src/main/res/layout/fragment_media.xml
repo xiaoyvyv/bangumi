@@ -40,18 +40,12 @@
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-        android:id="@+id/rv_options"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/fl_options"
         android:layout_width="@dimen/ui_size_300"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="?attr/colorSurface"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/ui_size_8"
-        android:paddingVertical="@dimen/ui_layout_margin"
-        app:layoutManager="com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager"
-        app:spanCount="4"
-        tools:itemCount="10"
-        tools:listitem="@layout/fragment_media_option_item" />
+        android:fitsSystemWindows="true" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

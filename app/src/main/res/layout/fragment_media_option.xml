@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiaoyv.common.widget.scroll.AnimeRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rv_options"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="?attr/colorSurface"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ui_size_8"
+    android:paddingVertical="@dimen/ui_layout_margin"
+    app:layoutManager="com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager"
+    app:spanCount="4"
+    tools:itemCount="10"
+    tools:listitem="@layout/fragment_media_option_item" />

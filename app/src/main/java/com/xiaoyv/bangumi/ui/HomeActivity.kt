@@ -8,7 +8,9 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.musume.LAppMusumeView
+import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
 import kotlinx.coroutines.delay
 
@@ -46,6 +48,10 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
             }
             true
         }
+    }
+
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
     }
 
     override fun onResume() {

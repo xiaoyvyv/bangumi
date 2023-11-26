@@ -58,9 +58,9 @@ interface BgmWebApi {
      */
     @GET("/{mediaType}/browser/{subPath}")
     suspend fun browserRank(
-        @Path("mediaType") @MediaType mediaType: String,
-        @Path("subPath") subPath: String,
-        @Query("sort") @BrowserSortType sortType: String,
+        @Path("mediaType", encoded = true) @MediaType mediaType: String,
+        @Path("subPath", encoded = true) subPath: String,
+        @Query("sort") @BrowserSortType sortType: String? = null,
         @Query("page") page: Int = 1,
         @Query("orderby") orderby: String? = null,
     ): Document

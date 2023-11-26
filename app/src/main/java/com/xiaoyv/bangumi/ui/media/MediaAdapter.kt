@@ -25,6 +25,18 @@ class MediaAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         MediaTab("三次元", MediaType.TYPE_REAL),
     )
 
+    fun getCurrentMediaType(currentItem: Int): String {
+        return bottomTabs[currentItem].type
+    }
+
+    fun getCurrentMediaTypeName(currentItem: Int): String {
+        return bottomTabs[currentItem].title
+    }
+
+    fun getMediaTypeName(@MediaType type: String): String {
+        return bottomTabs.find { it.type == type }?.title.orEmpty()
+    }
+
     override fun createFragment(position: Int): Fragment {
         return MediaPageFragment.newInstance(bottomTabs[position])
     }

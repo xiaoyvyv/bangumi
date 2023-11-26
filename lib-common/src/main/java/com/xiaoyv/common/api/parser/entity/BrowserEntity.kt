@@ -12,10 +12,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Keep
 @Parcelize
-data class BrowserEntity(
-    var options: List<Option> = emptyList(),
-    var items: List<Item> = emptyList()
-) : Parcelable {
+data class BrowserEntity(var items: List<Item> = emptyList()) : Parcelable {
 
     @Keep
     @Parcelize
@@ -30,20 +27,6 @@ data class BrowserEntity(
         var titleCn: String = "",
         var coverImage: String = "",
         var subjectId: String = "",
-    ) : Parcelable
-
-    @Keep
-    @Parcelize
-    data class Option(
-        var title: String = "",
-        var items: List<OptionItem> = emptyList(),
-    ) : Parcelable
-
-    @Keep
-    @Parcelize
-    data class OptionItem(
-        var path: String = "",
-        var title: String = ""
     ) : Parcelable
 
     @Keep
