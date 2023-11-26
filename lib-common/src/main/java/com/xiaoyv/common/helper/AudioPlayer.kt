@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import com.blankj.utilcode.util.Utils
 
+
 class AudioPlayer private constructor(context: Context) {
 
     private val audioManager: AudioManager =
@@ -42,6 +43,9 @@ class AudioPlayer private constructor(context: Context) {
             )
 
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                // 设置音量 10%
+                setStreamVolume()
+
                 mediaPlayer?.reset()
                 mediaPlayer?.setDataSource(afd)
                 mediaPlayer?.prepare()
@@ -50,6 +54,16 @@ class AudioPlayer private constructor(context: Context) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * 设置音量 10%
+     */
+    private fun setStreamVolume() {
+        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        val volume = 0.1f
+        val targetVolume = (volume * maxVolume).toInt()
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, targetVolume, 0)
     }
 
     fun pause() {

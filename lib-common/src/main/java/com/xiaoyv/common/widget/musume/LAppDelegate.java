@@ -24,6 +24,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import com.live2d.sdk.cubism.framework.CubismFramework;
 
@@ -115,9 +116,7 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
 
         LAppLive2DManager.releaseInstance();
         CubismFramework.dispose();
-    }
 
-    public void onDestroy() {
         releaseInstance();
     }
 
@@ -139,7 +138,11 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
         CubismFramework.initialize();
 
         // Shader initialization
-        view.initializeShader();
+        if (view != null) {
+            view.initializeShader();
+        }
+
+        Log.e("Robot-Exception", "onSurfaceCreated");
     }
 
     @Override

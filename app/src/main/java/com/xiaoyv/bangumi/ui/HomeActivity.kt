@@ -1,18 +1,14 @@
 package com.xiaoyv.bangumi.ui
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.view.Gravity
-import android.widget.PopupWindow
+import android.view.MotionEvent
+import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
-import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
-import com.xiaoyv.common.widget.musume.LAppMusumeView
 import com.xiaoyv.widget.dialog.UiDialog
-import com.xiaoyv.widget.kts.dpi
-import kotlinx.coroutines.delay
 
 /**
  * Class: [HomeActivity]
@@ -23,8 +19,7 @@ import kotlinx.coroutines.delay
 class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>() {
     private val vpAdapter by lazy { HomeAdapter(this) }
 
-    private lateinit var floatingView: LAppMusumeView
-    private var popupWindow: PopupWindow? = null
+    private val robot by lazy { HomeRobot(this) }
 
     override fun initView() {
         binding.vpView.isUserInputEnabled = false
@@ -33,7 +28,6 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
     }
 
     override fun initData() {
-        createRobot()
 
     }
 
@@ -50,44 +44,33 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
         }
     }
 
-    override fun onCreateLoadingDialog(): UiDialog {
-        return AnimeLoadingDialog(this)
+    override fun LifecycleOwner.initViewObserver() {
+        currentApplication.globalRobotSpeech.observe(this) {
+            debugLog { "春菜：$it" }
+            robot.onSay(it)
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        floatingView.onResume()
+        robot.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        floatingView.onPause()
+        robot.onPause()
     }
 
-    override fun finish() {
-        super.finish()
-        popupWindow?.dismiss()
-        popupWindow = null
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        robot.onAttachedToWindow(binding.navView)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        floatingView.release()
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        robot.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
-
-    /**
-     * 创建春菜窗口
-     */
-    private fun createRobot() {
-        floatingView = LAppMusumeView(this).apply {
-            init()
-        }
-        popupWindow = PopupWindow(floatingView, 120.dpi, 200.dpi)
-        popupWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        launchUI {
-            delay(2000)
-            popupWindow?.showAsDropDown(binding.navView, 0, 0, Gravity.END)
-        }
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
     }
 }

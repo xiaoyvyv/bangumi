@@ -1,5 +1,7 @@
 package com.xiaoyv.common.api.converter
 
+import com.xiaoyv.common.currentApplication
+import com.xiaoyv.widget.kts.sendValue
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -28,7 +30,14 @@ class WebDocumentConverter : Converter.Factory() {
     private object ItemConverter : Converter<ResponseBody, Document> {
         @Throws(IOException::class)
         override fun convert(value: ResponseBody): Document {
-            return Jsoup.parse(value.use { it.string() })
+            return Jsoup.parse(value.use { it.string() }).apply {
+                runCatching {
+                    val text = select("#robot_speech").text().trim()
+                    if (text.isNotBlank()) {
+                        currentApplication.globalRobotSpeech.sendValue(text)
+                    }
+                }
+            }
         }
     }
 
