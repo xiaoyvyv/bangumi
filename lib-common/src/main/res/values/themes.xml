@@ -29,11 +29,22 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
 
-    <style name="Theme.Bangumi" parent="Base.Theme.Bangumi" />
+    <style name="Theme.Bangumi" parent="Base.Theme.Bangumi">
+        <item name="appBarLayoutStyle">@style/Theme.Bangumi.AppBarTheme</item>
+        <item name="android:fontFamily">@font/font</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
 
+    <style name="Theme.Bangumi.AppBarTheme" parent="@style/Widget.Material3.AppBarLayout">
+        <item name="liftOnScroll">false</item>
+    </style>
 
     <style name="Theme.Bangumi.ImageCornerSmall">
         <item name="cornerFamily">?attr/shapeCornerFamily</item>
-        <item name="cornerSize">6dp</item>
+        <item name="cornerSize">@dimen/ui_layout_radius</item>
     </style>
+
+    <style name="Theme.Bangumi.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Bangumi.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

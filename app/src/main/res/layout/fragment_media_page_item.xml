@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="?attr/colorOnSurfaceInverse"
     tools:showIn="@layout/fragment_media_page">
 
     <FrameLayout
@@ -14,7 +13,6 @@
         android:layout_marginHorizontal="@dimen/ui_size_8"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
         app:layout_constraintDimensionRatio="2:3"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/ui_transparent"

@@ -3,8 +3,9 @@
     android:shape="rectangle"
     android:useLevel="false">
     <corners
-        android:bottomLeftRadius="@dimen/ui_size_8"
-        android:bottomRightRadius="@dimen/ui_size_8" />
+        android:bottomLeftRadius="@dimen/ui_layout_radius"
+        android:bottomRightRadius="@dimen/ui_layout_radius" />
+
     <gradient
         android:angle="-90"
         android:endColor="@color/ui_black_c0"

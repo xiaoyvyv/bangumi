@@ -5,6 +5,7 @@
     android:id="@+id/draw_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
@@ -37,6 +38,7 @@
             android:id="@+id/vp2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/transparent"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -45,7 +47,6 @@
         android:layout_width="@dimen/ui_size_300"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="?attr/colorSurface"
+        android:background="@android:color/transparent"
         android:fitsSystemWindows="true" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

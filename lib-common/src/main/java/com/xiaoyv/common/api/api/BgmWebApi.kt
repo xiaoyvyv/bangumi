@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.config.annotation.TimelineType
 import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
@@ -52,6 +53,14 @@ interface BgmWebApi {
         @Query("ajax") ajax: String = "1"
     ): Document
 
+    /**
+     * 超展开
+     */
+    @GET("/rakuen/topiclist")
+    suspend fun querySuperTopic(
+        @Query("type") @SuperType type: String,
+        @Query("filter") filter: String? = null
+    ): Document
 
     /**
      * @param orderby 按拼音排序，和 sort 互斥

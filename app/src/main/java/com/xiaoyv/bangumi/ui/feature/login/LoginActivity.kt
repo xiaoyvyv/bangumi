@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityLoginBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.activity
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -41,13 +42,13 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
             val verifyCode = binding.inputVerify.text.toString()
 
             if (email.isBlank()) {
-                binding.inputEmail.error = getString(R.string.login_input_error_email)
+                binding.inputEmail.error = getString(CommonString.login_input_error_email)
             }
             if (password.isBlank()) {
-                binding.inputPassword.error = getString(R.string.login_input_error_password)
+                binding.inputPassword.error = getString(CommonString.login_input_error_password)
             }
             if (verifyCode.isBlank()) {
-                binding.inputVerify.error = getString(R.string.login_input_error_verify)
+                binding.inputVerify.error = getString(CommonString.login_input_error_verify)
             }
 
             if (email.isNotBlank() && password.isNotBlank() && verifyCode.isNotBlank()) {
@@ -77,10 +78,13 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
             val message = it?.message.orEmpty()
 
             MaterialAlertDialogBuilder(activity)
-                .setTitle(if (loginSuccess) getString(R.string.login_result_tip) else getString(R.string.login_result_error))
+                .setTitle(
+                    if (loginSuccess) getString(CommonString.login_result_tip)
+                    else getString(CommonString.login_result_error)
+                )
                 .setCancelable(loginSuccess)
                 .setMessage(if (loginSuccess) message else errorMsg)
-                .setPositiveButton(getString(R.string.login_result_known)) { _, _ ->
+                .setPositiveButton(getString(CommonString.login_result_known)) { _, _ ->
                     viewModel.refreshVerifyCode()
                 }
                 .create()

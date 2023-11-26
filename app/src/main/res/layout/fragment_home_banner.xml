@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/ui_layout_margin"
     android:layout_marginTop="@dimen/ui_size_44"
-    app:cardCornerRadius="@dimen/ui_size_6"
+    app:cardCornerRadius="@dimen/ui_layout_radius"
     app:strokeColor="@color/ui_transparent"
     app:strokeWidth="@dimen/ui_size_0">
 

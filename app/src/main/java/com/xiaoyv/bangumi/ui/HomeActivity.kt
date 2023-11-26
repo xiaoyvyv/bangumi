@@ -28,7 +28,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
     }
 
     override fun initData() {
-
+        robot.disable()
     }
 
     override fun initListener() {
@@ -70,6 +70,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
         robot.onTouchEvent(ev)
         return super.dispatchTouchEvent(ev)
     }
+
     override fun onCreateLoadingDialog(): UiDialog {
         return AnimeLoadingDialog(this)
     }

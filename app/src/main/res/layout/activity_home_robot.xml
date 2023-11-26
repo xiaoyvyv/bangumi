@@ -4,17 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ui_theme_c1"
-    android:layout_gravity="end|bottom">
+    android:layout_gravity="end|bottom"
+    android:animateLayoutChanges="true">
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_speech"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_20"
+        android:layout_marginEnd="@dimen/ui_size_100"
+        android:background="@drawable/shape_message"
         android:padding="@dimen/ui_size_6"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="@dimen/text_label"
-        app:layout_constraintBottom_toBottomOf="@+id/robot_view"
-        app:layout_constraintEnd_toStartOf="@+id/robot_view"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/robot_view"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/robot_view"
@@ -24,7 +29,7 @@
 
     <com.xiaoyv.common.widget.musume.LAppMusumeView
         android:id="@+id/robot_view"
-        android:layout_width="@dimen/ui_size_120"
+        android:layout_width="@dimen/ui_size_100"
         android:layout_height="@dimen/ui_size_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

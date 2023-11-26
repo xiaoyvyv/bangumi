@@ -23,7 +23,7 @@ fun String.fetchStyleBackgroundUrl(): String {
 fun String.optImageUrl(): String {
     val imageUrl = if (startsWith("//")) "https:$this" else this
     return imageUrl
-        .replace("/r/(.*?)/".toRegex(), "/r/600/")
-        .replace("/pic/crt/s/", "/pic/crt/l/")
-        .replace("/pic/cover/c/", "/pic/cover/l/")
+//        .replace("/r/(.*?)/".toRegex(), "/r/600/")
+//        .replace("/pic/crt/s/", "/pic/crt/l/")
+//        .replace("/pic/cover/c/", "/pic/cover/l/")
 }

@@ -35,6 +35,7 @@
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_action"
         android:layout_width="@dimen/ui_size_0"
+        android:textDirection="@null"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/ui_size_12"
         android:layout_marginTop="@dimen/ui_size_12"
@@ -64,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ui_size_12"
         app:cardBackgroundColor="?attr/colorSurface"
-        app:cardCornerRadius="@dimen/ui_size_6"
+        app:cardCornerRadius="@dimen/ui_layout_radius"
         app:layout_constraintEnd_toEndOf="@+id/tv_action"
         app:layout_constraintStart_toStartOf="@+id/tv_action"
         app:layout_constraintTop_toBottomOf="@+id/rating"

@@ -1,6 +1,8 @@
 package com.xiaoyv.bangumi.ui.group
 
 import com.xiaoyv.bangumi.databinding.FragmentGroupBinding
+import com.xiaoyv.bangumi.ui.rakuen.RakuenFragment
+import com.xiaoyv.bangumi.ui.rakuen.RakuenViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 
 /**
@@ -9,7 +11,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
  * @author why
  * @since 11/24/23
  */
-class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, GroupViewModel>() {
+class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, RakuenViewModel>() {
     override fun initView() {
 
     }
@@ -19,8 +21,8 @@ class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, GroupViewModel
     }
 
     companion object {
-        fun newInstance(): GroupFragment {
-            return GroupFragment()
+        fun newInstance(): RakuenFragment {
+            return RakuenFragment()
         }
     }
 }

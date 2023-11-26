@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.BluePrint
 
+
 lateinit var currentApplication: MainApp
 
 /**

@@ -7,6 +7,33 @@
     <string name="title_super">超展开</string>
     <string name="title_profile">我的</string>
 
+
+    <string name="login_title">登录 Bangumi</string>
+    <string name="login_result_tip">咕噜~咕噜~</string>
+    <string name="login_result_known">知道了</string>
+    <string name="login_result_error">登录出错</string>
+    <string name="login_input_error_email">请输入邮箱</string>
+    <string name="login_input_error_password">请输入密码</string>
+    <string name="login_input_error_verify">请输入验证码</string>
+    <string name="login_input_password">密码</string>
+    <string name="login_input_email">邮箱</string>
+    <string name="login_input_verify">验证码</string>
+    <string name="login_btn_login">登录</string>
+
+    <string name="timeline_title">%s的时间胶囊</string>
+
+    <string name="calendar_title">每日放送</string>
+    <string name="calendar_today_title">今日放送</string>
+    <string name="calendar_tomorrow_title">明日放送</string>
+
+    <string name="media_title">媒体排行</string>
+
+    <string name="robot_title">坛娘</string>
+
+    <string name="blog_title">日志</string>
+
+    <string name="super_title">超展开</string>
+
     <string name="foreground_notification_channel_name">Foreground service notification</string>
     <string name="foreground_notification_title">%s keep running</string>
     <string name="foreground_notification_text">Click to enter the main page</string>
