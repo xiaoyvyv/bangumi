@@ -22,6 +22,7 @@ inline fun ImageView.loadImageAnimate(
         .load(model ?: return)
         .let { if (centerCrop) it.centerCrop() else it }
         .listener(onLoadFailed = onFail, onResourceReady = onReady)
+        .error(CommonDrawable.layer_error)
         .transition(DrawableTransitionOptions.withCrossFade())
         .into(this)
 }
@@ -36,5 +37,6 @@ inline fun ImageView.loadImageBlur(
         .let { if (centerCrop) it.centerCrop() else it }
         .listener(onLoadFailed = onFail, onResourceReady = onReady)
         .transform(BlurTransformation(25, 5))
+        .error(CommonDrawable.layer_error)
         .into(this)
 }

@@ -18,10 +18,11 @@
         app:strokeColor="@color/ui_transparent"
         app:strokeWidth="@dimen/ui_size_0">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <com.xiaoyv.common.widget.image.AnimeImageView
             android:id="@+id/iv_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
         <FrameLayout
