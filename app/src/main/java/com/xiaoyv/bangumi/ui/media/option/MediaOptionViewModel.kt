@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.media.option
 
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.MediaOptionConfig
 

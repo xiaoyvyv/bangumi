@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.databinding.FragmentMediaOptionBinding
 import com.xiaoyv.bangumi.ui.media.MediaFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.MediaOptionConfig
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -43,6 +44,10 @@ class MediaOptionFragment :
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onOptionsItemLiveData.observe(this) {
             optionAdapter.submitList(it)
+
+            // 默认值为排名对应 [MediaPageViewModel.mediaType]
+            it.find { any -> any is MediaOptionConfig.Config.Option.Item && any.value == BrowserSortType.TYPE_RANK }
+                .let { any -> optionAdapter.selectItem(any as MediaOptionConfig.Config.Option.Item) }
         }
     }
 

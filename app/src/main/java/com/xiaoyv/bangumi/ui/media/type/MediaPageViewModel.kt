@@ -32,8 +32,11 @@ class MediaPageViewModel : BaseViewModel() {
      */
     private var current = 1
 
+    /**
+     * 默认按排名
+     */
     @BrowserSortType
-    private var sortType: String? = null
+    private var sortType: String? = BrowserSortType.TYPE_RANK
     private var orderBy: String? = null
     private var subPath: String = ""
 
