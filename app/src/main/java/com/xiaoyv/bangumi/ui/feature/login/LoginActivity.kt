@@ -32,8 +32,8 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
     }
 
     override fun initData() {
-        binding.inputEmail.setText(UserHelper.currentUser.email.toString())
-        binding.inputPassword.setText(UserHelper.currentUser.password.toString())
+        binding.inputEmail.setText(UserHelper.currentUser.email)
+        binding.inputPassword.setText(UserHelper.currentUser.password)
     }
 
     override fun initListener() {

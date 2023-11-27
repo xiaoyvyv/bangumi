@@ -12,5 +12,5 @@ data class LoginResultEntity(
     var error: String? = null,
     var success: Boolean = false,
     var message: String = "",
-    var userEntity: UserEntity = UserEntity(isLogout = true)
+    var userEntity: UserEntity = UserEntity(isEmpty = true)
 )

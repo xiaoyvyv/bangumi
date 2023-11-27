@@ -80,6 +80,13 @@ class BgmApiManager {
         apiRetrofit.create(BgmJsonApi::class.java)
     }
 
+    /**
+     * 清空 Cookie
+     */
+    private fun resetCookie() {
+        cookieJar.clear()
+    }
+
     companion object {
         const val URL_BASE_WEB = "https://bangumi.tv"
         const val URL_BASE_API = "https://api.bgm.tv"
@@ -91,5 +98,9 @@ class BgmApiManager {
 
         val bgmWebApi: BgmWebApi
             get() = instance.bgmWebApi
+
+        fun resetCookie() {
+            instance.resetCookie()
+        }
     }
 }

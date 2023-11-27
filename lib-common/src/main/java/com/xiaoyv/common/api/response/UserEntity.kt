@@ -33,8 +33,9 @@ data class UserEntity(
     var email: String? = null,
     @SerializedName("password")
     var password: String? = null,
+
     @SerializedName("isEmpty")
-    var isLogout: Boolean = false
+    var isEmpty: Boolean = false
 ) : Parcelable {
 
     @Keep

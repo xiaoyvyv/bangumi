@@ -41,6 +41,7 @@ android {
 
 dependencies {
     api(project(":lib-live2d"))
+    api(project(":lib-emoji"))
 
     api(libs.blueprint)
     api(libs.blueprint.floater)

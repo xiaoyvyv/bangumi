@@ -4,12 +4,15 @@ import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+
 
 /**
  * Class: [ProfileFragment]
@@ -31,7 +34,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
     override fun initView() {
         binding.vpContent.adapter = vpAdapter
-        binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
+        binding.vpContent.offscreenPageLimit = 5
 
         tabLayoutMediator.attach()
     }
@@ -40,10 +43,6 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        tabLayoutMediator.detach()
-    }
 
     override fun initListener() {
         binding.toolbar.menu.apply {
@@ -51,7 +50,6 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                 .setIcon(CommonDrawable.ic_timeline)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
-
                     true
                 }
 
@@ -71,11 +69,20 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                     true
                 }
         }
+
+        binding.ivAvatar.setOnFastLimitClickListener {
+            editProfileOrLogin()
+        }
+
+        binding.tvEmail.setOnFastLimitClickListener {
+            editProfileOrLogin()
+        }
     }
+
 
     override fun LifecycleOwner.initViewObserver() {
         UserHelper.observe(this) {
-            if (!it.isLogout) {
+            if (!it.isEmpty) {
                 binding.ivBanner.loadImageBlur(it.avatar?.large)
                 binding.ivAvatar.loadImageAnimate(it.avatar?.large)
                 binding.tvEmail.text = it.email
@@ -83,8 +90,23 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                 binding.toolbarLayout.title = it.username.orEmpty().ifBlank { it.nickname }
             } else {
                 debugLog { "未登录！" }
+                binding.toolbarLayout.title = "访客身份"
+                binding.tvEmail.text = "点击去登录"
             }
         }
+    }
+
+    private fun editProfileOrLogin() {
+        if (UserHelper.isLogin) {
+            RouteHelper.jumpEditProfile()
+        } else {
+            RouteHelper.jumpLogin()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        tabLayoutMediator.detach()
     }
 
     companion object {

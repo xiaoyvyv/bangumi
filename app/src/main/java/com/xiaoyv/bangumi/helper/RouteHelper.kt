@@ -5,6 +5,7 @@ import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
+import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 
 /**
  * Class: [RouteHelper]
@@ -28,5 +29,9 @@ object RouteHelper {
 
     fun jumpHome() {
         ActivityUtils.startActivity(HomeActivity::class.java)
+    }
+
+    fun jumpEditProfile() {
+        ActivityUtils.startActivity(EditProfileActivity::class.java)
     }
 }

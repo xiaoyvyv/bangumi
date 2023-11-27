@@ -20,7 +20,7 @@
     <string name="login_input_verify">验证码</string>
     <string name="login_btn_login">登录</string>
 
-    <string name="timeline_title">%s的时间胶囊</string>
+    <string name="timeline_title">所有人的时间胶囊/时空管理局 </string>
 
     <string name="calendar_title">每日放送</string>
     <string name="calendar_today_title">今日放送</string>
@@ -37,4 +37,5 @@
     <string name="foreground_notification_channel_name">Foreground service notification</string>
     <string name="foreground_notification_title">%s keep running</string>
     <string name="foreground_notification_text">Click to enter the main page</string>
+    <string name="edit_profile_title">编辑个人信息</string>
 </resources>

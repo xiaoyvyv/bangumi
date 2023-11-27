@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.BluePrint
 import com.xiaoyv.common.helper.UserHelper
-
+import com.xiaoyv.common.widget.emoji.UiFaceManager
 
 lateinit var currentApplication: MainApp
 
@@ -26,5 +26,7 @@ class MainApp : Application() {
         BluePrint.init(this, false)
 
         UserHelper.initLoad()
+
+        UiFaceManager.manager.initEmojiMap()
     }
 }

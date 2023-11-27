@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/lib-common" />
+            <option value="$PROJECT_DIR$/lib-emoji" />
             <option value="$PROJECT_DIR$/lib-live2d" />
           </set>
         </option>

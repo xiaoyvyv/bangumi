@@ -93,7 +93,7 @@ object LoginParser {
             nickname = userName,
             username = userName,
             id = userId,
-            isLogout = false,
+            isEmpty = false,
             online = online,
             email = email,
             password = password
@@ -103,9 +103,16 @@ object LoginParser {
     /**
      * 校验页面是否登录
      */
-    fun Document.parserLoginState(): Boolean {
-        val html = select("#dock").outerHtml()
-        return !(html.contains("login") || html.contains("signup"))
+    fun Document.parserCheckIsLogin(): Boolean {
+        val guest = select(".guest").outerHtml()
+        val dock = select("#dock").outerHtml()
+        val message = select(".message").outerHtml()
+        return (dock.contains("login")
+                || dock.contains("signup")
+                || message.contains("login")
+                || message.contains("登录")
+                || guest.contains("login")
+                || guest.contains("登录")).not()
     }
 }
 

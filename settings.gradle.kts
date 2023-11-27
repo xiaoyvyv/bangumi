@@ -39,4 +39,6 @@ rootProject.name = "Bangumi"
 include(":app")
 include(":lib-common")
 include(":lib-live2d")
+include(":lib-emoji")
+
 

@@ -135,10 +135,9 @@
         tools:text="User A said Book 1" />
 
     <View
+        style="@style/Theme.Bangumi.Divider"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0.5"
-        android:alpha="0.1"
-        android:background="?attr/colorOnSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/iv_character"
         app:layout_constraintStart_toStartOf="@+id/tv_action"

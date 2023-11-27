@@ -52,6 +52,10 @@
         <item name="forceApplySystemWindowInsetTop">false</item>
     </style>
 
+    <style name="Theme.Bangumi.Divider">
+        <item name="android:background">?attr/colorOnSurface</item>
+        <item name="android:alpha">0.1</item>
+    </style>
 
     <style name="Theme.Bangumi.ToolbarTitle">
         <item name="android:fontFamily">@font/font</item>
