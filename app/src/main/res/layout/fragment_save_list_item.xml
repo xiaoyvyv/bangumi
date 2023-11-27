@@ -32,44 +32,52 @@
             android:scaleType="centerCrop"
             app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-        <FrameLayout
-            android:id="@+id/ll_edge"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_40"
+            android:layout_gravity="top"
+            android:background="@drawable/shape_top_edge_corner"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ui_size_6"
+            android:paddingTop="@dimen/ui_size_24"
+            android:paddingBottom="@dimen/ui_size_6"
+            android:textColor="?attr/colorOnPrimarySurface"
+            android:textSize="@dimen/text_label_big"
+            android:textStyle="bold"
+            tools:text="2023" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@drawable/shape_bottom_edge_corner"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ui_size_6"
             android:paddingTop="@dimen/ui_size_24"
-            android:paddingBottom="@dimen/ui_size_6">
+            android:paddingBottom="@dimen/ui_size_6"
+            android:textColor="?attr/colorOnPrimarySurface"
+            android:textSize="@dimen/text_label_big"
+            android:textStyle="bold"
+            tools:text="2023" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_tag"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginStart="@dimen/ui_size_6"
-                android:layout_marginEnd="@dimen/ui_size_44"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="?attr/colorOnPrimarySurface"
-                android:textSize="@dimen/text_label_big"
-                android:textStyle="bold"
-                tools:text="2023" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_source"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/ui_size_6"
-                android:drawablePadding="@dimen/ui_size_4"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:textColor="?attr/colorOnPrimarySurface"
-                android:textSize="@dimen/text_label_big"
-                android:textStyle="bold"
-                app:drawableStartCompat="@drawable/ic_round_star"
-                tools:text="99" />
-        </FrameLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/ui_size_6"
+            android:layout_marginEnd="@dimen/ui_size_6"
+            android:drawablePadding="@dimen/ui_size_4"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="?attr/colorOnPrimarySurface"
+            android:textSize="@dimen/text_label_big"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_round_star"
+            tools:text="99" />
     </FrameLayout>
 
     <com.xiaoyv.common.widget.text.AnimeTextView
