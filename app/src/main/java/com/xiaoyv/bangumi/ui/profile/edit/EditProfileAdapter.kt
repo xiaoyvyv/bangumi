@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.databinding.ActivityEditProfileAvatarBinding
 import com.xiaoyv.bangumi.databinding.ActivityEditProfileInputBinding
 import com.xiaoyv.bangumi.databinding.ActivityEditProfileSelectorBinding
 import com.xiaoyv.common.api.parser.entity.SettingBaseEntity
-import com.xiaoyv.common.config.annotation.EditProfileOptionType
+import com.xiaoyv.common.config.annotation.FormInputType
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -27,9 +27,9 @@ class EditProfileAdapter : BaseMultiItemAdapter<SettingBaseEntity>() {
             .addItemType(TYPE_SELECT, EditProfileSelectorBinder())
             .onItemViewType(OnItemViewTypeListener { position, list ->
                 return@OnItemViewTypeListener when (list[position].type) {
-                    EditProfileOptionType.TYPE_INPUT -> TYPE_TEXT
-                    EditProfileOptionType.TYPE_FILE -> TYPE_FILE
-                    EditProfileOptionType.TYPE_SELECTOR -> TYPE_SELECT
+                    FormInputType.TYPE_INPUT -> TYPE_TEXT
+                    FormInputType.TYPE_FILE -> TYPE_FILE
+                    FormInputType.TYPE_SELECT -> TYPE_SELECT
                     else -> TYPE_TEXT
                 }
             })
@@ -42,8 +42,12 @@ class EditProfileAdapter : BaseMultiItemAdapter<SettingBaseEntity>() {
             position: Int,
             item: SettingBaseEntity?
         ) {
+            val options = item?.options.orEmpty()
+            val value = item?.value.orEmpty().ifBlank { "未设置" }
+            val selectItem = options.find { it.isSelected } ?: options.firstOrNull()
+
             holder.binding.tvName.text = item?.title
-            holder.binding.tvValue.text = item?.value.orEmpty().ifBlank { "未设置" }
+            holder.binding.tvValue.text = selectItem?.title ?: value
         }
 
         override fun onCreate(

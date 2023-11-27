@@ -32,8 +32,8 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
     }
 
     override fun initData() {
-        binding.inputEmail.setText(UserHelper.currentUser.email)
-        binding.inputPassword.setText(UserHelper.currentUser.password)
+        binding.inputEmail.setText(UserHelper.cacheEmail)
+        binding.inputPassword.setText(UserHelper.cachePassword)
     }
 
     override fun initListener() {
@@ -86,7 +86,9 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
                 .setCancelable(loginSuccess)
                 .setMessage(if (loginSuccess) message else errorMsg)
                 .setPositiveButton(getString(CommonString.login_result_known)) { _, _ ->
-                    finish()
+                    if (loginSuccess) {
+                        finish()
+                    }
                 }
                 .create()
                 .apply {

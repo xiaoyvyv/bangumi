@@ -78,10 +78,11 @@ class LoginViewModel : BaseViewModel() {
                     forms["captcha_challenge_field"] = verifyCode
 
                     BgmApiManager.bgmWebApi.doLogin(forms)
-                        .parserLoginResult(email, password)
+                        .parserLoginResult()
                 }
 
-                UserHelper.onLogin(loginResult)
+                UserHelper.refresh()
+                UserHelper.cacheEmailAndPassword(email, password)
 
                 onLoginResultLiveData.value = loginResult
             }

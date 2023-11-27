@@ -29,11 +29,6 @@ data class UserEntity(
     var username: String? = null,
     @SerializedName("online")
     var online: String? = null,
-    @SerializedName("email")
-    var email: String? = null,
-    @SerializedName("password")
-    var password: String? = null,
-
     @SerializedName("isEmpty")
     var isEmpty: Boolean = false
 ) : Parcelable {

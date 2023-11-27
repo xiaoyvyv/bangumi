@@ -2,7 +2,8 @@ package com.xiaoyv.common.api.parser.entity
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-import com.xiaoyv.common.config.annotation.EditProfileOptionType
+import com.xiaoyv.common.config.annotation.FormInputType
+import java.io.File
 
 /**
  * Class: [SettingBaseEntity]
@@ -18,12 +19,22 @@ data class SettingBaseEntity(
     var field: String = "",
     @SerializedName("value")
     var value: String = "",
-    @EditProfileOptionType
+    @FormInputType
     @SerializedName("type")
-    var type: String = EditProfileOptionType.TYPE_INPUT,
+    var type: String = FormInputType.TYPE_INPUT,
     @SerializedName("options")
-    var options: List<SelectItem> = emptyList(),
+    var options: List<SelectItem> = emptyList()
 ) {
+
+    /**
+     * 设置新值
+     */
+    fun setNewValue(newItem: SettingBaseEntity) {
+        title = newItem.title
+        field = newItem.field
+        value = newItem.value
+        options = newItem.options
+    }
 
     @Keep
     data class SelectItem(

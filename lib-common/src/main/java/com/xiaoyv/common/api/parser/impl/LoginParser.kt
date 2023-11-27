@@ -6,7 +6,6 @@ import com.xiaoyv.common.api.parser.entity.LoginResultEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.response.UserEntity
-import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.orEmpty
 import org.jsoup.nodes.Document
 
@@ -22,10 +21,7 @@ object LoginParser {
         val formEntity = LoginFormEntity()
         val loginForm = select("#loginForm")
         if (loginForm.isEmpty()) {
-            val loginResult = parserLoginResult(
-                email = UserHelper.currentUser.email.orEmpty(),
-                password = UserHelper.currentUser.password.orEmpty()
-            )
+            val loginResult = parserLoginResult()
 
             if (loginResult.success) {
                 formEntity.hasLogin = true
@@ -58,7 +54,7 @@ object LoginParser {
     /**
      * 解析登录结果
      */
-    fun Document.parserLoginResult(email: String, password: String): LoginResultEntity {
+    fun Document.parserLoginResult(): LoginResultEntity {
         val columnNotice = select("#colunmNotice")
         val prgGuide = select("#prgGuide")
         if (columnNotice.isEmpty() && prgGuide.isNotEmpty()) {
@@ -66,21 +62,21 @@ object LoginParser {
             return LoginResultEntity(
                 success = true,
                 message = hello,
-                userEntity = parseUserInfo(email, password)
+                userEntity = parseUserInfo()
             )
         }
         val errorMsg = select("#colunmNotice .text").text().trim()
         return LoginResultEntity(
             success = false,
             error = errorMsg,
-            userEntity = parseUserInfo(email, password)
+            userEntity = parseUserInfo()
         )
     }
 
     /**
      * 解析用户信息
      */
-    private fun Document.parseUserInfo(email: String, password: String): UserEntity {
+    private fun Document.parseUserInfo(): UserEntity {
         val userId = select(".idBadgerNeue a.avatar").attr("href").substringAfterLast("/")
             .toLongOrNull().orEmpty()
         val avatarUrl = select(".idBadgerNeue a.avatar span").attr("style")
@@ -94,9 +90,7 @@ object LoginParser {
             username = userName,
             id = userId,
             isEmpty = false,
-            online = online,
-            email = email,
-            password = password
+            online = online
         )
     }
 

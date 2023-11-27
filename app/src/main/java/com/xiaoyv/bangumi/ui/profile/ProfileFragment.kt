@@ -85,7 +85,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
             if (!it.isEmpty) {
                 binding.ivBanner.loadImageBlur(it.avatar?.large)
                 binding.ivAvatar.loadImageAnimate(it.avatar?.large)
-                binding.tvEmail.text = it.email
+                binding.tvEmail.text = UserHelper.cacheEmail
 
                 binding.toolbarLayout.title = it.username.orEmpty().ifBlank { it.nickname }
             } else {

@@ -12,9 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Multipart
 import retrofit2.http.POST
-import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -96,12 +94,8 @@ interface BgmWebApi {
     /**
      * 修改用户信息
      */
-    @Multipart
     @POST("/settings")
-    suspend fun updateSettings(
-        @QueryMap map: Map<String, String>,
-        @Part file: MultipartBody.Part? = null
-    ): Document
+    suspend fun updateSettings(@Body body: MultipartBody): Document
 
     companion object {
 

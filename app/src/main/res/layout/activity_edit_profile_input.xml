@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+    android:id="@+id/option_item"
     android:foreground="?attr/selectableItemBackground"
     android:paddingHorizontal="@dimen/ui_size_12"
     tools:showIn="@layout/activity_edit_profile">
