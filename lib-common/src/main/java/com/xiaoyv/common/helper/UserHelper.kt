@@ -7,6 +7,7 @@ import com.blankj.utilcode.util.SPUtils
 import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.exception.NeedLoginException
 import com.xiaoyv.common.api.parser.entity.SettingBaseEntity
 import com.xiaoyv.common.api.parser.impl.LoginParser.parserCheckIsLogin
 import com.xiaoyv.common.api.parser.impl.parserSettingInfo
@@ -69,23 +70,35 @@ class UserHelper private constructor() {
         }
     }
 
+    /**
+     * 刷新用户信息
+     */
     private suspend fun refresh(): List<SettingBaseEntity> {
         return withContext(Dispatchers.IO) {
-            BgmApiManager.bgmWebApi.querySettings().parserSettingInfo().apply {
-                if (isNotEmpty()) {
-                    saveUserInfo(this)
+            runCatching {
+                val document = BgmApiManager.bgmWebApi.querySettings()
+                val userId = document.select(".idBadgerNeue a").attr("href")
+                    .substringAfterLast("/")
+                val settingInfo = document.parserSettingInfo()
+                if (settingInfo.isNotEmpty()) {
+                    saveUserInfo(userId, settingInfo)
                 } else {
                     clearUserInfo()
                 }
-            }
+                settingInfo
+            }.onFailure {
+                if (it is NeedLoginException) {
+                    clearUserInfo()
+                }
+            }.getOrDefault(emptyList())
         }
     }
 
     /**
      * 更新用户信息
      */
-    private fun saveUserInfo(userInfo: List<SettingBaseEntity>) {
-        val newInfo = UserEntity(isEmpty = false)
+    private fun saveUserInfo(userId: String, userInfo: List<SettingBaseEntity>) {
+        val newInfo = UserEntity(id = userId, isEmpty = false)
 
         userInfo.forEach { item ->
             when (item.field) {

@@ -14,18 +14,18 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 11/25/23
  */
 class MediaPageAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
-        FragmentMediaPageItemBinding>(TimelineDiffCallback) {
+        FragmentMediaPageItemBinding>(BrowserListDiffCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaPageItemBinding>.converted(item: BrowserEntity.Item) {
         val infoTip = item.infoTip
 
         binding.ivCover.loadImageAnimate(item.coverImage)
-        binding.tvTitle.text = item.titleCn
+        binding.tvTitle.text = item.title
         binding.tvTag.text = infoTip.time.ifBlank { infoTip.eps }
         binding.tvSource.text = item.ratingScore
     }
 
-    object TimelineDiffCallback : DiffUtil.ItemCallback<BrowserEntity.Item>() {
+    object BrowserListDiffCallback : DiffUtil.ItemCallback<BrowserEntity.Item>() {
         override fun areItemsTheSame(
             oldItem: BrowserEntity.Item,
             newItem: BrowserEntity.Item

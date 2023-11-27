@@ -65,11 +65,11 @@ class TimelinePageFragment :
         /**
          * 指定人物的时间胶囊
          */
-        fun newInstance(@TimelineType timelineType: String, userId: Long): TimelinePageFragment {
+        fun newInstance(@TimelineType type: String, userId: String): TimelinePageFragment {
             return TimelinePageFragment().apply {
                 val timeline = TimelineTab(
                     title = "User:$userId",
-                    timelineType = timelineType,
+                    timelineType = type,
                     userId = userId
                 )
                 arguments = bundleOf(NavKey.KEY_PARCELABLE to timeline)

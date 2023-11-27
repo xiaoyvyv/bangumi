@@ -11,7 +11,9 @@ import androidx.annotation.StringDef
 @StringDef(
     BrowserSortType.TYPE_RANK,
     BrowserSortType.TYPE_DATE,
-    BrowserSortType.TYPE_TITLE
+    BrowserSortType.TYPE_TITLE,
+    BrowserSortType.TYPE_RATE,
+    BrowserSortType.TYPE_DEFAULT
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class BrowserSortType {
@@ -19,5 +21,8 @@ annotation class BrowserSortType {
         const val TYPE_RANK = "rank"
         const val TYPE_DATE = "date"
         const val TYPE_TITLE = "title"
+
+        const val TYPE_RATE = "rate"
+        const val TYPE_DEFAULT = ""
     }
 }

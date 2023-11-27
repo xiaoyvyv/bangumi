@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.profile.page.ProfilePageFragment
+import com.xiaoyv.bangumi.ui.profile.page.save.SaveListFragment
 import com.xiaoyv.bangumi.ui.timeline.page.TimelinePageFragment
 import com.xiaoyv.common.config.annotation.ProfileType
 import com.xiaoyv.common.config.annotation.TimelineType
@@ -21,7 +22,7 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     internal val tabs = listOf(
-        ProfileTab("收藏", ProfileType.TYPE_BLOG),
+        ProfileTab("收藏", ProfileType.TYPE_COLLECTION),
         ProfileTab("人物", ProfileType.TYPE_MONO),
         ProfileTab("日志", ProfileType.TYPE_BLOG),
         ProfileTab("目录", ProfileType.TYPE_INDEX),
@@ -35,9 +36,13 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         val profileTab = tabs[position]
         val type = profileTab.type
         return when (type) {
+            ProfileType.TYPE_COLLECTION -> SaveListFragment.newInstance(
+                userId = UserHelper.currentUser.id.orEmpty()
+            )
+
             ProfileType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
-                TimelineType.TYPE_USER,
-                UserHelper.currentUser.id
+                type = TimelineType.TYPE_USER,
+                userId = UserHelper.currentUser.id.orEmpty()
             )
 
             else -> ProfilePageFragment.newInstance(profileTab)

@@ -7,6 +7,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.api.parser.impl.BrowserParser.parserBrowserPage
+import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.MediaOptionConfig
 import com.xiaoyv.common.config.bean.MediaTab
@@ -30,6 +31,8 @@ class MediaPageViewModel : BaseViewModel() {
      * 搜索条件
      */
     private var current = 1
+
+    @BrowserSortType
     private var sortType: String? = null
     private var orderBy: String? = null
     private var subPath: String = ""
@@ -61,7 +64,6 @@ class MediaPageViewModel : BaseViewModel() {
                 onBrowserRankLiveData.value = null
             },
             block = {
-                buildSubPathAndQueryOrderBy()
 
                 val response = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.browserRank(
@@ -88,19 +90,6 @@ class MediaPageViewModel : BaseViewModel() {
                 }
             }
         )
-    }
-
-    /**
-     * 构建媒体下的分类等相对路径
-     *
-     * - /
-     * - /tv
-     * - /airtime/2019
-     */
-    private fun buildSubPathAndQueryOrderBy() {
-
-
-//        debugLog { "optionUrl: $optionUrl, path: $path, subPath: $subPath" }
     }
 
     /**

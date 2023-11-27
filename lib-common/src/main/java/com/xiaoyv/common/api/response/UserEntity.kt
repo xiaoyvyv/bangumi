@@ -18,7 +18,7 @@ data class UserEntity(
     @SerializedName("avatar")
     var avatar: Avatar? = null,
     @SerializedName("id")
-    var id: Long = 0,
+    var id: String? = null,
     @SerializedName("nickname")
     var nickname: String? = null,
     @SerializedName("sign")

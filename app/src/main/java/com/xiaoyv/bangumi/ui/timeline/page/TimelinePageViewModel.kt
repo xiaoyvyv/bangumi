@@ -9,7 +9,6 @@ import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.impl.TimeParser.parserTimelineForms
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
-import com.xiaoyv.widget.kts.orEmpty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -25,7 +24,7 @@ class TimelinePageViewModel : BaseViewModel() {
     /**
      * 是否指定了用户 ID
      */
-    private val userId: Long
+    private val userId: String
         get() = timelineTab?.userId.orEmpty()
 
     private val timelineType: String
@@ -40,7 +39,7 @@ class TimelinePageViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
-                val forUser = userId > 0
+                val forUser = userId.isNotBlank()
 
                 onTimelineLiveData.value = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.queryTimeline(

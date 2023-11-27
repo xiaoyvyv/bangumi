@@ -6,7 +6,6 @@ import com.xiaoyv.common.api.parser.entity.LoginResultEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.response.UserEntity
-import com.xiaoyv.widget.kts.orEmpty
 import org.jsoup.nodes.Document
 
 /**
@@ -55,13 +54,11 @@ object LoginParser {
      * 解析登录结果
      */
     fun Document.parserLoginResult(): LoginResultEntity {
-        val columnNotice = select("#colunmNotice")
-        val prgGuide = select("#prgGuide")
-        if (columnNotice.isEmpty() && prgGuide.isNotEmpty()) {
-            val hello = select("#header h1").text().trim()
+        val welcome = select("#main #header")
+        if (welcome.isNotEmpty()) {
             return LoginResultEntity(
                 success = true,
-                message = hello,
+                message = welcome.select("h1").text().trim(),
                 userEntity = parseUserInfo()
             )
         }
@@ -74,11 +71,10 @@ object LoginParser {
     }
 
     /**
-     * 解析用户信息
+     * 解析登录成功后的用户信息
      */
     private fun Document.parseUserInfo(): UserEntity {
         val userId = select(".idBadgerNeue a.avatar").attr("href").substringAfterLast("/")
-            .toLongOrNull().orEmpty()
         val avatarUrl = select(".idBadgerNeue a.avatar span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         val userName = select("#header a").text()

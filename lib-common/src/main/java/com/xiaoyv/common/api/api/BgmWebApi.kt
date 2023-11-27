@@ -80,6 +80,18 @@ interface BgmWebApi {
     ): Document
 
     /**
+     * 用户收藏查询
+     */
+    @GET("/{mediaType}/list/{userId}/{listType}")
+    suspend fun queryUserCollect(
+        @Path("mediaType", encoded = true) @MediaType mediaType: String,
+        @Path("userId", encoded = true) userId: String,
+        @Path("listType", encoded = true) listType: String,
+        @Query("sort") @BrowserSortType sortType: String? = null,
+        @Query("page") page: Int = 1
+    ): Document
+
+    /**
      * 创建 Token
      */
     @POST("https://next.bgm.tv/demo/access-tokens")
@@ -102,8 +114,8 @@ interface BgmWebApi {
         /**
          * 时间胶囊路径
          */
-        fun timelineUrl(userId: Long): String {
-            return if (userId <= 0) "timeline"
+        fun timelineUrl(userId: String): String {
+            return if (userId.isBlank()) "timeline"
             else "user/$userId/timeline"
         }
     }

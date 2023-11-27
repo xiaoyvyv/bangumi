@@ -128,7 +128,7 @@ class EditProfileActivity :
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add("Finish")
-            .setIcon(CommonDrawable.ic_done)
+            .setIcon(CommonDrawable.ic_save)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 viewModel.updateSettings()
