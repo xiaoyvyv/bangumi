@@ -56,7 +56,7 @@
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
         <activity
-            android:name="com.xiaoyv.bangumi.ui.blog.detail.BlogActivity"
+            android:name="com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
         <activity

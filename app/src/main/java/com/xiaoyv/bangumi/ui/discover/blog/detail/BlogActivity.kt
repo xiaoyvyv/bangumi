@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.blog.detail
+package com.xiaoyv.bangumi.ui.discover.blog.detail
 
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge

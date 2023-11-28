@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.group
+package com.xiaoyv.bangumi.ui.discover.group
 
 import com.xiaoyv.bangumi.databinding.FragmentGroupBinding
 import com.xiaoyv.bangumi.ui.rakuen.RakuenFragment
@@ -21,8 +21,8 @@ class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, RakuenViewMode
     }
 
     companion object {
-        fun newInstance(): RakuenFragment {
-            return RakuenFragment()
+        fun newInstance(): GroupFragment {
+            return GroupFragment()
         }
     }
 }

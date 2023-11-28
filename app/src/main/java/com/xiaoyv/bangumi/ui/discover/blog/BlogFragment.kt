@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.blog
+package com.xiaoyv.bangumi.ui.discover.blog
 
 import com.xiaoyv.bangumi.databinding.FragmentBlogBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment

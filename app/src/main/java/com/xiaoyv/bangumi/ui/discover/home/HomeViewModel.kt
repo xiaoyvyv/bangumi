@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.home
+package com.xiaoyv.bangumi.ui.discover.home
 
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel

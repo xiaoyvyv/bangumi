@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.home
+package com.xiaoyv.bangumi.ui.discover.home
 
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R

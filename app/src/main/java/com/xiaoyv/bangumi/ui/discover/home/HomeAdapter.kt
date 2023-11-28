@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.home
+package com.xiaoyv.bangumi.ui.discover.home
 
 import android.content.Context
 import android.view.ViewGroup
@@ -25,14 +25,14 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  */
 class HomeAdapter : BaseMultiItemAdapter<Any>() {
     init {
-        this.addItemType(TYPE_HEADER, HomeCalendarImageBinder())
-            .addItemType(TYPE_BANNER, HomeBannerBinder())
-            .addItemType(TYPE_CARD_IMAGE, HomeCardImageBinder())
+        this.addItemType(TYPE_TOP_BANNER, HomeBannerBinder())
+            .addItemType(TYPE_CALENDAR_PREVIEW, HomeCalendarImageBinder())
+            .addItemType(TYPE_MEDIA_CARD, HomeCardImageBinder())
             .onItemViewType(OnItemViewTypeListener { position, list ->
                 return@OnItemViewTypeListener when (list[position]) {
-                    is HomeIndexCardEntity -> TYPE_CARD_IMAGE
-                    is HomeIndexCalendarEntity -> TYPE_HEADER
-                    is HomeIndexBannerEntity -> TYPE_BANNER
+                    is HomeIndexCardEntity -> TYPE_MEDIA_CARD
+                    is HomeIndexCalendarEntity -> TYPE_CALENDAR_PREVIEW
+                    is HomeIndexBannerEntity -> TYPE_TOP_BANNER
                     else -> 1
                 }
             })
@@ -136,8 +136,8 @@ class HomeAdapter : BaseMultiItemAdapter<Any>() {
     class HomeImageEntityViewHolder(val view: HomeCardView) : RecyclerView.ViewHolder(view)
 
     companion object {
-        const val TYPE_BANNER = 0
-        const val TYPE_HEADER = 1
-        const val TYPE_CARD_IMAGE = 2
+        const val TYPE_TOP_BANNER = 0
+        const val TYPE_CALENDAR_PREVIEW = 1
+        const val TYPE_MEDIA_CARD = 2
     }
 }

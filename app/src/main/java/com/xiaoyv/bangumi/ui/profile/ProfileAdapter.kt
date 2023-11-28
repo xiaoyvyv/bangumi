@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.xiaoyv.bangumi.ui.profile.page.ProfilePageFragment
+import com.xiaoyv.bangumi.ui.feature.empty.EmptyFragment
 import com.xiaoyv.bangumi.ui.profile.page.save.SaveListFragment
 import com.xiaoyv.bangumi.ui.timeline.page.TimelinePageFragment
 import com.xiaoyv.common.config.annotation.ProfileType
@@ -45,7 +45,7 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
                 userId = UserHelper.currentUser.id.orEmpty()
             )
 
-            else -> ProfilePageFragment.newInstance(profileTab)
+            else -> EmptyFragment.newInstance()
         }
     }
 

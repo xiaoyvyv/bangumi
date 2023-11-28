@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.character
+package com.xiaoyv.bangumi.ui.discover.character
 
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 

@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.xiaoyv.bangumi.ui.home.HomeFragment
+import com.xiaoyv.bangumi.ui.discover.DiscoverFragment
 import com.xiaoyv.bangumi.ui.media.MediaFragment
 import com.xiaoyv.bangumi.ui.profile.ProfileFragment
 import com.xiaoyv.bangumi.ui.rakuen.RakuenFragment
@@ -19,7 +19,7 @@ class HomeAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fra
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> HomeFragment.newInstance()
+            0 -> DiscoverFragment.newInstance()
             1 -> TimelineFragment.newInstance()
             2 -> MediaFragment.newInstance()
             3 -> RakuenFragment.newInstance()

@@ -1,15 +1,15 @@
-package com.xiaoyv.bangumi.ui.character
+package com.xiaoyv.bangumi.ui.discover.friend
 
 import com.xiaoyv.bangumi.databinding.FragmentCharacterBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 
 /**
- * Class: [CharacterFragment]
+ * Class: [FriendFragment]
  *
  * @author why
  * @since 11/24/23
  */
-class CharacterFragment : BaseViewModelFragment<FragmentCharacterBinding, CharacterViewModel>() {
+class FriendFragment : BaseViewModelFragment<FragmentCharacterBinding, FriendViewModel>() {
     override fun initView() {
 
     }
@@ -19,8 +19,8 @@ class CharacterFragment : BaseViewModelFragment<FragmentCharacterBinding, Charac
     }
 
     companion object {
-        fun newInstance(): CharacterFragment {
-            return CharacterFragment()
+        fun newInstance(): FriendFragment {
+            return FriendFragment()
         }
     }
 }

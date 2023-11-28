@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.group
+package com.xiaoyv.bangumi.ui.discover.group
 
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 
