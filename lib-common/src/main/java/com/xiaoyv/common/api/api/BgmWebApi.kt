@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.request.CreateTokenParam
 import com.xiaoyv.common.config.annotation.BrowserSortType
+import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.config.annotation.TimelineType
@@ -126,6 +127,12 @@ interface BgmWebApi {
         @Path("queryPath", encoded = true) queryPath: String,
         @Path("tag", encoded = true) tagPath: String,
         @Query("page") page: Int = 1
+    ): Document
+
+    @GET("/subject/{mediaId}/{mediaDetailType}")
+    suspend fun queryMediaDetail(
+        @Path("mediaId", encoded = true) mediaId: String,
+        @Path("mediaDetailType", encoded = true) @MediaDetailType type: String,
     ): Document
 
     companion object {

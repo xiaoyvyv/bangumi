@@ -19,7 +19,7 @@ class MediaMarkerFragment : BaseViewModelFragment<FragmentCharacterBinding, Medi
     }
 
     companion object {
-        fun newInstance(): MediaMarkerFragment {
+        fun newInstance(mediaId: String): MediaMarkerFragment {
             return MediaMarkerFragment()
         }
     }

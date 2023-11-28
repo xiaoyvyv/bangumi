@@ -19,7 +19,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentCharacterBinding, Overvie
     }
 
     companion object {
-        fun newInstance(): OverviewFragment {
+        fun newInstance(mediaId: String): OverviewFragment {
             return OverviewFragment()
         }
     }

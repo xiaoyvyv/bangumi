@@ -41,16 +41,16 @@ class MediaDetailActivity :
         setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
         binding.toolbar.title = viewModel.mediaName
+    }
+
+
+    override fun initData() {
+        vpAdapter.mediaId = viewModel.mediaId
 
         binding.vpContent.adapter = vpAdapter
         binding.vpContent.offscreenPageLimit = 5
 
         tabLayoutMediator.attach()
-    }
-
-
-    override fun initData() {
-
     }
 
     override fun initListener() {

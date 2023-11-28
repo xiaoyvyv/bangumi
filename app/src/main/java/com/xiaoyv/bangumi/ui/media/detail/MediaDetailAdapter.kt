@@ -4,13 +4,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.xiaoyv.bangumi.ui.discover.blog.BlogFragment
-import com.xiaoyv.bangumi.ui.discover.character.CharacterFragment
-import com.xiaoyv.bangumi.ui.discover.friend.FriendFragment
-import com.xiaoyv.bangumi.ui.discover.group.GroupFragment
-import com.xiaoyv.bangumi.ui.discover.index.IndexFragment
-import com.xiaoyv.bangumi.ui.discover.wiki.WikiFragment
 import com.xiaoyv.bangumi.ui.feature.empty.EmptyFragment
+import com.xiaoyv.bangumi.ui.media.detail.board.MediaBoardFragment
+import com.xiaoyv.bangumi.ui.media.detail.chapter.MediaChapterFragment
+import com.xiaoyv.bangumi.ui.media.detail.character.MediaCharacterFragment
+import com.xiaoyv.bangumi.ui.media.detail.comments.MediaCommentFragment
+import com.xiaoyv.bangumi.ui.media.detail.maker.MediaMarkerFragment
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewFragment
 import com.xiaoyv.bangumi.ui.media.detail.state.MediaStateFragment
 import com.xiaoyv.common.config.annotation.MediaDetailType
@@ -24,6 +23,8 @@ import com.xiaoyv.common.config.bean.MediaDetailTab
  */
 class MediaDetailAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
+
+    var mediaId: String = ""
 
     internal val tabs = listOf(
         MediaDetailTab("概览", MediaDetailType.TYPE_OVERVIEW),
@@ -40,14 +41,14 @@ class MediaDetailAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
         val discoverTab = tabs[position]
         val type = discoverTab.type
         return when (type) {
-            MediaDetailType.TYPE_OVERVIEW -> OverviewFragment.newInstance()
-            MediaDetailType.TYPE_CHAPTER -> CharacterFragment.newInstance()
-            MediaDetailType.TYPE_CHARACTER -> BlogFragment.newInstance()
-            MediaDetailType.TYPE_MAKER -> IndexFragment.newInstance()
-            MediaDetailType.TYPE_COMMENTS -> GroupFragment.newInstance()
-            MediaDetailType.TYPE_REVIEW -> FriendFragment.newInstance()
-            MediaDetailType.TYPE_BOARD -> WikiFragment.newInstance()
-            MediaDetailType.TYPE_STATS -> MediaStateFragment.newInstance()
+            MediaDetailType.TYPE_OVERVIEW -> OverviewFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_CHAPTER -> MediaChapterFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_CHARACTER -> MediaCharacterFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_MAKER -> MediaMarkerFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_COMMENTS -> MediaCommentFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_REVIEW -> MediaCommentFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_BOARD -> MediaBoardFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_STATS -> MediaStateFragment.newInstance(mediaId)
             else -> EmptyFragment.newInstance()
         }
     }
