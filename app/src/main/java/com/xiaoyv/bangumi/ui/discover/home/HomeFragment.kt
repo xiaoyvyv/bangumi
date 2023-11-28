@@ -18,7 +18,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
     private val contentAdapter by lazy { HomeAdapter() }
 
     override fun initView() {
-        binding.rvContent.setHasFixedSize(true)
         binding.rvContent.adapter = contentAdapter
     }
 
@@ -45,7 +44,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                 contentItems.add(0, this)
             }
 
-            binding.rvContent.setItemViewCacheSize(contentItems.size)
             contentAdapter.submitList(contentItems)
         }
     }

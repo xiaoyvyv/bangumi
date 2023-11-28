@@ -8,7 +8,7 @@
         android:id="@+id/tv_calendar_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:drawableEnd="@drawable/ic_right"
         android:paddingHorizontal="@dimen/ui_size_8"
         android:paddingVertical="@dimen/ui_size_12"

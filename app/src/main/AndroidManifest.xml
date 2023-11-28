@@ -63,6 +63,10 @@
             android:name="com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

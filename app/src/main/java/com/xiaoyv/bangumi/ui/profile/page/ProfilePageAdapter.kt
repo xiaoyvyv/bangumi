@@ -29,7 +29,7 @@ class ProfilePageAdapter : BaseQuickDiffBindingAdapter<TimelineEntity,
         binding.ivCharacter.loadImageAnimate(character?.avatar)
         binding.ivAvatar.isInvisible = item.avatar.isBlank()
         binding.ivAvatar.loadImageAnimate(item.avatar)
-        binding.tvAction.text = item.userActionText.parseAsHtml()
+        binding.tvAction.text = item.userActionText
         binding.tvTime.text = item.timeText
 
         if (itemCard == null) {

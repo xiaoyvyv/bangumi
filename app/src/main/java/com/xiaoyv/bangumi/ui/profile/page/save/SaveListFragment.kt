@@ -63,6 +63,7 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
     }
 
     override fun initData() {
+        binding.rvContent.setHasFixedSize(true)
         binding.rvContent.adapter = adapterHelper.adapter
 
         viewModel.refresh()

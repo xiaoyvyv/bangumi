@@ -109,6 +109,25 @@ interface BgmWebApi {
     @POST("/settings")
     suspend fun updateSettings(@Body body: MultipartBody): Document
 
+    /**
+     * 日志
+     *
+     * @param queryPath 日志查询路径
+     *
+     * - 用户："user/$userId"
+     * - 媒体："anime" | "book" | ...
+     *
+     * @param tagPath tag 拼接路径，注意 `tag` 需要拼接 `/` 开头
+     *
+     * - 例：tag/xxx
+     */
+    @GET("/{queryPath}/blog{tag}")
+    suspend fun queryBlogList(
+        @Path("queryPath", encoded = true) queryPath: String,
+        @Path("tag", encoded = true) tagPath: String,
+        @Query("page") page: Int = 1
+    ): Document
+
     companion object {
 
         /**

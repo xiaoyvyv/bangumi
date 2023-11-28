@@ -27,6 +27,7 @@ class CalendarViewModel : BaseViewModel() {
         launchUI(
             stateView = loadingViewState,
             error = {
+                it.printStackTrace()
                 onCalendarLiveData.value = null
             },
             block = {

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingHorizontal="@dimen/ui_layout_margin"
+    tools:showIn="@layout/fragment_blog">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingVertical="@dimen/ui_size_6"
+        android:paddingTop="@dimen/ui_layout_margin"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_desc"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingVertical="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="@tools:sample/lorem/random" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc">
+
+        <FrameLayout
+            android:id="@+id/card_cover"
+            android:layout_width="@dimen/ui_size_100"
+            android:layout_height="@dimen/ui_size_0"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="3:4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:strokeColor="@color/ui_transparent"
+            app:strokeWidth="@dimen/ui_size_0">
+
+            <com.xiaoyv.common.widget.image.AnimeImageView
+                android:id="@+id/iv_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:shapeAppearance="@style/Theme.Bangumi.ImageCornerStartSmall" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/shape_bottom_edge_corner_start"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/ui_size_6"
+                android:paddingTop="@dimen/ui_size_24"
+                android:paddingBottom="@dimen/ui_size_6"
+                android:textColor="?attr/colorOnPrimarySurface"
+                android:textSize="@dimen/text_label_big"
+                android:textStyle="bold"
+                tools:text="2023" />
+        </FrameLayout>
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_timeline"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="@dimen/ui_size_0"
+            android:ellipsize="end"
+            android:maxLines="6"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_size_6"
+            app:layout_constraintBottom_toBottomOf="@+id/card_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/card_cover"
+            app:layout_constraintTop_toTopOf="@+id/card_cover"
+            tools:text="@tools:sample/lorem/random" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_entry"
+        app:layout_constraintVertical_bias="1"
+        tools:text="@tools:sample/lorem" />
+
+    <View
+        style="@style/Theme.Bangumi.Divider"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

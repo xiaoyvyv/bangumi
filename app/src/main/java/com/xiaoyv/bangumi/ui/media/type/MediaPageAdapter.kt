@@ -17,12 +17,13 @@ class MediaPageAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
         FragmentMediaPageItemBinding>(BrowserListDiffCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaPageItemBinding>.converted(item: BrowserEntity.Item) {
-        val infoTip = item.infoTip
-
-        binding.ivCover.loadImageAnimate(item.coverImage)
+        binding.ivCover.loadImageAnimate(item.coverImage, holder = true)
         binding.tvTitle.text = item.title
-        binding.tvTag.text = infoTip.time.ifBlank { infoTip.eps }
         binding.tvSource.text = item.ratingScore
+
+        item.infoTip.apply {
+            binding.tvTag.text = time.ifBlank { eps }
+        }
     }
 
     object BrowserListDiffCallback : DiffUtil.ItemCallback<BrowserEntity.Item>() {

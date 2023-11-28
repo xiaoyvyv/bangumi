@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    android:useLevel="false">
+    <corners
+        android:bottomLeftRadius="@dimen/ui_layout_radius"
+        android:topLeftRadius="@dimen/ui_layout_radius" />
+
+    <gradient
+        android:angle="-90"
+        android:endColor="@color/ui_black_c0"
+        android:startColor="@color/ui_transparent" />
+</shape>

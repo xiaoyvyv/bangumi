@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentMediaPageBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.MediaFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
@@ -15,6 +17,7 @@ import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.config.bean.MediaTab
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getAttrColor
@@ -64,7 +67,9 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
     }
 
     override fun initData() {
+        binding.rvContent.setHasFixedSize(true)
         binding.rvContent.adapter = adapterHelper.adapter
+
         binding.srlRefresh.isRefreshing = true
 
         viewModel.refresh()
@@ -93,6 +98,10 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
         // 选项改变监听
         mediaFragment?.regisOptionSelectedChange(this) {
             viewModel.handleOption(it)
+        }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.card_cover) {
+            RouteHelper.jumpMediaDetail(it.subjectId, it.mediaType)
         }
     }
 

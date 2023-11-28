@@ -20,7 +20,7 @@ class SaveListAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
     override fun BaseQuickBindingHolder<FragmentSaveListItemBinding>.converted(item: BrowserEntity.Item) {
         val infoTip = item.infoTip
 
-        binding.ivCover.loadImageAnimate(item.coverImage)
+        binding.ivCover.loadImageAnimate(item.coverImage, holder = true)
         binding.tvTitle.text = item.title
         binding.tvTag.text = item.mediaTypeName
         binding.tvDesc.text = infoTip.fullTip.ifBlank { item.subtitle }

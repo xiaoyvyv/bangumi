@@ -50,7 +50,7 @@ class AnimeGridImageView @JvmOverloads constructor(
 
     class GridAdapter : BaseQuickBindingAdapter<Image, ViewImageGridBinding>() {
         override fun BaseQuickBindingHolder<ViewImageGridBinding>.converted(item: Image) {
-            binding.ivImage.loadImageAnimate(item.image)
+            binding.ivImage.loadImageAnimate(item.image, holder = true)
         }
     }
 }

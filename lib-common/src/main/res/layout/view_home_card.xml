@@ -10,7 +10,7 @@
         android:id="@+id/card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:drawableEnd="@drawable/ic_right"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_layout_margin"
@@ -62,7 +62,7 @@
             tools:text="从零开始的异世界生活" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
         android:id="@+id/rv_small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

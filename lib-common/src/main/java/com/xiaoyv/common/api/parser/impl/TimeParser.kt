@@ -1,8 +1,10 @@
 package com.xiaoyv.common.api.parser.impl
 
+import androidx.core.text.parseAsHtml
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseHtml
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
@@ -80,7 +82,7 @@ object TimeParser {
                 if (node is Element && node.tagName().lowercase() == "div") break
                 infoUserActionText += node.outerHtml()
             }
-            entity.userActionText = infoUserActionText
+            entity.userActionText = infoUserActionText.parseHtml()
 
 
             // images

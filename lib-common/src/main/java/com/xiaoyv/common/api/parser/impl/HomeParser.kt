@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.kts.debugLog
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -89,7 +90,7 @@ object HomeParser {
         val element = this ?: return emptyList()
         return element.select(".coverList .thumbTip").map {
             BgmMediaEntity(
-                title = it.select("a").attr("title").parseAsHtml(),
+                title = it.select("a").attr("title").parseHtml(),
                 id = it.select("a").attr("href").substringAfterLast("/"),
                 image = it.select("img").attr("src").optImageUrl()
             )

@@ -11,7 +11,7 @@ import com.xiaoyv.common.widget.image.AnimeGridImageView
 data class TimelineEntity(
     var avatar: String = "",
     var userId: String = "",
-    var userActionText: String = "",
+    var userActionText: CharSequence = "",
     var collectInfo: CollectionInfo? = null,
     var card: Card? = null,
     var character: Character? = null,

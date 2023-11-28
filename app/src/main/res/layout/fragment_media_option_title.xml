@@ -9,7 +9,7 @@
         android:id="@+id/tv_option_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:paddingHorizontal="@dimen/ui_size_8"
         android:paddingVertical="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyLarge"

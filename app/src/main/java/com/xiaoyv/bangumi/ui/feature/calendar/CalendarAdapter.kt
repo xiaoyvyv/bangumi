@@ -78,7 +78,7 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
             val score = content?.rating?.score ?: 0.0
             val epsCount = content?.epsCount ?: 0
 
-            binding.ivCover.loadImageAnimate(content?.images?.large)
+            binding.ivCover.loadImageAnimate(content?.images?.large, holder = true)
             binding.tvTitle.text = content?.nameCn.orEmpty().ifBlank { content?.name }
 
             binding.tvSummary.text = content?.summary.orEmpty()

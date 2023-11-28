@@ -76,4 +76,10 @@
         <item name="cornerFamily">?attr/shapeCornerFamily</item>
         <item name="cornerSize">@dimen/ui_layout_radius</item>
     </style>
+
+    <style name="Theme.Bangumi.ImageCornerStartSmall">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeTopLeft">@dimen/ui_layout_radius</item>
+        <item name="cornerSizeBottomLeft">@dimen/ui_layout_radius</item>
+    </style>
 </resources>
