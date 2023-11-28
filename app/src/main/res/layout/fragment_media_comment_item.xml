@@ -31,22 +31,34 @@
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_star"
         app:layout_constraintStart_toEndOf="@+id/iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar"
         tools:text="User A said Book 1" />
+
+    <androidx.appcompat.widget.AppCompatRatingBar
+        android:id="@+id/iv_star"
+        style="?attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:numStars="5"
+        android:progressTint="@color/ui_pink"
+        android:rating="2"
+        android:stepSize="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_attach"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/ui_size_12"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
         android:linksClickable="true"
         android:paddingTop="@dimen/ui_size_6"
-        android:paddingBottom="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorAccent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_time"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         tools:text="User A said Book 1" />
@@ -60,7 +72,7 @@
         android:paddingBottom="@dimen/ui_size_12"
         android:textColor="?attr/colorOnSurface"
         android:textSize="@dimen/text_label"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_attach"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attach"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="12 min" />
 
@@ -68,7 +80,10 @@
         style="@style/Theme.Bangumi.Divider"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0.5"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attach"
+        app:layout_constraintVertical_bias="1" />
 </androidx.constraintlayout.widget.ConstraintLayout>

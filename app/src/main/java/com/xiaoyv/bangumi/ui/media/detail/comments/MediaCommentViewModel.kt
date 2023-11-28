@@ -1,6 +1,10 @@
 package com.xiaoyv.bangumi.ui.media.detail.comments
 
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.xiaoyv.bangumi.base.BaseListViewModel
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
+import com.xiaoyv.common.api.parser.impl.parserMediaComments
+import com.xiaoyv.common.config.annotation.MediaDetailType
 
 /**
  * Class: [MediaCommentViewModel]
@@ -8,6 +12,15 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
  * @author why
  * @since 11/24/23
  */
-class MediaCommentViewModel : BaseViewModel() {
+class MediaCommentViewModel : BaseListViewModel<MediaCommentEntity>() {
+    /**
+     * 媒体ID
+     */
+    internal var mediaId: String = ""
 
+    override suspend fun onRequestListImpl(): List<MediaCommentEntity> {
+        require(mediaId.isNotBlank()) { "媒体ID不存在" }
+        return BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_COMMENTS)
+            .parserMediaComments()
+    }
 }
