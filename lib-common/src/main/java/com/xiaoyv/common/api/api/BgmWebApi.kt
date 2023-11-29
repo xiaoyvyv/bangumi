@@ -133,6 +133,7 @@ interface BgmWebApi {
     suspend fun queryMediaDetail(
         @Path("mediaId", encoded = true) mediaId: String,
         @Path("mediaDetailType", encoded = true) @MediaDetailType type: String,
+        @Query("page") page: Int? = null,
     ): Document
 
     companion object {
