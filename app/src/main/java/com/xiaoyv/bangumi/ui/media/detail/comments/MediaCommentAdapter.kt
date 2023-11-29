@@ -14,7 +14,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 11/24/23
  */
 class MediaCommentAdapter : BaseQuickDiffBindingAdapter<MediaCommentEntity,
-        FragmentMediaCommentItemBinding>(MediaChapterDiffItemCallback) {
+        FragmentMediaCommentItemBinding>(ItemDiffItemCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaCommentItemBinding>.converted(item: MediaCommentEntity) {
         binding.ivAvatar.loadImageAnimate(item.avatar)
@@ -24,7 +24,7 @@ class MediaCommentAdapter : BaseQuickDiffBindingAdapter<MediaCommentEntity,
         binding.ivStar.rating = item.star
     }
 
-    object MediaChapterDiffItemCallback : DiffUtil.ItemCallback<MediaCommentEntity>() {
+    private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaCommentEntity>() {
         override fun areItemsTheSame(
             oldItem: MediaCommentEntity,
             newItem: MediaCommentEntity

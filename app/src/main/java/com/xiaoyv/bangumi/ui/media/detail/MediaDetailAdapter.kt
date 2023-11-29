@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.ui.media.detail.board.MediaBoardFragment
 import com.xiaoyv.bangumi.ui.media.detail.chapter.MediaChapterFragment
 import com.xiaoyv.bangumi.ui.media.detail.character.MediaCharacterFragment
 import com.xiaoyv.bangumi.ui.media.detail.comments.MediaCommentFragment
-import com.xiaoyv.bangumi.ui.media.detail.maker.MediaMarkerFragment
+import com.xiaoyv.bangumi.ui.media.detail.maker.MediaMakerFragment
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewFragment
 import com.xiaoyv.bangumi.ui.media.detail.review.MediaReviewFragment
 import com.xiaoyv.bangumi.ui.media.detail.state.MediaStateFragment
@@ -45,7 +45,7 @@ class MediaDetailAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
             MediaDetailType.TYPE_OVERVIEW -> OverviewFragment.newInstance(mediaId)
             MediaDetailType.TYPE_CHAPTER -> MediaChapterFragment.newInstance(mediaId)
             MediaDetailType.TYPE_CHARACTER -> MediaCharacterFragment.newInstance(mediaId)
-            MediaDetailType.TYPE_MAKER -> MediaMarkerFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_MAKER -> MediaMakerFragment.newInstance(mediaId)
             MediaDetailType.TYPE_COMMENTS -> MediaCommentFragment.newInstance(mediaId)
             MediaDetailType.TYPE_REVIEW -> MediaReviewFragment.newInstance(mediaId)
             MediaDetailType.TYPE_BOARD -> MediaBoardFragment.newInstance(mediaId)

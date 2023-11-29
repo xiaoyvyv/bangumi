@@ -13,7 +13,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 11/24/23
  */
 class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
-        FragmentMediaChapterItemBinding>(MediaChapterDiffItemCallback) {
+        FragmentMediaChapterItemBinding>(ItemDiffItemCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaChapterItemBinding>.converted(item: MediaChapterEntity) {
         binding.titleCn.text = item.titleCn.ifBlank { item.titleNative }
@@ -22,7 +22,7 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
         binding.tvComment.text = item.comment
     }
 
-    object MediaChapterDiffItemCallback : DiffUtil.ItemCallback<MediaChapterEntity>() {
+    private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaChapterEntity>() {
         override fun areItemsTheSame(
             oldItem: MediaChapterEntity,
             newItem: MediaChapterEntity

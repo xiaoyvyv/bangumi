@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.impl
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
+import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
 import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
@@ -74,6 +75,19 @@ fun Document.parserMediaBoards(): List<MediaBoardEntity> {
             .substringAfterLast("/")
         entity.replies = tds.getOrNull(2)?.text().orEmpty()
         entity.time = tds.getOrNull(3)?.text().orEmpty()
+        entity
+    }
+}
+
+
+fun Document.parserMediaMakers(): List<MediaMakerEntity> {
+    return select("#columnInSubjectA > div").map {
+        val entity = MediaMakerEntity()
+        entity.id = it.select("h2 a").attr("href").substringAfterLast("/")
+        entity.avatar = it.select(".avatar img").attr("src").optImageUrl()
+        entity.titleCn = it.select("h2 .tip").text()
+        entity.titleNative = it.select("h2 a").textNodes().firstOrNull()?.text().orEmpty()
+        entity.personInfo = it.select(".prsn_info span.badge_job").map { job -> job.text() }
         entity
     }
 }

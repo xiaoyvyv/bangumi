@@ -14,16 +14,16 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 11/24/23
  */
 class MediaReviewAdapter : BaseQuickDiffBindingAdapter<MediaReviewEntity,
-        FragmentMediaReviewItemBinding>(MediaReviewDiffItemCallback) {
+        FragmentMediaReviewItemBinding>(ItemDiffItemCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaReviewItemBinding>.converted(item: MediaReviewEntity) {
         binding.ivAvatar.loadImageAnimate(item.avatar)
-        binding.tvTitle.text = "日志：" + item.title
+        binding.tvTitle.text = String.format("日志：%s", item.title)
         binding.tvContent.text = item.comment
         binding.tvTime.text = item.time
     }
 
-    object MediaReviewDiffItemCallback : DiffUtil.ItemCallback<MediaReviewEntity>() {
+    private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaReviewEntity>() {
         override fun areItemsTheSame(
             oldItem: MediaReviewEntity,
             newItem: MediaReviewEntity

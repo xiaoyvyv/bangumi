@@ -13,16 +13,16 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 11/24/23
  */
 class MediaBoardAdapter : BaseQuickDiffBindingAdapter<MediaBoardEntity,
-        FragmentMediaBoardItemBinding>(MediaBoardDiffItemCallback) {
+        FragmentMediaBoardItemBinding>(ItemDiffItemCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaBoardItemBinding>.converted(item: MediaBoardEntity) {
-        binding.tvTitle.text = item.userName
+        binding.tvTitle.text = String.format("用户：%s", item.userName)
         binding.tvContent.text = item.content
         binding.tvReplay.text = item.replies
         binding.tvTime.text = item.time
     }
 
-    object MediaBoardDiffItemCallback : DiffUtil.ItemCallback<MediaBoardEntity>() {
+    private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaBoardEntity>() {
         override fun areItemsTheSame(
             oldItem: MediaBoardEntity,
             newItem: MediaBoardEntity
