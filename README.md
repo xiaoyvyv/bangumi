@@ -16,6 +16,9 @@ RN的体验效果并不是很好，我决定开发一款纯原生的 Android 客
 ### 项目更新地址
 https://github.com/xiaoyvyv/Bangumi-for-Android
 
+### Github CI 下载测试开发包
+[https://github.com/xiaoyvyv/Bangumi-for-Android/actions](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
+
 ### 项目最终目标
 实现 Bangumi tv 官网的全部功能（目前只包含主站，不包含天窗等旗下功能站点）
 
