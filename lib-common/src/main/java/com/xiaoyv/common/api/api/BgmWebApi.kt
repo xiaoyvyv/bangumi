@@ -129,7 +129,7 @@ interface BgmWebApi {
         @Query("page") page: Int = 1
     ): Document
 
-    @GET("/subject/{mediaId}/{mediaDetailType}")
+    @GET("/subject/{mediaId}{mediaDetailType}")
     suspend fun queryMediaDetail(
         @Path("mediaId", encoded = true) mediaId: String,
         @Path("mediaDetailType", encoded = true) @MediaDetailType type: String,

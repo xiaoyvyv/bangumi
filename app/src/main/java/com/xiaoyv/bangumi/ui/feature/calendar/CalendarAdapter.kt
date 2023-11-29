@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.widget.kts.useNotNull
 
 /**
  * Class: [CalendarAdapter]
@@ -43,8 +44,9 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
             position: Int,
             item: Any?
         ) {
-            val weekday = item as? CalendarEntity.CalendarEntityItem.Weekday
-            holder.binding.tvCalendarTitle.text = weekday?.cn ?: weekday?.en ?: weekday?.ja
+            useNotNull(item as? CalendarEntity.CalendarEntityItem.Weekday) {
+                holder.binding.tvCalendarTitle.text = cn ?: en ?: ja
+            }
         }
 
         override fun onCreate(

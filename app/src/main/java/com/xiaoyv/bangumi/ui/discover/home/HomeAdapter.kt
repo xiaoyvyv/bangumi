@@ -24,6 +24,7 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  * @since 11/25/23
  */
 class HomeAdapter : BaseMultiItemAdapter<Any>() {
+
     init {
         this.addItemType(TYPE_TOP_BANNER, HomeBannerBinder())
             .addItemType(TYPE_CALENDAR_PREVIEW, HomeCalendarImageBinder())
@@ -41,26 +42,29 @@ class HomeAdapter : BaseMultiItemAdapter<Any>() {
     class HomeBannerBinder :
         OnMultiItemAdapterListener<Any, BaseQuickBindingHolder<FragmentHomeBannerBinding>> {
 
+        private val bannerItemParams by lazy {
+            RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+
         override fun onBind(
             holder: BaseQuickBindingHolder<FragmentHomeBannerBinding>,
             position: Int,
             item: Any?
         ) {
-            val bannerEntity = item as? HomeIndexBannerEntity
-            val binding = holder.binding
-            val context = binding.root.context
-
-            val imageViews = bannerEntity?.banners.orEmpty().map {
-                AppCompatImageView(context, null).apply {
-                    layoutParams = RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT,
-                        RelativeLayout.LayoutParams.MATCH_PARENT
-                    )
-                    loadImageAnimate(it)
+            (item as? HomeIndexBannerEntity)?.apply {
+                val binding = holder.binding
+                val context = binding.root.context
+                val imageViews = banners.map {
+                    AppCompatImageView(context, null).apply {
+                        layoutParams = bannerItemParams
+                        loadImageAnimate(it)
+                    }
                 }
+                binding.banner.setData(imageViews)
             }
-
-            binding.banner.setData(imageViews)
         }
 
         override fun onCreate(

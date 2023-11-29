@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -26,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:background="?attr/colorPrimary"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
@@ -34,10 +36,98 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/ui_size_280"
+                android:layout_height="match_parent"
                 android:layout_gravity="bottom"
                 android:background="@drawable/shape_bottom_edge"
                 android:fitsSystemWindows="true" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="false">
+
+                <com.xiaoyv.common.widget.image.AnimeImageView
+                    android:id="@+id/iv_cover"
+                    android:layout_width="@dimen/ui_size_120"
+                    android:layout_height="@dimen/ui_size_180"
+                    android:layout_marginStart="@dimen/ui_layout_margin"
+                    android:layout_marginTop="?actionBarSize"
+                    android:layout_marginBottom="@dimen/ui_layout_margin"
+                    android:elevation="@dimen/ui_layout_elevation"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="@dimen/ui_size_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                    android:ellipsize="end"
+                    android:maxLines="4"
+                    android:text="@tools:sample/lorem/random"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_cover"
+                    app:layout_constraintTop_toTopOf="@+id/iv_cover" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_subtitle"
+                    android:layout_width="@dimen/ui_size_0"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:paddingVertical="@dimen/ui_size_3"
+                    android:text="@tools:sample/full_names"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_title"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="@dimen/ui_size_0"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingVertical="@dimen/ui_size_3"
+                    android:text="(2023 - TV)"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_subtitle"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9.9"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:textColor="@color/ui_pink"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+                    app:layout_constraintStart_toStartOf="@id/tv_title" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_score_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ui_size_12"
+                    android:background="@drawable/ui_shape_rectangle_corner_6"
+                    android:backgroundTint="@color/ui_pink"
+                    android:padding="@dimen/ui_size_4"
+                    android:text="还不错"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_score"
+                    app:layout_constraintStart_toEndOf="@+id/tv_score" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -45,7 +135,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-                app:title="媒体详情" />
+                app:title="" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

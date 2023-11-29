@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/ui_pink"
+    android:layout_gravity="bottom"
+    android:fitsSystemWindows="true"
+    tools:layout_height="wrap_content"
+    tools:parentTag="com.google.android.material.appbar.CollapsingToolbarLayout"
+    tools:showIn="@layout/activity_media_detail">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="@dimen/ui_size_120"
+        android:layout_height="@dimen/ui_size_180"
+        android:layout_margin="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:elevation="@dimen/ui_layout_elevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:text="@tools:sample/lorem/random"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:paddingVertical="@dimen/ui_size_3"
+        android:text="@tools:sample/full_names"
+        android:textAppearance="?attr/textAppearanceLabelLarge"
+        android:textColor="?attr/colorOnPrimarySurface"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_time"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingVertical="@dimen/ui_size_3"
+        android:text="(2023 - TV)"
+        android:textAppearance="?attr/textAppearanceLabelLarge"
+        android:textColor="?attr/colorOnPrimarySurface"
+        app:layout_constraintEnd_toEndOf="@+id/tv_subtitle"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9.9"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="@color/ui_pink"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintStart_toStartOf="@id/tv_title" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_score_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_size_12"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="@color/ui_pink"
+        android:padding="@dimen/ui_size_4"
+        android:text="还不错"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnPrimarySurface"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_score"
+        app:layout_constraintStart_toEndOf="@+id/tv_score"
+        app:layout_constraintTop_toTopOf="@+id/tv_score" />
+</androidx.constraintlayout.widget.ConstraintLayout>

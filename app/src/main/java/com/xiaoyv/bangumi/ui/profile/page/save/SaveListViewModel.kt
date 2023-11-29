@@ -10,7 +10,6 @@ import com.xiaoyv.common.api.parser.impl.BrowserParser.parserBrowserPage
 import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.CollectType
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.config.bean.MediaTab
 import com.xiaoyv.widget.kts.copyAddAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -86,5 +85,9 @@ class SaveListViewModel : BaseViewModel() {
                 }
             }
         )
+    }
+
+    fun clearList() {
+        onListLiveData.value = emptyList()
     }
 }

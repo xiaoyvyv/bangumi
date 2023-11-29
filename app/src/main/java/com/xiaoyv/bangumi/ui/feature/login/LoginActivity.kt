@@ -60,6 +60,7 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
         }
 
         binding.ivVerify.setOnFastLimitClickListener {
+            binding.inputVerify.text = null
             viewModel.refreshVerifyCode(true)
         }
     }
@@ -88,6 +89,9 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
                 .setPositiveButton(getString(CommonString.login_result_known)) { _, _ ->
                     if (loginSuccess) {
                         finish()
+                    } else {
+                        binding.inputVerify.text = null
+                        viewModel.refreshVerifyCode(false)
                     }
                 }
                 .create()

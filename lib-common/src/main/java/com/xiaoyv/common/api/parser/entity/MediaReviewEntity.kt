@@ -14,5 +14,5 @@ data class MediaReviewEntity(
     var userId: String = "",
     var time: String = "",
     var comment: String = "",
-    var commentCount: String = ""
+    var commentCount: Int = 0
 )

@@ -3,11 +3,13 @@ package com.xiaoyv.bangumi.ui.media.detail
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityMediaDetailBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.api.response.MediaJsonEntity
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
@@ -41,6 +43,19 @@ class MediaDetailActivity :
         setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
         binding.toolbar.title = viewModel.mediaName
+        binding.ivBanner.updateLayoutParams {
+//            height = getAttrDimensionPixelSize(GoogleAttr.actionBarSize) +
+//                    BarUtils.getStatusBarHeight() +
+//                    180.dpi +
+//                    32.dpi
+        }
+
+//        binding.layoutInfo.root.updateLayoutParams {
+//            height = getAttrDimensionPixelSize(GoogleAttr.actionBarSize) +
+//                    BarUtils.getStatusBarHeight() +
+//                    180.dpi +
+//                    32.dpi
+//        }
     }
 
 
@@ -57,12 +72,18 @@ class MediaDetailActivity :
 
     }
 
-    override fun onCreateLoadingDialog(): UiDialog {
-        return AnimeLoadingDialog(this)
+    override fun LifecycleOwner.initViewObserver() {
+        viewModel.onMediaDetailLiveData.observe(this) {
+
+        }
     }
 
-    override fun LifecycleOwner.initViewObserver() {
+    fun refreshMediaInfo(mediaJsonEntity: MediaJsonEntity) {
+        viewModel.onMediaDetailLiveData.value = mediaJsonEntity
+    }
 
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

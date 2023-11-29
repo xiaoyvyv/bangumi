@@ -38,6 +38,7 @@ class LoginViewModel : BaseViewModel() {
             state = if (loading) loadingDialogState(cancelable = false) else null,
             error = { it.printStackTrace() },
             block = {
+                refreshFormImpl()
                 refreshVerifyImpl()
             }
         )

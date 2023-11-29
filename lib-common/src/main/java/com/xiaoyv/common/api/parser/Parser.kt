@@ -40,6 +40,12 @@ fun String.optImageUrl(): String {
         .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/pic/\$1/l/")
 }
 
+fun String?.parseCount(): Int {
+    val orNull = this?.toIntOrNull()
+    if (orNull != null) return orNull
+    return "(\\d+)".toRegex().find(this ?: return 0)?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0
+}
+
 fun String.parseHtml(): CharSequence {
     return parseAsHtml()
 }

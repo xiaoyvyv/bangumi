@@ -17,7 +17,7 @@
         app:banner_isNumberIndicator="true"
         app:banner_numberIndicatorBackground="@color/ui_transparent"
         app:banner_numberIndicatorTextColor="@color/ui_transparent"
-        app:banner_pointAutoPlayAble="true"
+        app:banner_pointAutoPlayAble="false"
         app:banner_pointContainerBackground="@color/ui_transparent"
         app:banner_transitionEffect="depth"
         app:layout_constraintBottom_toBottomOf="parent"

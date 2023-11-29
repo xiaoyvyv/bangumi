@@ -12,7 +12,6 @@ import com.xiaoyv.bangumi.ui.media.detail.comments.MediaCommentFragment
 import com.xiaoyv.bangumi.ui.media.detail.maker.MediaMakerFragment
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewFragment
 import com.xiaoyv.bangumi.ui.media.detail.review.MediaReviewFragment
-import com.xiaoyv.bangumi.ui.media.detail.state.MediaStateFragment
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.bean.MediaDetailTab
 
@@ -49,7 +48,7 @@ class MediaDetailAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
             MediaDetailType.TYPE_COMMENTS -> MediaCommentFragment.newInstance(mediaId)
             MediaDetailType.TYPE_REVIEW -> MediaReviewFragment.newInstance(mediaId)
             MediaDetailType.TYPE_BOARD -> MediaBoardFragment.newInstance(mediaId)
-            MediaDetailType.TYPE_STATS -> MediaStateFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_STATS -> EmptyFragment.newInstance()
             else -> EmptyFragment.newInstance()
         }
     }

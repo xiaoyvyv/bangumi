@@ -15,6 +15,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.CollectType
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
@@ -114,6 +115,15 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
                 }
 
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
+            }
+        }
+
+        UserHelper.observe(this) {
+            if (it.isEmpty) {
+                viewModel.clearList()
+            } else {
+                viewModel.userId = it.id.orEmpty()
+                viewModel.refresh()
             }
         }
     }
