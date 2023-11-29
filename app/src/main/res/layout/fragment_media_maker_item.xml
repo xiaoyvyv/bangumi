@@ -51,6 +51,20 @@
         tools:text="User A said Book 1" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_tip"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:linksClickable="true"
+        android:paddingTop="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_job"
+        tools:text="User A said Book 1" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_comment"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
@@ -60,7 +74,7 @@
         android:textColor="?attr/colorOnSurface"
         android:textSize="@dimen/text_label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_job"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tip"
         tools:text="12 min" />
 
     <View

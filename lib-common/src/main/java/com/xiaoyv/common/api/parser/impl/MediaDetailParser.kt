@@ -87,7 +87,9 @@ fun Document.parserMediaMakers(): List<MediaMakerEntity> {
         entity.avatar = it.select(".avatar img").attr("src").optImageUrl()
         entity.titleCn = it.select("h2 .tip").text()
         entity.titleNative = it.select("h2 a").textNodes().firstOrNull()?.text().orEmpty()
-        entity.personInfo = it.select(".prsn_info span.badge_job").map { job -> job.text() }
+        entity.personInfo = it.select(".prsn_info > p > span.badge_job").map { job -> job.text() }
+        entity.tip = it.select(".prsn_info > span.tip").text()
+        entity.commentCount = it.select(".rr > .na").text()
         entity
     }
 }
