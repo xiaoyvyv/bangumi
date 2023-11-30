@@ -80,13 +80,14 @@ class HomeAdapter : BaseMultiItemAdapter<Any>() {
 
     class HomeCalendarImageBinder :
         OnMultiItemAdapterListener<Any, BaseQuickBindingHolder<FragmentHomeCalendarBinding>> {
+        private val itemTodayAdapter by lazy { HomeCardView.ItemAdapter() }
+        private val itemTomorrowAdapter by lazy { HomeCardView.ItemAdapter() }
+
         override fun onBind(
             holder: BaseQuickBindingHolder<FragmentHomeCalendarBinding>,
             position: Int,
             item: Any?
         ) {
-            val itemTodayAdapter = HomeCardView.ItemAdapter()
-            val itemTomorrowAdapter = HomeCardView.ItemAdapter()
             val calendarEntity = item as? HomeIndexCalendarEntity
             val binding = holder.binding
 

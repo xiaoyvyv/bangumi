@@ -36,6 +36,7 @@ class OverviewCharacterBinder(private val touchedListener: RecyclerItemTouchedLi
         item ?: return
         holder.binding.rvCharacter.adapter = itemAdapter
         holder.binding.rvCharacter.addOnItemTouchListener(touchedListener)
+        holder.binding.rvCharacter.setInitialPrefetchItemCount(item.mediaDetailEntity.characters.size)
         itemAdapter.submitList(item.mediaDetailEntity.characters)
     }
 

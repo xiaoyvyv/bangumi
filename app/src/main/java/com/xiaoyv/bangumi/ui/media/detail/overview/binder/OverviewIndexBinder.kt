@@ -35,6 +35,7 @@ class OverviewIndexBinder(private val touchedListener: RecyclerItemTouchedListen
         item ?: return
         holder.binding.rvIndex.adapter = itemAdapter
         holder.binding.rvIndex.addOnItemTouchListener(touchedListener)
+        holder.binding.rvIndex.setInitialPrefetchItemCount(item.mediaDetailEntity.recommendIndex.size)
         itemAdapter.submitList(item.mediaDetailEntity.recommendIndex)
     }
 

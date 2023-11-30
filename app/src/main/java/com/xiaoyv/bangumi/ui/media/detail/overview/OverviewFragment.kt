@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
@@ -27,6 +28,9 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             mediaViewModel.vpEnableLiveData.value = it
         })
     }
+
+    private val layoutManager
+        get() = binding.rvContent.layoutManager as LinearLayoutManager
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.mediaId = arguments.getString(NavKey.KEY_STRING).orEmpty()

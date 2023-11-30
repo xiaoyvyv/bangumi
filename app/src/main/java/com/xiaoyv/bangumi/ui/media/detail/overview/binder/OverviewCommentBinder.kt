@@ -28,6 +28,7 @@ class OverviewCommentBinder(private val touchedListener: RecyclerItemTouchedList
         item ?: return
         holder.binding.rvComment.adapter = itemAdapter
         holder.binding.rvComment.addOnItemTouchListener(touchedListener)
+        holder.binding.rvComment.setInitialPrefetchItemCount(item.mediaDetailEntity.comments.size)
         itemAdapter.submitList(item.mediaDetailEntity.comments)
     }
 

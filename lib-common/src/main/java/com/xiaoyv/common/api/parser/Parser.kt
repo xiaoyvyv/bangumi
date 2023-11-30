@@ -43,6 +43,7 @@ fun String.optImageUrl(): String {
     return imageUrl
         .replace("/r/(.*?)/".toRegex(), "/r/600/")
         .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/pic/\$1/l/")
+        .substringBefore("?")
 }
 
 fun String?.parseCount(): Int {

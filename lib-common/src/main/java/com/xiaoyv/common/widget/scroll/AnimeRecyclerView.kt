@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xiaoyv.common.helper.FixHelper
+import com.xiaoyv.widget.kts.isDestroyed
 
 /**
  * Class: [AnimeRecyclerView]
@@ -28,11 +29,11 @@ class AnimeRecyclerView @JvmOverloads constructor(
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == SCROLL_STATE_SETTLING || newState == SCROLL_STATE_DRAGGING) {
                     if (!scrolling) {
-                        Glide.with(context).pauseRequests()
+                        if (!context.isDestroyed()) Glide.with(context).pauseRequests()
                     }
                     scrolling = true
                 } else if (newState == SCROLL_STATE_IDLE) {
-                    Glide.with(context).resumeRequests()
+                    if (!context.isDestroyed()) Glide.with(context).resumeRequests()
                     scrolling = false
                 }
             }
@@ -40,13 +41,15 @@ class AnimeRecyclerView @JvmOverloads constructor(
     }
 
     override fun setLayoutManager(layout: LayoutManager?) {
-        when (layout) {
-            is LinearLayoutManager -> {
-                layout.isItemPrefetchEnabled = true
-                layout.initialPrefetchItemCount = 3
-            }
-        }
         super.setLayoutManager(layout)
+        setInitialPrefetchItemCount(3)
+    }
+
+    fun setInitialPrefetchItemCount(count: Int) {
+        (layoutManager as? LinearLayoutManager)?.apply {
+            isItemPrefetchEnabled = true
+            initialPrefetchItemCount = count
+        }
     }
 
     fun setMaxRecycledViews(viewType: Int, max: Int) {

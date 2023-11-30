@@ -29,6 +29,7 @@ class OverviewReviewBinder(private val touchedListener: RecyclerItemTouchedListe
         item ?: return
         holder.binding.rvReview.adapter = itemAdapter
         holder.binding.rvReview.addOnItemTouchListener(touchedListener)
+        holder.binding.rvReview.setInitialPrefetchItemCount(item.mediaDetailEntity.reviews.size)
         itemAdapter.submitList(item.mediaDetailEntity.reviews)
     }
 

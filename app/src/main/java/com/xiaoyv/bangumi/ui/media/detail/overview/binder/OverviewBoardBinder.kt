@@ -29,6 +29,7 @@ class OverviewBoardBinder(private val touchedListener: RecyclerItemTouchedListen
         item ?: return
         holder.binding.rvBoard.adapter = itemAdapter
         holder.binding.rvBoard.addOnItemTouchListener(touchedListener)
+        holder.binding.rvBoard.setInitialPrefetchItemCount(item.mediaDetailEntity.boards.size)
         itemAdapter.submitList(item.mediaDetailEntity.boards)
     }
 
