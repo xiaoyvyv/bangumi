@@ -7,10 +7,11 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+        android:id="@+id/rv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="10" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -17,8 +17,8 @@ class AnimeRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
     private var scrolling = false
-    private var itemViewCacheSize = 50
-    private var maxRecycledViews = 20
+    private var itemViewCacheSize = 20
+    private var maxRecycledViews = 10
 
     init {
         FixHelper.fuckMiuiOverScroller(this)

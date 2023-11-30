@@ -1,6 +1,7 @@
 package com.xiaoyv.common.api.parser
 
 import androidx.core.text.parseAsHtml
+import com.xiaoyv.common.api.BgmApiManager
 
 
 /**
@@ -34,7 +35,11 @@ fun String.fetchStyleBackgroundUrl(): String {
  * https://lain.bgm.tv/pic/photo/g/41/30/823739_i8sWx.jpg
  */
 fun String.optImageUrl(): String {
-    val imageUrl = if (startsWith("//")) "https:$this" else this
+    val imageUrl = when {
+        startsWith("//") -> "https:$this"
+        startsWith("/") -> "${BgmApiManager.URL_BASE_WEB}$this"
+        else -> this
+    }
     return imageUrl
         .replace("/r/(.*?)/".toRegex(), "/r/600/")
         .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/pic/\$1/l/")
@@ -48,4 +53,18 @@ fun String?.parseCount(): Int {
 
 fun String.parseHtml(): CharSequence {
     return parseAsHtml()
+}
+
+/**
+ * 查询日期
+ * - 2004年1月1日
+ * - 2004年11月1日
+ * - 2004年11月11日
+ * - 2004年1月
+ * - 2025年
+ */
+fun String.parserTime(): String {
+    return ("\\d{4}.\\d{1,2}.\\d{1,2}.".toRegex().find(this)
+        ?: "\\d{4}.\\d{1,2}.".toRegex().find(this)
+        ?: "\\d{4}.".toRegex().find(this))?.value.orEmpty()
 }

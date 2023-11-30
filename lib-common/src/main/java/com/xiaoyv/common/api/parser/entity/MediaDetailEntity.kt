@@ -1,5 +1,8 @@
 package com.xiaoyv.common.api.parser.entity
 
+import kotlin.math.pow
+import kotlin.math.sqrt
+
 /**
  * Class: [MediaDetailEntity]
  *
@@ -10,7 +13,10 @@ data class MediaDetailEntity(
     var id: String = "",
     var titleCn: String = "",
     var titleNative: String = "",
+    var time: String = "",
+    var subtype: String = "",
     var cover: String = "",
+    var collectState: String = "",
     var infos: List<String> = emptyList(),
     var recommendIndex: List<MediaIndex> = emptyList(),
     var whoSee: List<MediaWhoSee> = emptyList(),
@@ -20,7 +26,7 @@ data class MediaDetailEntity(
     var countCollect: Int = 0,
     var countDropped: Int = 0,
     var progressList: List<MediaProgress> = emptyList(),
-    var subjectSummary: String = "",
+    var subjectSummary: CharSequence = "",
     var tags: List<MediaTag> = emptyList(),
     var characters: List<MediaCharacter> = emptyList(),
     var relativeMedia: List<MediaRelative> = emptyList(),
@@ -32,13 +38,34 @@ data class MediaDetailEntity(
 ) {
     data class MediaRating(
         var globalRating: Float? = null,
+        var description: String = "",
         var globalRank: Int = 0,
         var ratingCount: Int = 0,
-        var ratingDetail: List<RatingItem> = emptyList()
-    )
+        var ratingDetail: List<RatingItem> = emptyList(),
+        var standardDeviation: Double = 0.0
+    ) {
+
+        fun calculateStandardDeviation(): Double {
+            runCatching {
+                // 步骤1：计算平均值
+                val totalScores = ratingDetail.sumOf { it.label * it.count }
+                val totalCount = ratingDetail.sumOf { it.count }
+                val mean = totalScores.toDouble() / totalCount
+
+                // 步骤2和3：计算平方差的累加值
+                val sumOfSquaredDifferences =
+                    ratingDetail.sumOf { (it.label - mean).pow(2).toInt() * it.count }
+
+                // 步骤4：计算标准差
+                val variance = sumOfSquaredDifferences.toDouble() / totalCount
+                return sqrt(variance)
+            }
+            return 0.0
+        }
+    }
 
     data class RatingItem(
-        var label: String = "",
+        var label: Int = 1,
         var count: Int = 0,
         var percent: Float = 0f
     )
@@ -80,6 +107,8 @@ data class MediaDetailEntity(
         var duration: String = "",
         var id: String = "",
         var no: String = "",
+        var notEp: Boolean = false,
+        var isRelease: Boolean = false,
         var commentCount: Int = 0
     )
 

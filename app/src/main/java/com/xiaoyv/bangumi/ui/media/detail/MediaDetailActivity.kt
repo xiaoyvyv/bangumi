@@ -9,8 +9,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityMediaDetailBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.api.response.MediaJsonEntity
 import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.common.kts.loadImageAnimate
+import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
 
@@ -74,12 +75,25 @@ class MediaDetailActivity :
 
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onMediaDetailLiveData.observe(this) {
+            binding.ivCover.loadImageAnimate(it.cover)
+            binding.ivBanner.loadImageBlur(it.cover)
 
+            binding.toolbar.title = it.titleCn.ifBlank { it.titleNative }
+            binding.tvTitle.text = it.titleCn.ifBlank { it.titleNative }
+            binding.tvSubtitle.text = it.titleNative
+            binding.tvScore.text = String.format("%.1f", it.rating.globalRating)
+            binding.tvScoreTip.text = it.rating.description
+
+            if (it.subtype.isNotBlank()) {
+                binding.tvTime.text = String.format("(%s - %s)", it.time, it.subtype)
+            } else {
+                binding.tvTime.text = String.format("(%s)", it.time)
+            }
         }
-    }
 
-    fun refreshMediaInfo(mediaJsonEntity: MediaJsonEntity) {
-        viewModel.onMediaDetailLiveData.value = mediaJsonEntity
+        viewModel.vpEnableLiveData.observe(this) {
+            binding.vpContent.isUserInputEnabled = it
+        }
     }
 
     override fun onCreateLoadingDialog(): UiDialog {

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:text="收藏"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/tv_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="我想看这部动画"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_save" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_save_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintTop_toBottomOf="@+id/tv_save"
+        tools:text="4692人想看 / 9715人看过 / 791人在看 / 426人搁置 / 110人抛弃" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,8 @@ import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
+import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Document
@@ -136,9 +138,11 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         entity.titleCn = attr("title")
         entity.titleNative = text()
     }
-
+    entity.subtype = select(".nameSingle small").text()
     entity.cover = select("img.cover").attr("src").optImageUrl()
     entity.infos = select("#infobox > li").map { it.html() }
+    entity.time = select("#infobox").text().parserTime()
+    entity.collectState = select("#panelInterestWrapper .interest_now").text()
 
     // 推荐的条目
     entity.recommendIndex = select("#subjectPanelIndex .groupsLine > li").map { item ->
@@ -188,10 +192,14 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
 
     entity.progressList = select(".prg_list > li").map { item ->
         val progress = MediaDetailEntity.MediaProgress()
+
+        progress.notEp = item.hasClass("subtitle")
+
         item.select("a").apply {
             progress.id = attr("href").substringAfterLast("/")
             progress.titleNative = attr("title")
-            progress.no = text()
+            progress.no = text().ifBlank { item.text() }
+            progress.isRelease = hasClass("epBtnAir")
         }
 
         val relId = item.select("a").attr("rel")
@@ -213,7 +221,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         progress
     }
 
-    entity.subjectSummary = select("#subject_summary").text()
+    entity.subjectSummary = select("#subject_summary").outerHtml().parseHtml()
 
     entity.tags = select(".subject_tag_section .inner a").map { item ->
         val mediaTag = MediaDetailEntity.MediaTag()
@@ -278,16 +286,18 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.rating = select(".global_rating, #ChartWarpper").let { item ->
         val rating = MediaDetailEntity.MediaRating()
         rating.globalRating = item.select(".global_score .number").text().toFloatOrNull()
+        rating.description = item.select(".description").text()
         rating.globalRank = item.select("small.alarm").text().parseCount()
         rating.ratingCount = item.select(".chart_desc span").text().parseCount()
         rating.ratingDetail = item.select(".horizontalChart > li").map { chart ->
             val ratingItem = MediaDetailEntity.RatingItem()
             ratingItem.percent = chart.select("a.textTip").attr("title")
                 .substringBefore("%").toFloatOrNull() ?: 0f
-            ratingItem.label = chart.select(".label").text()
+            ratingItem.label = chart.select(".label").text().parseCount()
             ratingItem.count = chart.select(".count").text().parseCount()
             ratingItem
         }
+        rating.standardDeviation = rating.calculateStandardDeviation()
         rating
     }
 

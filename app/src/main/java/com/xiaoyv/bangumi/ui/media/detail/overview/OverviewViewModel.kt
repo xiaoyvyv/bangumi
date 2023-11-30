@@ -20,6 +20,7 @@ class OverviewViewModel : BaseViewModel() {
     internal var mediaId: String = ""
 
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity>()
+    internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.OverviewItem>>()
 
     fun queryMediaInfo() {
         launchUI(
@@ -28,13 +29,40 @@ class OverviewViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
-                mediaDetailLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryMediaDetail(
+                // 占位
+                if (mediaBinderListLiveData.value == null) {
+                    mediaBinderListLiveData.value = buildBinderList(MediaDetailEntity())
+                }
+
+                val (mediaEntity, binderList) = withContext(Dispatchers.IO) {
+                    val mediaEntity = BgmApiManager.bgmWebApi.queryMediaDetail(
                         mediaId = mediaId,
                         type = MediaDetailType.TYPE_OVERVIEW
-                    )
-                }.parserMediaDetail()
+                    ).parserMediaDetail()
+                    mediaEntity to buildBinderList(mediaEntity)
+                }
+
+                mediaDetailLiveData.value = mediaEntity
+                mediaBinderListLiveData.value = binderList
             }
         )
     }
+
+    private fun buildBinderList(entity: MediaDetailEntity): List<OverviewAdapter.OverviewItem> =
+        listOf(
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_SAVE, "收藏"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_EP, "章节"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_TAG, "标签"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_SUMMARY, "简介"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_PREVIEW, "预览"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_DETAIL, "详情"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_RATING, "评分"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_CHARACTER, "人物"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_MAKER, "制作人员"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_RELATIVE, "相关的条目"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_INDEX, "推荐的目录"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_REVIEW, "评论"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_BOARD, "讨论板"),
+            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_COMMENT, "吐槽")
+        )
 }

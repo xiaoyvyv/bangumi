@@ -26,10 +26,10 @@ jobs:
       run: ./gradlew :app:build
     
     - name: Upload APK and ProGuard Files
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: app-release
-        path: app/build/outputs/apk/release/*.apk
+        name: app-debug
+        path: app/build/outputs/apk/debug/*.apk
 
     - name: Upload ProGuard Mapping File
       uses: actions/upload-artifact@v3

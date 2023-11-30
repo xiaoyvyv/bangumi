@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title_ep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:text="章节"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+        android:id="@+id/rv_ep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_ep"
+        app:spanCount="8"
+        tools:listitem="@layout/fragment_overview_ep_item" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_ep_my_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:layout_marginBottom="@dimen/ui_size_12"
+        android:background="@drawable/shape_ep"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_ep"
+        tools:text="我的完成度：0/22" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
