@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/srl_refresh"
+<com.xiaoyv.common.widget.scroll.AnimeNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:layout_height="match_parent">
 
-    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-        android:id="@+id/rv_content"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:itemCount="10" />
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:orientation="vertical" />
+</com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
