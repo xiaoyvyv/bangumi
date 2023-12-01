@@ -22,7 +22,7 @@ class MediaDetailViewModel : BaseViewModel() {
 
     internal val onMediaDetailLiveData = MutableLiveData<MediaDetailEntity>()
 
-    internal val vpEnableLiveData = MutableLiveData<Boolean>(true)
+    internal val vpEnableLiveData = MutableLiveData(true)
 
     override fun onViewCreated() {
 

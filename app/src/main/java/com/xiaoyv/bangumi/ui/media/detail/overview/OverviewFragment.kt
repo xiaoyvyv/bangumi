@@ -4,6 +4,8 @@ package com.xiaoyv.bangumi.ui.media.detail.overview
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import com.chad.library.adapter.base.BaseMultiItemAdapter
@@ -25,8 +27,11 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.widget.stateview.StateViewLiveData
+import kotlinx.coroutines.delay
 
 /**
  * Class: [OverviewFragment]
@@ -107,6 +112,25 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                 val bindingHolder = viewHolders[overviewItem.type]
                 if (bindingHolder != null && adapterListener != null) {
                     adapterListener.onBind(bindingHolder, index, overviewItem)
+                }
+            }
+
+            binding.pbProgress.hide()
+        }
+
+        viewModel.loadingViewState.observe(this) {
+            when (it.type) {
+                StateViewLiveData.StateType.STATE_LOADING -> {
+                    binding.llContainer.isInvisible = true
+                    binding.pbProgress.show()
+                }
+
+                else -> {
+                    binding.pbProgress.hide()
+                    launchUI {
+                        delay(100)
+                        binding.llContainer.isVisible = true
+                    }
                 }
             }
         }

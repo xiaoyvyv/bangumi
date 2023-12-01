@@ -23,12 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:lineSpacingMultiplier="1.25"
+        android:lineSpacingMultiplier="1.5"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_summary"
-        tools:lines="3"
+        tools:lines="5"
         tools:text="@tools:sample/lorem/random" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,11 +29,6 @@ class OverviewViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
-                // 占位
-                if (mediaBinderListLiveData.value == null) {
-                    mediaBinderListLiveData.value = buildBinderList(MediaDetailEntity())
-                }
-
                 val (mediaEntity, binderList) = withContext(Dispatchers.IO) {
                     val mediaEntity = BgmApiManager.bgmWebApi.queryMediaDetail(
                         mediaId = mediaId,

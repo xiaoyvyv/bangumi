@@ -31,7 +31,7 @@
 
     <style name="Theme.Bangumi" parent="Base.Theme.Bangumi">
         <item name="appBarLayoutStyle">@style/Theme.Bangumi.AppBarTheme</item>
-        <item name="android:fontFamily">@font/font</item>
+        <item name="android:fontFamily">@raw/font</item>
         <item name="android:includeFontPadding">false</item>
 
         <!-- Fix CollapsingToolbar with theme material3 -->
@@ -58,12 +58,12 @@
     </style>
 
     <style name="Theme.Bangumi.ToolbarTitle">
-        <item name="android:fontFamily">@font/font</item>
+        <item name="android:fontFamily">@raw/font</item>
         <item name="android:textSize">@dimen/ui_font_22</item>
     </style>
 
     <style name="Theme.Bangumi.ExpandTitle">
-        <item name="android:fontFamily">@font/font</item>
+        <item name="android:fontFamily">@raw/font</item>
         <item name="android:textSize">@dimen/ui_font_14</item>
         <item name="android:textStyle">bold</item>
     </style>

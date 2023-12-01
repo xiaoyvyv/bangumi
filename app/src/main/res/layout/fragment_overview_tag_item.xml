@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiaoyv.common.widget.text.AnimeTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tv_title_tag"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/ui_size_4"
+    android:layout_marginEnd="@dimen/ui_size_8"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurfaceContainer"
+    android:paddingHorizontal="@dimen/ui_size_6"
+    android:paddingVertical="@dimen/ui_size_4"
+    android:text="标签"
+    android:textAppearance="?attr/textAppearanceBodySmall"
+    android:textColor="?attr/colorOnSurface"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />

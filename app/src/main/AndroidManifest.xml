@@ -15,10 +15,10 @@
         android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
 
-<!--
-00:59:06.744 4593  libc                    com.xiaoyv.bangumi                   A  Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 4622 (RenderThread), pid 4593 (.xiaoyv.bangumi)
-00:59:07.051 5091  DEBUG                   pid-5091                             A  Cmdline: com.xiaoyv.bangumi
-00:59:07.051 5091                          pid-5091                             A  pid: 4593, tid: 4622, name: RenderThread  >>> com.xiaoyv.bangumi <<< -->
+    <!--
+    00:59:06.744 4593  libc                    com.xiaoyv.bangumi                   A  Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 4622 (RenderThread), pid 4593 (.xiaoyv.bangumi)
+    00:59:07.051 5091  DEBUG                   pid-5091                             A  Cmdline: com.xiaoyv.bangumi
+    00:59:07.051 5091                          pid-5091                             A  pid: 4593, tid: 4622, name: RenderThread  >>> com.xiaoyv.bangumi <<< -->
     <application
         android:name="com.xiaoyv.common.MainApp"
         android:allowBackup="true"
@@ -69,6 +69,10 @@
             android:exported="false" />
         <activity
             android:name="com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
     </application>

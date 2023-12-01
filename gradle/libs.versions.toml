@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.0-alpha14"
+agp = "8.3.0-alpha15"
 blueprint = "1.1.36"
 fragmentKtx = "1.6.2"
 jsoup = "1.16.2"

@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentBlogBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
@@ -15,6 +16,7 @@ import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.getAttrColor
 
@@ -97,6 +99,10 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
         binding.srlRefresh.setOnRefreshListener {
             adapterHelper.trailingLoadState = LoadState.None
             viewModel.refresh()
+        }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.item_root) {
+            RouteHelper.jumpBlogDetail(it.id)
         }
     }
 

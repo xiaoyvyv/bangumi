@@ -1,0 +1,109 @@
+$primary: #ff80ab;
+@import "bootstrap/scss/bootstrap.scss";
+
+// 自定义字体
+// noinspection CssUnknownTarget
+@font-face {
+  font-family: 'BgmFont';
+  src: url("/android/font.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  place-items: center;
+
+  * {
+    font-family: 'BgmFont', monospace;
+    box-sizing: border-box;
+  }
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+}
+
+.w-0 {
+  width: 0 !important;
+}
+
+.w-20 {
+  width: 20% !important;
+}
+
+.w-25 {
+  width: 25% !important;
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.w-40 {
+  width: 40% !important;
+}
+
+.w-50 {
+  width: 50% !important;
+}
+
+.w-60 {
+  width: 60% !important;
+}
+
+.h-0 {
+  height: 0 !important;
+}
+
+.h-10 {
+  height: 10% !important;
+}
+
+.h-40 {
+  height: 40% !important;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
+
+// 元素开始进入的状态 | 元素离开结束的状态
+.run-enter-from,
+.run-leave-to {
+  opacity: 0;
+}
+
+// 元素进入结束的状态 ｜ 元素开始离开的状态。 这里不写也可以！！！！！！
+.run-enter-to,
+.run-leave-from {
+  opacity: 1;
+}
+
+// 元素进入 ｜ 结束时，过渡的效果
+.run-enter-active,
+.run-leave-active {
+  // 过渡动画的使用
+  transition: opacity 0.2s linear;
+}
+
+.MathJax {
+  max-width: 100%;
+  display: inline-block;
+  overflow-x: scroll;
+  vertical-align: top;
+}
+

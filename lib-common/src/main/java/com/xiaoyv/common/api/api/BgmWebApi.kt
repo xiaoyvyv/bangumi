@@ -136,6 +136,12 @@ interface BgmWebApi {
         @Query("page") page: Int? = null,
     ): Document
 
+    /**
+     * 日志详情
+     */
+    @GET("/blog/{blogId}")
+    suspend fun queryBlogDetail(@Path("blogId", encoded = true) blogId: String): Document
+
     companion object {
 
         /**

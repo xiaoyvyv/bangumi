@@ -78,6 +78,7 @@ fun Document.parserMediaReviews(): List<MediaReviewEntity> {
 
 fun Document.parserMediaBoards(): List<MediaBoardEntity> {
     return select(".topic_list > tbody > tr").map {
+        if (it.select(".more").isNotEmpty()) return@map null
         val entity = MediaBoardEntity()
         val tds = it.select("tr td")
         entity.id = tds.getOrNull(0)?.select("a")?.attr("href").orEmpty()
@@ -89,7 +90,7 @@ fun Document.parserMediaBoards(): List<MediaBoardEntity> {
         entity.replies = tds.getOrNull(2)?.text().orEmpty()
         entity.time = tds.getOrNull(3)?.text().orEmpty()
         entity
-    }
+    }.filterNotNull()
 }
 
 
@@ -221,9 +222,10 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         progress
     }
 
-    entity.subjectSummary = select("#subject_summary").outerHtml().parseHtml()
+    entity.subjectSummary = select("#subject_summary").text()
 
     entity.tags = select(".subject_tag_section .inner a").map { item ->
+        if (item.id() == "show_user_tags") return@map null
         val mediaTag = MediaDetailEntity.MediaTag()
 
         item.select("a.l").apply {
@@ -233,7 +235,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         }
 
         mediaTag
-    }
+    }.filterNotNull()
 
     entity.characters = select("#browserItemList > li").map { item ->
         val mediaCharacter = MediaDetailEntity.MediaCharacter()

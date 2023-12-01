@@ -2,13 +2,17 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import com.blankj.utilcode.util.SpanUtils
 import com.chad.library.adapter.base.BaseMultiItemAdapter
-import com.google.android.flexbox.FlexboxLayout
 import com.xiaoyv.bangumi.databinding.FragmentOverviewTagBinding
+import com.xiaoyv.bangumi.databinding.FragmentOverviewTagItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
+import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.widget.text.AnimeTextView
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.widget.kts.getAttrColor
 
 
 /**
@@ -19,6 +23,7 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  */
 class OverviewTagBinder :
     BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewTagBinding>> {
+
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewTagBinding>,
         position: Int,
@@ -26,18 +31,25 @@ class OverviewTagBinder :
     ) {
         item ?: return
         holder.binding.boxTag.removeAllViews()
+
+        val context = holder.binding.root.context
         for (tag in item.mediaDetailEntity.tags) {
-            val tagView = AnimeTextView(holder.binding.root.context)
-            tagView.text = tag.title
-            tagView.setBackgroundResource(com.xiaoyv.widget.R.drawable.ui_shape_rectangle_corner_6)
-            tagView.setPadding(16, 8, 16, 8)
-            val layoutParams = FlexboxLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            val binding = FragmentOverviewTagItemBinding.inflate(
+                context.inflater,
+                holder.binding.boxTag,
+                true
             )
-            layoutParams.setMargins(8, 8, 8, 8)
-            tagView.setLayoutParams(layoutParams)
-            holder.binding.boxTag.addView(tagView)
+
+            holder.binding.boxTag.addView(AnimeTextView(context).apply {
+                SpanUtils.with(binding.tvTitleTag)
+                    .append(tag.title)
+                    .setBold()
+                    .setForegroundColor(context.getAttrColor(GoogleAttr.colorOnSurface))
+                    .appendSpace(4.dpi)
+                    .append(tag.count.toString())
+                    .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))
+                    .create()
+            })
         }
     }
 
