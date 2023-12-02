@@ -2,10 +2,10 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.BaseMultiItemAdapter
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewEpBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewEpItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.getAttrColor
@@ -23,8 +24,10 @@ import com.xiaoyv.widget.kts.getAttrColor
  * @author why
  * @since 11/30/23
  */
-class OverviewEpBinder(private val touchedListener: RecyclerItemTouchedListener) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewEpBinding>> {
+class OverviewEpBinder(
+    private val touchedListener: RecyclerItemTouchedListener,
+    private val clickItemListener: (MediaDetailEntity.MediaProgress) -> Unit
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewEpBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter()
@@ -36,11 +39,11 @@ class OverviewEpBinder(private val touchedListener: RecyclerItemTouchedListener)
         item: OverviewAdapter.OverviewItem?
     ) {
         item ?: return
+        holder.binding.tvEpMyProgress.text = String.format("%s/10", 1)
         holder.binding.rvEp.adapter = itemAdapter
         holder.binding.rvEp.addOnItemTouchListener(touchedListener)
         itemAdapter.submitList(item.mediaDetailEntity.progressList)
-
-        holder.binding.tvEpMyProgress.text = String.format("%s/10", 1)
+        itemAdapter.setOnDebouncedChildClickListener(R.id.item_ep, block = clickItemListener)
     }
 
     override fun onCreate(

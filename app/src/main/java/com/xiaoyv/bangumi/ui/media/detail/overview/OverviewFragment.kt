@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewBoardBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewCharacterBinder
@@ -29,6 +30,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.stateview.StateViewLiveData
 import kotlinx.coroutines.delay
@@ -55,19 +57,23 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     private val viewBinderTypes: HashMap<Int, BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, *>> by lazy {
         hashMapOf<Int, BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, *>>().apply {
             put(OverviewAdapter.TYPE_SAVE, OverviewSaveBinder())
-            put(OverviewAdapter.TYPE_EP, OverviewEpBinder(touchedListener))
-            put(OverviewAdapter.TYPE_TAG, OverviewTagBinder())
+            put(OverviewAdapter.TYPE_EP, OverviewEpBinder(touchedListener) {})
+            put(OverviewAdapter.TYPE_TAG, OverviewTagBinder {})
             put(OverviewAdapter.TYPE_SUMMARY, OverviewSummaryBinder())
             put(OverviewAdapter.TYPE_PREVIEW, OverviewPreviewBinder())
             put(OverviewAdapter.TYPE_DETAIL, OverviewDetailBinder())
             put(OverviewAdapter.TYPE_RATING, OverviewRatingBinder())
-            put(OverviewAdapter.TYPE_CHARACTER, OverviewCharacterBinder(touchedListener))
+            put(OverviewAdapter.TYPE_CHARACTER, OverviewCharacterBinder(touchedListener) {})
             put(OverviewAdapter.TYPE_MAKER, OverviewMakerBinder())
-            put(OverviewAdapter.TYPE_RELATIVE, OverviewRelativeBinder(touchedListener))
-            put(OverviewAdapter.TYPE_INDEX, OverviewIndexBinder(touchedListener))
-            put(OverviewAdapter.TYPE_REVIEW, OverviewReviewBinder(touchedListener))
-            put(OverviewAdapter.TYPE_BOARD, OverviewBoardBinder(touchedListener))
-            put(OverviewAdapter.TYPE_COMMENT, OverviewCommentBinder(touchedListener))
+            put(OverviewAdapter.TYPE_RELATIVE, OverviewRelativeBinder(touchedListener) {
+                RouteHelper.jumpMediaDetail(it.id)
+            })
+            put(OverviewAdapter.TYPE_INDEX, OverviewIndexBinder(touchedListener) {})
+            put(OverviewAdapter.TYPE_REVIEW, OverviewReviewBinder(touchedListener) {
+                RouteHelper.jumpBlogDetail(it.id)
+            })
+            put(OverviewAdapter.TYPE_BOARD, OverviewBoardBinder(touchedListener) {})
+            put(OverviewAdapter.TYPE_COMMENT, OverviewCommentBinder(touchedListener) {})
         }
     }
 
@@ -133,6 +139,10 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                     }
                 }
             }
+        }
+
+        UserHelper.observe(this) {
+            viewModel.queryMediaInfo()
         }
     }
 

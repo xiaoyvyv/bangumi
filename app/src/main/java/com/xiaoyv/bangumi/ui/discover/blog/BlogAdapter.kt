@@ -1,11 +1,15 @@
 package com.xiaoyv.bangumi.ui.discover.blog
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
+import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.FragmentBlogItemBinding
 import com.xiaoyv.common.api.parser.entity.BlogEntity
+import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
+import com.xiaoyv.widget.kts.getAttrColor
 
 /**
  * Class: [BlogAdapter]
@@ -18,11 +22,17 @@ class BlogAdapter : BaseQuickDiffBindingAdapter<BlogEntity,
 
     override fun BaseQuickBindingHolder<FragmentBlogItemBinding>.converted(item: BlogEntity) {
         binding.ivCover.loadImageAnimate(item.image, holder = true)
-        binding.tvTag.text = item.title
         binding.tvTitle.text = item.title
         binding.tvDesc.text = item.content
         binding.tvTime.text = item.time
-        binding.tvTimeline.text = item.timeline
+        binding.tvRecent.isVisible = item.recentUserName.isNotBlank()
+        binding.tvCommentCount.text = String.format("讨论：+%d", item.commentCount)
+
+        SpanUtils.with(binding.tvRecent)
+            .append(item.recentUserName)
+            .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))
+            .append("：评论了该日志")
+            .create()
     }
 
     object BlogDiffCallback : DiffUtil.ItemCallback<BlogEntity>() {

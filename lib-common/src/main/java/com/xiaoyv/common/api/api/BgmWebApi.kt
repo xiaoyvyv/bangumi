@@ -1,6 +1,8 @@
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.request.CreateTokenParam
+import com.xiaoyv.common.api.response.ReplyResultEntity
+import com.xiaoyv.common.api.response.UploadResultEntity
 import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
@@ -13,7 +15,9 @@ import retrofit2.http.Body
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -141,6 +145,94 @@ interface BgmWebApi {
      */
     @GET("/blog/{blogId}")
     suspend fun queryBlogDetail(@Path("blogId", encoded = true) blogId: String): Document
+
+
+    /**
+     * 发表回复
+     *
+     * - New
+     * ```
+     * content	"\n台长?\n"
+     * related_photo	"0"
+     * lastview	"1701450913"
+     * formhash	"275b091c"
+     * submit	"submit"
+     * ```
+     *
+     * Sub
+     * ```
+     * topic_id	"327295"
+     * related	"195202"
+     * sub_reply_uid	"837364"
+     * post_uid	"539713"
+     * content	"Re:zero+"
+     * related_photo	"0"
+     * lastview	"1701492611"
+     * formhash	"275b091c"
+     * submit	"submit"
+     * ```
+     */
+    @FormUrlEncoded
+    @POST("{action}")
+    suspend fun postNewReply(
+        @Path("action", encoded = true) action: String,
+        @FieldMap param: Map<String, String>,
+        @Query("ajax") ajax: Int = 1
+    ): ReplyResultEntity
+
+    /**
+     * 上传图片
+     */
+    @Multipart
+    @POST("/blog/upload_photo")
+    suspend fun uploadBlogImage(@Part file: MultipartBody.Part): UploadResultEntity
+
+    /**
+     * 发表文章
+     * ```
+     * -----------------------------7435713640328518672821874407
+     * Content-Disposition: form-data; name="formhash"
+     *
+     * 275b091c
+     * -----------------------------7435713640328518672821874407
+     * Content-Disposition: form-data; name="title"
+     *
+     * 浅浅发个日志测试一下
+     * -----------------------------7435713640328518672821874407
+     * Content-Disposition: form-data; name="content"
+     *
+     * 浅浅发个日志测试一下
+     * -----------------------------7435713640328518672821874407
+     * Content-Disposition: form-data; name="tags"
+     *
+     * 动画
+     * -----------------------------7435713640328518672821874407
+     * Content-Disposition: form-data; name="public"
+     *
+     * 0
+     * -----------------------------7435713640328518672821874407
+     * Content-Disposition: form-data; name="submit"
+     *
+     * 加上去
+     * -----------------------------7435713640328518672821874407
+     * Content-Disposition: form-data; name="related_subject[]"
+     *
+     * 2907
+     * -----------------------------7435713640328518672821874407--
+     *
+     * ```
+     */
+    @POST("/blog/create")
+    suspend fun postCreateBlog(@Body body: MultipartBody): Document
+
+    @GET("/blog/create")
+    suspend fun queryCreateBlogForm(@Query("review") review: String?): Document
+
+    @GET("/erase/entry/{blogId}")
+    suspend fun deleteBlog(
+        @Path("blogId", encoded = true) blogId: String,
+        @Query("gh") hash: String
+    ): Document
 
     companion object {
 

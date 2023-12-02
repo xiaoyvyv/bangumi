@@ -75,6 +75,10 @@
             android:name="com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.post.PostActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

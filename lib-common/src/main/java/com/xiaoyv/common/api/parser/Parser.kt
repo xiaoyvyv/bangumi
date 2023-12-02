@@ -69,3 +69,10 @@ fun String.parserTime(): String {
         ?: "\\d{4}.\\d{1,2}.".toRegex().find(this)
         ?: "\\d{4}.".toRegex().find(this))?.value.orEmpty()
 }
+
+fun String?.replaceSmiles(): String {
+    return orEmpty().replace(
+        "src=\"/img/smiles/(.*?)\"".toRegex(),
+        "src=\"${BgmApiManager.URL_BASE_WEB}/img/smiles/\$1\""
+    )
+}

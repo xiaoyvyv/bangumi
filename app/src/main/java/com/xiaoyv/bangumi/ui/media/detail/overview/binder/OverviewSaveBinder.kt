@@ -2,11 +2,19 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import com.blankj.utilcode.util.ColorUtils
+import com.blankj.utilcode.util.StringUtils
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewSaveBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
+import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.kts.CommonColor
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
+import com.xiaoyv.common.kts.tint
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.widget.kts.getAttrColor
 
 /**
  * Class: [OverviewSaveBinder]
@@ -22,15 +30,56 @@ class OverviewSaveBinder :
         item: OverviewAdapter.OverviewItem?
     ) {
         item ?: return
-        holder.binding.tvSave.text = item.mediaDetailEntity.collectState
-        holder.binding.tvSaveSummary.text = String.format(
-            "%d人想看 / %d人看过 / %d人在看 / %d人搁置 / %d人抛弃",
+
+        holder.binding.tvSaveSummary.text = StringUtils.getString(
+            CommonString.media_save_summary,
             item.mediaDetailEntity.countWish,
             item.mediaDetailEntity.countCollect,
             item.mediaDetailEntity.countDoing,
             item.mediaDetailEntity.countOnHold,
             item.mediaDetailEntity.countDropped
         )
+
+        holder.binding.tvSave.text = StringUtils.getString(
+            CommonString.media_save_tip,
+            InterestType.string(item.mediaDetailEntity.collectState.interest)
+        )
+
+        item.mediaDetailEntity.collectState.apply {
+            when (interest) {
+                InterestType.TYPE_WISH -> {
+                    holder.binding.tvSave.backgroundTintList =
+                        ColorUtils.getColor(CommonColor.save_wish).tint
+                }
+
+                InterestType.TYPE_COLLECT -> {
+                    holder.binding.tvSave.backgroundTintList =
+                        ColorUtils.getColor(CommonColor.save_collect).tint
+                }
+
+                InterestType.TYPE_DO -> {
+                    holder.binding.tvSave.backgroundTintList =
+                        ColorUtils.getColor(CommonColor.save_do).tint
+                }
+
+                InterestType.TYPE_ON_HOLD -> {
+                    holder.binding.tvSave.backgroundTintList =
+                        ColorUtils.getColor(CommonColor.save_on_hold).tint
+                }
+
+                InterestType.TYPE_DROPPED -> {
+                    holder.binding.tvSave.backgroundTintList =
+                        ColorUtils.getColor(CommonColor.save_dropped).tint
+                }
+
+                else -> {
+                    holder.binding.tvSave.backgroundTintList =
+                        holder.binding.root.context.getAttrColor(GoogleAttr.colorPrimary).tint
+                    holder.binding.tvSave.text =
+                        StringUtils.getString(CommonString.media_save_click)
+                }
+            }
+        }
     }
 
     override fun onCreate(

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.BaseMultiItemAdapter
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewIndexBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewIndexItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
@@ -11,6 +12,7 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -20,8 +22,10 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @author why
  * @since 11/30/23
  */
-class OverviewIndexBinder(private val touchedListener: RecyclerItemTouchedListener) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewIndexBinding>> {
+class OverviewIndexBinder(
+    private val touchedListener: RecyclerItemTouchedListener,
+    private val clickItemListener: (MediaDetailEntity.MediaIndex) -> Unit
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewIndexBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter()
@@ -37,6 +41,7 @@ class OverviewIndexBinder(private val touchedListener: RecyclerItemTouchedListen
         holder.binding.rvIndex.addOnItemTouchListener(touchedListener)
         holder.binding.rvIndex.setInitialPrefetchItemCount(item.mediaDetailEntity.recommendIndex.size)
         itemAdapter.submitList(item.mediaDetailEntity.recommendIndex)
+        itemAdapter.setOnDebouncedChildClickListener(R.id.item_index, block = clickItemListener)
     }
 
     override fun onCreate(
@@ -47,10 +52,8 @@ class OverviewIndexBinder(private val touchedListener: RecyclerItemTouchedListen
         FragmentOverviewIndexBinding.inflate(context.inflater, parent, false)
     )
 
-    private class ItemAdapter :
-        BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaIndex, FragmentOverviewIndexItemBinding>(
-            DiffItemCallback
-        ) {
+    private class ItemAdapter : BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaIndex,
+            FragmentOverviewIndexItemBinding>(DiffItemCallback) {
         override fun BaseQuickBindingHolder<FragmentOverviewIndexItemBinding>.converted(item: MediaDetailEntity.MediaIndex) {
             binding.ivAvatar.loadImageAnimate(item.userAvatar)
             binding.tvName.text = item.title

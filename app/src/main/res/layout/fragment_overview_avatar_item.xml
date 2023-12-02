@@ -2,15 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_character"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_avatar"
         android:layout_width="@dimen/ui_size_80"
-        android:layout_height="@dimen/ui_size_120"
+        android:layout_height="@dimen/ui_size_0"
         android:layout_marginHorizontal="@dimen/ui_size_8"
         android:layout_marginTop="@dimen/ui_layout_margin"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

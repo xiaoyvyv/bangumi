@@ -2,13 +2,16 @@ package com.xiaoyv.bangumi.ui.media.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityMediaDetailBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
@@ -44,19 +47,6 @@ class MediaDetailActivity :
         setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
         binding.toolbar.title = viewModel.mediaName
-        binding.ivBanner.updateLayoutParams {
-//            height = getAttrDimensionPixelSize(GoogleAttr.actionBarSize) +
-//                    BarUtils.getStatusBarHeight() +
-//                    180.dpi +
-//                    32.dpi
-        }
-
-//        binding.layoutInfo.root.updateLayoutParams {
-//            height = getAttrDimensionPixelSize(GoogleAttr.actionBarSize) +
-//                    BarUtils.getStatusBarHeight() +
-//                    180.dpi +
-//                    32.dpi
-//        }
     }
 
 
@@ -98,6 +88,21 @@ class MediaDetailActivity :
 
     override fun onCreateLoadingDialog(): UiDialog {
         return AnimeLoadingDialog(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menu.add("Review")
+            .setIcon(CommonDrawable.ic_review)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                if (UserHelper.isLogin) {
+                    RouteHelper.jumpPostBlog(viewModel.onMediaDetailLiveData.value)
+                } else {
+                    RouteHelper.jumpLogin()
+                }
+                true
+            }
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

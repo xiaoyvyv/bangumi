@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurface">
+
+    <com.xiaoyv.widget.scrollview.UiHorizontalScrollView
+        android:id="@+id/scroll_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.75"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_bold"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:cropToPadding="false"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:contentPadding="@dimen/ui_size_0"
+                app:srcCompat="@drawable/ic_format_bold"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_italic"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:srcCompat="@drawable/ic_format_italic"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_underline"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_11"
+                app:srcCompat="@drawable/ic_format_underlined"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_strikethrough"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:srcCompat="@drawable/ic_format_strikethrough"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_size"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:srcCompat="@drawable/ic_format_size"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_color"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_11"
+                app:srcCompat="@drawable/ic_format_color"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_mask"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_12"
+                app:srcCompat="@drawable/ic_format_mask"
+                app:tint="?attr/colorControlNormal" />
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_link"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:srcCompat="@drawable/ic_format_link"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_image"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:srcCompat="@drawable/ic_format_image"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_quote"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:srcCompat="@drawable/ic_format_quote"
+                app:tint="?attr/colorControlNormal" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_code"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:cropToPadding="false"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:srcCompat="@drawable/ic_format_code"
+                app:tint="?attr/colorControlNormal" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.xiaoyv.widget.scrollview.UiHorizontalScrollView>
+
+    <com.xiaoyv.common.widget.text.AnimeEditTextView
+        android:id="@+id/ed_reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="start|top"
+        android:hint="请输入回复内容..."
+        android:maxLines="16"
+        android:minLines="5"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scroll_menu" />
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_send"
+        android:layout_width="@dimen/ui_size_50"
+        android:layout_height="@dimen/ui_size_35"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:padding="@dimen/ui_size_0"
+        android:text="发送"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/ed_reply"
+        app:layout_constraintEnd_toEndOf="@+id/ed_reply" />
+
+    <View
+        style="@style/Theme.Bangumi.Divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/scroll_menu" />
+
+    <View
+        style="@style/Theme.Bangumi.Divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_0.5"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

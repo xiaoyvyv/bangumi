@@ -4,4 +4,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_label">10sp</dimen>
     <dimen name="text_label_big">12sp</dimen>
+    <dimen name="format_menu">44dp</dimen>
 </resources>

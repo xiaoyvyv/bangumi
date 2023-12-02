@@ -10,7 +10,6 @@ import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
-import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
@@ -143,7 +142,29 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.cover = select("img.cover").attr("src").optImageUrl()
     entity.infos = select("#infobox > li").map { it.html() }
     entity.time = select("#infobox").text().parserTime()
-    entity.collectState = select("#panelInterestWrapper .interest_now").text()
+
+    entity.collectState = select("#panelInterestWrapper").let { item ->
+        val collectForm = MediaDetailEntity.MediaCollectForm()
+        collectForm.comment = item.select("#comment").text()
+        collectForm.interest = item.select("input[checked=checked][name=interest]").attr("value")
+        collectForm.referer = item.select("input[name=referer]").attr("value")
+        collectForm.tags = item.select("input#tags").attr("value")
+        collectForm.update = item.select("input[name=update]").attr("value")
+        collectForm.privacy = item.select("input[name=privacy]").attr("checked").let { checked ->
+            if (checked.isNotBlank()) 1 else 0
+        }
+        collectForm.normalTags = item.select(".tagList")
+            .getOrNull(0)?.select("a").orEmpty()
+            .map { a ->
+                a.text()
+            }
+        collectForm.myTags = item.select(".tagList")
+            .getOrNull(1)?.select("a").orEmpty()
+            .map { a ->
+                a.text()
+            }
+        collectForm
+    }
 
     // 推荐的条目
     entity.recommendIndex = select("#subjectPanelIndex .groupsLine > li").map { item ->

@@ -2,9 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_root"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/home_card_height"
     android:layout_marginHorizontal="@dimen/ui_size_8"
+    android:clickable="true"
+    android:focusable="true"
     android:paddingVertical="@dimen/ui_layout_margin"
     tools:showIn="@layout/view_home_card">
 
@@ -12,6 +15,7 @@
         android:id="@+id/card_small"
         android:layout_width="@dimen/ui_size_120"
         android:layout_height="match_parent"
+        android:foreground="?attr/selectableItemBackground"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

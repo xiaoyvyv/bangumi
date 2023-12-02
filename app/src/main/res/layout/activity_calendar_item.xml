@@ -12,7 +12,7 @@
         android:layout_marginHorizontal="@dimen/ui_size_8"
         android:layout_marginVertical="@dimen/ui_size_8"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="2:3"
+        app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />

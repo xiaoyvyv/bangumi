@@ -2,7 +2,6 @@ package com.xiaoyv.common.widget.text
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatTextView
 import com.google.android.material.textview.MaterialTextView
 
 /**
@@ -13,4 +12,10 @@ import com.google.android.material.textview.MaterialTextView
  */
 open class AnimeTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : AppCompatTextView(context, attrs)
+) : MaterialTextView(context, attrs) {
+
+    init {
+
+
+    }
+}

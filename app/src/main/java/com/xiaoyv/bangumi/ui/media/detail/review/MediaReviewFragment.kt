@@ -2,10 +2,12 @@ package com.xiaoyv.bangumi.ui.media.detail.review
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
@@ -24,6 +26,14 @@ class MediaReviewFragment : BaseListFragment<MediaReviewEntity, MediaReviewViewM
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<MediaReviewEntity, *> {
         return MediaReviewAdapter()
+    }
+
+    override fun initListener() {
+        super.initListener()
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.item_review) {
+            RouteHelper.jumpBlogDetail(it.id)
+        }
     }
 
     companion object {

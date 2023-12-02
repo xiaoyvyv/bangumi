@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+    android:id="@+id/item_review"
     android:foreground="?attr/selectableItemBackground">
 
     <com.xiaoyv.common.widget.image.AnimeImageView

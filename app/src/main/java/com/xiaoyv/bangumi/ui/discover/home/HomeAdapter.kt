@@ -7,13 +7,16 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.chad.library.adapter.base.BaseMultiItemAdapter.OnItemViewTypeListener
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeBannerBinding
 import com.xiaoyv.bangumi.databinding.FragmentHomeCalendarBinding
+import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.card.HomeCardView
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 
@@ -23,12 +26,12 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  * @author why
  * @since 11/25/23
  */
-class HomeAdapter : BaseMultiItemAdapter<Any>() {
+class HomeAdapter(onItemClick: (BgmMediaEntity) -> Unit) : BaseMultiItemAdapter<Any>() {
 
     init {
         this.addItemType(TYPE_TOP_BANNER, HomeBannerBinder())
-            .addItemType(TYPE_CALENDAR_PREVIEW, HomeCalendarImageBinder())
-            .addItemType(TYPE_MEDIA_CARD, HomeCardImageBinder())
+            .addItemType(TYPE_CALENDAR_PREVIEW, HomeCalendarImageBinder(onItemClick))
+            .addItemType(TYPE_MEDIA_CARD, HomeCardImageBinder(onItemClick))
             .onItemViewType(OnItemViewTypeListener { position, list ->
                 return@OnItemViewTypeListener when (list[position]) {
                     is HomeIndexCardEntity -> TYPE_MEDIA_CARD
@@ -39,6 +42,9 @@ class HomeAdapter : BaseMultiItemAdapter<Any>() {
             })
     }
 
+    /**
+     * 顶部 Banner 模块
+     */
     class HomeBannerBinder :
         OnMultiItemAdapterListener<Any, BaseQuickBindingHolder<FragmentHomeBannerBinding>> {
 
@@ -78,7 +84,10 @@ class HomeAdapter : BaseMultiItemAdapter<Any>() {
         }
     }
 
-    class HomeCalendarImageBinder :
+    /**
+     * 今日放送 | 明日放送模块
+     */
+    class HomeCalendarImageBinder(private val onItemClick: (BgmMediaEntity) -> Unit) :
         OnMultiItemAdapterListener<Any, BaseQuickBindingHolder<FragmentHomeCalendarBinding>> {
         private val itemTodayAdapter by lazy { HomeCardView.ItemAdapter() }
         private val itemTomorrowAdapter by lazy { HomeCardView.ItemAdapter() }
@@ -101,6 +110,16 @@ class HomeAdapter : BaseMultiItemAdapter<Any>() {
 
             itemTodayAdapter.submitList(calendarEntity?.today.orEmpty())
             itemTomorrowAdapter.submitList(calendarEntity?.tomorrow.orEmpty())
+
+            itemTodayAdapter.setOnDebouncedChildClickListener(
+                R.id.item_root,
+                block = onItemClick
+            )
+
+            itemTomorrowAdapter.setOnDebouncedChildClickListener(
+                R.id.item_root,
+                block = onItemClick
+            )
         }
 
         override fun onCreate(
@@ -114,13 +133,18 @@ class HomeAdapter : BaseMultiItemAdapter<Any>() {
         }
     }
 
-    class HomeCardImageBinder : OnMultiItemAdapterListener<Any, HomeImageEntityViewHolder> {
+    /**
+     * 主页底部大图模块
+     */
+    class HomeCardImageBinder(private val onItemClick: (BgmMediaEntity) -> Unit) :
+        OnMultiItemAdapterListener<Any, HomeImageEntityViewHolder> {
         override fun onBind(
             holder: HomeImageEntityViewHolder,
             position: Int,
             item: Any?
         ) {
             holder.view.data = item as? HomeIndexCardEntity
+            holder.view.onItemClick = onItemClick
         }
 
         override fun onCreate(

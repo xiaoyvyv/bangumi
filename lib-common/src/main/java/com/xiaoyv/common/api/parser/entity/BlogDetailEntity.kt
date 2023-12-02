@@ -13,5 +13,10 @@ data class BlogDetailEntity(
     var userAvatar: String = "",
     var userName: String = "",
     var userId: String = "",
-    var content: String = ""
+    var content: String = "",
+    var related: List<MediaDetailEntity.MediaRelative> = emptyList(),
+    var tags: List<MediaDetailEntity.MediaTag> = emptyList(),
+    var comments: List<CommentTreeEntity> = emptyList(),
+    var replyForm: CommentFormEntity = CommentFormEntity(),
+    var deleteHash: String = ""
 )

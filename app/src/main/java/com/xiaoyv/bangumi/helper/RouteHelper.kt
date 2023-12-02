@@ -7,11 +7,13 @@ import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
+import com.xiaoyv.bangumi.ui.feature.post.PostActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
+import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 
 /**
  * Class: [RouteHelper]
@@ -63,6 +65,13 @@ object RouteHelper {
             PreviewImageActivity::class.java,
             android.R.anim.fade_in,
             android.R.anim.fade_out
+        )
+    }
+
+    fun jumpPostBlog(mediaDetailEntity: MediaDetailEntity? = null) {
+        ActivityUtils.startActivity(
+            bundleOf(NavKey.KEY_PARCELABLE to mediaDetailEntity),
+            PostActivity::class.java
         )
     }
 }

@@ -25,11 +25,11 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     }
 
     override fun initView() {
-
+        binding.ivImage.loadImageAnimate(imageUrl, centerCrop = false)
     }
 
     override fun initData() {
-        binding.ivImage.loadImageAnimate(imageUrl, centerCrop = false)
+
     }
 
     companion object {

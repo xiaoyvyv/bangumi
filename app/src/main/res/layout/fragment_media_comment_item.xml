@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_comment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -72,8 +73,8 @@
         android:paddingBottom="@dimen/ui_size_12"
         android:textColor="?attr/colorOnSurface"
         android:textSize="@dimen/text_label"
-        app:layout_constraintTop_toBottomOf="@+id/tv_attach"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attach"
         tools:text="12 min" />
 
     <View

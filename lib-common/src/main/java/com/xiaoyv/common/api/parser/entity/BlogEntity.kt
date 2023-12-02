@@ -10,9 +10,12 @@ data class BlogEntity(
     var id: String = "",
     var title: String = "",
     var image: String = "",
-    var timeline: CharSequence = "",
     var time: String = "",
     var content: String = "",
-    var comment: String = "",
-    var mediaType: String = ""
+    var mediaType: String = "",
+    var commentCount: Int = 0,
+
+    var mediaName: String = "",
+    var recentUserName: String = "",
+    var recentUserId: String = "",
 )

@@ -14,7 +14,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        app:layout_constraintDimensionRatio="2:3"
+        app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/ui_transparent"
         app:strokeWidth="@dimen/ui_size_0">

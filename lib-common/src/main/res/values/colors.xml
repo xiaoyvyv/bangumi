@@ -64,4 +64,10 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="save_wish">#FF9800</color>
+    <color name="save_collect">#4CAF50</color>
+    <color name="save_do">#2196F3</color>
+    <color name="save_on_hold">#9C27B0</color>
+    <color name="save_dropped">#F44336</color>
 </resources>

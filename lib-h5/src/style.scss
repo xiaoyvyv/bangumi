@@ -1,6 +1,3 @@
-$primary: #ff80ab;
-@import "bootstrap/scss/bootstrap.scss";
-
 // 自定义字体
 // noinspection CssUnknownTarget
 @font-face {
@@ -29,6 +26,7 @@ html, body {
   * {
     font-family: 'BgmFont', monospace;
     box-sizing: border-box;
+    background: transparent;
   }
 }
 
@@ -99,11 +97,3 @@ html, body {
   // 过渡动画的使用
   transition: opacity 0.2s linear;
 }
-
-.MathJax {
-  max-width: 100%;
-  display: inline-block;
-  overflow-x: scroll;
-  vertical-align: top;
-}
-

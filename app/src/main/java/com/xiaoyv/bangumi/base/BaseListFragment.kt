@@ -25,7 +25,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
 
     abstract val isOnlyOnePage: Boolean
 
-    private val contentAdapter: BaseDifferAdapter<T, *> by lazy {
+    internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
         onCreateContentAdapter()
     }
 

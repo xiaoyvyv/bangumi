@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_ep"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_ep"
@@ -12,6 +15,7 @@
         android:layout_marginVertical="@dimen/ui_size_6"
         android:background="@drawable/ui_shape_rectangle_corner_6"
         android:backgroundTint="?attr/colorPrimaryContainer"
+        android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:text="1"
         android:textColor="?attr/colorOnSurface"

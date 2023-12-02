@@ -9,9 +9,13 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
-import com.xiaoyv.common.widget.web.BlogView
+import com.xiaoyv.common.widget.web.page.BlogView
+import com.xiaoyv.common.widget.reply.ReplyDialog
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.stateview.StateViewLiveData
@@ -51,14 +55,41 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
             }
         }
 
-
         blogWeb.onPreviewImageListener = { imageUrl, imageUrls ->
             RouteHelper.jumpPreviewImage(imageUrl, imageUrls)
+        }
+
+        blogWeb.onReplyUserListener = { replyJs, formEntity ->
+            val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
+            if (replyForm != null && replyForm.isEmpty.not()) {
+                ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity)
+            } else {
+                RouteHelper.jumpLogin()
+            }
+        }
+
+        blogWeb.onReplyNewListener = {
+            val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
+            if (replyForm != null && replyForm.isEmpty.not()) {
+                ReplyDialog.show(supportFragmentManager, replyForm, null, null)
+            } else {
+                RouteHelper.jumpLogin()
+            }
+        }
+
+        blogWeb.onNeedLoginListener = {
+            RouteHelper.jumpLogin()
+        }
+
+        blogWeb.onClickRelatedListener = {
+            RouteHelper.jumpMediaDetail(it.id)
         }
     }
 
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onBlogDetailLiveData.observe(this) {
+            debugLog { it.toJson(true) }
+
             launchUI {
                 blogWeb.loadBlogDetail(it)
                 binding.pbProgress.hide()
@@ -74,6 +105,12 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
                 StateViewLiveData.StateType.STATE_TIPS -> {
                     binding.pbProgress.hide()
                 }
+            }
+        }
+
+        UserHelper.observe(this) {
+            if (!it.isEmpty) {
+                viewModel.queryBlogDetail()
             }
         }
     }

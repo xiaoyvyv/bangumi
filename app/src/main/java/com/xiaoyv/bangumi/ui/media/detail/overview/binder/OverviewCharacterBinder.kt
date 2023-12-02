@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.BaseMultiItemAdapter
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewAvatarItemBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewCharacterBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
@@ -12,6 +13,7 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -21,8 +23,10 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @author why
  * @since 11/30/23
  */
-class OverviewCharacterBinder(private val touchedListener: RecyclerItemTouchedListener) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewCharacterBinding>> {
+class OverviewCharacterBinder(
+    private val touchedListener: RecyclerItemTouchedListener,
+    private val clickItemListener: (MediaDetailEntity.MediaCharacter) -> Unit
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewCharacterBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter()
@@ -38,6 +42,7 @@ class OverviewCharacterBinder(private val touchedListener: RecyclerItemTouchedLi
         holder.binding.rvCharacter.addOnItemTouchListener(touchedListener)
         holder.binding.rvCharacter.setInitialPrefetchItemCount(item.mediaDetailEntity.characters.size)
         itemAdapter.submitList(item.mediaDetailEntity.characters)
+        itemAdapter.setOnDebouncedChildClickListener(R.id.item_character, block = clickItemListener)
     }
 
     override fun onCreate(
@@ -48,10 +53,8 @@ class OverviewCharacterBinder(private val touchedListener: RecyclerItemTouchedLi
         FragmentOverviewCharacterBinding.inflate(context.inflater, parent, false)
     )
 
-    private class ItemAdapter :
-        BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaCharacter, FragmentOverviewAvatarItemBinding>(
-            DiffItemCallback
-        ) {
+    private class ItemAdapter : BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaCharacter,
+            FragmentOverviewAvatarItemBinding>(DiffItemCallback) {
         override fun BaseQuickBindingHolder<FragmentOverviewAvatarItemBinding>.converted(item: MediaDetailEntity.MediaCharacter) {
             binding.ivAvatar.loadImageAnimate(item.avatar)
             binding.tvName.text = item.characterNameCn.ifBlank { item.characterName }

@@ -34,6 +34,7 @@ class OverviewViewModel : BaseViewModel() {
                         mediaId = mediaId,
                         type = MediaDetailType.TYPE_OVERVIEW
                     ).parserMediaDetail()
+
                     mediaEntity to buildBinderList(mediaEntity)
                 }
 

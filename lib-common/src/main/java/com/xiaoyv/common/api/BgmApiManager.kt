@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit
  * @since 11/18/23
  */
 class BgmApiManager {
+
     private val cookieJar by lazy {
         PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Utils.getApp()))
     }

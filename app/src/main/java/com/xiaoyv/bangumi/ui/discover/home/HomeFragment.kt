@@ -15,7 +15,11 @@ import com.xiaoyv.widget.kts.useNotNull
  */
 class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>() {
 
-    private val contentAdapter by lazy { HomeAdapter() }
+    private val contentAdapter by lazy {
+        HomeAdapter {
+            RouteHelper.jumpMediaDetail(it.id)
+        }
+    }
 
     override fun initView() {
         binding.rvContent.adapter = contentAdapter

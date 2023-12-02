@@ -7,10 +7,12 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewTagBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewTagItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
+import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.widget.text.AnimeTextView
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 
@@ -21,7 +23,7 @@ import com.xiaoyv.widget.kts.getAttrColor
  * @author why
  * @since 11/30/23
  */
-class OverviewTagBinder :
+class OverviewTagBinder(private val clickItemListener: (MediaDetailEntity.MediaTag) -> Unit) :
     BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewTagBinding>> {
 
     override fun onBind(
@@ -39,6 +41,9 @@ class OverviewTagBinder :
                 holder.binding.boxTag,
                 true
             )
+            binding.tvTitleTag.setOnFastLimitClickListener {
+                clickItemListener(tag)
+            }
 
             holder.binding.boxTag.addView(AnimeTextView(context).apply {
                 SpanUtils.with(binding.tvTitleTag)
