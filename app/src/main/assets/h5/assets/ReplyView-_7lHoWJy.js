@@ -1,1 +1,0 @@
-import{d as e,o as t,c as o,f as s,a as n}from"./index-QA_4Gfa8.js";const a={class:"html"},c=n("h2",null,"Generated HTML here",-1),_=[c],p=e({__name:"ReplyView",setup(r){return t(()=>{}),(d,l)=>(s(),o("div",a,_))}});export{p as default};
