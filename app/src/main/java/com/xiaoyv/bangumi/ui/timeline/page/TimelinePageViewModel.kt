@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.api.BgmWebApi
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.impl.TimeParser.parserTimelineForms
 import com.xiaoyv.common.config.annotation.TimelineType
@@ -42,11 +41,18 @@ class TimelinePageViewModel : BaseViewModel() {
                 val forUser = userId.isNotBlank()
 
                 onTimelineLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryTimeline(
-                        path = BgmWebApi.timelineUrl(userId),
-                        type = timelineType,
-                        ajax = if (forUser) 0 else 1
-                    ).parserTimelineForms(forUser)
+                    if (forUser) {
+                        BgmApiManager.bgmWebApi.queryTimeline(
+                            userId = userId,
+                            type = timelineType,
+                            ajax = 0
+                        ).parserTimelineForms(true)
+                    } else {
+                        BgmApiManager.bgmJsonApi.queryWholeTimeline(
+                            type = timelineType,
+                            ajax = 1
+                        ).parserTimelineForms(false)
+                    }
                 }
             }
         )

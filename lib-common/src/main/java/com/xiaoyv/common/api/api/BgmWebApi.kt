@@ -49,16 +49,13 @@ interface BgmWebApi {
     suspend fun doLogin(@FieldMap query: Map<String, String>): Document
 
     /**
-     * 查询事件时间胶囊
-     *
-     * - User Path: /user/837364/timeline
-     * - Public Path: /timeline
+     * 查询时间胶囊
      *
      * @param ajax 仅返回嵌套的 html
      */
-    @GET("/{timeline}")
+    @GET("/user/{userId}/timeline")
     suspend fun queryTimeline(
-        @Path("timeline", encoded = true) path: String,
+        @Path("userId", encoded = true) userId: String,
         @Query("type") @TimelineType type: String,
         @Query("ajax") ajax: Long = 1
     ): Document
@@ -145,6 +142,17 @@ interface BgmWebApi {
      */
     @GET("/blog/{blogId}")
     suspend fun queryBlogDetail(@Path("blogId", encoded = true) blogId: String): Document
+
+    /**
+     * Topic 详情
+     *
+     * 直接使用超展开接口
+     */
+    @GET("/rakuen/topic/{topicType}/{topicId}")
+    suspend fun queryTopicDetail(
+        @Path("topicId", encoded = true) topicId: String,
+        @Path("topicType", encoded = true) topicType: String
+    ): Document
 
 
     /**

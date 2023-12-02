@@ -5,6 +5,7 @@ declare module '@bbob/html';
 declare interface Window {
     blog: any;
     blogPost: any;
+    topic: any;
     mounted: boolean;
     android: Android;
 }

@@ -2,16 +2,19 @@ package com.xiaoyv.bangumi.ui.feature.calendar
 
 import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityCalendarBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
-import com.xiaoyv.common.widget.decoration.GridItemDecoration
-import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.kts.getAttrColor
+import com.xiaoyv.widget.kts.orEmpty
+import com.xiaoyv.widget.kts.useNotNull
 
 /**
  * Class: [CalendarActivity]
@@ -41,6 +44,12 @@ class CalendarActivity : BaseViewModelActivity<ActivityCalendarBinding, Calendar
     override fun initListener() {
         binding.srlRefresh.setOnRefreshListener {
             viewModel.queryCalendar()
+        }
+
+        calendarAdapter.setOnDebouncedChildClickListener(R.id.item_card) {
+            useNotNull(it as? CalendarEntity.CalendarEntityItem.Item) {
+                RouteHelper.jumpMediaDetail(id.toString())
+            }
         }
     }
 

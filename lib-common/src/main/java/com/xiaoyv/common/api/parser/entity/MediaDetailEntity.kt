@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import com.xiaoyv.common.config.annotation.InterestType
 import kotlinx.parcelize.Parcelize
 import kotlin.math.pow
@@ -13,59 +14,59 @@ import kotlin.math.sqrt
  * @author why
  * @since 11/29/23
  */
+
 @Parcelize
 @Keep
 data class MediaDetailEntity(
-    var id: String = "",
-    var titleCn: String = "",
-    var titleNative: String = "",
-    var time: String = "",
-    var subtype: String = "",
-    var cover: String = "",
-    var collectState: MediaCollectForm = MediaCollectForm(),
-    var infos: List<String> = emptyList(),
-    var recommendIndex: List<MediaIndex> = emptyList(),
-    var whoSee: List<MediaWhoSee> = emptyList(),
-    var countWish: Int = 0,
-    var countDoing: Int = 0,
-    var countOnHold: Int = 0,
-    var countCollect: Int = 0,
-    var countDropped: Int = 0,
-    var progressList: List<MediaProgress> = emptyList(),
-    var subjectSummary: CharSequence = "",
-    var tags: List<MediaTag> = emptyList(),
-    var characters: List<MediaCharacter> = emptyList(),
-    var relativeMedia: List<MediaRelative> = emptyList(),
-    var sameLikes: List<MediaRelative> = emptyList(),
-    var reviews: List<MediaReviewEntity> = emptyList(),
-    var boards: List<MediaBoardEntity> = emptyList(),
-    var comments: List<MediaCommentEntity> = emptyList(),
-    var rating: MediaRating = MediaRating(),
+    @SerializedName("id") var id: String = "",
+    @SerializedName("titleCn") var titleCn: String = "",
+    @SerializedName("titleNative") var titleNative: String = "",
+    @SerializedName("time") var time: String = "",
+    @SerializedName("subtype") var subtype: String = "",
+    @SerializedName("cover") var cover: String = "",
+    @SerializedName("collectState") var collectState: MediaCollectForm = MediaCollectForm(),
+    @SerializedName("infos") var infos: List<String> = emptyList(),
+    @SerializedName("recommendIndex") var recommendIndex: List<MediaIndex> = emptyList(),
+    @SerializedName("whoSee") var whoSee: List<MediaWhoSee> = emptyList(),
+    @SerializedName("countWish") var countWish: Int = 0,
+    @SerializedName("countDoing") var countDoing: Int = 0,
+    @SerializedName("countOnHold") var countOnHold: Int = 0,
+    @SerializedName("countCollect") var countCollect: Int = 0,
+    @SerializedName("countDropped") var countDropped: Int = 0,
+    @SerializedName("progressList") var progressList: List<MediaProgress> = emptyList(),
+    @SerializedName("subjectSummary") var subjectSummary: CharSequence = "",
+    @SerializedName("tags") var tags: List<MediaTag> = emptyList(),
+    @SerializedName("characters") var characters: List<MediaCharacter> = emptyList(),
+    @SerializedName("relativeMedia") var relativeMedia: List<MediaRelative> = emptyList(),
+    @SerializedName("sameLikes") var sameLikes: List<MediaRelative> = emptyList(),
+    @SerializedName("reviews") var reviews: List<MediaReviewEntity> = emptyList(),
+    @SerializedName("boards") var boards: List<MediaBoardEntity> = emptyList(),
+    @SerializedName("comments") var comments: List<MediaCommentEntity> = emptyList(),
+    @SerializedName("rating") var rating: MediaRating = MediaRating(),
 ) : Parcelable {
 
     @Parcelize
     @Keep
     data class MediaCollectForm(
-        var tags: String = "",
-        var comment: String = "",
-        var referer: String = "subject",
-        @InterestType
-        var interest: String = InterestType.TYPE_UNKNOWN,
-        var update: String = "保存",
-        var privacy: Int = 0,
-        var myTags: List<String> = emptyList(),
-        var normalTags: List<String> = emptyList()
+        @SerializedName("tags") var tags: String = "",
+        @SerializedName("comment") var comment: String = "",
+        @SerializedName("referer") var referer: String = "subject",
+        @SerializedName("interest") @InterestType var interest: String = InterestType.TYPE_UNKNOWN,
+        @SerializedName("update") var update: String = "保存",
+        @SerializedName("privacy") var privacy: Int = 0,
+        @SerializedName("myTags") var myTags: List<String> = emptyList(),
+        @SerializedName("normalTags") var normalTags: List<String> = emptyList()
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaRating(
-        var globalRating: Float? = null,
-        var description: String = "",
-        var globalRank: Int = 0,
-        var ratingCount: Int = 0,
-        var ratingDetail: List<RatingItem> = emptyList(),
-        var standardDeviation: Double = 0.0
+        @SerializedName("globalRating") var globalRating: Float? = null,
+        @SerializedName("description") var description: String = "",
+        @SerializedName("globalRank") var globalRank: Int = 0,
+        @SerializedName("ratingCount") var ratingCount: Int = 0,
+        @SerializedName("ratingDetail") var ratingDetail: List<RatingItem> = emptyList(),
+        @SerializedName("standardDeviation") var standardDeviation: Double = 0.0
     ) : Parcelable {
 
         fun calculateStandardDeviation(): Double {
@@ -90,80 +91,81 @@ data class MediaDetailEntity(
     @Parcelize
     @Keep
     data class RatingItem(
-        var label: Int = 1,
-        var count: Int = 0,
-        var percent: Float = 0f
+        @SerializedName("label") var label: Int = 1,
+        @SerializedName("count") var count: Int = 0,
+        @SerializedName("percent") var percent: Float = 0f
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaRelative(
-        var cover: String = "",
-        var id: String = "",
-        var titleCn: String = "",
-        var titleNative: String = "",
-        var type: String = ""
+        @SerializedName("cover") var cover: String = "",
+        @SerializedName("id") var id: String = "",
+        @SerializedName("titleCn") var titleCn: String = "",
+        @SerializedName("titleNative") var titleNative: String = "",
+        @SerializedName("type") var type: String = ""
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaCharacter(
-        var avatar: String = "",
-        var id: String = "",
-        var characterName: String = "",
-        var characterNameCn: String = "",
-        var saveCount: Int = 0,
-        var job: String = "",
-        var persons: List<MediaCharacterPerson> = emptyList()
+        @SerializedName("avatar") var avatar: String = "",
+        @SerializedName("id") var id: String = "",
+        @SerializedName("characterName") var characterName: String = "",
+        @SerializedName("characterNameCn") var characterNameCn: String = "",
+        @SerializedName("saveCount") var saveCount: Int = 0,
+        @SerializedName("job") var job: String = "",
+        @SerializedName("persons") var persons: List<MediaCharacterPerson> = emptyList()
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaCharacterPerson(
-        var personId: String = "",
-        var personName: String = "",
+        @SerializedName("personId") var personId: String = "",
+        @SerializedName("personName") var personName: String = "",
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaTag(
-        var tagName: String = "",
-        var title: String = "",
-        var count: Int = 0,
-        var url: String = ""
+        @SerializedName("tagName") var tagName: String = "",
+        @SerializedName("title") var title: String = "",
+        @SerializedName("count") var count: Int = 0,
+        @SerializedName("url") var url: String = ""
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaProgress(
-        var titleNative: String = "",
-        var titleCn: String = "",
-        var firstTime: String = "",
-        var duration: String = "",
-        var id: String = "",
-        var no: String = "",
-        var notEp: Boolean = false,
-        var isRelease: Boolean = false,
-        var commentCount: Int = 0
+        @SerializedName("titleNative") var titleNative: String = "",
+        @SerializedName("titleCn") var titleCn: String = "",
+        @SerializedName("firstTime") var firstTime: String = "",
+        @SerializedName("duration") var duration: String = "",
+        @SerializedName("id") var id: String = "",
+        @SerializedName("no") var no: String = "",
+        @SerializedName("notEp") var notEp: Boolean = false,
+        @SerializedName("isRelease") var isRelease: Boolean = false,
+        @SerializedName("commentCount") var commentCount: Int = 0
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaIndex(
-        var userName: String = "",
-        var userId: String = "",
-        var userAvatar: String = "",
-        var id: String = "",
-        var title: String = ""
+        @SerializedName("userName") var userName: String = "",
+        @SerializedName("userId") var userId: String = "",
+        @SerializedName("userAvatar") var userAvatar: String = "",
+        @SerializedName("id") var id: String = "",
+        @SerializedName("title") var title: String = ""
     ) : Parcelable
 
     @Parcelize
     @Keep
     data class MediaWhoSee(
-        var userName: String = "",
-        var userId: String = "",
-        var userAvatar: String = "",
-        var time: String = "",
-        var star: Float = 0f
+        @SerializedName("userName") var userName: String = "",
+        @SerializedName("userId") var userId: String = "",
+        @SerializedName("userAvatar") var userAvatar: String = "",
+        @SerializedName("time") var time: String = "",
+        @SerializedName("star") var star: Float = 0f
     ) : Parcelable
 }
+

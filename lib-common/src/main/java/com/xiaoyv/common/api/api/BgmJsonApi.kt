@@ -3,9 +3,11 @@ package com.xiaoyv.common.api.api
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.api.response.MediaJsonEntity
+import com.xiaoyv.common.config.annotation.TimelineType
 import org.jsoup.nodes.Document
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Class: [BgmJsonApi]
@@ -17,6 +19,12 @@ interface BgmJsonApi {
 
     @GET(BgmApiManager.URL_BASE_WEB)
     suspend fun queryMainPage(): Document
+
+    @GET("${BgmApiManager.URL_BASE_WEB}/timeline")
+    suspend fun queryWholeTimeline(
+        @Query("type") @TimelineType type: String,
+        @Query("ajax") ajax: Long = 1
+    ): Document
 
     /**
      * 每日放送

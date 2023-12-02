@@ -9,11 +9,13 @@ import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
 import com.xiaoyv.bangumi.ui.feature.post.PostActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
+import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.annotation.TopicType
 
 /**
  * Class: [RouteHelper]
@@ -72,6 +74,15 @@ object RouteHelper {
         ActivityUtils.startActivity(
             bundleOf(NavKey.KEY_PARCELABLE to mediaDetailEntity),
             PostActivity::class.java
+        )
+    }
+
+    fun jumpTopicDetail(topicId: String, @TopicType topicType: String) {
+        TopicActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to topicId,
+                NavKey.KEY_STRING_SECOND to topicType
+            )
         )
     }
 }

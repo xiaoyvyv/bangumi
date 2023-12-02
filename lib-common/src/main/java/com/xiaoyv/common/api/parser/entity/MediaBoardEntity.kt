@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -13,10 +14,10 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Keep
 data class MediaBoardEntity(
-    var id: String = "",
-    var content: String = "",
-    var userName: String = "",
-    var userId: String = "",
-    var time: String = "",
-    var replies: String = "",
+    @SerializedName("id") var id: String = "",
+    @SerializedName("content") var content: String = "",
+    @SerializedName("userName") var userName: String = "",
+    @SerializedName("userId") var userId: String = "",
+    @SerializedName("time") var time: String = "",
+    @SerializedName("replies") var replies: String = ""
 ) : Parcelable

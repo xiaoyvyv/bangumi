@@ -29,6 +29,7 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -57,7 +58,9 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     private val viewBinderTypes: HashMap<Int, BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, *>> by lazy {
         hashMapOf<Int, BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, *>>().apply {
             put(OverviewAdapter.TYPE_SAVE, OverviewSaveBinder())
-            put(OverviewAdapter.TYPE_EP, OverviewEpBinder(touchedListener) {})
+            put(OverviewAdapter.TYPE_EP, OverviewEpBinder(touchedListener) {
+                RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
+            })
             put(OverviewAdapter.TYPE_TAG, OverviewTagBinder {})
             put(OverviewAdapter.TYPE_SUMMARY, OverviewSummaryBinder())
             put(OverviewAdapter.TYPE_PREVIEW, OverviewPreviewBinder())

@@ -37,7 +37,7 @@ class CalendarEntity : ArrayList<CalendarEntity.CalendarEntityItem>(), Parcelabl
             @SerializedName("eps_count")
             var epsCount: Int = 0,
             @SerializedName("id")
-            var id: Int = 0,
+            var id: Long = 0,
             @SerializedName("images")
             var images: Images? = null,
             @SerializedName("name")

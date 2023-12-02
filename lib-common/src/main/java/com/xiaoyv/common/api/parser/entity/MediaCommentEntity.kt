@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -13,11 +14,11 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Keep
 data class MediaCommentEntity(
-    var id: String = "",
-    var avatar: String = "",
-    var userName: String = "",
-    var userId: String = "",
-    var time: String = "",
-    var comment: String = "",
-    var star: Float = 0f
+    @SerializedName("id") var id: String = "",
+    @SerializedName("avatar") var avatar: String = "",
+    @SerializedName("userName") var userName: String = "",
+    @SerializedName("userId") var userId: String = "",
+    @SerializedName("time") var time: String = "",
+    @SerializedName("comment") var comment: String = "",
+    @SerializedName("star") var star: Float = 0f
 ) : Parcelable

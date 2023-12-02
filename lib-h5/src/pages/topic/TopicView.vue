@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import {nextTick, onMounted, ref} from "vue";
-import {BlogDetailEntity, CommentTreeEntity, MediaRelative} from "../../util/interface/entity.ts";
+import {CommentTreeEntity, TopicDetailEntity} from "../../util/interface/entity.ts";
 import common from "../../util/common.ts";
 
-const blogRef = ref<BlogDetailEntity>();
-const blogContentRef = ref<HTMLDivElement>();
+const topic = ref<TopicDetailEntity>({} as TopicDetailEntity);
+const topicContentRef = ref<HTMLDivElement>();
 
-const blogHandler = {
-  loadBlogDetail: async (obj: BlogDetailEntity) => {
-    blogRef.value = obj;
+const topicHandler = {
+  loadTopicDetail: async (obj: TopicDetailEntity) => {
+    topic.value = obj;
+
     await nextTick();
-    const content = blogContentRef.value;
+    const content = topicContentRef.value;
 
     // 图片处理
     common.injectImageClick(content);
@@ -33,7 +34,13 @@ const optText = (text: string | null | undefined) => {
  * 点击评论
  */
 const onClickComment = (event: Event, mainComment: CommentTreeEntity, subComment: CommentTreeEntity | null) => {
-  common.scrollIntoView(event, document.getElementById('blog'), subComment == null);
+  const item = event.target as HTMLElement;
+  if (common.injectHandleItemClick(item)) {
+    return;
+  }
+
+  common.scrollIntoView(event, document.getElementById("topic"), subComment == null);
+
   const subReplyJs = subComment?.replyJs || "";
   const replyMainJs = mainComment.replyJs || "";
 
@@ -48,7 +55,7 @@ const onClickComment = (event: Event, mainComment: CommentTreeEntity, subComment
         replyComment.replyQuote = common.handleQuote(replyComment.userName, replyComment.replyContent);
       }
 
-      window.android.onReplyUser(subReplyJs.length > 0 ? subReplyJs : replyJs, JSON.stringify(replyComment));
+      window.android.onReplyUser(subReplyJs.length > 0 ? subReplyJs : replyJs, JSON.stringify(subComment ? subComment : mainComment));
       return
     }
 
@@ -57,15 +64,15 @@ const onClickComment = (event: Event, mainComment: CommentTreeEntity, subComment
 };
 
 const onClickNewComment = (event: Event) => {
-  common.scrollIntoView(event, document.getElementById('blog'), true);
+  common.scrollIntoView(event, document.getElementById("topic"), true);
   if (window.android) {
     window.android.onReplyNew();
   }
 }
 
-const onClickRelated = (related: MediaRelative) => {
+const onClickRelated = (topic: TopicDetailEntity) => {
   if (window.android) {
-    window.android.onClickRelated(JSON.stringify(related))
+    window.android.onClickRelated(JSON.stringify(topic))
   }
 }
 
@@ -75,82 +82,81 @@ const onClickUser = (comment: CommentTreeEntity) => {
   }
 }
 
-
 onMounted(() => {
-  window.blog = blogHandler;
+  window.topic = topicHandler;
   window.mounted = true;
 });
 </script>
 
 <template>
-  <div class="blog" id="blog">
-    <div class="blog-title">
-      {{ blogRef?.title }}
+  <div class="topic" id="topic" v-if="topic.content || topic.comments">
+    <div class="topic-title">
+      {{ topic.title }}
     </div>
-    <div class="blog-info">
-      <div class="blog-author">{{ blogRef?.userName }}</div>
-      <div class="blog-time">{{ blogRef?.time }}</div>
+    <div class="topic-info">
+      <div class="topic-author">{{ topic.userName }}</div>
+      <div class="topic-time">{{ topic.time }}</div>
     </div>
-    <div class="blog-relative" v-if="(blogRef?.related || []).length > 0">
-      <div class="blog-relative-subject">
-        <div class="tip">关联的条目 {{ blogRef?.related?.length }} 个</div>
-        <div class="relative" v-for="item in (blogRef?.related || [])" @click.stop="onClickRelated(item)">
-          <img :src="item.cover" alt="img">
-          <div class="title"># {{ item.titleNative }}</div>
+    <div class="topic-relative">
+      <div class="topic-relative-subject">
+        <div class="tip">关联的讨论</div>
+        <div class="relative" @click.stop="onClickRelated(topic)">
+          <img :src="topic.headerAvatar" alt="img">
+          <div class="title"># {{ topic.headerName }}</div>
         </div>
       </div>
     </div>
-    <div class="blog-content" ref="blogContentRef" v-html="optText(blogRef?.content)"/>
-    <div class="blog-tag" v-if="(blogRef?.tags || []).length > 0">
-      <div class="tip">标签：</div>
-      <div class="blog-tag-item" v-for="item in (blogRef?.tags || [])">{{ item.title }}</div>
-    </div>
-    <hr class="divider" v-if="blogRef?.content">
-    <div class="blog-comment" v-if="blogRef?.content">
-      <div class="blog-comment-title">
+    <div class="topic-content" ref="topicContentRef" v-html="optText(topic.content)"/>
+    <!--    <div class="topic-tag" v-if="(topic.likeMap || []).length > 0">-->
+    <!--      <div class="tip">标签：</div>-->
+    <!--      <div class="topic-tag-item" v-for="item in (topic.tags || [])">{{ item.title }}</div>-->
+    <!--    </div>-->
+    <hr class="divider" v-if="topic.content">
+    <div class="topic-comment" v-if="topic.content">
+      <div class="topic-comment-title">
         <div class="title">精选留言</div>
         <div style="flex: 1"/>
         <div class="write" @click.stop="onClickNewComment($event)">写留言</div>
       </div>
-      <div class="blog-comment-item" v-for="comment in (blogRef?.comments || [])">
+      <div class="topic-comment-item" v-for="comment in (topic.comments || [])">
         <img class="avatar" :src="comment.userAvatar" alt="img" @click.stop="onClickUser(comment)">
         <div class="comment-content">
           <div class="info">
             <div class="user-name" @click.stop="onClickUser(comment)">{{ comment.userName }}</div>
             <div class="time">{{ comment.time }}</div>
           </div>
-          <div class="blog-html" v-html="comment.replyContent" @click.stop="onClickComment($event, comment, null)"/>
+          <div class="topic-html" v-html="comment.replyContent" @click.stop="onClickComment($event, comment, null)"/>
 
           <div style="height: 12px"/>
 
           <!-- 嵌套条目 -->
-          <div class="blog-comment-item" v-for="subComment in (comment.topicSubReply || [])">
+          <div class="topic-comment-item" v-for="subComment in (comment.topicSubReply || [])">
             <img class="avatar sub" :src="subComment.userAvatar" alt="img" @click.stop="onClickUser(subComment)">
             <div class="comment-content">
               <div class="info">
                 <div class="user-name" @click.stop="onClickUser(subComment)">{{ subComment.userName }}</div>
                 <div class="time">{{ subComment.time }}</div>
               </div>
-              <div class="blog-html" v-html="subComment.replyContent"
+              <div class="topic-html" v-html="subComment.replyContent"
                    @click.stop="onClickComment($event, comment, subComment)"/>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="blog-space" v-if="blogRef?.content">
+    <div class="topic-space" v-if="topic.content">
       我是有底线的
     </div>
   </div>
 </template>
 
 <style lang="scss">
-.blog {
+.topic {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
-  overflow-y: scroll;
   overscroll-behavior-x: none;
+  overflow-y: scroll;
 
   img {
     display: block;
@@ -158,11 +164,11 @@ onMounted(() => {
     height: auto;
     border-radius: 6px;
     margin: 12px 0;
-    border: 1px #cccccc7f solid;
+    border: 1px #cccccc7f solid !important;
   }
 }
 
-.blog-title {
+.topic-title {
   font-weight: 800 !important;
   font-size: 20px;
   margin: 12px 16px;
@@ -173,24 +179,24 @@ onMounted(() => {
   text-overflow: ellipsis;
 }
 
-.blog-info {
+.topic-info {
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 15px;
   margin-left: 16px;
 
-  .blog-author {
+  .topic-author {
     color: deepskyblue;
     margin-right: 6px;
   }
 
-  .blog-time {
+  .topic-time {
     color: #888888;
   }
 }
 
-.blog-content {
+.topic-content {
   overflow-x: hidden !important;
   padding: 12px 16px;
   font-size: 16px;
@@ -206,10 +212,10 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.blog-relative {
+.topic-relative {
   width: 100%;
 
-  .blog-relative-subject {
+  .topic-relative-subject {
     margin: 16px 16px;
     padding: 12px;
     border-radius: 6px;
@@ -241,7 +247,7 @@ onMounted(() => {
   }
 }
 
-.blog-tag {
+.topic-tag {
   display: flex;
   flex-flow: row wrap;
   margin: 16px 16px;
@@ -250,7 +256,7 @@ onMounted(() => {
   background: #cccccc3f;
   align-items: center;
 
-  .blog-tag-item {
+  .topic-tag-item {
     margin: 4px 8px 4px 0;
     padding: 4px;
     color: white;
@@ -268,10 +274,10 @@ onMounted(() => {
   opacity: 0.2;
 }
 
-.blog-comment {
+.topic-comment {
   padding: 12px 16px;
 
-  .blog-comment-title {
+  .topic-comment-title {
     display: flex;
     flex-flow: row nowrap;
     padding-bottom: 16px;
@@ -288,7 +294,7 @@ onMounted(() => {
     }
   }
 
-  .blog-comment-item {
+  .topic-comment-item {
     display: flex;
     flex-flow: row nowrap;
 
@@ -330,7 +336,7 @@ onMounted(() => {
         }
       }
 
-      .blog-html {
+      .topic-html {
         width: 100%;
         max-width: 100%;
         word-break: break-all;
@@ -350,7 +356,7 @@ onMounted(() => {
   }
 }
 
-.blog-space {
+.topic-space {
   height: 400px;
   display: flex;
   align-items: end;

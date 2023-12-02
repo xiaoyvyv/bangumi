@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="@dimen/ui_size_80"
-        android:height="@dimen/ui_size_120">
+        android:width="@dimen/ui_size_120"
+        android:height="@dimen/ui_size_160">
         <shape
             android:shape="rectangle"
             android:useLevel="false">
@@ -13,6 +13,6 @@
         android:width="@dimen/ui_size_60"
         android:height="@dimen/ui_size_45"
         android:drawable="@drawable/bg_login"
-        android:left="@dimen/ui_size_10"
-        android:top="@dimen/ui_size_35" />
+        android:left="30dp"
+        android:top="57.5dp" />
 </layer-list>

@@ -11,6 +11,58 @@ export interface BlogDetailEntity {
     comments: CommentTreeEntity[];
 }
 
+
+export interface TopicDetailEntity {
+    id: string;
+    headerAvatar: string;
+    headerName: string;
+    headUrl: string;
+    subHeaderName: string;
+    subHeadUrl: string;
+
+    title: string;
+    time: string;
+    userAvatar: string;
+    userName: string;
+    userId: string;
+    userSign: string;
+    deleteHash: string;
+
+    content: string;
+    comments: CommentTreeEntity[];
+    replyForm: CommentFormEntity;
+
+    likeMap: Map<string, Map<string, LikeAction>>;
+    likeEmojis: LikeEmoji[];
+}
+
+interface LikeAction {
+    emoji?: string | null;
+    mainId: number;
+    total: number;
+    type: number;
+    users?: {
+        nickname?: string | null;
+        username?: string | null;
+    };
+    value?: string | null;
+}
+
+export interface LikeEmoji {
+    likeValue: string;
+    emojiUrl: string;
+}
+
+export interface CommentFormEntity {
+    action: string;
+    inputs: {
+        formhash: string;
+        lastview: string;
+        submit: string;
+    }
+}
+
+
 export interface MediaRelative {
     cover: string;
     id: string;
@@ -35,6 +87,7 @@ export interface CommentTreeEntity {
     userId: string;
     replyContent: string;
     replyJs: string;
+    replyQuote: string;
     topicSubReply: CommentTreeEntity[];
 }
 

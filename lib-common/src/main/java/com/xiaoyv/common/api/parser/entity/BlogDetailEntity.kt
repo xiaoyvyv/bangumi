@@ -1,22 +1,29 @@
 package com.xiaoyv.common.api.parser.entity
 
+import android.os.Parcelable
+import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+
 /**
  * Class: [BlogDetailEntity]
  *
  * @author why
  * @since 11/30/23
  */
+@Keep
+@Parcelize
 data class BlogDetailEntity(
-    var id: String = "",
-    var title: String = "",
-    var time: String = "",
-    var userAvatar: String = "",
-    var userName: String = "",
-    var userId: String = "",
-    var content: String = "",
-    var related: List<MediaDetailEntity.MediaRelative> = emptyList(),
-    var tags: List<MediaDetailEntity.MediaTag> = emptyList(),
-    var comments: List<CommentTreeEntity> = emptyList(),
-    var replyForm: CommentFormEntity = CommentFormEntity(),
-    var deleteHash: String = ""
-)
+    @SerializedName("id") var id: String = "",
+    @SerializedName("title") var title: String = "",
+    @SerializedName("time") var time: String = "",
+    @SerializedName("userAvatar") var userAvatar: String = "",
+    @SerializedName("userName") var userName: String = "",
+    @SerializedName("userId") var userId: String = "",
+    @SerializedName("content") var content: String = "",
+    @SerializedName("related") var related: List<MediaDetailEntity.MediaRelative> = emptyList(),
+    @SerializedName("tags") var tags: List<MediaDetailEntity.MediaTag> = emptyList(),
+    @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
+    @SerializedName("replyForm") var replyForm: CommentFormEntity = CommentFormEntity(),
+    @SerializedName("deleteHash") var deleteHash: String = ""
+) : Parcelable

@@ -1,11 +1,13 @@
 const blog = () => import('../pages/blog/BlogView.vue');
 const blogPost = () => import('../pages/post/BlogPostView.vue');
 const index = () => import('../pages/IndexView.vue');
+const topic = () => import('../pages/topic/TopicView.vue');
 
 export const RoutePaths = {
     blog: 'blog',
     blogPost: 'blog-post',
-    index: 'index'
+    index: 'index',
+    topic: 'topic',
 };
 
 export default [
@@ -17,6 +19,11 @@ export default [
         name: RoutePaths.blog,
         path: '/blog',
         component: blog
+    },
+    {
+        name: RoutePaths.topic,
+        path: '/topic',
+        component: topic
     },
     {
         name: RoutePaths.blogPost,

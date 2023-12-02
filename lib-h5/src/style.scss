@@ -79,6 +79,87 @@ html, body {
   cursor: pointer !important;
 }
 
+pre {
+  overflow-x: scroll !important;
+  background: #cccccc3f;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 80%;
+  color: #ff80ab;
+  box-sizing: border-box;
+}
+
+.blinking {
+  color: #3b4f64;
+  border-radius: 6px;
+  animation: blinkAnimation 1s forwards;
+}
+
+@keyframes blinkAnimation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+img[smileid] {
+  margin: 6px 3px 0 3px !important;
+  vertical-align: bottom !important;
+  border: 1px solid #ff80ab !important;
+  padding: 1px !important;
+  height: 20px !important;
+  width: 20px !important;
+  min-width: unset !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+}
+
+.quote {
+  font-size: 75%;
+  margin: 6px 0;
+  color: #666;
+
+  span {
+    font-weight: bold;
+    background: #cccccc7f;
+    border-radius: 6px;
+    padding: 2px 4px;
+    font-size: 10px;
+    color: #333333;
+  }
+
+  q:before {
+    content: open-quote;
+    display: inline;
+    height: 0;
+    line-height: 0;
+    left: -22px;
+    position: relative;
+    top: 15px;
+    font-size: 30px;
+    letter-spacing: -18px;
+    color: #CCC;
+  }
+
+  q::after {
+    content: close-quote;
+    display: inline;
+    height: 0;
+    line-height: 0;
+    left: 3px;
+    position: relative;
+    top: 20px;
+    font-size: 30px;
+    color: #CCC;
+  }
+}
+
+.text_mask {
+
+}
+
 // 元素开始进入的状态 | 元素离开结束的状态
 .run-enter-from,
 .run-leave-to {

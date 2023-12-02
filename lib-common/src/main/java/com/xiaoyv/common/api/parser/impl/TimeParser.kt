@@ -1,6 +1,5 @@
 package com.xiaoyv.common.api.parser.impl
 
-import androidx.core.text.parseAsHtml
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
@@ -23,9 +22,8 @@ object TimeParser {
         var userId = ""
         var userAvatar = ""
         if (isUser) {
-            userId =
-                select(".headerAvatar > a").attr("href")
-                    .substringAfterLast("/")
+            userId = select(".headerAvatar > a").attr("href")
+                .substringAfterLast("/")
             userAvatar = select(".headerAvatar > a > span").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
         }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -40,6 +41,7 @@ import kotlinx.coroutines.withContext
  * @since 12/1/23
  */
 class ReplyDialog : DialogFragment() {
+    var onReplySuccess: () -> Unit = {}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +58,9 @@ class ReplyDialog : DialogFragment() {
         val replyForm = arguments?.getParcelObj<CommentFormEntity>(NavKey.KEY_PARCELABLE)
         val commentEntity = arguments?.getParcelObj<CommentTreeEntity>(NavKey.KEY_PARCELABLE_SECOND)
 
-        debugLog { "ReplyJs: ${replyParam.toJson(true)}" }
+        debugLog { "ReplyJs - Form: ${replyParam.toJson(true)}" }
+        debugLog { "ReplyJs - Form: ${replyForm.toJson(true)}" }
+        debugLog { "ReplyJs - Target: ${commentEntity.toJson(true)}" }
 
         binding.edReply.hint = String.format("回复 %s：", commentEntity?.userName)
 
@@ -111,20 +115,31 @@ class ReplyDialog : DialogFragment() {
         binding.btnSend.setOnFastLimitClickListener {
             val input = binding.edReply.text.toString().trim()
             if (input.isBlank() || replyForm == null) return@setOnFastLimitClickListener
-            sendReply(input, replyForm, replyParam)
+
+            // 拼接引用回复
+            val replyQuote = commentEntity?.replyQuote.orEmpty()
+            val targetContent = replyQuote + input
+
+            sendReply(binding, targetContent, replyForm, replyParam)
         }
     }
 
     private fun sendReply(
+        binding: ViewReplyDialogBinding,
         input: String,
         replyForm: CommentFormEntity,
         replyParam: CommentFormEntity.CommentParam
     ) {
         launchUI(
             error = {
+                hideLoading(binding)
+
                 it.printStackTrace()
+                Toast.makeText(activity, it.message.orEmpty(), Toast.LENGTH_SHORT).show()
             },
             block = {
+                showLoading(binding)
+
                 withContext(Dispatchers.IO) {
                     val stringMap = mutableMapOf(
                         "topic_id" to replyParam.topicId.toString(),
@@ -143,10 +158,25 @@ class ReplyDialog : DialogFragment() {
                         param = stringMap
                     )
                 }
+
+                hideLoading(binding)
+
+                onReplySuccess()
+
+                dismissAllowingStateLoss()
             }
         )
     }
 
+    private fun showLoading(binding: ViewReplyDialogBinding) {
+        binding.groupLoading.isVisible = true
+        binding.pbProgress.show()
+    }
+
+    private fun hideLoading(binding: ViewReplyDialogBinding) {
+        binding.groupLoading.isVisible = false
+        binding.pbProgress.hide()
+    }
 
     override fun onStart() {
         super.onStart()
@@ -176,10 +206,12 @@ class ReplyDialog : DialogFragment() {
             fragmentManager: FragmentManager,
             replyForm: CommentFormEntity,
             replyJs: String? = null,
-            targetComment: CommentTreeEntity?
+            targetComment: CommentTreeEntity?,
+            onReplyListener: () -> Unit = {}
         ) {
             ReplyDialog()
                 .apply {
+                    onReplySuccess = onReplyListener
                     arguments = bundleOf(
                         NavKey.KEY_STRING to replyJs,
                         NavKey.KEY_PARCELABLE to replyForm,

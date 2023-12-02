@@ -9,7 +9,9 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class CommentFormEntity(
+    @SerializedName("inputs")
     var inputs: MutableMap<String, String> = mutableMapOf(),
+    @SerializedName("action")
     var action: String = ""
 ) : Parcelable {
     val isEmpty: Boolean
