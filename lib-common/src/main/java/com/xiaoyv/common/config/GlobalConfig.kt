@@ -20,4 +20,8 @@ object GlobalConfig {
             MediaTab("三次元", MediaType.TYPE_REAL),
         )
     }
+
+    fun mediaTypeName(@MediaType mediaType: String): String {
+        return mediaTypes.find { it.type == mediaType }?.title.orEmpty()
+    }
 }

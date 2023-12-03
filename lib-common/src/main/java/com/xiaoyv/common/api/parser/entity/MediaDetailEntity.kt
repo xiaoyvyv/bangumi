@@ -3,7 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.MediaType
 import kotlinx.parcelize.Parcelize
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -19,6 +19,7 @@ import kotlin.math.sqrt
 @Keep
 data class MediaDetailEntity(
     @SerializedName("id") var id: String = "",
+    @SerializedName("mediaType") @MediaType var mediaType: String = MediaType.TYPE_ANIME,
     @SerializedName("titleCn") var titleCn: String = "",
     @SerializedName("titleNative") var titleNative: String = "",
     @SerializedName("time") var time: String = "",

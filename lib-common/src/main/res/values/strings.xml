@@ -27,8 +27,8 @@
     <string name="calendar_tomorrow_title">明日放送</string>
 
     <string name="media_title">媒体排行</string>
-    <string name="media_save_tip">我%s这部动画</string>
-    <string name="media_save_click">点击收藏这部动画</string>
+    <string name="media_save_tip">我%s这部%s</string>
+    <string name="media_save_click">点击收藏这部%s</string>
     <string name="media_save_summary">%d人想看 / %d人看过 / %d人在看 / %d人搁置 / %d人抛弃</string>
 
     <string name="robot_title">坛娘</string>

@@ -12,6 +12,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parserTime
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Document
@@ -133,7 +134,6 @@ fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
 
 fun Document.parserMediaDetail(): MediaDetailEntity {
     val entity = MediaDetailEntity()
-
     select(".nameSingle > a").apply {
         entity.id = attr("href").substringAfterLast("/")
         entity.titleCn = attr("title")
@@ -332,7 +332,16 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         rating.standardDeviation = rating.calculateStandardDeviation()
         rating
     }
-
+    entity.mediaType = select(".global_rating .global_score small.grey").text().lowercase().let {
+        when {
+            it.contains("anime") -> MediaType.TYPE_ANIME
+            it.contains("book") -> MediaType.TYPE_BOOK
+            it.contains("music") -> MediaType.TYPE_MUSIC
+            it.contains("game") -> MediaType.TYPE_GAME
+            it.contains("real") -> MediaType.TYPE_REAL
+            else -> MediaType.TYPE_ANIME
+        }
+    }
     entity.reviews = parserMediaReviews()
     entity.boards = parserMediaBoards()
     entity.comments = parserMediaComments()

@@ -1,11 +1,13 @@
 package com.xiaoyv.bangumi.ui.discover.home
 
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.CacheDiskUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.impl.HomeParser.parserHomePage
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
+import com.xiaoyv.common.api.parser.impl.HomeParser.parserHomePage
+import com.xiaoyv.common.kts.parcelableCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -24,14 +26,31 @@ class HomeViewModel : BaseViewModel() {
 
     private fun queryHomeCardImage() {
         launchUI(
-            error = { it.printStackTrace() },
+            error = {
+                it.printStackTrace()
+                readCache()
+            },
             block = {
+                readCache()
                 onHomeIndexLiveData.value = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmJsonApi.queryMainPage().parserHomePage()
                 }
-
-//                debugLog(document.text())
+                saveCache()
             }
         )
+    }
+
+    private fun readCache() {
+        runCatching {
+            val cache = CacheDiskUtils.getInstance()
+                .getParcelable(javaClass.simpleName, parcelableCreator<HomeIndexEntity>())
+            if (cache != onHomeIndexLiveData.value) {
+                onHomeIndexLiveData.value = cache
+            }
+        }
+    }
+
+    private fun saveCache() {
+        CacheDiskUtils.getInstance().put(javaClass.simpleName, onHomeIndexLiveData.value)
     }
 }

@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentSaveListBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
@@ -18,6 +19,7 @@ import com.xiaoyv.common.config.annotation.CollectType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.getAttrColor
 
@@ -102,6 +104,10 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
         binding.srlRefresh.setOnRefreshListener {
             adapterHelper.trailingLoadState = LoadState.None
             viewModel.refresh()
+        }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.item_save) {
+            RouteHelper.jumpMediaDetail(it.subjectId)
         }
     }
 

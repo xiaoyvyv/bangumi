@@ -2,7 +2,7 @@ package com.xiaoyv.common.kts
 
 import android.content.Intent
 import android.content.res.ColorStateList
-import androidx.annotation.ColorInt
+import android.os.Parcelable
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
@@ -39,3 +39,8 @@ val Int.tint: ColorStateList
 fun Any.toJsonMap(): Map<String, Any> {
     return toJson().fromJson<Map<String, Any>>().orEmpty()
 }
+
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T : Parcelable> parcelableCreator(): Parcelable.Creator<T> =
+    T::class.java.getDeclaredField("CREATOR").get(null) as? Parcelable.Creator<T>
+        ?: throw IllegalArgumentException("Could not access CREATOR field in class ${T::class.simpleName}")

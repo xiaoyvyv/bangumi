@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.StringUtils
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewSaveBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
+import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonString
@@ -43,7 +44,8 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (View) -> Unit) :
         )
         holder.binding.tvSave.text = StringUtils.getString(
             CommonString.media_save_tip,
-            InterestType.string(item.mediaDetailEntity.collectState.interest)
+            InterestType.string(item.mediaDetailEntity.collectState.interest),
+            GlobalConfig.mediaTypeName(item.mediaDetailEntity.mediaType)
         )
         holder.binding.tvSave.setOnFastLimitClickListener(onMultiClick = onSaveBtnClickListener)
 
@@ -77,8 +79,10 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (View) -> Unit) :
                 else -> {
                     holder.binding.tvSave.backgroundTintList =
                         holder.binding.root.context.getAttrColor(GoogleAttr.colorPrimary).tint
-                    holder.binding.tvSave.text =
-                        StringUtils.getString(CommonString.media_save_click)
+                    holder.binding.tvSave.text = StringUtils.getString(
+                        CommonString.media_save_click,
+                        GlobalConfig.mediaTypeName(item.mediaDetailEntity.mediaType)
+                    )
                 }
             }
         }
