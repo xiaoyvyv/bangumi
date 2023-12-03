@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
 import com.xiaoyv.bangumi.ui.feature.post.PostActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
+import com.xiaoyv.bangumi.ui.feature.user.UserActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.blueprint.constant.NavKey
@@ -84,5 +85,9 @@ object RouteHelper {
                 NavKey.KEY_STRING_SECOND to topicType
             )
         )
+    }
+
+    fun jumpUserDetail(userId: String) {
+        UserActivity::class.open(bundleOf(NavKey.KEY_STRING to userId))
     }
 }

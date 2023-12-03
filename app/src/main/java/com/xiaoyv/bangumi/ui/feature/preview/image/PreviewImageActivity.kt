@@ -55,6 +55,10 @@ class PreviewImageActivity :
         })
     }
 
+    fun setVpEnable(enable: Boolean) {
+        binding.vpImage.isUserInputEnabled = enable
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         item.initNavBack(this)
         return super.onOptionsItemSelected(item)

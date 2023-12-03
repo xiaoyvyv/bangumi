@@ -154,7 +154,7 @@ class ReplyDialog : DialogFragment() {
                     stringMap.putAll(replyForm.inputs)
 
                     BgmApiManager.bgmWebApi.postNewReply(
-                        action = replyForm.action,
+                        submitAction = replyForm.action,
                         param = stringMap
                     )
                 }

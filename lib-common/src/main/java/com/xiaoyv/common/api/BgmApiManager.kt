@@ -100,6 +100,9 @@ class BgmApiManager {
         val bgmWebApi: BgmWebApi
             get() = instance.bgmWebApi
 
+        val httpClient
+            get() = instance.httpClient
+
         fun resetCookie() {
             instance.resetCookie()
         }

@@ -33,6 +33,10 @@ const optText = (text: string | null | undefined) => {
  * 点击评论
  */
 const onClickComment = (event: Event, mainComment: CommentTreeEntity, subComment: CommentTreeEntity | null) => {
+  const item = event.target as HTMLElement;
+  if (common.injectHandleItemClick(item)) {
+    return;
+  }
   common.scrollIntoView(event, document.getElementById('blog'), subComment == null);
   const subReplyJs = subComment?.replyJs || "";
   const replyMainJs = mainComment.replyJs || "";
@@ -71,7 +75,7 @@ const onClickRelated = (related: MediaRelative) => {
 
 const onClickUser = (comment: CommentTreeEntity) => {
   if (window.android) {
-    window.android.onClickUser(comment.userId);
+    window.android.onClickUser(comment.userId || "");
   }
 }
 
@@ -115,7 +119,7 @@ onMounted(() => {
       <div class="blog-comment-item" v-for="comment in (blogRef?.comments || [])">
         <img class="avatar" :src="comment.userAvatar" alt="img" @click.stop="onClickUser(comment)">
         <div class="comment-content">
-          <div class="info">
+          <div class="info" @click.stop="onClickComment($event, comment, null)">
             <div class="user-name" @click.stop="onClickUser(comment)">{{ comment.userName }}</div>
             <div class="time">{{ comment.time }}</div>
           </div>
@@ -126,13 +130,13 @@ onMounted(() => {
           <!-- 嵌套条目 -->
           <div class="blog-comment-item" v-for="subComment in (comment.topicSubReply || [])">
             <img class="avatar sub" :src="subComment.userAvatar" alt="img" @click.stop="onClickUser(subComment)">
-            <div class="comment-content">
+            <div class="comment-content"
+                 @click.stop="onClickComment($event, comment, subComment)">
               <div class="info">
                 <div class="user-name" @click.stop="onClickUser(subComment)">{{ subComment.userName }}</div>
                 <div class="time">{{ subComment.time }}</div>
               </div>
-              <div class="blog-html" v-html="subComment.replyContent"
-                   @click.stop="onClickComment($event, comment, subComment)"/>
+              <div class="blog-html" v-html="subComment.replyContent"/>
             </div>
           </div>
         </div>

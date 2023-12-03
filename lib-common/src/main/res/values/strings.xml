@@ -44,4 +44,7 @@
 
     <string name="post_result_known">知道了</string>
     <string name="post_result_error">发布出错了</string>
+    <string name="common_tip">提示</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_done">确定</string>
 </resources>

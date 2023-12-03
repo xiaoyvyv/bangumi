@@ -183,7 +183,7 @@ interface BgmWebApi {
     @FormUrlEncoded
     @POST("{action}")
     suspend fun postNewReply(
-        @Path("action", encoded = true) action: String,
+        @Path("action", encoded = true) submitAction: String,
         @FieldMap param: Map<String, String>,
         @Query("ajax") ajax: Int = 1
     ): ReplyResultEntity

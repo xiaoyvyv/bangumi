@@ -31,7 +31,7 @@ class BlogAdapter : BaseQuickDiffBindingAdapter<BlogEntity,
         SpanUtils.with(binding.tvRecent)
             .append(item.recentUserName)
             .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))
-            .append("：评论了该日志")
+            .append("：发表了该日志")
             .create()
     }
 

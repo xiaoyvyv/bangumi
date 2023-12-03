@@ -25,6 +25,7 @@ class BlogView(override val webView: UiWebView) : WebBase(webView) {
     var onReplyUserListener: (String, CommentTreeEntity) -> Unit = { _, _ -> }
     var onReplyNewListener: () -> Unit = {}
     var onNeedLoginListener: () -> Unit = {}
+    var onClickUserListener: (String) -> Unit = {}
     var onClickRelatedListener: (MediaDetailEntity.MediaRelative) -> Unit = { }
 
     override val pageRoute: String
@@ -63,6 +64,11 @@ class BlogView(override val webView: UiWebView) : WebBase(webView) {
         useNotNull(json.fromJson<MediaDetailEntity.MediaRelative>()) {
             onClickRelatedListener(this)
         }
+    }
+
+    @JavascriptInterface
+    fun onClickUser(userId: String) {
+        onClickUserListener(userId)
     }
 
     suspend fun loadBlogDetail(detailEntity: BlogDetailEntity?) {

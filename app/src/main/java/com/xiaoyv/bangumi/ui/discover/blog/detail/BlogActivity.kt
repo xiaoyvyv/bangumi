@@ -85,6 +85,10 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
             RouteHelper.jumpLogin()
         }
 
+        blogWeb.onClickUserListener = {
+            RouteHelper.jumpUserDetail(it)
+        }
+
         blogWeb.onClickRelatedListener = {
             RouteHelper.jumpMediaDetail(it.id)
         }

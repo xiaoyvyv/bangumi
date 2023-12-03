@@ -63,7 +63,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         topicView.onReplyUserListener = { replyJs, formEntity ->
             val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity){
+                ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity) {
                     viewModel.queryTopicDetail()
                 }
             } else {
@@ -74,7 +74,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         topicView.onReplyNewListener = {
             val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(supportFragmentManager, replyForm, null, null){
+                ReplyDialog.show(supportFragmentManager, replyForm, null, null) {
                     viewModel.queryTopicDetail()
                 }
             } else {
@@ -84,6 +84,10 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
 
         topicView.onNeedLoginListener = {
             RouteHelper.jumpLogin()
+        }
+
+        topicView.onClickUserListener = {
+            RouteHelper.jumpUserDetail(it)
         }
 
         topicView.onClickRelatedListener = {

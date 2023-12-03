@@ -33,6 +33,9 @@ const injectHandleItemClick = (element: HTMLElement): boolean => {
         element.style.color = "white";
         return true
     }
+    if (element instanceof HTMLLinkElement) {
+        return true
+    }
     if (element instanceof HTMLImageElement) {
         if (window.android) {
             window.android.onPreviewImage(element.src, [element.src]);

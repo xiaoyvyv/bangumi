@@ -78,7 +78,7 @@ const onClickRelated = (topic: TopicDetailEntity) => {
 
 const onClickUser = (comment: CommentTreeEntity) => {
   if (window.android) {
-    window.android.onClickUser(comment.userId);
+    window.android.onClickUser(comment.userId || "");
   }
 }
 
@@ -121,7 +121,7 @@ onMounted(() => {
       <div class="topic-comment-item" v-for="comment in (topic.comments || [])">
         <img class="avatar" :src="comment.userAvatar" alt="img" @click.stop="onClickUser(comment)">
         <div class="comment-content">
-          <div class="info">
+          <div class="info" @click.stop="onClickComment($event, comment, null)">
             <div class="user-name" @click.stop="onClickUser(comment)">{{ comment.userName }}</div>
             <div class="time">{{ comment.time }}</div>
           </div>
@@ -132,13 +132,12 @@ onMounted(() => {
           <!-- 嵌套条目 -->
           <div class="topic-comment-item" v-for="subComment in (comment.topicSubReply || [])">
             <img class="avatar sub" :src="subComment.userAvatar" alt="img" @click.stop="onClickUser(subComment)">
-            <div class="comment-content">
+            <div class="comment-content" @click.stop="onClickComment($event, comment, subComment)">
               <div class="info">
                 <div class="user-name" @click.stop="onClickUser(subComment)">{{ subComment.userName }}</div>
                 <div class="time">{{ subComment.time }}</div>
               </div>
-              <div class="topic-html" v-html="subComment.replyContent"
-                   @click.stop="onClickComment($event, comment, subComment)"/>
+              <div class="topic-html" v-html="subComment.replyContent"/>
             </div>
           </div>
         </div>
