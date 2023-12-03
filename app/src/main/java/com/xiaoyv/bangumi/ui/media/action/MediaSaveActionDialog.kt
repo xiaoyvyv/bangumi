@@ -163,6 +163,7 @@ class MediaSaveActionDialog : DialogFragment() {
                         "rating" to form.score.toString(),
                         "tags" to form.tags.trim(),
                         "comment" to form.comment.trim(),
+                        "privacy" to form.privacy.toString(),
                         "update" to form.update.ifBlank { "保存" },
                     )
 
@@ -188,6 +189,7 @@ class MediaSaveActionDialog : DialogFragment() {
 
     private var loadingJob: Job? = null
     private fun showLoading(binding: FragmentMediaActionBinding) {
+        isCancelable = false
         binding.btnSubmit.isEnabled = false
         loadingJob?.cancel()
         loadingJob = launchUI {
@@ -204,6 +206,7 @@ class MediaSaveActionDialog : DialogFragment() {
     }
 
     private fun hideLoading(binding: FragmentMediaActionBinding) {
+        isCancelable = true
         binding.btnSubmit.isEnabled = true
         loadingJob?.cancel()
         binding.btnSubmit.text = "更新"
@@ -291,8 +294,6 @@ class MediaSaveActionDialog : DialogFragment() {
             width = ScreenUtils.getScreenWidth() - 32.dpi
             gravity = Gravity.CENTER
         }
-
-        isCancelable = false
     }
 
     companion object {
