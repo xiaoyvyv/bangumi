@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurface"
+    android:elevation="@dimen/ui_layout_elevation"
+    android:paddingHorizontal="@dimen/ui_layout_margin">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title_cn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="无职转生" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title_native"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_cn"
+        tools:text="无职转生" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_score_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:textAppearance="?textAppearanceBodyLarge"
+        android:textColor="?attr/colorPrimary"
+        android:textColorHighlight="@color/ui_transparent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_score_clear"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_native"
+        tools:text="力荐" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_score_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:text=" / 清除"
+        android:textAppearance="?textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColorHighlight="@color/ui_transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_score_tip"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_native" />
+
+    <com.xiaoyv.common.widget.star.AnimeRatingBar
+        android:id="@+id/iv_star"
+        style="?attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:progressTint="@color/ui_pink"
+        android:rating="1"
+        android:stepSize="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_score_tip" />
+
+    <com.xiaoyv.common.widget.text.AnimeEditTextView
+        android:id="@+id/et_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_24"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        android:hint="标签（多个空格分割）"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?textAppearanceBodyLarge"
+        app:layout_constraintTop_toBottomOf="@+id/iv_star" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_tag_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:gravity="center"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorPrimary"
+        android:textColorHighlight="?attr/colorSurface"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_tag"
+        tools:text="常用 | 我的" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flex_tag_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:alignItems="stretch"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tag_switch" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flex_tag_my"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:alignItems="stretch"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tag_switch" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="flex_tag_my,flex_tag_normal" />
+
+    <com.xiaoyv.common.widget.text.AnimeEditTextView
+        android:id="@+id/et_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        android:gravity="top"
+        android:hint="吐槽"
+        android:minLines="4"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?textAppearanceBodyLarge"
+        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/gp_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_24"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/et_comment"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_wish"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="想看"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_collect"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="看过"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_do"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="在看"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_on_hold"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="搁置"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_dropped"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="抛弃"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_submit"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_size_24"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="更新"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_public"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gp_buttons" />
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_public"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:layout_marginBottom="@dimen/ui_size_24"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="公开"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gp_buttons" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_cancel"
+        android:layout_width="@dimen/ui_size_44"
+        android:layout_height="@dimen/ui_size_44"
+        android:layout_marginTop="@dimen/ui_size_6"
+        android:background="@color/ui_transparent"
+        android:padding="@dimen/ui_size_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_close"
+        app:tint="?attr/colorControlNormal" />
+</androidx.constraintlayout.widget.ConstraintLayout>

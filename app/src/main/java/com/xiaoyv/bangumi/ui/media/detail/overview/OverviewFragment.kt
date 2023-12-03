@@ -10,7 +10,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
+import com.xiaoyv.bangumi.databinding.FragmentOverviewSaveBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.media.action.MediaSaveActionDialog
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewBoardBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewCharacterBinder
@@ -33,6 +35,7 @@ import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.widget.kts.useNotNull
 import com.xiaoyv.widget.stateview.StateViewLiveData
 import kotlinx.coroutines.delay
 
@@ -57,7 +60,19 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
      */
     private val viewBinderTypes: HashMap<Int, BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, *>> by lazy {
         hashMapOf<Int, BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, *>>().apply {
-            put(OverviewAdapter.TYPE_SAVE, OverviewSaveBinder())
+            put(OverviewAdapter.TYPE_SAVE, OverviewSaveBinder {
+                if (UserHelper.isLogin) {
+                    MediaSaveActionDialog.show(
+                        childFragmentManager,
+                        viewModel.mediaDetailLiveData.value?.collectState
+                    ) {
+                        viewModel.refreshCollectState(it)
+                        refreshCollectStateView()
+                    }
+                } else {
+                    RouteHelper.jumpLogin()
+                }
+            })
             put(OverviewAdapter.TYPE_EP, OverviewEpBinder(touchedListener) {
                 RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
             })
@@ -79,6 +94,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             put(OverviewAdapter.TYPE_COMMENT, OverviewCommentBinder(touchedListener) {})
         }
     }
+
 
     private val overviewAdapter by lazy {
         OverviewAdapter(RecyclerItemTouchedListener {
@@ -151,6 +167,21 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
 
     override fun initListener() {
 
+    }
+
+    /**
+     * 手动刷新收藏条目
+     */
+    private fun refreshCollectStateView() {
+        val position = viewBinderTypes.keys.indexOf(OverviewAdapter.TYPE_SAVE)
+        val adapterListener = viewBinderTypes[OverviewAdapter.TYPE_SAVE] as OverviewSaveBinder
+        val bindingHolder =
+            viewHolders[OverviewAdapter.TYPE_SAVE] as BaseQuickBindingHolder<FragmentOverviewSaveBinding>
+        useNotNull(viewModel.mediaDetailLiveData.value) {
+            val newItem = OverviewAdapter.OverviewItem(this, OverviewAdapter.TYPE_SAVE, "收藏")
+
+            adapterListener.onBind(bindingHolder, position, newItem)
+        }
     }
 
     companion object {

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.config.annotation.MediaDetailType
@@ -61,4 +62,12 @@ class OverviewViewModel : BaseViewModel() {
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_BOARD, "讨论板"),
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_COMMENT, "吐槽")
         )
+
+    /**
+     * 刷新收藏模型
+     */
+    fun refreshCollectState(it: MediaCollectForm) {
+        mediaDetailLiveData.value?.collectState = it
+        mediaDetailLiveData.value = mediaDetailLiveData.value
+    }
 }

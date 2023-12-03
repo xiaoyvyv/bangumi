@@ -29,7 +29,7 @@ class OverviewAdapter(touchedListener: RecyclerItemTouchedListener) :
     BaseMultiItemAdapter<OverviewAdapter.OverviewItem>() {
 
     init {
-        this.addItemType(TYPE_SAVE, OverviewSaveBinder())
+        this.addItemType(TYPE_SAVE, OverviewSaveBinder{})
             .addItemType(TYPE_EP, OverviewEpBinder(touchedListener) {})
             .addItemType(TYPE_TAG, OverviewTagBinder {})
             .addItemType(TYPE_SUMMARY, OverviewSummaryBinder())

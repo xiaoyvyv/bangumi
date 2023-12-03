@@ -10,7 +10,6 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
-import com.xiaoyv.common.widget.text.AnimeTextView
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpi
@@ -45,16 +44,14 @@ class OverviewTagBinder(private val clickItemListener: (MediaDetailEntity.MediaT
                 clickItemListener(tag)
             }
 
-            holder.binding.boxTag.addView(AnimeTextView(context).apply {
-                SpanUtils.with(binding.tvTitleTag)
-                    .append(tag.title)
-                    .setBold()
-                    .setForegroundColor(context.getAttrColor(GoogleAttr.colorOnSurface))
-                    .appendSpace(4.dpi)
-                    .append(tag.count.toString())
-                    .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))
-                    .create()
-            })
+            SpanUtils.with(binding.tvTitleTag)
+                .append(tag.title)
+                .setBold()
+                .setForegroundColor(context.getAttrColor(GoogleAttr.colorOnSurface))
+                .appendSpace(4.dpi)
+                .append(tag.count.toString())
+                .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))
+                .create()
         }
     }
 

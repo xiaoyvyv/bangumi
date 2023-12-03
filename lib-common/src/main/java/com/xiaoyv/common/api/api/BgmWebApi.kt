@@ -242,6 +242,14 @@ interface BgmWebApi {
         @Query("gh") hash: String
     ): Document
 
+    @FormUrlEncoded
+    @POST("/subject/{mediaId}/interest/update")
+    suspend fun updateInterest(
+        @FieldMap map: Map<String, String>,
+        @Path("mediaId", encoded = true) mediaId: String,
+        @Query("gh") gh: String
+    ): Document
+
     companion object {
 
         /**

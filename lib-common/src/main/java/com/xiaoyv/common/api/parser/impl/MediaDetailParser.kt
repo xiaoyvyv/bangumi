@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.impl
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCharacterEntity
+import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
@@ -144,24 +145,31 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.time = select("#infobox").text().parserTime()
 
     entity.collectState = select("#panelInterestWrapper").let { item ->
-        val collectForm = MediaDetailEntity.MediaCollectForm()
+        val collectForm = MediaCollectForm()
+        collectForm.gh = select("#collectBoxForm").attr("action").substringAfterLast("=")
+        collectForm.mediaId = entity.id
+        collectForm.titleCn = entity.titleCn
+        collectForm.titleNative = entity.titleNative
         collectForm.comment = item.select("#comment").text()
-        collectForm.interest = item.select("input[checked=checked][name=interest]").attr("value")
+        collectForm.interest =
+            item.select("input[checked=checked][name=interest]").attr("value").ifBlank { "0" }
         collectForm.referer = item.select("input[name=referer]").attr("value")
-        collectForm.tags = item.select("input#tags").attr("value")
+        collectForm.tags = item.select("input#tags").attr("value").trim()
         collectForm.update = item.select("input[name=update]").attr("value")
         collectForm.privacy = item.select("input[name=privacy]").attr("checked").let { checked ->
             if (checked.isNotBlank()) 1 else 0
         }
+        collectForm.score = item.select("input[name=rate][checked]")
+            .attr("value").toIntOrNull() ?: 0
         collectForm.normalTags = item.select(".tagList")
             .getOrNull(0)?.select("a").orEmpty()
             .map { a ->
-                a.text()
+                MediaDetailEntity.MediaTag(tagName = a.text())
             }
         collectForm.myTags = item.select(".tagList")
             .getOrNull(1)?.select("a").orEmpty()
             .map { a ->
-                a.text()
+                MediaDetailEntity.MediaTag(tagName = a.text())
             }
         collectForm
     }

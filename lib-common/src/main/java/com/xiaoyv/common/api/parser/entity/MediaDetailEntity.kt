@@ -45,18 +45,6 @@ data class MediaDetailEntity(
     @SerializedName("rating") var rating: MediaRating = MediaRating(),
 ) : Parcelable {
 
-    @Parcelize
-    @Keep
-    data class MediaCollectForm(
-        @SerializedName("tags") var tags: String = "",
-        @SerializedName("comment") var comment: String = "",
-        @SerializedName("referer") var referer: String = "subject",
-        @SerializedName("interest") @InterestType var interest: String = InterestType.TYPE_UNKNOWN,
-        @SerializedName("update") var update: String = "保存",
-        @SerializedName("privacy") var privacy: Int = 0,
-        @SerializedName("myTags") var myTags: List<String> = emptyList(),
-        @SerializedName("normalTags") var normalTags: List<String> = emptyList()
-    ) : Parcelable
 
     @Parcelize
     @Keep
