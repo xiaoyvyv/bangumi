@@ -160,6 +160,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             if (checked.isNotBlank()) 1 else 0
         }
         collectForm.score = item.select("input[name=rate][checked]")
+            .ifEmpty { item.select("input[name=rating][checked]") }
             .attr("value").toIntOrNull() ?: 0
         collectForm.normalTags = item.select(".tagList")
             .getOrNull(0)?.select("a").orEmpty()
