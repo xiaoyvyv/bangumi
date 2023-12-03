@@ -13,9 +13,15 @@ class CommonInterceptor : Interceptor {
     private val defaultUserAgent =
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0"
 
+    /**
+     * Bgm 推荐的 UA
+     *
+     * - "xiaoyvyv/Bangumi-for-Android/${AppUtils.getAppVersionName()} (Android) (https://github.com/xiaoyvyv/Bangumi-for-Android)"
+     * - 部分图片服务商禁止 Dalvik，这里替换一下
+     */
     private val userAgent: String by lazy {
-        // "xiaoyvyv/Bangumi-for-Android/${AppUtils.getAppVersionName()} (Android) (https://github.com/xiaoyvyv/Bangumi-for-Android)"
-        System.getProperty("http.agent", defaultUserAgent)
+        System.getProperty("http.agent", defaultUserAgent).orEmpty()
+            .replace("Dalvik", "Mozilla")
     }
 
     /**
@@ -40,6 +46,8 @@ class CommonInterceptor : Interceptor {
         return chain.proceed(
             request
                 .newBuilder()
+                .removeHeader("Referer")
+                .removeHeader("User-Agent")
                 .addHeader("Sec-Fetch-Dest", "empty")
                 .addHeader("Sec-Fetch-Mode", "cors")
                 .addHeader("Sec-Fetch-Site", "cross-site")

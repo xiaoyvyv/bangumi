@@ -112,7 +112,7 @@ onMounted(() => {
     <!--      <div class="topic-tag-item" v-for="item in (topic.tags || [])">{{ item.title }}</div>-->
     <!--    </div>-->
     <hr class="divider" v-if="topic.content">
-    <div class="topic-comment" v-if="topic.content">
+    <div class="topic-comment">
       <div class="topic-comment-title">
         <div class="title">精选留言</div>
         <div style="flex: 1"/>
