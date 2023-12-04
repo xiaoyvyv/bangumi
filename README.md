@@ -1,5 +1,12 @@
 # Bangumi-for-Android
 
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/xiaoyvyv/Bangumi-for-Android/)](https://github.com/xiaoyvyv/Bangumi-for-Android)
+[![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/Bangumi-for-Android/total)](https://github.com/xiaoyvyv/Bangumi-for-Android)
+[![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android)
+[![GitHub forks](https://img.shields.io/github/forks/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/fork)
+[![GitHub issues](https://img.shields.io/github/issues/xiaoyvyv/Bangumi-for-Android)](https://github.com/xiaoyvyv/Bangumi-for-Android/issues)
+
+[![GitHub license](https://img.shields.io/xiaoyvyv/Bangumi-for-Android)](https://github.com/xiaoyvyv/Bangumi-for-Android/blob/master/LICENSE)
 [![Build Status](https://github.com/xiaoyvyv/Bangumi-for-Android/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
 
 重大消息，本宅作为一位资深的Android开发从业人员，于 2023年11月决定开发一款 Bangumi 的三方客户端。
