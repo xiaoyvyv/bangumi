@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
@@ -93,18 +94,29 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
 fun Elements.parserUserSaveOverview(): UserDetailEntity.SaveOverview {
     val overview = UserDetailEntity.SaveOverview()
     val horizontalOptions = select(".horizontalOptions li")
+    if (horizontalOptions.isEmpty()) return overview
+    overview.isEmpty = false
     overview.title = horizontalOptions.select("li.title").remove().text()
     overview.count = horizontalOptions.map { it.text() }
-    useNotNull(select("div.clearit").getOrNull(0)?.select("ul > li a")) {
-        overview.doing
+    useNotNull(select("div.clearit .coversSmall").getOrNull(0)?.select("ul > li a")) {
+        overview.doing = map { item ->
+            val relative = MediaDetailEntity.MediaRelative()
+            relative.titleCn = item.select(".name").text()
+            relative.titleNative = item.select(".name").text()
+            relative.id = item.attr("href").substringAfterLast("/")
+            relative.cover = item.select("img").attr("src").optImageUrl(false)
+            relative.type = InterestType.TYPE_DO
+            relative
+        }
     }
-    useNotNull(select("div.clearit").getOrNull(1)?.select("ul > li a")) {
+    useNotNull(select("div.clearit .coversSmall").getOrNull(1)?.select("ul > li a")) {
         overview.collect = map { item ->
             val relative = MediaDetailEntity.MediaRelative()
             relative.titleCn = item.select(".name").text()
             relative.titleNative = item.select(".name").text()
             relative.id = item.attr("href").substringAfterLast("/")
-            relative.cover = item.select("img").attr("src").optImageUrl()
+            relative.cover = item.select("img").attr("src").optImageUrl(false)
+            relative.type = InterestType.TYPE_COLLECT
             relative
         }
     }

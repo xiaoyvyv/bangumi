@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
+import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
@@ -141,7 +142,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
     entity.subtype = select(".nameSingle small").text()
     entity.cover = select("img.cover").attr("src").optImageUrl()
-    entity.infos = select("#infobox > li").map { it.html() }
+    entity.infos = select("#infobox > li").map { it.html().parseHtml() }
     entity.time = select("#infobox").text().parserTime()
 
     entity.collectState = select("#panelInterestWrapper").let { item ->

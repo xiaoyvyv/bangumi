@@ -21,7 +21,8 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  */
 class OverviewCommentBinder(
     private val touchedListener: RecyclerItemTouchedListener,
-    private val clickItemListener: (MediaCommentEntity) -> Unit
+    private val clickItemListener: (MediaCommentEntity) -> Unit,
+    private val clickUserListener: (MediaCommentEntity) -> Unit,
 ) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewCommentBinding>> {
     private val itemAdapter by lazy { MediaCommentAdapter() }
 
@@ -36,6 +37,7 @@ class OverviewCommentBinder(
         holder.binding.rvComment.setInitialPrefetchItemCount(item.mediaDetailEntity.comments.size)
         itemAdapter.submitList(item.mediaDetailEntity.comments)
         itemAdapter.setOnDebouncedChildClickListener(R.id.item_comment, block = clickItemListener)
+        itemAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar, block = clickUserListener)
     }
 
     override fun onCreate(

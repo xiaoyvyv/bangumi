@@ -34,7 +34,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
     override fun initView() {
         binding.vpContent.adapter = vpAdapter
-        binding.vpContent.offscreenPageLimit = 5
+        binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
 
         tabLayoutMediator.attach()
     }

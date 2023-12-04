@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewDetailBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
-import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 
@@ -25,9 +24,10 @@ class OverviewDetailBinder :
         item ?: return
         holder.binding.tvDetailContent.text = null
         item.mediaDetailEntity.infos.forEach {
-            holder.binding.tvDetailContent.append(it.parseHtml())
+            holder.binding.tvDetailContent.append(it)
             holder.binding.tvDetailContent.append("\n")
         }
+        holder.binding.tvDetailContent.append("...")
     }
 
     override fun onCreate(

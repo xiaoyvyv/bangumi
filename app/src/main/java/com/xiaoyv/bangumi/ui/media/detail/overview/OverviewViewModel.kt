@@ -55,7 +55,7 @@ class OverviewViewModel : BaseViewModel() {
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_DETAIL, "详情"),
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_RATING, "评分"),
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_CHARACTER, "人物"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_MAKER, "制作人员"),
+//            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_MAKER, "制作人员"),
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_RELATIVE, "相关的条目"),
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_INDEX, "推荐的目录"),
             OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_REVIEW, "评论"),

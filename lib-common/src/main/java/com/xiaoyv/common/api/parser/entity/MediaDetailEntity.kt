@@ -26,7 +26,7 @@ data class MediaDetailEntity(
     @SerializedName("subtype") var subtype: String = "",
     @SerializedName("cover") var cover: String = "",
     @SerializedName("collectState") var collectState: MediaCollectForm = MediaCollectForm(),
-    @SerializedName("infos") var infos: List<String> = emptyList(),
+    @SerializedName("infos") var infos: List<CharSequence> = emptyList(),
     @SerializedName("recommendIndex") var recommendIndex: List<MediaIndex> = emptyList(),
     @SerializedName("whoSee") var whoSee: List<MediaWhoSee> = emptyList(),
     @SerializedName("countWish") var countWish: Int = 0,
@@ -92,7 +92,7 @@ data class MediaDetailEntity(
         @SerializedName("id") var id: String = "",
         @SerializedName("titleCn") var titleCn: String = "",
         @SerializedName("titleNative") var titleNative: String = "",
-        @SerializedName("type") var type: String = ""
+        @SerializedName("type") var type: String = "",
     ) : Parcelable
 
     @Parcelize

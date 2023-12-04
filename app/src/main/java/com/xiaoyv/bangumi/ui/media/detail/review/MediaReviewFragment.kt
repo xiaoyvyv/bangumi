@@ -34,6 +34,10 @@ class MediaReviewFragment : BaseListFragment<MediaReviewEntity, MediaReviewViewM
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_review) {
             RouteHelper.jumpBlogDetail(it.id)
         }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
+            RouteHelper.jumpUserDetail(it.userId)
+        }
     }
 
     companion object {

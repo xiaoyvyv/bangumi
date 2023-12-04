@@ -20,7 +20,6 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewCommentBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewDetailBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewEpBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewIndexBinder
-import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewMakerBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewPreviewBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewRatingBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewRelativeBinder
@@ -81,17 +80,27 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             put(OverviewAdapter.TYPE_PREVIEW, OverviewPreviewBinder())
             put(OverviewAdapter.TYPE_DETAIL, OverviewDetailBinder())
             put(OverviewAdapter.TYPE_RATING, OverviewRatingBinder())
-            put(OverviewAdapter.TYPE_CHARACTER, OverviewCharacterBinder(touchedListener) {})
-            put(OverviewAdapter.TYPE_MAKER, OverviewMakerBinder())
+            put(OverviewAdapter.TYPE_CHARACTER, OverviewCharacterBinder(touchedListener) {
+                RouteHelper.jumpPerson(it.id)
+            })
+//            put(OverviewAdapter.TYPE_MAKER, OverviewMakerBinder {
+//                RouteHelper.jumpPerson(it.id)
+//            })
             put(OverviewAdapter.TYPE_RELATIVE, OverviewRelativeBinder(touchedListener) {
                 RouteHelper.jumpMediaDetail(it.id)
             })
             put(OverviewAdapter.TYPE_INDEX, OverviewIndexBinder(touchedListener) {})
-            put(OverviewAdapter.TYPE_REVIEW, OverviewReviewBinder(touchedListener) {
+            put(OverviewAdapter.TYPE_REVIEW, OverviewReviewBinder(touchedListener, {
                 RouteHelper.jumpBlogDetail(it.id)
-            })
+            }, {
+                RouteHelper.jumpUserDetail(it.userId)
+            }))
             put(OverviewAdapter.TYPE_BOARD, OverviewBoardBinder(touchedListener) {})
-            put(OverviewAdapter.TYPE_COMMENT, OverviewCommentBinder(touchedListener) {})
+            put(OverviewAdapter.TYPE_COMMENT, OverviewCommentBinder(touchedListener, {
+
+            }, {
+                RouteHelper.jumpUserDetail(it.userId)
+            }))
         }
     }
 

@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewReviewBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.bangumi.ui.media.detail.review.MediaReviewAdapter
+import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.inflater
@@ -21,9 +22,9 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  */
 class OverviewReviewBinder(
     private val touchedListener: RecyclerItemTouchedListener,
-    private val clickItemListener: (MediaReviewEntity) -> Unit
-) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewReviewBinding>> {
+    private val clickItemListener: (MediaReviewEntity) -> Unit,
+    private val clickUserListener: (MediaReviewEntity) -> Unit
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewReviewBinding>> {
 
     private val itemAdapter by lazy { MediaReviewAdapter() }
 
@@ -38,6 +39,7 @@ class OverviewReviewBinder(
         holder.binding.rvReview.setInitialPrefetchItemCount(item.mediaDetailEntity.reviews.size)
         itemAdapter.submitList(item.mediaDetailEntity.reviews)
         itemAdapter.setOnDebouncedChildClickListener(R.id.item_review, block = clickItemListener)
+        itemAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar, block = clickUserListener)
     }
 
     override fun onCreate(

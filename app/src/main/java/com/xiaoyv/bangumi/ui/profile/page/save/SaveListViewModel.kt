@@ -8,7 +8,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.api.parser.impl.BrowserParser.parserBrowserPage
 import com.xiaoyv.common.config.annotation.BrowserSortType
-import com.xiaoyv.common.config.annotation.CollectType
+import com.xiaoyv.common.config.annotation.InterestCollectType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.widget.kts.copyAddAll
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ import kotlinx.coroutines.withContext
 class SaveListViewModel : BaseViewModel() {
     internal val onListLiveData = MutableLiveData<List<BrowserEntity.Item>?>()
 
-    internal var listType = CollectType.TYPE_WISH
+    internal var listType = InterestCollectType.TYPE_WISH
     internal var userId = ""
 
     /**

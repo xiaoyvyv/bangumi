@@ -25,12 +25,23 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.5"
+        android:maxLines="18"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_detail"
-        tools:lines="3"
         tools:text="@tools:sample/lorem/random" />
 
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:text="更多 >>"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_title_detail"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

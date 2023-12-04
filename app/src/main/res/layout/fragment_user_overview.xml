@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+        android:id="@+id/rv_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        android:paddingVertical="@dimen/ui_size_8"
+        app:layoutManager="com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager"
+        app:spanCount="6"
+        tools:itemCount="12"
+        tools:listitem="@layout/fragment_user_overview_item" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/pb_progress"
+        android:layout_width="@dimen/ui_size_48"
+        android:layout_height="@dimen/ui_size_48"
+        android:layout_marginTop="@dimen/ui_size_150"
+        android:indeterminate="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackCornerRadius="@dimen/ui_size_10" />
+</androidx.constraintlayout.widget.ConstraintLayout>

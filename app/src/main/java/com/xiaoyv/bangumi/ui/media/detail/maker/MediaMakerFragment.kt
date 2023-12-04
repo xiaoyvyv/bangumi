@@ -2,10 +2,12 @@ package com.xiaoyv.bangumi.ui.media.detail.maker
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
@@ -24,6 +26,14 @@ class MediaMakerFragment : BaseListFragment<MediaMakerEntity, MediaMakerViewMode
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<MediaMakerEntity, *> {
         return MediaMakerAdapter()
+    }
+
+    override fun initListener() {
+        super.initListener()
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.item_person) {
+            RouteHelper.jumpPerson(it.id)
+        }
     }
 
     companion object {

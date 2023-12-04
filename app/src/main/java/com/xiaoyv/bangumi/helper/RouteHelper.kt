@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
+import com.xiaoyv.bangumi.ui.feature.person.PersonActivity
 import com.xiaoyv.bangumi.ui.feature.post.PostActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
@@ -89,5 +90,9 @@ object RouteHelper {
 
     fun jumpUserDetail(userId: String) {
         UserActivity::class.open(bundleOf(NavKey.KEY_STRING to userId))
+    }
+
+    fun jumpPerson(personId: String) {
+        PersonActivity::class.open(bundleOf(NavKey.KEY_STRING to personId))
     }
 }

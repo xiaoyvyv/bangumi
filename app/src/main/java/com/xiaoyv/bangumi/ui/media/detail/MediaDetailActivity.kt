@@ -54,7 +54,7 @@ class MediaDetailActivity :
         vpAdapter.mediaId = viewModel.mediaId
 
         binding.vpContent.adapter = vpAdapter
-        binding.vpContent.offscreenPageLimit = 5
+        binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
 
         tabLayoutMediator.attach()
     }

@@ -29,7 +29,7 @@ class OverviewAdapter(touchedListener: RecyclerItemTouchedListener) :
     BaseMultiItemAdapter<OverviewAdapter.OverviewItem>() {
 
     init {
-        this.addItemType(TYPE_SAVE, OverviewSaveBinder{})
+        this.addItemType(TYPE_SAVE, OverviewSaveBinder {})
             .addItemType(TYPE_EP, OverviewEpBinder(touchedListener) {})
             .addItemType(TYPE_TAG, OverviewTagBinder {})
             .addItemType(TYPE_SUMMARY, OverviewSummaryBinder())
@@ -37,12 +37,12 @@ class OverviewAdapter(touchedListener: RecyclerItemTouchedListener) :
             .addItemType(TYPE_DETAIL, OverviewDetailBinder())
             .addItemType(TYPE_RATING, OverviewRatingBinder())
             .addItemType(TYPE_CHARACTER, OverviewCharacterBinder(touchedListener) {})
-            .addItemType(TYPE_MAKER, OverviewMakerBinder())
+            .addItemType(TYPE_MAKER, OverviewMakerBinder {})
             .addItemType(TYPE_RELATIVE, OverviewRelativeBinder(touchedListener) {})
             .addItemType(TYPE_INDEX, OverviewIndexBinder(touchedListener) {})
-            .addItemType(TYPE_REVIEW, OverviewReviewBinder(touchedListener) {})
+            .addItemType(TYPE_REVIEW, OverviewReviewBinder(touchedListener,{}) {})
             .addItemType(TYPE_BOARD, OverviewBoardBinder(touchedListener) {})
-            .addItemType(TYPE_COMMENT, OverviewCommentBinder(touchedListener) {})
+            .addItemType(TYPE_COMMENT, OverviewCommentBinder(touchedListener,{}) {})
             .onItemViewType(OnItemViewTypeListener { position, list ->
                 return@OnItemViewTypeListener list[position].type
             })

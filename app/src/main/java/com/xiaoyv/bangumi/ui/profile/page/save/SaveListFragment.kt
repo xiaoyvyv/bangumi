@@ -15,7 +15,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.config.GlobalConfig
-import com.xiaoyv.common.config.annotation.CollectType
+import com.xiaoyv.common.config.annotation.InterestCollectType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
@@ -75,11 +75,11 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
     override fun initListener() {
         binding.listType.setOnCheckedStateChangeListener { chipGroup, ints ->
             val type = when (ints.firstOrNull()) {
-                R.id.type_wish -> CollectType.TYPE_WISH
-                R.id.type_collect -> CollectType.TYPE_COLLECT
-                R.id.type_do -> CollectType.TYPE_DO
-                R.id.type_on_hold -> CollectType.TYPE_ON_HOLD
-                R.id.type_dropped -> CollectType.TYPE_DROPPED
+                R.id.type_wish -> InterestCollectType.TYPE_WISH
+                R.id.type_collect -> InterestCollectType.TYPE_COLLECT
+                R.id.type_do -> InterestCollectType.TYPE_DO
+                R.id.type_on_hold -> InterestCollectType.TYPE_ON_HOLD
+                R.id.type_dropped -> InterestCollectType.TYPE_DROPPED
                 else -> null
             }
 

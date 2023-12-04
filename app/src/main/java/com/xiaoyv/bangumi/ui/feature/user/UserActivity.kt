@@ -1,11 +1,8 @@
 package com.xiaoyv.bangumi.ui.feature.user
 
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.core.animation.doOnEnd
+import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
@@ -14,13 +11,15 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
+import com.xiaoyv.common.kts.randomOffset
+import com.xiaoyv.common.kts.randomX
+import com.xiaoyv.common.kts.randomY
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.dpf
 import com.xiaoyv.widget.kts.dpi
 import kotlin.math.abs
-import kotlin.random.Random
 
 
 /**
@@ -30,7 +29,6 @@ import kotlin.random.Random
  * @since 12/3/23
  */
 class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>() {
-    private val breathDistance by lazy { 5.dpf }
 
     private val vpAdapter by lazy {
         UserAdapter(supportFragmentManager, this.lifecycle)
@@ -42,40 +40,40 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
         }
     }
 
-    internal val appBarLayout
-        get() = binding.appBar
-
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.userId = bundle.getString(NavKey.KEY_STRING).orEmpty()
     }
 
     override fun initView() {
-        randomX(binding.topLeftTextView, getRandomOffsetX())
-        randomY(binding.topLeftTextView, getRandomOffsetY())
+        randomX(binding.topLeftTextView, randomOffset)
+        randomY(binding.topLeftTextView, randomOffset)
 
-        randomX(binding.middleLeftTextView, getRandomOffsetX())
-        randomY(binding.middleLeftTextView, getRandomOffsetY())
+        randomX(binding.middleLeftTextView, randomOffset)
+        randomY(binding.middleLeftTextView, randomOffset)
 
-        randomX(binding.bottomLeftTextView, getRandomOffsetX())
-        randomY(binding.bottomLeftTextView, getRandomOffsetY())
+        randomX(binding.bottomLeftTextView, randomOffset)
+        randomY(binding.bottomLeftTextView, randomOffset)
 
-        randomX(binding.topRightTextView, getRandomOffsetX())
-        randomY(binding.topRightTextView, getRandomOffsetY())
+        randomX(binding.topRightTextView, randomOffset)
+        randomY(binding.topRightTextView, randomOffset)
 
-        randomX(binding.middleRightTextView, getRandomOffsetX())
-        randomY(binding.middleRightTextView, getRandomOffsetY())
+        randomX(binding.middleRightTextView, randomOffset)
+        randomY(binding.middleRightTextView, randomOffset)
 
-        randomX(binding.bottomRightTextView, getRandomOffsetX())
-        randomY(binding.bottomRightTextView, getRandomOffsetY())
+        randomX(binding.bottomRightTextView, randomOffset)
+        randomY(binding.bottomRightTextView, randomOffset)
 
-        binding.vpContent.adapter = vpAdapter
-        binding.vpContent.offscreenPageLimit = 5
-
-        tabLayoutMediator.attach()
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.initNavBack(this)
     }
 
     override fun initData() {
+        vpAdapter.userId = viewModel.userId
 
+        binding.vpContent.adapter = vpAdapter
+        binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
+
+        tabLayoutMediator.attach()
     }
 
     override fun initListener() {
@@ -107,40 +105,8 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
         }
     }
 
-    /**
-     * 设置无限循环的动画
-     */
-    private fun randomX(view: View, startX: Float) {
-        val offsetX = getRandomOffsetX()
-        val animatorX = ObjectAnimator.ofFloat(startX, offsetX)
-        animatorX.interpolator = AccelerateDecelerateInterpolator()
-        animatorX.repeatCount = 0
-        animatorX.duration = 2000
-        animatorX.addUpdateListener {
-            view.translationX = it.animatedValue as Float
-        }
-        animatorX.doOnEnd { randomX(view, offsetX) }
-        animatorX.start()
-    }
-
-    /**
-     * 设置无限循环的动画
-     */
-    private fun randomY(view: View, startY: Float) {
-        val offsetY = getRandomOffsetX()
-        val animatorX = ObjectAnimator.ofFloat(view, "translationY", startY, offsetY)
-        animatorX.interpolator = AccelerateDecelerateInterpolator()
-        animatorX.repeatCount = 0
-        animatorX.duration = 2000
-        animatorX.doOnEnd { randomY(view, offsetY) }
-        animatorX.start()
-    }
-
-    private fun getRandomOffsetX(): Float {
-        return (Random.nextFloat() - 0.5f) * breathDistance
-    }
-
-    private fun getRandomOffsetY(): Float {
-        return (Random.nextFloat() - 0.5f) * breathDistance
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.initNavBack(this)
+        return super.onOptionsItemSelected(item)
     }
 }

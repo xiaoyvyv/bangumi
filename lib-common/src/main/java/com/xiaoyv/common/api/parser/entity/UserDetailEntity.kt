@@ -24,6 +24,7 @@ data class UserDetailEntity(
     var blog: List<MediaReviewEntity> = emptyList()
 ) {
     data class SaveOverview(
+        var isEmpty: Boolean = true,
         var title: String = "",
         var count: List<String> = emptyList(),
         var doing: List<MediaDetailEntity.MediaRelative> = emptyList(),

@@ -31,6 +31,11 @@ inline fun ImageView.loadImageAnimate(
         .into(this)
 }
 
+fun ImageView.clear() {
+    Glide.with(this).clear(this)
+    setImageResource(0)
+}
+
 inline fun ImageView.loadImageBlur(
     model: Any?, centerCrop: Boolean = true,
     crossinline onReady: (Drawable) -> Unit = {},

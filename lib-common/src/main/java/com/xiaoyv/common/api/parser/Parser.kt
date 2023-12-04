@@ -34,15 +34,16 @@ fun String.fetchStyleBackgroundUrl(): String {
  * --->
  * https://lain.bgm.tv/pic/photo/g/41/30/823739_i8sWx.jpg
  */
-fun String.optImageUrl(): String {
+fun String.optImageUrl(large: Boolean = true): String {
     val imageUrl = when {
         startsWith("//") -> "https:$this"
         startsWith("/") -> "${BgmApiManager.URL_BASE_WEB}$this"
         else -> this
     }
+    val size = if (large) "l" else "m"
     return imageUrl
         .replace("/r/(.*?)/".toRegex(), "/r/600/")
-        .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/pic/\$1/l/")
+        .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/pic/\$1/$size/")
 }
 
 fun String?.parseCount(): Int {
