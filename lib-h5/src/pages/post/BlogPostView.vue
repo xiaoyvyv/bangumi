@@ -116,26 +116,6 @@ onMounted(() => {
     user-select: none !important;
   }
 
-  img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
-    margin: 12px 0;
-    border: 1px #cccccc7f solid !important;
-  }
-
-  img[smileid] {
-    margin: 4px 6px 4px 0 !important;
-    vertical-align: bottom !important;
-    border: 1px solid #ff80ab !important;
-    padding: 1px !important;
-    height: 20px !important;
-    width: 20px !important;
-    min-width: unset !important;
-    border-radius: 4px !important;
-  }
-
   .sub-tip {
     padding: 12px;
     opacity: 0.5;

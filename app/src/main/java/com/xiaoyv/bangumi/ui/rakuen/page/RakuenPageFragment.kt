@@ -69,6 +69,10 @@ class RakuenPageFragment :
                 }
             }
         }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
+            RouteHelper.jumpUserDetail(it.userId)
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {

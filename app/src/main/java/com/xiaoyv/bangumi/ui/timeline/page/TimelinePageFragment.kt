@@ -4,12 +4,15 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentTimelinePageBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
 
@@ -43,6 +46,10 @@ class TimelinePageFragment :
     override fun initListener() {
         binding.srlRefresh.setOnRefreshListener {
             viewModel.queryTimeline()
+        }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
+            RouteHelper.jumpUserDetail(it.userId)
         }
     }
 

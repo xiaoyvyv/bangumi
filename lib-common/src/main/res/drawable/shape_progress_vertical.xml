@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="?attr/colorSurfaceContainer" />
+            <!--下面是设置4个角的圆角-->
+            <corners
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp"
+                android:topLeftRadius="@dimen/ui_layout_radius"
+                android:topRightRadius="@dimen/ui_layout_radius" />
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <scale
+            android:scaleWidth="0%"
+            android:scaleHeight="100%"
+            android:scaleGravity="bottom">
+            <shape>
+                <!--这里是设置填充颜色和方向-->
+                <gradient
+                    android:angle="270"
+                    android:endColor="?attr/colorPrimary"
+                    android:startColor="?attr/colorSecondary"
+                    android:type="linear" />
+                <!--下面是设置4个角的圆角-->
+                <corners
+                    android:bottomLeftRadius="0dp"
+                    android:bottomRightRadius="0dp"
+                    android:topLeftRadius="@dimen/ui_layout_radius"
+                    android:topRightRadius="@dimen/ui_layout_radius" />
+            </shape>
+        </scale>
+    </item>
+</layer-list>

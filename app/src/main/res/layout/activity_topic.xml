@@ -33,9 +33,9 @@
             android:layout_height="match_parent"
             tools:visibility="gone" />
 
-        <androidx.core.widget.ContentLoadingProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/pb_progress"
-            style="@style/Widget.AppCompat.ProgressBar"
+            app:trackCornerRadius="@dimen/ui_size_10"
             android:layout_width="@dimen/ui_size_48"
             android:layout_height="@dimen/ui_size_48"
             android:indeterminate="true"

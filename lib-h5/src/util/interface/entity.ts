@@ -102,3 +102,7 @@ export interface PostInfoEntity {
     tags: string;
     isPublic: boolean;
 }
+
+export interface UserSignEntity {
+    sign: string;
+}

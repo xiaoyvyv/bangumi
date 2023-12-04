@@ -250,6 +250,12 @@ interface BgmWebApi {
         @Query("gh") gh: String
     ): Document
 
+    /**
+     * 用户详情
+     */
+    @GET("/user/{userId}")
+    suspend fun queryUserInfo(@Path("userId") userId: String): Document
+
     companion object {
 
         /**

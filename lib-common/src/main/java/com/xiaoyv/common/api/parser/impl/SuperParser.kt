@@ -12,7 +12,7 @@ import org.jsoup.nodes.Document
 fun Document.parserSuperTopic(): List<SuperTopicEntity> {
     return select("#eden_tpc_list > ul > li").map {
         val superEntity = SuperTopicEntity()
-
+        superEntity.userId = it.select("a.avatar > span").attr("data-user")
         superEntity.userName = it.select("a.avatar").attr("title")
         superEntity.avatarUrl = it.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()

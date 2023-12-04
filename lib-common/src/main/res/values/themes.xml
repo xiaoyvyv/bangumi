@@ -82,4 +82,7 @@
         <item name="cornerSizeTopLeft">@dimen/ui_layout_radius</item>
         <item name="cornerSizeBottomLeft">@dimen/ui_layout_radius</item>
     </style>
+
+    <style name="test">
+    </style>
 </resources>

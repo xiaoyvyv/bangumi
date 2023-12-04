@@ -58,6 +58,8 @@ dependencies {
     api(libs.androidx.fragment.ktx)
     api(libs.persistent.cookie.jar)
 
+    api("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
+
     api(libs.jsoup)
 
     ksp(libs.glide.ksp)

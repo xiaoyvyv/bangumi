@@ -49,7 +49,7 @@ class UserHelper private constructor() {
             withContext(Dispatchers.IO) {
                 // 无登录历史跳过校验
                 if (userEntity.isEmpty) {
-                    clearUserInfo()
+                    clearUserInfo(true)
 
                     debugLog { "校验缓存用户：无登录历史" }
                     return@withContext
@@ -117,10 +117,12 @@ class UserHelper private constructor() {
     /**
      * 退出登录
      */
-    private fun clearUserInfo() {
+    private fun clearUserInfo(clearEmailAndPassword: Boolean = false) {
         BgmApiManager.resetCookie()
-
-        userSp.clear(true)
+        userSp.put(KEY_USER_INFO, "")
+        if (clearEmailAndPassword) {
+            userSp.clear()
+        }
         onUserInfoLiveData.sendValue(empty)
     }
 
@@ -172,7 +174,7 @@ class UserHelper private constructor() {
         fun logout() {
             launchProcess {
                 withContext(Dispatchers.IO) {
-                    helper.clearUserInfo()
+                    helper.clearUserInfo(true)
                 }
             }
         }

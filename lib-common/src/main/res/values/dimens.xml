@@ -5,4 +5,5 @@
     <dimen name="text_label">10sp</dimen>
     <dimen name="text_label_big">12sp</dimen>
     <dimen name="format_menu">44dp</dimen>
+    <dimen name="track_thickness">20dp</dimen>
 </resources>

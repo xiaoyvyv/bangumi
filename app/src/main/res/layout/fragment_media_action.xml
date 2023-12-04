@@ -14,12 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingHorizontal="@dimen/ui_size_32"
         android:paddingVertical="@dimen/ui_layout_margin"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="无职转生" />
+        tools:text="无职转生无职转生无职转生无职转生无职转生无职转生无职转生" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_title_native"

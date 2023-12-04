@@ -56,7 +56,7 @@ fun Element.parserMediaComments(): List<MediaCommentEntity> {
     }
 }
 
-fun Document.parserMediaReviews(): List<MediaReviewEntity> {
+fun Element.parserMediaReviews(): List<MediaReviewEntity> {
     return select("#entry_list > .item").map { item ->
         val entity = MediaReviewEntity()
         item.select(".entry .title").apply {

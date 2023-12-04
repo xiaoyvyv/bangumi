@@ -174,9 +174,8 @@
         app:layout_constraintStart_toStartOf="@+id/ed_reply"
         app:layout_constraintTop_toTopOf="@+id/scroll_menu" />
 
-    <androidx.core.widget.ContentLoadingProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_progress"
-        style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="@dimen/ui_size_48"
         android:layout_height="@dimen/ui_size_48"
         android:layout_gravity="center"
@@ -184,7 +183,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/fl_loading"
         app:layout_constraintEnd_toEndOf="@+id/fl_loading"
         app:layout_constraintStart_toStartOf="@+id/fl_loading"
-        app:layout_constraintTop_toTopOf="@+id/fl_loading" />
+        app:layout_constraintTop_toTopOf="@+id/fl_loading"
+        app:trackCornerRadius="@dimen/ui_size_10" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_loading"

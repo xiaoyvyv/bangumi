@@ -6,6 +6,7 @@ declare interface Window {
     blog: any;
     blogPost: any;
     topic: any;
+    sign: any;
     mounted: boolean;
     android: Android;
 }

@@ -8,6 +8,7 @@ package com.xiaoyv.common.api.parser.entity
  */
 data class SuperTopicEntity(
     var userName: String = "",
+    var userId: String = "",
     var avatarUrl: String = "",
     var title: String = "",
     var titleLink: String = "",
