@@ -32,7 +32,7 @@ class MediaMakerFragment : BaseListFragment<MediaMakerEntity, MediaMakerViewMode
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_person) {
-            RouteHelper.jumpPerson(it.id)
+            RouteHelper.jumpPerson(it.id, false)
         }
     }
 

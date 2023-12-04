@@ -3,10 +3,13 @@ package com.xiaoyv.bangumi.ui.feature.person
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityPersonBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.randomOffset
 import com.xiaoyv.common.kts.randomX
@@ -32,6 +35,7 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.personId = bundle.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.isVirtual = bundle.getBoolean(NavKey.KEY_BOOLEAN)
     }
 
     override fun initView() {
@@ -66,6 +70,12 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
         tabLayoutMediator.attach()
     }
 
+    override fun LifecycleOwner.initViewObserver() {
+        viewModel.onPersonLiveData.observe(this) {
+            val entity = it ?: return@observe
+            debugLog { "Person: " + entity.toJson(true) }
+        }
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         item.initNavBack(this)

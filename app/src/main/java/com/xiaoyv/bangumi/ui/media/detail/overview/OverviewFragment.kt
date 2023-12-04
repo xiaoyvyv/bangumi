@@ -81,7 +81,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             put(OverviewAdapter.TYPE_DETAIL, OverviewDetailBinder())
             put(OverviewAdapter.TYPE_RATING, OverviewRatingBinder())
             put(OverviewAdapter.TYPE_CHARACTER, OverviewCharacterBinder(touchedListener) {
-                RouteHelper.jumpPerson(it.id)
+                RouteHelper.jumpPerson(it.id, true)
             })
 //            put(OverviewAdapter.TYPE_MAKER, OverviewMakerBinder {
 //                RouteHelper.jumpPerson(it.id)

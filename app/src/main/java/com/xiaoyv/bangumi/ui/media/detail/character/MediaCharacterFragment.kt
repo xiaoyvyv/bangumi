@@ -7,7 +7,6 @@ import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaCharacterEntity
-import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -33,7 +32,7 @@ class MediaCharacterFragment : BaseListFragment<MediaCharacterEntity, MediaChara
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_person) {
-            RouteHelper.jumpPerson(it.id)
+            RouteHelper.jumpPerson(it.id, true)
         }
     }
 

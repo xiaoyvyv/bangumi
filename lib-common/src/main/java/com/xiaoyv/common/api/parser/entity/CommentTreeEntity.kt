@@ -21,6 +21,7 @@ data class CommentTreeEntity(
     @SerializedName("userAvatar") var userAvatar: String = "",
     @SerializedName("userName") var userName: String = "",
     @SerializedName("userId") var userId: String = "",
+    @SerializedName("userSign") var userSign: String = "",
     @SerializedName("replyContent") var replyContent: String = "",
     @SerializedName("topicSubReply") var topicSubReply: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyQuote") var replyQuote: String = ""

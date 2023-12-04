@@ -196,13 +196,13 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
 
     // 谁在看
     entity.whoSee = select("#subjectPanelCollect .groupsLine > li").map { item ->
-        val whoSee = MediaDetailEntity.MediaWhoSee()
+        val whoSee = MediaDetailEntity.MediaWho()
 
         item.select(".innerWithAvatar a.avatar").apply {
             whoSee.userId = attr("href").substringAfterLast("/")
             whoSee.userName = text()
         }
-        whoSee.userAvatar = item.select("li > a.avatar")
+        whoSee.userAvatar = item.select("li > a.avatar span")
             .attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
 
@@ -210,7 +210,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             .attr("class").let { starClass ->
                 StarCommentView.parseScore(starClass)
             }
-        whoSee.time = item.select(".innerWithAvatar > small").text()
+        whoSee.time = item.select(".innerWithAvatar small").text()
         whoSee
     }
 

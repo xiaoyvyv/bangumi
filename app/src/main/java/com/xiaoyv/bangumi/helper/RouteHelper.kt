@@ -92,7 +92,12 @@ object RouteHelper {
         UserActivity::class.open(bundleOf(NavKey.KEY_STRING to userId))
     }
 
-    fun jumpPerson(personId: String) {
-        PersonActivity::class.open(bundleOf(NavKey.KEY_STRING to personId))
+    fun jumpPerson(personId: String, isVirtual: Boolean) {
+        PersonActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to personId,
+                NavKey.KEY_BOOLEAN to isVirtual,
+            )
+        )
     }
 }

@@ -28,7 +28,7 @@ data class MediaDetailEntity(
     @SerializedName("collectState") var collectState: MediaCollectForm = MediaCollectForm(),
     @SerializedName("infos") var infos: List<CharSequence> = emptyList(),
     @SerializedName("recommendIndex") var recommendIndex: List<MediaIndex> = emptyList(),
-    @SerializedName("whoSee") var whoSee: List<MediaWhoSee> = emptyList(),
+    @SerializedName("whoSee") var whoSee: List<MediaWho> = emptyList(),
     @SerializedName("countWish") var countWish: Int = 0,
     @SerializedName("countDoing") var countDoing: Int = 0,
     @SerializedName("countOnHold") var countOnHold: Int = 0,
@@ -104,6 +104,7 @@ data class MediaDetailEntity(
         @SerializedName("characterNameCn") var characterNameCn: String = "",
         @SerializedName("saveCount") var saveCount: Int = 0,
         @SerializedName("job") var job: String = "",
+        @SerializedName("personJob") var personJob: String = "",
         @SerializedName("persons") var persons: List<MediaCharacterPerson> = emptyList()
     ) : Parcelable
 
@@ -149,7 +150,7 @@ data class MediaDetailEntity(
 
     @Parcelize
     @Keep
-    data class MediaWhoSee(
+    data class MediaWho(
         @SerializedName("userName") var userName: String = "",
         @SerializedName("userId") var userId: String = "",
         @SerializedName("userAvatar") var userAvatar: String = "",

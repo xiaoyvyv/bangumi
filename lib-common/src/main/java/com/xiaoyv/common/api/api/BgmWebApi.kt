@@ -256,6 +256,18 @@ interface BgmWebApi {
     @GET("/user/{userId}")
     suspend fun queryUserInfo(@Path("userId") userId: String): Document
 
+    /**
+     * 人物详情
+     */
+    @GET("/person/{personId}")
+    suspend fun queryPersonInfo(@Path("personId") personId: String): Document
+
+    /**
+     * 虚拟人物详情
+     */
+    @GET("/character/{characterId}")
+    suspend fun queryCharacterInfo(@Path("characterId") characterId: String): Document
+
     companion object {
 
         /**

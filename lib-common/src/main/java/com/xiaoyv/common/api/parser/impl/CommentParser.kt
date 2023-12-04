@@ -5,7 +5,7 @@ import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.replaceSmiles
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 /**
@@ -14,14 +14,14 @@ import org.jsoup.select.Elements
  * @author why
  * @since 12/1/23
  */
-fun Document.parserBottomComment(): List<CommentTreeEntity> {
+fun Element.parserBottomComment(): List<CommentTreeEntity> {
     return select("#comment_list > div").mapCommentItems()
 }
 
 /**
  * 解析发回复表单
  */
-fun Document.parserReplyForm(): CommentFormEntity {
+fun Element.parserReplyForm(): CommentFormEntity {
     val formEntity = CommentFormEntity()
     select("#ReplyForm input").forEach {
         formEntity.inputs[it.attr("name")] = it.attr("value")
@@ -44,6 +44,7 @@ private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
             entity.userAvatar = select("span").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
         }
+        entity.userSign = item.select(".sign").text().removeSuffix(")").removePrefix("(")
         entity.userName = item.select("strong > a").text()
         entity.floor = item.select(".post_actions a.floor-anchor").text()
         entity.replyJs = item.select(".post_actions .action > a.icon").attr("onclick")
