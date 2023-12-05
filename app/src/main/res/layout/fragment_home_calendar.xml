@@ -38,7 +38,7 @@
         android:layout_height="@dimen/home_card_height"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/ui_size_8"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
         tools:listitem="@layout/view_home_card_item" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -61,6 +61,6 @@
         android:layout_height="@dimen/home_card_height"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/ui_size_8"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
         tools:listitem="@layout/view_home_card_item" />
 </androidx.appcompat.widget.LinearLayoutCompat>

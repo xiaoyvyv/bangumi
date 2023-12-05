@@ -17,12 +17,12 @@ import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 
 /**
- * Class: [SaveOverviewAdapter]
+ * Class: [UserOverviewAdapter]
  *
  * @author why
  * @since 12/4/23
  */
-class SaveOverviewAdapter : BaseMultiItemAdapter<Any>() {
+class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
     init {
         this.addItemType(TYPE_TITLE, ItemTitleBinder())
             .addItemType(TYPE_GRID, ItemGridBinder())

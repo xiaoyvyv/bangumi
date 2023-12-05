@@ -20,13 +20,14 @@ import kotlinx.coroutines.withContext
 class OverviewViewModel : BaseViewModel() {
     internal var mediaId: String = ""
 
-    internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity>()
+    internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
     internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.OverviewItem>>()
 
     fun queryMediaInfo() {
         launchUI(
             stateView = loadingViewState,
             error = {
+                mediaDetailLiveData.value = null
                 it.printStackTrace()
             },
             block = {

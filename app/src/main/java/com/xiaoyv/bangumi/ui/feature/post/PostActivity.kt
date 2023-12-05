@@ -21,7 +21,6 @@ import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.web.page.BlogPostView
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getParcelObj
-import com.xiaoyv.widget.stateview.StateViewLiveData
 
 /**
  * Class: [PostActivity]
@@ -57,22 +56,16 @@ class PostActivity : BaseViewModelActivity<ActivityPostBinding, PostViewModel>()
     }
 
     override fun LifecycleOwner.initViewObserver() {
-        viewModel.loadingViewState.observe(this) {
-            when (it.type) {
-                StateViewLiveData.StateType.STATE_LOADING -> {
-                    binding.pbProgress.show()
-                }
-
-                StateViewLiveData.StateType.STATE_TIPS -> {
-                    binding.pbProgress.hide()
-                }
-            }
-        }
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingViewState = viewModel.loadingViewState,
+            interceptShowContent = true
+        )
 
         viewModel.onCreateEntity.observe(this) {
             launchUI {
                 blogPostWeb.setPostInfo(it)
-                binding.pbProgress.hide()
+                binding.stateView.showContent()
             }
         }
 

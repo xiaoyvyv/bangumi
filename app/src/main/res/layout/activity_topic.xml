@@ -33,15 +33,9 @@
             android:layout_height="match_parent"
             tools:visibility="gone" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/pb_progress"
-            app:trackCornerRadius="@dimen/ui_size_10"
-            android:layout_width="@dimen/ui_size_48"
-            android:layout_height="@dimen/ui_size_48"
-            android:indeterminate="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.xiaoyv.common.widget.state.AnimeStateView
+            android:id="@+id/state_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

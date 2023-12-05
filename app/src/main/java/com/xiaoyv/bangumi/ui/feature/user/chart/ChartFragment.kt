@@ -23,7 +23,7 @@ class ChartFragment : BaseBindingFragment<FragmentUserChartBinding>() {
     private val activityViewModel: UserViewModel by activityViewModels()
 
     override fun initView() {
-        binding.pbProgress.show()
+        binding.stateView.showLoading(0.2f)
 
         binding.clLine.doOnPreDraw {
             listOf(
@@ -71,7 +71,6 @@ class ChartFragment : BaseBindingFragment<FragmentUserChartBinding>() {
                 binding.tvName6.text = value.roundToInt().toString()
             }
 
-            binding.pbProgress.hide()
             binding.tvCount.text = String.format("总评数：%d", total)
 
             listOf(
@@ -90,6 +89,8 @@ class ChartFragment : BaseBindingFragment<FragmentUserChartBinding>() {
                     showAnimeProgress(progressBar, this, total)
                 }
             }
+
+            binding.stateView.showContent()
         }
     }
 

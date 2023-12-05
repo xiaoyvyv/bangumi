@@ -6,7 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.feature.empty.EmptyFragment
 import com.xiaoyv.bangumi.ui.feature.user.chart.ChartFragment
-import com.xiaoyv.bangumi.ui.feature.user.overview.SaveOverviewFragment
+import com.xiaoyv.bangumi.ui.feature.user.overview.UserOverviewFragment
 import com.xiaoyv.bangumi.ui.feature.user.sign.SignFragment
 import com.xiaoyv.bangumi.ui.profile.page.save.SaveListFragment
 import com.xiaoyv.common.config.annotation.UserCenterType
@@ -36,7 +36,7 @@ class UserAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         val profileTab = tabs[position]
         val type = profileTab.type
         return when (type) {
-            UserCenterType.TYPE_OVERVIEW -> SaveOverviewFragment.newInstance()
+            UserCenterType.TYPE_OVERVIEW -> UserOverviewFragment.newInstance()
             UserCenterType.TYPE_SAVE -> SaveListFragment.newInstance(userId)
             UserCenterType.TYPE_ABOUT -> SignFragment.newInstance()
             UserCenterType.TYPE_CHART -> ChartFragment.newInstance()

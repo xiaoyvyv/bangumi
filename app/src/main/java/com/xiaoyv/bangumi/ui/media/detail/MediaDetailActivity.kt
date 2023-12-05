@@ -65,6 +65,10 @@ class MediaDetailActivity :
 
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onMediaDetailLiveData.observe(this) {
+            if (it == null) {
+                return@observe
+            }
+
             binding.ivCover.loadImageAnimate(it.cover)
             binding.ivBanner.loadImageBlur(it.cover)
 

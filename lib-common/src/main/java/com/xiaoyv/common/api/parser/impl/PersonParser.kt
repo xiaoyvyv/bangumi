@@ -84,7 +84,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
     }
 
     select("#columnCrtB").apply {
-        entity.job = select("h2").text()
+        entity.job = select("h2").firstOrNull()?.text().orEmpty()
         entity.summary = select(".detail").html().parseHtml()
     }
 

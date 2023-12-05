@@ -9,19 +9,20 @@ import com.xiaoyv.bangumi.ui.feature.user.UserViewModel
 import com.xiaoyv.blueprint.base.binding.BaseBindingFragment
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.parser.entity.UserDetailEntity
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Class: [SaveOverviewFragment]
+ * Class: [UserOverviewFragment]
  *
  * @author why
  * @since 12/4/23
  */
-class SaveOverviewFragment : BaseBindingFragment<FragmentUserOverviewBinding>() {
+class UserOverviewFragment : BaseBindingFragment<FragmentUserOverviewBinding>() {
 
-    private val itemAdapter by lazy { SaveOverviewAdapter() }
+    private val itemAdapter by lazy { UserOverviewAdapter() }
     private val activityViewModel: UserViewModel by activityViewModels()
 
     override fun initView() {
@@ -29,7 +30,7 @@ class SaveOverviewFragment : BaseBindingFragment<FragmentUserOverviewBinding>() 
     }
 
     override fun initData() {
-
+        binding.stateView.showLoading(0.2f)
     }
 
     override fun initListener() {
@@ -42,18 +43,22 @@ class SaveOverviewFragment : BaseBindingFragment<FragmentUserOverviewBinding>() 
 
     override fun LifecycleOwner.initViewObserver() {
         activityViewModel.onUserInfoLiveData.observe(this) {
-            val entity = it ?: return@observe
-            launchUI {
-                itemAdapter.submitList(withContext(Dispatchers.IO) {
-                    listOf(
-                        entity.anime,
-                        entity.book,
-                        entity.music,
-                        entity.game,
-                        entity.real
-                    ).filter { overview ->
+            if (it == null) {
+                binding.stateView.showTip()
+                return@observe
+            }
+            loadInfo(it)
+        }
+    }
+
+    private fun loadInfo(entity: UserDetailEntity) {
+        launchUI {
+            itemAdapter.submitList(withContext(Dispatchers.IO) {
+                listOf(entity.anime, entity.book, entity.music, entity.game, entity.real)
+                    .filter { overview ->
                         overview.isEmpty.not()
-                    }.flatMap { overview ->
+                    }
+                    .flatMap { overview ->
                         val itemArr = arrayListOf<Any>()
                         itemArr.add(overview)
                         if (overview.doing.isNotEmpty()) {
@@ -64,10 +69,8 @@ class SaveOverviewFragment : BaseBindingFragment<FragmentUserOverviewBinding>() 
                         }
                         itemArr
                     }
-                })
-
-                binding.pbProgress.hide()
-            }
+            })
+            binding.stateView.showContent()
         }
     }
 
@@ -84,8 +87,8 @@ class SaveOverviewFragment : BaseBindingFragment<FragmentUserOverviewBinding>() 
     }
 
     companion object {
-        fun newInstance(): SaveOverviewFragment {
-            return SaveOverviewFragment()
+        fun newInstance(): UserOverviewFragment {
+            return UserOverviewFragment()
         }
     }
 }

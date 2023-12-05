@@ -2,7 +2,6 @@
 <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
     <FrameLayout
@@ -17,13 +16,9 @@
             android:orientation="vertical"
             android:visibility="invisible" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/pb_progress"
-            app:trackCornerRadius="@dimen/ui_size_10"
-            android:layout_width="@dimen/ui_size_48"
-            android:layout_height="@dimen/ui_size_48"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/ui_size_150"
-            android:indeterminate="true" />
+        <com.xiaoyv.common.widget.state.AnimeStateView
+            android:id="@+id/state_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>

@@ -4,7 +4,6 @@ package com.xiaoyv.bangumi.ui.media.detail.overview
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
@@ -29,14 +28,11 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.kts.useNotNull
-import com.xiaoyv.widget.stateview.StateViewLiveData
-import kotlinx.coroutines.delay
 
 /**
  * Class: [OverviewFragment]
@@ -134,8 +130,21 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     }
 
     override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingBias = 0.2f,
+            loadingViewState = viewModel.loadingViewState,
+            doOnShowContent = {
+                binding.llContainer.isVisible = true
+            }
+        )
+
         viewModel.mediaDetailLiveData.observe(this) {
             mediaViewModel.onMediaDetailLiveData.value = it
+
+            if (it == null) {
+                binding.stateView.showTip()
+            }
         }
 
         viewModel.mediaBinderListLiveData.observe(this) {
@@ -148,26 +157,8 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                     adapterListener.onBind(bindingHolder, index, overviewItem)
                 }
             }
-
-            binding.pbProgress.hide()
         }
 
-        viewModel.loadingViewState.observe(this) {
-            when (it.type) {
-                StateViewLiveData.StateType.STATE_LOADING -> {
-                    binding.llContainer.isInvisible = true
-                    binding.pbProgress.show()
-                }
-
-                else -> {
-                    binding.pbProgress.hide()
-                    launchUI {
-                        delay(100)
-                        binding.llContainer.isVisible = true
-                    }
-                }
-            }
-        }
 
         UserHelper.observe(this) {
             viewModel.queryMediaInfo()

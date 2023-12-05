@@ -24,7 +24,7 @@
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_comment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

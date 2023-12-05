@@ -34,7 +34,7 @@
             android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingVertical="@dimen/ui_size_8"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
             tools:itemCount="10"
             tools:listitem="@layout/activity_edit_profile_input" />
 

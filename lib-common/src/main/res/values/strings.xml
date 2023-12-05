@@ -47,4 +47,5 @@
     <string name="common_tip">提示</string>
     <string name="common_cancel">取消</string>
     <string name="common_done">确定</string>
+    <string name="common_empty_tip">ごめん，Bangumi娘找不到数据了</string>
 </resources>

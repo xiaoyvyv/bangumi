@@ -72,7 +72,7 @@
         android:minHeight="@dimen/home_card_height"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/ui_size_8"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/card_big"
         tools:listitem="@layout/view_home_card_item" />
 </merge>

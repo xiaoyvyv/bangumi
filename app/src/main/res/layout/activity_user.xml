@@ -15,7 +15,6 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ui_size_280"
             android:background="?attr/colorPrimaryContainer"

@@ -26,6 +26,7 @@ class PersonViewModel : BaseViewModel() {
 
     private fun queryPersonInfo() {
         launchUI(
+            stateView = loadingViewState,
             error = {
                 onPersonLiveData.value = null
                 it.printStackTrace()
@@ -36,7 +37,7 @@ class PersonViewModel : BaseViewModel() {
                         BgmApiManager.bgmWebApi.queryCharacterInfo(personId)
                     } else {
                         BgmApiManager.bgmWebApi.queryPersonInfo(personId)
-                    }.parserPerson(personId,isVirtual)
+                    }.parserPerson(personId, isVirtual)
                 }
             }
         )

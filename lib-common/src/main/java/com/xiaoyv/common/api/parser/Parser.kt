@@ -2,6 +2,8 @@ package com.xiaoyv.common.api.parser
 
 import androidx.core.text.parseAsHtml
 import com.xiaoyv.common.api.BgmApiManager
+import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 
 
 /**
@@ -75,4 +77,17 @@ fun String?.replaceSmiles(): String {
         "src=\"/img/smiles/(.*?)\"".toRegex(),
         "src=\"${BgmApiManager.URL_BASE_WEB}/img/smiles/\$1\""
     )
+}
+
+@Throws(IllegalArgumentException::class)
+fun <T : Element> T.checkLegal(): T {
+    require(toString().isNotBlank()) { "数据不不见了" }
+    return this
+}
+
+@Throws(IllegalArgumentException::class)
+fun <T : Element> T.selectLegal(selector: String): Elements {
+    val elements = select(selector)
+    require(elements.isNotEmpty()) { "Bangumi娘：报告数据不不见了" }
+    return elements
 }

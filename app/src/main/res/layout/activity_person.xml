@@ -10,30 +10,23 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ui_transparent"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_size_280"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimaryContainer"
             android:fitsSystemWindows="true"
-            android:paddingVertical="@dimen/ui_size_0"
-            app:expandedTitleGravity="center|bottom"
-            app:expandedTitleMarginBottom="@dimen/ui_size_60"
-            app:expandedTitleTextAppearance="@style/Theme.Bangumi.ExpandTitle"
-            app:expandedTitleTextColor="?attr/colorOnPrimarySurface"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimVisibleHeightTrigger="@dimen/ui_size_180"
-            app:toolbarId="@+id/toolbar">
+            app:titleEnabled="false">
 
             <com.xiaoyv.common.widget.image.AnimeImageView
                 android:id="@+id/iv_banner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:background="?attr/colorPrimaryContainer"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
@@ -42,140 +35,73 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/ui_size_280"
+                android:layout_height="match_parent"
                 android:layout_gravity="bottom"
                 android:background="@drawable/shape_bottom_edge"
                 android:fitsSystemWindows="true" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_info"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.1">
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="false">
 
                 <com.xiaoyv.common.widget.image.AnimeImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="@dimen/ui_size_90"
-                    android:layout_height="@dimen/ui_size_90"
-                    android:elevation="@dimen/ui_size_6"
-                    android:padding="@dimen/ui_size_2"
+                    android:id="@+id/iv_cover"
+                    android:layout_width="@dimen/ui_size_120"
+                    android:layout_height="@dimen/ui_size_180"
+                    android:layout_marginStart="@dimen/ui_layout_margin"
+                    android:layout_marginTop="?actionBarSize"
+                    android:layout_marginBottom="@dimen/ui_size_24"
+                    android:elevation="@dimen/ui_layout_elevation"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5"
-                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-                    app:strokeColor="@android:color/white"
-                    app:strokeWidth="@dimen/ui_size_2"
-                    tools:src="@tools:sample/avatars" />
+                    app:layout_constraintVertical_bias="1"
+                    app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-                <!-- 左上文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/topLeftTextView"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_title"
+                    android:layout_width="@dimen/ui_size_0"
                     android:layout_height="wrap_content"
-                    android:alpha="0.9"
-                    android:shadowColor="@color/ui_black_20"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:text="0000-00-00 加入"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:paddingVertical="@dimen/ui_size_6"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:textColor="?attr/colorOnPrimarySurface"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/iv_avatar"
-                    app:layout_constraintTop_toTopOf="@id/iv_avatar" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_cover"
+                    app:layout_constraintTop_toTopOf="@+id/iv_cover"
+                    tools:text="@tools:sample/lorem/random" />
 
-                <!-- 左中文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/middleLeftTextView"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_subtitle"
+                    android:layout_width="@dimen/ui_size_0"
                     android:layout_height="wrap_content"
-                    android:alpha="0.9"
-                    android:paddingHorizontal="@dimen/ui_layout_margin"
-                    android:shadowColor="@color/ui_black_20"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:text="同步率 -%"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:maxLines="2"
+                    android:paddingVertical="@dimen/ui_size_3"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
                     android:textColor="?attr/colorOnPrimarySurface"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
-                    app:layout_constraintEnd_toStartOf="@id/iv_avatar"
-                    app:layout_constraintTop_toTopOf="@id/iv_avatar" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_title"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                    tools:text="@tools:sample/lorem/random" />
 
-                <!-- 左下文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/bottomLeftTextView"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_job"
+                    android:layout_width="@dimen/ui_size_0"
                     android:layout_height="wrap_content"
-                    android:alpha="0.9"
-                    android:shadowColor="@color/ui_black_20"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:text="最近活跃"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingVertical="@dimen/ui_size_6"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
                     android:textColor="?attr/colorOnPrimarySurface"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
-                    app:layout_constraintEnd_toStartOf="@id/iv_avatar"
-                    app:layout_constraintVertical_bias="1.0" />
-
-                <!-- 右上文案 -->
-                <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/topRightTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.9"
-                    android:shadowColor="@color/ui_black_20"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:text="Ta 的人物"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
-                    android:textColor="?attr/colorOnPrimarySurface"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/iv_avatar"
-                    app:layout_constraintTop_toTopOf="@id/iv_avatar" />
-
-                <!-- 右中文案 -->
-                <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/middleRightTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.9"
-                    android:paddingHorizontal="@dimen/ui_layout_margin"
-                    android:shadowColor="@color/ui_black_20"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:text="Ta 的日志"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
-                    android:textColor="?attr/colorOnPrimarySurface"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
-                    app:layout_constraintStart_toEndOf="@id/iv_avatar"
-                    app:layout_constraintTop_toTopOf="@id/iv_avatar" />
-
-                <!-- 右下文案 -->
-                <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/bottomRightTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.9"
-                    android:shadowColor="@color/ui_black_20"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:text="Ta 的目录"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
-                    android:textColor="?attr/colorOnPrimarySurface"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
-                    app:layout_constraintStart_toEndOf="@id/iv_avatar" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_subtitle"
+                    app:layout_constraintStart_toStartOf="@+id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
+                    tools:text="(2023 - TV)" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -183,8 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-                app:title="@string/app_name" />
+                app:popupTheme="@style/Theme.Bangumi.PopupOverlay" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

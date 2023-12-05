@@ -23,7 +23,7 @@ class SignFragment : BaseBindingFragment<FragmentUserSignBinding>() {
     }
 
     override fun initView() {
-        binding.pbProgress.show()
+        binding.stateView.showLoading(0.2f)
     }
 
     override fun initData() {
@@ -53,7 +53,7 @@ class SignFragment : BaseBindingFragment<FragmentUserSignBinding>() {
             launchUI {
                 signView.waitMounted()
                 signView.setSign(it?.sign.orEmpty())
-                binding.pbProgress.hide()
+                binding.stateView.showContent()
             }
         }
     }

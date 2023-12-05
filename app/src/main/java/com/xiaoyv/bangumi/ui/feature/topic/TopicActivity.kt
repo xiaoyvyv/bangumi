@@ -18,7 +18,6 @@ import com.xiaoyv.common.widget.reply.ReplyDialog
 import com.xiaoyv.common.widget.web.page.TopicView
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
-import com.xiaoyv.widget.stateview.StateViewLiveData
 
 /**
  * Class: [TopicActivity]
@@ -96,24 +95,18 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
     }
 
     override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingViewState = viewModel.loadingViewState,
+            interceptShowContent = true
+        )
+
         viewModel.onTopicDetailLiveData.observe(this) {
             debugLog { it.toJson(true) }
 
             launchUI {
                 topicView.loadTopicDetail(it)
-                binding.pbProgress.hide()
-            }
-        }
-
-        viewModel.loadingViewState.observe(this) {
-            when (it.type) {
-                StateViewLiveData.StateType.STATE_LOADING -> {
-                    binding.pbProgress.show()
-                }
-
-                StateViewLiveData.StateType.STATE_TIPS -> {
-                    binding.pbProgress.hide()
-                }
+                binding.stateView.showContent()
             }
         }
 

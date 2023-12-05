@@ -1,10 +1,16 @@
 package com.xiaoyv.common.kts
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.helper.blur.BlurTransformation
 import com.xiaoyv.widget.kts.listener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * ImageViewKt
@@ -27,7 +33,7 @@ inline fun ImageView.loadImageAnimate(
                     .error(CommonDrawable.layer_error)
             } else it
         }
-//        .transition(DrawableTransitionOptions.withCrossFade())
+        .transition(DrawableTransitionOptions.withCrossFade())
         .into(this)
 }
 
@@ -45,7 +51,22 @@ inline fun ImageView.loadImageBlur(
         .load(model ?: return)
         .let { if (centerCrop) it.centerCrop() else it }
         .listener(onLoadFailed = onFail, onResourceReady = onReady)
-        .transform(BlurTransformation(25, 5))
+        .transform(BlurTransformation(25, 10))
         .error(CommonDrawable.layer_error)
         .into(this)
+}
+
+fun View.loadImageBlurBackground(model: Any?) {
+    findViewTreeLifecycleOwner()?.launchUI {
+        background = withContext(Dispatchers.IO) {
+            Glide.with(this@loadImageBlurBackground)
+                .asDrawable()
+                .load(model)
+                .error(CommonDrawable.layer_error)
+                .centerCrop()
+                .transform(BlurTransformation(25, 10))
+                .submit()
+                .get()
+        }
+    }
 }

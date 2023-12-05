@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
@@ -18,7 +19,7 @@ import org.jsoup.select.Elements
 fun Document.parserUserInfo(userId: String): UserDetailEntity {
     val entity = UserDetailEntity()
     entity.id = userId
-    select("#headerProfile").apply {
+    selectLegal("#headerProfile").apply {
         entity.avatar = select(".headerAvatar span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.nickname = select(".inner .name a").text()

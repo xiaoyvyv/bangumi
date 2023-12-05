@@ -14,6 +14,7 @@ import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -60,6 +61,7 @@ class HomeAdapter(onItemClick: (BgmMediaEntity) -> Unit) : BaseMultiItemAdapter<
             position: Int,
             item: Any?
         ) {
+            debugLog { "顶部 Banner 模块:$position" }
             (item as? HomeIndexBannerEntity)?.apply {
                 val binding = holder.binding
                 val context = binding.root.context
@@ -97,6 +99,7 @@ class HomeAdapter(onItemClick: (BgmMediaEntity) -> Unit) : BaseMultiItemAdapter<
             position: Int,
             item: Any?
         ) {
+            debugLog { "今日放送 | 明日放送模块 模块:$position" }
             val calendarEntity = item as? HomeIndexCalendarEntity
             val binding = holder.binding
 
@@ -143,6 +146,7 @@ class HomeAdapter(onItemClick: (BgmMediaEntity) -> Unit) : BaseMultiItemAdapter<
             position: Int,
             item: Any?
         ) {
+            debugLog { "主页底部大图模块 模块:$position" }
             holder.view.data = item as? HomeIndexCardEntity
             holder.view.onItemClick = onItemClick
         }

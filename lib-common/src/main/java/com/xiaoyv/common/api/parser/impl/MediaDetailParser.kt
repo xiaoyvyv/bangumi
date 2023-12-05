@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserTime
+import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
@@ -135,7 +136,7 @@ fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
 
 fun Document.parserMediaDetail(): MediaDetailEntity {
     val entity = MediaDetailEntity()
-    select(".nameSingle > a").apply {
+    selectLegal(".nameSingle > a").apply {
         entity.id = attr("href").substringAfterLast("/")
         entity.titleCn = attr("title")
         entity.titleNative = text()

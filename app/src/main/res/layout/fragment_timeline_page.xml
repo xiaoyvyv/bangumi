@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
         tools:itemCount="10"
         tools:listitem="@layout/fragment_timeline_page_item" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
