@@ -4,10 +4,12 @@
     android:useLevel="false">
     <corners
         android:bottomLeftRadius="@dimen/ui_layout_radius"
-        android:bottomRightRadius="@dimen/ui_layout_radius" />
+        android:bottomRightRadius="@dimen/ui_layout_radius"
+        android:topLeftRadius="@dimen/ui_layout_radius"
+        android:topRightRadius="@dimen/ui_layout_radius" />
 
     <gradient
         android:angle="-90"
-        android:endColor="@color/ui_black_c0"
+        android:endColor="@color/ui_black_a0"
         android:startColor="@color/ui_transparent" />
 </shape>

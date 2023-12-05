@@ -58,8 +58,8 @@ class OverviewCharacterBinder(
         override fun BaseQuickBindingHolder<FragmentOverviewAvatarItemBinding>.converted(item: MediaDetailEntity.MediaCharacter) {
             binding.ivAvatar.loadImageAnimate(item.avatar)
             binding.tvName.text = item.characterNameCn.ifBlank { item.characterName }
-            binding.tvJob.text = item.job
-            binding.tvComment.text = "+" + item.saveCount
+            binding.tvJob.text = item.jobs.joinToString(";")
+            binding.tvComment.text = String.format("+%d", item.saveCount)
             binding.tvComment.isVisible = item.saveCount != 0
         }
 

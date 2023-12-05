@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.ui.feature.person.cooperate
 
 import androidx.recyclerview.widget.DiffUtil
-import com.xiaoyv.bangumi.databinding.FragmentPersonCollectItemBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonCooperateItemBinding
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -21,6 +20,7 @@ class PersonCooperateAdapter : BaseQuickDiffBindingAdapter<PersonEntity.RecentCo
         binding.ivAvatar.loadImageAnimate(item.avatar)
         binding.tvName.text = item.name
         binding.tvTimes.text = String.format("x%d", item.times)
+        binding.tvJobs.text = item.jobs.joinToString("、")
     }
 
     private object ItemDiffItemCallback : DiffUtil.ItemCallback<PersonEntity.RecentCooperate>() {

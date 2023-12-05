@@ -67,11 +67,7 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
     }
 
     override fun initData() {
-        binding.rvContent.setHasFixedSize(true)
         binding.rvContent.adapter = adapterHelper.adapter
-
-        binding.srlRefresh.isRefreshing = true
-
         viewModel.refresh()
     }
 
@@ -100,7 +96,7 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
             viewModel.handleOption(it)
         }
 
-        contentAdapter.setOnDebouncedChildClickListener(R.id.card_cover) {
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_cover) {
             RouteHelper.jumpMediaDetail(it.subjectId, it.mediaType)
         }
     }

@@ -279,7 +279,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
                 .fetchStyleBackgroundUrl().optImageUrl()
         }
         item.select(".info .tip_j").apply {
-            mediaCharacter.job = select(".badge_job_tip").text()
+            mediaCharacter.jobs = select(".badge_job_tip").map { it.text() }
             mediaCharacter.characterNameCn = select("span.tip").text()
             mediaCharacter.persons = select("a").map { person ->
                 val characterPerson = MediaDetailEntity.MediaCharacterPerson()

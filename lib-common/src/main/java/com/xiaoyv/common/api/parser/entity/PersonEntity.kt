@@ -28,8 +28,8 @@ data class PersonEntity(
     @SerializedName("infos") var infos: List<SubInfo> = emptyList(),
     @SerializedName("recommendIndexes") var recommendIndexes: List<MediaDetailEntity.MediaIndex> = emptyList(),
     @SerializedName("whoCollects") var whoCollects: List<MediaDetailEntity.MediaWho> = emptyList(),
-    @SerializedName("performers") var performers: List<RecentlyCharacter> = emptyList(),
-    @SerializedName("recentCharacters") var recentCharacters: List<RecentlyCharacter> = emptyList(),
+    @SerializedName("performers") var performers: List<RecentlyPerformer> = emptyList(),
+    @SerializedName("recentCharacters") var recentCharacters: List<CharacterEntity> = emptyList(),
     @SerializedName("recentOpuses") var recentOpuses: List<RecentlyOpus> = emptyList(),
     @SerializedName("recentCooperates") var recentCooperates: List<RecentCooperate> = emptyList(),
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
@@ -55,15 +55,24 @@ data class PersonEntity(
     @Parcelize
     data class RecentlyOpus(
         @SerializedName("cover") var cover: String = "",
-        @SerializedName("title") var title: String = "",
+        @SerializedName("titleNative") var titleNative: String = "",
+        @SerializedName("titleCn") var titleCn: String = "",
         @SerializedName("id") var id: String = "",
-        @SerializedName("job") var job: String = "",
+        @SerializedName("job") var jobs: List<String> = emptyList(),
         @SerializedName("mediaType") @MediaType var mediaType: String = MediaType.TYPE_UNKNOWN,
+        @SerializedName("rateInfo") var rateInfo: RateInfo = RateInfo()
     ) : Parcelable
 
     @Keep
     @Parcelize
-    data class RecentlyCharacter(
+    data class RateInfo(
+        var count: Int = 0,
+        var rate: Float = 0f
+    ) : Parcelable
+
+    @Keep
+    @Parcelize
+    data class RecentlyPerformer(
         @SerializedName("character") var character: MediaDetailEntity.MediaCharacter = MediaDetailEntity.MediaCharacter(),
         @SerializedName("media") var media: MediaDetailEntity.MediaRelative = MediaDetailEntity.MediaRelative()
     ) : Parcelable

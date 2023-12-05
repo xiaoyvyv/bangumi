@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.ui.feature.person.collect
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
-import com.xiaoyv.common.api.parser.impl.parserPersonCollect
+import com.xiaoyv.common.api.parser.impl.parserPersonCollector
 
 /**
  * Class: [PersonCollectViewModel]
@@ -25,12 +25,12 @@ class PersonCollectViewModel : BaseListViewModel<MediaDetailEntity.MediaWho>() {
             BgmApiManager.bgmWebApi.queryCharacterCollectUser(
                 personId = personId,
                 page = current
-            ).parserPersonCollect()
+            ).parserPersonCollector()
         } else {
             BgmApiManager.bgmWebApi.queryPersonCollectUser(
                 personId = personId,
                 page = current
-            ).parserPersonCollect()
+            ).parserPersonCollector()
         }
     }
 }

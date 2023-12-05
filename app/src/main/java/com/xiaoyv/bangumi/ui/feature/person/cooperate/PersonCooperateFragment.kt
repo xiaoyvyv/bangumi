@@ -51,14 +51,14 @@ class PersonCooperateFragment :
     }
 
     override fun onCreateLayoutManager(): LinearLayoutManager {
-        return QuickGridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+        return QuickGridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
     }
 
     companion object {
         fun newInstance(personId: String, isVirtual: Boolean): PersonCooperateFragment {
             return PersonCooperateFragment().apply {
                 arguments = bundleOf(
-                    NavKey.KEY_STRING to "17491",
+                    NavKey.KEY_STRING to personId,
                     NavKey.KEY_BOOLEAN to isVirtual
                 )
             }

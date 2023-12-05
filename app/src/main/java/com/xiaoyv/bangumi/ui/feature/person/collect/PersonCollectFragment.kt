@@ -50,7 +50,7 @@ class PersonCollectFragment :
     }
 
     override fun onCreateLayoutManager(): LinearLayoutManager {
-        return QuickGridLayoutManager(requireContext(), 6, GridLayoutManager.VERTICAL, false)
+        return QuickGridLayoutManager(requireContext(), 5, GridLayoutManager.VERTICAL, false)
     }
 
     companion object {

@@ -142,5 +142,5 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/ui_size_24"
         android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/ic_align_top" />
+        app:srcCompat="@drawable/ic_filter" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

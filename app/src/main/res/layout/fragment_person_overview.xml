@@ -3,4 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.xiaoyv.common.widget.state.AnimeStateView
+        android:id="@+id/state_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

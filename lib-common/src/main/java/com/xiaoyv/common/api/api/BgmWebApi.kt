@@ -286,6 +286,15 @@ interface BgmWebApi {
         @Query("page") page: Int? = null,
     ): Document
 
+    @GET("/person/{personId}/works")
+    suspend fun queryPersonWorks(
+        @Path("personId", encoded = true) personId: String,
+        @Query("page") page: Int? = null,
+    ): Document
+
+    @GET("/person/{personId}/works/voice")
+    suspend fun queryPersonWorkVoices(@Path("personId", encoded = true) personId: String): Document
+
     companion object {
 
         /**

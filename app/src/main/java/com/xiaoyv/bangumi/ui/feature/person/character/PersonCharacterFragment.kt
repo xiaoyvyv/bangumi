@@ -1,9 +1,19 @@
 package com.xiaoyv.bangumi.ui.feature.person.character
 
+import android.os.Bundle
 import androidx.core.os.bundleOf
-import com.xiaoyv.bangumi.databinding.FragmentPersonCharacterBinding
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import androidx.core.view.updatePadding
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
+import com.xiaoyv.bangumi.R
+import com.xiaoyv.bangumi.base.BaseListFragment
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.api.parser.entity.CharacterEntity
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
+import com.xiaoyv.widget.kts.dpi
 
 /**
  * Class: [PersonCharacterFragment]
@@ -11,14 +21,35 @@ import com.xiaoyv.blueprint.constant.NavKey
  * @author why
  * @since 12/4/23
  */
-class PersonCharacterFragment :
-    BaseViewModelFragment<FragmentPersonCharacterBinding, PersonCharacterViewModel>() {
-    override fun initView() {
+class PersonCharacterFragment : BaseListFragment<CharacterEntity, PersonCharacterViewModel>() {
 
+    override fun initArgumentsData(arguments: Bundle) {
+        viewModel.personId = arguments.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.isVirtual = arguments.getBoolean(NavKey.KEY_BOOLEAN)
     }
 
-    override fun initData() {
+    override val isOnlyOnePage: Boolean
+        get() = true
 
+    override fun initView() {
+        super.initView()
+        binding.rvContent.updatePadding(8.dpi, 8.dpi, 8.dpi, 8.dpi)
+    }
+
+    override fun initListener() {
+        super.initListener()
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_cover) {
+            RouteHelper.jumpPerson(it.id, true)
+        }
+    }
+
+    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<CharacterEntity, *> {
+        return PersonCharacterAdapter()
+    }
+
+    override fun onCreateLayoutManager(): LinearLayoutManager {
+        return QuickGridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
     }
 
     companion object {

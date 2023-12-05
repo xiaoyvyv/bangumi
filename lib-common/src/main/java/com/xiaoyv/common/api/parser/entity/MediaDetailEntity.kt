@@ -93,6 +93,7 @@ data class MediaDetailEntity(
         @SerializedName("titleCn") var titleCn: String = "",
         @SerializedName("titleNative") var titleNative: String = "",
         @SerializedName("type") var type: String = "",
+        @SerializedName("characterJobs") var characterJobs: List<String> = emptyList()
     ) : Parcelable
 
     @Parcelize
@@ -103,7 +104,7 @@ data class MediaDetailEntity(
         @SerializedName("characterName") var characterName: String = "",
         @SerializedName("characterNameCn") var characterNameCn: String = "",
         @SerializedName("saveCount") var saveCount: Int = 0,
-        @SerializedName("job") var job: String = "",
+        @SerializedName("jobs") var jobs: List<String> = emptyList(),
         @SerializedName("personJob") var personJob: String = "",
         @SerializedName("persons") var persons: List<MediaCharacterPerson> = emptyList()
     ) : Parcelable

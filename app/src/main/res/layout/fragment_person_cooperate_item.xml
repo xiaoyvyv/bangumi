@@ -12,11 +12,27 @@
         android:layout_height="@dimen/ui_size_0"
         android:layout_margin="@dimen/ui_size_8"
         android:foreground="?attr/selectableItemBackground"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_jobs"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:background="@drawable/shape_bottom_edge_corner"
+        android:gravity="bottom|start"
+        android:paddingHorizontal="@dimen/ui_size_6"
+        android:paddingBottom="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnPrimarySurface"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+        app:layout_constraintEnd_toEndOf="@+id/iv_avatar"
+        app:layout_constraintStart_toStartOf="@+id/iv_avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+        tools:text="歌手、作曲家" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_name"
