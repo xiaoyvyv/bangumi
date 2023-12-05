@@ -268,6 +268,24 @@ interface BgmWebApi {
     @GET("/character/{characterId}")
     suspend fun queryCharacterInfo(@Path("characterId") characterId: String): Document
 
+    @GET("/person/{personId}/collections?page=1")
+    suspend fun queryPersonCollectUser(
+        @Path("personId", encoded = true) personId: String,
+        @Query("page") page: Int? = null,
+    ): Document
+
+    @GET("/character/{personId}/collections?page=1")
+    suspend fun queryCharacterCollectUser(
+        @Path("personId", encoded = true) personId: String,
+        @Query("page") page: Int? = null,
+    ): Document
+
+    @GET("/person/{personId}/collabs")
+    suspend fun queryPersonCooperate(
+        @Path("personId", encoded = true) personId: String,
+        @Query("page") page: Int? = null,
+    ): Document
+
     companion object {
 
         /**

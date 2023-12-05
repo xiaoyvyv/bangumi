@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * @author why
@@ -187,3 +188,64 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
     entity.comments = parserBottomComment()
     return entity
 }
+
+fun Element.parserPersonCollect(): List<MediaDetailEntity.MediaWho> {
+    return select("#memberUserList > li.user").map { item ->
+        val who = MediaDetailEntity.MediaWho()
+        item.select(".userImage img").apply {
+            who.userAvatar = attr("src").optImageUrl()
+            who.userName = attr("alt")
+        }
+        who.userId = item.select(".userContainer a").attr("href").substringAfterLast("/")
+        who.time = item.select(".info").text()
+        who
+    }
+}
+
+fun Element.parserPersonCooperate(): List<PersonEntity.RecentCooperate> {
+    return select(".browserCrtList > div").map { item ->
+        val cooperate = PersonEntity.RecentCooperate()
+
+        item.select("a.avatar").apply {
+            cooperate.avatar = select("img").attr("src").optImageUrl()
+            cooperate.id = attr("href").substringAfterLast("/")
+        }
+
+        item.select("h3").apply {
+            cooperate.name = select("a").text()
+            cooperate.times = select("small").text().parseCount()
+        }
+
+        item.select(".prsn_info").apply {
+            cooperate.jobs = select(".badge_job").map { it.text() }
+            cooperate.infos = select(".tip").text()
+                .split("/")
+                .map {
+                    it.trim().split("\\s".toRegex()).let { list ->
+                        list.getOrNull(0).orEmpty().trim() to list.getOrNull(1).orEmpty().trim()
+                    }
+                }
+            cooperate.opus = select(".subject_tag_section > a").map { subItem ->
+                val relative = MediaDetailEntity.MediaRelative()
+                relative.id = subItem.attr("href").substringAfterLast("/")
+                relative.titleCn = subItem.attr("title")
+                relative.titleNative = subItem.text()
+                relative
+            }
+        }
+        cooperate
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

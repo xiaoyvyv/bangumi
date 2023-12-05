@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.ui.feature.person.overview
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
-import com.xiaoyv.bangumi.databinding.FragmentPersionCharacterBinding
+import com.xiaoyv.bangumi.databinding.FragmentPersonCharacterBinding
 import com.xiaoyv.bangumi.ui.feature.person.PersonViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
@@ -15,7 +15,7 @@ import com.xiaoyv.blueprint.constant.NavKey
  * @since 12/4/23
  */
 class PersonOverviewFragment :
-    BaseViewModelFragment<FragmentPersionCharacterBinding, PersonOverviewViewModel>() {
+    BaseViewModelFragment<FragmentPersonCharacterBinding, PersonOverviewViewModel>() {
 
     private val personViewModel: PersonViewModel by activityViewModels()
 
@@ -36,9 +36,12 @@ class PersonOverviewFragment :
     }
 
     companion object {
-        fun newInstance(personId: String): PersonOverviewFragment {
+        fun newInstance(personId: String, isVirtual: Boolean): PersonOverviewFragment {
             return PersonOverviewFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to personId)
+                arguments = bundleOf(
+                    NavKey.KEY_STRING to personId,
+                    NavKey.KEY_BOOLEAN to isVirtual
+                )
             }
         }
     }

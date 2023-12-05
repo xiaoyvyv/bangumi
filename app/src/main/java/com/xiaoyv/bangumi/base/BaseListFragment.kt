@@ -11,6 +11,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.getAttrColor
 
@@ -57,19 +58,23 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     @CallSuper
     override fun initView() {
         binding.rvContent.setHasFixedSize(hasFixedSize)
-        if (isOnlyOnePage) {
-            binding.rvContent.adapter = contentAdapter
-        } else {
-            binding.rvContent.adapter = adapterHelper.adapter
-        }
-
         binding.srlRefresh.initRefresh { viewModel.isRefresh }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
     }
 
     @CallSuper
     override fun initData() {
+        binding.rvContent.layoutManager = onCreateLayoutManager()
+        if (isOnlyOnePage) {
+            binding.rvContent.adapter = contentAdapter
+        } else {
+            binding.rvContent.adapter = adapterHelper.adapter
+        }
         viewModel.refresh()
+    }
+
+    open fun onCreateLayoutManager(): LinearLayoutManager {
+        return AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
     @CallSuper

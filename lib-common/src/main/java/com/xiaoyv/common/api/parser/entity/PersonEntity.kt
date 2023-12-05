@@ -45,7 +45,10 @@ data class PersonEntity(
         @SerializedName("id") var id: String = "",
         @SerializedName("avatar") var avatar: String = "",
         @SerializedName("name") var name: String = "",
-        @SerializedName("times") var times: Int = 0
+        @SerializedName("times") var times: Int = 0,
+        var jobs: List<String> = emptyList(),
+        var infos: List<Pair<String, String>> = emptyList(),
+        var opus: List<MediaDetailEntity.MediaRelative> = emptyList(),
     ) : Parcelable
 
     @Keep

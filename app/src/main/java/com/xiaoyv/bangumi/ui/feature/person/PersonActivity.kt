@@ -44,6 +44,7 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
     }
 
     override fun initData() {
+        vpAdapter.isVirtual = viewModel.isVirtual
         vpAdapter.personId = viewModel.personId
 
         binding.vpContent.adapter = vpAdapter

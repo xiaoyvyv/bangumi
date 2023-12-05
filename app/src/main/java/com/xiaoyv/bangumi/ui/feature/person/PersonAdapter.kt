@@ -23,8 +23,9 @@ class PersonAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     internal var personId = ""
+    internal var isVirtual = false
 
-    internal val tabs = listOf(
+    private val personTabs = listOf(
         PersonTab("概览", PersonTabType.TYPE_OVERVIEW),
         PersonTab("角色", PersonTabType.TYPE_CHARACTER),
         PersonTab("作品", PersonTabType.TYPE_OPUS),
@@ -32,15 +33,22 @@ class PersonAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         PersonTab("收藏", PersonTabType.TYPE_SAVE)
     )
 
+    private val virtualTabs = listOf(
+        PersonTab("概览", PersonTabType.TYPE_OVERVIEW),
+        PersonTab("收藏", PersonTabType.TYPE_SAVE)
+    )
+
+    internal val tabs get() = if (isVirtual) virtualTabs else personTabs
+
     override fun createFragment(position: Int): Fragment {
         val profileTab = tabs[position]
         val type = profileTab.type
         return when (type) {
-            PersonTabType.TYPE_OVERVIEW -> PersonOverviewFragment.newInstance(personId)
-            PersonTabType.TYPE_CHARACTER -> PersonCharacterFragment.newInstance(personId)
-            PersonTabType.TYPE_OPUS -> PersonOpusFragment.newInstance(personId)
-            PersonTabType.TYPE_COOPERATE -> PersonCooperateFragment.newInstance(personId)
-            PersonTabType.TYPE_SAVE -> PersonCollectFragment.newInstance(personId)
+            PersonTabType.TYPE_OVERVIEW -> PersonOverviewFragment.newInstance(personId, isVirtual)
+            PersonTabType.TYPE_CHARACTER -> PersonCharacterFragment.newInstance(personId, isVirtual)
+            PersonTabType.TYPE_OPUS -> PersonOpusFragment.newInstance(personId, isVirtual)
+            PersonTabType.TYPE_COOPERATE -> PersonCooperateFragment.newInstance(personId, isVirtual)
+            PersonTabType.TYPE_SAVE -> PersonCollectFragment.newInstance(personId, isVirtual)
             else -> EmptyFragment.newInstance()
         }
     }

@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.ui.feature.person.opus
 
 import androidx.core.os.bundleOf
-import com.xiaoyv.bangumi.databinding.FragmentPersionCharacterBinding
+import com.xiaoyv.bangumi.databinding.FragmentPersonCharacterBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 
@@ -12,7 +12,7 @@ import com.xiaoyv.blueprint.constant.NavKey
  * @since 12/4/23
  */
 class PersonOpusFragment :
-    BaseViewModelFragment<FragmentPersionCharacterBinding, PersonOpusViewModel>() {
+    BaseViewModelFragment<FragmentPersonCharacterBinding, PersonOpusViewModel>() {
     override fun initView() {
 
     }
@@ -22,9 +22,12 @@ class PersonOpusFragment :
     }
 
     companion object {
-        fun newInstance(personId: String): PersonOpusFragment {
+        fun newInstance(personId: String, isVirtual: Boolean): PersonOpusFragment {
             return PersonOpusFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to personId)
+                arguments = bundleOf(
+                    NavKey.KEY_STRING to personId,
+                    NavKey.KEY_BOOLEAN to isVirtual
+                )
             }
         }
     }

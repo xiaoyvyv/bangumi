@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.ui.feature.person.character
 
 import androidx.core.os.bundleOf
-import com.xiaoyv.bangumi.databinding.FragmentPersionCharacterBinding
+import com.xiaoyv.bangumi.databinding.FragmentPersonCharacterBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 
@@ -12,7 +12,7 @@ import com.xiaoyv.blueprint.constant.NavKey
  * @since 12/4/23
  */
 class PersonCharacterFragment :
-    BaseViewModelFragment<FragmentPersionCharacterBinding, PersonCharacterViewModel>() {
+    BaseViewModelFragment<FragmentPersonCharacterBinding, PersonCharacterViewModel>() {
     override fun initView() {
 
     }
@@ -22,9 +22,12 @@ class PersonCharacterFragment :
     }
 
     companion object {
-        fun newInstance(personId: String): PersonCharacterFragment {
+        fun newInstance(personId: String, isVirtual: Boolean): PersonCharacterFragment {
             return PersonCharacterFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to personId)
+                arguments = bundleOf(
+                    NavKey.KEY_STRING to personId,
+                    NavKey.KEY_BOOLEAN to isVirtual
+                )
             }
         }
     }

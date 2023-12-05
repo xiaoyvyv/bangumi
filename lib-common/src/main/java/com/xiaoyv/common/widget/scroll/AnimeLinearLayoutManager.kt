@@ -31,7 +31,7 @@ class AnimeLinearLayoutManager : LinearLayoutManager {
 
     override fun calculateExtraLayoutSpace(state: RecyclerView.State, extraLayoutSpace: IntArray) {
         super.calculateExtraLayoutSpace(state, extraLayoutSpace)
-        extraLayoutSpace[0] = ScreenUtils.getScreenHeight() * 2
-        extraLayoutSpace[1] = ScreenUtils.getScreenWidth() * 2
+        extraLayoutSpace[0] = ScreenUtils.getScreenHeight()
+        extraLayoutSpace[1] = ScreenUtils.getScreenWidth()
     }
 }

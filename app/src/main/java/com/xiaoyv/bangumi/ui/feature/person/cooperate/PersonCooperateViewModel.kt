@@ -1,6 +1,9 @@
 package com.xiaoyv.bangumi.ui.feature.person.cooperate
 
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.xiaoyv.bangumi.base.BaseListViewModel
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.PersonEntity
+import com.xiaoyv.common.api.parser.impl.parserPersonCooperate
 
 /**
  * Class: [PersonCooperateViewModel]
@@ -8,6 +11,15 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
  * @author why
  * @since 12/4/23
  */
-class PersonCooperateViewModel : BaseViewModel() {
+class PersonCooperateViewModel : BaseListViewModel<PersonEntity.RecentCooperate>() {
+    /**
+     * 人物ID和是否为虚拟人物
+     */
+    internal var personId: String = ""
+    internal var isVirtual: Boolean = false
 
+    override suspend fun onRequestListImpl(): List<PersonEntity.RecentCooperate> {
+        return BgmApiManager.bgmWebApi.queryPersonCooperate(personId, current)
+            .parserPersonCooperate()
+    }
 }
