@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_performer"
+    android:id="@+id/item_character"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -126,6 +126,6 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0.5"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/iv_cover"
         app:layout_constraintStart_toStartOf="@+id/iv_avatar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

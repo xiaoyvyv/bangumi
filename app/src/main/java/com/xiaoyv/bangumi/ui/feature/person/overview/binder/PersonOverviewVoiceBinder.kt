@@ -2,12 +2,14 @@ package com.xiaoyv.bangumi.ui.feature.person.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListCharacterBinding
+import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListVoiceBinding
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.helper.IdDiffItemCallback
@@ -32,6 +34,7 @@ class PersonOverviewVoiceBinder(
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
+            setOnDebouncedChildClickListener(R.id.item_performer, block = clickMediaItem)
             setOnDebouncedChildClickListener(R.id.iv_avatar, block = clickPersonItem)
             setOnDebouncedChildClickListener(R.id.iv_cover, block = clickMediaItem)
         }
@@ -68,12 +71,12 @@ class PersonOverviewVoiceBinder(
      * 虚拟角色扮演者条目
      */
     private class ItemAdapter : BaseQuickDiffBindingAdapter<PersonEntity.RecentlyPerformer,
-            FragmentPersonOverviewListCharacterBinding>(IdDiffItemCallback()) {
+            FragmentPersonOverviewListVoiceBinding>(IdDiffItemCallback()) {
 
-        override fun BaseQuickBindingHolder<FragmentPersonOverviewListCharacterBinding>.converted(
+        override fun BaseQuickBindingHolder<FragmentPersonOverviewListVoiceBinding>.converted(
             item: PersonEntity.RecentlyPerformer
         ) {
-            binding.ivAvatar.isVisible = item.character.id.isNotBlank()
+            binding.ivAvatar.isInvisible = item.character.id.isBlank()
             binding.ivAvatar.loadImageAnimate(item.character.avatar)
             binding.tvName.text = item.character.characterName
             binding.tvNameCn.text = item.character.personJob

@@ -32,6 +32,7 @@ class PersonOverviewCharacterBinder(
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
+            setOnDebouncedChildClickListener(R.id.item_character, block = clickPersonItem)
             setOnDebouncedChildClickListener(R.id.iv_avatar, block = clickPersonItem)
             setOnDebouncedChildClickListener(R.id.iv_cover, block = clickMediaItem)
         }
