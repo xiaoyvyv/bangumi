@@ -40,6 +40,10 @@ fun Any.toJsonMap(): Map<String, Any> {
     return toJson().fromJson<Map<String, Any>>().orEmpty()
 }
 
+inline fun <reified T> Any.forceCast(): T {
+    return this as T
+}
+
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : Parcelable> parcelableCreator(): Parcelable.Creator<T> =
     T::class.java.getDeclaredField("CREATOR").get(null) as? Parcelable.Creator<T>

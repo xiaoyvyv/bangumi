@@ -8,78 +8,59 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:paddingHorizontal="@dimen/ui_layout_margin"
-    tools:showIn="@layout/fragment_save_list">
+    android:paddingHorizontal="@dimen/ui_layout_margin">
 
-    <FrameLayout
-        android:id="@+id/card_cover"
-        android:layout_width="@dimen/ui_size_100"
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="@dimen/ui_size_80"
         android:layout_height="@dimen/ui_size_0"
         android:layout_marginVertical="@dimen/ui_layout_margin"
-        android:clickable="true"
-        android:focusable="true"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:strokeColor="@color/ui_transparent"
-        app:strokeWidth="@dimen/ui_size_0">
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-        <com.xiaoyv.common.widget.image.AnimeImageView
-            android:id="@+id/iv_cover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_size_40"
-            android:layout_gravity="top"
-            android:background="@drawable/shape_top_edge_corner"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingHorizontal="@dimen/ui_size_6"
-            android:paddingTop="@dimen/ui_size_24"
-            android:paddingBottom="@dimen/ui_size_6"
-            android:textColor="?attr/colorOnPrimarySurface"
-            android:textSize="@dimen/text_label_big"
-            android:textStyle="bold"
-            tools:text="2023" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_tag"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:background="@drawable/shape_bottom_edge_corner"
+        android:ellipsize="end"
+        android:gravity="bottom|start"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/ui_size_6"
+        android:paddingTop="@dimen/ui_size_24"
+        android:paddingBottom="@dimen/ui_size_6"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textSize="@dimen/text_label_big"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cover"
+        app:layout_constraintStart_toStartOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover"
+        tools:text="2023" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_tag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@drawable/shape_bottom_edge_corner"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingHorizontal="@dimen/ui_size_6"
-            android:paddingTop="@dimen/ui_size_24"
-            android:paddingBottom="@dimen/ui_size_6"
-            android:textColor="?attr/colorOnPrimarySurface"
-            android:textSize="@dimen/text_label_big"
-            android:textStyle="bold"
-            tools:text="2023" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/ui_size_6"
-            android:layout_marginEnd="@dimen/ui_size_6"
-            android:drawablePadding="@dimen/ui_size_4"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:textColor="?attr/colorOnPrimarySurface"
-            android:textSize="@dimen/text_label_big"
-            android:textStyle="bold"
-            app:drawableStartCompat="@drawable/ic_round_star"
-            tools:text="99" />
-    </FrameLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/ui_size_6"
+        android:layout_marginEnd="@dimen/ui_size_6"
+        android:drawablePadding="@dimen/ui_size_4"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textSize="@dimen/text_label_big"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_round_star"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover"
+        tools:text="99" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_title"
@@ -93,8 +74,8 @@
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/card_cover"
-        app:layout_constraintTop_toTopOf="@+id/card_cover"
+        app:layout_constraintStart_toEndOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover"
         tools:text="@tools:sample/lorem" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -132,5 +113,5 @@
         android:layout_height="@dimen/ui_size_0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/card_cover" />
+        app:layout_constraintStart_toStartOf="@+id/iv_cover" />
 </androidx.constraintlayout.widget.ConstraintLayout>

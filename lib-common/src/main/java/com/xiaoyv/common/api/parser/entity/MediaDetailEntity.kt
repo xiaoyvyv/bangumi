@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.helper.IdEntity
 import kotlinx.parcelize.Parcelize
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -152,11 +153,11 @@ data class MediaDetailEntity(
     @Parcelize
     @Keep
     data class MediaWho(
-        @SerializedName("userName") var userName: String = "",
-        @SerializedName("userId") var userId: String = "",
-        @SerializedName("userAvatar") var userAvatar: String = "",
+        @SerializedName("id") override var id: String = "",
+        @SerializedName("name") var name: String = "",
+        @SerializedName("avatar") var avatar: String = "",
         @SerializedName("time") var time: String = "",
         @SerializedName("star") var star: Float = 0f
-    ) : Parcelable
+    ) : Parcelable, IdEntity
 }
 

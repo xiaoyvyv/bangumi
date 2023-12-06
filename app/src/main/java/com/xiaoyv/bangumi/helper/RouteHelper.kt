@@ -100,4 +100,8 @@ object RouteHelper {
             )
         )
     }
+
+    fun jumpIndexDetail(id: String) {
+
+    }
 }

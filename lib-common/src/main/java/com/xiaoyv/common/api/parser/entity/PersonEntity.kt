@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.helper.IdEntity
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -25,6 +26,7 @@ data class PersonEntity(
     @SerializedName("isCollected") var isCollected: Boolean = false,
     @SerializedName("gh") var gh: String = "",
     @SerializedName("summary") var summary: CharSequence = "",
+    @SerializedName("infoText") var infoText: String = "",
     @SerializedName("infos") var infos: List<SubInfo> = emptyList(),
     @SerializedName("recommendIndexes") var recommendIndexes: List<MediaDetailEntity.MediaIndex> = emptyList(),
     @SerializedName("whoCollects") var whoCollects: List<MediaDetailEntity.MediaWho> = emptyList(),
@@ -42,38 +44,41 @@ data class PersonEntity(
     @Keep
     @Parcelize
     data class RecentCooperate(
-        @SerializedName("id") var id: String = "",
+        @SerializedName("id") override var id: String = "",
         @SerializedName("avatar") var avatar: String = "",
         @SerializedName("name") var name: String = "",
         @SerializedName("times") var times: Int = 0,
-        var jobs: List<String> = emptyList(),
-        var infos: List<Pair<String, String>> = emptyList(),
-        var opus: List<MediaDetailEntity.MediaRelative> = emptyList(),
-    ) : Parcelable
+        @SerializedName("jobs") var jobs: List<String> = emptyList(),
+        @SerializedName("infos") var infos: List<Pair<String, String>> = emptyList(),
+        @SerializedName("opus") var opus: List<MediaDetailEntity.MediaRelative> = emptyList(),
+    ) : Parcelable, IdEntity
 
     @Keep
     @Parcelize
     data class RecentlyOpus(
+        @SerializedName("id") override var id: String = "",
         @SerializedName("cover") var cover: String = "",
         @SerializedName("titleNative") var titleNative: String = "",
         @SerializedName("titleCn") var titleCn: String = "",
-        @SerializedName("id") var id: String = "",
+        @SerializedName("time") var time: String = "",
+        @SerializedName("desc") var desc: String = "",
         @SerializedName("job") var jobs: List<String> = emptyList(),
         @SerializedName("mediaType") @MediaType var mediaType: String = MediaType.TYPE_UNKNOWN,
-        @SerializedName("rateInfo") var rateInfo: RateInfo = RateInfo()
-    ) : Parcelable
+        @SerializedName("rateInfo") var rateInfo: RateInfo = RateInfo(),
+    ) : Parcelable, IdEntity
 
     @Keep
     @Parcelize
     data class RateInfo(
-        var count: Int = 0,
-        var rate: Float = 0f
+        @SerializedName("count") var count: Int = 0,
+        @SerializedName("rate") var rate: Float = 0f
     ) : Parcelable
 
     @Keep
     @Parcelize
     data class RecentlyPerformer(
+        @SerializedName("id") override var id: String = "",
         @SerializedName("character") var character: MediaDetailEntity.MediaCharacter = MediaDetailEntity.MediaCharacter(),
         @SerializedName("media") var media: MediaDetailEntity.MediaRelative = MediaDetailEntity.MediaRelative()
-    ) : Parcelable
+    ) : Parcelable, IdEntity
 }

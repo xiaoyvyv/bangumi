@@ -42,10 +42,10 @@ fun String.optImageUrl(large: Boolean = true): String {
         startsWith("/") -> "${BgmApiManager.URL_BASE_WEB}$this"
         else -> this
     }
-    val size = if (large) "l" else "m"
+    val size = if (large) "400" else "200"
     return imageUrl
-        .replace("/r/(.*?)/".toRegex(), "/r/600/")
-        .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/pic/\$1/$size/")
+        .replace("/r/(.*?)/".toRegex(), "/")
+        .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/r/$size/pic/\$1/l/")
 }
 
 fun String?.parseCount(): Int {

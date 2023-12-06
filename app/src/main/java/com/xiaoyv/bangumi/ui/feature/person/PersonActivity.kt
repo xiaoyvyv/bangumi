@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityPersonBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
@@ -53,6 +54,18 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
         tabLayoutMediator.attach()
     }
 
+    override fun initListener() {
+        binding.vpContent.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if ((position == 1 || position == 2) && viewModel.isVirtual.not()) {
+                    binding.fabTop.show()
+                } else {
+                    binding.fabTop.hide()
+                }
+            }
+        })
+    }
+
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onPersonLiveData.observe(this) {
             val entity = it ?: return@observe
@@ -66,6 +79,10 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
             binding.tvTitle.text = entity.nameNative
             binding.tvSubtitle.text = entity.nameCn
             binding.tvJob.text = if (entity.isVirtual) "虚拟角色" else entity.job
+        }
+
+        viewModel.vpEnableLiveData.observe(this) {
+            binding.vpContent.isUserInputEnabled = it
         }
     }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_opus"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/ui_size_8">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_0"
+        android:foreground="?attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="3:4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_tag"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:background="@drawable/shape_bottom_edge_corner"
+        android:ellipsize="end"
+        android:gravity="bottom|start"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/ui_size_6"
+        android:paddingBottom="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cover"
+        app:layout_constraintStart_toStartOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover"
+        tools:text="2023" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="1"
+        android:paddingTop="@dimen/ui_size_8"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cover"
+        app:layout_constraintStart_toStartOf="@id/iv_cover"
+        app:layout_constraintTop_toBottomOf="@+id/iv_cover"
+        app:layout_constraintVertical_bias="0"
+        tools:text="@tools:sample/lorem" />
+</androidx.constraintlayout.widget.ConstraintLayout>

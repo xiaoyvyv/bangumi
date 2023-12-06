@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Document
@@ -42,6 +43,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
     select("#columnCrtA").apply {
         entity.poster = select("img.cover").attr("src").optImageUrl()
         entity.posterLarge = select("a.cover").attr("href").optImageUrl()
+        entity.infoText = select(".infobox_container li").map { it.text() }.joinToString("\n")
         entity.infos = select(".infobox_container li").map { item ->
             val subInfo = PersonEntity.SubInfo()
             subInfo.title = item.select(".tip").remove().text().trim().removeSuffix(":")
@@ -69,10 +71,10 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
         entity.whoCollects = select("#crtPanelCollect .groupsLine > li").map { item ->
             val who = MediaDetailEntity.MediaWho()
             item.select(".innerWithAvatar a.avatar").apply {
-                who.userId = attr("href").substringAfterLast("/")
-                who.userName = text()
+                who.id = attr("href").substringAfterLast("/")
+                who.name = text()
             }
-            who.userAvatar = item.select("li > a.avatar span")
+            who.avatar = item.select("li > a.avatar span")
                 .attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
 
@@ -124,7 +126,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
                         character.characterNameCn = select("h3 a.l").text()
                         character.personJob = select("small.grey").text()
                     }
-                    PersonEntity.RecentlyPerformer(character, media)
+                    PersonEntity.RecentlyPerformer(character.id, character, media)
                 }
             }
 
@@ -177,10 +179,10 @@ fun Element.parserPersonCollector(): List<MediaDetailEntity.MediaWho> {
     return select("#memberUserList > li.user").map { item ->
         val who = MediaDetailEntity.MediaWho()
         item.select(".userImage img").apply {
-            who.userAvatar = attr("src").optImageUrl()
-            who.userName = attr("alt")
+            who.avatar = attr("src").optImageUrl()
+            who.name = attr("alt")
         }
-        who.userId = item.select(".userContainer a").attr("href").substringAfterLast("/")
+        who.id = item.select(".userContainer a").attr("href").substringAfterLast("/")
         who.time = item.select(".info").text()
         who
     }
@@ -251,7 +253,8 @@ fun Element.parserPersonOpus(): List<PersonEntity.RecentlyOpus> {
             rateInfo.count = subItem.select(".tip_j").text().parseCount()
             rateInfo
         }
-
+        opus.desc = item.select("p.info").text().substringAfter("/").trim()
+        opus.time = item.select("p.info").text().parserTime()
         opus
     }
 }
@@ -279,6 +282,7 @@ fun Element.parserPersonVoices(): List<CharacterEntity> {
             relative.characterJobs = subItem.select(".badge_job").map { it.text() }
             relative
         }
+        entity.comments = item.parserBottomComment()
         entity
     }
 }

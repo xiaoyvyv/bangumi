@@ -14,6 +14,8 @@ import com.blankj.utilcode.util.ScreenUtils
  */
 class AnimeLinearLayoutManager : LinearLayoutManager {
 
+    var extraLayoutSpaceScale = 1
+
     constructor(context: Context?) : super(context)
 
     constructor(
@@ -31,7 +33,9 @@ class AnimeLinearLayoutManager : LinearLayoutManager {
 
     override fun calculateExtraLayoutSpace(state: RecyclerView.State, extraLayoutSpace: IntArray) {
         super.calculateExtraLayoutSpace(state, extraLayoutSpace)
-        extraLayoutSpace[0] = ScreenUtils.getScreenHeight()
-        extraLayoutSpace[1] = ScreenUtils.getScreenWidth()
+        runCatching {
+            extraLayoutSpace[0] = ScreenUtils.getScreenHeight() * extraLayoutSpaceScale
+            extraLayoutSpace[1] = ScreenUtils.getScreenWidth() * extraLayoutSpaceScale
+        }
     }
 }

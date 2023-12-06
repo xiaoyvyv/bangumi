@@ -19,6 +19,7 @@ class PersonViewModel : BaseViewModel() {
     internal var personId = ""
     internal var isVirtual = false
     internal val onPersonLiveData = MutableLiveData<PersonEntity?>()
+    internal val vpEnableLiveData = MutableLiveData<Boolean>()
 
     override fun onViewCreated() {
         queryPersonInfo()

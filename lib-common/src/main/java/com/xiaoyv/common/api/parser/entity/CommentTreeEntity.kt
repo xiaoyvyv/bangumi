@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.helper.IdEntity
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -14,7 +15,7 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class CommentTreeEntity(
-    @SerializedName("id") var id: String = "",
+    @SerializedName("id") override var id: String = "",
     @SerializedName("floor") var floor: String = "#1",
     @SerializedName("time") var time: String = "",
     @SerializedName("replyJs") var replyJs: String = "",
@@ -25,4 +26,4 @@ data class CommentTreeEntity(
     @SerializedName("replyContent") var replyContent: String = "",
     @SerializedName("topicSubReply") var topicSubReply: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyQuote") var replyQuote: String = ""
-) : Parcelable
+) : Parcelable, IdEntity

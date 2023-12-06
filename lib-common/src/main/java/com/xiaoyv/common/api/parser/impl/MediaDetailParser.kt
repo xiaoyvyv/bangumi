@@ -200,10 +200,10 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val whoSee = MediaDetailEntity.MediaWho()
 
         item.select(".innerWithAvatar a.avatar").apply {
-            whoSee.userId = attr("href").substringAfterLast("/")
-            whoSee.userName = text()
+            whoSee.id = attr("href").substringAfterLast("/")
+            whoSee.name = text()
         }
-        whoSee.userAvatar = item.select("li > a.avatar span")
+        whoSee.avatar = item.select("li > a.avatar span")
             .attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
 

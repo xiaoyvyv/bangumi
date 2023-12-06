@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/ui_size_40"
+        android:layout_height="@dimen/ui_size_40"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:foreground="@drawable/shape_bottom_edge_corner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+        tools:text="@tools:sample/full_names" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_size_12"
+        android:alpha="0.7"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_user"
+        app:layout_constraintStart_toEndOf="@+id/tv_user"
+        app:layout_constraintTop_toTopOf="@+id/tv_user"
+        tools:text="2023-12-21" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_content"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_user"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user"
+        tools:lines="5"
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+        android:id="@+id/rv_sub"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="@+id/tv_content"
+        app:layout_constraintStart_toStartOf="@+id/tv_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        tools:itemCount="2"
+        tools:listitem="@layout/view_comment_item_sub" />
+
+    <View
+        style="@style/Theme.Bangumi.Divider"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_content"
+        app:layout_constraintStart_toStartOf="@+id/tv_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>

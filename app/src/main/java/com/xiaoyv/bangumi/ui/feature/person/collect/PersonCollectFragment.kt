@@ -41,7 +41,7 @@ class PersonCollectFragment :
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
-            RouteHelper.jumpUserDetail(it.userId)
+            RouteHelper.jumpUserDetail(it.id)
         }
     }
 
