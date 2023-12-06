@@ -26,8 +26,8 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 12/6/23
  */
 class PersonOverviewCharacterBinder(
-    private val clickPersonItem: (PersonEntity.RecentlyPerformer) -> Unit,
-    private val clickMediaItem: (PersonEntity.RecentlyPerformer) -> Unit,
+    private val clickPersonItem: (CharacterEntity) -> Unit,
+    private val clickMediaItem: (CharacterEntity) -> Unit,
 ) : BaseMultiItemAdapter.OnMultiItemAdapterListener<PersonOverviewAdapter.Item, BaseQuickBindingHolder<FragmentPersonOverviewListBinding>> {
 
     private val itemAdapter by lazy {

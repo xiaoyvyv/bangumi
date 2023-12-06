@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewSummar
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewVoiceBinder
 import com.xiaoyv.common.config.annotation.PersonBinderClickType
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.widget.kts.useNotNull
 
 /**
  * Class: [PersonOverviewAdapter]
@@ -43,12 +44,14 @@ class PersonOverviewAdapter(
                     RouteHelper.jumpPerson(it.character.id, false)
                 }
             ))
-            .addItemType(TYPE_CHARACTER, PersonOverviewCharacterBinder (
+            .addItemType(TYPE_CHARACTER, PersonOverviewCharacterBinder(
                 clickMediaItem = {
-                    RouteHelper.jumpMediaDetail(it.media.id)
+                    useNotNull(it.from.firstOrNull()) {
+                        RouteHelper.jumpMediaDetail(id)
+                    }
                 },
                 clickPersonItem = {
-                    RouteHelper.jumpPerson(it.character.id, false)
+                    RouteHelper.jumpPerson(it.id, false)
                 }
             ))
             .addItemType(TYPE_OPUS, PersonOverviewOpusBinder {
