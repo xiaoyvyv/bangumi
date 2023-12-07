@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.doOnPreDraw
 import com.google.android.material.appbar.AppBarLayout
@@ -72,7 +71,7 @@ class AnimeAppBarLayout @JvmOverloads constructor(
             val menuItem = menu.getItem(i)
             val icon = menuItem.icon ?: continue
             val tintedIcon = DrawableCompat.wrap(icon)
-            DrawableCompat.setTint(tintedIcon, ContextCompat.getColor(context, tintColor))
+            DrawableCompat.setTint(tintedIcon, tintColor)
             menuItem.icon = tintedIcon
         }
     }
