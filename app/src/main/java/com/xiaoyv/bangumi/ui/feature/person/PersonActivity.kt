@@ -40,7 +40,6 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
     }
 
     override fun initView() {
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
     }
 

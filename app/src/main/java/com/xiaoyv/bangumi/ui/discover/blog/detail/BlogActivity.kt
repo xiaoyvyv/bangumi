@@ -36,8 +36,6 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
 
     override fun initView() {
         blogWeb.startLoad()
-
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
     }
 

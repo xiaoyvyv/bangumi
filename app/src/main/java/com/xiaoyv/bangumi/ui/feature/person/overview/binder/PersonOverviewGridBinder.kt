@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.ui.feature.person.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
@@ -10,6 +9,7 @@ import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewGridBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewGridItemBinding
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.helper.IdDiffItemCallback
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -62,28 +62,11 @@ class PersonOverviewGridBinder(
      * 横向 Grid
      */
     private class ItemAdapter : BaseQuickDiffBindingAdapter<SampleAvatar,
-            FragmentPersonOverviewGridItemBinding>(DiffItemCallback) {
+            FragmentPersonOverviewGridItemBinding>(IdDiffItemCallback()) {
         override fun BaseQuickBindingHolder<FragmentPersonOverviewGridItemBinding>.converted(item: SampleAvatar) {
             binding.ivAvatar.loadImageAnimate(item.image)
             binding.tvName.text = item.title
             binding.tvDesc.text = item.desc
-        }
-
-        private object DiffItemCallback :
-            DiffUtil.ItemCallback<SampleAvatar>() {
-            override fun areItemsTheSame(
-                oldItem: SampleAvatar,
-                newItem: SampleAvatar
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(
-                oldItem: SampleAvatar,
-                newItem: SampleAvatar
-            ): Boolean {
-                return oldItem == newItem
-            }
         }
     }
 }

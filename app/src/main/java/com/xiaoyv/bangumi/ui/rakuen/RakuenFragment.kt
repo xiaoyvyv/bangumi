@@ -2,9 +2,12 @@
 
 package com.xiaoyv.bangumi.ui.rakuen
 
+import androidx.core.view.ViewCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentSuperBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.blueprint.kts.launchUI
+import kotlinx.coroutines.delay
 
 /**
  * Class: [RakuenFragment]

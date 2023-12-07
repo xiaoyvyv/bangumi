@@ -4,6 +4,7 @@ import androidx.core.os.bundleOf
 import com.blankj.utilcode.util.ActivityUtils
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
+import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
@@ -103,5 +104,9 @@ object RouteHelper {
 
     fun jumpIndexDetail(id: String) {
 
+    }
+
+    fun jumpGroupDetail(groupId: String) {
+        GroupDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to groupId))
     }
 }

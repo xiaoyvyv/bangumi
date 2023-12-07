@@ -27,7 +27,6 @@ class PreviewImageActivity :
     }
 
     override fun initView() {
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
     }
 

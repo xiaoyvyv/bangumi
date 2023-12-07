@@ -43,9 +43,7 @@ class EditProfileActivity :
     override fun initView() {
         enableEdgeToEdge()
 
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
-
         binding.rvContent.adapter = contentAdapter
 
         binding.srlRefresh.initRefresh { true }

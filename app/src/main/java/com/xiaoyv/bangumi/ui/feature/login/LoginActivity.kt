@@ -26,8 +26,6 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
 
     override fun initView() {
         enableEdgeToEdge()
-
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
     }
 

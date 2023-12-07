@@ -44,7 +44,6 @@ class MediaDetailActivity :
     }
 
     override fun initView() {
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
         binding.toolbar.title = viewModel.mediaName
     }

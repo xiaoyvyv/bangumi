@@ -12,10 +12,4 @@ import com.google.android.material.textview.MaterialTextView
  */
 open class AnimeTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : MaterialTextView(context, attrs) {
-
-    init {
-
-
-    }
-}
+) : MaterialTextView(context, attrs)

@@ -295,6 +295,9 @@ interface BgmWebApi {
     @GET("/person/{personId}/works/voice")
     suspend fun queryPersonWorkVoices(@Path("personId", encoded = true) personId: String): Document
 
+    @GET("/group/{groupId}")
+    suspend fun queryGroupDetail(@Path("groupId", encoded = true) groupId: String): Document
+
     companion object {
 
         /**

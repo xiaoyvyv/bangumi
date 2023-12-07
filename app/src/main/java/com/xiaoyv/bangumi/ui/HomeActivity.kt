@@ -1,15 +1,16 @@
 package com.xiaoyv.bangumi.ui
 
 import android.view.MotionEvent
-import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
+
 
 /**
  * Class: [HomeActivity]
@@ -30,6 +31,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
 
     override fun initData() {
         robot.disable()
+        RouteHelper.jumpGroupDetail("boring")
     }
 
     override fun initListener() {

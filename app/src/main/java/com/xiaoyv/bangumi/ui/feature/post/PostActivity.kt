@@ -39,7 +39,6 @@ class PostActivity : BaseViewModelActivity<ActivityPostBinding, PostViewModel>()
     }
 
     override fun initView() {
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
     }
 

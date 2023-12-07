@@ -37,8 +37,6 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
 
     override fun initView() {
         topicView.startLoad()
-
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
     }
 

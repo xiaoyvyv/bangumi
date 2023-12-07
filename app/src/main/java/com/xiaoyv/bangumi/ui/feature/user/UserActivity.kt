@@ -63,7 +63,6 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
         randomX(binding.bottomRightTextView, randomOffset)
         randomY(binding.bottomRightTextView, randomOffset)
 
-        setSupportActionBar(binding.toolbar)
         binding.toolbar.initNavBack(this)
     }
 

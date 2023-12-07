@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="NewApi">
+
+    <!-- Widget AppBarLayout -->
+    <style name="Theme.Bangumi.AppBarTheme" parent="@style/Widget.Material3.AppBarLayout">
+        <item name="liftOnScroll">false</item>
+        <item name="elevation">@dimen/ui_layout_elevation</item>
+    </style>
+
+    <!-- Widget Toolbar -->
+    <style name="Theme.Bangumi.Toolbar" parent="Widget.Material3.Toolbar" />
+
+    <!-- Widget CollapsingToolbar -->
+    <style name="Theme.Bangumi.CollapsingToolbar" parent="Widget.Material3.CollapsingToolbar">
+        <item name="forceApplySystemWindowInsetTop">false</item>
+    </style>
+
+
+    <!-- 段落行高自定义 -->
+    <style name="textAppearanceTitleLarge" parent="@style/TextAppearance.Material3.TitleLarge">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceTitleMedium" parent="@style/TextAppearance.Material3.TitleMedium">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceTitleSmall" parent="@style/TextAppearance.Material3.TitleSmall">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceBodyLarge" parent="@style/TextAppearance.Material3.BodyLarge">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceBodyMedium" parent="@style/TextAppearance.Material3.BodyMedium">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceBodySmall" parent="@style/TextAppearance.Material3.BodySmall">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceLabelLarge" parent="@style/TextAppearance.Material3.LabelLarge">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceLabelMedium" parent="@style/TextAppearance.Material3.LabelMedium">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+
+    <style name="textAppearanceLabelSmall" parent="@style/TextAppearance.Material3.LabelSmall">
+        <item name="lineHeight">@null</item>
+        <item name="android:lineHeight">@null</item>
+    </style>
+</resources>

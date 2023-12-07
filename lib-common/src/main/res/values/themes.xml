@@ -30,31 +30,29 @@
     </style>
 
     <style name="Theme.Bangumi" parent="Base.Theme.Bangumi">
-        <item name="appBarLayoutStyle">@style/Theme.Bangumi.AppBarTheme</item>
         <item name="android:fontFamily">@raw/font</item>
         <item name="android:includeFontPadding">false</item>
 
         <!-- Fix CollapsingToolbar with theme material3 -->
         <item name="collapsingToolbarLayoutStyle">@style/Theme.Bangumi.CollapsingToolbar</item>
         <item name="toolbarStyle">@style/Theme.Bangumi.Toolbar</item>
-    </style>
+        <item name="appBarLayoutStyle">@style/Theme.Bangumi.AppBarTheme</item>
 
-    <!-- Widget AppBarLayout -->
-    <style name="Theme.Bangumi.AppBarTheme" parent="@style/Widget.Material3.AppBarLayout">
-        <item name="liftOnScroll">false</item>
-    </style>
-
-    <!-- Widget Toolbar -->
-    <style name="Theme.Bangumi.Toolbar" parent="Widget.Material3.Toolbar" />
-
-    <!-- Widget CollapsingToolbar -->
-    <style name="Theme.Bangumi.CollapsingToolbar" parent="Widget.Material3.CollapsingToolbar">
-        <item name="forceApplySystemWindowInsetTop">false</item>
+        <!-- 段落行高自定义 -->
+        <item name="textAppearanceTitleLarge">@style/textAppearanceTitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/textAppearanceTitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/textAppearanceTitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/textAppearanceBodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/textAppearanceBodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/textAppearanceBodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/textAppearanceLabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/textAppearanceLabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/textAppearanceLabelSmall</item>
     </style>
 
     <style name="Theme.Bangumi.Divider">
         <item name="android:background">?attr/colorOnSurface</item>
-        <item name="android:alpha">0.1</item>
+        <item name="android:alpha">0.05</item>
     </style>
 
     <style name="Theme.Bangumi.ToolbarTitle">
@@ -81,8 +79,5 @@
         <item name="cornerFamily">?attr/shapeCornerFamily</item>
         <item name="cornerSizeTopLeft">@dimen/ui_layout_radius</item>
         <item name="cornerSizeBottomLeft">@dimen/ui_layout_radius</item>
-    </style>
-
-    <style name="test">
     </style>
 </resources>

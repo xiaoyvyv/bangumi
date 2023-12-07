@@ -24,7 +24,7 @@ class AnimeSectionView @JvmOverloads constructor(
             binding.tvItemTitle.text = value
         }
 
-    var more: String = ""
+    var more: String? = ""
         set(value) {
             field = value
             binding.tvMore.text = value
