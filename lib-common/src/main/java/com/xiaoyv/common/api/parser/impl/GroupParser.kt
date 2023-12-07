@@ -4,6 +4,7 @@ import com.xiaoyv.common.api.parser.entity.GroupDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.bean.SampleAvatar
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
@@ -16,12 +17,17 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
     val entity = GroupDetailEntity()
     entity.id = groupId
 
-    select("#columnA").apply {
+    selectLegal("#columnA").apply {
         entity.avatar = select(".grp_box > img").attr("src").optImageUrl()
         entity.name = select("h1.SecondaryNavTitle").text()
         entity.time = select(".grp_box > .tip").text()
         entity.summary = select(".line_detail > .tip").html()
         entity.summaryText = entity.summary.parseHtml().toString()
+
+        select(".chiiBtn").attr("href").also { actionUrl ->
+            entity.gh = actionUrl.substringAfterLast("=")
+            entity.isJoin = actionUrl.contains("bye")
+        }
     }
 
     select("#columnB > .SidePanel").apply {

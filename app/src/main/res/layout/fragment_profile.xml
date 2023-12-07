@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ui_transparent"
         android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout
+            android:id="@id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ui_size_280"
             android:background="?attr/colorPrimaryContainer"
@@ -26,7 +26,7 @@
             app:expandedTitleTextColor="?attr/colorOnPrimarySurface"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:scrimVisibleHeightTrigger="@dimen/ui_size_180"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@id/toolbar">
 
             <com.xiaoyv.common.widget.image.AnimeImageView
                 android:id="@+id/iv_banner"
@@ -89,15 +89,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+                android:id="@id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
                 app:title="Mine" />
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+        </com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout>
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -22,5 +22,7 @@ data class GroupDetailEntity(
     var summary: String = "",
     var summaryText: String = "",
     var recently: List<SampleAvatar> = emptyList(),
-    var otherGroups: List<SampleAvatar> = emptyList()
+    var otherGroups: List<SampleAvatar> = emptyList(),
+    var gh: String = "",
+    var isJoin: Boolean = false
 ) : IdEntity, Parcelable

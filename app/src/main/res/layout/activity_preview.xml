@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+            android:id="@id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/ui_transparent"
@@ -28,5 +28,5 @@
             app:title="图片预览"
             app:titleTextColor="@android:color/white" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,11 +19,17 @@ class GroupDetailViewModel : BaseViewModel() {
     internal var groupId: String = ""
     internal val onGroupDetailLiveData = MutableLiveData<GroupDetailEntity?>()
 
+    internal val isJoined: Boolean
+        get() = onGroupDetailLiveData.value?.isJoin == true
+
+    private val gh: String
+        get() = onGroupDetailLiveData.value?.gh.orEmpty()
+
     override fun onViewCreated() {
         queryGroupDetail()
     }
 
-    private fun queryGroupDetail() {
+    fun queryGroupDetail() {
         launchUI(
             stateView = loadingViewState,
             error = {
@@ -34,6 +40,26 @@ class GroupDetailViewModel : BaseViewModel() {
             block = {
                 onGroupDetailLiveData.value = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.queryGroupDetail(groupId).parserGroupDetail(groupId)
+                }
+            }
+        )
+    }
+
+    fun actionGroup(joinOrExit: Boolean) {
+        launchUI(
+            state = loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+            },
+            block = {
+                val referer = BgmApiManager.URL_BASE_WEB + "/group/" + groupId
+
+                onGroupDetailLiveData.value = withContext(Dispatchers.IO) {
+                    if (joinOrExit) {
+                        BgmApiManager.bgmWebApi.postJoinGroup(referer = referer, groupId, gh)
+                    } else {
+                        BgmApiManager.bgmWebApi.postExitGroup(referer = referer, groupId, gh)
+                    }.parserGroupDetail(groupId)
                 }
             }
         )

@@ -48,7 +48,6 @@ class CommonInterceptor : Interceptor {
         return chain.proceed(
             request
                 .newBuilder()
-                .removeHeader("Referer")
                 .removeHeader("User-Agent")
                 .addHeader("Sec-Fetch-Dest", "empty")
                 .addHeader("Sec-Fetch-Mode", "cors")
@@ -58,7 +57,10 @@ class CommonInterceptor : Interceptor {
                 .addHeader("TE", "trailers")
                 .addHeader("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
                 .addHeader("User-Agent", userAgent)
-                .addHeader("Referer", request.url.toString())
+                .let {
+                    if (!request.header("Referer").isNullOrBlank()) it
+                    else it.addHeader("Referer", request.url.toString())
+                }
                 .build()
         )
     }

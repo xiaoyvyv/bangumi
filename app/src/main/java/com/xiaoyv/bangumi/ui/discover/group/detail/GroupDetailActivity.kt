@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.discover.group.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -11,10 +12,15 @@ import com.xiaoyv.bangumi.databinding.ActivityGroupDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.dialog.UiDialog
 
 /**
  * Class: [GroupDetailActivity]
@@ -55,7 +61,7 @@ class GroupDetailActivity :
         recentlyAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
             RouteHelper.jumpUserDetail(it.id)
         }
-        
+
         otherAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
             RouteHelper.jumpGroupDetail(it.id)
         }
@@ -78,7 +84,39 @@ class GroupDetailActivity :
             otherAdapter.submitList(entity.otherGroups)
 
             binding.clContainer.isVisible = true
+
+            // 刷新
+            invalidateOptionsMenu()
         }
+
+        UserHelper.observe(this) {
+            viewModel.queryGroupDetail()
+        }
+    }
+
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val joined = viewModel.isJoined
+
+        menu.add(if (joined) "退出" else "加入")
+            .setIcon(if (joined) CommonDrawable.ic_group_remove else CommonDrawable.ic_group_add)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                if (UserHelper.isLogin.not()) {
+                    RouteHelper.jumpLogin()
+                    return@setOnMenuItemClickListener true
+                }
+
+                val tip = if (joined) "是否退出该小组？" else "是否加入该小组？"
+                showConfirmDialog(message = tip) {
+                    viewModel.actionGroup(joined.not())
+                }
+                true
+            }
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

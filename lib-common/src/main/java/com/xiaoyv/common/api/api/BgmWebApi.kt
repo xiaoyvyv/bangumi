@@ -12,9 +12,11 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
 import retrofit2.http.Body
+import retrofit2.http.Field
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -297,6 +299,24 @@ interface BgmWebApi {
 
     @GET("/group/{groupId}")
     suspend fun queryGroupDetail(@Path("groupId", encoded = true) groupId: String): Document
+
+    @FormUrlEncoded
+    @POST("/group/{groupId}/bye")
+    suspend fun postExitGroup(
+        @Header("Referer") referer: String,
+        @Path("groupId", encoded = true) groupId: String,
+        @Query("gh") gh: String,
+        @Field("action") action: String = "join-bye"
+    ): Document
+
+    @FormUrlEncoded
+    @POST("/group/{groupId}/join")
+    suspend fun postJoinGroup(
+        @Header("Referer") referer: String,
+        @Path("groupId", encoded = true) groupId: String,
+        @Query("gh") gh: String,
+        @Field("action") action: String = "join-bye"
+    ): Document
 
     companion object {
 

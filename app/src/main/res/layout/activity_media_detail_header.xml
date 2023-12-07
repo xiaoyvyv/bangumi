@@ -9,7 +9,7 @@
     android:layout_gravity="bottom"
     android:fitsSystemWindows="true"
     tools:layout_height="wrap_content"
-    tools:parentTag="com.google.android.material.appbar.CollapsingToolbarLayout"
+    tools:parentTag="com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout"
     tools:showIn="@layout/activity_media_detail">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
