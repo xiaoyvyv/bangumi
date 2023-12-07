@@ -68,7 +68,11 @@ class GroupDetailActivity :
     }
 
     override fun LifecycleOwner.initViewObserver() {
-        binding.stateView.initObserver(this, viewModel.loadingViewState)
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingViewState = viewModel.loadingViewState,
+            loadingBias = 0.4f
+        )
 
         viewModel.onGroupDetailLiveData.observe(this) {
             val entity = it ?: return@observe

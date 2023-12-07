@@ -2,7 +2,7 @@ package com.xiaoyv.common.config.bean
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.xiaoyv.common.config.annotation.PersonBinderClickType
+import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.helper.IdEntity
 import kotlinx.parcelize.Parcelize
 
@@ -19,5 +19,5 @@ data class SampleAvatar(
     var image: String = "",
     var title: String = "",
     var desc: String = "",
-    @PersonBinderClickType var type: Int = 0
+    @SampleImageGridClickType var type: Int = 0
 ) : Parcelable, IdEntity

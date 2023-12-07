@@ -1,9 +1,12 @@
 package com.xiaoyv.bangumi.ui.discover.group
 
+import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.databinding.FragmentGroupBinding
-import com.xiaoyv.bangumi.ui.rakuen.RakuenFragment
-import com.xiaoyv.bangumi.ui.rakuen.RakuenViewModel
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.widget.kts.getAttrColor
 
 /**
  * Class: [GroupFragment]
@@ -11,13 +14,46 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
  * @author why
  * @since 11/24/23
  */
-class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, RakuenViewModel>() {
-    override fun initView() {
+class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, GroupViewModel>() {
+    private val contentAdapter by lazy {
+        GroupAdapter(
+            onClickGroupListener = {
+                RouteHelper.jumpGroupDetail(it.id)
+            },
+            onClickTopicListener = {
+                RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_GROUP)
+            }
+        )
+    }
 
+    override fun initView() {
+        binding.srlRefresh.initRefresh { true }
+        binding.srlRefresh.setColorSchemeColors(requireContext().getAttrColor(GoogleAttr.colorPrimary))
     }
 
     override fun initData() {
+        binding.rvContent.adapter = contentAdapter
 
+        viewModel.queryGroupIndex()
+    }
+
+    override fun initListener() {
+        binding.srlRefresh.setOnRefreshListener {
+            viewModel.queryGroupIndex()
+        }
+    }
+
+    override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingViewState = viewModel.loadingViewState,
+            interceptShowLoading = true
+        )
+
+        viewModel.onGroupIndexLiveData.observe(this) {
+            val entity = it ?: return@observe
+            contentAdapter.submitList(entity)
+        }
     }
 
     companion object {

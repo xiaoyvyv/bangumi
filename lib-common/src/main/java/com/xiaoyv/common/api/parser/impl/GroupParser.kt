@@ -1,13 +1,17 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.GroupDetailEntity
+import com.xiaoyv.common.api.parser.entity.GroupIndexEntity
+import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.bean.SampleAvatar
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * @author why
@@ -53,5 +57,64 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
             }
         }
     }
+    return entity
+}
+
+/**
+ * 解析小组首页
+ */
+fun Element.parserGroupIndex(): GroupIndexEntity {
+    val entity = GroupIndexEntity()
+
+    selectLegal("#columnA").apply {
+        entity.hotGroups = select(".groupsLarge > li").map { item ->
+            val avatar = SampleAvatar()
+            avatar.image = item.select("img").attr("src").optImageUrl()
+            avatar.id = item.select("a").attr("href").substringAfterLast("/")
+            avatar.title = item.select("a").text()
+            avatar.desc = item.select("small").text()
+            avatar
+        }
+        entity.hotTopics = select(".topic_list > tbody > tr")
+            .filterNot { it.select("td").isEmpty() }
+            .map { item ->
+                val sampleEntity = TopicSampleEntity()
+                val tds = item.select("tr td")
+
+                useNotNull(tds.getOrNull(0)) {
+                    sampleEntity.id = select("a").attr("href").substringAfterLast("/")
+                    sampleEntity.commentCount = select("small").text().parseCount()
+                    sampleEntity.title = select("a").text()
+                }
+
+                useNotNull(tds.getOrNull(1)) {
+                    sampleEntity.groupId = select("a").attr("href").substringAfterLast("/")
+                    sampleEntity.groupName = select("a").text()
+                }
+
+                useNotNull(tds.getOrNull(2)) {
+                    sampleEntity.userId = select("a").attr("href").substringAfterLast("/")
+                    sampleEntity.userName = select("a").text()
+                }
+
+                useNotNull(tds.getOrNull(3)) {
+                    sampleEntity.time = text()
+                }
+
+                sampleEntity
+            }
+    }
+
+    select("#columnB").apply {
+        entity.newGroups = select(".groupsSmall > li").map { item ->
+            val avatar = SampleAvatar()
+            avatar.image = item.select("img").attr("src").optImageUrl()
+            avatar.id = item.select(".inner a").attr("href").substringAfterLast("/")
+            avatar.title = item.select(".inner a").text()
+            avatar.desc = item.select("small").text()
+            avatar
+        }
+    }
+
     return entity
 }

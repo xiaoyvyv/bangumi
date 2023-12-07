@@ -1,6 +1,7 @@
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.request.CreateTokenParam
+import com.xiaoyv.common.api.response.NotifyEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.api.response.UploadResultEntity
 import com.xiaoyv.common.config.annotation.BrowserSortType
@@ -34,6 +35,9 @@ interface BgmWebApi {
 
     @GET("/login")
     suspend fun queryLoginPage(): Document
+
+    @GET("/json/notify")
+    suspend fun notify(@Query("_") timestamp: Long): NotifyEntity
 
     /**
      * 验证码
@@ -299,6 +303,9 @@ interface BgmWebApi {
 
     @GET("/group/{groupId}")
     suspend fun queryGroupDetail(@Path("groupId", encoded = true) groupId: String): Document
+
+    @GET("/group/discover")
+    suspend fun queryGroupIndex(): Document
 
     @FormUrlEncoded
     @POST("/group/{groupId}/bye")

@@ -49,17 +49,18 @@ class AnimeStateView @JvmOverloads constructor(
         }
     }
 
-    fun initObserver(
+    inline fun initObserver(
         lifecycleOwner: LifecycleOwner,
         loadingViewState: StateViewLiveData,
         loadingBias: Float = 0.5f,
+        interceptShowLoading: Boolean = false,
         interceptShowContent: Boolean = false,
-        doOnShowContent: () -> Unit = {}
+        crossinline doOnShowContent: () -> Unit = {}
     ) {
         loadingViewState.observe(lifecycleOwner) {
             when (it.type) {
                 StateViewLiveData.StateType.STATE_LOADING -> {
-                    showLoading(loadingBias)
+                    if (interceptShowLoading.not()) showLoading(loadingBias)
                 }
 
                 StateViewLiveData.StateType.STATE_TIPS -> {

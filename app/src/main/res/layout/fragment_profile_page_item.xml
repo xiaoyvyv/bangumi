@@ -43,7 +43,7 @@
         android:linksClickable="true"
         android:paddingVertical="@dimen/ui_size_8"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textColor="?attr/colorAccent"
+        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toStartOf="@+id/tv_time"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"

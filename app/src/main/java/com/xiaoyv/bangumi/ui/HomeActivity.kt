@@ -31,7 +31,6 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
 
     override fun initData() {
         robot.disable()
-        RouteHelper.jumpGroupDetail("boring")
     }
 
     override fun initListener() {

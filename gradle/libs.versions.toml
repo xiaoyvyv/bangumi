@@ -23,12 +23,14 @@ lifecycleViewmodelKtx = "2.6.2"
 navigationFragmentKtx = "2.7.5"
 navigationUiKtx = "2.7.5"
 jetbrainsKotlinJvm = "1.9.0"
+workRuntimeKtx = "2.8.1"
 
 [libraries]
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 blueprint = { module = "io.github.xiaoyvyv:blueprint", version.ref = "blueprint" }
 blueprint-floater = { module = "io.github.xiaoyvyv:floater", version.ref = "blueprint" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "kspVersion" }

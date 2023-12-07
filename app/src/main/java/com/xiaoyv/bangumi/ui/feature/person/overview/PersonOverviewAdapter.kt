@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewGridBi
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewOpusBinder
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewVoiceBinder
-import com.xiaoyv.common.config.annotation.PersonBinderClickType
+import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.helper.RecyclerItemTouchedListener
 import com.xiaoyv.widget.kts.useNotNull
 
@@ -55,7 +55,7 @@ class PersonOverviewAdapter(
                 }
             ))
             .addItemType(TYPE_OPUS, PersonOverviewOpusBinder {
-                clickSubItem(PersonBinderClickType.TYPE_OPUS, it.id)
+                clickSubItem(SampleImageGridClickType.TYPE_OPUS, it.id)
             })
             .onItemViewType { position, list ->
                 list[position].type

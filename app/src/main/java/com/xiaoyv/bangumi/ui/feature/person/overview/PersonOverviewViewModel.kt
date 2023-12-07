@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.ui.feature.person.overview
 
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.common.api.parser.entity.PersonEntity
-import com.xiaoyv.common.config.annotation.PersonBinderClickType
+import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.config.bean.SampleAvatar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -72,7 +72,7 @@ class PersonOverviewViewModel : BaseViewModel() {
                                 it.avatar,
                                 it.name,
                                 String.format("x%d", it.times),
-                                PersonBinderClickType.TYPE_PERSON_REAL
+                                SampleImageGridClickType.TYPE_PERSON_REAL
                             )
                         },
                         type = PersonOverviewAdapter.TYPE_COOPERATE,
@@ -90,7 +90,7 @@ class PersonOverviewViewModel : BaseViewModel() {
                             it.avatar,
                             it.name,
                             it.time,
-                            PersonBinderClickType.TYPE_USER
+                            SampleImageGridClickType.TYPE_USER
                         )
                     },
                     type = PersonOverviewAdapter.TYPE_COLLECTOR,
@@ -107,7 +107,7 @@ class PersonOverviewViewModel : BaseViewModel() {
                             it.userAvatar,
                             it.title,
                             String.format("by：%s", it.userName),
-                            PersonBinderClickType.TYPE_INDEX
+                            SampleImageGridClickType.TYPE_INDEX
                         )
                     },
                     type = PersonOverviewAdapter.TYPE_INDEX,
