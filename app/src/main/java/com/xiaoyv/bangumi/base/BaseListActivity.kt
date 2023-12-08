@@ -38,6 +38,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         onCreateContentAdapter()
     }
 
+    internal open val needResetPositionWhenRefresh = true
     internal open val debugLog = false
     internal open val hasFixedSize = false
     internal open val toolbarTitle = " "
@@ -117,14 +118,14 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing }
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() }
         )
 
         viewModel.onListLiveData.observe(this) {
             if (debugLog) debugLog { "List:\n " + it.toJson(true) }
 
             contentAdapter.submitList(it.orEmpty()) {
-                if (viewModel.isRefresh) {
+                if (viewModel.isRefresh && needResetPositionWhenRefresh) {
                     layoutManager?.scrollToPositionWithOffset(0, 0)
                 }
 
@@ -143,6 +144,10 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
 
     open fun LifecycleOwner.initViewObserverExt() {
 
+    }
+
+    open fun canShowStateLoading(): Boolean {
+        return true
     }
 
     open fun onBindListDataFinish(list: List<T>) {

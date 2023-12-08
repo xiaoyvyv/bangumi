@@ -35,6 +35,9 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
     override val isOnlyOnePage: Boolean
         get() = true
 
+    override val needResetPositionWhenRefresh: Boolean
+        get() = false
+
     override val toolbarTitle: String
         get() = viewModel.fromName.ifBlank { "短信详情" }
 
@@ -87,7 +90,7 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
             inputBinding.etMessage.text = null
         }
 
-        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar_theme) {
             RouteHelper.jumpUserDetail(it.fromId)
         }
 
@@ -105,7 +108,7 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
 
     override fun onBindListDataFinish(list: List<MessageEntity>) {
         // 软键盘打开的情况下，轮询的消息才自动滑动
-        if (viewModel.isPollMessages && viewModel.imeHeight > 0) scrollToBottom()
+        if (viewModel.imeHeight > 0) scrollToBottom()
 
         // 检测是否可以回复
         if (viewModel.replyForm.isEmpty()) {
@@ -120,6 +123,13 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
             }
             inputBinding.etMessage.isEnabled = true
         }
+    }
+
+    /**
+     * 轮询的请求不显示 loading 状态图
+     */
+    override fun canShowStateLoading(): Boolean {
+        return viewModel.isPollMessages.not()
     }
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<MessageEntity, *> {
