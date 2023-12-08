@@ -8,6 +8,8 @@
 
 package com.live2d.sdk.cubism.framework.utils.jsonparser;
 
+import java.util.Objects;
+
 public class CubismJsonString extends ACubismJsonValue {
     /**
      * stringのインスタンスを得る
@@ -40,7 +42,7 @@ public class CubismJsonString extends ACubismJsonValue {
 
         CubismJsonString that = (CubismJsonString) o;
 
-        return stringBuffer != null ? stringBuffer.equals(that.stringBuffer) : that.stringBuffer == null;
+        return Objects.equals(stringBuffer, that.stringBuffer);
     }
 
     @Override

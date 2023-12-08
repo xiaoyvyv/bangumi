@@ -21,7 +21,7 @@ class MediaCommentAdapter : BaseQuickDiffBindingAdapter<MediaCommentEntity,
         binding.tvAttach.text = item.comment
         binding.tvTitle.text = item.userName
         binding.tvTime.text = item.time
-        binding.ivStar.rating = item.star
+        binding.ivStar.rating = item.star / 2f
     }
 
     private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaCommentEntity>() {

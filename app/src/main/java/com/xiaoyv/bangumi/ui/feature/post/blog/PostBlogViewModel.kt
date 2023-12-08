@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.post
+package com.xiaoyv.bangumi.ui.feature.post.blog
 
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.TimeUtils
@@ -21,12 +21,12 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 
 /**
- * Class: [PostViewModel]
+ * Class: [PostBlogViewModel]
  *
  * @author why
  * @since 12/2/23
  */
-class PostViewModel : BaseViewModel() {
+class PostBlogViewModel : BaseViewModel() {
     internal val onCreateEntity = MutableLiveData<BlogCreateEntity>()
 
     /**

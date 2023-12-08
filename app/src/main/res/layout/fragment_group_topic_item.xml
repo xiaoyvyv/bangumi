@@ -17,6 +17,7 @@
         android:layout_marginTop="@dimen/ui_layout_margin"
         android:layout_marginEnd="@dimen/ui_layout_margin"
         android:ellipsize="end"
+        android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
         android:maxLines="2"
         android:paddingBottom="@dimen/ui_size_6"

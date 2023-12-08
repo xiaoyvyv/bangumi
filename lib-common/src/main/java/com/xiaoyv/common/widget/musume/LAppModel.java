@@ -720,11 +720,7 @@ public class LAppModel extends CubismUserModel {
 
             this.<CubismRendererAndroid>getRenderer().bindTexture(modelTextureNumber, glTextureNumber);
 
-            if (LAppDefine.PREMULTIPLIED_ALPHA_ENABLE) {
-                this.<CubismRendererAndroid>getRenderer().isPremultipliedAlpha(true);
-            } else {
-                this.<CubismRendererAndroid>getRenderer().isPremultipliedAlpha(false);
-            }
+            this.<CubismRendererAndroid>getRenderer().isPremultipliedAlpha(LAppDefine.PREMULTIPLIED_ALPHA_ENABLE);
         }
     }
 

@@ -14,6 +14,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.bean.SuperTopicTab
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
 
@@ -72,6 +73,12 @@ class RakuenPageFragment :
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
             RouteHelper.jumpUserDetail(it.userId)
+        }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_action) {
+            requireContext().showConfirmDialog(
+                message = "xxx"
+            )
         }
     }
 

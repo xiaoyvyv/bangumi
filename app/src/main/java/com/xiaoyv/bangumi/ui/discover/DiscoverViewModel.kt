@@ -8,6 +8,4 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
  * @author why
  * @since 11/24/23
  */
-class DiscoverViewModel : BaseViewModel() {
-
-}
+class DiscoverViewModel : BaseViewModel()

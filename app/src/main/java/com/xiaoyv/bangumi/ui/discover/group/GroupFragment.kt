@@ -47,7 +47,8 @@ class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, GroupViewModel
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            interceptShowLoading = true
+            interceptShowLoading = true,
+            showContentDelay = 100
         )
 
         viewModel.onGroupIndexLiveData.observe(this) {

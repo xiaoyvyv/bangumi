@@ -11,6 +11,7 @@ import com.live2d.sdk.cubism.framework.exception.CubismJsonParseException;
 import com.live2d.sdk.cubism.framework.exception.CubismJsonSyntaxErrorException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class has some functions related to JSON.
@@ -56,7 +57,7 @@ public class CubismJson {
      */
     private void parse(byte[] buffer) {
         try {
-            String json = new String(buffer, "UTF-8");
+            String json = new String(buffer, StandardCharsets.UTF_8);
             lexer = new CubismJsonLexer(json);
 
             token = lexer.getNextToken();

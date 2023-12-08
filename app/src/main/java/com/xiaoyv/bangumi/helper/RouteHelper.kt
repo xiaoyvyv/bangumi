@@ -5,11 +5,13 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
+import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
 import com.xiaoyv.bangumi.ui.feature.person.PersonActivity
-import com.xiaoyv.bangumi.ui.feature.post.PostActivity
+import com.xiaoyv.bangumi.ui.feature.post.blog.PostBlogActivity
+import com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
@@ -76,7 +78,14 @@ object RouteHelper {
     fun jumpPostBlog(mediaDetailEntity: MediaDetailEntity? = null) {
         ActivityUtils.startActivity(
             bundleOf(NavKey.KEY_PARCELABLE to mediaDetailEntity),
-            PostActivity::class.java
+            PostBlogActivity::class.java
+        )
+    }
+
+    fun jumpPostTopic(groupId: String) {
+        ActivityUtils.startActivity(
+            bundleOf(NavKey.KEY_STRING to groupId),
+            PostTopicActivity::class.java
         )
     }
 
@@ -108,5 +117,9 @@ object RouteHelper {
 
     fun jumpGroupDetail(groupId: String) {
         GroupDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to groupId))
+    }
+
+    fun jumpGroupTopics(groupId: String) {
+        GroupTopicsActivity::class.open(bundleOf(NavKey.KEY_STRING to groupId))
     }
 }

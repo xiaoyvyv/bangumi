@@ -198,7 +198,7 @@ public class LAppView {
                 int height = LAppDelegate.getInstance().getWindowHeight();
 
                 // モデル描画キャンバス
-                useTarget.createOffscreenFrame((int) width, (int) height, null);
+                useTarget.createOffscreenFrame(width, height, null);
             }
             // レンダリング開始
             useTarget.beginDraw(null);
@@ -411,7 +411,7 @@ public class LAppView {
      */
     private final float[] clearColor = new float[4];
 
-    private CubismOffscreenSurfaceAndroid renderingBuffer = new CubismOffscreenSurfaceAndroid();
+    private final CubismOffscreenSurfaceAndroid renderingBuffer = new CubismOffscreenSurfaceAndroid();
 
     private LAppSprite backSprite;
     private LAppSprite gearSprite;

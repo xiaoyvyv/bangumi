@@ -118,3 +118,38 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
 
     return entity
 }
+
+/**
+ * 解析小组的全部话题列表
+ */
+fun Element.parserGroupTopics(groupId: String): List<TopicSampleEntity> {
+    return select(".topic_list > tbody > tr")
+        .filterNot { it.select("td").isEmpty() }
+        .map { item ->
+            val sampleEntity = TopicSampleEntity()
+            sampleEntity.groupId = groupId
+            sampleEntity.groupName = select("h1.SecondaryNavTitle").text()
+
+            val tds = item.select("tr td")
+
+            useNotNull(tds.getOrNull(0)) {
+                sampleEntity.id = select("a").attr("href").substringAfterLast("/")
+                sampleEntity.title = select("a").text()
+            }
+
+            useNotNull(tds.getOrNull(1)) {
+                sampleEntity.userId = select("a").attr("href").substringAfterLast("/")
+                sampleEntity.userName = select("a").text()
+            }
+
+            useNotNull(tds.getOrNull(2)) {
+                sampleEntity.commentCount = text().parseCount()
+            }
+
+            useNotNull(tds.getOrNull(3)) {
+                sampleEntity.time = text()
+            }
+
+            sampleEntity
+        }
+}

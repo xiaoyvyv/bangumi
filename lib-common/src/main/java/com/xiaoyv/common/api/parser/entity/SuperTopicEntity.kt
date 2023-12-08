@@ -12,8 +12,8 @@ data class SuperTopicEntity(
     var avatarUrl: String = "",
     var title: String = "",
     var titleLink: String = "",
-    var comment: String = "",
     var attachLink: String = "",
     var attachTitle: String = "",
     var time: String = "",
+    var commentCount: Int = 0,
 )

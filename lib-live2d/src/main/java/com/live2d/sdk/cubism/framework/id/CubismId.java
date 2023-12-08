@@ -7,6 +7,8 @@
 
 package com.live2d.sdk.cubism.framework.id;
 
+import java.util.Objects;
+
 /**
  * The name of parameters, parts and Drawaable is held in this class.
  */
@@ -47,7 +49,7 @@ public class CubismId {
 
         CubismId cubismId = (CubismId) o;
 
-        return id != null ? id.equals(cubismId.id) : cubismId.id == null;
+        return Objects.equals(id, cubismId.id);
     }
 
     @Override

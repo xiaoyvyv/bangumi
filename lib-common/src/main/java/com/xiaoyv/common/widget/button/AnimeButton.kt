@@ -12,5 +12,4 @@ import com.google.android.material.button.MaterialButton
  */
 class AnimeButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : MaterialButton(context, attrs) {
-}
+) : MaterialButton(context, attrs)

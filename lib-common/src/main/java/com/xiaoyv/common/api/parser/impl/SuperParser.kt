@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.impl
 import com.xiaoyv.common.api.parser.entity.SuperTopicEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseCount
 import org.jsoup.nodes.Document
 
 /**
@@ -19,11 +20,11 @@ fun Document.parserSuperTopic(): List<SuperTopicEntity> {
 
         superEntity.title = it.select("a.title").text()
         superEntity.titleLink = it.select("a.title").attr("href")
-        superEntity.comment = it.select(".inner small.grey").text()
+        superEntity.commentCount = it.select(".inner small.grey").text().parseCount()
 
         superEntity.attachLink = it.select(".inner .row a").attr("href")
         superEntity.attachTitle = it.select(".inner .row a").text()
-        superEntity.time = it.select(".inner small.time").text()
+        superEntity.time = it.select(".inner small.time").text().trim().removePrefix("...")
 
         superEntity
     }

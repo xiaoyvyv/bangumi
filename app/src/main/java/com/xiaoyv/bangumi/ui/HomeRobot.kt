@@ -54,7 +54,7 @@ class HomeRobot(private val homeActivity: HomeActivity) {
         popupWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popupWindow?.isFocusable = false
         popupWindow?.isTouchable = false
-        popupWindow?.contentView?.bringToFront();
+        popupWindow?.contentView?.bringToFront()
 
         if (attachedToWindow && anchorView != null) {
             show()

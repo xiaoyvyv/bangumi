@@ -74,7 +74,7 @@
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
         <activity
-            android:name="com.xiaoyv.bangumi.ui.feature.post.PostActivity"
+            android:name="com.xiaoyv.bangumi.ui.feature.post.blog.PostBlogActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
         <activity
@@ -91,6 +91,14 @@
             android:exported="false" />
         <activity
             android:name="com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
     </application>

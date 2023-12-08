@@ -307,6 +307,12 @@ interface BgmWebApi {
     @GET("/group/discover")
     suspend fun queryGroupIndex(): Document
 
+    @GET("/group/{groupId}/forum")
+    suspend fun queryGroupTopicList(
+        @Path("groupId", encoded = true) groupId: String,
+        @Query("page") page: Int? = null,
+    ): Document
+
     @FormUrlEncoded
     @POST("/group/{groupId}/bye")
     suspend fun postExitGroup(

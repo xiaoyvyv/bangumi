@@ -20,6 +20,7 @@ import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
 
 /**
@@ -64,6 +65,10 @@ class GroupDetailActivity :
 
         otherAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
             RouteHelper.jumpGroupDetail(it.id)
+        }
+
+        binding.btnEnter.setOnFastLimitClickListener {
+            RouteHelper.jumpGroupTopics(viewModel.groupId)
         }
     }
 

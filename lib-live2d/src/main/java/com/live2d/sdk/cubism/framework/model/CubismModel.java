@@ -1563,9 +1563,9 @@ public class CubismModel {
      */
     private float modelOpacity = 1.0f;
 
-    private List<CubismId> parameterIds = new ArrayList<CubismId>();
-    private List<CubismId> partIds = new ArrayList<CubismId>();
-    private List<CubismId> drawableIds = new ArrayList<CubismId>();
+    private final List<CubismId> parameterIds = new ArrayList<CubismId>();
+    private final List<CubismId> partIds = new ArrayList<CubismId>();
+    private final List<CubismId> drawableIds = new ArrayList<CubismId>();
 
     /**
      * Drawableの乗算色のリスト

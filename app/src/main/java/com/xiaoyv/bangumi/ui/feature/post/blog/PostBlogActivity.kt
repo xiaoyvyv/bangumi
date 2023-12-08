@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.post
+package com.xiaoyv.bangumi.ui.feature.post.blog
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.xiaoyv.bangumi.databinding.ActivityPostBinding
+import com.xiaoyv.bangumi.databinding.ActivityPostBlogBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
@@ -23,12 +23,12 @@ import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getParcelObj
 
 /**
- * Class: [PostActivity]
+ * Class: [PostBlogActivity]
  *
  * @author why
  * @since 12/2/23
  */
-class PostActivity : BaseViewModelActivity<ActivityPostBinding, PostViewModel>() {
+class PostBlogActivity : BaseViewModelActivity<ActivityPostBlogBinding, PostBlogViewModel>() {
 
     private val blogPostWeb by lazy {
         BlogPostView(binding.webView)

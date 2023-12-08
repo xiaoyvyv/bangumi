@@ -29,23 +29,40 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/ui_size_12"
-        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:layout_marginEnd="@dimen/ui_size_12"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
+        android:maxLines="2"
         android:paddingBottom="@dimen/ui_size_6"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_action"
         app:layout_constraintStart_toEndOf="@+id/iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-        tools:text="User A said Book 1" />
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_action"
+        android:layout_width="@dimen/ui_size_20"
+        android:layout_height="@dimen/ui_size_20"
+        android:layout_marginEnd="@dimen/ui_size_12"
+        android:alpha="0.5"
+        android:background="@color/ui_transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+        app:srcCompat="@drawable/ic_action_menu" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_attach"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/ui_size_12"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
+        android:maxLines="2"
         android:paddingTop="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyMedium"
@@ -53,11 +70,11 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_time"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        tools:text="User A said Book 1" />
+        tools:text="@tools:sample/lorem/random" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_time"
-        android:layout_width="@dimen/ui_size_0"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/ui_layout_margin"
         android:paddingTop="@dimen/ui_size_6"

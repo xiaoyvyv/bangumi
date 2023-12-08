@@ -7,6 +7,8 @@
 
 package com.live2d.sdk.cubism.framework.utils.jsonparser;
 
+import java.util.Objects;
+
 /**
  * This class expresses a JSON null Value.
  * It has no fields and methods.
@@ -33,7 +35,7 @@ class CubismJsonNullValue extends ACubismJsonValue {
 
         CubismJsonNullValue that = (CubismJsonNullValue) o;
 
-        return stringBuffer != null ? stringBuffer.equals(that.stringBuffer) : that.stringBuffer == null;
+        return Objects.equals(stringBuffer, that.stringBuffer);
     }
 
     @Override

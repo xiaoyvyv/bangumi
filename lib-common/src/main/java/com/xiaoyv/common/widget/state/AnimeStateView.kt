@@ -7,9 +7,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.databinding.ViewStateBinding
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.widget.stateview.StateViewLiveData
+import kotlinx.coroutines.delay
 
 /**
  * Class: [AnimeStateView]
@@ -23,6 +25,7 @@ class AnimeStateView @JvmOverloads constructor(
     private val binding = ViewStateBinding.inflate(context.inflater, this)
 
     fun showLoading(bias: Float = 0.5f) {
+        isVisible = true
         binding.tvTip.isVisible = false
         binding.ivEmptyImage.isVisible = false
         binding.pbProgress.isVisible = true
@@ -32,12 +35,14 @@ class AnimeStateView @JvmOverloads constructor(
     }
 
     fun showContent() {
+        isVisible = false
         binding.tvTip.isVisible = false
         binding.ivEmptyImage.isVisible = false
         binding.pbProgress.isVisible = false
     }
 
     fun showTip(@DrawableRes image: Int = 0, message: String? = null) {
+        isVisible = true
         binding.pbProgress.isVisible = false
         binding.tvTip.isVisible = true
         binding.ivEmptyImage.isVisible = true
@@ -55,6 +60,7 @@ class AnimeStateView @JvmOverloads constructor(
         loadingBias: Float = 0.5f,
         interceptShowLoading: Boolean = false,
         interceptShowContent: Boolean = false,
+        showContentDelay: Long? = null,
         crossinline doOnShowContent: () -> Unit = {}
     ) {
         loadingViewState.observe(lifecycleOwner) {
@@ -68,8 +74,16 @@ class AnimeStateView @JvmOverloads constructor(
                 }
 
                 StateViewLiveData.StateType.STATE_HIDE -> {
-                    if (interceptShowContent.not()) showContent()
-                    doOnShowContent()
+                    if (showContentDelay == null) {
+                        if (interceptShowContent.not()) showContent()
+                        doOnShowContent()
+                    } else {
+                        lifecycleOwner.launchUI {
+                            delay(showContentDelay)
+                            if (interceptShowContent.not()) showContent()
+                            doOnShowContent()
+                        }
+                    }
                 }
             }
         }

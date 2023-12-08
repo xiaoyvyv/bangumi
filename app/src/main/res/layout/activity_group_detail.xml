@@ -16,12 +16,12 @@
         <com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout
             android:id="@id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_size_180"
+            android:layout_height="@dimen/ui_size_200"
             android:background="?attr/colorPrimaryContainer"
             android:fitsSystemWindows="true"
             android:paddingVertical="@dimen/ui_size_0"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimVisibleHeightTrigger="@dimen/ui_size_120"
+            app:scrimVisibleHeightTrigger="@dimen/ui_size_140"
             app:titleEnabled="false"
             app:toolbarId="@id/toolbar">
 
@@ -62,11 +62,12 @@
 
                 <com.xiaoyv.common.widget.text.AnimeTextView
                     android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/ui_size_0"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/ui_layout_margin"
                     android:textAppearance="?attr/textAppearanceBodyLarge"
                     android:textColor="?attr/colorOnPrimarySurface"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_enter"
                     app:layout_constraintStart_toEndOf="@+id/iv_avatar"
                     app:layout_constraintTop_toTopOf="@id/iv_avatar"
                     tools:text="@tools:sample/full_names" />
@@ -82,6 +83,17 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_name"
                     tools:text="@tools:sample/full_names" />
 
+                <com.xiaoyv.common.widget.button.AnimeButton
+                    android:id="@+id/btn_enter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/ui_size_40"
+                    android:layout_marginEnd="@dimen/ui_layout_margin"
+                    android:padding="@dimen/ui_size_0"
+                    android:text="进入小组"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/iv_avatar" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
