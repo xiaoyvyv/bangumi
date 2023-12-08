@@ -87,7 +87,7 @@ class GroupDetailActivity :
             binding.tvDesc.text = entity.id
             binding.toolbar.title = entity.name
             binding.tvTime.text = entity.time
-            binding.tvSummary.text = entity.summaryText
+            binding.tvSummary.text = entity.summaryText.ifBlank { "这个小组暂时没有介绍呢" }
 
             recentlyAdapter.submitList(entity.recently)
             otherAdapter.submitList(entity.otherGroups)
@@ -99,7 +99,9 @@ class GroupDetailActivity :
         }
 
         UserHelper.observe(this) {
-            viewModel.queryGroupDetail()
+            if (!it.isEmpty) {
+                viewModel.queryGroupDetail()
+            }
         }
     }
 

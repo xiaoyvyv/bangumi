@@ -23,6 +23,14 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
         entity.avatar = select(".headerAvatar span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.nickname = select(".inner .name a").text()
+
+        select(".actions small").apply {
+            entity.ignoreHash = select("a").firstOrNull()?.attr("onclick").orEmpty()
+                .let {
+                    "ignoreUser\\('[\\s\\S]+','(.*?)'\\)".toRegex()
+                        .find(it)?.groupValues?.getOrNull(1).orEmpty()
+                }
+        }
     }
 
     select("#user_home").apply {

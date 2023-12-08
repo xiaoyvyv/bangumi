@@ -53,7 +53,7 @@ class AnimeLoadingDialog(context: Context) : AlertDialog(context), UiDialog {
             setDimAmount(0.25f)
             setBackgroundDrawableResource(com.xiaoyv.widget.R.color.ui_transparent)
             updateWindowParams {
-                width = (ScreenUtils.getScreenWidth() * 0.6).roundToInt()
+                width = (ScreenUtils.getScreenWidth() * 0.5).roundToInt()
             }
         }
 

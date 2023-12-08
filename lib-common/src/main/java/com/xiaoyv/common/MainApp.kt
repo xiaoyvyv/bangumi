@@ -8,6 +8,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.xiaoyv.blueprint.BluePrint
+import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.work.IdleWorker
 import com.xiaoyv.common.widget.emoji.UiFaceManager
@@ -36,11 +37,9 @@ class MainApp : Application() {
         super.onCreate()
         currentApplication = this
         BluePrint.init(this, false)
-
+        H5PreLoadHelper.preloadWebView(this)
         UserHelper.initLoad()
-
         UiFaceManager.manager.initEmojiMap()
-
         startIdleWork()
     }
 

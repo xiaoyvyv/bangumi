@@ -10,8 +10,8 @@
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/ui_size_44"
-        android:layout_height="@dimen/ui_size_44"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
         android:layout_marginVertical="@dimen/ui_layout_margin"
         android:layout_marginStart="@dimen/ui_layout_margin"
         android:layout_marginTop="@dimen/ui_size_12"
@@ -27,8 +27,8 @@
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_character"
-        android:layout_width="@dimen/ui_size_44"
-        android:layout_height="@dimen/ui_size_44"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
         android:layout_marginTop="@dimen/ui_size_12"
         android:layout_marginEnd="@dimen/ui_layout_margin"
         android:layout_marginBottom="@dimen/ui_size_12"
@@ -130,7 +130,8 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:paddingVertical="@dimen/ui_size_8"
-        android:textColor="?attr/colorOnSurface"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="@dimen/text_label"
         app:layout_constraintEnd_toEndOf="@+id/tv_action"
         app:layout_constraintStart_toStartOf="@+id/tv_action"

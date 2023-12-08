@@ -13,12 +13,15 @@ import com.xiaoyv.common.api.parser.impl.parserGroupTopics
  */
 class GroupTopicsViewModel : BaseListViewModel<TopicSampleEntity>() {
     internal var groupId = ""
+    internal var groupName = ""
 
     override suspend fun onRequestListImpl(): List<TopicSampleEntity> {
         require(groupId.isNotBlank()) { "小组不存在" }
-        return BgmApiManager.bgmWebApi.queryGroupTopicList(
+        val (groupName, topics) = BgmApiManager.bgmWebApi.queryGroupTopicList(
             groupId = groupId,
             page = current
         ).parserGroupTopics(groupId)
+        this.groupName = groupName
+        return topics
     }
 }

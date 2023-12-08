@@ -176,8 +176,8 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_progress"
-        android:layout_width="@dimen/ui_size_48"
-        android:layout_height="@dimen/ui_size_48"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
         android:layout_gravity="center"
         android:indeterminate="true"
         app:layout_constraintBottom_toBottomOf="@+id/fl_loading"

@@ -1,12 +1,15 @@
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.request.CreateTokenParam
+import com.xiaoyv.common.api.response.BgmStatusEntity
 import com.xiaoyv.common.api.response.NotifyEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.api.response.UploadResultEntity
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.annotation.MessageBoxType
 import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.config.annotation.TimelineType
 import okhttp3.MultipartBody
@@ -268,6 +271,22 @@ interface BgmWebApi {
     @GET("/person/{personId}")
     suspend fun queryPersonInfo(@Path("personId") personId: String): Document
 
+    @GET("/{type}/{id}/collect")
+    suspend fun postAddCollect(
+        @Header("Referer") referer: String,
+        @Path("type", encoded = true) @BgmPathType type: String,
+        @Path("id", encoded = true) id: String,
+        @Query("gh") gh: String,
+    ): Document
+
+    @GET("/{type}/{id}/erase_collect")
+    suspend fun postRemoveCollect(
+        @Header("Referer") referer: String,
+        @Path("type", encoded = true) @BgmPathType type: String,
+        @Path("id", encoded = true) id: String,
+        @Query("gh") gh: String,
+    ): Document
+
     /**
      * 虚拟人物详情
      */
@@ -331,14 +350,49 @@ interface BgmWebApi {
         @Field("action") action: String = "join-bye"
     ): Document
 
-    companion object {
+    @GET("/notify/all")
+    suspend fun queryNotifyAll(): Document
 
-        /**
-         * 时间胶囊路径
-         */
-        fun timelineUrl(userId: String): String {
-            return if (userId.isBlank()) "timeline"
-            else "user/$userId/timeline"
-        }
-    }
+    /**
+     * 绝交用户
+     */
+    @FormUrlEncoded
+    @POST("/settings/privacy?ajax=1")
+    suspend fun postIgnoreUser(
+        @Field("ignore_user") ignoreUser: String,
+        @Field("formhash") formHash: String,
+        @Field("submit_ignore") submitIgnore: String = "submit_ignore",
+        @Query("ajax") ajax: Int = 1
+    ): BgmStatusEntity
+
+    @GET("/pm/{type}.chii")
+    suspend fun queryMessageList(
+        @Path("type", encoded = true) @MessageBoxType type: String,
+        @Query("page") page: Int
+    ): Document
+
+    @GET("/pm/view/{messageId}.chii")
+    suspend fun queryMessageBox(@Path("messageId", encoded = true) messageId: String): Document
+
+
+    /**
+     * 发送短信
+     *
+     * ```
+     * related	"320667"
+     * msg_receivers	"837364"
+     * current_msg_id	"320667"
+     * formhash	"6a93ef91"
+     * msg_title	"Re:hello?"
+     * msg_body	"22222"
+     * chat	"on"
+     * submit	"回复"
+     * ```
+     */
+    @FormUrlEncoded
+    @POST("/pm/create.chii")
+    suspend fun postMessage(
+        @Header("Referer") referer: String,
+        @FieldMap map: Map<String, String>
+    ): Document
 }

@@ -3,11 +3,8 @@ package com.xiaoyv.common.widget.appbar
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.doOnPreDraw
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.xiaoyv.common.R
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.widget.kts.getAttrColor
@@ -51,28 +48,11 @@ class AnimeAppBarLayout @JvmOverloads constructor(
      */
     private fun configToolbar() {
         if (findViewById<View>(R.id.toolbar_layout) == null) return
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar) ?: return
+        val toolbar = findViewById<AnimeToolbar>(R.id.toolbar) ?: return
         if (isToolbarCollapsed) {
-            toolbar.setNavigationIconTint(context.getAttrColor(android.R.attr.textColorPrimary))
-            toolbar.setTitleTextColor(context.getAttrColor(android.R.attr.textColorPrimary))
-            toolbar.setMenuIconTint(context.getAttrColor(android.R.attr.textColorPrimary))
+            toolbar.refreshColorTheme(context.getAttrColor(android.R.attr.textColorPrimary))
         } else {
-            toolbar.setNavigationIconTint(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-            toolbar.setTitleTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-            toolbar.setMenuIconTint(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-        }
-    }
-
-    /**
-     * 菜单项图标
-     */
-    private fun Toolbar.setMenuIconTint(tintColor: Int) {
-        for (i in 0 until menu.size()) {
-            val menuItem = menu.getItem(i)
-            val icon = menuItem.icon ?: continue
-            val tintedIcon = DrawableCompat.wrap(icon)
-            DrawableCompat.setTint(tintedIcon, tintColor)
-            menuItem.icon = tintedIcon
+            toolbar.refreshColorTheme(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
         }
     }
 }

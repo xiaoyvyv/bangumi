@@ -95,7 +95,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            interceptShowContent = true
+            canShowContent = { false }
         )
 
         viewModel.onBlogDetailLiveData.observe(this) {

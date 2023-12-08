@@ -24,17 +24,21 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
 
     select("#headerSubject").apply {
         entity.nameCn = select("small").text()
-        entity.nameNative = select(".nameSingle a").attr("title")
-        // /person/17491/collect?gh=275b091c
-        // /person/17491/erase_collect?gh=275b091c
+        select(".nameSingle a").apply {
+            entity.nameNative = text()
+
+            if (entity.nameCn.isBlank()) {
+                entity.nameCn = attr("title")
+            }
+        }
+
         select(".collect a").apply {
             if (isEmpty()) {
                 entity.isCollected = false
-
             } else {
                 attr("href").apply {
-                    entity.isCollected = !contains("erase_collect")
                     entity.gh = substringAfterLast("=")
+                    entity.isCollected = contains("erase_collect")
                 }
             }
         }
@@ -43,7 +47,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
     select("#columnCrtA").apply {
         entity.poster = select("img.cover").attr("src").optImageUrl()
         entity.posterLarge = select("a.cover").attr("href").optImageUrl()
-        entity.infoText = select(".infobox_container li").map { it.text() }.joinToString("\n")
+        entity.infoText = select(".infobox_container li").joinToString("\n") { it.text() }
         entity.infos = select(".infobox_container li").map { item ->
             val subInfo = PersonEntity.SubInfo()
             subInfo.title = item.select(".tip").remove().text().trim().removeSuffix(":")

@@ -43,9 +43,15 @@ fun String.optImageUrl(large: Boolean = true): String {
         else -> this
     }
     val size = if (large) "400" else "200"
+    val defaultImage = "file:///android_asset/image/info_only.jpg"
     return imageUrl
         .replace("/r/(.*?)/".toRegex(), "/")
         .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/r/$size/pic/\$1/l/")
+        .replace("https://(.*?)/info_only.png".toRegex(), defaultImage)
+        .replace("https://(.*?)/no_icon.jpg".toRegex(), defaultImage)
+        .replace("https://(.*?)/no_icon_subject.png".toRegex(), defaultImage)
+        .replace("https://(.*?)/icon.jpg".toRegex(), defaultImage)
+        .ifBlank { defaultImage }
 }
 
 fun String?.parseCount(): Int {

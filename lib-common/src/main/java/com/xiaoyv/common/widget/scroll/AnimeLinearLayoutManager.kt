@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ScreenUtils
+import kotlin.math.roundToInt
 
 /**
  * Class: [AnimeLinearLayoutManager]
@@ -14,7 +15,7 @@ import com.blankj.utilcode.util.ScreenUtils
  */
 class AnimeLinearLayoutManager : LinearLayoutManager {
 
-    var extraLayoutSpaceScale = 1
+    var extraLayoutSpaceScale: Float = 1f
 
     constructor(context: Context?) : super(context)
 
@@ -34,8 +35,8 @@ class AnimeLinearLayoutManager : LinearLayoutManager {
     override fun calculateExtraLayoutSpace(state: RecyclerView.State, extraLayoutSpace: IntArray) {
         super.calculateExtraLayoutSpace(state, extraLayoutSpace)
         runCatching {
-            extraLayoutSpace[0] = ScreenUtils.getScreenHeight() * extraLayoutSpaceScale
-            extraLayoutSpace[1] = ScreenUtils.getScreenWidth() * extraLayoutSpaceScale
+            extraLayoutSpace[0] = (ScreenUtils.getScreenHeight() * extraLayoutSpaceScale).roundToInt()
+            extraLayoutSpace[1] = (ScreenUtils.getScreenWidth() * extraLayoutSpaceScale).roundToInt()
         }
     }
 }

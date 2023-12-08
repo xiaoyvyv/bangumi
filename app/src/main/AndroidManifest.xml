@@ -101,6 +101,23 @@
             android:name="com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.notify.NotifyActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.message.MessageActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.setting.SettingActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.message.detail.MessageDetailActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
     </application>
 
 </manifest>

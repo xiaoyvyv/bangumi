@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/ui_size_44"
-        android:layout_height="@dimen/ui_size_44"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
         android:layout_marginVertical="@dimen/ui_layout_margin"
         android:layout_marginStart="@dimen/ui_layout_margin"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,8 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_size_6"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="@dimen/text_label"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_attach"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="12 min" />

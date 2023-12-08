@@ -29,7 +29,7 @@
         android:gravity="center"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="@string/common_empty_tip"
+        android:text="@string/common_error_tip"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:visibility="gone"
@@ -38,8 +38,8 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_progress"
-        android:layout_width="@dimen/ui_size_48"
-        android:layout_height="@dimen/ui_size_48"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
         android:indeterminate="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -58,7 +58,7 @@ class PostBlogActivity : BaseViewModelActivity<ActivityPostBlogBinding, PostBlog
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            interceptShowContent = true
+            canShowContent = { false }
         )
 
         viewModel.onCreateEntity.observe(this) {

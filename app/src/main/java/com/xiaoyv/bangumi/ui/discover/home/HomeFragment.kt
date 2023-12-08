@@ -1,10 +1,12 @@
 package com.xiaoyv.bangumi.ui.discover.home
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.kts.useNotNull
 
 /**
@@ -22,11 +24,14 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
     }
 
     override fun initView() {
-        binding.rvContent.adapter = contentAdapter
+        binding.rvContent.layoutManager =
+            AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false).apply {
+                extraLayoutSpaceScale = 2.5f
+            }
     }
 
     override fun initData() {
-
+        binding.rvContent.adapter = contentAdapter
     }
 
     override fun initListener() {

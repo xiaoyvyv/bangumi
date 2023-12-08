@@ -6,6 +6,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.GroupDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserGroupDetail
+import com.xiaoyv.common.config.annotation.BgmPathType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -52,7 +53,7 @@ class GroupDetailViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
-                val referer = BgmApiManager.URL_BASE_WEB + "/group/" + groupId
+                val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_GROUP, groupId)
 
                 onGroupDetailLiveData.value = withContext(Dispatchers.IO) {
                     if (joinOrExit) {

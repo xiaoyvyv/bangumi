@@ -122,13 +122,14 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
 /**
  * 解析小组的全部话题列表
  */
-fun Element.parserGroupTopics(groupId: String): List<TopicSampleEntity> {
-    return select(".topic_list > tbody > tr")
+fun Element.parserGroupTopics(groupId: String): Pair<String, List<TopicSampleEntity>> {
+    val groupName = select("h1.SecondaryNavTitle").text()
+    return groupName to select(".topic_list > tbody > tr")
         .filterNot { it.select("td").isEmpty() }
         .map { item ->
             val sampleEntity = TopicSampleEntity()
             sampleEntity.groupId = groupId
-            sampleEntity.groupName = select("h1.SecondaryNavTitle").text()
+            sampleEntity.groupName = groupName
 
             val tds = item.select("tr td")
 

@@ -6,17 +6,23 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chad.library.adapter.base.util.addOnDebouncedChildClick
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentTimelinePageBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.SuperTopicTab
+import com.xiaoyv.common.helper.showActionMenu
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
-import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
+import com.xiaoyv.widget.kts.useNotNull
 
 /**
  * Class: [RakuenPageFragment]
@@ -51,35 +57,57 @@ class RakuenPageFragment :
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_super) {
-            val titleLink = it.titleLink
-            val targetId = titleLink.substringAfterLast("/")
-
-            when {
-                titleLink.contains("/blog/") -> {
-                    RouteHelper.jumpBlogDetail(targetId)
+            when (it.pathType) {
+                BgmPathType.TYPE_BLOG -> {
+                    RouteHelper.jumpBlogDetail(it.id)
                 }
 
-                titleLink.contains("/topic/") -> {
-                    val topicType = "/topic/(.*?)/".toRegex()
-                        .find(titleLink)?.groupValues?.getOrNull(1)
-                        .orEmpty()
-
-                    if (topicType.isNotBlank()) {
-                        RouteHelper.jumpTopicDetail(targetId, topicType)
+                BgmPathType.TYPE_TOPIC -> {
+                    if (it.topicType.isNotBlank()) {
+                        RouteHelper.jumpTopicDetail(it.id, it.topicType)
                     }
                 }
             }
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
-            RouteHelper.jumpUserDetail(it.userId)
+            when (it.pathType) {
+                BgmPathType.TYPE_BLOG -> {
+                    RouteHelper.jumpUserDetail(it.avatarId)
+                }
+
+                BgmPathType.TYPE_TOPIC -> when (it.topicType) {
+                    TopicType.TYPE_EP,
+                    TopicType.TYPE_SUBJECT -> {
+                        RouteHelper.jumpMediaDetail(it.attachId)
+                    }
+
+                    TopicType.TYPE_GROUP -> {
+                        RouteHelper.jumpGroupDetail(it.attachId)
+                    }
+
+                    TopicType.TYPE_PERSON,
+                    TopicType.TYPE_CRT -> {
+                        RouteHelper.jumpTopicDetail(it.id, it.topicType)
+                    }
+                }
+            }
         }
 
-        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_action) {
-            requireContext().showConfirmDialog(
-                message = "xxx"
-            )
+        // 屏蔽用户相关菜单
+        contentAdapter.addOnDebouncedChildClick(R.id.iv_action) { _, view, position ->
+            useNotNull(contentAdapter.getItem(position)) {
+                requireActivity().showActionMenu(
+                    view,
+                    avatarId,
+                    viewModel.loadingDialogState(cancelable = false)
+                )
+            }
         }
+    }
+
+    override fun createLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(requireContext())
     }
 
     override fun LifecycleOwner.initViewObserver() {

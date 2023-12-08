@@ -9,13 +9,12 @@ import com.xiaoyv.common.api.api.BgmWebApi
 import com.xiaoyv.common.api.converter.WebDocumentConverter
 import com.xiaoyv.common.api.converter.WebHtmlConverter
 import com.xiaoyv.common.api.interceptor.CommonInterceptor
+import com.xiaoyv.common.config.annotation.BgmPathType
 import okhttp3.CookieJar
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Arrays
 import java.util.concurrent.TimeUnit
 
 
@@ -107,6 +106,19 @@ class BgmApiManager {
 
         fun resetCookie() {
             instance.resetCookie()
+        }
+
+        /**
+         * 构建 Referer
+         */
+        fun buildReferer(@BgmPathType type: String, id: String): String {
+            return when (type) {
+                BgmPathType.TYPE_CHARACTER -> "$URL_BASE_WEB/character/$id"
+                BgmPathType.TYPE_GROUP -> "$URL_BASE_WEB/group/$id"
+                BgmPathType.TYPE_PERSON -> "$URL_BASE_WEB/person/$id"
+                BgmPathType.TYPE_MESSAGE_BOX -> "$URL_BASE_WEB/pm/view/$id.chii"
+                else -> URL_BASE_WEB
+            }
         }
     }
 }

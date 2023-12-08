@@ -1,21 +1,27 @@
 package com.xiaoyv.bangumi.base
 
 import android.view.MenuItem
+import android.view.MotionEvent
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.KeyboardUtils
+import com.blankj.utilcode.util.StringUtils
 import com.chad.library.adapter.base.BaseDifferAdapter
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.xiaoyv.bangumi.databinding.ActivityListBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.getAttrColor
+import com.xiaoyv.widget.kts.useNotNull
 
 /**
  * Class: [BaseListActivity]
@@ -31,6 +37,14 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
         onCreateContentAdapter()
     }
+
+    internal open val debugLog = false
+    internal open val hasFixedSize = false
+    internal open val toolbarTitle = " "
+
+    internal open val layoutManager: LinearLayoutManager?
+        get() = binding.rvContent.layoutManager as? LinearLayoutManager
+
 
     private val adapterHelper by lazy {
         QuickAdapterHelper.Builder(contentAdapter)
@@ -50,12 +64,6 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
             .build()
     }
 
-    internal open val hasFixedSize = false
-    internal open val toolbarTitle = " "
-
-    internal open val layoutManager: LinearLayoutManager?
-        get() = binding.rvContent.layoutManager as? LinearLayoutManager
-
     abstract fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<T, *>
 
     @CallSuper
@@ -64,7 +72,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         binding.toolbar.title = toolbarTitle
 
         binding.rvContent.setHasFixedSize(hasFixedSize)
-        binding.srlRefresh.initRefresh { viewModel.isRefresh }
+        binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(getAttrColor(GoogleAttr.colorPrimary))
     }
 
@@ -88,12 +96,32 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         binding.srlRefresh.setOnRefreshListener {
             viewModel.refresh()
         }
+
+        // 隐藏软键盘
+        binding.rvContent.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                KeyboardUtils.hideSoftInput(this@BaseListActivity)
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+            }
+        })
     }
 
     @CallSuper
     override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingViewState = viewModel.loadingViewState,
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing }
+        )
+
         viewModel.onListLiveData.observe(this) {
-            debugLog { "List:\n " + it.toJson(true) }
+            if (debugLog) debugLog { "List:\n " + it.toJson(true) }
 
             contentAdapter.submitList(it.orEmpty()) {
                 if (viewModel.isRefresh) {
@@ -103,12 +131,36 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
 
                 onBindListDataFinish(it.orEmpty())
+
+                if (viewModel.isRefresh && it.isNullOrEmpty()) {
+                    binding.stateView.showTip(message = StringUtils.getString(CommonString.common_empty_tip))
+                }
             }
         }
+
+        initViewObserverExt()
+    }
+
+    open fun LifecycleOwner.initViewObserverExt() {
+
     }
 
     open fun onBindListDataFinish(list: List<T>) {
 
+    }
+
+    fun scrollToBottom() {
+        useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
+            val position = (contentAdapter.itemCount - 1).coerceAtLeast(0)
+            scrollToPositionWithOffset(position, 0)
+        }
+    }
+
+    fun smoothScrollToBottom() {
+        useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
+            val position = (contentAdapter.itemCount - 1).coerceAtLeast(0)
+            smoothScrollToPosition(binding.rvContent, RecyclerView.State(), position)
+        }
     }
 
     @CallSuper

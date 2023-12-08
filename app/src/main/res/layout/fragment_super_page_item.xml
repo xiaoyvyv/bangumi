@@ -11,8 +11,8 @@
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/ui_size_44"
-        android:layout_height="@dimen/ui_size_44"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
         android:layout_marginVertical="@dimen/ui_layout_margin"
         android:layout_marginStart="@dimen/ui_layout_margin"
         android:clickable="true"
@@ -29,7 +29,6 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/ui_size_12"
-        android:layout_marginEnd="@dimen/ui_size_12"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
@@ -45,20 +44,20 @@
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_action"
-        android:layout_width="@dimen/ui_size_20"
-        android:layout_height="@dimen/ui_size_20"
-        android:layout_marginEnd="@dimen/ui_size_12"
+        android:layout_width="@dimen/ui_size_44"
+        android:layout_height="@dimen/ui_size_44"
+        android:layout_marginTop="@dimen/ui_size_6"
         android:alpha="0.5"
         android:background="@color/ui_transparent"
+        android:padding="@dimen/ui_size_12"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_action_menu" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_attach"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/ui_size_12"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
@@ -76,11 +75,11 @@
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:paddingHorizontal="@dimen/ui_size_16"
         android:paddingTop="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_12"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="@dimen/text_label"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="@+id/tv_attach"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="12 min" />

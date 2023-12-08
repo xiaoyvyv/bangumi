@@ -96,7 +96,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            interceptShowContent = true
+            canShowContent = { false }
         )
 
         viewModel.onTopicDetailLiveData.observe(this) {

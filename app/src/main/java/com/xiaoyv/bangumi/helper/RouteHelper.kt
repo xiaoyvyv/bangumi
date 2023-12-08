@@ -8,11 +8,15 @@ import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
 import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
+import com.xiaoyv.bangumi.ui.feature.message.MessageActivity
+import com.xiaoyv.bangumi.ui.feature.message.detail.MessageDetailActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
+import com.xiaoyv.bangumi.ui.feature.notify.NotifyActivity
 import com.xiaoyv.bangumi.ui.feature.person.PersonActivity
 import com.xiaoyv.bangumi.ui.feature.post.blog.PostBlogActivity
 import com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
+import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
@@ -21,6 +25,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.kts.debugLog
 
 /**
  * Class: [RouteHelper]
@@ -121,5 +126,34 @@ object RouteHelper {
 
     fun jumpGroupTopics(groupId: String) {
         GroupTopicsActivity::class.open(bundleOf(NavKey.KEY_STRING to groupId))
+    }
+
+    fun jumpNotify() {
+        ActivityUtils.startActivity(NotifyActivity::class.java)
+    }
+
+    fun jumpMessage() {
+        ActivityUtils.startActivity(MessageActivity::class.java)
+    }
+
+
+    fun jumpMessageDetail(messageId: String, fromName: String) {
+        MessageDetailActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to messageId,
+                NavKey.KEY_STRING_SECOND to fromName
+            )
+        )
+    }
+
+    fun jumpSetting() {
+        ActivityUtils.startActivity(SettingActivity::class.java)
+    }
+
+    /**
+     * - https://bangumi.tv/group/topic/390252#post_2535628
+     */
+    fun handleUrl(titleLink: String) {
+        debugLog { "Handle Url: $titleLink" }
     }
 }

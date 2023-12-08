@@ -49,7 +49,7 @@ class UserHelper private constructor() {
             withContext(Dispatchers.IO) {
                 // 无登录历史跳过校验
                 if (userEntity.isEmpty) {
-                    clearUserInfo(true)
+                    clearUserInfo()
 
                     debugLog { "校验缓存用户：无登录历史" }
                     return@withContext
@@ -120,9 +120,10 @@ class UserHelper private constructor() {
     private fun clearUserInfo(clearEmailAndPassword: Boolean = false) {
         BgmApiManager.resetCookie()
         userSp.put(KEY_USER_INFO, "")
-        if (clearEmailAndPassword) {
-            userSp.clear()
-        }
+
+        // 是否清空账户和密码
+        if (clearEmailAndPassword) userSp.clear()
+
         onUserInfoLiveData.sendValue(empty)
     }
 

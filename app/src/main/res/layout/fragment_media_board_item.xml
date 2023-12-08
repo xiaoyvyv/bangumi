@@ -63,8 +63,8 @@
         android:layout_marginEnd="@dimen/ui_layout_margin"
         android:paddingTop="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_12"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="@dimen/text_label"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_content"
         tools:text="12 min" />

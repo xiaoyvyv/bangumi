@@ -2,9 +2,9 @@ package com.xiaoyv.bangumi.ui
 
 import android.view.MotionEvent
 import androidx.lifecycle.LifecycleOwner
+import com.google.android.material.badge.BadgeDrawable
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
-import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.kts.debugLog
@@ -50,6 +50,16 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
         currentApplication.globalRobotSpeech.observe(this) {
             debugLog { "春菜：$it" }
             robot.onSay(it)
+        }
+
+        currentApplication.globalNotify.observe(this) {
+            val badge = binding.navView.getOrCreateBadge(R.id.bottom_menu_profile)
+            if (it != 0) {
+                badge.number = it
+                badge.badgeGravity = BadgeDrawable.TOP_END
+            } else {
+                badge.clearNumber()
+            }
         }
     }
 

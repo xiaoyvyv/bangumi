@@ -13,6 +13,7 @@ data class UserDetailEntity(
     var sign: String = "",
     var lastOnlineTime: String = "",
     var createTime: String = "",
+    var ignoreHash: String = "",
     var chart: UserChart = UserChart(),
     var networkService: List<NetworkService> = emptyList(),
     var userSynchronize: Synchronize = Synchronize(),

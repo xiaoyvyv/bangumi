@@ -12,8 +12,8 @@
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/ui_size_50"
-        android:layout_height="@dimen/ui_size_50"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
         android:layout_marginVertical="@dimen/ui_size_16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

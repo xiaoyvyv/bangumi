@@ -6,6 +6,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog
@@ -47,9 +48,10 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
     override fun initListener() {
         binding.toolbar.menu.apply {
             add("Timeline")
-                .setIcon(CommonDrawable.ic_timeline)
+                .setIcon(CommonDrawable.ic_notifications)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
+                    RouteHelper.jumpNotify()
                     true
                 }
 
@@ -57,7 +59,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                 .setIcon(CommonDrawable.ic_email_normal)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
-
+                    RouteHelper.jumpMessage()
                     true
                 }
 
@@ -65,7 +67,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                 .setIcon(CommonDrawable.ic_setting)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
-
+                    RouteHelper.jumpSetting()
                     true
                 }
         }
@@ -93,6 +95,16 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                 binding.toolbarLayout.title = "访客身份"
                 binding.tvEmail.text = "点击去登录"
             }
+        }
+
+        currentApplication.globalNotify.observe(this) {
+//            val badge = binding.navView.getOrCreateBadge(R.id.bottom_menu_profile)
+//            if (it != 0) {
+//                badge.number = it
+//                badge.badgeGravity = BadgeDrawable.TOP_END
+//            } else {
+//                badge.clearNumber()
+//            }
         }
     }
 

@@ -2,6 +2,7 @@
 
 package com.xiaoyv.bangumi.ui.rakuen.page
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.FragmentSuperPageItemBinding
@@ -27,6 +28,7 @@ class RakuenPageAdapter : BaseQuickDiffBindingAdapter<SuperTopicEntity,
         binding.ivAvatar.loadImageAnimate(item.avatarUrl)
         binding.tvAttach.text = item.attachTitle
         binding.tvTime.text = item.time
+        binding.ivAction.isVisible = item.canShowActionMenu
 
         SpanUtils.with(binding.tvTitle)
             .append(item.title)

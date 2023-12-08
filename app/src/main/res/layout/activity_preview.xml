@@ -18,7 +18,7 @@
         android:fitsSystemWindows="true"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
             android:id="@id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"

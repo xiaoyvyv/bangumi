@@ -2,19 +2,26 @@ package com.xiaoyv.bangumi.ui.feature.person
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityPersonBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.loadImageBlurBackground
+import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.dialog.UiDialog
 
 /**
  * Class: [PersonActivity]
@@ -78,11 +85,37 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
             binding.tvTitle.text = entity.nameNative
             binding.tvSubtitle.text = entity.nameCn
             binding.tvJob.text = if (entity.isVirtual) "虚拟角色" else entity.job
+
+            invalidateOptionsMenu()
         }
 
         viewModel.vpEnableLiveData.observe(this) {
             binding.vpContent.isUserInputEnabled = it
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val isCollected = viewModel.isCollected
+        menu.add(if (isCollected) "取消收藏" else "收藏")
+            .setIcon(if (isCollected) CommonDrawable.ic_bookmark_added else CommonDrawable.ic_bookmark_add)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                if (UserHelper.isLogin.not()) {
+                    RouteHelper.jumpLogin()
+                    return@setOnMenuItemClickListener true
+                }
+
+                val tip = if (isCollected) "是否取消收藏该人物？" else "是否收藏该人物？"
+                showConfirmDialog(message = tip) {
+                    viewModel.actionCollection(isCollected.not())
+                }
+                true
+            }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

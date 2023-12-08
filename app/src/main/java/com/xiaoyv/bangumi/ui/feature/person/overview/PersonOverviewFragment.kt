@@ -58,7 +58,7 @@ class PersonOverviewFragment :
         binding.rvContent.layoutManager =
             AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 .apply {
-                    extraLayoutSpaceScale = 2
+                    extraLayoutSpaceScale = 2f
                 }
 
         binding.rvContent.adapter = itemAdapter

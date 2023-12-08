@@ -27,7 +27,7 @@ class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, GroupViewModel
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh { true }
+        binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(requireContext().getAttrColor(GoogleAttr.colorPrimary))
     }
 
@@ -47,7 +47,7 @@ class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, GroupViewModel
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            interceptShowLoading = true,
+            canShowLoading = { !binding.srlRefresh.isRefreshing },
             showContentDelay = 100
         )
 
