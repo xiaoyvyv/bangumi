@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.feature.search
 
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.KeyboardUtils
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivitySearchBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -51,13 +52,16 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
 
         subjectItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
             viewModel.currentSearchItem.value = subjectItemAdapter.getItem(position)
+            KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
         }
 
         personItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
             viewModel.currentSearchItem.value = personItemAdapter.getItem(position)
+            KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
         }
 
         recentlyItemAdapter.setOnDebouncedChildClickListener(R.id.item_search) {
+            KeyboardUtils.hideSoftInput(this)
             RouteHelper.jumpSearchDetail(it)
             finish()
         }

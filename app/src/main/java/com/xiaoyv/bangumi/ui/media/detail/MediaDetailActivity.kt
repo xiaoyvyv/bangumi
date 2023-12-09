@@ -82,6 +82,8 @@ class MediaDetailActivity :
             } else {
                 binding.tvTime.text = String.format("(%s)", it.time)
             }
+
+            invalidateOptionsMenu()
         }
 
         viewModel.vpEnableLiveData.observe(this) {
@@ -94,7 +96,7 @@ class MediaDetailActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("Review")
+        if (viewModel.onMediaDetailLiveData.value != null) menu.add("写点评")
             .setIcon(CommonDrawable.ic_review)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {

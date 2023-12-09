@@ -87,8 +87,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingBias = 0.2f,
-            loadingViewState = viewModel.loadingViewState,
-            canShowContent = { false }
+            loadingViewState = viewModel.loadingViewState
         )
 
         viewModel.mediaDetailLiveData.observe(this) {
@@ -97,8 +96,6 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
 
         viewModel.mediaBinderListLiveData.observe(this) {
             overviewAdapter.submitList(it)
-
-            binding.stateView.showContent()
         }
 
         UserHelper.observe(this) {
