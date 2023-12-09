@@ -106,9 +106,11 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
         }
     }
 
-    override fun onBindListDataFinish(list: List<MessageEntity>) {
+    override fun onListDataFinish(list: List<MessageEntity>) {
+        inputBinding.root.isVisible = true
+        
         // 软键盘打开的情况下，轮询的消息才自动滑动
-        if (viewModel.imeHeight > 0) scrollToBottom()
+        if (viewModel.imeHeight > 0 || !viewModel.isPollMessages) scrollToBottom()
 
         // 检测是否可以回复
         if (viewModel.replyForm.isEmpty()) {
@@ -123,6 +125,10 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
             }
             inputBinding.etMessage.isEnabled = true
         }
+    }
+
+    override fun onListDataError() {
+        inputBinding.root.isVisible = false
     }
 
     /**

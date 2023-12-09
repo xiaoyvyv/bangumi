@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Parcelable
 import com.blankj.utilcode.util.ActivityUtils
-import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.xiaoyv.blueprint.kts.toJson
@@ -28,7 +27,9 @@ inline fun <reified T> String.fromJson(): T? {
         val type = object : TypeToken<T>() {}.type
         return gson.fromJson(this, type)
     }.onFailure {
-        LogUtils.e("JsonError: $this", it)
+        it.printStackTrace()
+
+        debugLog { "JsonError: $this" }
     }
     return null
 }

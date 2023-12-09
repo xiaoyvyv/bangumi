@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.bean.SampleAvatar
 import com.xiaoyv.widget.kts.useNotNull
@@ -18,8 +19,9 @@ import org.jsoup.nodes.Element
  * @since 12/7/23
  */
 fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
-    val entity = GroupDetailEntity()
-    entity.id = groupId
+    requireNoError()
+
+    val entity = GroupDetailEntity(id = groupId)
 
     selectLegal("#columnA").apply {
         entity.avatar = select(".grp_box > img").attr("src").optImageUrl()

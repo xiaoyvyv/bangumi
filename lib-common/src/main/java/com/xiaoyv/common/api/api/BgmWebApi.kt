@@ -391,8 +391,14 @@ interface BgmWebApi {
      */
     @FormUrlEncoded
     @POST("/pm/create.chii")
-    suspend fun postMessage(
-        @Header("Referer") referer: String,
-        @FieldMap map: Map<String, String>
+    suspend fun postMessage(@FieldMap map: Map<String, String>): Document
+
+    @FormUrlEncoded
+    @POST("/pm/erase/batch")
+    suspend fun postClearMessageBox(
+        @Field("folder") @MessageBoxType folder: String,
+        @Field("erase_pm[]") erasePm: List<String>,
+        @Field("chkall") chkall: String,
+        @Query("gh") gh: String,
     ): Document
 }

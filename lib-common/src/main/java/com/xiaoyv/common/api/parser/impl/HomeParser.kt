@@ -1,6 +1,5 @@
 package com.xiaoyv.common.api.parser.impl
 
-import androidx.core.text.parseAsHtml
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity

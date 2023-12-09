@@ -8,7 +8,6 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MessageEntity
 import com.xiaoyv.common.api.parser.impl.parserMessageBox
 import com.xiaoyv.common.api.parser.impl.parserMessageReplyForm
-import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.copyAdd
 import com.xiaoyv.widget.kts.errorMsg
@@ -85,9 +84,7 @@ class MessageDetailViewModel : BaseListViewModel<MessageEntity>() {
                     // 默认开启交谈模式
                     replyForm["chat"] = "on"
                     replyForm["msg_body"] = input
-                    val referer =
-                        BgmApiManager.buildReferer(BgmPathType.TYPE_MESSAGE_BOX, messageId)
-                    BgmApiManager.bgmWebApi.postMessage(referer, replyForm)
+                    BgmApiManager.bgmWebApi.postMessage(replyForm)
                 }
 
                 refreshStateToSent()

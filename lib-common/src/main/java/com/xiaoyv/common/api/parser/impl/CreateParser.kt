@@ -3,18 +3,12 @@ package com.xiaoyv.common.api.parser.impl
 import com.xiaoyv.common.api.parser.entity.BlogCreateEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.requireNoError
 import org.jsoup.nodes.Document
 
-/**
- *
- * @author why
- * @since 12/2/23
- */
-fun Document.parserFormHash(): String {
-    return select("#editTopicForm input[name=formhash]").attr("value")
-}
-
 fun Document.parserCreateBlog(): BlogCreateEntity {
+    requireNoError()
+
     val createEntity = BlogCreateEntity()
     createEntity.formHash = parserFormHash()
     createEntity.related = select("#columnB ul > li").map { item ->
@@ -28,4 +22,12 @@ fun Document.parserCreateBlog(): BlogCreateEntity {
         relative
     }
     return createEntity
+}
+
+/**
+ * @author why
+ * @since 12/2/23
+ */
+fun Document.parserFormHash(): String {
+    return select("#editTopicForm input[name=formhash]").attr("value")
 }

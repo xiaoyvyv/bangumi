@@ -14,8 +14,8 @@ import com.xiaoyv.common.api.BgmApiManager
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.MediaType
-import okhttp3.Protocol
 import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
 import okio.BufferedSource
 import okio.ForwardingSource
@@ -39,7 +39,8 @@ class OkHttpProgressGlideModule : AppGlideModule() {
             OkHttpUrlLoader.Factory(
                 BgmApiManager.httpClient
                     .newBuilder()
-                    .addInterceptor(createInterceptor(DispatchingProgressListener()))
+                    .apply { networkInterceptors().removeIf { it is HttpLoggingInterceptor } }
+                    .addNetworkInterceptor(createInterceptor(DispatchingProgressListener()))
                     .build()
             )
         )

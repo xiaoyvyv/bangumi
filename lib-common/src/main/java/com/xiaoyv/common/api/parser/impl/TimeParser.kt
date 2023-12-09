@@ -4,6 +4,7 @@ import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.requireNoError
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
@@ -16,6 +17,8 @@ import org.jsoup.nodes.Element
 object TimeParser {
 
     fun Document.parserTimelineForms(isUser: Boolean): List<TimelineEntity> {
+        requireNoError()
+
         val entities = arrayListOf<TimelineEntity>()
 
         // 用户的时间线单独解析头像和ID

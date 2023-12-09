@@ -5,6 +5,7 @@ import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
@@ -14,9 +15,10 @@ import org.jsoup.nodes.Document
  * @since 12/2/23
  */
 fun Document.parserTopic(blogId: String): TopicDetailEntity {
+    requireNoError()
+
     return select("#news_list > .item, .entry_list > .item").let {
-        val entity = TopicDetailEntity()
-        entity.id = blogId
+        val entity = TopicDetailEntity(id = blogId)
 
         select(".postTopic .re_info small").outerHtml().let {
             val groupValues = "eraseEntry\\(\\s*(.*?)\\s*,\\s*'(.*?)'\\s*\\)".toRegex()

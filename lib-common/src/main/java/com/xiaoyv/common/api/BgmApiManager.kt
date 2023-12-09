@@ -35,12 +35,12 @@ class BgmApiManager {
         OkHttpClient.Builder()
             .addInterceptor(CommonInterceptor())
             .addNetworkInterceptor(FixCookieInterceptor())
-            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
             .cookieJar(cookieJar)
-            .callTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
-            .connectTimeout(15, TimeUnit.SECONDS)
+            .callTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 
@@ -118,7 +118,7 @@ class BgmApiManager {
                 BgmPathType.TYPE_CHARACTER -> "$URL_BASE_WEB/character/$id"
                 BgmPathType.TYPE_GROUP -> "$URL_BASE_WEB/group/$id"
                 BgmPathType.TYPE_PERSON -> "$URL_BASE_WEB/person/$id"
-                BgmPathType.TYPE_MESSAGE_BOX -> "$URL_BASE_WEB/pm/view/$id.chii"
+                BgmPathType.TYPE_MESSAGE_BOX -> "$URL_BASE_WEB/pm/$id.chii"
                 else -> URL_BASE_WEB
             }
         }

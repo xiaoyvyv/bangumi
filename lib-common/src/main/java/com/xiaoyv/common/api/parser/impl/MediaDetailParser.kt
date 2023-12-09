@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserTime
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
@@ -25,6 +26,8 @@ import org.jsoup.nodes.Element
  * @since 11/29/23
  */
 fun Document.parserMediaChapters(): List<MediaChapterEntity> {
+    requireNoError()
+
     return select(".line_detail > ul > li").map {
         if (it.select("h6").isEmpty()) return@map null
         val entity = MediaChapterEntity()
@@ -39,6 +42,8 @@ fun Document.parserMediaChapters(): List<MediaChapterEntity> {
 }
 
 fun Element.parserMediaComments(): List<MediaCommentEntity> {
+    requireNoError()
+
     return select("#comment_box > .item").map {
         val entity = MediaCommentEntity()
         entity.id = it.select("a.avatar").attr("href")
@@ -59,6 +64,8 @@ fun Element.parserMediaComments(): List<MediaCommentEntity> {
 }
 
 fun Element.parserMediaReviews(): List<MediaReviewEntity> {
+    requireNoError()
+
     return select("#entry_list > .item").map { item ->
         val entity = MediaReviewEntity()
         item.select(".entry .title").apply {
@@ -80,6 +87,8 @@ fun Element.parserMediaReviews(): List<MediaReviewEntity> {
 }
 
 fun Document.parserMediaBoards(): List<MediaBoardEntity> {
+    requireNoError()
+
     return select(".topic_list > tbody > tr").map {
         if (it.select(".more").isNotEmpty()) return@map null
         val entity = MediaBoardEntity()
@@ -98,6 +107,8 @@ fun Document.parserMediaBoards(): List<MediaBoardEntity> {
 
 
 fun Document.parserMediaMakers(): List<MediaMakerEntity> {
+    requireNoError()
+
     return select("#columnInSubjectA > div").map {
         val entity = MediaMakerEntity()
         entity.id = it.select("h2 a").attr("href").substringAfterLast("/")
@@ -112,6 +123,8 @@ fun Document.parserMediaMakers(): List<MediaMakerEntity> {
 }
 
 fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
+    requireNoError()
+
     return select("#columnInSubjectA > div").map {
         val entity = MediaCharacterEntity()
         entity.id = it.select("h2 a").attr("href").substringAfterLast("/")
@@ -135,6 +148,8 @@ fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
 
 
 fun Document.parserMediaDetail(): MediaDetailEntity {
+    requireNoError()
+
     val entity = MediaDetailEntity()
     selectLegal(".nameSingle > a").apply {
         entity.id = attr("href").substringAfterLast("/")

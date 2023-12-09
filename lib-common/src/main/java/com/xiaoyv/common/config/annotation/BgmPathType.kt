@@ -28,6 +28,6 @@ annotation class BgmPathType {
         const val TYPE_USER = "user"
         const val TYPE_BLOG = "blog"
         const val TYPE_TOPIC = "topic"
-        const val TYPE_MESSAGE_BOX = "pm/view"
+        const val TYPE_MESSAGE_BOX = "pm"
     }
 }

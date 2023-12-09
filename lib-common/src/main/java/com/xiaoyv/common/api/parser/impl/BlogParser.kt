@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.kts.decodeUrl
 import org.jsoup.nodes.Document
 
@@ -16,6 +17,8 @@ import org.jsoup.nodes.Document
  * @since 11/28/23
  */
 fun Document.parserBlogList(mediaType: String): List<BlogEntity> {
+    requireNoError()
+
     return select("#news_list > .item, .entry_list > .item").map {
         val blogEntity = BlogEntity()
         blogEntity.mediaType = mediaType
@@ -39,6 +42,8 @@ fun Document.parserBlogList(mediaType: String): List<BlogEntity> {
 }
 
 fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
+    requireNoError()
+
     return select("#news_list > .item, .entry_list > .item").let {
         val blogEntity = BlogDetailEntity()
         blogEntity.id = blogId

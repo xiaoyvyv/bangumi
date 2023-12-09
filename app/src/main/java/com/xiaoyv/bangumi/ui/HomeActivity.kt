@@ -58,7 +58,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
                 badge.number = it
                 badge.badgeGravity = BadgeDrawable.TOP_END
             } else {
-                badge.clearNumber()
+                binding.navView.removeBadge(R.id.bottom_menu_profile)
             }
         }
     }

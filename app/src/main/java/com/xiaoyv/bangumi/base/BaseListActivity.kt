@@ -122,18 +122,23 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         )
 
         viewModel.onListLiveData.observe(this) {
+            if (it == null) {
+                onListDataError()
+                return@observe
+            }
+
             if (debugLog) debugLog { "List:\n " + it.toJson(true) }
 
-            contentAdapter.submitList(it.orEmpty()) {
+            contentAdapter.submitList(it) {
                 if (viewModel.isRefresh && needResetPositionWhenRefresh) {
                     layoutManager?.scrollToPositionWithOffset(0, 0)
                 }
 
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
 
-                onBindListDataFinish(it.orEmpty())
+                onListDataFinish(it)
 
-                if (viewModel.isRefresh && it.isNullOrEmpty()) {
+                if (viewModel.isRefresh && it.isEmpty()) {
                     binding.stateView.showTip(message = StringUtils.getString(CommonString.common_empty_tip))
                 }
             }
@@ -150,7 +155,11 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         return true
     }
 
-    open fun onBindListDataFinish(list: List<T>) {
+    open fun onListDataFinish(list: List<T>) {
+
+    }
+
+    open fun onListDataError() {
 
     }
 

@@ -393,8 +393,16 @@ import kotlinx.parcelize.Parcelize
  */
 @Keep
 @Parcelize
-data class LikeEntity(val i: Int = 10) : HashMap<String, Map<String, LikeEntity.LikeAction>>(i),
-    Parcelable {
+data class LikeEntity(val i: Int = 10) : HashMap<String, Any>(i), Parcelable {
+
+    @Keep
+    @Parcelize
+    data class LikeActionMap(val initialCapacity: Int = 10) :
+        HashMap<String, LikeAction>(initialCapacity), Parcelable
+
+    @Keep
+    @Parcelize
+    data class LikeActionList(var i: Int = 10) : ArrayList<LikeAction>(i), Parcelable
 
     @Keep
     @Parcelize

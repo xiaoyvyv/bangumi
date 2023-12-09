@@ -52,7 +52,7 @@ class GroupTopicsActivity : BaseListActivity<TopicSampleEntity, GroupTopicsViewM
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onBindListDataFinish(list: List<TopicSampleEntity>) {
+    override fun onListDataFinish(list: List<TopicSampleEntity>) {
         binding.toolbar.title = list.getOrNull(0)?.groupName ?: viewModel.groupName
     }
 

@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.MediaType
 import org.jsoup.nodes.Document
@@ -21,6 +22,8 @@ object BrowserParser {
         @MediaType mediaType: String,
         isCollectList: Boolean = false
     ): BrowserEntity {
+        requireNoError()
+
         val browserEntity = BrowserEntity()
 
         browserEntity.items = select("#browserItemList > li").map {

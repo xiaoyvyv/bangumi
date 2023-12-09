@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.xiaoyv.common.config.annotation.MessageBoxType
 import com.xiaoyv.common.helper.IdEntity
 import kotlinx.parcelize.Parcelize
 
@@ -20,9 +21,14 @@ data class MessageEntity(
     var fromName: String = "",
     var fromAvatar: String = "",
     var mineAvatar: String = "",
+    var subject: String = "",
     var summary: CharSequence = "",
     var time: String = "",
     var deleteHash: String = "",
+    var isRead: Boolean = false,
+    @MessageBoxType
+    var boxType: String = MessageBoxType.TYPE_INBOX,
+
     var isMine: Boolean = true,
-    var isSending: Boolean = false
+    var isSending: Boolean = false,
 ) : IdEntity, Parcelable

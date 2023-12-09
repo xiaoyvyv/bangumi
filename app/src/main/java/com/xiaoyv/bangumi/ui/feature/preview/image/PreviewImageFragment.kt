@@ -1,24 +1,24 @@
 package com.xiaoyv.bangumi.ui.feature.preview.image
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.view.MotionEvent
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.xiaoyv.bangumi.databinding.ActivityPreviewPageBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.glide.ProgressTarget
+import com.xiaoyv.common.helper.SubsamplingTarget
 import com.xiaoyv.common.kts.debugLog
 import kotlin.math.roundToInt
 
 
 /**
  * Class: [PreviewImageFragment]
+ *
+ * TODO:// Crash https://bangumi.tv/blog/327666
  *
  * @author why
  * @since 12/1/23
@@ -28,9 +28,6 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     private var position: Int = 0
     private var total = 0
 
-    private val parentActivity: PreviewImageActivity
-        get() = requireActivity() as PreviewImageActivity
-
     override fun initArgumentsData(arguments: Bundle) {
         imageUrl = arguments.getString(NavKey.KEY_STRING).orEmpty()
         position = arguments.getInt(NavKey.KEY_INTEGER)
@@ -38,37 +35,19 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     }
 
     override fun initView() {
+        binding.ivImage.maxScale = 8f
     }
 
     override fun initData() {
         val target = ImageProgressTarget(
             imageUrl, requireContext(),
-            BitmapImageViewTarget(binding.ivImage)
+            SubsamplingTarget(binding.ivImage)
         )
 
         Glide.with(requireContext())
-            .asBitmap()
+            .asFile()
             .load(imageUrl)
             .into(target)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun initListener() {
-        binding.ivImage.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    if (binding.ivImage.isZoomed) {
-                        parentActivity.setVpEnable(false)
-                    }
-                }
-
-                MotionEvent.ACTION_UP,
-                MotionEvent.ACTION_CANCEL -> {
-                    parentActivity.setVpEnable(true)
-                }
-            }
-            false
-        }
     }
 
     inner class ImageProgressTarget<Z>(model: String?, context: Context, target: Target<Z>) :

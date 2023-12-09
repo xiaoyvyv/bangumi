@@ -24,6 +24,19 @@
         app:layout_constraintVertical_bias="0"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_badge"
+        android:layout_width="@dimen/ui_size_12"
+        android:layout_height="@dimen/ui_size_12"
+        android:layout_marginTop="-6dp"
+        android:layout_marginEnd="-6dp"
+        android:alpha="0.75"
+        android:background="@color/ui_red"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toTopOf="@id/iv_avatar"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
+
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_title"
         android:layout_width="@dimen/ui_size_0"

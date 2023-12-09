@@ -4,6 +4,7 @@ import com.xiaoyv.common.api.parser.entity.MessageEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Element
@@ -12,11 +13,15 @@ import org.jsoup.nodes.Element
  * @author why
  * @since 12/9/23
  */
-fun Element.parserMessageList(): List<MessageEntity> {
-    return select("#pmForm table > tbody > tr")
+fun Element.parserMessageList(boxType: String): Pair<String, List<MessageEntity>> {
+    requireNoError()
+
+    val gh = select("#pmForm").attr("action").substringAfterLast("=")
+    return gh to select("#pmForm table > tbody > tr")
         .filter { item -> item.select(".erase").isNotEmpty() }
         .map { item ->
             val entity = MessageEntity()
+            entity.boxType = boxType
             entity.field = item.select("input").attr("name")
             entity.id = item.select("input").attr("value")
             entity.fromAvatar = item.select("img.avatar").attr("src").optImageUrl()
@@ -24,6 +29,7 @@ fun Element.parserMessageList(): List<MessageEntity> {
             entity.fromName = item.select(".sub_title a").text()
             entity.time = item.select("small.grey").text()
             entity.summary = item.select(".tip").html().parseHtml()
+            entity.isRead = item.select(".pm_new").isNotEmpty()
             entity
         }
 }
@@ -32,13 +38,18 @@ fun Element.parserMessageList(): List<MessageEntity> {
  * 解析消息聊天列表
  */
 fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
+    requireNoError()
+
     return select("#comment_box > .item").map { item ->
         val entity = MessageEntity()
         entity.id = messageId
         entity.fromAvatar = item.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.fromId = item.select("a.avatar").attr("href").substringAfterLast("/")
+        entity.isMine = item.select(".text_main_odd").isNotEmpty()
         entity.mineAvatar = UserHelper.currentUser.avatar?.large.orEmpty()
+
+        // 内容部分
         val textPm = item.select(".text_pm")
         textPm.select(".rr").remove().apply {
             entity.time = select("small.grey").text().substringBefore("/").trim()
@@ -51,10 +62,22 @@ fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
             entity.fromName = text()
             remove()
         }
-        entity.isMine = item.select(".text_main_odd").isNotEmpty()
+
+        // 内容主题
+        val pmBoard = textPm.select(".board").firstOrNull()
+        if (pmBoard != null) {
+            val subject = pmBoard.previousElementSibling()
+            if (subject != null) {
+                entity.subject = subject.text()
+                subject.remove()
+            }
+        }
+
+        // 内容的详细信息
         entity.summary = textPm.html()
             .trim().removePrefix(":")
             .trim().parseHtml()
+
         entity
     }
 }

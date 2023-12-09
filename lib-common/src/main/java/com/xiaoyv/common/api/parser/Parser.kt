@@ -85,15 +85,19 @@ fun String?.replaceSmiles(): String {
     )
 }
 
-@Throws(IllegalArgumentException::class)
-fun <T : Element> T.checkLegal(): T {
-    require(toString().isNotBlank()) { "数据不不见了" }
-    return this
-}
-
+/**
+ * 强制校验目标节点是否存在，不存在抛出错误
+ */
 @Throws(IllegalArgumentException::class)
 fun <T : Element> T.selectLegal(selector: String): Elements {
     val elements = select(selector)
     require(elements.isNotEmpty()) { "Bangumi娘：报告数据不不见了" }
     return elements
+}
+
+fun <T : Element> T.requireNoError() {
+    val errorMsg = select("#colunmNotice .text").text().trim()
+    if (errorMsg.isNotBlank()) {
+        throw IllegalArgumentException(errorMsg.ifBlank { "Bangumi娘：报告数据出错啦" })
+    }
 }

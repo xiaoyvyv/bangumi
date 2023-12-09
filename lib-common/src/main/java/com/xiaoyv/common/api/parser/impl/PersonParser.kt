@@ -8,6 +8,7 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserTime
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Document
@@ -18,9 +19,9 @@ import org.jsoup.nodes.Element
  * @since 12/4/23
  */
 fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
-    val entity = PersonEntity()
-    entity.id = personId
-    entity.isVirtual = isVirtual
+    requireNoError()
+
+    val entity = PersonEntity(id=personId, isVirtual = isVirtual)
 
     select("#headerSubject").apply {
         entity.nameCn = select("small").text()
@@ -180,6 +181,8 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
  * 解析收藏者者数据
  */
 fun Element.parserPersonCollector(): List<MediaDetailEntity.MediaWho> {
+    requireNoError()
+
     return select("#memberUserList > li.user").map { item ->
         val who = MediaDetailEntity.MediaWho()
         item.select(".userImage img").apply {
@@ -196,6 +199,8 @@ fun Element.parserPersonCollector(): List<MediaDetailEntity.MediaWho> {
  * 解析合作者数据
  */
 fun Element.parserPersonCooperate(): List<PersonEntity.RecentCooperate> {
+    requireNoError()
+
     return select(".browserCrtList > div").map { item ->
         val cooperate = PersonEntity.RecentCooperate()
 
@@ -234,6 +239,8 @@ fun Element.parserPersonCooperate(): List<PersonEntity.RecentCooperate> {
  * 解析作品条目数据
  */
 fun Element.parserPersonOpus(): List<PersonEntity.RecentlyOpus> {
+    requireNoError()
+
     return select("#browserItemList > li").map { item ->
         val opus = PersonEntity.RecentlyOpus()
         opus.id = item.select("a.subjectCover").attr("href").substringAfterLast("/")
@@ -267,6 +274,8 @@ fun Element.parserPersonOpus(): List<PersonEntity.RecentlyOpus> {
  * 解析角色的条目数据
  */
 fun Element.parserPersonVoices(): List<CharacterEntity> {
+    requireNoError()
+
     return select(".browserList > li").map { item ->
         val entity = CharacterEntity()
 

@@ -4,6 +4,7 @@ import com.xiaoyv.common.api.parser.entity.NotifyEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.requireNoError
 import org.jsoup.nodes.Element
 
 /**
@@ -11,6 +12,8 @@ import org.jsoup.nodes.Element
  * @since 12/8/23
  */
 fun Element.parserNotify(): List<NotifyEntity> {
+    requireNoError()
+
     return select("#comment_list > div").map { item ->
         val entity = NotifyEntity()
         entity.userId = item.select("a.avatar").attr("href").substringAfterLast("/")

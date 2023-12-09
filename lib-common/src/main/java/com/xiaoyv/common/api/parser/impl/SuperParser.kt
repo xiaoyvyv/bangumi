@@ -4,6 +4,7 @@ import com.xiaoyv.common.api.parser.entity.SuperTopicEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
+import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
 import org.jsoup.nodes.Document
@@ -13,6 +14,8 @@ import org.jsoup.nodes.Document
  * @since 11/26/23
  */
 fun Document.parserSuperTopic(): List<SuperTopicEntity> {
+    requireNoError()
+
     return select("#eden_tpc_list > ul > li").map {
         val entity = SuperTopicEntity()
         val titleLink = it.select("a.title").attr("href")
