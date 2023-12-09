@@ -88,7 +88,10 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
             }
             binding.searchBar.etKeyword.hint = hint
 
-            showToast(hint)
+            // 有输入内容切换时，提示搜索内容
+            if (binding.searchBar.etKeyword.text.toString().trim().isNotBlank()) {
+                showToast(hint)
+            }
         }
     }
 }
