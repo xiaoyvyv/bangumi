@@ -15,16 +15,23 @@ import com.xiaoyv.widget.kts.subListLimit
  * @since 12/10/23
  */
 object CacheHelper {
-    const val CACHE_HISTORY = "SearchHistory"
+    private const val CACHE_HISTORY = "SearchHistory"
 
+    /**
+     * 保存搜索历史
+     */
     fun saveSearchHistory(searchItem: SearchItem) {
+        if (searchItem.keyword.isBlank()) return
         launchProcess {
-            val key = EncryptUtils.encryptMD5ToString(searchItem.toString())
+            val key = EncryptUtils.encryptMD5ToString(searchItem.keyword)
             searchItem.timestamp = System.currentTimeMillis()
             SPUtils.getInstance(CACHE_HISTORY).put(key, searchItem.toJson())
         }
     }
 
+    /**
+     * 读取搜索历史
+     */
     fun readSearchHistory(): List<SearchItem> {
         return runCatching {
             SPUtils.getInstance(CACHE_HISTORY).all

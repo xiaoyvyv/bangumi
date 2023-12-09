@@ -80,12 +80,15 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
         }
 
         viewModel.currentSearchItem.observe(this) {
-            binding.searchBar.etKeyword.hint = buildString {
+            val hint = buildString {
                 append("搜索：")
                 append(BgmPathType.string(it.pathType))
                 append(" - ")
                 append(it.label)
             }
+            binding.searchBar.etKeyword.hint = hint
+
+            showToast(hint)
         }
     }
 }
