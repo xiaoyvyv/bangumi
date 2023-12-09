@@ -10,6 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_gif"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ui_transparent"
+        android:visibility="gone" />
+
     <ProgressBar
         android:id="@+id/pb_progress"
         style="@style/Widget.AppCompat.ProgressBar"

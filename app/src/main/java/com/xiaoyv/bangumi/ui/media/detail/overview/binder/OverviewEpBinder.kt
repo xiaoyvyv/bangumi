@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewEpBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewEpItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
-import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener

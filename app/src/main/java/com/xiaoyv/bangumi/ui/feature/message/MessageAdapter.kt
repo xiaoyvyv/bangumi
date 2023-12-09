@@ -5,7 +5,7 @@ import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.ActivityNotifyItemBinding
 import com.xiaoyv.common.api.parser.entity.MessageEntity
 import com.xiaoyv.common.config.annotation.MessageBoxType
-import com.xiaoyv.common.helper.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder

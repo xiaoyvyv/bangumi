@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.ui.feature.person.character
 import androidx.core.view.isVisible
 import com.xiaoyv.bangumi.databinding.FragmentMediaPageItemBinding
 import com.xiaoyv.common.api.parser.entity.CharacterEntity
-import com.xiaoyv.common.helper.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter

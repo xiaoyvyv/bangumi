@@ -1,4 +1,4 @@
-package com.xiaoyv.common.helper
+package com.xiaoyv.common.helper.callback
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil

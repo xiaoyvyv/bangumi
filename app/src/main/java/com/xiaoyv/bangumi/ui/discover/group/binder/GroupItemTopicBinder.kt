@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.databinding.FragmentGroupTopicBinding
 import com.xiaoyv.bangumi.databinding.FragmentGroupTopicItemBinding
 import com.xiaoyv.bangumi.ui.discover.group.GroupAdapter
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
-import com.xiaoyv.common.helper.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener

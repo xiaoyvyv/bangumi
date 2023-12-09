@@ -21,6 +21,7 @@ import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.loadImageBlurBackground
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
 
 /**
@@ -80,6 +81,9 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
             binding.ivBanner.loadImageBlur(entity.poster)
             binding.ivCover.loadImageBlurBackground(entity.poster)
             binding.ivCover.loadImageAnimate(entity.poster, centerCrop = false)
+            binding.ivCover.setOnFastLimitClickListener {
+                RouteHelper.jumpPreviewImage(entity.posterLarge)
+            }
             binding.toolbar.title = entity.nameNative
 
             binding.tvTitle.text = entity.nameNative

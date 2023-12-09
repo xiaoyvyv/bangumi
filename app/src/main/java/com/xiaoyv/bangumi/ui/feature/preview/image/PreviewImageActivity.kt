@@ -38,6 +38,11 @@ class PreviewImageActivity :
         viewModel.onImageListLiveData.observe(this) {
             val position = it.first
 
+            binding.toolbar.title = String.format(
+                "图片预览（%d/%d）", position + 1,
+                viewModel.totalImageUrls.size
+            )
+            
             binding.vpImage.adapter = PreviewImageAdapter(activity, it.second)
             if (position != -1 && position < it.second.size) {
                 binding.vpImage.setCurrentItem(position, false)

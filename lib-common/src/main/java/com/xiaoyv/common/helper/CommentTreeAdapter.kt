@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.databinding.ViewCommentItemBinding
 import com.xiaoyv.common.databinding.ViewCommentItemSubBinding
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter

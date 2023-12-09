@@ -18,6 +18,7 @@ import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
+import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
@@ -34,9 +35,11 @@ fun Document.parserMediaChapters(): List<MediaChapterEntity> {
         entity.id = it.select("h6 a").attr("href").substringAfterLast("/")
         entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
         entity.titleNative = it.select("h6 a").text()
-        entity.time = it.select("small").getOrNull(0)?.text().orEmpty()
-        entity.comment =
-            it.select("small").getOrNull(1)?.text().orEmpty().substringAfterLast("/").trim()
+
+        useNotNull(it.select("small")) {
+            entity.time = getOrNull(0)?.text().orEmpty()
+            entity.commentCount = getOrNull(1)?.text().orEmpty().parseCount()
+        }
         entity
     }.filterNotNull()
 }

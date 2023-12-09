@@ -6,7 +6,7 @@ import androidx.core.view.updateLayoutParams
 import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.ActivityMessageDetailItemBinding
 import com.xiaoyv.common.api.parser.entity.MessageEntity
-import com.xiaoyv.common.helper.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder

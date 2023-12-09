@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewBoardBinding
 import com.xiaoyv.bangumi.ui.media.detail.board.MediaBoardAdapter
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
-import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder

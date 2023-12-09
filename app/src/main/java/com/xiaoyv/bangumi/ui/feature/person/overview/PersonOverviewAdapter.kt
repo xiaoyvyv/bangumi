@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewOpusBi
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewVoiceBinder
 import com.xiaoyv.common.config.annotation.SampleImageGridClickType
-import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.widget.kts.useNotNull
 
 /**

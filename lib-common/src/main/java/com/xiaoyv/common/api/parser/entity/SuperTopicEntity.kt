@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
-import com.xiaoyv.common.helper.IdEntity
+import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
 /**

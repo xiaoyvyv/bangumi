@@ -10,8 +10,10 @@ import com.xiaoyv.bangumi.databinding.ActivityPreviewPageBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.glide.ProgressTarget
-import com.xiaoyv.common.helper.SubsamplingTarget
+import com.xiaoyv.common.helper.callback.SubsamplingEventListener
+import com.xiaoyv.common.helper.callback.SubsamplingTarget
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.widget.kts.loadImage
 import kotlin.math.roundToInt
 
 
@@ -28,6 +30,9 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     private var position: Int = 0
     private var total = 0
 
+    private val isGif
+        get() = imageUrl.endsWith(".gif", false)
+
     override fun initArgumentsData(arguments: Bundle) {
         imageUrl = arguments.getString(NavKey.KEY_STRING).orEmpty()
         position = arguments.getInt(NavKey.KEY_INTEGER)
@@ -35,19 +40,43 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     }
 
     override fun initView() {
-        binding.ivImage.maxScale = 8f
+        binding.ivImage.isQuickScaleEnabled = true
+        if (isGif) {
+            binding.ivGif.isVisible = true
+            binding.ivImage.isVisible = false
+        } else {
+            binding.ivGif.isVisible = false
+            binding.ivImage.isVisible = true
+        }
     }
 
     override fun initData() {
-        val target = ImageProgressTarget(
-            imageUrl, requireContext(),
-            SubsamplingTarget(binding.ivImage)
-        )
+        if (isGif) {
+            binding.ivGif.loadImage(imageUrl, cropOrFit = false)
+            binding.gpProgress.isVisible = false
+        } else {
+            val target = ImageProgressTarget(
+                imageUrl, requireContext(),
+                SubsamplingTarget(binding.ivImage)
+            )
 
-        Glide.with(requireContext())
-            .asFile()
-            .load(imageUrl)
-            .into(target)
+            Glide.with(requireContext())
+                .asFile()
+                .load(imageUrl)
+                .into(target)
+        }
+    }
+
+    override fun initListener() {
+        binding.ivImage.setOnImageEventListener(object : SubsamplingEventListener() {
+            override fun onImageLoaded() {
+                val scale = binding.ivImage.scale
+                binding.ivImage.minScale = scale
+                binding.ivImage.maxScale = scale * 5f
+                binding.ivImage.setDoubleTapZoomScale(scale * 2.5f)
+                binding.ivImage.resetScaleAndCenter()
+            }
+        })
     }
 
     inner class ImageProgressTarget<Z>(model: String?, context: Context, target: Target<Z>) :

@@ -10,7 +10,7 @@
     android:foreground="?attr/selectableItemBackground">
 
     <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/title_cn"
+        android:id="@+id/title_native"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/ui_layout_margin"
@@ -23,13 +23,13 @@
         tools:text="@tools:sample/lorem" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/title"
+        android:id="@+id/title_cn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodySmall"
-        app:layout_constraintTop_toBottomOf="@+id/title_cn"
+        app:layout_constraintTop_toBottomOf="@+id/title_native"
         tools:text="@tools:sample/lorem" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -43,7 +43,7 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toStartOf="@+id/tv_comment"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title_cn"
         tools:text="@tools:sample/lorem" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -55,7 +55,7 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_time"
-        tools:text="@tools:sample/lorem" />
+        tools:text="讨论：124" />
 
     <View
         style="@style/Theme.Bangumi.Divider"

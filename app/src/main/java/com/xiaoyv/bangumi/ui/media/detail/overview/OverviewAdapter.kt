@@ -17,7 +17,7 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSaveBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
-import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 
 /**
  * Class: [OverviewAdapter]

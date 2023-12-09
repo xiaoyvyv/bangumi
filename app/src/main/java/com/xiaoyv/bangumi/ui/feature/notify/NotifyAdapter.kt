@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.ui.feature.notify
 
 import com.xiaoyv.bangumi.databinding.ActivityNotifyItemBinding
 import com.xiaoyv.common.api.parser.entity.NotifyEntity
-import com.xiaoyv.common.helper.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter

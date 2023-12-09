@@ -1,4 +1,4 @@
-package com.xiaoyv.common.helper
+package com.xiaoyv.common.helper.callback
 
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView

@@ -9,8 +9,8 @@ import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewGridBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewGridItemBinding
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.config.bean.SampleAvatar
-import com.xiaoyv.common.helper.IdDiffItemCallback
-import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate

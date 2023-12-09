@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewRelativeBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewRelativeItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
-import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener

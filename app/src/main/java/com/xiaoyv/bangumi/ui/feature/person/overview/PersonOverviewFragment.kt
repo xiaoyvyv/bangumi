@@ -13,7 +13,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.SampleImageGridClickType
-import com.xiaoyv.common.helper.RecyclerItemTouchedListener
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 

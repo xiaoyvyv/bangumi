@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.ui.feature.person.cooperate
 
 import com.xiaoyv.bangumi.databinding.FragmentPersonCooperateItemBinding
 import com.xiaoyv.common.api.parser.entity.PersonEntity
-import com.xiaoyv.common.helper.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter

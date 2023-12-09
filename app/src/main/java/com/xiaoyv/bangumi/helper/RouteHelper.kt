@@ -68,7 +68,7 @@ object RouteHelper {
         BlogActivity::class.open(bundleOf(NavKey.KEY_STRING to blogId))
     }
 
-    fun jumpPreviewImage(showImage: String, totalImage: List<String>) {
+    fun jumpPreviewImage(showImage: String, totalImage: List<String> = emptyList()) {
         ActivityUtils.startActivity(
             bundleOf(
                 NavKey.KEY_STRING to showImage,

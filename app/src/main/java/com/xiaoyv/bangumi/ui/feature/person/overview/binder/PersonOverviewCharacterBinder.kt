@@ -9,8 +9,7 @@ import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListCharacterBinding
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.CharacterEntity
-import com.xiaoyv.common.api.parser.entity.PersonEntity
-import com.xiaoyv.common.helper.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate

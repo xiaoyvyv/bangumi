@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.helper.IdEntity
+import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 import kotlin.math.pow
 import kotlin.math.sqrt
