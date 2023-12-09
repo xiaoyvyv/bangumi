@@ -16,28 +16,30 @@
         <com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout
             android:id="@id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_size_300"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
+            <com.xiaoyv.common.widget.image.AnimeImageView
+                android:id="@+id/iv_banner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="?attr/colorOnSurfaceVariant"
+                android:fitsSystemWindows="true"
+                android:foreground="@drawable/shape_bottom_edge"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:srcCompat="@color/ui_black_60" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_info"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
-
-                <com.xiaoyv.common.widget.image.AnimeImageView
-                    android:id="@+id/iv_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="?attr/colorOnSurfaceVariant"
-                    android:fitsSystemWindows="true"
-                    android:foreground="@drawable/shape_bottom_edge"
-                    android:scaleType="centerCrop"
-                    app:layout_collapseMode="parallax"
-                    app:srcCompat="@color/ui_black_60" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:fitsSystemWindows="false"
+                android:paddingTop="?attr/actionBarSize">
 
                 <com.xiaoyv.common.widget.image.AnimeImageView
                     android:id="@+id/iv_cover"
