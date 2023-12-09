@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewRatingBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
+import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 
@@ -15,30 +17,25 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  * @since 11/30/23
  */
 class OverviewRatingBinder :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewRatingBinding>> {
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewRatingBinding>> {
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewRatingBinding>,
         position: Int,
-        item: OverviewAdapter.OverviewItem?
+        item: OverviewAdapter.Item?
     ) {
         item ?: return
-        holder.binding.tvScore.text =
-            String.format("%.1f", item.mediaDetailEntity.rating.globalRating)
-        if (item.mediaDetailEntity.rating.globalRank != 0) {
-            holder.binding.tvScoreTip.text = String.format(
-                "#%d %s",
-                item.mediaDetailEntity.rating.globalRank,
-                item.mediaDetailEntity.rating.description
-            )
-        } else {
-            holder.binding.tvScoreTip.text = String.format(
-                "%s",
-                item.mediaDetailEntity.rating.description
-            )
-        }
 
-        holder.binding.tvRatingStandardDeviation.text =
-            String.format("%.2f", item.mediaDetailEntity.rating.standardDeviation)
+        item.entity.forceCast<MediaDetailEntity>().rating.apply {
+            holder.binding.tvScore.text = String.format("%.1f", globalRating)
+            if (globalRank != 0) {
+                holder.binding.tvScoreTip.text = String.format("#%d %s", globalRank, description)
+            } else {
+                holder.binding.tvScoreTip.text = String.format("%s", description)
+            }
+
+            holder.binding.tvRatingStandardDeviation.text =
+                String.format("%.2f", standardDeviation)
+        }
     }
 
     override fun onCreate(

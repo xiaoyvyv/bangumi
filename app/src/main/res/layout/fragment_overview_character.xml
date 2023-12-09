@@ -5,12 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
+    <com.xiaoyv.common.widget.menu.AnimeSectionView
         android:id="@+id/tv_title_character"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_layout_margin"
         android:text="角色"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="?attr/colorOnSurface"
@@ -23,10 +21,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:orientation="horizontal"
+        android:nestedScrollingEnabled="false"
+        android:orientation="vertical"
         android:paddingHorizontal="@dimen/ui_size_8"
-        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_character"
-        tools:listitem="@layout/fragment_overview_avatar_item" />
+        app:spanCount="3"
+        tools:listitem="@layout/fragment_overview_character_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

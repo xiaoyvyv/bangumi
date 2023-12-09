@@ -15,11 +15,11 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  * @since 11/30/23
  */
 class OverviewPreviewBinder :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewPreviewBinding>> {
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewPreviewBinding>> {
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewPreviewBinding>,
         position: Int,
-        item: OverviewAdapter.OverviewItem?
+        item: OverviewAdapter.Item?
     ) {
 
     }

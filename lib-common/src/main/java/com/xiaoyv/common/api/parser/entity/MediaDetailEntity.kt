@@ -133,12 +133,12 @@ data class MediaDetailEntity(
         @SerializedName("titleCn") var titleCn: String = "",
         @SerializedName("firstTime") var firstTime: String = "",
         @SerializedName("duration") var duration: String = "",
-        @SerializedName("id") var id: String = "",
+        @SerializedName("id") override var id: String = "",
         @SerializedName("no") var no: String = "",
         @SerializedName("notEp") var notEp: Boolean = false,
         @SerializedName("isRelease") var isRelease: Boolean = false,
         @SerializedName("commentCount") var commentCount: Int = 0
-    ) : Parcelable
+    ) : Parcelable,IdEntity
 
     @Parcelize
     @Keep

@@ -8,7 +8,9 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewCommentBinding
 import com.xiaoyv.bangumi.ui.media.detail.comments.MediaCommentAdapter
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
+import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
+import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -23,21 +25,28 @@ class OverviewCommentBinder(
     private val touchedListener: RecyclerItemTouchedListener,
     private val clickItemListener: (MediaCommentEntity) -> Unit,
     private val clickUserListener: (MediaCommentEntity) -> Unit,
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewCommentBinding>> {
-    private val itemAdapter by lazy { MediaCommentAdapter() }
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewCommentBinding>> {
+
+    private val itemAdapter by lazy {
+        MediaCommentAdapter().apply {
+            setOnDebouncedChildClickListener(R.id.item_comment, block = clickItemListener)
+            setOnDebouncedChildClickListener(R.id.iv_avatar, block = clickUserListener)
+        }
+    }
 
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewCommentBinding>,
         position: Int,
-        item: OverviewAdapter.OverviewItem?
+        item: OverviewAdapter.Item?
     ) {
         item ?: return
         holder.binding.rvComment.adapter = itemAdapter
         holder.binding.rvComment.addOnItemTouchListener(touchedListener)
-        holder.binding.rvComment.setInitialPrefetchItemCount(item.mediaDetailEntity.comments.size)
-        itemAdapter.submitList(item.mediaDetailEntity.comments)
-        itemAdapter.setOnDebouncedChildClickListener(R.id.item_comment, block = clickItemListener)
-        itemAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar, block = clickUserListener)
+        
+        item.entity.forceCast<MediaDetailEntity>().apply {
+            holder.binding.rvComment.setInitialPrefetchItemCount(comments.size)
+            itemAdapter.submitList(comments)
+        }
     }
 
     override fun onCreate(

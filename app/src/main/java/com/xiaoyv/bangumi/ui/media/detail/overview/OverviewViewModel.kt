@@ -8,6 +8,8 @@ import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.config.annotation.MediaDetailType
+import com.xiaoyv.common.config.annotation.SampleImageGridClickType
+import com.xiaoyv.common.config.bean.SampleAvatar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -21,14 +23,16 @@ class OverviewViewModel : BaseViewModel() {
     internal var mediaId: String = ""
 
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
-    internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.OverviewItem>>()
+    internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.Item>>()
 
     fun queryMediaInfo() {
         launchUI(
             stateView = loadingViewState,
             error = {
-                mediaDetailLiveData.value = null
                 it.printStackTrace()
+
+                mediaDetailLiveData.value = null
+                mediaBinderListLiveData.value = emptyList()
             },
             block = {
                 val (mediaEntity, binderList) = withContext(Dispatchers.IO) {
@@ -46,29 +50,83 @@ class OverviewViewModel : BaseViewModel() {
         )
     }
 
-    private fun buildBinderList(entity: MediaDetailEntity): List<OverviewAdapter.OverviewItem> =
-        listOf(
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_SAVE, "收藏"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_EP, "章节"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_TAG, "标签"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_SUMMARY, "简介"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_PREVIEW, "预览"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_DETAIL, "详情"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_RATING, "评分"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_CHARACTER, "人物"),
-//            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_MAKER, "制作人员"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_RELATIVE, "相关的条目"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_INDEX, "推荐的目录"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_REVIEW, "评论"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_BOARD, "讨论板"),
-            OverviewAdapter.OverviewItem(entity, OverviewAdapter.TYPE_COMMENT, "吐槽")
+    private fun buildBinderList(entity: MediaDetailEntity): List<OverviewAdapter.Item> {
+        val items = mutableListOf<OverviewAdapter.Item>()
+
+        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_SAVE, "收藏"))
+        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_EP, "章节"))
+        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_TAG, "标签"))
+        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_SUMMARY, "简介"))
+        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_PREVIEW, "预览"))
+        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_DETAIL, "详情"))
+        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_RATING, "评分"))
+
+        // 角色介绍
+        if (entity.characters.isNotEmpty()) {
+            items.add(
+                OverviewAdapter.Item(
+                    entity.characters,
+                    OverviewAdapter.TYPE_CHARACTER,
+                    "角色介绍"
+                )
+            )
+        }
+
+        // 相关的媒体条目
+        if (entity.relativeMedia.isNotEmpty()) {
+            items.add(
+                OverviewAdapter.Item(
+                    entity.relativeMedia,
+                    OverviewAdapter.TYPE_RELATIVE,
+                    "相关的条目"
+                )
+            )
+        }
+
+        // 谁在看这部动画
+        if (entity.whoSee.isNotEmpty()) items.add(
+            OverviewAdapter.Item(
+                entity.whoSee.map {
+                    SampleAvatar(
+                        id = it.id,
+                        image = it.avatar,
+                        title = it.name,
+                        desc = it.time,
+                        type = SampleImageGridClickType.TYPE_USER
+                    )
+                },
+                OverviewAdapter.TYPE_COLLECTOR, "谁在看这部动画"
+            )
         )
+
+        // 推荐本条目的目录
+        if (entity.recommendIndex.isNotEmpty()) items.add(
+            OverviewAdapter.Item(
+                entity.recommendIndex.map {
+                    SampleAvatar(
+                        id = it.id,
+                        image = it.userAvatar,
+                        title = it.title,
+                        desc = it.userName,
+                        type = SampleImageGridClickType.TYPE_INDEX
+                    )
+                }, OverviewAdapter.TYPE_INDEX, "推荐本条目的目录"
+            )
+        )
+
+        // 吐槽
+        if (entity.comments.isNotEmpty()) {
+            items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_COMMENT, "吐槽"))
+        }
+
+        return items
+    }
 
     /**
      * 刷新收藏模型
      */
-    fun refreshCollectState(it: MediaCollectForm) {
+    fun refreshCollectState(it: MediaCollectForm): MediaDetailEntity? {
         mediaDetailLiveData.value?.collectState = it
-        mediaDetailLiveData.value = mediaDetailLiveData.value
+        return mediaDetailLiveData.value
     }
 }

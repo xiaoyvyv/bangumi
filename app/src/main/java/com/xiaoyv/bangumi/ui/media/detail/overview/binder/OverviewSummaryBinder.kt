@@ -3,10 +3,10 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 import android.content.Context
 import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseMultiItemAdapter
-import com.xiaoyv.bangumi.databinding.FragmentOverviewSummaryBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
-import com.xiaoyv.common.kts.inflater
-import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.kts.forceCast
+import com.xiaoyv.common.widget.state.AnimeSummaryView
 
 /**
  * Class: [OverviewSummaryBinder]
@@ -14,22 +14,29 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  * @author why
  * @since 11/30/23
  */
-class OverviewSummaryBinder :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewSummaryBinding>> {
+class OverviewSummaryBinder(private val isSummary: Boolean) :
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, AnimeSummaryView.Holder> {
+
     override fun onBind(
-        holder: BaseQuickBindingHolder<FragmentOverviewSummaryBinding>,
+        holder: AnimeSummaryView.Holder,
         position: Int,
-        item: OverviewAdapter.OverviewItem?
+        item: OverviewAdapter.Item?
     ) {
         item ?: return
-        holder.binding.tvSummaryContent.text = item.mediaDetailEntity.subjectSummary
+        holder.summaryView.section.title = item.title
+
+        item.entity.forceCast<MediaDetailEntity>().apply {
+            if (isSummary) {
+                holder.summaryView.summary = subjectSummary
+            } else {
+                holder.summaryView.summaries = infos
+            }
+        }
     }
 
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
         viewType: Int
-    ) = BaseQuickBindingHolder(
-        FragmentOverviewSummaryBinding.inflate(context.inflater, parent, false)
-    )
+    ) = AnimeSummaryView.createHolder(context, parent)
 }

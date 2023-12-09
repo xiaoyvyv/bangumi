@@ -27,6 +27,20 @@ class AnimeSummaryView @JvmOverloads constructor(
             binding.tvSummaryContent.text = value.ifBlank { "暂时没有介绍呢!" }
         }
 
+    var summaries: List<CharSequence> = emptyList()
+        set(value) {
+            field = value
+            if (value.isEmpty()) {
+                binding.tvSummaryContent.text = "暂时没有内容呢!"
+            } else {
+                binding.tvSummaryContent.text = null
+                value.forEach {
+                    binding.tvSummaryContent.append(it)
+                    binding.tvSummaryContent.append("\n")
+                }
+            }
+        }
+
     class Holder(private val view: AnimeSummaryView) :
         RecyclerView.ViewHolder(view) {
 

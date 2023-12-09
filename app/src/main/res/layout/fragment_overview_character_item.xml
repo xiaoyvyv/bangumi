@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_grid"
+    android:id="@+id/item_character"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -41,7 +41,7 @@
         android:layout_marginEnd="@dimen/ui_size_12"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.25"
-        android:maxLines="2"
+        android:maxLines="3"
         android:paddingVertical="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurface"
@@ -62,6 +62,6 @@
         app:layout_constraintEnd_toEndOf="@id/iv_avatar"
         app:layout_constraintStart_toEndOf="@+id/tv_name"
         app:layout_constraintTop_toTopOf="@+id/tv_name"
-        tools:text="@string/app_name" />
+        tools:text="+12" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewTagItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
@@ -23,18 +24,18 @@ import com.xiaoyv.widget.kts.getAttrColor
  * @since 11/30/23
  */
 class OverviewTagBinder(private val clickItemListener: (MediaDetailEntity.MediaTag) -> Unit) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewTagBinding>> {
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewTagBinding>> {
 
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewTagBinding>,
         position: Int,
-        item: OverviewAdapter.OverviewItem?
+        item: OverviewAdapter.Item?
     ) {
         item ?: return
         holder.binding.boxTag.removeAllViews()
-
         val context = holder.binding.root.context
-        for (tag in item.mediaDetailEntity.tags) {
+
+        for (tag in item.entity.forceCast<MediaDetailEntity>().tags) {
             val binding = FragmentOverviewTagItemBinding.inflate(
                 context.inflater,
                 holder.binding.boxTag,

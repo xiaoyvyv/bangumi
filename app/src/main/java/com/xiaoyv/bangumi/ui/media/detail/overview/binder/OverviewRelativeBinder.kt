@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewRelativeItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
+import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -25,23 +26,24 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 class OverviewRelativeBinder(
     private val touchedListener: RecyclerItemTouchedListener,
     private val clickItemListener: (MediaDetailEntity.MediaRelative) -> Unit
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.OverviewItem, BaseQuickBindingHolder<FragmentOverviewRelativeBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewRelativeBinding>> {
 
     private val itemAdapter by lazy {
-        ItemAdapter()
+        ItemAdapter().apply {
+            setOnDebouncedChildClickListener(R.id.item_related, block = clickItemListener)
+        }
     }
 
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewRelativeBinding>,
         position: Int,
-        item: OverviewAdapter.OverviewItem?
+        item: OverviewAdapter.Item?
     ) {
         item ?: return
         holder.binding.rvRelative.adapter = itemAdapter
         holder.binding.rvRelative.addOnItemTouchListener(touchedListener)
-        holder.binding.rvRelative.setInitialPrefetchItemCount(item.mediaDetailEntity.relativeMedia.size)
-        itemAdapter.submitList(item.mediaDetailEntity.relativeMedia)
-        itemAdapter.setOnDebouncedChildClickListener(R.id.item_related, block = clickItemListener)
+        holder.binding.rvRelative.setInitialPrefetchItemCount(5)
+        itemAdapter.submitList(item.entity.forceCast())
     }
 
     override fun onCreate(

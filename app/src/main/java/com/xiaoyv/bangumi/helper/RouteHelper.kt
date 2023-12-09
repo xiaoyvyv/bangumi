@@ -119,6 +119,9 @@ object RouteHelper {
     fun jumpIndexDetail(id: String) {
 
     }
+    fun jumpTagDetail(tag: String) {
+
+    }
 
     fun jumpGroupDetail(groupId: String) {
         GroupDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to groupId))

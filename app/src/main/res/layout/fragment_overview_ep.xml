@@ -5,17 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
+    <com.xiaoyv.common.widget.menu.AnimeSectionView
         android:id="@+id/tv_title_ep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="章节"
-        android:textAppearance="?attr/textAppearanceTitleLarge"
-        android:textColor="?attr/colorOnSurface"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
@@ -23,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/ui_size_8"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

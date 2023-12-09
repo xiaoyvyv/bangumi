@@ -71,7 +71,6 @@ class PersonOverviewAdapter(
         const val TYPE_VOICE = 6
         const val TYPE_CHARACTER = 7
         const val TYPE_OPUS = 8
-        const val TYPE_COMMENT = 9
     }
 
     data class Item(
