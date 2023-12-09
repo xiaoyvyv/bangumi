@@ -31,7 +31,7 @@ class MediaPageAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
             oldItem: BrowserEntity.Item,
             newItem: BrowserEntity.Item
         ): Boolean {
-            return oldItem.subjectId == newItem.subjectId
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(

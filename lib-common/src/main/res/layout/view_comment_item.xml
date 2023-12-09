@@ -14,7 +14,7 @@
         android:layout_marginStart="@dimen/ui_layout_margin"
         android:layout_marginTop="@dimen/ui_layout_margin"
         android:layout_marginBottom="@dimen/ui_layout_margin"
-        android:foreground="@drawable/shape_bottom_edge_corner"
+        android:foreground="@drawable/shape_cover_mask"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

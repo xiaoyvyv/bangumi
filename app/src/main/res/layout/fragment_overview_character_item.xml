@@ -22,7 +22,7 @@
         android:id="@+id/tv_jobs"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0"
-        android:background="@drawable/shape_bottom_edge_corner"
+        android:background="@drawable/shape_cover_mask"
         android:gravity="bottom|start"
         android:paddingHorizontal="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_6"
@@ -40,28 +40,43 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/ui_size_12"
         android:ellipsize="end"
-        android:lineSpacingMultiplier="1.25"
-        android:maxLines="3"
+        android:maxLines="1"
         android:paddingVertical="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintEnd_toStartOf="@+id/tv_times"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_comment_count"
         app:layout_constraintStart_toStartOf="@+id/iv_avatar"
         app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
         tools:text="@tools:sample/full_names" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_times"
+        android:id="@+id/tv_comment_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="2"
+        android:maxLines="1"
         android:paddingVertical="@dimen/ui_size_6"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_name"
         app:layout_constraintEnd_toEndOf="@id/iv_avatar"
         app:layout_constraintStart_toEndOf="@+id/tv_name"
         app:layout_constraintTop_toTopOf="@+id/tv_name"
         tools:text="+12" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_person"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingBottom="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintEnd_toEndOf="@+id/iv_avatar"
+        app:layout_constraintStart_toStartOf="@+id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        tools:text="@tools:sample/full_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

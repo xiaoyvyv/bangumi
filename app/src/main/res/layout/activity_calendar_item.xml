@@ -22,7 +22,7 @@
         android:id="@+id/tv_title"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_bottom_edge_corner"
+        android:background="@drawable/shape_cover_mask"
         android:ellipsize="end"
         android:maxLines="3"
         android:paddingHorizontal="@dimen/ui_size_12"

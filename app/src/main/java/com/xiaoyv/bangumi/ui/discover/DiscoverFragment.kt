@@ -1,11 +1,18 @@
 package com.xiaoyv.bangumi.ui.discover
 
+import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentDiscoverBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.openInBrowser
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 /**
  * Class: [DiscoverFragment]
@@ -31,15 +38,25 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
 
     override fun initData() {
         binding.vpContent.adapter = vpAdapter
-//        binding.vpContent.offscreenPageLimit = 5
-
+        binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
         tabLayoutMediator.attach()
     }
 
     override fun initListener() {
+        binding.toolbar.menu.apply {
+            add(getString(CommonString.common_search))
+                .setIcon(CommonDrawable.ic_search)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    RouteHelper.jumpSearch()
+                    true
+                }
+        }
 
+        binding.bgm.setOnFastLimitClickListener {
+            openInBrowser("https://github.com/xiaoyvyv/Bangumi-for-Android")
+        }
     }
-
 
     override fun LifecycleOwner.initViewObserver() {
         UserHelper.observe(this) {

@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
         android:orientation="vertical"
+        android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/tv_item_title"
         app:spanCount="2"

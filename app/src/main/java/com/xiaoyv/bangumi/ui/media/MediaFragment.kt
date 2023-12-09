@@ -9,11 +9,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentMediaBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.option.MediaOptionFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.bean.MediaOptionConfig
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
 import kotlinx.coroutines.delay
 
 /**
@@ -74,14 +76,23 @@ class MediaFragment : BaseViewModelFragment<FragmentMediaBinding, MediaViewModel
     }
 
     override fun initListener() {
-        binding.toolbar.menu
-            .add("Filter")
-            .setIcon(CommonDrawable.ic_filter)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            .setOnMenuItemClickListener {
-                binding.drawLayout.openDrawer(GravityCompat.START)
-                true
-            }
+        binding.toolbar.menu.apply {
+            add(getString(CommonString.common_filter))
+                .setIcon(CommonDrawable.ic_filter)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    binding.drawLayout.openDrawer(GravityCompat.START)
+                    true
+                }
+
+            add(getString(CommonString.common_search))
+                .setIcon(CommonDrawable.ic_search)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    RouteHelper.jumpSearch()
+                    true
+                }
+        }
 
         binding.vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

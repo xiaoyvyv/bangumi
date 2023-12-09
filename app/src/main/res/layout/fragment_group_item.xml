@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
         android:orientation="vertical"
+        android:overScrollMode="never"
         android:padding="@dimen/ui_size_8"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/section_hot"

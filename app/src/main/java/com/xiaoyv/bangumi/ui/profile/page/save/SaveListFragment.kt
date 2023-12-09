@@ -107,7 +107,7 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_save) {
-            RouteHelper.jumpMediaDetail(it.subjectId)
+            RouteHelper.jumpMediaDetail(it.id)
         }
     }
 

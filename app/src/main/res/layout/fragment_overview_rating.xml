@@ -5,17 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_title_rating"
-        android:layout_width="wrap_content"
+    <com.xiaoyv.common.widget.menu.AnimeSectionView
+        android:id="@+id/tv_section"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="评分"
-        android:textAppearance="?attr/textAppearanceTitleLarge"
-        android:textColor="?attr/colorOnSurface"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -23,12 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0.0"
+        android:layout_marginStart="@dimen/ui_size_60"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="@color/ui_pink"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_title_rating"
-        app:layout_constraintStart_toEndOf="@+id/tv_title_rating"
-        app:layout_constraintTop_toTopOf="@+id/tv_title_rating"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_section"
+        app:layout_constraintStart_toStartOf="@+id/tv_section"
+        app:layout_constraintTop_toTopOf="@+id/tv_section"
         tools:ignore="HardcodedText" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -46,24 +40,16 @@
         app:layout_constraintStart_toEndOf="@+id/tv_score"
         tools:ignore="HardcodedText" />
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_rating_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title_rating" />
-
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_rating_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+    <com.xiaoyv.common.widget.star.AnimeLineChartViw
+        android:id="@+id/cl_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginTop="@dimen/ui_size_12"
         android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:text="用户评分"
-        app:drawableEndCompat="@drawable/ic_right"
-        app:drawableTint="?attr/colorOnSurfaceVariant"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rating_content" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="9:5"
+        app:layout_constraintTop_toBottomOf="@+id/tv_section"
+        app:layout_constraintVertical_bias="0" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_rating_standard_deviation"
@@ -71,7 +57,6 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:text="标准差：1.2"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_rating_detail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rating_content" />
+        app:layout_constraintTop_toBottomOf="@+id/cl_line" />
 </androidx.constraintlayout.widget.ConstraintLayout>

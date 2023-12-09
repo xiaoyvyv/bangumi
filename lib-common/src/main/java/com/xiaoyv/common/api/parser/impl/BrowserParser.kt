@@ -5,7 +5,8 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.MediaType
-import org.jsoup.nodes.Document
+import com.xiaoyv.common.widget.star.StarCommentView
+import org.jsoup.nodes.Element
 
 /**
  * Class: [BrowserParser]
@@ -18,8 +19,8 @@ object BrowserParser {
     /**
      * 是否是收藏的条目
      */
-    fun Document.parserBrowserPage(
-        @MediaType mediaType: String,
+    fun Element.parserBrowserPage(
+        @MediaType mediaType: String? = null,
         isCollectList: Boolean = false
     ): BrowserEntity {
         requireNoError()
@@ -29,7 +30,7 @@ object BrowserParser {
         browserEntity.items = select("#browserItemList > li").map {
             val item = BrowserEntity.Item()
 
-            item.subjectId = it.select("a.cover").attr("href").substringAfterLast("/")
+            item.id = it.select("a.cover").attr("href").substringAfterLast("/")
             item.coverImage = it.select("a.cover img").attr("src").optImageUrl()
             item.title = it.select(".inner h3 a").text()
             item.subtitle = it.select(".inner h3 small").text()
@@ -37,7 +38,9 @@ object BrowserParser {
             item.infoTip = parserInfoTip(it.select(".tip").text())
 
             val rateInfo = it.select(".rateInfo")
-            item.rating = rateInfo.select(".starstop-s > span").attr("class")
+            item.rating = rateInfo.select(".starstop-s > span").attr("class").let { starClass ->
+                StarCommentView.parseScore(starClass)
+            }
             item.ratingScore = rateInfo.select(".fade").text()
 
             if (isCollectList) {
@@ -48,17 +51,15 @@ object BrowserParser {
 
             val collectBlock = it.select(".collectBlock")
             item.isCollection = collectBlock.select(".collectModify").isNotEmpty()
-            item.mediaType = mediaType
-            item.mediaTypeName = GlobalConfig.mediaTypes.find { tab ->
-                tab.type == mediaType
-            }?.title.orEmpty()
+            item.mediaType = mediaType.orEmpty()
+            item.mediaTypeName = GlobalConfig.mediaTypeName(item.mediaType)
             item
         }
 
         return browserEntity
     }
 
-    private fun parserInfoTip(infoTip: String): BrowserEntity.InfoTip {
+    fun parserInfoTip(infoTip: String): BrowserEntity.InfoTip {
         val regex = "(\\d{4}-\\d{1,2})|((\\d{4})年(\\d{1,2})月)".toRegex()
         val time = regex.find(infoTip)?.groupValues?.firstOrNull().orEmpty()
         val eps = "\\d\\s+话".toRegex().find(infoTip)?.value.orEmpty()

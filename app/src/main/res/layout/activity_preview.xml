@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
 
         <com.xiaoyv.common.widget.appbar.AnimeToolbar
             android:id="@id/toolbar"

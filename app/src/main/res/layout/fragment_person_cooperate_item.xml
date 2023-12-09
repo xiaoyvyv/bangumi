@@ -22,7 +22,7 @@
         android:id="@+id/tv_jobs"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0"
-        android:background="@drawable/shape_bottom_edge_corner"
+        android:background="@drawable/shape_cover_mask"
         android:gravity="bottom|start"
         android:paddingHorizontal="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_6"

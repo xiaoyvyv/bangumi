@@ -21,7 +21,7 @@
     <View
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0"
-        android:background="@drawable/shape_bottom_edge_corner"
+        android:background="@drawable/shape_cover_mask"
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
         app:layout_constraintEnd_toEndOf="@+id/iv_avatar"
         app:layout_constraintStart_toStartOf="@+id/iv_avatar"

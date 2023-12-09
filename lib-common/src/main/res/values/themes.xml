@@ -66,9 +66,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Theme.Bangumi.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Bangumi.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
 
-    <style name="Theme.Bangumi.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Bangumi.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 
     <style name="Theme.Bangumi.ImageCornerSmall">
         <item name="cornerFamily">?attr/shapeCornerFamily</item>

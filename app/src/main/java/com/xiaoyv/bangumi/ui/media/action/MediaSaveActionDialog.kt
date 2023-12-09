@@ -29,11 +29,11 @@ import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.ScoreStarType
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
-import com.xiaoyv.common.kts.toast
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
+import com.xiaoyv.widget.kts.toast
 import com.xiaoyv.widget.kts.updateWindowParams
 import com.xiaoyv.widget.kts.useNotNull
 import kotlinx.coroutines.Dispatchers

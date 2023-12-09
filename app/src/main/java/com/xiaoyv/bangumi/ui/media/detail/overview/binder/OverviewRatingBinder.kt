@@ -24,17 +24,21 @@ class OverviewRatingBinder :
         item: OverviewAdapter.Item?
     ) {
         item ?: return
-
+        holder.binding.tvSection.title = item.title
+        holder.binding.tvSection.more = "查看评分 >>"
         item.entity.forceCast<MediaDetailEntity>().rating.apply {
+            val total = ratingDetail.sumOf { item -> item.count.toLong() }
             holder.binding.tvScore.text = String.format("%.1f", globalRating)
+
             if (globalRank != 0) {
                 holder.binding.tvScoreTip.text = String.format("#%d %s", globalRank, description)
             } else {
                 holder.binding.tvScoreTip.text = String.format("%s", description)
             }
 
+            holder.binding.clLine.setData(ratingDetail, total, false)
             holder.binding.tvRatingStandardDeviation.text =
-                String.format("%.2f", standardDeviation)
+                String.format("标准差：%.2f", standardDeviation)
         }
     }
 

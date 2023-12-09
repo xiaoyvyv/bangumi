@@ -4,13 +4,13 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
-import com.blankj.utilcode.util.SpanUtils
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewCharacterBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewCharacterItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -18,7 +18,6 @@ import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
-import com.xiaoyv.widget.kts.spi
 
 /**
  * Class: [OverviewCharacterBinder]
@@ -58,35 +57,17 @@ class OverviewCharacterBinder(
     )
 
     private class ItemAdapter : BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaCharacter,
-            FragmentOverviewCharacterItemBinding>(DiffItemCallback) {
+            FragmentOverviewCharacterItemBinding>(IdDiffItemCallback()) {
         override fun BaseQuickBindingHolder<FragmentOverviewCharacterItemBinding>.converted(item: MediaDetailEntity.MediaCharacter) {
             binding.ivAvatar.loadImageAnimate(item.avatar)
+            binding.tvName.text = item.characterNameCn.ifBlank { item.characterName }
             binding.tvJobs.text = item.jobs.joinToString(";")
-            binding.tvTimes.text = String.format("+%d", item.saveCount)
-            binding.tvTimes.isVisible = item.saveCount != 0
-
-            SpanUtils.with(binding.tvName)
-                .append(item.characterNameCn.ifBlank { item.characterName })
-                .appendLine()
-                .append(item.personJob + "：" + item.persons.joinToString("、") { it.personName })
-                .setFontSize(12.spi)
-                .create()
-        }
-
-        private object DiffItemCallback :
-            DiffUtil.ItemCallback<MediaDetailEntity.MediaCharacter>() {
-            override fun areItemsTheSame(
-                oldItem: MediaDetailEntity.MediaCharacter,
-                newItem: MediaDetailEntity.MediaCharacter
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(
-                oldItem: MediaDetailEntity.MediaCharacter,
-                newItem: MediaDetailEntity.MediaCharacter
-            ): Boolean {
-                return oldItem == newItem
+            binding.tvCommentCount.text = String.format("讨论：%d", item.saveCount)
+            binding.tvCommentCount.isVisible = item.saveCount != 0
+            binding.tvPerson.isVisible = item.persons.isNotEmpty()
+            binding.tvPerson.text = buildString {
+                append("CV：")
+                append(item.persons.joinToString("、") { it.personName })
             }
         }
     }

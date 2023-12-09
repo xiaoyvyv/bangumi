@@ -23,5 +23,6 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
         android:orientation="vertical"
+        android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@+id/tv_item_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>

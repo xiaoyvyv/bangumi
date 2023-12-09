@@ -100,15 +100,15 @@ data class MediaDetailEntity(
     @Parcelize
     @Keep
     data class MediaCharacter(
+        @SerializedName("id") override var id: String = "",
         @SerializedName("avatar") var avatar: String = "",
-        @SerializedName("id") var id: String = "",
         @SerializedName("characterName") var characterName: String = "",
         @SerializedName("characterNameCn") var characterNameCn: String = "",
         @SerializedName("saveCount") var saveCount: Int = 0,
         @SerializedName("jobs") var jobs: List<String> = emptyList(),
+        @SerializedName("persons") var persons: List<MediaCharacterPerson> = emptyList(),
         @SerializedName("personJob") var personJob: String = "",
-        @SerializedName("persons") var persons: List<MediaCharacterPerson> = emptyList()
-    ) : Parcelable
+    ) : Parcelable, IdEntity
 
     @Parcelize
     @Keep
@@ -138,7 +138,7 @@ data class MediaDetailEntity(
         @SerializedName("notEp") var notEp: Boolean = false,
         @SerializedName("isRelease") var isRelease: Boolean = false,
         @SerializedName("commentCount") var commentCount: Int = 0
-    ) : Parcelable,IdEntity
+    ) : Parcelable, IdEntity
 
     @Parcelize
     @Keep

@@ -28,7 +28,7 @@
         android:id="@+id/tv_tag"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0"
-        android:background="@drawable/shape_bottom_edge_corner"
+        android:background="@drawable/shape_cover_mask"
         android:ellipsize="end"
         android:gravity="bottom|start"
         android:maxLines="1"

@@ -10,6 +10,7 @@ import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.MessageBoxType
+import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.config.annotation.TimelineType
 import okhttp3.MultipartBody
@@ -401,4 +402,18 @@ interface BgmWebApi {
         @Field("chkall") chkall: String,
         @Query("gh") gh: String,
     ): Document
+
+    @GET("/{pathType}/{keyword}")
+    suspend fun querySearch(
+        @Path("pathType") pathType: String,
+        @Path("keyword") keyword: String,
+        @Query("cat") @SearchCatType cat: String,
+        @Query("page") page: Int,
+        @Query("legacy") legacy: Int = 1
+    ): Document
 }
+
+
+
+
+

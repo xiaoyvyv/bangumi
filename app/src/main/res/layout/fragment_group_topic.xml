@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
         android:orientation="vertical"
+        android:overScrollMode="never"
         app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/section_topic"
         tools:listitem="@layout/fragment_group_topic_item" />

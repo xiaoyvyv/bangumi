@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -18,21 +19,21 @@ data class BrowserEntity(var items: List<Item> = emptyList()) : Parcelable {
     @Keep
     @Parcelize
     data class Item(
+        override var id: String = "",
         var title: String = "",
         var subtitle: String = "",
         var isCollection: Boolean = false,
         var ratingCount: String = "",
         var ratingScore: String = "",
-        var rating: String = "",
+        var rating: Float = 0f,
         var infoTip: InfoTip = InfoTip(),
         var rank: String = "",
         var coverImage: String = "",
-        var subjectId: String = "",
 
         @MediaType
         var mediaType: String = MediaType.TYPE_ANIME,
         var mediaTypeName: String = ""
-    ) : Parcelable
+    ) : Parcelable, IdEntity
 
     @Keep
     @Parcelize

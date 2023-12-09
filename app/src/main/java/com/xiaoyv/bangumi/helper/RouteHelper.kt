@@ -16,6 +16,9 @@ import com.xiaoyv.bangumi.ui.feature.person.PersonActivity
 import com.xiaoyv.bangumi.ui.feature.post.blog.PostBlogActivity
 import com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
+import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
+import com.xiaoyv.common.config.bean.SearchItem
+import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
@@ -25,6 +28,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.debugLog
 
 /**
@@ -34,6 +38,13 @@ import com.xiaoyv.common.kts.debugLog
  * @since 11/25/23
  */
 object RouteHelper {
+
+    /**
+     * - https://bangumi.tv/group/topic/390252#post_2535628
+     */
+    fun handleUrl(titleLink: String) {
+        debugLog { "Handle Url: $titleLink" }
+    }
 
     fun jumpCalendar() {
         ActivityUtils.startActivity(CalendarActivity::class.java)
@@ -119,6 +130,7 @@ object RouteHelper {
     fun jumpIndexDetail(id: String) {
 
     }
+
     fun jumpTagDetail(tag: String) {
 
     }
@@ -153,10 +165,15 @@ object RouteHelper {
         ActivityUtils.startActivity(SettingActivity::class.java)
     }
 
-    /**
-     * - https://bangumi.tv/group/topic/390252#post_2535628
-     */
-    fun handleUrl(titleLink: String) {
-        debugLog { "Handle Url: $titleLink" }
+    fun jumpSearch() {
+        ActivityUtils.startActivity(SearchActivity::class.java)
+    }
+
+    fun jumpSearchDetail(searchItem: SearchItem) {
+        CacheHelper.saveSearchHistory(searchItem)
+
+        SearchDetailActivity::class.open(
+            bundleOf(NavKey.KEY_PARCELABLE to searchItem)
+        )
     }
 }

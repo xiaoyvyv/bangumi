@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiaoyv.common.widget.appbar.AnimeAppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+    <com.xiaoyv.common.widget.appbar.AnimeToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetStart="@dimen/ui_size_0"
+        app:popupTheme="@style/Theme.Bangumi.PopupOverlay">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_layout"
+                android:layout_width="@dimen/ui_size_0"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ui_layout_margin"
+                android:layout_marginEnd="@dimen/ui_size_4"
+                app:endIconMode="clear_text"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_cancel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:startIconDrawable="@drawable/ic_search">
+
+                <com.xiaoyv.common.widget.text.AnimeEditTextView
+                    android:id="@+id/et_keyword"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/ui_size_40"
+                    android:background="@drawable/ui_shape_rectangle_corner_6"
+                    android:backgroundTint="?attr/colorSurface"
+                    android:hint="搜索"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingVertical="@dimen/ui_size_0"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:textColor="?attr/colorOnSurface" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/ui_size_4"
+                android:layout_marginBottom="@dimen/ui_size_4"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/ui_size_12"
+                android:paddingVertical="@dimen/ui_size_12"
+                android:text="@string/common_cancel"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.xiaoyv.common.widget.appbar.AnimeToolbar>
+</com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>

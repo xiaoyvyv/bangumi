@@ -16,6 +16,7 @@ import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 
 /**
@@ -74,7 +75,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     override fun initData() {
         binding.rvRecycler.layoutManager =
             AnimeLinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false).apply {
-                extraLayoutSpaceScale = 6f
+                extraLayoutSpaceScale = 8f
             }
         binding.rvRecycler.adapter = overviewAdapter
         binding.rvRecycler.itemAnimator = null
@@ -106,7 +107,13 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     }
 
     override fun initListener() {
+        overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
+            when (it.type) {
+                OverviewAdapter.TYPE_RATING -> {
 
+                }
+            }
+        }
     }
 
 

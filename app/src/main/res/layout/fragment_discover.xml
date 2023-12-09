@@ -10,14 +10,35 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
 
         <com.xiaoyv.common.widget.appbar.AnimeToolbar
             android:id="@id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title="Bgm Android" />
+            app:title="@string/ui_common_empty">
+
+            <com.xiaoyv.common.widget.image.AnimeImageView
+                android:layout_width="@dimen/ui_size_135"
+                android:layout_height="@dimen/ui_size_35"
+                android:background="@color/ui_transparent"
+                android:paddingStart="@dimen/ui_size_0"
+                android:paddingEnd="@dimen/ui_size_12"
+                app:srcCompat="@drawable/ic_logo_banner" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/bgm"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ui_size_35"
+                android:alpha="0.5"
+                android:gravity="bottom"
+                android:includeFontPadding="true"
+                android:text="@string/app_name"
+                android:textAppearance="?attr/textAppearanceLabelMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </com.xiaoyv.common.widget.appbar.AnimeToolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/table_layout"

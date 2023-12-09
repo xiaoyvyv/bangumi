@@ -25,7 +25,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_bottom_edge_corner"
+        android:background="@drawable/shape_cover_mask"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/card_small"
         app:layout_constraintEnd_toEndOf="@+id/card_small"

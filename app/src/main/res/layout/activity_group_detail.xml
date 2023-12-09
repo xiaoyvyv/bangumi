@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ui_transparent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
 
         <com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout
             android:id="@id/toolbar_layout"
@@ -184,6 +185,7 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
+                android:overScrollMode="never"
                 android:padding="@dimen/ui_size_8"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/section_recently"
@@ -209,6 +211,7 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
+                android:overScrollMode="never"
                 android:padding="@dimen/ui_size_8"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/section_other"
