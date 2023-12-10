@@ -18,7 +18,7 @@ import com.xiaoyv.widget.dialog.UiDialog
  * @author why
  * @since 11/24/23
  */
-class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>() {
+class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>() {
     private val vpAdapter by lazy { HomeAdapter(this) }
 
     private val robot by lazy { HomeRobot(this) }
@@ -43,6 +43,14 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, HomeViewModel>()
                 R.id.bottom_menu_profile -> binding.vpView.setCurrentItem(4, false)
             }
             true
+        }
+
+        binding.navView.setOnItemReselectedListener {
+            when (it.itemId) {
+                R.id.bottom_menu_home -> {
+                    viewModel.resetDiscoverIndex()
+                }
+            }
         }
     }
 

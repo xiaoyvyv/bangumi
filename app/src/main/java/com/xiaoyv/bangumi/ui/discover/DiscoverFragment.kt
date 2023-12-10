@@ -1,11 +1,13 @@
 package com.xiaoyv.bangumi.ui.discover
 
 import android.view.MenuItem
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
-import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentDiscoverBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.MainViewModel
+import com.xiaoyv.bangumi.ui.discover.home.HomeViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
@@ -21,6 +23,8 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
  * @since 11/24/23
  */
 class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, DiscoverViewModel>() {
+
+    private val activityViewModel: MainViewModel by activityViewModels()
 
     private val vpAdapter by lazy {
         DiscoverAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
@@ -59,6 +63,10 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
     }
 
     override fun LifecycleOwner.initViewObserver() {
+        activityViewModel.onDiscoverPageIndex.observe(this) {
+            binding.vpContent.setCurrentItem(it, true)
+        }
+
         UserHelper.observe(this) {
             if (!it.isEmpty) {
 

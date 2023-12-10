@@ -23,17 +23,20 @@ import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
+import com.xiaoyv.bangumi.ui.feature.web.WebActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.decodeUrl
 
 /**
  * Class: [RouteHelper]
@@ -46,48 +49,82 @@ object RouteHelper {
      * - https://bangumi.tv/group/topic/390252#post_2535628
      * - /person/57315
      */
-    fun handleUrl(titleLink: String) {
+    fun handleUrl(titleLink: String): Boolean {
         val id = titleLink.substringAfterLast("/")
             .substringBefore("#")
             .substringBefore("?")
 
+        debugLog { "Handle Url: $titleLink" }
+
         when {
-            // 人物
-            titleLink.contains(BgmPathType.TYPE_PERSON) -> {
-                jumpPerson(id, false)
-            }
             // 话题
             titleLink.contains(BgmPathType.TYPE_TOPIC) -> {
                 when {
                     // 虚拟人物
                     titleLink.contains(TopicType.TYPE_CRT) -> {
                         jumpTopicDetail(id, TopicType.TYPE_CRT)
+                        return true
                     }
                     // 章节
                     titleLink.contains(TopicType.TYPE_EP) -> {
                         jumpTopicDetail(id, TopicType.TYPE_EP)
+                        return true
                     }
                     // 小组
                     titleLink.contains(TopicType.TYPE_GROUP) -> {
                         jumpTopicDetail(id, TopicType.TYPE_GROUP)
+                        return true
                     }
                     // 现实人物
                     titleLink.contains(TopicType.TYPE_PERSON) -> {
                         jumpTopicDetail(id, TopicType.TYPE_PERSON)
+                        return true
                     }
                     // 条目
                     titleLink.contains(TopicType.TYPE_SUBJECT) -> {
                         jumpTopicDetail(id, TopicType.TYPE_SUBJECT)
+                        return true
                     }
                 }
             }
             // 日志
             titleLink.contains(BgmPathType.TYPE_BLOG) -> {
                 jumpBlogDetail(id)
+                return true
+            }
+            // 标签
+            titleLink.contains(BgmPathType.TYPE_SEARCH_TAG) -> {
+                val decodeUrl = titleLink.decodeUrl()
+                val tag = decodeUrl.substringAfter("tag").trim('/')
+                    .substringBefore("/")
+                val mediaType = decodeUrl.substringBefore("tag").trim('/')
+                    .substringAfterLast("/")
+                jumpTagDetail(mediaType, tag)
+                return true
+            }
+            // 虚拟角色
+            titleLink.contains(BgmPathType.TYPE_CHARACTER) -> {
+                jumpPerson(id, true)
+                return true
+            }
+            // 现实人物
+            titleLink.contains(BgmPathType.TYPE_PERSON) -> {
+                jumpPerson(titleLink.parseCount().toString(), false)
+                return true
+            }
+            // 用户
+            titleLink.contains(BgmPathType.TYPE_USER) -> {
+                jumpUserDetail(id)
+                return true
+            }
+            // 条目
+            titleLink.contains(BgmPathType.TYPE_SUBJECT) -> {
+                jumpMediaDetail(id)
+                return true
             }
         }
 
-        debugLog { "Handle Url: $titleLink" }
+        return false
     }
 
     fun jumpCalendar() {
@@ -237,5 +274,9 @@ object RouteHelper {
 
     fun jumpRatingDetail() {
 
+    }
+
+    fun jumpWeb(url: String) {
+        WebActivity::class.open(bundleOf(NavKey.KEY_STRING to url))
     }
 }

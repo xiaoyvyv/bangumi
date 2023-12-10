@@ -95,6 +95,12 @@ class BgmApiManager {
         const val URL_BASE_WEB = "https://bangumi.tv"
         const val URL_BASE_API = "https://api.bgm.tv"
 
+        /**
+         * 年鉴
+         */
+        val URL_ALMANAC
+            get() = "$URL_BASE_WEB/award/2022"
+
         private val instance by lazy { BgmApiManager() }
 
         val bgmJsonApi: BgmJsonApi

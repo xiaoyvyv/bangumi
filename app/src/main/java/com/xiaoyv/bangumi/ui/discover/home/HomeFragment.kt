@@ -6,6 +6,8 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.config.annotation.HomeFeatureType
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.kts.useNotNull
 
@@ -18,15 +20,34 @@ import com.xiaoyv.widget.kts.useNotNull
 class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>() {
 
     private val contentAdapter by lazy {
-        HomeAdapter {
-            RouteHelper.jumpMediaDetail(it.id)
-        }
+        HomeAdapter(
+            onClickFeature = {
+                when (it.id) {
+                    HomeFeatureType.TYPE_SEARCH -> RouteHelper.jumpSearch()
+                    HomeFeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
+                    HomeFeatureType.TYPE_MAGI -> {
+
+                    }
+
+                    HomeFeatureType.TYPE_DOLLARS -> {
+
+                    }
+
+                    HomeFeatureType.TYPE_ALMANAC -> {
+                        RouteHelper.jumpWeb(BgmApiManager.URL_ALMANAC)
+                    }
+                }
+            },
+            onClickMedia = {
+                RouteHelper.jumpMediaDetail(it.id)
+            }
+        )
     }
 
     override fun initView() {
         binding.rvContent.layoutManager =
             AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false).apply {
-                extraLayoutSpaceScale = 2.5f
+                extraLayoutSpaceScale = 3f
             }
     }
 

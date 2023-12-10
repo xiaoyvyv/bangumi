@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/ui_layout_margin"
-    android:layout_marginTop="@dimen/ui_layout_margin"
-    app:cardCornerRadius="@dimen/ui_layout_radius"
-    app:strokeColor="@color/ui_transparent"
-    app:strokeWidth="@dimen/ui_size_0">
+    android:orientation="vertical">
 
-    <cn.bingoogolapple.bgabanner.BGABanner
-        android:id="@+id/banner"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_size_180"
-        android:background="@color/ui_transparent"
-        app:banner_isNumberIndicator="true"
-        app:banner_numberIndicatorBackground="@color/ui_transparent"
-        app:banner_numberIndicatorTextColor="@color/ui_transparent"
-        app:banner_pointAutoPlayAble="false"
-        app:banner_pointContainerBackground="@color/ui_transparent"
-        app:banner_transitionEffect="depth"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        app:cardCornerRadius="@dimen/ui_layout_radius"
+        app:strokeColor="@color/ui_transparent"
+        app:strokeWidth="@dimen/ui_size_0">
+
+        <cn.bingoogolapple.bgabanner.BGABanner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_180"
+            android:background="@color/ui_transparent"
+            app:banner_isNumberIndicator="true"
+            app:banner_numberIndicatorBackground="@color/ui_transparent"
+            app:banner_numberIndicatorTextColor="@color/ui_transparent"
+            app:banner_pointAutoPlayAble="false"
+            app:banner_pointContainerBackground="@color/ui_transparent"
+            app:banner_transitionEffect="depth" />
+    </com.google.android.material.card.MaterialCardView>
 
     <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
         android:id="@+id/rv_enter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_24"
+        android:nestedScrollingEnabled="false"
         android:orientation="vertical"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        android:paddingBottom="@dimen/ui_layout_margin"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="5" />
-
-</com.google.android.material.card.MaterialCardView>
+        app:spanCount="5"
+        tools:listitem="@layout/fragment_home_banner_feature" />
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.databinding.ViewHomeCardBinding
@@ -27,6 +28,7 @@ class HomeCardView @JvmOverloads constructor(
     private val binding = ViewHomeCardBinding.inflate(LayoutInflater.from(context), this)
     private val itemAdapter by lazy { ItemAdapter() }
 
+
     var data: HomeIndexCardEntity? = null
         set(value) {
             field = value
@@ -42,6 +44,10 @@ class HomeCardView @JvmOverloads constructor(
         itemAdapter.setOnDebouncedItemClickListener {
             onItemClick(it)
         }
+    }
+
+    fun setRecycledViewPool(viewPool: RecycledViewPool) {
+        binding.rvSmall.setRecycledViewPool(viewPool)
     }
 
     private fun refreshCardImages() {

@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.xiaoyv.common.config.bean.HomeIndexFeature
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -13,5 +14,6 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class HomeIndexBannerEntity(
-    var banners: List<String> = emptyList()
+    var banners: List<String> = emptyList(),
+    var features: List<HomeIndexFeature> = emptyList()
 ) : Parcelable
