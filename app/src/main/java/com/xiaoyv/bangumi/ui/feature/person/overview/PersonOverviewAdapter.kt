@@ -50,8 +50,8 @@ class PersonOverviewAdapter(
                         RouteHelper.jumpMediaDetail(id)
                     }
                 },
-                clickPersonItem = {
-                    RouteHelper.jumpPerson(it.id, false)
+                clickCharacterItem = {
+                    RouteHelper.jumpPerson(it.id, true)
                 }
             ))
             .addItemType(TYPE_OPUS, PersonOverviewOpusBinder {

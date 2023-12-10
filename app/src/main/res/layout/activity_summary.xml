@@ -38,7 +38,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:isScrollContainer="false"
-                android:lineSpacingMultiplier="1.25"
+                android:lineSpacingMultiplier="1.5"
                 android:padding="@dimen/ui_layout_margin"
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:textColor="?attr/colorOnSurface"
