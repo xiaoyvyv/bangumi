@@ -76,14 +76,7 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
     }
 
     override fun initListener() {
-        binding.appBar.addOnOffsetChangedListener { _, i ->
-            binding.fabTop.isVisible =
-                abs(i) < 100.dpi && binding.vpContent.currentItem == vpAdapter.itemCount - 1
-        }
 
-        binding.fabTop.setOnFastLimitClickListener {
-            binding.appBar.setExpanded(false, true)
-        }
     }
 
     override fun LifecycleOwner.initViewObserver() {

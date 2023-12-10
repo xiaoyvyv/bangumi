@@ -17,6 +17,12 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+        </intent>
+    </queries>
+
     <application
         android:name="com.xiaoyv.common.MainApp"
         android:allowBackup="true"
@@ -39,6 +45,50 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.scheme.SchemeActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- bgm://bangumi.android/route?data=xxx -->
+                <data
+                    android:host="bangumi.android"
+                    android:pathPattern="/route"
+                    android:scheme="bgm" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- 处理链接 -->
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:host="bgm.tv" />
+                <data android:host="bangumi.tv" />
+                <data android:host="chii.in" />
+                <data android:host="next.bgm.tv" />
+                <data android:host="next.bangumi.tv" />
+                <data android:host="next.chii.in" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.WEB_SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:scheme="http" />
             </intent-filter>
         </activity>
         <activity

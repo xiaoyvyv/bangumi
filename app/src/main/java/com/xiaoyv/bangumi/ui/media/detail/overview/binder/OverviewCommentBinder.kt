@@ -40,9 +40,10 @@ class OverviewCommentBinder(
         item: OverviewAdapter.Item?
     ) {
         item ?: return
+        holder.binding.sectionComment.title = item.title
         holder.binding.rvComment.adapter = itemAdapter
         holder.binding.rvComment.addOnItemTouchListener(touchedListener)
-        
+
         item.entity.forceCast<MediaDetailEntity>().apply {
             holder.binding.rvComment.setInitialPrefetchItemCount(comments.size)
             itemAdapter.submitList(comments)

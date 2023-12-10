@@ -4,19 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.BarUtils
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityMediaDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.widget.kts.getAttrDimensionPixelSize
 
 /**
  * Class: [MediaDetailActivity]
@@ -46,6 +53,8 @@ class MediaDetailActivity :
     override fun initView() {
         binding.toolbar.initNavBack(this)
         binding.toolbar.title = viewModel.mediaName
+
+        FixHelper.fixCool(binding.ivBanner, binding.toolbarLayout, 204.dpi)
     }
 
 
@@ -88,6 +97,13 @@ class MediaDetailActivity :
 
         viewModel.vpEnableLiveData.observe(this) {
             binding.vpContent.isUserInputEnabled = it
+        }
+
+        viewModel.vpCurrentItemType.observe(this) { type ->
+            val index = vpAdapter.tabs.indexOfFirst { it.type == type }
+            if (index != -1) {
+                binding.vpContent.setCurrentItem(index, true)
+            }
         }
     }
 

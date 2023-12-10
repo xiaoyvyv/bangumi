@@ -32,7 +32,7 @@ class MediaCommentFragment : BaseListFragment<MediaCommentEntity, MediaCommentVi
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_comment) {
-
+            RouteHelper.jumpUserDetail(it.userId)
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {

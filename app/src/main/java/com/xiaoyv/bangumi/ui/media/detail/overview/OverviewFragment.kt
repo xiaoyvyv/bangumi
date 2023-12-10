@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
@@ -57,7 +58,9 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             onClickIndexItem = {
                 RouteHelper.jumpIndexDetail(it.id)
             },
-            onClickCommentItem = {},
+            onClickCommentItem = {
+                RouteHelper.jumpUserDetail(it.userId)
+            },
             onClickCommentUser = {
                 RouteHelper.jumpUserDetail(it.userId)
             }
@@ -106,10 +109,34 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     override fun initListener() {
         overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
             when (it.type) {
-                OverviewAdapter.TYPE_RATING -> {
-                    RouteHelper.jumpSummaryDetail()
+                OverviewAdapter.TYPE_EP -> {
+                    activityViewModel.vpCurrentItemType.value = MediaDetailType.TYPE_CHAPTER
                 }
 
+                OverviewAdapter.TYPE_CHARACTER -> {
+                    activityViewModel.vpCurrentItemType.value = MediaDetailType.TYPE_CHARACTER
+                }
+
+                OverviewAdapter.TYPE_COMMENT -> {
+                    activityViewModel.vpCurrentItemType.value = MediaDetailType.TYPE_COMMENTS
+                }
+
+                OverviewAdapter.TYPE_RATING -> {
+                    RouteHelper.jumpRatingDetail()
+                }
+
+                OverviewAdapter.TYPE_SUMMARY -> {
+                    RouteHelper.jumpSummaryDetail(it.entity.forceCast<MediaDetailEntity>().subjectSummary)
+                }
+
+                OverviewAdapter.TYPE_DETAIL -> {
+                    RouteHelper.jumpSummaryDetail(*it.entity.forceCast<MediaDetailEntity>().infoHtml.toTypedArray())
+                }
+            }
+        }
+
+        overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_summary_content) {
+            when (it.type) {
                 OverviewAdapter.TYPE_SUMMARY -> {
                     RouteHelper.jumpSummaryDetail(it.entity.forceCast<MediaDetailEntity>().subjectSummary)
                 }

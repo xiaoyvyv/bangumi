@@ -20,7 +20,7 @@ data class GroupDetailEntity(
     var name: String = "",
     var time: String = "",
     var summary: String = "",
-    var summaryText: String = "",
+    var summaryHtml: String = "",
     var recently: List<SampleAvatar> = emptyList(),
     var otherGroups: List<SampleAvatar> = emptyList(),
     var gh: String = "",

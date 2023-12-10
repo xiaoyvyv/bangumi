@@ -4,17 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_title_comment"
+    <com.xiaoyv.common.widget.menu.AnimeSectionView
+        android:id="@+id/section_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="吐槽"
-        android:textAppearance="?attr/textAppearanceTitleLarge"
-        android:textColor="?attr/colorOnSurface"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
@@ -27,5 +20,5 @@
         android:overScrollMode="never"
         app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title_comment" />
+        app:layout_constraintTop_toBottomOf="@+id/section_comment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

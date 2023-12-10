@@ -27,6 +27,7 @@ import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
@@ -39,11 +40,22 @@ import com.xiaoyv.common.kts.debugLog
  * @since 11/25/23
  */
 object RouteHelper {
-
     /**
      * - https://bangumi.tv/group/topic/390252#post_2535628
+     * - /person/57315
      */
     fun handleUrl(titleLink: String) {
+        val id = titleLink.substringAfterLast("/")
+            .substringBefore("#")
+            .substringBefore("?")
+
+        when {
+            // 人物
+            titleLink.contains(BgmPathType.TYPE_PERSON) -> {
+                jumpPerson(id, false)
+            }
+        }
+
         debugLog { "Handle Url: $titleLink" }
     }
 
@@ -182,5 +194,9 @@ object RouteHelper {
         SummaryActivity::class.open(
             bundleOf(NavKey.KEY_SERIALIZABLE_ARRAY to htmlSummary)
         )
+    }
+
+    fun jumpRatingDetail() {
+
     }
 }

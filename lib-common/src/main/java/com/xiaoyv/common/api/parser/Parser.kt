@@ -1,6 +1,15 @@
 package com.xiaoyv.common.api.parser
 
+import android.content.Intent
+import android.graphics.Color
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.style.ClickableSpan
+import android.text.style.URLSpan
+import android.view.View
 import androidx.core.text.parseAsHtml
+import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.common.api.BgmApiManager
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -60,8 +69,42 @@ fun String?.parseCount(): Int {
     return "(\\d+)".toRegex().find(this ?: return 0)?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 0
 }
 
+class GlobalChickHandler(private val span: URLSpan) : ClickableSpan() {
+    override fun updateDrawState(ds: TextPaint) {
+        super.updateDrawState(ds)
+        ds.bgColor = Color.TRANSPARENT
+    }
+
+    override fun onClick(view: View) {
+        runCatching {
+            val byteArray = span.url.orEmpty().encodeToByteArray()
+            val encode = EncodeUtils.base64Encode2String(byteArray)
+            val uri = "bgm://bangumi.android/route?data=$encode"
+            require(ActivityUtils.startActivity(Intent.parseUri(uri, Intent.URI_ALLOW_UNSAFE))) {
+                "Uri: 启动失败 -> $uri"
+            }
+        }.onFailure {
+            it.printStackTrace()
+        }
+    }
+}
+
+/**
+ * 解析 Html 并添加链接
+ */
 fun String.parseHtml(): CharSequence {
-    return parseAsHtml()
+    val spanned = parseAsHtml()
+    val builder = SpannableStringBuilder(spanned)
+    val urlSpans = builder.getSpans(0, builder.length, URLSpan::class.java)
+    for (span in urlSpans) {
+        val start = builder.getSpanStart(span)
+        val end = builder.getSpanEnd(span)
+        val flags = builder.getSpanFlags(span)
+        val newSpan = GlobalChickHandler(span)
+        builder.removeSpan(span)
+        builder.setSpan(newSpan, start, end, flags)
+    }
+    return builder
 }
 
 /**

@@ -1,7 +1,14 @@
 package com.xiaoyv.common.helper
 
+import android.widget.ImageView
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.BarUtils
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.widget.kts.getAttrDimensionPixelSize
 
 /**
  * Class: [FixHelper]
@@ -10,6 +17,23 @@ import androidx.recyclerview.widget.RecyclerView
  * @since 11/24/23
  */
 object FixHelper {
+
+    fun fixCool(ivBanner: ImageView, toolbarLayout: CollapsingToolbarLayout, contentHeight: Int) {
+        ivBanner.updateLayoutParams {
+            height =
+                contentHeight + ivBanner.context.getAttrDimensionPixelSize(GoogleAttr.actionBarSize)
+        }
+
+        toolbarLayout.doOnPreDraw {
+            toolbarLayout.updateLayoutParams {
+                height = toolbarLayout.height
+            }
+
+            ivBanner.updateLayoutParams {
+                height = ivBanner.height + BarUtils.getStatusBarHeight()
+            }
+        }
+    }
 
     /**
      * 傻逼小米魔改 Android SDK 导致 fling 有闪退 BUG

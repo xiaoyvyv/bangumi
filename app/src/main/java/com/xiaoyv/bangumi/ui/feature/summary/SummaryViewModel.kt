@@ -22,7 +22,8 @@ import kotlinx.coroutines.withContext
  * @since 12/10/23
  */
 class SummaryViewModel : BaseViewModel() {
-    internal var summary = MutableLiveData<Array<out String>>()
+    internal var summary: Array<out String> = emptyArray()
+    internal var summaryOriginal = MutableLiveData<List<CharSequence>?>()
     internal var summaryTranslate = MutableLiveData<String>()
     internal var isShowOriginal = true
 
@@ -32,7 +33,7 @@ class SummaryViewModel : BaseViewModel() {
      * 待翻译的文本
      */
     private val needTranslateText: String
-        get() = summary.value.orEmpty().joinToString("\n") {
+        get() = summary.joinToString("\n") {
             it.parseHtml().toString().trim()
         }
 
@@ -43,25 +44,24 @@ class SummaryViewModel : BaseViewModel() {
      * 直接刷新
      */
     fun showOriginal() {
-        isShowOriginal = true
-        summary.value = summary.value
+        launchUI(stateView = loadingViewState) {
+            isShowOriginal = true
+            summaryOriginal.value = withContext(Dispatchers.IO) {
+                summary.map { it.parseHtml() }
+            }
+        }
     }
 
     fun shoTranslate() {
-        isShowOriginal = false
-
         launchUI(
-            state = loadingDialogState(cancelable = false),
+            stateView = loadingViewState,
             error = {
                 it.printStackTrace()
 
-                if (it is IllegalArgumentException) {
-                    onNeedConfig.value = Unit
-                } else {
-                    showToastCompat(it.errorMsg)
-                }
+                showToastCompat(it.errorMsg)
             },
             block = {
+                isShowOriginal = false
                 val translate = CacheHelper.readTranslate(cacheKey)
                 if (translate.isNotBlank()) {
                     summaryTranslate.value = translate
@@ -72,7 +72,10 @@ class SummaryViewModel : BaseViewModel() {
                 val salt = System.currentTimeMillis().toString()
                 val sign = generateSign(needTranslateText, appId, secret, salt)
 
-                require(appId.isNotBlank() && secret.isNotBlank()) { "请先配置百度翻译的 AppId 和 Secret " }
+                if (appId.isBlank() || secret.isBlank()) {
+                    onNeedConfig.value = Unit
+                    return@launchUI
+                }
 
                 val result: BaiduTranslateEntity = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmJsonApi.postBaiduTranslate(

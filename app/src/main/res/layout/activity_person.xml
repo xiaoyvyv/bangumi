@@ -25,7 +25,7 @@
                 android:id="@+id/iv_banner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_gravity="top"
                 android:background="?attr/colorOnSurfaceVariant"
                 android:fitsSystemWindows="true"
                 android:foreground="@drawable/shape_bottom_edge"
@@ -39,8 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:fitsSystemWindows="false"
-                android:paddingTop="?attr/actionBarSize">
+                android:fitsSystemWindows="false">
 
                 <com.xiaoyv.common.widget.image.AnimeImageView
                     android:id="@+id/iv_cover"
@@ -62,7 +61,7 @@
                     android:layout_marginHorizontal="@dimen/ui_layout_margin"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:paddingVertical="@dimen/ui_size_6"
+                    android:paddingBottom="@dimen/ui_size_6"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:textColor="?attr/colorOnPrimarySurface"
                     android:textStyle="bold"
@@ -104,7 +103,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/Theme.Bangumi.PopupOverlay" />
+                app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+                app:title=" " />
 
         </com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout>
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>

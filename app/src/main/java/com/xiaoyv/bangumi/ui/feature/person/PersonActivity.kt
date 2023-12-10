@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog
@@ -23,6 +24,7 @@ import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.dpi
 
 /**
  * Class: [PersonActivity]
@@ -49,6 +51,8 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
 
     override fun initView() {
         binding.toolbar.initNavBack(this)
+
+        FixHelper.fixCool(binding.ivBanner, binding.toolbarLayout, 204.dpi)
     }
 
     override fun initData() {
@@ -78,17 +82,18 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
             val entity = it ?: return@observe
             debugLog { "Person: " + entity.toJson(true) }
 
-            binding.ivBanner.loadImageBlur(entity.poster)
             binding.ivCover.loadImageBlurBackground(entity.poster)
             binding.ivCover.loadImageAnimate(entity.poster, centerCrop = false)
             binding.ivCover.setOnFastLimitClickListener {
                 RouteHelper.jumpPreviewImage(entity.posterLarge)
             }
-            binding.toolbar.title = entity.nameNative
 
+            binding.toolbar.title = entity.nameNative
             binding.tvTitle.text = entity.nameNative
             binding.tvSubtitle.text = entity.nameCn
             binding.tvJob.text = if (entity.isVirtual) "虚拟角色" else entity.job
+
+            binding.ivBanner.loadImageBlur(entity.poster)
 
             invalidateOptionsMenu()
         }

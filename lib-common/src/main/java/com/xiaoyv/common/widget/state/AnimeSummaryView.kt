@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.text.method.LinkMovementMethodCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.xiaoyv.common.databinding.ViewSummaryBinding
 import com.xiaoyv.common.kts.inflater

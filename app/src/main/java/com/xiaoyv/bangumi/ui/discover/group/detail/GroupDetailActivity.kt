@@ -87,7 +87,10 @@ class GroupDetailActivity :
             binding.tvDesc.text = entity.id
             binding.toolbar.title = entity.name
             binding.tvTime.text = entity.time
-            binding.tvSummary.text = entity.summaryText.ifBlank { "这个小组暂时没有介绍呢" }
+            binding.tvSummary.text = entity.summary.ifBlank { "这个小组暂时没有介绍呢" }
+            binding.tvSummary.setOnFastLimitClickListener {
+                RouteHelper.jumpSummaryDetail(entity.summaryHtml)
+            }
 
             recentlyAdapter.submitList(entity.recently)
             otherAdapter.submitList(entity.otherGroups)

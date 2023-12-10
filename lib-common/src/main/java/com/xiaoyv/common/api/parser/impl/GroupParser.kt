@@ -27,8 +27,8 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
         entity.avatar = select(".grp_box > img").attr("src").optImageUrl()
         entity.name = select("h1.SecondaryNavTitle").text()
         entity.time = select(".grp_box > .tip").text()
-        entity.summary = select(".line_detail > .tip").html()
-        entity.summaryText = entity.summary.parseHtml().toString()
+        entity.summaryHtml = select(".line_detail > .tip").html()
+        entity.summary = entity.summaryHtml.parseHtml().toString().trim()
 
         select(".chiiBtn").attr("href").also { actionUrl ->
             entity.gh = actionUrl.substringAfterLast("=")

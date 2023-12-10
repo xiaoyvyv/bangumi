@@ -38,8 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:fitsSystemWindows="false"
-                android:paddingTop="?attr/actionBarSize">
+                android:fitsSystemWindows="false">
 
                 <com.xiaoyv.common.widget.image.AnimeImageView
                     android:id="@+id/iv_cover"
@@ -61,7 +60,7 @@
                     android:layout_marginHorizontal="@dimen/ui_layout_margin"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:paddingVertical="@dimen/ui_size_6"
+                    android:paddingBottom="@dimen/ui_size_6"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:textColor="?attr/colorOnPrimarySurface"
                     android:textStyle="bold"

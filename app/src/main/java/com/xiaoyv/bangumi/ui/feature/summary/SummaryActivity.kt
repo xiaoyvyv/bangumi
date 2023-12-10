@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.text.method.LinkMovementMethodCompat
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.databinding.ActivitySummaryBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.openInBrowser
@@ -25,22 +25,27 @@ import com.xiaoyv.widget.dialog.UiDialog
  */
 class SummaryActivity : BaseViewModelActivity<ActivitySummaryBinding, SummaryViewModel>() {
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
-        viewModel.summary.value = bundle.getStringArray(NavKey.KEY_SERIALIZABLE_ARRAY).orEmpty()
+        viewModel.summary = bundle.getStringArray(NavKey.KEY_SERIALIZABLE_ARRAY).orEmpty()
     }
 
     override fun initView() {
         binding.toolbar.initNavBack(this)
+        binding.tvSummary.isClickable = true
+        binding.tvSummary.movementMethod = LinkMovementMethodCompat.getInstance()
     }
 
     override fun initData() {
-
+        viewModel.showOriginal()
     }
 
     override fun LifecycleOwner.initViewObserver() {
-        viewModel.summary.observe(this) {
+        binding.stateView.initObserver(this, viewModel.loadingViewState)
+
+        viewModel.summaryOriginal.observe(this) {
             binding.tvSummary.text = null
-            it.forEach { text ->
-                binding.tvSummary.append(text.parseHtml())
+
+            it.orEmpty().forEach { text ->
+                binding.tvSummary.append(text)
                 binding.tvSummary.append("\n")
             }
 
@@ -67,6 +72,10 @@ class SummaryActivity : BaseViewModelActivity<ActivitySummaryBinding, SummaryVie
                 }
             )
         }
+    }
+
+    override fun initListener() {
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

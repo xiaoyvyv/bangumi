@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.ui.media.detail
 
 import androidx.lifecycle.MutableLiveData
+import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.MediaType
@@ -23,6 +24,8 @@ class MediaDetailViewModel : BaseViewModel() {
     internal val onMediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
 
     internal val vpEnableLiveData = MutableLiveData(true)
+
+    internal val vpCurrentItemType = UnPeekLiveData<String>()
 
     override fun onViewCreated() {
 
