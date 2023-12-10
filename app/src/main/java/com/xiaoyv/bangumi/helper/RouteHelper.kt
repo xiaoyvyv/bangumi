@@ -6,6 +6,7 @@ import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
 import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
+import com.xiaoyv.bangumi.ui.feature.almanac.AlmanacActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.message.MessageActivity
@@ -276,7 +277,17 @@ object RouteHelper {
 
     }
 
-    fun jumpWeb(url: String) {
-        WebActivity::class.open(bundleOf(NavKey.KEY_STRING to url))
+    fun jumpWeb(url: String, fitToolbar: Boolean = false, injectJs: String = "") {
+        WebActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to url,
+                NavKey.KEY_STRING_SECOND to injectJs,
+                NavKey.KEY_BOOLEAN to fitToolbar
+            )
+        )
+    }
+
+    fun jumpAlmanac() {
+        AlmanacActivity::class.open()
     }
 }

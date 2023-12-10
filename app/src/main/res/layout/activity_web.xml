@@ -26,6 +26,7 @@
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         tools:visibility="gone" />
 
     <com.xiaoyv.widget.webview.UiWebProgressBar
@@ -34,4 +35,5 @@
         android:layout_height="@dimen/ui_size_3"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

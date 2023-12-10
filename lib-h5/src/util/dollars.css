@@ -1,0 +1,19 @@
+#chatBox {
+    width: 100% !important;
+    margin: 16px !important;
+}
+
+#chatList {
+    width: 100% !important;
+}
+
+#chatList ul {
+    margin: 16px !important;
+}
+
+#chatList div.bubble div.content {
+    max-width: 100% !important;
+}
+
+textarea[name=message] {
+}

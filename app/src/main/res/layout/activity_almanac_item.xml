@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_year"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+    android:layout_marginVertical="@dimen/ui_size_8"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:cardCornerRadius="@dimen/ui_layout_radius"
+    app:strokeColor="@color/ui_transparent"
+    app:strokeWidth="@dimen/ui_size_0">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_year"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_160"
+        android:background="@color/ui_transparent"
+        android:scaleType="centerCrop" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:includeFontPadding="true"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceDisplayLarge"
+        android:textColor="?attr/colorOnSurface"
+        tools:text="2022" />
+</com.google.android.material.card.MaterialCardView>

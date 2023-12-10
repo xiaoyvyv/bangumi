@@ -11,7 +11,9 @@ import com.xiaoyv.common.api.converter.WebHtmlConverter
 import com.xiaoyv.common.api.interceptor.CommonInterceptor
 import com.xiaoyv.common.api.interceptor.FixCookieInterceptor
 import com.xiaoyv.common.config.annotation.BgmPathType
+import okhttp3.Cookie
 import okhttp3.CookieJar
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -95,12 +97,6 @@ class BgmApiManager {
         const val URL_BASE_WEB = "https://bangumi.tv"
         const val URL_BASE_API = "https://api.bgm.tv"
 
-        /**
-         * 年鉴
-         */
-        val URL_ALMANAC
-            get() = "$URL_BASE_WEB/award/2022"
-
         private val instance by lazy { BgmApiManager() }
 
         val bgmJsonApi: BgmJsonApi
@@ -111,6 +107,12 @@ class BgmApiManager {
 
         val httpClient
             get() = instance.httpClient
+
+        fun readBgmCookie(): List<Cookie> {
+            return instance.cookieJar.loadForRequest(
+                URL_BASE_WEB.toHttpUrlOrNull() ?: return emptyList()
+            )
+        }
 
         fun resetCookie() {
             instance.resetCookie()
