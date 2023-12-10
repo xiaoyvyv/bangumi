@@ -143,4 +143,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="magi_title">Magi 问答</string>
 </resources>

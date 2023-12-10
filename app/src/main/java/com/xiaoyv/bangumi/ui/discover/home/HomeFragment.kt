@@ -27,7 +27,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     HomeFeatureType.TYPE_SEARCH -> RouteHelper.jumpSearch()
                     HomeFeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
                     HomeFeatureType.TYPE_MAGI -> {
-
+                        RouteHelper.jumpMagi()
                     }
 
                     HomeFeatureType.TYPE_DOLLARS -> {

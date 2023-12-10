@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
 import com.xiaoyv.bangumi.ui.feature.almanac.AlmanacActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
+import com.xiaoyv.bangumi.ui.feature.magi.MagiActivity
 import com.xiaoyv.bangumi.ui.feature.message.MessageActivity
 import com.xiaoyv.bangumi.ui.feature.message.detail.MessageDetailActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
@@ -289,5 +290,9 @@ object RouteHelper {
 
     fun jumpAlmanac() {
         AlmanacActivity::class.open()
+    }
+
+    fun jumpMagi() {
+        MagiActivity::class.open()
     }
 }
