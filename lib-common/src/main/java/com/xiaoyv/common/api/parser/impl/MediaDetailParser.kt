@@ -284,6 +284,8 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             mediaTag.tagName = attr("href").substringAfterLast("/").decodeUrl()
             mediaTag.title = select("span").text()
             mediaTag.count = select("small").text().parseCount()
+            mediaTag.mediaType = attr("href").trim('/').substringBefore("/").trim()
+            mediaTag.url = attr("href")
         }
 
         mediaTag

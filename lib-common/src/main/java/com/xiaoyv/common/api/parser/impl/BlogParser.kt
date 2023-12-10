@@ -91,6 +91,7 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
             tag.tagName = item.attr("href").substringAfterLast("/").decodeUrl()
             tag.title = item.text()
             tag.url = item.attr("href")
+            tag.mediaType = item.attr("href").trim('/').substringBefore("/")
             tag
         }
         blogEntity.comments = parserBottomComment()

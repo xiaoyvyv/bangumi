@@ -24,5 +24,5 @@ data class SearchResultEntity(
     var infoTip: BrowserEntity.InfoTip = BrowserEntity.InfoTip(),
     var rank: String = "",
     var coverImage: String = "",
-    var searchType: String = ""
+    var searchTip: String = ""
 ) : IdEntity, Parcelable

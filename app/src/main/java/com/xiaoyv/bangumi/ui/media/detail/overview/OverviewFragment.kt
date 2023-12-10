@@ -47,7 +47,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                 RouteHelper.jumpPerson(it.id, true)
             },
             onClickTagItem = {
-                RouteHelper.jumpTagDetail(it.tagName)
+                RouteHelper.jumpTagDetail(it.mediaType, it.tagName)
             },
             onClickRelatedItem = {
                 RouteHelper.jumpMediaDetail(it.id)

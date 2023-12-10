@@ -30,12 +30,12 @@ class SearchDetailItemAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
 
         if (item.infoTip.time.isNotBlank()) {
             binding.tvTime.text = buildString {
-                append(item.searchType)
+                append(item.searchTip)
                 append(" ")
                 append(item.infoTip.time)
             }
         } else {
-            binding.tvTime.text = item.searchType
+            binding.tvTime.text = item.searchTip
         }
     }
 }

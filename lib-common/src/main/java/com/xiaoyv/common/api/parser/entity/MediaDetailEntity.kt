@@ -124,6 +124,7 @@ data class MediaDetailEntity(
         @SerializedName("tagName") var tagName: String = "",
         @SerializedName("title") var title: String = "",
         @SerializedName("count") var count: Int = 0,
+        @SerializedName("mediaType") var mediaType: String = "",
         @SerializedName("url") var url: String = ""
     ) : Parcelable
 

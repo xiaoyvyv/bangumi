@@ -423,6 +423,22 @@ interface BgmWebApi {
         @Path("mediaType") mediaType: String,
         @Path("keyword") keyword: String
     ): Document
+
+    /**
+     * 标签详细内容
+     *
+     * time 格式
+     * - /airtime/2024
+     * - /airtime/2024-12
+     */
+    @GET("/{mediaType}/tag/{tag}{time}")
+    suspend fun queryTagDetail(
+        @Path("mediaType") mediaType: String,
+        @Path("tag") tag: String,
+        @Path("time", encoded = true) time: String,
+        @Query("sort") @BrowserSortType sortType: String? = null,
+        @Query("page") page: Int
+    ): Document
 }
 
 

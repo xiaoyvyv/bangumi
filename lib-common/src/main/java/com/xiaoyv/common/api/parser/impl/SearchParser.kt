@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Element
 
@@ -51,7 +52,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                         else -> MediaType.TYPE_UNKNOWN
                     }
                 }
-                entity.searchType = GlobalConfig.mediaTypeName(mediaType)
+                entity.searchTip = GlobalConfig.mediaTypeName(mediaType)
                 entity
             }
         }
@@ -70,7 +71,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                     }
                     entity.infoTip =
                         BrowserParser.parserInfoTip(item.select(".prsn_info .tip").text().trim('/'))
-                    entity.searchType = "人物"
+                    entity.searchTip = "人物"
                     entity
                 }
         }
@@ -78,10 +79,10 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
         BgmPathType.TYPE_SEARCH_TAG -> {
             select("#tagList > a").map { item ->
                 val entity = SearchResultEntity()
-                entity.id = item.attr("href").substringAfterLast("/")
+                entity.id = item.attr("href").substringAfterLast("/").decodeUrl()
                 entity.count = item.nextElementSibling()?.text().orEmpty()
                 entity.title = item.text()
-                entity.searchType = "标签"
+                entity.searchTip = "标签"
                 entity
             }
         }

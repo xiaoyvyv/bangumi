@@ -116,6 +116,15 @@ class SearchDetailActivity :
                 }
             }
         }
+
+        contentTagAdapter.setOnDebouncedChildClickListener(R.id.item_tag) { entity ->
+            useNotNull(viewModel.currentSearchItem.value) {
+                // 针对标签的搜索结果，SearchItem 的 id 在 SearchViewModel 填充为 MediaType
+                val tagMediaType = this.id
+                val tagName = entity.id
+                RouteHelper.jumpTagDetail(tagMediaType, tagName)
+            }
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {

@@ -20,6 +20,7 @@ import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
 import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
+import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
@@ -28,6 +29,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
@@ -56,25 +58,25 @@ object RouteHelper {
             }
             // 话题
             titleLink.contains(BgmPathType.TYPE_TOPIC) -> {
-                when{
+                when {
                     // 虚拟人物
-                    titleLink.contains(TopicType.TYPE_CRT)-> {
+                    titleLink.contains(TopicType.TYPE_CRT) -> {
                         jumpTopicDetail(id, TopicType.TYPE_CRT)
                     }
                     // 章节
-                    titleLink.contains(TopicType.TYPE_EP)-> {
+                    titleLink.contains(TopicType.TYPE_EP) -> {
                         jumpTopicDetail(id, TopicType.TYPE_EP)
                     }
                     // 小组
-                    titleLink.contains(TopicType.TYPE_GROUP)-> {
+                    titleLink.contains(TopicType.TYPE_GROUP) -> {
                         jumpTopicDetail(id, TopicType.TYPE_GROUP)
                     }
                     // 现实人物
-                    titleLink.contains(TopicType.TYPE_PERSON)-> {
+                    titleLink.contains(TopicType.TYPE_PERSON) -> {
                         jumpTopicDetail(id, TopicType.TYPE_PERSON)
                     }
                     // 条目
-                    titleLink.contains(TopicType.TYPE_SUBJECT)-> {
+                    titleLink.contains(TopicType.TYPE_SUBJECT) -> {
                         jumpTopicDetail(id, TopicType.TYPE_SUBJECT)
                     }
                 }
@@ -173,8 +175,16 @@ object RouteHelper {
 
     }
 
-    fun jumpTagDetail(tag: String) {
-
+    /**
+     * 标签详情页面
+     */
+    fun jumpTagDetail(@MediaType mediaType: String, tag: String) {
+        TagDetailActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to mediaType,
+                NavKey.KEY_STRING_SECOND to tag
+            )
+        )
     }
 
     fun jumpGroupDetail(groupId: String) {

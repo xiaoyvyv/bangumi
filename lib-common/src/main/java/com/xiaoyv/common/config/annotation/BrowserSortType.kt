@@ -13,6 +13,7 @@ import androidx.annotation.StringDef
     BrowserSortType.TYPE_DATE,
     BrowserSortType.TYPE_TITLE,
     BrowserSortType.TYPE_RATE,
+    BrowserSortType.TYPE_COLLECTS,
     BrowserSortType.TYPE_DEFAULT
 )
 @Retention(AnnotationRetention.SOURCE)
@@ -23,6 +24,7 @@ annotation class BrowserSortType {
         const val TYPE_TITLE = "title"
 
         const val TYPE_RATE = "rate"
+        const val TYPE_COLLECTS = "collects"
         const val TYPE_DEFAULT = ""
     }
 }
