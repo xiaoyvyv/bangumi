@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.api.response.UploadResultEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
+import com.xiaoyv.common.config.annotation.MagiType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.MessageBoxType
@@ -439,6 +440,10 @@ interface BgmWebApi {
         @Query("sort") @BrowserSortType sortType: String? = null,
         @Query("page") page: Int
     ): Document
+
+
+    @GET("/magi")
+    suspend fun queryMagi(@Query("cat") @MagiType mediaType: String): Document
 }
 
 
