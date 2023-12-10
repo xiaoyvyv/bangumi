@@ -30,6 +30,8 @@ class NotifyActivity : BaseListActivity<NotifyEntity, NotifyViewModel>() {
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_notify) {
             if (it.titleLink.isNotBlank()) {
                 RouteHelper.handleUrl(it.titleLink)
+            } else {
+                RouteHelper.jumpUserDetail(it.userId)
             }
         }
     }

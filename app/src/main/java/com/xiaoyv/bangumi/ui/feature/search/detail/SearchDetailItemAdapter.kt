@@ -9,12 +9,12 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
- * Class: [SearchDetailAdapter]
+ * Class: [SearchDetailItemAdapter]
  *
  * @author why
  * @since 12/8/23
  */
-class SearchDetailAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
+class SearchDetailItemAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
         ActivitySearchDetailItemBinding>(IdDiffItemCallback()) {
 
     override fun BaseQuickBindingHolder<ActivitySearchDetailItemBinding>.converted(item: SearchResultEntity) {

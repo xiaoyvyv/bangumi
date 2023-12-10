@@ -403,13 +403,25 @@ interface BgmWebApi {
         @Query("gh") gh: String,
     ): Document
 
+    /**
+     * 搜索人物、条目
+     */
     @GET("/{pathType}/{keyword}")
-    suspend fun querySearch(
+    suspend fun querySearchMedia(
         @Path("pathType") pathType: String,
         @Path("keyword") keyword: String,
         @Query("cat") @SearchCatType cat: String,
         @Query("page") page: Int,
         @Query("legacy") legacy: Int = 1
+    ): Document
+
+    /**
+     * 搜索标签
+     */
+    @GET("/search/tag/{mediaType}/{keyword}")
+    suspend fun querySearchTag(
+        @Path("mediaType") mediaType: String,
+        @Path("keyword") keyword: String
     ): Document
 }
 

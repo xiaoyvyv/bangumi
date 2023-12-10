@@ -18,7 +18,8 @@ import androidx.annotation.StringDef
     BgmPathType.TYPE_TOPIC,
     BgmPathType.TYPE_MESSAGE_BOX,
     BgmPathType.TYPE_SEARCH_SUBJECT,
-    BgmPathType.TYPE_SEARCH_MONO
+    BgmPathType.TYPE_SEARCH_MONO,
+    BgmPathType.TYPE_SEARCH_TAG
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class BgmPathType {
@@ -33,11 +34,13 @@ annotation class BgmPathType {
         const val TYPE_MESSAGE_BOX = "pm"
         const val TYPE_SEARCH_SUBJECT = "subject_search"
         const val TYPE_SEARCH_MONO = "mono_search"
+        const val TYPE_SEARCH_TAG = "tag"
 
         fun string(@BgmPathType type: String): String {
             return when (type) {
                 TYPE_SEARCH_SUBJECT -> "条目查询"
                 TYPE_SEARCH_MONO -> "人物查询"
+                TYPE_SEARCH_TAG -> "标签查询"
                 else -> ""
             }
         }

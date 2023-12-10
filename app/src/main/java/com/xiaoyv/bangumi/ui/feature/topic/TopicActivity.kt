@@ -123,4 +123,9 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         item.initNavBack(this)
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.webView.destroy()
+    }
 }

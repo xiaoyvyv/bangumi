@@ -27,7 +27,6 @@
                 android:clipToPadding="false"
                 android:orientation="vertical"
                 android:paddingVertical="@dimen/ui_size_8"
-                app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
                 tools:listitem="@layout/activity_search_detail_item" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

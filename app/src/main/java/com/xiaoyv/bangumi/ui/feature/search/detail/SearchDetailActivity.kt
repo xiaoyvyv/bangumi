@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.KeyboardUtils
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivitySearchDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -16,6 +18,7 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
@@ -29,9 +32,20 @@ import com.xiaoyv.widget.kts.useNotNull
  */
 class SearchDetailActivity :
     BaseViewModelActivity<ActivitySearchDetailBinding, SearchDetailViewModel>() {
-    private val contentAdapter by lazy {
-        SearchDetailAdapter()
+    private val contentItemAdapter by lazy {
+        SearchDetailItemAdapter()
     }
+
+    private val contentTagAdapter by lazy {
+        SearchDetailTagAdapter()
+    }
+
+    /**
+     * 适配器
+     */
+    private val contentAdapter
+        get() = if (viewModel.isSearchTag) contentTagAdapter else contentItemAdapter
+
 
     private val adapterHelper by lazy {
         QuickAdapterHelper.Builder(contentAdapter)
@@ -51,9 +65,6 @@ class SearchDetailActivity :
             .build()
     }
 
-    private val layoutManager: LinearLayoutManager?
-        get() = binding.rvContent.layoutManager as? LinearLayoutManager
-
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.currentSearchItem.value = bundle.getParcelObj(NavKey.KEY_PARCELABLE)
     }
@@ -61,11 +72,18 @@ class SearchDetailActivity :
     override fun initView() {
         binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(getAttrColor(GoogleAttr.colorPrimary))
-
-        binding.rvContent.adapter = adapterHelper.adapter
     }
 
     override fun initData() {
+        if (viewModel.isSearchTag) {
+            binding.rvContent.layoutManager = FlexboxLayoutManager(this, FlexDirection.ROW)
+            binding.rvContent.adapter = contentAdapter
+        } else {
+            binding.rvContent.layoutManager =
+                AnimeLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            binding.rvContent.adapter = adapterHelper.adapter
+        }
+
         viewModel.refresh()
     }
 
@@ -89,7 +107,7 @@ class SearchDetailActivity :
             true
         }
 
-        contentAdapter.setOnDebouncedChildClickListener(R.id.item_search) {
+        contentItemAdapter.setOnDebouncedChildClickListener(R.id.item_search) {
             useNotNull(viewModel.currentSearchItem.value) {
                 if (pathType == BgmPathType.TYPE_SEARCH_SUBJECT) {
                     RouteHelper.jumpMediaDetail(it.id)
@@ -126,9 +144,14 @@ class SearchDetailActivity :
 
             contentAdapter.submitList(it) {
                 if (viewModel.isRefresh) {
-                    layoutManager?.scrollToPositionWithOffset(0, 0)
+                    if (viewModel.isSearchTag) {
+                        (binding.rvContent.layoutManager as? FlexboxLayoutManager)
+                            ?.scrollToPosition(0)
+                    } else {
+                        (binding.rvContent.layoutManager as? LinearLayoutManager)
+                            ?.scrollToPositionWithOffset(0, 0)
+                    }
                 }
-
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
             }
         }

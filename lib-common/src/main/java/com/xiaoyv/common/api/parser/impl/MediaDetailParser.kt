@@ -18,6 +18,7 @@ import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
+import com.xiaoyv.widget.kts.subListLimit
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -161,8 +162,8 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
     entity.subtype = select(".nameSingle small").text()
     entity.cover = select("img.cover").attr("src").optImageUrl()
-    entity.infos = select("#infobox > li").map { it.html().parseHtml() }
-    entity.infoHtml = select("#infobox > li").map { it.html()}
+    entity.infoHtml = select("#infobox > li").map { it.html() }
+    entity.infoShort = entity.infoHtml.subListLimit(10).map { it.parseHtml() }
     entity.time = select("#infobox").text().parserTime()
 
     entity.collectState = select("#panelInterestWrapper").let { item ->

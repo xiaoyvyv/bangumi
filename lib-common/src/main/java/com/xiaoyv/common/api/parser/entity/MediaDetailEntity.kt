@@ -27,7 +27,7 @@ data class MediaDetailEntity(
     @SerializedName("subtype") var subtype: String = "",
     @SerializedName("cover") var cover: String = "",
     @SerializedName("collectState") var collectState: MediaCollectForm = MediaCollectForm(),
-    @SerializedName("infos") var infos: List<CharSequence> = emptyList(),
+    @SerializedName("infos") var infoShort: List<CharSequence> = emptyList(),
     @SerializedName("infoHtml") var infoHtml: List<String> = emptyList(),
     @SerializedName("recommendIndex") var recommendIndex: List<MediaIndex> = emptyList(),
     @SerializedName("whoSee") var whoSee: List<MediaWho> = emptyList(),

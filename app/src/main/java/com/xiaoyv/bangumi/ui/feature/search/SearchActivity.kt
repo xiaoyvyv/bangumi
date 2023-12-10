@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.feature.search
 
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import com.blankj.utilcode.util.KeyboardUtils
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivitySearchBinding
@@ -21,16 +22,27 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
 
     private val subjectItemAdapter by lazy { SearchAdapter(false) }
     private val personItemAdapter by lazy { SearchAdapter(false) }
+    private val tagItemAdapter by lazy { SearchAdapter(false) }
     private val recentlyItemAdapter by lazy { SearchAdapter(true) }
 
+    private val viewPool by lazy { RecycledViewPool() }
+
     override fun initView() {
-        binding.rvSubject.adapter = subjectItemAdapter
-        binding.rvPerson.adapter = personItemAdapter
-        binding.rvRecently.adapter = recentlyItemAdapter
+        binding.rvSubject.hasFixedSize()
+        binding.rvSubject.setRecycledViewPool(viewPool)
+        binding.rvPerson.hasFixedSize()
+        binding.rvPerson.setRecycledViewPool(viewPool)
+        binding.rvTag.hasFixedSize()
+        binding.rvTag.setRecycledViewPool(viewPool)
+        binding.rvRecently.hasFixedSize()
+        binding.rvRecently.setRecycledViewPool(viewPool)
     }
 
     override fun initData() {
-
+        binding.rvSubject.adapter = subjectItemAdapter
+        binding.rvPerson.adapter = personItemAdapter
+        binding.rvTag.adapter = tagItemAdapter
+        binding.rvRecently.adapter = recentlyItemAdapter
     }
 
     override fun initListener() {
@@ -51,12 +63,17 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
         }
 
         subjectItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
-            viewModel.currentSearchItem.value = subjectItemAdapter.getItem(position)
+            viewModel.switchSearchType(subjectItemAdapter.getItem(position))
             KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
         }
 
         personItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
-            viewModel.currentSearchItem.value = personItemAdapter.getItem(position)
+            viewModel.switchSearchType(personItemAdapter.getItem(position))
+            KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
+        }
+
+        tagItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
+            viewModel.switchSearchType(tagItemAdapter.getItem(position))
             KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
         }
 
@@ -73,22 +90,27 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
         }
 
         viewModel.onSearchPersonLiveData.observe(this) {
-            binding.rvRecently.isVisible = it.isNotEmpty()
-            binding.tvTitleRecently.isVisible = it.isNotEmpty()
-            binding.dividerRecently.isVisible = it.isNotEmpty()
             personItemAdapter.submitList(it)
         }
 
+        viewModel.onSearchTagLiveData.observe(this) {
+            tagItemAdapter.submitList(it)
+        }
+
         viewModel.onSearchRecentlyLiveData.observe(this) {
+            binding.rvRecently.isVisible = it.isNullOrEmpty().not()
+            binding.tvTitleRecently.isVisible = it.isNullOrEmpty().not()
+            binding.dividerRecently.isVisible = it.isNullOrEmpty().not()
             recentlyItemAdapter.submitList(it)
         }
 
         viewModel.currentSearchItem.observe(this) {
+            val item = it ?: return@observe
             val hint = buildString {
                 append("搜索：")
-                append(BgmPathType.string(it.pathType))
+                append(BgmPathType.string(item.pathType))
                 append(" - ")
-                append(it.label)
+                append(item.label)
             }
             binding.searchBar.etKeyword.hint = hint
 

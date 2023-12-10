@@ -29,7 +29,7 @@ class OverviewSummaryBinder(private val isSummary: Boolean) :
             if (isSummary) {
                 holder.summaryView.summary = subjectSummary
             } else {
-                holder.summaryView.summaries = infos
+                holder.summaryView.summaries = infoShort
             }
         }
     }

@@ -109,4 +109,9 @@ class PostBlogActivity : BaseViewModelActivity<ActivityPostBlogBinding, PostBlog
         item.initNavBack(this)
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.webView.destroy()
+    }
 }

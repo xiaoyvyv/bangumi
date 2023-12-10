@@ -92,8 +92,10 @@ class GlobalChickHandler(private val span: URLSpan) : ClickableSpan() {
 /**
  * 解析 Html 并添加链接
  */
-fun String.parseHtml(): CharSequence {
+fun String.parseHtml(handleLink: Boolean = false): CharSequence {
     val spanned = parseAsHtml()
+    if (!handleLink) return spanned
+
     val builder = SpannableStringBuilder(spanned)
     val urlSpans = builder.getSpans(0, builder.length, URLSpan::class.java)
     for (span in urlSpans) {

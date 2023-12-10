@@ -47,7 +47,7 @@ class SummaryViewModel : BaseViewModel() {
         launchUI(stateView = loadingViewState) {
             isShowOriginal = true
             summaryOriginal.value = withContext(Dispatchers.IO) {
-                summary.map { it.parseHtml() }
+                summary.map { it.parseHtml(true) }
             }
         }
     }

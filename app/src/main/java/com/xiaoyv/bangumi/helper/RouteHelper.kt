@@ -54,6 +54,35 @@ object RouteHelper {
             titleLink.contains(BgmPathType.TYPE_PERSON) -> {
                 jumpPerson(id, false)
             }
+            // 话题
+            titleLink.contains(BgmPathType.TYPE_TOPIC) -> {
+                when{
+                    // 虚拟人物
+                    titleLink.contains(TopicType.TYPE_CRT)-> {
+                        jumpTopicDetail(id, TopicType.TYPE_CRT)
+                    }
+                    // 章节
+                    titleLink.contains(TopicType.TYPE_EP)-> {
+                        jumpTopicDetail(id, TopicType.TYPE_EP)
+                    }
+                    // 小组
+                    titleLink.contains(TopicType.TYPE_GROUP)-> {
+                        jumpTopicDetail(id, TopicType.TYPE_GROUP)
+                    }
+                    // 现实人物
+                    titleLink.contains(TopicType.TYPE_PERSON)-> {
+                        jumpTopicDetail(id, TopicType.TYPE_PERSON)
+                    }
+                    // 条目
+                    titleLink.contains(TopicType.TYPE_SUBJECT)-> {
+                        jumpTopicDetail(id, TopicType.TYPE_SUBJECT)
+                    }
+                }
+            }
+            // 日志
+            titleLink.contains(BgmPathType.TYPE_BLOG) -> {
+                jumpBlogDetail(id)
+            }
         }
 
         debugLog { "Handle Url: $titleLink" }
