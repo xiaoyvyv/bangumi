@@ -162,6 +162,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.subtype = select(".nameSingle small").text()
     entity.cover = select("img.cover").attr("src").optImageUrl()
     entity.infos = select("#infobox > li").map { it.html().parseHtml() }
+    entity.infoHtml = select("#infobox > li").map { it.html()}
     entity.time = select("#infobox").text().parserTime()
 
     entity.collectState = select("#panelInterestWrapper").let { item ->

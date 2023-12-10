@@ -17,9 +17,9 @@ import com.xiaoyv.bangumi.ui.feature.post.blog.PostBlogActivity
 import com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
 import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
-import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
+import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
@@ -28,6 +28,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.debugLog
 
@@ -174,6 +175,12 @@ object RouteHelper {
 
         SearchDetailActivity::class.open(
             bundleOf(NavKey.KEY_PARCELABLE to searchItem)
+        )
+    }
+
+    fun jumpSummaryDetail(vararg htmlSummary: String) {
+        SummaryActivity::class.open(
+            bundleOf(NavKey.KEY_SERIALIZABLE_ARRAY to htmlSummary)
         )
     }
 }

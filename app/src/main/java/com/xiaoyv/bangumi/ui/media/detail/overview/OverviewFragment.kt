@@ -107,7 +107,15 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
             when (it.type) {
                 OverviewAdapter.TYPE_RATING -> {
+                    RouteHelper.jumpSummaryDetail()
+                }
 
+                OverviewAdapter.TYPE_SUMMARY -> {
+                    RouteHelper.jumpSummaryDetail(it.entity.forceCast<MediaDetailEntity>().subjectSummary)
+                }
+
+                OverviewAdapter.TYPE_DETAIL -> {
+                    RouteHelper.jumpSummaryDetail(*it.entity.forceCast<MediaDetailEntity>().infoHtml.toTypedArray())
                 }
             }
         }

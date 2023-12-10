@@ -5,15 +5,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.feature.person.PersonViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
+import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 
@@ -65,7 +66,16 @@ class PersonOverviewFragment :
     }
 
     override fun initListener() {
-        itemAdapter.setOnDebouncedChildClickListener(R.id.item_grid) {
+        itemAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
+            when (it.type) {
+                PersonOverviewAdapter.TYPE_SUMMARY -> {
+                    RouteHelper.jumpSummaryDetail(it.entity.forceCast<PersonEntity>().summaryHtml)
+                }
+
+                PersonOverviewAdapter.TYPE_INFOS -> {
+                    RouteHelper.jumpSummaryDetail(*it.entity.forceCast<PersonEntity>().infoHtml.toTypedArray())
+                }
+            }
         }
     }
 

@@ -15,8 +15,10 @@ inline fun Context.showConfirmDialog(
     title: String = StringUtils.getString(CommonString.common_tip),
     message: String = "",
     confirmText: String? = getString(CommonString.common_done),
-    cancelText: String = getString(CommonString.common_cancel),
+    neutralText: String? = null,
+    cancelText: String? = getString(CommonString.common_cancel),
     cancelable: Boolean = true,
+    crossinline onNeutralClick: (() -> Unit) = {},
     crossinline onCancelClick: (() -> Unit) = {},
     crossinline onConfirmClick: (() -> Unit) = {},
 ) {
@@ -25,7 +27,16 @@ inline fun Context.showConfirmDialog(
         .setMessage(message)
         .setCancelable(cancelable)
         .let {
-            if (confirmText != null) {
+            if (neutralText != null) {
+                it.setNeutralButton(neutralText) { _, _ ->
+                    onNeutralClick()
+                }
+            } else {
+                it
+            }
+        }
+        .let {
+            if (cancelText != null) {
                 it.setNegativeButton(cancelText) { _, _ ->
                     onCancelClick()
                 }

@@ -21,7 +21,7 @@ import org.jsoup.nodes.Element
 fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
     requireNoError()
 
-    val entity = PersonEntity(id=personId, isVirtual = isVirtual)
+    val entity = PersonEntity(id = personId, isVirtual = isVirtual)
 
     select("#headerSubject").apply {
         entity.nameCn = select("small").text()
@@ -48,7 +48,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
     select("#columnCrtA").apply {
         entity.poster = select("img.cover").attr("src").optImageUrl()
         entity.posterLarge = select("a.cover").attr("href").optImageUrl()
-        entity.infoText = select(".infobox_container li").joinToString("\n") { it.text() }
+        entity.infoHtml = select(".infobox_container li").map { it.html() }
         entity.infos = select(".infobox_container li").map { item ->
             val subInfo = PersonEntity.SubInfo()
             subInfo.title = item.select(".tip").remove().text().trim().removeSuffix(":")
@@ -94,7 +94,8 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
 
     select("#columnCrtB").apply {
         entity.job = select("h2").firstOrNull()?.text().orEmpty()
-        entity.summary = select(".detail").html().parseHtml()
+        entity.summaryHtml = select(".detail").html().trim()
+        entity.summary = entity.summaryHtml.parseHtml()
     }
 
     select(".browserList").associateBy {

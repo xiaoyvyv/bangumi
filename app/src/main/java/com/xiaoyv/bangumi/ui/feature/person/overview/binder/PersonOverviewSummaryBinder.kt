@@ -29,7 +29,7 @@ class PersonOverviewSummaryBinder(private val isSummary: Boolean) :
             if (isSummary) {
                 holder.summaryView.summary = summary
             } else {
-                holder.summaryView.summary = infoText
+                holder.summaryView.summaries = infos.map { it.title + "：" + it.value }
             }
         }
     }

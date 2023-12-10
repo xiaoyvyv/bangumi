@@ -1,5 +1,6 @@
 package com.xiaoyv.common.helper
 
+import com.blankj.utilcode.util.CacheDiskUtils
 import com.blankj.utilcode.util.EncryptUtils
 import com.blankj.utilcode.util.SPUtils
 import com.xiaoyv.blueprint.kts.launchProcess
@@ -40,5 +41,13 @@ object CacheHelper {
                 .sortedByDescending { it.timestamp }
                 .subListLimit(9)
         }.getOrNull().orEmpty()
+    }
+
+    fun saveTranslate(cacheKey: String, text: String) {
+        CacheDiskUtils.getInstance().put(cacheKey, text)
+    }
+
+    fun readTranslate(cacheKey: String): String {
+        return CacheDiskUtils.getInstance().getString(cacheKey).orEmpty()
     }
 }
