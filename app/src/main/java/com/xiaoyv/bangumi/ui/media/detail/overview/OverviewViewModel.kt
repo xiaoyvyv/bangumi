@@ -13,6 +13,7 @@ import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.config.bean.SampleAvatar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
 /**
  * Class: [OverviewViewModel]
@@ -26,6 +27,15 @@ class OverviewViewModel : BaseViewModel() {
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
     internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.Item>>()
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
+    internal val defaultImage by lazy {
+        DouBanPhotoEntity.Photo(
+            image = DouBanPhotoEntity.Image(
+                large = DouBanPhotoEntity.ImageItem(
+                    url = "https://bgm.tv/pic/wallpaper/02.png"
+                )
+            )
+        )
+    }
 
     fun queryMediaInfo() {
         launchUI(
@@ -42,6 +52,7 @@ class OverviewViewModel : BaseViewModel() {
                         mediaId = mediaId,
                         type = MediaDetailType.TYPE_OVERVIEW
                     ).parserMediaDetail()
+                    entity.photos = listOf(defaultImage)
                     entity to buildBinderList(entity)
                 }
 
@@ -126,20 +137,16 @@ class OverviewViewModel : BaseViewModel() {
     fun queryPhotos(mediaName: String?) {
         launchUI(
             error = {
-                onMediaPreviewLiveData.value = listOf(DouBanPhotoEntity.Photo(loading = false))
+                it.printStackTrace()
+                onMediaPreviewLiveData.value = listOf(defaultImage)
             },
             block = {
                 requireNotNull(mediaName)
                 onMediaPreviewLiveData.value = withContext(Dispatchers.IO) {
-                    val searchResult =
-                        BgmApiManager.bgmJsonApi.queryDouBanSearchHint(mediaName, 10)
-                    val item = searchResult.items.orEmpty().firstOrNull()
-                    val targetId = item?.targetId.orEmpty()
-                    BgmApiManager.bgmJsonApi.queryDouBanPhotoList(targetId, 6)
-                        .photos.orEmpty()
-                        .let {
-                            it.ifEmpty { listOf(DouBanPhotoEntity.Photo(loading = false)) }
-                        }
+                    val searchResult = BgmApiManager.bgmJsonApi.queryDouBanSuggestion(mediaName)
+                    val targetId = searchResult.cards?.firstOrNull()?.targetId.orEmpty()
+                    BgmApiManager.bgmJsonApi.queryDouBanPhotoList(targetId)
+                        .photos.orEmpty().let { it.ifEmpty { listOf(defaultImage) } }
                 }
             }
         )

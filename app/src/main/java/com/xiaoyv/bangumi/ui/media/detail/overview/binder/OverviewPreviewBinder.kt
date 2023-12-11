@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewPreviewBinding
@@ -61,16 +60,7 @@ class OverviewPreviewBinder(
     private class ItemAdapter : BaseQuickDiffBindingAdapter<DouBanPhotoEntity.Photo,
             FragmentOverviewPreviewItemBinding>(IdDiffItemCallback()) {
         override fun BaseQuickBindingHolder<FragmentOverviewPreviewItemBinding>.converted(item: DouBanPhotoEntity.Photo) {
-            val url = item.image?.large?.url.orEmpty()
-            if (item.loading) {
-                Glide.with(context).clear(binding.ivPreview)
-                binding.ivPreview.loadImageAnimate(url)
-            } else if (url.isBlank()) {
-                Glide.with(context).clear(binding.ivPreview)
-                binding.ivPreview.loadImageAnimate(url)
-            } else {
-                binding.ivPreview.loadImageAnimate(url)
-            }
+            binding.ivPreview.loadImageAnimate(item.image?.large?.url.orEmpty())
         }
     }
 }

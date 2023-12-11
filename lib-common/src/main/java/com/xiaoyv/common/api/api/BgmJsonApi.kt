@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.api.response.MediaJsonEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
+import com.xiaoyv.common.api.response.douban.DouBanSuggestEntity
 import com.xiaoyv.common.config.annotation.TimelineType
 import org.jsoup.nodes.Document
 import retrofit2.http.Field
@@ -59,6 +60,12 @@ interface BgmJsonApi {
         @Query("count") count: Int = 10,
         @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
     ): DouBanSearchEntity
+
+    @GET("https://frodo.douban.com/api/v2/search/suggestion")
+    suspend fun queryDouBanSuggestion(
+        @Query("q") q: String,
+        @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70"
+    ): DouBanSuggestEntity
 
     @GET("https://frodo.douban.com/api/v2/tv/{mediaId}/photos")
     suspend fun queryDouBanPhotoList(

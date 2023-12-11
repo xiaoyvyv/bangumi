@@ -82,8 +82,7 @@ data class DouBanPhotoEntity(
         @SerializedName("uri")
         var uri: String? = null,
         @SerializedName("url")
-        var url: String? = null,
-        var loading: Boolean = false
+        var url: String? = null
     ) : Parcelable, IdEntity
 
     @Keep
