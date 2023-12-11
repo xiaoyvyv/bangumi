@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.GroupDetailEntity
 import com.xiaoyv.common.api.parser.entity.GroupIndexEntity
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
@@ -40,7 +41,7 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
         useNotNull(getOrNull(0)) {
             entity.recently = select("dl").map { item ->
                 val avatar = SampleAvatar()
-                avatar.id = item.select(".avatar").attr("href").substringAfterLast("/")
+                avatar.id = item.select(".avatar").hrefId()
                 avatar.image = item.select(".avatar > span").attr("style")
                     .fetchStyleBackgroundUrl().optImageUrl()
                 avatar.title = item.select(".l").text()
@@ -50,7 +51,7 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
         useNotNull(getOrNull(1)) {
             entity.otherGroups = select("dl").map { item ->
                 val avatar = SampleAvatar()
-                avatar.id = item.select(".avatar").attr("href").substringAfterLast("/")
+                avatar.id = item.select(".avatar").hrefId()
                 avatar.image = item.select(".avatar > span").attr("style")
                     .fetchStyleBackgroundUrl().optImageUrl()
                 avatar.title = item.select(".l").text()
@@ -72,7 +73,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
         entity.hotGroups = select(".groupsLarge > li").map { item ->
             val avatar = SampleAvatar()
             avatar.image = item.select("img").attr("src").optImageUrl()
-            avatar.id = item.select("a").attr("href").substringAfterLast("/")
+            avatar.id = item.select("a").hrefId()
             avatar.title = item.select("a").text()
             avatar.desc = item.select("small").text()
             avatar
@@ -84,18 +85,18 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
                 val tds = item.select("tr td")
 
                 useNotNull(tds.getOrNull(0)) {
-                    sampleEntity.id = select("a").attr("href").substringAfterLast("/")
+                    sampleEntity.id = select("a").hrefId()
                     sampleEntity.commentCount = select("small").text().parseCount()
                     sampleEntity.title = select("a").text()
                 }
 
                 useNotNull(tds.getOrNull(1)) {
-                    sampleEntity.groupId = select("a").attr("href").substringAfterLast("/")
+                    sampleEntity.groupId = select("a").hrefId()
                     sampleEntity.groupName = select("a").text()
                 }
 
                 useNotNull(tds.getOrNull(2)) {
-                    sampleEntity.userId = select("a").attr("href").substringAfterLast("/")
+                    sampleEntity.userId = select("a").hrefId()
                     sampleEntity.userName = select("a").text()
                 }
 
@@ -111,7 +112,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
         entity.newGroups = select(".groupsSmall > li").map { item ->
             val avatar = SampleAvatar()
             avatar.image = item.select("img").attr("src").optImageUrl()
-            avatar.id = item.select(".inner a").attr("href").substringAfterLast("/")
+            avatar.id = item.select(".inner a").hrefId()
             avatar.title = item.select(".inner a").text()
             avatar.desc = item.select("small").text()
             avatar
@@ -136,12 +137,12 @@ fun Element.parserGroupTopics(groupId: String): Pair<String, List<TopicSampleEnt
             val tds = item.select("tr td")
 
             useNotNull(tds.getOrNull(0)) {
-                sampleEntity.id = select("a").attr("href").substringAfterLast("/")
+                sampleEntity.id = select("a").hrefId()
                 sampleEntity.title = select("a").text()
             }
 
             useNotNull(tds.getOrNull(1)) {
-                sampleEntity.userId = select("a").attr("href").substringAfterLast("/")
+                sampleEntity.userId = select("a").hrefId()
                 sampleEntity.userName = select("a").text()
             }
 

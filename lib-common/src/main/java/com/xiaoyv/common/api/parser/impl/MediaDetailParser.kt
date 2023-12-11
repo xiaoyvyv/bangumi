@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCharacterEntity
@@ -9,13 +10,13 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
 import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
-import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
@@ -34,7 +35,7 @@ fun Document.parserMediaChapters(): List<MediaChapterEntity> {
     return select(".line_detail > ul > li").map {
         if (it.select("h6").isEmpty()) return@map null
         val entity = MediaChapterEntity()
-        entity.id = it.select("h6 a").attr("href").substringAfterLast("/")
+        entity.id = it.select("h6 a").hrefId()
         entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
         entity.titleNative = it.select("h6 a").text()
 
@@ -57,7 +58,7 @@ fun Element.parserMediaComments(): List<MediaCommentEntity> {
             .fetchStyleBackgroundUrl().optImageUrl()
         it.select(".text a.l").apply {
             entity.userName = text()
-            entity.userId = attr("href").substringAfterLast("/")
+            entity.userId = hrefId()
         }
         entity.comment = it.select(".comment").text()
         entity.time = it.select(".text small").text().replace("@", "").trim()
@@ -74,13 +75,13 @@ fun Element.parserMediaReviews(): List<MediaReviewEntity> {
     return select("#entry_list > .item").map { item ->
         val entity = MediaReviewEntity()
         item.select(".entry .title").apply {
-            entity.id = select("a").attr("href").substringAfterLast("/")
+            entity.id = select("a").hrefId()
             entity.title = text()
         }
         entity.avatar = item.select("span.image > img").attr("src").optImageUrl()
         item.select("div.time .tip_j a").apply {
             entity.userName = text()
-            entity.userId = attr("href").substringAfterLast("/")
+            entity.userId = hrefId()
         }
         entity.time = item.select("div.time small.time").text()
         entity.commentCount = item.select("div.time small.orange").text().parseCount()
@@ -116,10 +117,10 @@ fun Document.parserMediaMakers(): List<MediaMakerEntity> {
 
     return select("#columnInSubjectA > div").map {
         val entity = MediaMakerEntity()
-        entity.id = it.select("h2 a").attr("href").substringAfterLast("/")
+        entity.id = it.select("h2 a").hrefId()
         entity.avatar = it.select(".avatar img").attr("src").optImageUrl()
         entity.titleCn = it.select("h2 .tip").text()
-        entity.titleNative = it.select("h2 a").textNodes().firstOrNull()?.text().orEmpty()
+        entity.titleNative = it.select("h2 a").firsTextNode()
         entity.personInfo = it.select(".prsn_info > p > span.badge_job").map { job -> job.text() }
         entity.tip = it.select(".prsn_info > span.tip").text()
         entity.commentCount = it.select(".rr > .na").text()
@@ -132,16 +133,16 @@ fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
 
     return select("#columnInSubjectA > div").map {
         val entity = MediaCharacterEntity()
-        entity.id = it.select("h2 a").attr("href").substringAfterLast("/")
+        entity.id = it.select("h2 a").hrefId()
         entity.avatar = it.select(".avatar img").attr("src").optImageUrl()
         entity.titleCn = it.select("h2 .tip").text()
-        entity.titleNative = it.select("h2 a").textNodes().firstOrNull()?.text().orEmpty()
+        entity.titleNative = it.select("h2 a").firsTextNode()
         entity.commentCount = it.select(".rr > .na").text()
         entity.personJob = it.select(".prsn_info > .badge_job").text()
         entity.personSex = it.select(".prsn_info > .tip").text()
         entity.actors = it.select(".actorBadge").map { actor ->
             val actorBadge = MediaCharacterEntity.ActorBadge()
-            actorBadge.id = actor.select("a.avatar").attr("href").substringAfterLast("/")
+            actorBadge.id = actor.select("a.avatar").hrefId()
             actorBadge.avatar = actor.select("a.avatar img").attr("src").optImageUrl()
             actorBadge.name = actor.select("p a.l").text()
             actorBadge.nameCn = actor.select("p small").text()
@@ -157,7 +158,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
 
     val entity = MediaDetailEntity()
     selectLegal(".nameSingle > a").apply {
-        entity.id = attr("href").substringAfterLast("/")
+        entity.id = hrefId()
         entity.titleCn = attr("title")
         entity.titleNative = text()
     }
@@ -203,11 +204,11 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val mediaIndex = MediaDetailEntity.MediaIndex()
 
         item.select(".innerWithAvatar a.avatar").apply {
-            mediaIndex.id = attr("href").substringAfterLast("/")
+            mediaIndex.id = hrefId()
             mediaIndex.title = text()
         }
         item.select(".innerWithAvatar small.grey a").apply {
-            mediaIndex.userId = attr("href").substringAfterLast("/")
+            mediaIndex.userId = hrefId()
             mediaIndex.userName = text()
         }
         mediaIndex.userAvatar = item.select("li > a.avatar > span")
@@ -221,7 +222,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val whoSee = MediaDetailEntity.MediaWho()
 
         item.select(".innerWithAvatar a.avatar").apply {
-            whoSee.id = attr("href").substringAfterLast("/")
+            whoSee.id = hrefId()
             whoSee.name = text()
         }
         whoSee.avatar = item.select("li > a.avatar span")
@@ -250,7 +251,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         progress.notEp = item.hasClass("subtitle")
 
         item.select("a").apply {
-            progress.id = attr("href").substringAfterLast("/")
+            progress.id = hrefId()
             progress.titleNative = attr("title")
             progress.no = text().ifBlank { item.text() }
             progress.isRelease = hasClass("epBtnAir")
@@ -282,7 +283,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val mediaTag = MediaDetailEntity.MediaTag()
 
         item.select("a.l").apply {
-            mediaTag.tagName = attr("href").substringAfterLast("/").decodeUrl()
+            mediaTag.tagName = hrefId().decodeUrl()
             mediaTag.title = select("span").text()
             mediaTag.count = select("small").text().parseCount()
             mediaTag.mediaType = attr("href").trim('/').substringBefore("/").trim()
@@ -296,7 +297,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val mediaCharacter = MediaDetailEntity.MediaCharacter()
         mediaCharacter.saveCount = item.select(".userContainer .fade").text().parseCount()
         item.select(".userContainer a.avatar").apply {
-            mediaCharacter.id = attr("href").substringAfterLast("/")
+            mediaCharacter.id = hrefId()
             mediaCharacter.characterName = attr("title")
             mediaCharacter.avatar = select(".userImage > span").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
@@ -307,7 +308,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             mediaCharacter.persons = select("a").map { person ->
                 val characterPerson = MediaDetailEntity.MediaCharacterPerson()
                 characterPerson.personName = person.text()
-                characterPerson.personId = person.attr("href").substringAfterLast("/")
+                characterPerson.personId = person.hrefId()
                 characterPerson
             }
         }
@@ -319,7 +320,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val mediaRelative = MediaDetailEntity.MediaRelative()
         mediaRelative.type = item.select("span.sub").text()
         item.select("a.avatar").apply {
-            mediaRelative.id = attr("href").substringAfterLast("/")
+            mediaRelative.id = hrefId()
             mediaRelative.titleCn = attr("title")
             mediaRelative.cover = select("span").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
@@ -332,7 +333,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val mediaRelative = MediaDetailEntity.MediaRelative()
         mediaRelative.type = item.select("span.sub").text()
         item.select("a.avatar").apply {
-            mediaRelative.id = attr("href").substringAfterLast("/")
+            mediaRelative.id = hrefId()
             mediaRelative.titleCn = attr("title")
             mediaRelative.cover = select("span").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()

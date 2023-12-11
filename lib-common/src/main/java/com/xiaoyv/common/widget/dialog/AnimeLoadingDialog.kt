@@ -8,7 +8,6 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.xiaoyv.common.databinding.ViewLoadingBinding
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.updateWindowParams
-import com.xiaoyv.widget.kts.useNotNull
 import kotlin.math.roundToInt
 
 /**
@@ -37,24 +36,23 @@ class AnimeLoadingDialog(context: Context) : AlertDialog(context), UiDialog {
     }
 
     override fun dismissLoading() {
-        binding.ivLogo.pauseAnimation()
         dismiss()
     }
 
     override fun showLoading(activity: FragmentActivity, msg: String?) {
         message = msg
         show()
-        binding.ivLogo.playAnimation()
     }
 
     override fun onStart() {
         super.onStart()
-        useNotNull(window) {
-            setDimAmount(0.25f)
-            setBackgroundDrawableResource(com.xiaoyv.widget.R.color.ui_transparent)
-            updateWindowParams {
-                width = (ScreenUtils.getScreenWidth() * 0.5).roundToInt()
-            }
+
+        val window = window ?: return
+        window.setDimAmount(0.25f)
+        window.setBackgroundDrawableResource(com.xiaoyv.widget.R.color.ui_transparent)
+        window.updateWindowParams {
+            width = (ScreenUtils.getScreenWidth() * 0.4).roundToInt()
+            height = width
         }
 
         setCancelable(canCancelable)

@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
@@ -31,7 +32,7 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
 
         select("#pageHeader a").apply {
             useNotNull(getOrNull(0)) {
-                entity.headUrl = attr("href").substringAfterLast("/")
+                entity.headUrl = hrefId()
                 entity.headerAvatar = select("img.avatar").attr("src").optImageUrl()
                 entity.headerName = text()
             }
@@ -46,7 +47,7 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
                 .firstOrNull()?.textNodes()?.firstOrNull()?.text()
                 .orEmpty().trim()
 
-            entity.userId = select("a.avatar").attr("href").substringAfterLast("/")
+            entity.userId = select("a.avatar").hrefId()
             entity.userAvatar = select("a.avatar > span").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
             entity.userName = select(".inner strong a").text()

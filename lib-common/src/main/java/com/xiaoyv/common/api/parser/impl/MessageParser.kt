@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.MessageEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.requireNoError
@@ -25,7 +26,7 @@ fun Element.parserMessageList(boxType: String): Pair<String, List<MessageEntity>
             entity.field = item.select("input").attr("name")
             entity.id = item.select("input").attr("value")
             entity.fromAvatar = item.select("img.avatar").attr("src").optImageUrl()
-            entity.fromId = item.select(".sub_title a").attr("href").substringAfterLast("/")
+            entity.fromId = item.select(".sub_title a").hrefId()
             entity.fromName = item.select(".sub_title a").text()
             entity.time = item.select("small.grey").text()
             entity.summary = item.select(".tip").html().parseHtml()
@@ -45,7 +46,7 @@ fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
         entity.id = messageId
         entity.fromAvatar = item.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
-        entity.fromId = item.select("a.avatar").attr("href").substringAfterLast("/")
+        entity.fromId = item.select("a.avatar").hrefId()
         entity.isMine = item.select(".text_main_odd").isNotEmpty()
         entity.mineAvatar = UserHelper.currentUser.avatar?.large.orEmpty()
 

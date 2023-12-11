@@ -1,6 +1,7 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
@@ -36,7 +37,7 @@ object HomeParser {
 
             val titleRef = it.select("h2.title")
             imageCardEntity.title = titleRef.text()
-            imageCardEntity.titleType = titleRef.select("a").attr("href").substringAfterLast("/")
+            imageCardEntity.titleType = titleRef.select("a").hrefId()
             imageCardEntity.images = it.select("li > div").map { item ->
                 val title: String
                 val imageUrl: String
@@ -90,7 +91,7 @@ object HomeParser {
         return element.select(".coverList .thumbTip").map {
             BgmMediaEntity(
                 title = it.select("a").attr("title").parseHtml(),
-                id = it.select("a").attr("href").substringAfterLast("/"),
+                id = it.select("a").hrefId(),
                 image = it.select("img").attr("src").optImageUrl()
             )
         }

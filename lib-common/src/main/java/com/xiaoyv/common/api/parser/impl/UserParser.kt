@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.UserDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
@@ -115,7 +116,7 @@ fun Elements.parserUserSaveOverview(): UserDetailEntity.SaveOverview {
             val relative = MediaDetailEntity.MediaRelative()
             relative.titleCn = item.select(".name").text()
             relative.titleNative = item.select(".name").text()
-            relative.id = item.attr("href").substringAfterLast("/")
+            relative.id = item.hrefId()
             relative.cover = item.select("img").attr("src").optImageUrl(false)
             relative.type = InterestType.TYPE_DO
             relative
@@ -126,7 +127,7 @@ fun Elements.parserUserSaveOverview(): UserDetailEntity.SaveOverview {
             val relative = MediaDetailEntity.MediaRelative()
             relative.titleCn = item.select(".name").text()
             relative.titleNative = item.select(".name").text()
-            relative.id = item.attr("href").substringAfterLast("/")
+            relative.id = item.hrefId()
             relative.cover = item.select("img").attr("src").optImageUrl(false)
             relative.type = InterestType.TYPE_COLLECT
             relative

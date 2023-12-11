@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.BlogDetailEntity
 import com.xiaoyv.common.api.parser.entity.BlogEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
@@ -24,7 +25,7 @@ fun Document.parserBlogList(mediaType: String): List<BlogEntity> {
         blogEntity.mediaType = mediaType
         blogEntity.image = it.select(".cover a img").attr("src").optImageUrl()
         blogEntity.title = it.select(".entry .title a").text()
-        blogEntity.id = it.select(".entry .title a").attr("href").substringAfterLast("/")
+        blogEntity.id = it.select(".entry .title a").hrefId()
         blogEntity.time = it.select(".entry .time small").lastOrNull()?.text().orEmpty()
             .replace("/", "").trim()
         it.select(".entry .content").apply {
@@ -58,7 +59,7 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
         }
 
         select("#pageHeader a.avatar").apply {
-            blogEntity.userId = attr("href").substringAfterLast("/")
+            blogEntity.userId = hrefId()
             blogEntity.userAvatar = select("img.avatar").attr("src").optImageUrl()
             blogEntity.userName = text()
         }
@@ -78,7 +79,7 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
             val relative = MediaDetailEntity.MediaRelative()
 
             item.select("li > a.avatar").apply {
-                relative.id = attr("href").substringAfterLast("/")
+                relative.id = hrefId()
                 relative.cover = select("img").attr("src").optImageUrl()
                 relative.titleCn = attr("title")
                 relative.titleNative = attr("title")
@@ -88,7 +89,7 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
 
         blogEntity.tags = select(".tags > a").map { item ->
             val tag = MediaDetailEntity.MediaTag()
-            tag.tagName = item.attr("href").substringAfterLast("/").decodeUrl()
+            tag.tagName = item.hrefId().decodeUrl()
             tag.title = item.text()
             tag.url = item.attr("href")
             tag.mediaType = item.attr("href").trim('/').substringBefore("/")

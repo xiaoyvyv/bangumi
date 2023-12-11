@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
@@ -40,7 +41,7 @@ private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
         }
         entity.id = item.attr("id")
         item.select("a.avatar").apply {
-            entity.userId = attr("href").substringAfterLast("/")
+            entity.userId = hrefId()
             entity.userAvatar = select("span").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
         }

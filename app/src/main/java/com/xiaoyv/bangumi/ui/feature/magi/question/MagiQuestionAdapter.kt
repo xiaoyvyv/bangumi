@@ -1,9 +1,10 @@
 package com.xiaoyv.bangumi.ui.feature.magi.question
 
-import android.graphics.Color
+import com.blankj.utilcode.util.ColorUtils
 import com.xiaoyv.bangumi.databinding.FragmentMagiQuestionItemBinding
 import com.xiaoyv.common.api.parser.entity.MagiQuestionEntity
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
+import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.tint
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -30,12 +31,13 @@ class MagiQuestionAdapter : BaseQuickDiffBindingAdapter<MagiQuestionEntity.Optio
         when {
             item?.right == true -> {
                 holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-                holder.binding.tvOption.backgroundTintList = Color.parseColor("#55CC55").tint
+                holder.binding.tvOption.backgroundTintList = ColorUtils.getColor(CommonColor.question_right).tint
             }
 
             item?.error == true -> {
                 holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-                holder.binding.tvOption.backgroundTintList = Color.parseColor("#CC5555").tint
+                holder.binding.tvOption.backgroundTintList =
+                    ColorUtils.getColor(CommonColor.question_error).tint
             }
 
             position == selectIndex -> {

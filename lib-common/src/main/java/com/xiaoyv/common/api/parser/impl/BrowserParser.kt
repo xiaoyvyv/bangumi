@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.requireNoError
@@ -30,7 +31,7 @@ object BrowserParser {
         browserEntity.items = select("#browserItemList > li").map {
             val item = BrowserEntity.Item()
 
-            item.id = it.select("a.cover").attr("href").substringAfterLast("/")
+            item.id = it.select("a.cover").hrefId()
             item.coverImage = it.select("a.cover img").attr("src").optImageUrl()
             item.title = it.select(".inner h3 a").text()
             item.subtitle = it.select(".inner h3 small").text()

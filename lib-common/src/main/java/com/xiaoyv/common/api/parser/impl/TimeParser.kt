@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
@@ -59,14 +60,14 @@ object TimeParser {
                 val characterImg = a.select("img.rr")
                 if (characterImg.isNotEmpty()) {
                     avatar = characterImg.attr("src").optImageUrl()
-                    characterSubjectId = a.attr("href").substringAfterLast("/")
+                    characterSubjectId = a.hrefId()
                     a.remove()
                 }
 
                 val userImage = a.select("a.rr img")
                 if (userImage.isNotEmpty()) {
                     avatar = userImage.attr("src").optImageUrl()
-                    userId = a.attr("href").substringAfterLast("/")
+                    userId = a.hrefId()
                     a.remove()
                 }
             }
@@ -90,7 +91,7 @@ object TimeParser {
             val images = it.select(".imgs > a")
             if (images.isNotEmpty()) {
                 entity.images = images.map { item ->
-                    val subjectId = item.attr("href").substringAfterLast("/")
+                    val subjectId = item.hrefId()
                     val coverUrl = item.select("a img").attr("src").optImageUrl()
                     TimelineEntity.Image(coverUrl, subjectId)
                 }
@@ -107,7 +108,7 @@ object TimeParser {
             // Card
             val cardContainer = it.select(".card .container")
             val subjectId =
-                cardContainer.select(".container > a").attr("href").substringAfterLast("/")
+                cardContainer.select(".container > a").hrefId()
             val coverUrl = cardContainer.select(".cover img").attr("src").optImageUrl()
             val inner = cardContainer.select(".inner")
             val cardTitle = inner.select("p.title").text()

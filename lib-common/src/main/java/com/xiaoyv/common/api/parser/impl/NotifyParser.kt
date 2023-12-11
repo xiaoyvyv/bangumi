@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.NotifyEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
@@ -16,7 +17,7 @@ fun Element.parserNotify(): List<NotifyEntity> {
 
     return select("#comment_list > div").map { item ->
         val entity = NotifyEntity()
-        entity.userId = item.select("a.avatar").attr("href").substringAfterLast("/")
+        entity.userId = item.select("a.avatar").hrefId()
         entity.userAvatar = item.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.userName = item.select(".inner strong a").text()

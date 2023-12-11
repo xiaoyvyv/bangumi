@@ -58,7 +58,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     @CallSuper
     override fun initView() {
         binding.rvContent.setHasFixedSize(hasFixedSize)
-        binding.srlRefresh.initRefresh { viewModel.isRefresh }
+        binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
     }
 
@@ -86,6 +86,12 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
 
     @CallSuper
     override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingViewState = viewModel.loadingViewState,
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() }
+        )
+
         viewModel.onListLiveData.observe(this) {
             debugLog { "List:\n " + it.toJson(true) }
 
@@ -97,5 +103,14 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
             }
         }
+        initViewObserverExt()
+    }
+
+    open fun canShowStateLoading(): Boolean {
+        return true
+    }
+
+    open fun LifecycleOwner.initViewObserverExt() {
+
     }
 }

@@ -446,6 +446,15 @@ interface BgmWebApi {
     @GET("/magi")
     suspend fun queryMagi(@Query("cat") @MagiType mediaType: String): Document
 
+    @GET("/magi/rank")
+    suspend fun queryMagiRank(): Document
+
+    @GET("/magi/self")
+    suspend fun queryMagiHistory(): Document
+
+    @GET("/magi/q/{id}")
+    suspend fun queryMagiDetail(@Path("id") id: String): Document
+
     @FormUrlEncoded
     @POST("/magi/answer")
     suspend fun postMagiAnswer(

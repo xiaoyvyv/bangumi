@@ -1,6 +1,7 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.LoginFormEntity
 import com.xiaoyv.common.api.parser.entity.LoginResultEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
@@ -74,7 +75,7 @@ object LoginParser {
      * 解析登录成功后的用户信息
      */
     private fun Document.parseUserInfo(): UserEntity {
-        val userId = select(".idBadgerNeue a.avatar").attr("href").substringAfterLast("/")
+        val userId = select(".idBadgerNeue a.avatar").hrefId()
         val avatarUrl = select(".idBadgerNeue a.avatar span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         val userName = select("#header a").text()

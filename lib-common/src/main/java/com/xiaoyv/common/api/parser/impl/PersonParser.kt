@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.CharacterEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.PersonEntity
@@ -60,11 +61,11 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
             val mediaIndex = MediaDetailEntity.MediaIndex()
 
             item.select(".innerWithAvatar a.avatar").apply {
-                mediaIndex.id = attr("href").substringAfterLast("/")
+                mediaIndex.id = hrefId()
                 mediaIndex.title = text()
             }
             item.select(".innerWithAvatar small.grey a").apply {
-                mediaIndex.userId = attr("href").substringAfterLast("/")
+                mediaIndex.userId = hrefId()
                 mediaIndex.userName = text()
             }
             mediaIndex.userAvatar = item.select("li > a.avatar > span")
@@ -76,7 +77,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
         entity.whoCollects = select("#crtPanelCollect .groupsLine > li").map { item ->
             val who = MediaDetailEntity.MediaWho()
             item.select(".innerWithAvatar a.avatar").apply {
-                who.id = attr("href").substringAfterLast("/")
+                who.id = hrefId()
                 who.name = text()
             }
             who.avatar = item.select("li > a.avatar span")
@@ -108,7 +109,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
                     val media = MediaDetailEntity.MediaRelative()
 
                     item.select(".innerLeftItem").apply {
-                        media.id = select("a.subjectCover").attr("href").substringAfterLast("/")
+                        media.id = select("a.subjectCover").hrefId()
                         media.cover = select("img.cover").attr("src").optImageUrl()
                         media.titleNative = select("h3").text()
                         media.titleCn = select("small.grey").text()
@@ -126,7 +127,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
                     }
 
                     item.select(".innerRightList").apply {
-                        character.id = select("a.avatar").attr("href").substringAfterLast("/")
+                        character.id = select("a.avatar").hrefId()
                         character.avatar = select("img.avatar").attr("src").optImageUrl()
                         character.characterName = select("h3 a.l").text()
                         character.characterNameCn = select("h3 a.l").text()
@@ -144,7 +145,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
                 entity.recentOpuses = value.select("ul.browserList > li").orEmpty().map { item ->
                     val opus = PersonEntity.RecentlyOpus()
                     item.select(".innerLeftItem").apply {
-                        opus.id = select("a.cover").attr("href").substringAfterLast("/")
+                        opus.id = select("a.cover").hrefId()
                         opus.cover = select("img.cover").attr("src").optImageUrl()
                         opus.titleNative = select("h3 a.l").text()
                         opus.jobs = select(".badge_job").map { it.text() }
@@ -167,7 +168,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
 
     entity.recentCooperates = select(".content_inner ul > li").map { item ->
         val cooperate = PersonEntity.RecentCooperate()
-        cooperate.id = item.select("a.avatar").attr("href").substringAfterLast("/")
+        cooperate.id = item.select("a.avatar").hrefId()
         cooperate.avatar = item.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         cooperate.name = item.select("p.info").text()
@@ -190,7 +191,7 @@ fun Element.parserPersonCollector(): List<MediaDetailEntity.MediaWho> {
             who.avatar = attr("src").optImageUrl()
             who.name = attr("alt")
         }
-        who.id = item.select(".userContainer a").attr("href").substringAfterLast("/")
+        who.id = item.select(".userContainer a").hrefId()
         who.time = item.select(".info").text()
         who
     }
@@ -207,7 +208,7 @@ fun Element.parserPersonCooperate(): List<PersonEntity.RecentCooperate> {
 
         item.select("a.avatar").apply {
             cooperate.avatar = select("img").attr("src").optImageUrl()
-            cooperate.id = attr("href").substringAfterLast("/")
+            cooperate.id = hrefId()
         }
 
         item.select("h3").apply {
@@ -226,7 +227,7 @@ fun Element.parserPersonCooperate(): List<PersonEntity.RecentCooperate> {
                 }
             cooperate.opus = select(".subject_tag_section > a").map { subItem ->
                 val relative = MediaDetailEntity.MediaRelative()
-                relative.id = subItem.attr("href").substringAfterLast("/")
+                relative.id = subItem.hrefId()
                 relative.titleCn = subItem.attr("title")
                 relative.titleNative = subItem.text()
                 relative
@@ -244,7 +245,7 @@ fun Element.parserPersonOpus(): List<PersonEntity.RecentlyOpus> {
 
     return select("#browserItemList > li").map { item ->
         val opus = PersonEntity.RecentlyOpus()
-        opus.id = item.select("a.subjectCover").attr("href").substringAfterLast("/")
+        opus.id = item.select("a.subjectCover").hrefId()
         opus.cover = item.select("img.cover").attr("src").optImageUrl()
         opus.titleCn = item.select("h3 a").text()
         opus.titleNative = item.select("small.grey").text()
@@ -281,7 +282,7 @@ fun Element.parserPersonVoices(): List<CharacterEntity> {
         val entity = CharacterEntity()
 
         item.select(".innerLeftItem").apply {
-            entity.id = select("a.avatar").attr("href").substringAfterLast("/")
+            entity.id = select("a.avatar").hrefId()
             entity.avatar = select("img.avatar").attr("src").optImageUrl()
             entity.nameNative = select("h3 a.l").text()
             entity.nameCn = select("h3 .tip").text()
@@ -289,7 +290,7 @@ fun Element.parserPersonVoices(): List<CharacterEntity> {
 
         entity.from = item.select(".innerRightList > li").map { subItem ->
             val relative = MediaDetailEntity.MediaRelative()
-            relative.id = subItem.select("a.subjectCover").attr("href").substringAfterLast("/")
+            relative.id = subItem.select("a.subjectCover").hrefId()
             relative.cover = subItem.select("img.cover").attr("src").optImageUrl()
             relative.titleNative = subItem.select("h3").text()
             relative.titleCn = subItem.select("small.grey").text()

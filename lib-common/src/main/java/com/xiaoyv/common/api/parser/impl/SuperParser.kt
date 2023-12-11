@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.SuperTopicEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
@@ -24,11 +25,11 @@ fun Document.parserSuperTopic(): List<SuperTopicEntity> {
         entity.avatarUrl = it.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
 
-        entity.id = it.select("a.title").attr("href").substringAfterLast("/")
+        entity.id = it.select("a.title").hrefId()
         entity.title = it.select("a.title").text()
         entity.commentCount = it.select(".inner small.grey").text().parseCount()
 
-        entity.attachId = it.select(".inner .row a").attr("href").substringAfterLast("/")
+        entity.attachId = it.select(".inner .row a").hrefId()
         entity.attachTitle = it.select(".inner .row a").text()
         entity.time = it.select(".inner small.time").text().trim().removePrefix("...")
 

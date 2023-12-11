@@ -140,6 +140,22 @@ fun <T : Element> T.selectLegal(selector: String): Elements {
     return elements
 }
 
+fun Elements.hrefId(): String {
+    return attr("href").substringAfterLast("/")
+}
+
+fun Element.hrefId(): String {
+    return attr("href").substringAfterLast("/")
+}
+
+fun Elements.lastTextNode(): String {
+    return textNodes().lastOrNull()?.text().orEmpty()
+}
+
+fun Elements.firsTextNode(): String {
+    return textNodes().firstOrNull()?.text().orEmpty()
+}
+
 fun <T : Element> T.requireNoError() {
     val errorMsg = select("#colunmNotice .text").text().trim()
     if (errorMsg.isNotBlank()) {

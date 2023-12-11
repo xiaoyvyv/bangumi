@@ -24,6 +24,7 @@ data class MagiQuestionEntity(
     var lastQuestionId: String = "",
     var lastQuestionTitle: String = "",
     var lastQuestionRightRate: String = "",
+    var lastQuestionRight: Boolean = false,
     var lastQuestionCount: String = "",
     var lastQuestionOptions: List<Option> = emptyList(),
     var syncRate: String = "",

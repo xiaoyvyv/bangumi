@@ -3,9 +3,10 @@ package com.xiaoyv.bangumi.ui.feature.magi.rank
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.common.api.parser.entity.TimelineEntity
-import com.xiaoyv.common.config.annotation.ProfileType
-import com.xiaoyv.common.config.bean.ProfileTab
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.impl.parserMagiRank
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Class: [MagiRankViewModel]
@@ -14,28 +15,40 @@ import com.xiaoyv.common.config.bean.ProfileTab
  * @since 11/24/23
  */
 class MagiRankViewModel : BaseViewModel() {
-    internal var rprofileTab: ProfileTab? = null
+    internal val onItemLiveData = MutableLiveData<List<MagiRankAdapter.Item>?>()
 
-    internal val userId: String? = null
-
-    internal val profileType: String
-        get() = rprofileTab?.type ?: ProfileType.TYPE_COLLECTION
-
-    internal val onTimelineLiveData = MutableLiveData<List<TimelineEntity>?>()
-
-    fun queryTimeline() {
+    fun querySyncRateRank() {
         launchUI(
             stateView = loadingViewState,
             error = {
-                it.printStackTrace()
+
             },
             block = {
-             /*   onTimelineLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryTimeline(
-                        path = BgmWebApi.timelineUrl(userId),
-                        type = profileType
-                    ).parserTimelineForms()
-                }*/
+                onItemLiveData.value = withContext(Dispatchers.IO) {
+                    val items = arrayListOf<MagiRankAdapter.Item>()
+                    val magiRank = BgmApiManager.bgmWebApi.queryMagiRank().parserMagiRank()
+                    items.add(
+                        MagiRankAdapter.Item(
+                            type = MagiRankAdapter.TYPE_HEADER,
+                            entity = "同步率总排行",
+                        )
+                    )
+                    items.addAll(magiRank.rateRank.map {
+                        it.challenge = true
+                        MagiRankAdapter.Item(MagiRankAdapter.TYPE_ITEM, it)
+                    })
+                    items.add(
+                        MagiRankAdapter.Item(
+                            type = MagiRankAdapter.TYPE_HEADER,
+                            entity = "创建总排行",
+                        )
+                    )
+                    items.addAll(magiRank.createRank.map {
+                        it.challenge = false
+                        MagiRankAdapter.Item(MagiRankAdapter.TYPE_ITEM, it)
+                    })
+                    items
+                }
             }
         )
     }

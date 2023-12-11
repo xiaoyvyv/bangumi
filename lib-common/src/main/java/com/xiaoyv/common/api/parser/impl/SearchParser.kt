@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.requireNoError
@@ -24,7 +25,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
         BgmPathType.TYPE_SEARCH_SUBJECT -> {
             select("#browserItemList > li").map { item ->
                 val entity = SearchResultEntity()
-                entity.id = item.select("a.cover").attr("href").substringAfterLast("/")
+                entity.id = item.select("a.cover").hrefId()
                 entity.coverImage = item.select("a.cover img").attr("src").optImageUrl()
                 entity.title = item.select(".inner h3 a").text()
                 entity.subtitle = item.select(".inner h3 small").text()
@@ -62,7 +63,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                 .filter { item -> item.select("a").isNotEmpty() }
                 .map { item ->
                     val entity = SearchResultEntity()
-                    entity.id = item.select("a.avatar").attr("href").substringAfterLast("/")
+                    entity.id = item.select("a.avatar").hrefId()
                     entity.coverImage = item.select("a.avatar img").attr("src").optImageUrl()
                     entity.count = "讨论：" + item.select(".rr small").text()
                     item.select("h2 a.l").apply {
@@ -79,7 +80,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
         BgmPathType.TYPE_SEARCH_TAG -> {
             select("#tagList > a").map { item ->
                 val entity = SearchResultEntity()
-                entity.id = item.attr("href").substringAfterLast("/").decodeUrl()
+                entity.id = item.hrefId().decodeUrl()
                 entity.count = item.nextElementSibling()?.text().orEmpty()
                 entity.title = item.text()
                 entity.searchTip = "标签"
