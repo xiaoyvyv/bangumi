@@ -10,7 +10,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
  * @author why
  * @since 12/7/23
  */
-
 inline fun Context.showConfirmDialog(
     title: String = StringUtils.getString(CommonString.common_tip),
     message: String = "",
@@ -57,4 +56,18 @@ inline fun Context.showConfirmDialog(
         .apply {
             setCanceledOnTouchOutside(cancelable)
         }.show()
+}
+
+inline fun Context.showOptionsDialog(
+    title: String = StringUtils.getString(CommonString.common_tip),
+    items: List<String>,
+    crossinline onItemClick: (String, Int) -> Unit = { _, _ -> },
+) {
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setItems(items.toTypedArray()) { _, which ->
+            onItemClick(items[which], which)
+        }
+        .create()
+        .show()
 }

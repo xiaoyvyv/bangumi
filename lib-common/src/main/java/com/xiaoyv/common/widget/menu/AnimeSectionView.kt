@@ -3,8 +3,10 @@ package com.xiaoyv.common.widget.menu
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.xiaoyv.common.databinding.ViewSectionBinding
 import com.xiaoyv.common.kts.inflater
+import com.xiaoyv.common.widget.text.AnimeTextView
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 /**
@@ -28,6 +30,7 @@ class AnimeSectionView @JvmOverloads constructor(
         set(value) {
             field = value
             binding.tvMore.text = value
+            binding.tvMore.isVisible = value.isNullOrBlank().not()
         }
 
     var onMoreClickListener: (() -> Unit)? = null

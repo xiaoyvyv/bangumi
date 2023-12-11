@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
@@ -57,6 +58,9 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             },
             onClickIndexItem = {
                 RouteHelper.jumpIndexDetail(it.id)
+            },
+            onClickPreview = {
+                showPreview(it)
             },
             onClickCommentItem = {
                 RouteHelper.jumpUserDetail(it.userId)
@@ -166,6 +170,14 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             item.entity = entity
             overviewAdapter[position] = item
         }
+    }
+
+    private fun showPreview(photo: DouBanPhotoEntity.Photo) {
+        val item = overviewAdapter.items.find { it.type == OverviewAdapter.TYPE_PREVIEW } ?: return
+        val photos = item.entity.forceCast<List<DouBanPhotoEntity.Photo>>()
+        val showImageUrl = photo.image?.large?.url.orEmpty()
+        val totalImageUrls = photos.map { it.image?.large?.url.orEmpty() }
+        RouteHelper.jumpPreviewImage(showImageUrl, totalImageUrls)
     }
 
     companion object {

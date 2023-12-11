@@ -10,7 +10,9 @@
         android:id="@+id/tv_item_title"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:lineSpacingMultiplier="1.25"
+        android:maxLines="10"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_layout_margin"
         android:text="人物介绍"
@@ -19,7 +21,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tv_more"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem/random" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_more"

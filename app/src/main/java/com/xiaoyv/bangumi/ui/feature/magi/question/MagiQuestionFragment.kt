@@ -2,17 +2,21 @@ package com.xiaoyv.bangumi.ui.feature.magi.question
 
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentMagiQuestionBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.annotation.MagiType
 import com.xiaoyv.common.kts.GoogleAttr
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.loadImageAnimate
+import com.xiaoyv.common.kts.showOptionsDialog
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getAttrColor
+import com.xiaoyv.widget.kts.useNotNull
+import kotlinx.coroutines.delay
 
 /**
  * Class: [MagiQuestionFragment]
@@ -23,13 +27,8 @@ import com.xiaoyv.widget.kts.getAttrColor
 class MagiQuestionFragment :
     BaseViewModelFragment<FragmentMagiQuestionBinding, MagiQuestionViewModel>() {
     private val questionAdapter by lazy { MagiQuestionAdapter() }
-    private val lastQuestionAdapter by lazy { MagiQuestionAdapter() }
-    private val viewPool by lazy { RecycledViewPool() }
 
     override fun initView() {
-        binding.tvSection.more = ""
-        binding.tvSection.title = ""
-
         binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(requireContext().getAttrColor(GoogleAttr.colorPrimary))
     }
@@ -37,13 +36,7 @@ class MagiQuestionFragment :
 
     override fun initData() {
         binding.rvQuestion.itemAnimator = null
-        binding.rvQuestion.setRecycledViewPool(viewPool)
         binding.rvQuestion.adapter = questionAdapter
-
-        binding.rvLastQuestion.itemAnimator = null
-        binding.rvLastQuestion.setRecycledViewPool(viewPool)
-        binding.rvLastQuestion.adapter = lastQuestionAdapter
-
         viewModel.queryQuestion()
     }
 
@@ -55,6 +48,31 @@ class MagiQuestionFragment :
         questionAdapter.addOnItemChildClickListener(R.id.item_option) { _, _, position ->
             val item = questionAdapter.getItem(position) ?: return@addOnItemChildClickListener
             questionAdapter.select(item)
+
+            viewModel.submitAnswer(item)
+        }
+
+        binding.btnEnter.setOnFastLimitClickListener {
+            showLastAnswer()
+        }
+
+        binding.ivAvatar.setOnFastLimitClickListener {
+            useNotNull(viewModel.onMagiQuestionLiveData.value) {
+                RouteHelper.jumpUserDetail(userId)
+            }
+        }
+
+        binding.tvType.setOnFastLimitClickListener {
+            val items = MagiType.items()
+            requireActivity().showOptionsDialog(
+                title = "选取问答类型",
+                items = items.map { pair -> pair.second },
+                onItemClick = { _, which ->
+                    binding.srlRefresh.isRefreshing = true
+                    viewModel.magiType = items[which].first
+                    viewModel.queryQuestion()
+                }
+            )
         }
     }
 
@@ -67,30 +85,44 @@ class MagiQuestionFragment :
 
         viewModel.onMagiQuestionLiveData.observe(this) {
             val entity = it ?: return@observe
-            debugLog { entity.toJson(true) }
 
             binding.ivAvatar.isVisible = true
             binding.ivAvatar.loadImageAnimate(entity.userAvatar)
             binding.tvUser.text = entity.userName
-            binding.tvSection.title = buildString {
-                append("Magi 问答：")
-                append(entity.title)
-            }
+            binding.tvQuestion.text = entity.title
+            binding.tvType.text = MagiType.string(viewModel.magiType)
+            binding.tvType.isVisible = true
+
             binding.tvId.text = buildString {
                 append("#")
                 append(entity.id)
             }
 
-            questionAdapter.selectIndex=-1
+            questionAdapter.selectIndex = -1
             questionAdapter.submitList(entity.options)
 
-            lastQuestionAdapter.selectIndex=-1
-            lastQuestionAdapter.submitList(entity.lastQuestionOptions)
+            binding.btnEnter.isVisible = entity.lastQuestionId.isNotBlank()
 
-            binding.ivAvatar.setOnFastLimitClickListener {
-                RouteHelper.jumpUserDetail(entity.userId)
+            // 显示回答答案
+            if (entity.lastQuestionId.isNotBlank() && viewModel.isRefresh.not()) {
+                launchUI {
+                    delay(100)
+                    showLastAnswer()
+                }
             }
         }
+    }
+
+    private fun showLastAnswer() {
+        useNotNull(viewModel.onMagiQuestionLiveData.value) {
+            if (lastQuestionId.isNotBlank()) {
+                MagiQuestionDialog.show(childFragmentManager, this)
+            }
+        }
+    }
+
+    override fun createLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(requireContext())
     }
 
     companion object {

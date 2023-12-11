@@ -30,12 +30,33 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingHorizontal="@dimen/ui_size_6"
             android:textAppearance="?attr/textAppearanceBodyLarge"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/btn_enter"
+            app:layout_constraintStart_toEndOf="@+id/tv_type"
             app:layout_constraintTop_toTopOf="@+id/iv_avatar"
             tools:text="@tools:sample/full_names" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ui_size_12"
+            android:background="@drawable/ui_shape_rectangle_corner_6"
+            android:backgroundTint="?attr/colorPrimary"
+            android:ellipsize="end"
+            android:isScrollContainer="false"
+            android:lineSpacingMultiplier="1.25"
+            android:maxLines="1"
+            android:padding="@dimen/ui_size_4"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnPrimarySurface"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+            tools:text="全部"
+            tools:visibility="visible" />
 
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:id="@+id/tv_id"
@@ -43,46 +64,64 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_6"
             android:textAppearance="?attr/textAppearanceBodySmall"
             app:layout_constraintEnd_toEndOf="@+id/tv_user"
-            app:layout_constraintStart_toStartOf="@+id/tv_user"
+            app:layout_constraintStart_toStartOf="@+id/tv_type"
             app:layout_constraintTop_toBottomOf="@+id/tv_user"
             tools:text="@tools:sample/full_names" />
 
-        <com.xiaoyv.common.widget.menu.AnimeSectionView
-            android:id="@+id/tv_section"
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_enter"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ui_size_40"
+            android:layout_marginEnd="@dimen/ui_layout_margin"
+            android:padding="@dimen/ui_size_0"
+            android:text="上一题答案"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_avatar" />
+
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ui_size_12"
-            app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
+            android:ellipsize="end"
+            android:isScrollContainer="false"
+            android:lineSpacingMultiplier="1.25"
+            android:maxLines="10"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
+            android:paddingVertical="@dimen/ui_size_12"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
+            tools:text="@tools:sample/lorem/random" />
 
         <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
             android:id="@+id/rv_question"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/ui_size_0"
+            android:layout_marginTop="@dimen/ui_size_12"
+            android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/tv_section"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question"
             tools:listitem="@layout/fragment_magi_question_item" />
 
-        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-            android:id="@+id/rv_last_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/tv_section"
-            tools:listitem="@layout/fragment_magi_question_item" />
 
         <com.xiaoyv.common.widget.state.AnimeStateView
             android:id="@+id/state_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

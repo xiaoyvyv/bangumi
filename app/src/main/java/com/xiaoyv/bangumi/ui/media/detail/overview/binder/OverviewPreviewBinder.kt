@@ -30,7 +30,7 @@ class OverviewPreviewBinder(
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
-            setOnDebouncedChildClickListener(R.id.item_ep, block = clickItemListener)
+            setOnDebouncedChildClickListener(R.id.iv_preview, block = clickItemListener)
         }
     }
 

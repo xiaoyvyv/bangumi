@@ -53,12 +53,11 @@ fun Element.parserMagiQuestion(): MagiQuestionEntity {
             select(".latestQuiz > small.grey").textNodes().lastOrNull()?.text().orEmpty()
 
         entity.lastQuestionOptions = select(".opts > li").map { item ->
-            val answerInput = item.select("input")
-            val label = item.select("label").text()
+            item.select("span").remove()
             MagiQuestionEntity.Option(
-                id = answerInput.attr("value"),
-                field = answerInput.attr("name"),
-                label = label,
+                id = item.text(),
+                field = "",
+                label = item.text(),
                 error = item.hasClass("wrong"),
                 right = item.hasClass("answer"),
             )

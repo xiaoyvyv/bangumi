@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.api
 
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.CreateTokenParam
 import com.xiaoyv.common.api.response.BgmStatusEntity
 import com.xiaoyv.common.api.response.NotifyEntity
@@ -444,6 +445,13 @@ interface BgmWebApi {
 
     @GET("/magi")
     suspend fun queryMagi(@Query("cat") @MagiType mediaType: String): Document
+
+    @FormUrlEncoded
+    @POST("/magi/answer")
+    suspend fun postMagiAnswer(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB + "/magi",
+        @FieldMap params: Map<String, String>
+    ): Document
 }
 
 

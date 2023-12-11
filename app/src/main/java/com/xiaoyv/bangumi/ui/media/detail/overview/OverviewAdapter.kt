@@ -34,6 +34,7 @@ class OverviewAdapter(
     onClickRelatedItem: (MediaDetailEntity.MediaRelative) -> Unit,
     onClickCollectorItem: (SampleAvatar) -> Unit,
     onClickIndexItem: (SampleAvatar) -> Unit,
+    onClickPreview: (DouBanPhotoEntity.Photo) -> Unit,
     onClickCommentItem: (MediaCommentEntity) -> Unit,
     onClickCommentUser: (MediaCommentEntity) -> Unit,
 ) : BaseMultiItemAdapter<OverviewAdapter.Item>() {
@@ -45,7 +46,7 @@ class OverviewAdapter(
             .addItemType(TYPE_EP, OverviewEpBinder(touchedListener, onClickEpItem))
             .addItemType(TYPE_TAG, OverviewTagBinder(onClickTagItem))
             .addItemType(TYPE_SUMMARY, OverviewSummaryBinder(true))
-            .addItemType(TYPE_PREVIEW, OverviewPreviewBinder(touchedListener) {})
+            .addItemType(TYPE_PREVIEW, OverviewPreviewBinder(touchedListener, onClickPreview))
             .addItemType(TYPE_DETAIL, OverviewSummaryBinder(false))
             .addItemType(TYPE_RATING, OverviewRatingBinder())
             .addItemType(TYPE_CHARACTER, OverviewCharacterBinder(touchedListener, onClickCrtItem))

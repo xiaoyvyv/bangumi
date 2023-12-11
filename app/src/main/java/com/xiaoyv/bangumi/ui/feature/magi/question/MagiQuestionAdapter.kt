@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.feature.magi.question
 
+import android.graphics.Color
 import com.xiaoyv.bangumi.databinding.FragmentMagiQuestionItemBinding
 import com.xiaoyv.common.api.parser.entity.MagiQuestionEntity
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
@@ -26,14 +27,28 @@ class MagiQuestionAdapter : BaseQuickDiffBindingAdapter<MagiQuestionEntity.Optio
         item: MagiQuestionEntity.Option?
     ) {
         super.onBindViewHolder(holder, position, item)
-        if (position == selectIndex) {
-            holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-            holder.binding.tvOption.backgroundTintList =
-                context.getAttrColor(GoogleAttr.colorPrimarySurface).tint
-        } else {
-            holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurface))
-            holder.binding.tvOption.backgroundTintList =
-                context.getAttrColor(GoogleAttr.colorSurfaceContainer).tint
+        when {
+            item?.right == true -> {
+                holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
+                holder.binding.tvOption.backgroundTintList = Color.parseColor("#55CC55").tint
+            }
+
+            item?.error == true -> {
+                holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
+                holder.binding.tvOption.backgroundTintList = Color.parseColor("#CC5555").tint
+            }
+
+            position == selectIndex -> {
+                holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
+                holder.binding.tvOption.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorPrimarySurface).tint
+            }
+
+            else -> {
+                holder.binding.tvOption.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurface))
+                holder.binding.tvOption.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorSurfaceContainer).tint
+            }
         }
     }
 
