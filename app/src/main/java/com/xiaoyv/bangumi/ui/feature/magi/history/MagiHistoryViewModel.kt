@@ -25,7 +25,9 @@ class MagiHistoryViewModel : BaseListViewModel<MagiQuestionEntity>() {
     internal var onQueryMagiDetail = UnPeekLiveData<MagiQuestionEntity?>()
 
     override suspend fun onRequestListImpl(): List<MagiQuestionEntity> {
-        return BgmApiManager.bgmWebApi.queryMagiHistory().parserMagiHistory()
+        return BgmApiManager.bgmWebApi.queryMagiHistory().parserMagiHistory().apply {
+            require(isNotEmpty()) { "暂时没有回答历史呢" }
+        }
     }
 
     fun queryDetail(entity: MagiQuestionEntity) {

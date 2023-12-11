@@ -116,7 +116,8 @@ class MagiQuestionFragment :
     private fun showLastAnswer() {
         useNotNull(viewModel.onMagiQuestionLiveData.value) {
             if (lastQuestionId.isNotBlank()) {
-                MagiQuestionDialog.show(childFragmentManager, this)
+                // 这里 userId 已经变成下一题用户了，仅显示上题答案，移除 userId
+                MagiQuestionDialog.show(childFragmentManager, copy(userId = ""))
             }
         }
     }

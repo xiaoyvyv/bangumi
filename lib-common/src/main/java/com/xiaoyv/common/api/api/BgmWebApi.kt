@@ -461,6 +461,9 @@ interface BgmWebApi {
         @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB + "/magi",
         @FieldMap params: Map<String, String>
     ): Document
+
+    @GET("/index")
+    suspend fun queryIndexPage(): Document
 }
 
 
