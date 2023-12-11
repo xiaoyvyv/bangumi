@@ -15,6 +15,7 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
+import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.widget.star.StarCommentView
@@ -165,6 +166,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.infoHtml = select("#infobox > li").map { it.html() }
     entity.infoShort = entity.infoHtml.subListLimit(10).map { it.parseHtml() }
     entity.time = select("#infobox").text().parserTime()
+    entity.photos = listOf(DouBanPhotoEntity.Photo(loading = true))
 
     entity.collectState = select("#panelInterestWrapper").let { item ->
         val collectForm = MediaCollectForm()

@@ -86,26 +86,6 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         viewModel.queryMediaInfo()
     }
 
-    override fun LifecycleOwner.initViewObserver() {
-        binding.stateView.initObserver(
-            lifecycleOwner = this,
-            loadingBias = 0.2f,
-            loadingViewState = viewModel.loadingViewState
-        )
-
-        viewModel.mediaDetailLiveData.observe(this) {
-            activityViewModel.onMediaDetailLiveData.value = it
-        }
-
-        viewModel.mediaBinderListLiveData.observe(this) {
-            overviewAdapter.submitList(it)
-        }
-
-        UserHelper.observe(this) {
-            viewModel.queryMediaInfo()
-        }
-    }
-
     override fun initListener() {
         overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
             when (it.type) {
@@ -145,6 +125,32 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                     RouteHelper.jumpSummaryDetail(*it.entity.forceCast<MediaDetailEntity>().infoHtml.toTypedArray())
                 }
             }
+        }
+    }
+
+    override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingBias = 0.2f,
+            loadingViewState = viewModel.loadingViewState
+        )
+
+        viewModel.mediaDetailLiveData.observe(this) {
+            activityViewModel.onMediaDetailLiveData.value = it
+            viewModel.queryPhotos(it?.titleCn?.ifBlank { it.titleNative })
+        }
+
+        viewModel.mediaBinderListLiveData.observe(this) {
+            overviewAdapter.submitList(it)
+        }
+
+        viewModel.onMediaPreviewLiveData.observe(this) {
+            val photos = it ?: return@observe
+            overviewAdapter.refreshPhotos(photos)
+        }
+
+        UserHelper.observe(this) {
+            viewModel.queryMediaInfo()
         }
     }
 

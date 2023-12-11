@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
@@ -46,6 +47,7 @@ data class MediaDetailEntity(
     @SerializedName("boards") var boards: List<MediaBoardEntity> = emptyList(),
     @SerializedName("comments") var comments: List<MediaCommentEntity> = emptyList(),
     @SerializedName("rating") var rating: MediaRating = MediaRating(),
+    @SerializedName("photos") var photos: List<DouBanPhotoEntity.Photo> = emptyList()
 ) : Parcelable {
 
 

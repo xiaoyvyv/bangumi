@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
+import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.config.bean.SampleAvatar
@@ -24,6 +25,7 @@ class OverviewViewModel : BaseViewModel() {
 
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
     internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.Item>>()
+    internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
 
     fun queryMediaInfo() {
         launchUI(
@@ -36,12 +38,11 @@ class OverviewViewModel : BaseViewModel() {
             },
             block = {
                 val (mediaEntity, binderList) = withContext(Dispatchers.IO) {
-                    val mediaEntity = BgmApiManager.bgmWebApi.queryMediaDetail(
+                    val entity = BgmApiManager.bgmWebApi.queryMediaDetail(
                         mediaId = mediaId,
                         type = MediaDetailType.TYPE_OVERVIEW
                     ).parserMediaDetail()
-
-                    mediaEntity to buildBinderList(mediaEntity)
+                    entity to buildBinderList(entity)
                 }
 
                 mediaDetailLiveData.value = mediaEntity
@@ -57,7 +58,7 @@ class OverviewViewModel : BaseViewModel() {
         items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_EP, "章节"))
         items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_TAG, "标签"))
         items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_SUMMARY, "简介"))
-        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_PREVIEW, "预览"))
+        items.add(OverviewAdapter.Item(entity.photos, OverviewAdapter.TYPE_PREVIEW, "预览"))
         items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_DETAIL, "详情"))
         items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_RATING, "评分"))
 
@@ -120,6 +121,28 @@ class OverviewViewModel : BaseViewModel() {
         }
 
         return items
+    }
+
+    fun queryPhotos(mediaName: String?) {
+        launchUI(
+            error = {
+                onMediaPreviewLiveData.value = listOf(DouBanPhotoEntity.Photo(loading = false))
+            },
+            block = {
+                requireNotNull(mediaName)
+                onMediaPreviewLiveData.value = withContext(Dispatchers.IO) {
+                    val searchResult =
+                        BgmApiManager.bgmJsonApi.queryDouBanSearchHint(mediaName, 10)
+                    val item = searchResult.items.orEmpty().firstOrNull()
+                    val targetId = item?.targetId.orEmpty()
+                    BgmApiManager.bgmJsonApi.queryDouBanPhotoList(targetId, 6)
+                        .photos.orEmpty()
+                        .let {
+                            it.ifEmpty { listOf(DouBanPhotoEntity.Photo(loading = false)) }
+                        }
+                }
+            }
+        )
     }
 
     /**

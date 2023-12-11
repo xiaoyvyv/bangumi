@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiaoyv.common.widget.image.AnimeImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/iv_preview"
+    android:layout_width="@dimen/ui_size_320"
+    android:layout_height="@dimen/ui_size_160"
+    android:layout_margin="@dimen/ui_size_8"
+    android:foreground="?attr/selectableItemBackground"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintDimensionRatio="16:9"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />

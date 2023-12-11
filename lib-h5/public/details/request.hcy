@@ -1,0 +1,6 @@
+GET /api/v2/tv/36093351?event_source=search&apikey=0dad551ec0f84ed02907ff5c42e8ec70&channel=Yingyongbao_Market&udid=0643fa6abfd3eaff076ff3ee603211ded11fc344&os_rom=android&timezone=Asia%2FShanghai&_sig=micV3kLPcc7z9Vi5uwLG5Xe%2BkNE%3D&_ts=1702285908 HTTP/1.1
+User-Agent: api-client/1 com.douban.frodo/7.65.0(277) Android/33 product/coral vendor/Google model/Pixel 4 XL brand/google  rom/android  network/wifi  udid/0643fa6abfd3eaff076ff3ee603211ded11fc344  platform/mobile nd/1
+Host: frodo.douban.com
+Connection: Keep-Alive
+Accept-Encoding: gzip
+

@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.bean.SampleAvatar
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 
@@ -44,7 +45,7 @@ class OverviewAdapter(
             .addItemType(TYPE_EP, OverviewEpBinder(touchedListener, onClickEpItem))
             .addItemType(TYPE_TAG, OverviewTagBinder(onClickTagItem))
             .addItemType(TYPE_SUMMARY, OverviewSummaryBinder(true))
-            .addItemType(TYPE_PREVIEW, OverviewPreviewBinder())
+            .addItemType(TYPE_PREVIEW, OverviewPreviewBinder(touchedListener) {})
             .addItemType(TYPE_DETAIL, OverviewSummaryBinder(false))
             .addItemType(TYPE_RATING, OverviewRatingBinder())
             .addItemType(TYPE_CHARACTER, OverviewCharacterBinder(touchedListener, onClickCrtItem))
@@ -64,6 +65,18 @@ class OverviewAdapter(
             .onItemViewType(OnItemViewTypeListener { position, list ->
                 return@OnItemViewTypeListener list[position].type
             })
+    }
+
+    /**
+     * 刷新预览
+     */
+    fun refreshPhotos(photos: List<DouBanPhotoEntity.Photo>) {
+        val item = items.find { it.type == TYPE_PREVIEW } ?: return
+        val targetIndex = itemIndexOfFirst(item)
+        if (targetIndex != -1 && photos.isNotEmpty()) {
+            item.entity = photos
+            set(targetIndex, item)
+        }
     }
 
     companion object {

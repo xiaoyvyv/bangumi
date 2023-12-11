@@ -18,7 +18,7 @@ import com.xiaoyv.widget.kts.getAttrColor
 class MagiQuestionAdapter : BaseQuickDiffBindingAdapter<MagiQuestionEntity.Option,
         FragmentMagiQuestionItemBinding>(IdDiffItemCallback()) {
 
-    private var selectIndex = -1
+    var selectIndex = -1
 
     override fun onBindViewHolder(
         holder: BaseQuickBindingHolder<FragmentMagiQuestionItemBinding>,

@@ -3,18 +3,17 @@
 package com.xiaoyv.common.api.interceptor
 
 import com.blankj.utilcode.constant.TimeConstants
-import com.xiaoyv.common.kts.debugLog
 import okhttp3.Cookie
 import okhttp3.Interceptor
 import okhttp3.Response
 
 /**
- * Class: [FixCookieInterceptor]
+ * Class: [CookieInterceptor]
  *
  * @author why
  * @since 11/24/23
  */
-class FixCookieInterceptor : Interceptor {
+class CookieInterceptor : Interceptor {
     private val cookieHeader = "Set-Cookie"
     private val cookieAuthName = "chii_auth"
 

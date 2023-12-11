@@ -81,7 +81,10 @@ class MagiQuestionFragment :
                 append(entity.id)
             }
 
+            questionAdapter.selectIndex=-1
             questionAdapter.submitList(entity.options)
+
+            lastQuestionAdapter.selectIndex=-1
             lastQuestionAdapter.submitList(entity.lastQuestionOptions)
 
             binding.ivAvatar.setOnFastLimitClickListener {

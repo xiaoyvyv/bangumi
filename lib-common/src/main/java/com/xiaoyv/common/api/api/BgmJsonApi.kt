@@ -4,6 +4,8 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.api.response.MediaJsonEntity
+import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
+import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
 import com.xiaoyv.common.config.annotation.TimelineType
 import org.jsoup.nodes.Document
 import retrofit2.http.Field
@@ -51,4 +53,18 @@ interface BgmJsonApi {
         @Field("to") to: String = "zh",
     ): BaiduTranslateEntity
 
+    @GET("https://frodo.douban.com/api/v2/search/subjects")
+    suspend fun queryDouBanSearchHint(
+        @Query("q") q: String,
+        @Query("count") count: Int = 10,
+        @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
+    ): DouBanSearchEntity
+
+    @GET("https://frodo.douban.com/api/v2/tv/{mediaId}/photos")
+    suspend fun queryDouBanPhotoList(
+        @Path("mediaId") mediaId: String,
+        @Query("start") start: Int = 0,
+        @Query("count") count: Int = 10,
+        @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
+    ): DouBanPhotoEntity
 }

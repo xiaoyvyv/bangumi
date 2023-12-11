@@ -9,7 +9,8 @@ import com.xiaoyv.common.api.api.BgmWebApi
 import com.xiaoyv.common.api.converter.WebDocumentConverter
 import com.xiaoyv.common.api.converter.WebHtmlConverter
 import com.xiaoyv.common.api.interceptor.CommonInterceptor
-import com.xiaoyv.common.api.interceptor.FixCookieInterceptor
+import com.xiaoyv.common.api.interceptor.CookieInterceptor
+import com.xiaoyv.common.api.interceptor.DouBanInterceptor
 import com.xiaoyv.common.config.annotation.BgmPathType
 import okhttp3.Cookie
 import okhttp3.CookieJar
@@ -36,7 +37,8 @@ class BgmApiManager {
     private val httpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(CommonInterceptor())
-            .addNetworkInterceptor(FixCookieInterceptor())
+            .addInterceptor(DouBanInterceptor())
+            .addNetworkInterceptor(CookieInterceptor())
             .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
             .cookieJar(cookieJar)
             .callTimeout(30, TimeUnit.SECONDS)
