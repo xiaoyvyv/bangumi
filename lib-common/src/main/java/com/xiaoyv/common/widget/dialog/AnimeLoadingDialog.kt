@@ -4,11 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import com.blankj.utilcode.util.ScreenUtils
+import com.xiaoyv.common.R
 import com.xiaoyv.common.databinding.ViewLoadingBinding
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.updateWindowParams
-import kotlin.math.roundToInt
 
 /**
  * AnimeLoadingDialog
@@ -51,8 +51,7 @@ class AnimeLoadingDialog(context: Context) : AlertDialog(context), UiDialog {
         window.setDimAmount(0.25f)
         window.setBackgroundDrawableResource(com.xiaoyv.widget.R.color.ui_transparent)
         window.updateWindowParams {
-            width = (ScreenUtils.getScreenWidth() * 0.4).roundToInt()
-            height = width
+            width = 24.dpi * 2 + context.resources.getDimensionPixelSize(R.dimen.avatar_size)
         }
 
         setCancelable(canCancelable)

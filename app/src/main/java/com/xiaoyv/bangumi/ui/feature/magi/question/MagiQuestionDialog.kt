@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.FragmentMagiQuestionLastBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MagiQuestionEntity
 import com.xiaoyv.common.kts.GoogleAttr
@@ -48,6 +49,16 @@ class MagiQuestionDialog : DialogFragment() {
         binding.tvRate.isVisible = entity.lastQuestionId.isNotBlank()
 
         SpanUtils.with(binding.tvRate)
+            .apply {
+                if (entity.userId.isNotBlank()) {
+                    append("来自：")
+                    append(entity.userName)
+                    setClickSpan(requireContext().getAttrColor(GoogleAttr.colorPrimary), false) {
+                        RouteHelper.jumpUserDetail(entity.userId)
+                    }
+                    append("\u3000")
+                }
+            }
             .append("通过率: ")
             .append(entity.lastQuestionRightRate)
             .setForegroundColor(requireContext().getAttrColor(GoogleAttr.colorPrimary))
