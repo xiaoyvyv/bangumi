@@ -38,19 +38,19 @@ class IndexViewModel : BaseViewModel() {
                     items.add(
                         IndexAdapter.IndexItem(
                             type = IndexAdapter.TYPE_TITLE,
-                            entity = "最新创建的目录",
+                            entity = "热门目录" to false,
                         )
                     )
-                    items.addAll(indexEntity.newItems.map {
+                    items.addAll(indexEntity.hotItems.map {
                         IndexAdapter.IndexItem(IndexAdapter.TYPE_ITEM, it)
                     })
                     items.add(
                         IndexAdapter.IndexItem(
                             type = IndexAdapter.TYPE_TITLE,
-                            entity = "热门目录",
+                            entity = "最新创建的目录" to true,
                         )
                     )
-                    items.addAll(indexEntity.hotItems.map {
+                    items.addAll(indexEntity.newItems.map {
                         IndexAdapter.IndexItem(IndexAdapter.TYPE_ITEM, it)
                     })
                     items

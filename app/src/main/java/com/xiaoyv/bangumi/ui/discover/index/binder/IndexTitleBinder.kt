@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.ui.discover.index.IndexAdapter
+import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.widget.menu.AnimeSectionView
 
 /**
@@ -22,7 +23,7 @@ class IndexTitleBinder :
     ) {
         item ?: return
         (holder.itemView as AnimeSectionView).apply {
-            title = item.entity.toString()
+            title = item.entity.forceCast<Pair<String, Boolean>>().first
         }
     }
 

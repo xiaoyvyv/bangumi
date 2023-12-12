@@ -3,6 +3,7 @@ package com.xiaoyv.common.kts
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.blankj.utilcode.util.ActivityUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -41,10 +42,12 @@ fun Any.toJsonMap(): Map<String, Any> {
     return toJson().fromJson<Map<String, Any>>().orEmpty()
 }
 
+@Keep
 inline fun <reified T> Any.forceCast(): T {
     return this as T
 }
 
+@Keep
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : Parcelable> parcelableCreator(): Parcelable.Creator<T> =
     T::class.java.getDeclaredField("CREATOR").get(null) as? Parcelable.Creator<T>

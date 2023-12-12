@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.magi.rank.binder
+package com.xiaoyv.bangumi.ui.discover.index.binder
 
 import android.content.Context
 import android.view.ViewGroup

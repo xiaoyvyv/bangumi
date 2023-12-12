@@ -1,18 +1,19 @@
 package com.xiaoyv.bangumi.ui.discover.index
 
+import androidx.core.view.updatePadding
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentListBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.common.api.parser.entity.MagiRankEntity
+import com.xiaoyv.common.api.parser.entity.IndexEntity
+import com.xiaoyv.common.api.parser.entity.IndexItemEntity
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
-import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
+import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 
 /**
@@ -28,11 +29,13 @@ class IndexFragment : BaseViewModelFragment<FragmentListBinding, IndexViewModel>
     override fun initView() {
         binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
+
+        binding.rvContent.updatePadding(top = 8.dpi)
     }
 
     override fun initData() {
         binding.rvContent.layoutManager =
-            QuickGridLayoutManager(requireContext(), 3,GridLayoutManager.VERTICAL, false)
+            QuickGridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
 
         binding.rvContent.adapter = listAdapter
 
@@ -44,8 +47,21 @@ class IndexFragment : BaseViewModelFragment<FragmentListBinding, IndexViewModel>
             viewModel.queryIndexHome()
         }
 
-        listAdapter.setOnDebouncedChildClickListener(R.id.item_rate) {
-            RouteHelper.jumpUserDetail(it.entity.forceCast<MagiRankEntity.MagiRank>().id)
+        listAdapter.setOnDebouncedChildClickListener(R.id.item_index_grid) {
+            RouteHelper.jumpIndexDetail(it.entity.forceCast<IndexEntity.Grid>().id)
+        }
+
+        listAdapter.setOnDebouncedChildClickListener(R.id.item_index) {
+            RouteHelper.jumpIndexDetail(it.entity.forceCast<IndexItemEntity>().id)
+        }
+
+        listAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
+            val isNewCreateIndex = it.entity.forceCast<Pair<String, Boolean>>().second
+            when (it.type) {
+                IndexAdapter.TYPE_TITLE -> {
+                    RouteHelper.jumpIndexList(isNewCreateIndex)
+                }
+            }
         }
     }
 

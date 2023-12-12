@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_comment"
+    android:id="@+id/item_index"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -10,19 +10,35 @@
     android:foreground="?attr/selectableItemBackground">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
-        android:id="@+id/iv_avatar"
+        android:id="@+id/iv_index"
         android:layout_width="@dimen/avatar_size"
         android:layout_height="@dimen/avatar_size"
         android:layout_marginVertical="@dimen/ui_layout_margin"
         android:layout_marginStart="@dimen/ui_layout_margin"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
+        android:background="?attr/colorOnSurface"
+        app:contentPadding="@dimen/ui_size_12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:srcCompat="@drawable/ic_folder"
+        app:tint="?attr/colorOnSurfaceInverse" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/ui_size_24"
+        android:layout_height="@dimen/ui_size_24"
+        android:layout_marginStart="@dimen/ui_size_12"
+        android:layout_marginEnd="-6dp"
+        android:layout_marginBottom="-6dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_index"
+        app:layout_constraintEnd_toEndOf="@+id/iv_index"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:strokeColor="?attr/colorOnSurfaceInverse" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_title"
@@ -31,46 +47,15 @@
         android:layout_marginStart="@dimen/ui_size_12"
         android:layout_marginEnd="@dimen/ui_layout_margin"
         android:ellipsize="end"
-        android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
-        android:maxLines="2"
+        android:maxLines="1"
         android:paddingBottom="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/iv_star"
-        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-        tools:text="@tools:sample/lorem/random" />
-
-    <androidx.appcompat.widget.AppCompatRatingBar
-        android:id="@+id/iv_star"
-        style="?attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/ui_layout_margin"
-        android:numStars="5"
-        android:progressTint="@color/ui_pink"
-        android:rating="2"
-        android:stepSize="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_title" />
-
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_desc"
-        android:layout_width="@dimen/ui_size_0"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/ui_layout_margin"
-        android:ellipsize="end"
-        android:lineSpacingMultiplier="1.25"
-        android:linksClickable="true"
-        android:maxLines="5"
-        android:paddingTop="@dimen/ui_size_6"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintEnd_toStartOf="@+id/tv_time"
+        app:layout_constraintStart_toEndOf="@+id/iv_index"
+        app:layout_constraintTop_toTopOf="@+id/iv_index"
         tools:text="@tools:sample/lorem/random" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -78,13 +63,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/ui_layout_margin"
-        android:paddingTop="@dimen/ui_size_6"
-        android:paddingBottom="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceLabelMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+        app:layout_constraintTop_toTopOf="@+id/tv_title"
         tools:text="12 min" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_desc"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.25"
+        android:linksClickable="true"
+        android:maxLines="2"
+        android:paddingTop="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="@tools:sample/lorem/random" />
 
     <View
         style="@style/Theme.Bangumi.Divider"

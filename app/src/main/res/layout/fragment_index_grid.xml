@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_opus"
+    android:id="@+id/item_index_grid"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:padding="@dimen/ui_size_8">
+    android:paddingVertical="@dimen/ui_size_8">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_cover"
@@ -21,33 +21,33 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_tag"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0"
         android:background="@drawable/shape_cover_mask"
+        android:breakStrategy="balanced"
         android:ellipsize="end"
-        android:gravity="bottom|start"
-        android:maxLines="1"
+        android:gravity="bottom"
+        android:lineSpacingMultiplier="1.25"
+        android:maxLines="4"
         android:paddingHorizontal="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_6"
-        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnPrimarySurface"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
         app:layout_constraintEnd_toEndOf="@+id/iv_cover"
         app:layout_constraintStart_toStartOf="@+id/iv_cover"
         app:layout_constraintTop_toTopOf="@+id/iv_cover"
-        tools:text="2023" />
+        tools:text="（2023.11.11更新）全年代日本动画佳作榜 中日美三网站综合资深评分[1-1000]" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_title"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="2"
-        android:minLines="1"
+        android:maxLines="1"
         android:paddingTop="@dimen/ui_size_8"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnSurface"

@@ -52,7 +52,7 @@
 
     <style name="Theme.Bangumi.Divider">
         <item name="android:background">?attr/colorOnSurface</item>
-        <item name="android:alpha">0.05</item>
+        <item name="android:alpha">0.1</item>
     </style>
 
     <style name="Theme.Bangumi.ToolbarTitle">

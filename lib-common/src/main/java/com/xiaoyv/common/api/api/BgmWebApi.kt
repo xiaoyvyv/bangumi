@@ -332,7 +332,13 @@ interface BgmWebApi {
     @GET("/group/{groupId}/forum")
     suspend fun queryGroupTopicList(
         @Path("groupId", encoded = true) groupId: String,
-        @Query("page") page: Int? = null,
+        @Query("page") page: Int,
+    ): Document
+
+    @GET("/group/category/{category}")
+    suspend fun queryGroupList(
+        @Path("category", encoded = true) category: String,
+        @Query("page") page: Int,
     ): Document
 
     @FormUrlEncoded
@@ -464,6 +470,12 @@ interface BgmWebApi {
 
     @GET("/index")
     suspend fun queryIndexPage(): Document
+
+    @GET("/index/browser")
+    suspend fun queryIndexList(
+        @Query("orderby") orderBy: String? = null,
+        @Query("page") page: Int
+    ): Document
 }
 
 

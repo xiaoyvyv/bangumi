@@ -16,5 +16,9 @@ class GroupDetailAdapter : BaseQuickDiffBindingAdapter<SampleAvatar,
     override fun BaseQuickBindingHolder<ActivityGroupDetailItemBinding>.converted(item: SampleAvatar) {
         binding.ivAvatar.loadImageAnimate(item.image)
         binding.tvTip.text = item.title
+        binding.tvCount.text = buildString {
+            append("成员：")
+            append(item.desc)
+        }
     }
 }

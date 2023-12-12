@@ -24,9 +24,9 @@ fun Element.parserIndex(): IndexEntity {
             grid.images = item.select(".coverGrid img").map {
                 it.attr("src").optImageUrl()
             }
-            grid.id = select("a").hrefId()
-            grid.title = select("a h3").text()
-            grid.desc = select("a span").text()
+            grid.id = item.select("a").hrefId()
+            grid.title = item.select("a span").text()
+            grid.desc = item.select("a h3").text()
             grid
         }
 
@@ -59,4 +59,35 @@ fun Element.parserIndex(): IndexEntity {
         entity.hotItems = list.getOrNull(1).orEmpty()
     }
     return entity
+}
+
+/**
+ * @author why
+ * @since 12/12/23
+ */
+fun Element.parserIndexList(): List<IndexItemEntity> {
+    requireNoError()
+    return select("#timeline ul > li").map { item ->
+        val itemEntity = IndexItemEntity()
+        itemEntity.userId = item.select("a.avatar").hrefId()
+        itemEntity.userAvatar = item.select("a.avatar > span").attr("style")
+            .fetchStyleBackgroundUrl().optImageUrl()
+        itemEntity.userName = item.select(".info .tip_i a").text()
+        itemEntity.time = item.select(".info .tip_j").text()
+        itemEntity.id = item.select("h3 a").hrefId()
+        itemEntity.title = item.select("h3").text()
+        itemEntity.desc = item.select(".info > p").text()
+        itemEntity.mediaType = item.select(".ico_subject_type").toString().let {
+            when {
+                it.contains("subject_type_1") -> MediaType.TYPE_BOOK
+                it.contains("subject_type_2") -> MediaType.TYPE_ANIME
+                it.contains("subject_type_3") -> MediaType.TYPE_MUSIC
+                it.contains("subject_type_4") -> MediaType.TYPE_GAME
+                it.contains("subject_type_6") -> MediaType.TYPE_REAL
+                else -> MediaType.TYPE_UNKNOWN
+            }
+        }
+        itemEntity.mediaCount = item.select(".ico_subject_type").text().parseCount()
+        itemEntity
+    }
 }

@@ -6,6 +6,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.kts.getAttrColor
 
 /**
@@ -40,6 +41,10 @@ class GroupFragment : BaseViewModelFragment<FragmentGroupBinding, GroupViewModel
     override fun initListener() {
         binding.srlRefresh.setOnRefreshListener {
             viewModel.queryGroupIndex()
+        }
+
+        contentAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
+            RouteHelper.jumpGroupList()
         }
     }
 

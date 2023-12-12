@@ -31,7 +31,6 @@ class GroupItemGridBinder(
     ) {
         item ?: return
         holder.binding.sectionHot.title = item.title
-        holder.binding.sectionHot.more = null
         groupAdapter.submitList(item.entity.forceCast())
     }
 

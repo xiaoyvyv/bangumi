@@ -196,6 +196,18 @@
             android:name="com.xiaoyv.bangumi.ui.feature.magi.MagiActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.discover.group.list.GroupListActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.discover.index.detail.IndexDetailActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.discover.index.list.IndexListActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

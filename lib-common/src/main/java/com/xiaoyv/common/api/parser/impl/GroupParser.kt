@@ -1,10 +1,10 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.GroupDetailEntity
 import com.xiaoyv.common.api.parser.entity.GroupIndexEntity
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
@@ -16,6 +16,8 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
 /**
+ * 解析小组详情页面
+ *
  * @author why
  * @since 12/7/23
  */
@@ -75,7 +77,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
             avatar.image = item.select("img").attr("src").optImageUrl()
             avatar.id = item.select("a").hrefId()
             avatar.title = item.select("a").text()
-            avatar.desc = item.select("small").text()
+            avatar.desc = item.select("small").text().parseCount().toString()
             avatar
         }
         entity.hotTopics = select(".topic_list > tbody > tr")
@@ -114,7 +116,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
             avatar.image = item.select("img").attr("src").optImageUrl()
             avatar.id = item.select(".inner a").hrefId()
             avatar.title = item.select(".inner a").text()
-            avatar.desc = item.select("small").text()
+            avatar.desc = item.select("small").text().parseCount().toString()
             avatar
         }
     }
@@ -123,7 +125,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
 }
 
 /**
- * 解析小组的全部话题列表
+ * 解析小组首页的全部话题列表
  */
 fun Element.parserGroupTopics(groupId: String): Pair<String, List<TopicSampleEntity>> {
     val groupName = select("h1.SecondaryNavTitle").text()
@@ -156,4 +158,21 @@ fun Element.parserGroupTopics(groupId: String): Pair<String, List<TopicSampleEnt
 
             sampleEntity
         }
+}
+
+/**
+ * 小组列表
+ */
+fun Document.parserGroupList(): List<SampleAvatar> {
+    requireNoError()
+    return select("#memberGroupList > li").map { item ->
+        val avatar = SampleAvatar()
+        item.select(".userContainer a.avatar").apply {
+            avatar.id = hrefId()
+            avatar.title = text()
+            avatar.image = select(".userImage > img").attr("src").optImageUrl()
+        }
+        avatar.desc = item.select("small").text().parseCount().toString()
+        avatar
+    }
 }

@@ -5,7 +5,10 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
+import com.xiaoyv.bangumi.ui.discover.group.list.GroupListActivity
 import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
+import com.xiaoyv.bangumi.ui.discover.index.detail.IndexDetailActivity
+import com.xiaoyv.bangumi.ui.discover.index.list.IndexListActivity
 import com.xiaoyv.bangumi.ui.feature.almanac.AlmanacActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
@@ -211,7 +214,15 @@ object RouteHelper {
     }
 
     fun jumpIndexDetail(id: String) {
+        IndexDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to id))
+    }
 
+    fun jumpIndexList(isSortByNewest: Boolean) {
+        IndexListActivity::class.open(bundleOf(NavKey.KEY_BOOLEAN to isSortByNewest))
+    }
+
+    fun jumpGroupList() {
+        GroupListActivity::class.open()
     }
 
     /**
