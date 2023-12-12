@@ -25,6 +25,7 @@ class SaveListViewModel : BaseViewModel() {
 
     internal var listType = InterestCollectType.TYPE_WISH
     internal var userId = ""
+    internal var isMine = false
 
     /**
      * 搜索条件

@@ -58,6 +58,7 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.isMine = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
     }
 
     override fun initView() {
@@ -124,20 +125,25 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
             }
         }
 
-        UserHelper.observe(this) {
-            if (it.isEmpty) {
-                viewModel.clearList()
-            } else {
-                viewModel.userId = it.id.orEmpty()
-                viewModel.refresh()
+        if (viewModel.isMine) {
+            UserHelper.observe(this) {
+                if (it.isEmpty) {
+                    viewModel.clearList()
+                } else {
+                    viewModel.userId = it.id.orEmpty()
+                    viewModel.refresh()
+                }
             }
         }
     }
 
     companion object {
-        fun newInstance(userId: String): SaveListFragment {
+        fun newInstance(userId: String, isMine: Boolean = false): SaveListFragment {
             return SaveListFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to userId)
+                arguments = bundleOf(
+                    NavKey.KEY_STRING to userId,
+                    NavKey.KEY_BOOLEAN to isMine
+                )
             }
         }
     }

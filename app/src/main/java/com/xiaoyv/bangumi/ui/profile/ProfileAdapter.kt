@@ -37,7 +37,8 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         val type = profileTab.type
         return when (type) {
             ProfileType.TYPE_COLLECTION -> SaveListFragment.newInstance(
-                userId = UserHelper.currentUser.id.orEmpty()
+                userId = UserHelper.currentUser.id.orEmpty(),
+                isMine = true
             )
 
             ProfileType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
