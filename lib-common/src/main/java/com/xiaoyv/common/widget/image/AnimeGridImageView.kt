@@ -30,7 +30,6 @@ class AnimeGridImageView @JvmOverloads constructor(
     var images: List<Image> = emptyList()
         set(value) {
             field = value
-            debugLog { value.toJson(true) }
             imageAdapter.submitList(value)
         }
 

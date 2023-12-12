@@ -47,6 +47,10 @@ class TimelinePageFragment :
                     BgmPathType.TYPE_PERSON -> {
                         RouteHelper.jumpPerson(it.id, false)
                     }
+                    // 跳转用户详情
+                    BgmPathType.TYPE_USER -> {
+                        RouteHelper.jumpUserDetail(it.id)
+                    }
                 }
             }
         }

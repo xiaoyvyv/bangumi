@@ -124,16 +124,6 @@ private fun Element.handleItem(entity: TimelineEntity) {
         entities.add(entity)
     }
 */
-/*
-*/
-/**
- * 解析媒体类型时间线
- *//*
-private fun Element.parserTimelineMedia(): List<TimelineEntity> {
-    return parserTimelineText { entity ->
-
-    }
-}*/
 
 /**
  * 解析多图网格类型的时间线
@@ -143,11 +133,22 @@ fun parserTimelineGrid(item: Element, entity: TimelineEntity) {
     parserTimelineText(item, entity)
 
     // 右侧图片
-    val rightImage = item.select("img.rr").let { img ->
-        val a = img.parents()
+    // 小组、好友等右侧单图片解析 a.rr -> img
+    // 人物等右侧单图片解析 a -> img.rr
+    val rightImage = item.select(".rr").let { rr ->
+        val img = rr.select("img")
         val coverUrl = img.attr("src").optImageUrl()
-        val (titleId, titleType) = a.firstOrNull().fetchLinkIdAndType()
-        TimelineEntity.GridTimeline(coverUrl, titleId, titleType)
+        // 当 rr 是 a 标签，直接解析
+        val rrA = rr.select("a")
+        if (rrA.isNotEmpty()) {
+            val (titleId, titleType) = rrA.first().fetchLinkIdAndType()
+            TimelineEntity.GridTimeline(coverUrl, titleId, titleType)
+        }
+        // 否则 rr 是 img标签，则提取父级 a 标签解析
+        else {
+            val (titleId, titleType) = rr.parents().firstOrNull().fetchLinkIdAndType()
+            TimelineEntity.GridTimeline(coverUrl, titleId, titleType)
+        }
     }
 
     // 图片 Grid
@@ -265,6 +266,7 @@ private fun Element?.fetchLinkIdAndType(): Pair<String, String> {
         titleLink.contains(BgmPathType.TYPE_CHARACTER) -> BgmPathType.TYPE_CHARACTER
         titleLink.contains(BgmPathType.TYPE_PERSON) -> BgmPathType.TYPE_PERSON
         titleLink.contains(BgmPathType.TYPE_SUBJECT) -> BgmPathType.TYPE_SUBJECT
+        titleLink.contains(BgmPathType.TYPE_USER) -> BgmPathType.TYPE_USER
         else -> BgmPathType.TYPE_USER
     }
     return titleId to titleType
