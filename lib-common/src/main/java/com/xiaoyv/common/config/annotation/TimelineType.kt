@@ -20,7 +20,6 @@ import androidx.annotation.StringDef
     TimelineType.TYPE_GROUP,
     TimelineType.TYPE_WIKI,
     TimelineType.TYPE_INDEX,
-    TimelineType.TYPE_WINDOW,
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class TimelineType {
@@ -36,6 +35,14 @@ annotation class TimelineType {
         const val TYPE_GROUP = "group"
         const val TYPE_WIKI = "wiki"
         const val TYPE_INDEX = "index"
-        const val TYPE_WINDOW = "doujin"
     }
 }
+
+annotation class TimelineAdapterType {
+    companion object {
+        const val TYPE_GRID = 1
+        const val TYPE_TEXT = 2
+        const val TYPE_MEDIA = 3
+    }
+}
+

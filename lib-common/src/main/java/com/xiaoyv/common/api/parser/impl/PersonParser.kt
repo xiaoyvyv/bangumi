@@ -8,10 +8,10 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
@@ -84,10 +84,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
                 .attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
 
-            who.star = item.select(".starstop-s > span")
-                .attr("class").let { starClass ->
-                    StarCommentView.parseScore(starClass)
-                }
+            who.star = item.parseStar()
             who.time = item.select(".innerWithAvatar small").text()
             who
         }

@@ -20,7 +20,8 @@ import androidx.annotation.StringDef
     BgmPathType.TYPE_SEARCH_SUBJECT,
     BgmPathType.TYPE_SEARCH_MONO,
     BgmPathType.TYPE_SEARCH_TAG,
-    BgmPathType.TYPE_SUBJECT
+    BgmPathType.TYPE_SUBJECT,
+    BgmPathType.TYPE_INDEX
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class BgmPathType {
@@ -34,6 +35,7 @@ annotation class BgmPathType {
         const val TYPE_TOPIC = "topic"
         const val TYPE_SUBJECT = "subject"
         const val TYPE_MESSAGE_BOX = "pm"
+        const val TYPE_INDEX = "index"
         const val TYPE_SEARCH_SUBJECT = "subject_search"
         const val TYPE_SEARCH_MONO = "mono_search"
         const val TYPE_SEARCH_TAG = "tag"

@@ -1,12 +1,12 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Element
 
 /**
@@ -39,9 +39,7 @@ object BrowserParser {
             item.infoTip = parserInfoTip(it.select(".tip").text())
 
             val rateInfo = it.select(".rateInfo")
-            item.rating = rateInfo.select(".starstop-s > span").attr("class").let { starClass ->
-                StarCommentView.parseScore(starClass)
-            }
+            item.rating = rateInfo.parseStar()
             item.ratingScore = rateInfo.select(".fade").text()
 
             if (isCollectList) {

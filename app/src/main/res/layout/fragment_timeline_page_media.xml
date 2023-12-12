@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_timeline"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
+        android:layout_marginVertical="@dimen/ui_layout_margin"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_action"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_size_12"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.25"
+        android:linksClickable="true"
+        android:maxLines="4"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurface"
+        android:textDirection="@null"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_content"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_size_12"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.25"
+        android:linksClickable="true"
+        android:maxLines="3"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_action"
+        tools:text="@tools:sample/lorem/random" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_media"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        app:layout_constraintEnd_toEndOf="@+id/tv_action"
+        app:layout_constraintStart_toStartOf="@+id/tv_action"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        app:layout_goneMarginTop="@dimen/ui_size_12">
+
+        <com.xiaoyv.common.widget.image.AnimeImageView
+            android:id="@+id/iv_media_cover"
+            android:layout_width="@dimen/ui_size_60"
+            android:layout_height="@dimen/ui_size_80"
+            android:layout_margin="@dimen/ui_size_12"
+            android:backgroundTint="?attr/colorSurface"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_media_name"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_media_cover"
+            app:layout_constraintTop_toTopOf="@+id/iv_media_cover"
+            tools:text="@tools:sample/lorem/random" />
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/iv_media_score"
+            style="?attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ui_size_12"
+            android:layout_marginTop="@dimen/ui_size_6"
+            android:numStars="5"
+            android:progressTint="@color/ui_pink"
+            android:rating="2"
+            android:stepSize="0.5"
+            app:layout_constraintStart_toStartOf="@+id/tv_media_desc"
+            app:layout_constraintTop_toBottomOf="@+id/tv_media_name" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_media_desc"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lineSpacingMultiplier="1.25"
+            android:maxLines="2"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_size_6"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintEnd_toEndOf="@+id/tv_media_name"
+            app:layout_constraintStart_toStartOf="@+id/tv_media_name"
+            app:layout_constraintTop_toBottomOf="@+id/iv_media_score"
+            tools:text="@tools:sample/lorem/random" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_action"
+        app:layout_constraintTop_toBottomOf="@+id/cl_media"
+        tools:text="2023-13-22" />
+
+    <View
+        style="@style/Theme.Bangumi.Divider"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0.5"
+        android:layout_marginStart="@dimen/ui_size_12"
+        android:layout_marginEnd="@dimen/ui_size_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar" />
+</androidx.constraintlayout.widget.ConstraintLayout>

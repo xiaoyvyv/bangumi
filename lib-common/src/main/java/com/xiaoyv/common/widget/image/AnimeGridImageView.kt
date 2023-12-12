@@ -6,9 +6,11 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.R
 import com.xiaoyv.common.databinding.ViewImageGridBinding
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.loadImageAnimate
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.decoration.GridItemDecoration
 import com.xiaoyv.widget.binder.BaseQuickBindingAdapter
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -32,7 +34,22 @@ class AnimeGridImageView @JvmOverloads constructor(
             imageAdapter.submitList(value)
         }
 
+    /**
+     * 点击事件
+     */
+    var onGridItemClickListener: ((Image) -> Unit)? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                imageAdapter.setOnDebouncedChildClickListener(R.id.iv_image, block = value)
+            }
+        }
+
     init {
+        hasFixedSize()
+        itemAnimator = null
+        overScrollMode = OVER_SCROLL_NEVER
+        isNestedScrollingEnabled = false
         layoutManager = GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
         addItemDecoration(
             GridItemDecoration.Builder(context)
@@ -50,7 +67,7 @@ class AnimeGridImageView @JvmOverloads constructor(
 
     class GridAdapter : BaseQuickBindingAdapter<Image, ViewImageGridBinding>() {
         override fun BaseQuickBindingHolder<ViewImageGridBinding>.converted(item: Image) {
-            binding.ivImage.loadImageAnimate(item.image, holder = true)
+            binding.ivImage.loadImageAnimate(item.image)
         }
     }
 }

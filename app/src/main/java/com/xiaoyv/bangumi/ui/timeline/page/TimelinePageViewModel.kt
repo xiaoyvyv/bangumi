@@ -5,7 +5,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
-import com.xiaoyv.common.api.parser.impl.TimeParser.parserTimelineForms
+import com.xiaoyv.common.api.parser.impl.parserTimelineForms
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
 import kotlinx.coroutines.Dispatchers
@@ -57,5 +57,4 @@ class TimelinePageViewModel : BaseViewModel() {
             }
         )
     }
-
 }

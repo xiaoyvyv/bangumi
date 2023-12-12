@@ -156,6 +156,30 @@ fun Elements.firsTextNode(): String {
     return textNodes().firstOrNull()?.text().orEmpty()
 }
 
+fun Elements.styleBackground(): String {
+    return attr("style").fetchStyleBackgroundUrl().optImageUrl()
+}
+
+fun Element.parseStar(): Float {
+    return select(".starstop-s > span").attr("class").let { starClass ->
+        starClass.orEmpty()
+            .split(" ")
+            .find { it.startsWith("stars") }.orEmpty()
+            .replace("stars", "")
+            .toFloatOrNull() ?: 0f
+    }
+}
+
+fun Elements.parseStar(): Float {
+    return select(".starstop-s > span").attr("class").let { starClass ->
+        starClass.orEmpty()
+            .split(" ")
+            .find { it.startsWith("stars") }.orEmpty()
+            .replace("stars", "")
+            .toFloatOrNull() ?: 0f
+    }
+}
+
 fun <T : Element> T.requireNoError() {
     val errorMsg = select("#colunmNotice .text").text().trim()
     if (errorMsg.isNotBlank()) {

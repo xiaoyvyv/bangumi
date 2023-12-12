@@ -1,6 +1,12 @@
 package com.xiaoyv.common.api.parser.entity
 
+import android.os.Parcelable
+import androidx.annotation.Keep
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.TimelineAdapterType
+import com.xiaoyv.common.helper.callback.IdEntity
 import com.xiaoyv.common.widget.image.AnimeGridImageView
+import kotlinx.parcelize.Parcelize
 
 /**
  * Class: [TimelineEntity]
@@ -8,44 +14,43 @@ import com.xiaoyv.common.widget.image.AnimeGridImageView
  * @author why
  * @since 11/25/23
  */
+@Keep
+@Parcelize
 data class TimelineEntity(
+    override var id: String = "",
     var avatar: String = "",
-    var userId: String = "",
-    var userActionText: CharSequence = "",
-    var collectInfo: CollectionInfo? = null,
-    var card: Card? = null,
-    var character: Character? = null,
-    var images: List<Image> = emptyList(),
-    var timeText: String = ""
-) {
-    data class Character(
-        var avatar: String,
-        var subjectId: String,
-        var userId: String
-    )
+    var name: String = "",
+    var title: CharSequence = "",
+    var titleId: String = "",
+    @BgmPathType
+    var titleType: String = BgmPathType.TYPE_UNKNOWN,
+    var content: String = "",
+    var time: String = "",
+    var platform: String = "",
+    var adapterType: Int = TimelineAdapterType.TYPE_TEXT,
 
-    data class Image(
-        var coverUrl: String = "",
-        var subjectId: String = ""
-    ) : AnimeGridImageView.Image {
-        override val image: String get() = coverUrl
-    }
+    var mediaCard: MediaTimeline = MediaTimeline(),
+    var gridCard: List<GridTimeline> = emptyList(),
+) : Parcelable, IdEntity {
 
-    data class CollectionInfo(
-        var score: String = "",
-        var comment: String = ""
-    )
+    @Keep
+    @Parcelize
+    data class GridTimeline(
+        override var image: String = "",
+        override var id: String = "",
+        @BgmPathType
+        var pathType: String = BgmPathType.TYPE_UNKNOWN,
+    ) : AnimeGridImageView.Image, Parcelable, IdEntity
 
-    data class Info(
-        var title: String,
-    )
-
-    data class Card(
+    @Keep
+    @Parcelize
+    data class MediaTimeline(
+        override var id: String = "",
         var title: String = "",
-        var subjectId: String = "",
-        var coverUrl: String = "",
-        var cardTip: String = "",
+        var info: String = "",
+        var cover: String = "",
         var cardRate: String = "",
         var cardRateTotal: String = "",
-    )
+        var score: Float = 0f
+    ) : IdEntity, Parcelable
 }

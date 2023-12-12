@@ -1,6 +1,5 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCharacterEntity
@@ -11,15 +10,16 @@ import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
 import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.firsTextNode
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
-import com.xiaoyv.common.widget.star.StarCommentView
 import com.xiaoyv.widget.kts.subListLimit
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
@@ -62,9 +62,7 @@ fun Element.parserMediaComments(): List<MediaCommentEntity> {
         }
         entity.comment = it.select(".comment").text()
         entity.time = it.select(".text small").text().replace("@", "").trim()
-        entity.star = it.select(".starstop-s > span").attr("class").let { starClass ->
-            StarCommentView.parseScore(starClass)
-        }
+        entity.star = it.parseStar()
         entity
     }
 }
@@ -229,10 +227,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             .attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
 
-        whoSee.star = item.select(".starstop-s > span")
-            .attr("class").let { starClass ->
-                StarCommentView.parseScore(starClass)
-            }
+        whoSee.star = item.parseStar()
         whoSee.time = item.select(".innerWithAvatar small").text()
         whoSee
     }

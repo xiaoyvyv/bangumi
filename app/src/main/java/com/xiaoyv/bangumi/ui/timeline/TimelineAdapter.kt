@@ -28,7 +28,6 @@ class TimelineAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         TimelineTab("小组", TimelineType.TYPE_GROUP),
         TimelineTab("维基", TimelineType.TYPE_WIKI),
         TimelineTab("目录", TimelineType.TYPE_INDEX),
-        TimelineTab("天窗", TimelineType.TYPE_WINDOW)
     )
 
     override fun createFragment(position: Int): Fragment {

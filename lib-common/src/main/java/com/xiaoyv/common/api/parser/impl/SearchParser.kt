@@ -1,14 +1,14 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
-import com.xiaoyv.common.widget.star.StarCommentView
 import org.jsoup.nodes.Element
 
 /**
@@ -33,10 +33,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                 entity.infoTip = BrowserParser.parserInfoTip(item.select(".tip").text())
 
                 val rateInfo = item.select(".rateInfo")
-                entity.rating =
-                    rateInfo.select(".starstop-s > span").attr("class").let { starClass ->
-                        StarCommentView.parseScore(starClass)
-                    }
+                entity.rating = rateInfo.parseStar()
                 entity.ratingScore = rateInfo.select(".fade").text()
                 entity.count = rateInfo.select(".tip_j").text()
 
