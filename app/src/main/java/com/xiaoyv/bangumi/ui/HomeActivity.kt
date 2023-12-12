@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
@@ -31,6 +32,9 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
 
     override fun initData() {
         robot.disable()
+
+        // 更新检测
+        UpdateHelper.checkUpdate(this, false)
     }
 
     override fun initListener() {

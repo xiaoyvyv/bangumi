@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.api
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.CalendarEntity
+import com.xiaoyv.common.api.response.GithubLatestEntity
 import com.xiaoyv.common.api.response.MediaJsonEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
@@ -26,6 +27,9 @@ interface BgmJsonApi {
 
     @GET(BgmApiManager.URL_BASE_WEB)
     suspend fun queryMainPage(): Document
+
+    @GET("https://api.github.com/repos/xiaoyvyv/Bangumi-for-Android/releases/latest")
+    suspend fun queryGithubLatest(): GithubLatestEntity
 
     @GET("${BgmApiManager.URL_BASE_WEB}/timeline")
     suspend fun queryWholeTimeline(
