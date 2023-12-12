@@ -1,9 +1,9 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.UserDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.replaceSmiles
@@ -63,8 +63,10 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
         entity.real = select("#real").parserUserSaveOverview()
         entity.blog = select("#blog").firstOrNull()?.parserMediaReviews().orEmpty()
     }
+
     entity.lastOnlineTime = select("#pinnedLayout .timeline > li")
         .firstOrNull()?.select(".time")?.text().orEmpty()
+        .replace("(\\d{4}-\\d{1,2}-\\d{1,2})\\s+\\d{1,2}:\\d{1,2}".toRegex(), "$1")
 
     entity.chart = select("#pinnedLayout .userStats").let { item ->
         val chart = UserDetailEntity.UserChart()

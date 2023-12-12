@@ -40,7 +40,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
     }
 
     override fun initData() {
-        viewModel.queryBlogDetail()
+
     }
 
     override fun initListener() {
@@ -108,9 +108,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         }
 
         UserHelper.observe(this) {
-            if (!it.isEmpty) {
-                viewModel.queryBlogDetail()
-            }
+            viewModel.queryBlogDetail()
         }
     }
 

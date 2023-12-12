@@ -41,7 +41,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
     }
 
     override fun initData() {
-        viewModel.queryTopicDetail()
+
     }
 
     override fun initListener() {
@@ -109,9 +109,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         }
 
         UserHelper.observe(this) {
-            if (!it.isEmpty) {
-                viewModel.queryTopicDetail()
-            }
+            viewModel.queryTopicDetail()
         }
     }
 

@@ -70,7 +70,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingBottom="@dimen/ui_size_6"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

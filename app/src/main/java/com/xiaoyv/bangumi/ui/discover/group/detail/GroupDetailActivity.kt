@@ -102,9 +102,7 @@ class GroupDetailActivity :
         }
 
         UserHelper.observe(this) {
-            if (!it.isEmpty) {
-                viewModel.queryGroupDetail()
-            }
+            viewModel.queryGroupDetail()
         }
     }
 

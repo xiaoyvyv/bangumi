@@ -68,11 +68,7 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
         }
 
         UserHelper.observe(this) {
-            if (!it.isEmpty) {
 
-            } else {
-                debugLog { "未登录！" }
-            }
         }
     }
 

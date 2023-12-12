@@ -86,8 +86,6 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             }
         binding.rvRecycler.adapter = overviewAdapter
         binding.rvRecycler.itemAnimator = null
-
-        viewModel.queryMediaInfo()
     }
 
     override fun initListener() {
@@ -141,7 +139,11 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
 
         viewModel.mediaDetailLiveData.observe(this) {
             activityViewModel.onMediaDetailLiveData.value = it
-            viewModel.queryPhotos(it?.titleCn?.ifBlank { it.titleNative })
+
+            val title = it?.titleCn?.ifBlank { it.titleNative }
+            if (title.isNullOrBlank().not()) {
+                viewModel.queryPhotos(title)
+            }
         }
 
         viewModel.mediaBinderListLiveData.observe(this) {

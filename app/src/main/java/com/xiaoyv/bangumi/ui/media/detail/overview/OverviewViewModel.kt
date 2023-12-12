@@ -27,7 +27,8 @@ class OverviewViewModel : BaseViewModel() {
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
     internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.Item>>()
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
-    internal val defaultImage by lazy {
+
+    private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(
             image = DouBanPhotoEntity.Image(
                 large = DouBanPhotoEntity.ImageItem(
