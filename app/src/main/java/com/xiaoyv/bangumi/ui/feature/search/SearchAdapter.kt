@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseDifferAdapter
 import com.xiaoyv.bangumi.databinding.ActivitySearchItemBinding
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
+import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -28,7 +30,6 @@ class SearchAdapter(private val showIcon: Boolean) : BaseDifferAdapter<SearchIte
     ) {
         item ?: return
         holder.binding.tvItem.text = item.keyword.ifBlank { item.label }
-        holder.binding.ivIcon.isVisible = showIcon
         holder.binding.tvItem.setTextColor(
             if (showIcon) {
                 context.getAttrColor(GoogleAttr.colorOnSurface)
@@ -36,6 +37,14 @@ class SearchAdapter(private val showIcon: Boolean) : BaseDifferAdapter<SearchIte
                 context.getAttrColor(GoogleAttr.colorPrimary)
             }
         )
+
+        holder.binding.ivIcon.isVisible = showIcon
+        when (item.pathType) {
+            BgmPathType.TYPE_SEARCH_TAG -> holder.binding.ivIcon.setImageResource(CommonDrawable.ic_tag)
+            BgmPathType.TYPE_SEARCH_MONO -> holder.binding.ivIcon.setImageResource(CommonDrawable.ic_person)
+            BgmPathType.TYPE_SEARCH_SUBJECT -> holder.binding.ivIcon.setImageResource(CommonDrawable.ic_tv)
+            else -> holder.binding.ivIcon.setImageResource(CommonDrawable.ic_history)
+        }
     }
 
     override fun onCreateViewHolder(

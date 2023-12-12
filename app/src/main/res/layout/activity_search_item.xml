@@ -35,7 +35,7 @@
         android:paddingVertical="@dimen/ui_layout_margin"
         android:text="三次元"
         android:textAppearance="?attr/textAppearanceLabelLarge"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
