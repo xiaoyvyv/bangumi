@@ -5,6 +5,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.parser.parserSecParamHash
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.useNotNull
@@ -54,10 +55,7 @@ fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
         val textPm = item.select(".text_pm")
         textPm.select(".rr").remove().apply {
             entity.time = select("small.grey").text().substringBefore("/").trim()
-            entity.deleteHash = select("small.grey a").attr("onclick").let {
-                "erasePM\\('[\\s\\S]+','(.*?)'\\)".toRegex()
-                    .find(it)?.groupValues?.getOrNull(1).orEmpty()
-            }
+            entity.deleteHash = select("small.grey a[onclick]").parserSecParamHash("erasePM")
         }
         useNotNull(textPm.select("a.l").firstOrNull()) {
             entity.fromName = text()

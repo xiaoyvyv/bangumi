@@ -3,15 +3,18 @@ package com.xiaoyv.common.widget.web
 import android.content.Intent
 import android.webkit.JavascriptInterface
 import androidx.annotation.Keep
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.helper.CommentPaginationHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
+import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.kts.useNotNull
 import com.xiaoyv.widget.webview.UiWebView
 import com.xiaoyv.widget.webview.listener.OnWindowListener
@@ -27,6 +30,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 abstract class WebBase(open val webView: UiWebView) {
     private var mounted = false
     private val interceptor by lazy { WebResourceInterceptor() }
+    internal val commentPagination by lazy { CommentPaginationHelper() }
 
     abstract val pageRoute: String
 
@@ -56,6 +60,16 @@ abstract class WebBase(open val webView: UiWebView) {
         }
     }
 
+    /**
+     * 优化评论加载
+     */
+    @Keep
+    @JvmOverloads
+    @JavascriptInterface
+    fun onLoadComments(page: Int, size: Int = 10, sort: String): String {
+        return commentPagination.loadComments(page, size, sort).toJson()
+    }
+
     @Keep
     @JavascriptInterface
     fun onPreviewImage(imageUrl: String, imageUrls: Array<String>) {
@@ -65,7 +79,6 @@ abstract class WebBase(open val webView: UiWebView) {
     @Keep
     @JavascriptInterface
     fun onNeedLogin() {
-        debugLog { "请登录后再操作" }
         onNeedLoginListener()
     }
 
@@ -80,6 +93,27 @@ abstract class WebBase(open val webView: UiWebView) {
     fun onClickRelated(json: String) {
         useNotNull(json.fromJson<SampleRelatedEntity.Item>()) {
             onClickRelatedListener(this)
+        }
+    }
+
+    /**
+     * 更改评论排序
+     */
+    @Keep
+    @JavascriptInterface
+    fun onClickCommentSort() {
+        val activity = ActivityUtils.getTopActivity() as? FragmentActivity ?: return
+        val sorts = listOf("asc", "desc", "hot")
+        activity.runOnUiThread {
+            activity.showOptionsDialog(
+                title = "更改评论排序",
+                items = arrayListOf("按时间正向排序", "按最新发布排序", "按热门程度排序"),
+                onItemClick = { _, which ->
+                    activity.launchUI {
+                        callJs("window.changeCommentSort('${sorts[which]}')")
+                    }
+                }
+            )
         }
     }
 

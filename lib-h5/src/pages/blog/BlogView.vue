@@ -16,7 +16,7 @@ const blogContentRef = ref<HTMLDivElement>();
 const loadingIdentifier = ref(new Date().getDate());
 const commentPageSize = 10;
 const commentPage = ref(1);
-const commentDesc = ref(false);
+const commentSort = ref("desc");
 const comments = reactive<CommentTreeEntity[]>([]);
 const robotSay = ref("哼！Bangumi老娘我是有底线的人");
 
@@ -36,7 +36,7 @@ const blogHandler = {
  * @param $state
  */
 const loadComments = async ($state: any) => {
-  const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, commentDesc.value);
+  const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, commentSort.value);
   const pageComments = JSON.parse(pageCommentJson);
   if (pageComments.length == 0) {
     $state.complete();
@@ -54,8 +54,17 @@ const loadComments = async ($state: any) => {
 }
 
 onMounted(() => {
+  // 机器人说话
   window.robotSay = (message: string) => {
     robotSay.value = message;
+  };
+
+  // 更改排序
+  window.changeCommentSort = (sort: string) => {
+    commentSort.value = sort;
+    commentPage.value = 1;
+    comments.length = 0;
+    loadingIdentifier.value++;
   };
 
   window.blog = blogHandler;
@@ -64,10 +73,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="blog" id="blog">
-    <div class="blog-title">
-      {{ blog.title }}
-    </div>
+  <div class="blog" id="blog" v-if="blog.id">
+    <div class="blog-title">{{ blog.title }}</div>
     <div class="blog-info">
       <div class="blog-author">{{ blog.userName }}</div>
       <div class="blog-time">{{ blog.time }}</div>
@@ -82,11 +89,12 @@ onMounted(() => {
     </div>
     <div class="divider" v-if="blog.content"/>
 
-    <comment-view target="#blog" :comments="comments"/>
+    <comment-view target="#blog" :comments="comments" :sort="commentSort"/>
 
     <infinite-loading class="loading"
                       target="#blog"
                       :identifier="loadingIdentifier"
+                      :distance="300"
                       @infinite="loadComments">
       <!--suppress VueUnrecognizedSlot -->
       <template #spinner>

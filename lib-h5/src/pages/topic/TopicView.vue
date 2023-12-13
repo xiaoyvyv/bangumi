@@ -17,7 +17,7 @@ const topicContentRef = ref<HTMLDivElement>();
 const loadingIdentifier = ref(new Date().getDate());
 const commentPageSize = 10;
 const commentPage = ref(1);
-const commentDesc = ref(false);
+const commentSort = ref("desc");
 const comments = reactive<CommentTreeEntity[]>([]);
 const robotSay = ref("哼！Bangumi老娘我是有底线的人");
 
@@ -37,7 +37,7 @@ const topicHandler = {
  * @param $state
  */
 const loadComments = async ($state: any) => {
-  const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, commentDesc.value);
+  const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, commentSort.value);
   const pageComments = JSON.parse(pageCommentJson);
 
   if (pageComments.length == 0) {
@@ -55,17 +55,26 @@ const loadComments = async ($state: any) => {
   }
 }
 
-onMounted(() => {
+onMounted(() => { // 机器人说话
   window.robotSay = (message: string) => {
     robotSay.value = message;
   };
+
+  // 更改排序
+  window.changeCommentSort = (sort: string) => {
+    commentSort.value = sort;
+    commentPage.value = 1;
+    comments.length = 0;
+    loadingIdentifier.value++;
+  };
+
   window.topic = topicHandler;
   window.mounted = true;
 });
 </script>
 
 <template>
-  <div class="topic" id="topic">
+  <div class="topic" id="topic" v-if="topic.id">
     <div class="topic-title">{{ topic.title }}</div>
     <div class="topic-info">
       <div class="topic-author">{{ topic.userName }}</div>
@@ -77,11 +86,12 @@ onMounted(() => {
     <div class="topic-content" ref="topicContentRef" v-html="common.optText(topic.content)"/>
     <div class="divider" v-if="topic.content"/>
 
-    <comment-view target="#topic" :comments="comments"/>
+    <comment-view target="#topic" :comments="comments" :sort="commentSort"/>
 
     <infinite-loading class="loading"
                       target="#topic"
                       :identifier="loadingIdentifier"
+                      :distance="300"
                       @infinite="loadComments">
       <!--suppress VueUnrecognizedSlot -->
       <template #spinner>

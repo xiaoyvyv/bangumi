@@ -13,12 +13,10 @@ import com.xiaoyv.bangumi.databinding.FragmentSaveListBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.InterestCollectType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.getAttrColor
@@ -122,7 +120,7 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
         }
 
         if (viewModel.isMine) {
-            UserHelper.observe(this) {
+            UserHelper.observeUserInfo(this) {
                 if (it.isEmpty) {
                     viewModel.clearList()
                 } else {

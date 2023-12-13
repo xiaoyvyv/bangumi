@@ -17,12 +17,35 @@ const props = defineProps({
     default: [],
     required: true
   },
+  sort: {
+    type: String,
+    required: true
+  },
 });
 
 /**
  * 转为响应式
  */
-const {target, comments} = toRefs(props);
+const {target, comments, sort} = toRefs(props);
+
+/**
+ * 排序名称
+ *
+ * @param sort
+ */
+const sortName = (sort: string) => {
+  switch (sort) {
+    case "desc": {
+      return "最新";
+    }
+    case "hot": {
+      return "最热";
+    }
+    default: {
+      return "时间"
+    }
+  }
+}
 
 /**
  * 点击用户
@@ -70,6 +93,13 @@ const onClickReplyComment = (event: Event, mainComment: CommentTreeEntity, subCo
 };
 
 /**
+ * 更改排序
+ */
+const onClickCommentSort = () => {
+  window.android && window.android.onClickCommentSort();
+}
+
+/**
  * 新建评论
  * @param event
  */
@@ -84,7 +114,8 @@ const onClickNewComment = (event: Event) => {
 <template>
   <div class="comment">
     <div class="comment-title">
-      <div class="title">精选留言</div>
+      <div class="title">用户讨论</div>
+      <div class="sort" @click.stop="onClickCommentSort">排序：{{ sortName(sort) }}</div>
       <div style="flex: 1"/>
       <div class="write" @click.stop="onClickNewComment($event)">写留言</div>
     </div>
@@ -129,17 +160,24 @@ const onClickNewComment = (event: Event) => {
   display: flex;
   flex-flow: column nowrap;
   padding: 12px 16px;
+  min-height: 300px;
 
   .comment-title {
     display: flex;
     flex-flow: row nowrap;
     padding-bottom: 16px;
     align-items: center;
+    font-size: 16px;
 
     .title {
-      color: var(--on-surface-variant-color);
+      color: var(--on-surface-color);
       font-weight: bold;
-      opacity: 0.75;
+    }
+
+    .sort {
+      margin-left: 16px;
+      font-size: 16px;
+      color: var(--primary-color);
     }
 
     .write {

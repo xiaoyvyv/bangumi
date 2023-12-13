@@ -155,7 +155,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             overviewAdapter.refreshPhotos(photos)
         }
 
-        UserHelper.observe(this) {
+        UserHelper.observeUserInfo(this) {
             viewModel.queryMediaInfo()
         }
     }

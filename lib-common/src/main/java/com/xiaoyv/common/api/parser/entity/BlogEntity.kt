@@ -12,9 +12,8 @@ data class BlogEntity(
     var image: String = "",
     var time: String = "",
     var content: String = "",
-    var mediaType: String = "",
     var commentCount: Int = 0,
-
+    var nestingProfile: Boolean = false,
     var mediaName: String = "",
     var recentUserName: String = "",
     var recentUserId: String = "",

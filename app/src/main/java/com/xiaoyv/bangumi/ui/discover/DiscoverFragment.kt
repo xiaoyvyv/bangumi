@@ -7,12 +7,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentDiscoverBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.MainViewModel
-import com.xiaoyv.bangumi.ui.discover.home.HomeViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
@@ -67,7 +65,7 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
             binding.vpContent.setCurrentItem(it, true)
         }
 
-        UserHelper.observe(this) {
+        UserHelper.observeUserInfo(this) {
 
         }
     }

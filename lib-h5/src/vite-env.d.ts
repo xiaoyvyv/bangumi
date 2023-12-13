@@ -9,6 +9,7 @@ declare interface Window {
     sign: any;
     mounted: boolean;
     robotSay: (message: string) => void;
+    changeCommentSort: (sort: string) => void;
     android: Android;
 }
 
@@ -19,5 +20,6 @@ declare interface Android {
     onClickUser: any;
     onNeedLogin: any;
     onClickRelated: any;
-    onLoadComments: (page: number, size: number, desc: boolean) => string;
+    onClickCommentSort: any;
+    onLoadComments: (page: number, size: number, sort: string) => string;
 }

@@ -83,7 +83,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
 
     override fun LifecycleOwner.initViewObserver() {
-        UserHelper.observe(this) {
+        UserHelper.observeUserInfo(this) {
             if (!it.isEmpty) {
                 binding.ivBanner.loadImageBlur(it.avatar?.large)
                 binding.ivAvatar.loadImageAnimate(it.avatar?.large)

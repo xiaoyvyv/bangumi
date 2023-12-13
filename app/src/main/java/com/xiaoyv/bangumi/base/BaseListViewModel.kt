@@ -1,9 +1,11 @@
 package com.xiaoyv.bangumi.base
 
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.StringUtils
 import com.chad.library.adapter.base.loadState.LoadState
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.widget.kts.copyAddAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,6 +26,9 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     internal val isRefresh: Boolean
         get() = current == 1
 
+    internal open val emptyTip: String
+        get() = StringUtils.getString(CommonString.common_empty_tip)
+
     fun refresh() {
         current = 1
         loadListData()
@@ -39,11 +44,21 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             stateView = loadingViewState,
             error = {
                 it.printStackTrace()
-                onListLiveData.value = null
+                if (isRefresh) {
+                    loadingMoreState = LoadState.None
+                    onListLiveData.value = null
+                } else {
+                    loadingMoreState = LoadState.Error(it)
+                    current--
+                }
             },
             block = {
                 val responseList = withContext(Dispatchers.IO) {
-                    onRequestListImpl()
+                    onRequestListImpl().apply {
+                        if (isRefresh) {
+                            require(isNotEmpty()) { emptyTip }
+                        }
+                    }
                 }
 
                 if (isRefresh) {

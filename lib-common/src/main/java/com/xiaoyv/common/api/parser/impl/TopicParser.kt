@@ -38,7 +38,7 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
             val a = item.select("a")
             useNotNull(a.firstOrNull()) {
                 relatedItem.image = select("img.avatar").attr("src").optImageUrl()
-                relatedItem.title = text()
+                relatedItem.title = text().ifBlank { attr("title") }
 
                 relatedItem.imageLink = attr("href")
                 relatedItem.titleLink = attr("href")

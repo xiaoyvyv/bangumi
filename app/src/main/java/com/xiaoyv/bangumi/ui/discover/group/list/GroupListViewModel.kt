@@ -4,6 +4,7 @@ import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.impl.parserGroupList
 import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.helper.UserHelper
 
 /**
  * Class: [GroupListViewModel]
@@ -13,6 +14,11 @@ import com.xiaoyv.common.config.bean.SampleAvatar
  */
 class GroupListViewModel : BaseListViewModel<SampleAvatar>() {
     internal var isSortByNewest = false
+
+    internal var userId: String = ""
+
+    internal val isMine: Boolean
+        get() = userId.isNotBlank() && userId == UserHelper.currentUser.id
 
     internal val categoryMap by lazy {
         listOf(
@@ -61,9 +67,10 @@ class GroupListViewModel : BaseListViewModel<SampleAvatar>() {
     }
 
     override suspend fun onRequestListImpl(): List<SampleAvatar> {
-        return BgmApiManager.bgmWebApi.queryGroupList(
-            category = category,
-            page = current
-        ).parserGroupList()
+        return if (userId.isNotBlank()) {
+            BgmApiManager.bgmWebApi.queryUserGroup(userId).parserGroupList()
+        } else {
+            BgmApiManager.bgmWebApi.queryGroupList(category, current).parserGroupList()
+        }
     }
 }

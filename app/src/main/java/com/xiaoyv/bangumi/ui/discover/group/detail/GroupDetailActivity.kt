@@ -101,7 +101,7 @@ class GroupDetailActivity :
             invalidateOptionsMenu()
         }
 
-        UserHelper.observe(this) {
+        UserHelper.observeUserInfo(this) {
             viewModel.queryGroupDetail()
         }
     }

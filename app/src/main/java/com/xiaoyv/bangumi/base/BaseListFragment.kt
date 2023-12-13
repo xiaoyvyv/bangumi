@@ -26,6 +26,11 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
 
     abstract val isOnlyOnePage: Boolean
 
+    /**
+     * 加载进度提示垂直偏移
+     */
+    open val loadingBias: Float = 0.5f
+
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
         onCreateContentAdapter()
     }
@@ -88,21 +93,34 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     override fun LifecycleOwner.initViewObserver() {
         binding.stateView.initObserver(
             lifecycleOwner = this,
+            loadingBias = loadingBias,
             loadingViewState = viewModel.loadingViewState,
             canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() }
         )
 
         viewModel.onListLiveData.observe(this) {
             debugLog { "List:\n " + it.toJson(true) }
+            // 加载失败
+            if (it == null) {
+                // 刷新失败清空
+                if (viewModel.isRefresh) {
+                    contentAdapter.submitList(emptyList())
+                }
+                adapterHelper.trailingLoadState = viewModel.loadingMoreState
+                return@observe
+            }
 
-            contentAdapter.submitList(it.orEmpty()) {
+            contentAdapter.submitList(it) {
                 if (viewModel.isRefresh) {
                     layoutManager?.scrollToPositionWithOffset(0, 0)
                 }
 
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
+
+                onListDataFinish(it)
             }
         }
+
         initViewObserverExt()
     }
 
@@ -111,6 +129,10 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     }
 
     open fun LifecycleOwner.initViewObserverExt() {
+
+    }
+
+    open fun onListDataFinish(list: List<T>) {
 
     }
 }

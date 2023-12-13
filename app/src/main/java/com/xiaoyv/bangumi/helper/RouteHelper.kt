@@ -127,6 +127,11 @@ object RouteHelper {
                 jumpMediaDetail(id)
                 return true
             }
+            // 小组
+            titleLink.contains(BgmPathType.TYPE_GROUP) -> {
+                jumpGroupDetail(id)
+                return true
+            }
         }
 
         return false

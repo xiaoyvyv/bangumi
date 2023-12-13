@@ -11,8 +11,8 @@ object WebConfig {
         return baseH5Url + page
     }
 
-    private const val DEBUG = false
+    private const val DEBUG = true
 
     private val baseH5Url
-        get() = if (DEBUG) "http://192.168.6.70:5173/#/" else "file:///android_asset/h5/index.html#"
+        get() = if (DEBUG) "http://192.168.0.100:5173/#/" else "file:///android_asset/h5/index.html#"
 }

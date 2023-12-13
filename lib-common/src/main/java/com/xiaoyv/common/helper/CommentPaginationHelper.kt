@@ -5,12 +5,37 @@ import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 /**
  * Class: [CommentPaginationHelper]
  */
-class CommentPaginationHelper(private var comments: List<CommentTreeEntity>) {
+class CommentPaginationHelper(private var comments: List<CommentTreeEntity> = mutableListOf()) {
+    private val sortCache: MutableMap<String, List<CommentTreeEntity>> = mutableMapOf()
+
+    /**
+     * 刷新评论数据源
+     */
+    fun refreshComments(newComments: List<CommentTreeEntity>) {
+        comments = newComments
+    }
+
+    /**
+     * 排序
+     */
+    private fun loadSortDataSource(sort: String): List<CommentTreeEntity> {
+        if (sortCache[sort] == null) {
+            val tmp = when (sort) {
+                "desc" -> comments.reversed()
+                "hot" -> comments.toMutableList().sortedByDescending { it.topicSubReply.size }
+                else -> comments
+            }
+            sortCache[sort] = tmp
+            return tmp
+        }
+
+        return sortCache[sort].orEmpty()
+    }
 
     /**
      * 分页加载评论
      */
-    fun loadComments(page: Int, size: Int, isDesc: Boolean): List<CommentTreeEntity> {
+    fun loadComments(page: Int, size: Int, sort: String): List<CommentTreeEntity> {
         val startIndex = (page - 1) * size
         val endIndex = startIndex + size
 
@@ -19,10 +44,6 @@ class CommentPaginationHelper(private var comments: List<CommentTreeEntity>) {
             return emptyList()
         }
 
-        return if (isDesc) {
-            comments.reversed().subList(startIndex, endIndex.coerceAtMost(comments.size))
-        } else {
-            comments.subList(startIndex, endIndex.coerceAtMost(comments.size))
-        }
+        return loadSortDataSource(sort).subList(startIndex, endIndex.coerceAtMost(comments.size))
     }
 }

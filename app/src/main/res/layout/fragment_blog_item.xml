@@ -42,13 +42,13 @@
         android:id="@+id/iv_cover"
         android:layout_width="@dimen/ui_size_60"
         android:layout_height="@dimen/ui_size_0"
-        android:layout_marginTop="@dimen/ui_size_6"
         android:layout_marginBottom="@dimen/ui_layout_margin"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintVertical_bias="0"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -62,7 +62,8 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_cover"
-        app:layout_constraintTop_toTopOf="@+id/iv_cover"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_goneMarginStart="@dimen/ui_size_0"
         tools:text="@tools:sample/lorem/random" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
@@ -70,34 +71,49 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/ui_size_12"
+        android:layout_marginTop="@dimen/ui_size_12"
         android:layout_marginEnd="@dimen/ui_size_12"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnSurfaceVariant"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_time"
         app:layout_constraintStart_toEndOf="@+id/iv_cover"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+        app:layout_constraintVertical_bias="1"
+        app:layout_goneMarginStart="@dimen/ui_size_0"
         tools:text="讨论（+1）岘评论了该日志" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_12"
         android:ellipsize="end"
         android:gravity="end"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnSurfaceVariant"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
         app:layout_constraintVertical_bias="1"
         tools:text="2020-12-34" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tv_recent,tv_time,iv_cover" />
 
     <View
         style="@style/Theme.Bangumi.Divider"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0.5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
 </androidx.constraintlayout.widget.ConstraintLayout>

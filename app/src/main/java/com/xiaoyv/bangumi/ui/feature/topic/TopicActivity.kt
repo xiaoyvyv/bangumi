@@ -104,7 +104,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
             }
         }
 
-        UserHelper.observe(this) {
+        UserHelper.observeUserInfo(this) {
             viewModel.queryTopicDetail()
         }
     }

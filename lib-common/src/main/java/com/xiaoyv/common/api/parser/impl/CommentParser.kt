@@ -1,9 +1,9 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.replaceSmiles
 import org.jsoup.nodes.Element
@@ -31,8 +31,14 @@ fun Element.parserReplyForm(): CommentFormEntity {
     return formEntity
 }
 
+/**
+ * 解析评论
+ */
 private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
-    return map { item ->
+    val entities = arrayListOf<CommentTreeEntity>()
+    forEach { item ->
+        if (item.id().isBlank()) return@forEach
+
         val entity = CommentTreeEntity()
         val topicSubReply = item.select(".topic_sub_reply").remove()
         if (topicSubReply.isNotEmpty()) {
@@ -55,8 +61,9 @@ private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
         entity.replyContent = item.select(".reply_content > .message")
             .ifEmpty { item.select(".inner > .cmt_sub_content") }
             .html().replaceSmiles()
-        entity
+        entities.add(entity)
     }
+    return entities
 }
 
 /**

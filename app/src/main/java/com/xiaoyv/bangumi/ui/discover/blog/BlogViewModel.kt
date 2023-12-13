@@ -1,16 +1,14 @@
 package com.xiaoyv.bangumi.ui.discover.blog
 
-import androidx.lifecycle.MutableLiveData
-import com.chad.library.adapter.base.loadState.LoadState
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.blankj.utilcode.util.StringUtils
+import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.BlogEntity
 import com.xiaoyv.common.api.parser.impl.parserBlogList
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.widget.kts.copyAddAll
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonString
 
 /**
  * Class: [BlogViewModel]
@@ -18,22 +16,14 @@ import kotlinx.coroutines.withContext
  * @author why
  * @since 11/24/23
  */
-class BlogViewModel : BaseViewModel() {
-    internal val onListLiveData = MutableLiveData<List<BlogEntity>?>()
+class BlogViewModel : BaseListViewModel<BlogEntity>() {
 
     internal var userId = ""
-
-    /**
-     * 搜索条件
-     */
-    private var current = 1
 
     @MediaType
     internal var mediaType: String = MediaType.TYPE_ANIME
 
     internal var tag = ""
-
-    internal var loadingMoreState: LoadState = LoadState.None
 
     /**
      * 默认日志查询路径为 媒体的动漫
@@ -45,17 +35,25 @@ class BlogViewModel : BaseViewModel() {
      */
     private var tagPath = ""
 
-    internal val isRefresh: Boolean
-        get() = current == 1
+    /**
+     * 是否为自己的帖子列表
+     */
+    internal val isMine: Boolean
+        get() = userId.isNotBlank() && userId == UserHelper.currentUser.id
 
-    fun refresh() {
-        current = 1
-        queryBlogList()
-    }
+    override suspend fun onRequestListImpl(): List<BlogEntity> {
+        buildQueryTagPath()
 
-    fun loadMore() {
-        current++
-        queryBlogList()
+        return BgmApiManager.bgmWebApi.queryBlogList(
+            queryPath = queryPath,
+            tagPath = tagPath,
+            page = current
+        ).parserBlogList(userId.isNotBlank()).apply {
+            // 刷新时，检测是否为空数据
+            if (isRefresh) require(isNotEmpty()) {
+                StringUtils.getString(CommonString.common_empty_tip)
+            }
+        }
     }
 
     private fun queryBlogList() {
@@ -63,30 +61,11 @@ class BlogViewModel : BaseViewModel() {
             stateView = loadingViewState,
             error = {
                 it.printStackTrace()
-                onListLiveData.value = null
+                if (isRefresh) onListLiveData.value = null
+                else current--
             },
             block = {
-                buildQueryTagPath()
 
-                val response = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryBlogList(
-                        queryPath = queryPath,
-                        tagPath = tagPath,
-                        page = current
-                    ).parserBlogList(mediaType)
-                }
-
-                if (isRefresh) {
-                    onListLiveData.value = response
-                } else {
-                    onListLiveData.value = onListLiveData.value.copyAddAll(response)
-                }
-
-                loadingMoreState = if (isRefresh && response.isEmpty()) {
-                    LoadState.None
-                } else {
-                    LoadState.NotLoading(response.isEmpty())
-                }
             }
         )
     }

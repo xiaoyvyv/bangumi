@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.discover.blog
 
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.blankj.utilcode.util.SpanUtils
@@ -21,12 +22,14 @@ class BlogAdapter : BaseQuickDiffBindingAdapter<BlogEntity,
         FragmentBlogItemBinding>(BlogDiffCallback) {
 
     override fun BaseQuickBindingHolder<FragmentBlogItemBinding>.converted(item: BlogEntity) {
-        binding.ivCover.loadImageAnimate(item.image, holder = true)
+        binding.ivCover.isGone = item.nestingProfile
         binding.tvTitle.text = item.title
         binding.tvDesc.text = item.content
         binding.tvTime.text = item.time
         binding.tvRecent.isVisible = item.recentUserName.isNotBlank()
         binding.tvCommentCount.text = String.format("讨论：+%d", item.commentCount)
+
+        if (!item.nestingProfile) binding.ivCover.loadImageAnimate(item.image, holder = true)
 
         SpanUtils.with(binding.tvRecent)
             .append(item.recentUserName)
@@ -38,14 +41,14 @@ class BlogAdapter : BaseQuickDiffBindingAdapter<BlogEntity,
     object BlogDiffCallback : DiffUtil.ItemCallback<BlogEntity>() {
         override fun areItemsTheSame(
             oldItem: BlogEntity,
-            newItem: BlogEntity
+            newItem: BlogEntity,
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
             oldItem: BlogEntity,
-            newItem: BlogEntity
+            newItem: BlogEntity,
         ): Boolean {
             return oldItem == newItem
         }

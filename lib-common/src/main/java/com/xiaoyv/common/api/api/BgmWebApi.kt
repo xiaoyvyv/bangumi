@@ -69,7 +69,7 @@ interface BgmWebApi {
     suspend fun queryTimeline(
         @Path("userId", encoded = true) userId: String,
         @Query("type") @TimelineType type: String,
-        @Query("ajax") ajax: Long = 1
+        @Query("ajax") ajax: Long = 1,
     ): Document
 
     /**
@@ -78,7 +78,7 @@ interface BgmWebApi {
     @GET("/rakuen/topiclist")
     suspend fun querySuperTopic(
         @Query("type") @SuperType type: String,
-        @Query("filter") filter: String? = null
+        @Query("filter") filter: String? = null,
     ): Document
 
     /**
@@ -102,7 +102,7 @@ interface BgmWebApi {
         @Path("userId", encoded = true) userId: String,
         @Path("listType", encoded = true) listType: String,
         @Query("sort") @BrowserSortType sortType: String? = null,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
     ): Document
 
     /**
@@ -139,7 +139,7 @@ interface BgmWebApi {
     suspend fun queryBlogList(
         @Path("queryPath", encoded = true) queryPath: String,
         @Path("tag", encoded = true) tagPath: String,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
     ): Document
 
     @GET("/subject/{mediaId}{mediaDetailType}")
@@ -156,6 +156,20 @@ interface BgmWebApi {
     suspend fun queryBlogDetail(@Path("blogId", encoded = true) blogId: String): Document
 
     /**
+     * 目录详情
+     */
+    @GET("/index/{indexId}")
+    suspend fun queryIndexDetail(@Path("indexId", encoded = true) indexId: String): Document
+
+    @FormUrlEncoded
+    @POST("/index/{indexId}/erase")
+    suspend fun deleteIndex(
+        @Header("Referer") referer: String = "",
+        @Path("indexId", encoded = true) indexId: String,
+        @FieldMap map: Map<String, String>,
+    ): Document
+
+    /**
      * Topic 详情
      *
      * 直接使用超展开接口
@@ -163,7 +177,7 @@ interface BgmWebApi {
     @GET("/rakuen/topic/{topicType}/{topicId}")
     suspend fun queryTopicDetail(
         @Path("topicId", encoded = true) topicId: String,
-        @Path("topicType", encoded = true) topicType: String
+        @Path("topicType", encoded = true) topicType: String,
     ): Document
 
 
@@ -197,7 +211,7 @@ interface BgmWebApi {
     suspend fun postNewReply(
         @Path("action", encoded = true) submitAction: String,
         @FieldMap param: Map<String, String>,
-        @Query("ajax") ajax: Int = 1
+        @Query("ajax") ajax: Int = 1,
     ): ReplyResultEntity
 
     /**
@@ -251,7 +265,43 @@ interface BgmWebApi {
     @GET("/erase/entry/{blogId}")
     suspend fun deleteBlog(
         @Path("blogId", encoded = true) blogId: String,
-        @Query("gh") hash: String
+        @Query("gh") hash: String,
+    ): Document
+
+    @GET("/subject/{subjectId}/remove")
+    suspend fun deleteSubjectCollect(
+        @Path("subjectId", encoded = true) subjectId: String,
+        @Query("gh") hash: String,
+    ): Document
+
+    @GET("/erase/group/topic/{topicId}")
+    suspend fun deleteGrpTopic(
+        @Path("topicId", encoded = true) topicId: String,
+        @Query("gh") hash: String,
+    ): Document
+
+    @GET("/erase/subject/topic/{topicId}")
+    suspend fun deleteSubjectTopic(
+        @Path("topicId", encoded = true) topicId: String,
+        @Query("gh") hash: String,
+    ): Document
+
+    @GET("/erase/club/topic/{topicId}")
+    suspend fun deleteClubTopic(
+        @Path("topicId", encoded = true) topicId: String,
+        @Query("gh") hash: String,
+    ): Document
+
+    @GET("/erase/entry/{id}")
+    suspend fun deleteEntry(
+        @Path("id", encoded = true) id: String,
+        @Query("gh") hash: String,
+    ): Document
+
+    @GET("/disconnect/{frdId}")
+    suspend fun disconnectFriend(
+        @Path("frdId", encoded = true) frdId: String,
+        @Query("gh") hash: String,
     ): Document
 
     @FormUrlEncoded
@@ -259,7 +309,7 @@ interface BgmWebApi {
     suspend fun updateInterest(
         @FieldMap map: Map<String, String>,
         @Path("mediaId", encoded = true) mediaId: String,
-        @Query("gh") gh: String
+        @Query("gh") gh: String,
     ): Document
 
     /**
@@ -347,7 +397,7 @@ interface BgmWebApi {
         @Header("Referer") referer: String,
         @Path("groupId", encoded = true) groupId: String,
         @Query("gh") gh: String,
-        @Field("action") action: String = "join-bye"
+        @Field("action") action: String = "join-bye",
     ): Document
 
     @FormUrlEncoded
@@ -356,7 +406,7 @@ interface BgmWebApi {
         @Header("Referer") referer: String,
         @Path("groupId", encoded = true) groupId: String,
         @Query("gh") gh: String,
-        @Field("action") action: String = "join-bye"
+        @Field("action") action: String = "join-bye",
     ): Document
 
     @GET("/notify/all")
@@ -371,13 +421,13 @@ interface BgmWebApi {
         @Field("ignore_user") ignoreUser: String,
         @Field("formhash") formHash: String,
         @Field("submit_ignore") submitIgnore: String = "submit_ignore",
-        @Query("ajax") ajax: Int = 1
+        @Query("ajax") ajax: Int = 1,
     ): BgmStatusEntity
 
     @GET("/pm/{type}.chii")
     suspend fun queryMessageList(
         @Path("type", encoded = true) @MessageBoxType type: String,
-        @Query("page") page: Int
+        @Query("page") page: Int,
     ): Document
 
     @GET("/pm/view/{messageId}.chii")
@@ -420,7 +470,7 @@ interface BgmWebApi {
         @Path("keyword") keyword: String,
         @Query("cat") @SearchCatType cat: String,
         @Query("page") page: Int,
-        @Query("legacy") legacy: Int = 1
+        @Query("legacy") legacy: Int = 1,
     ): Document
 
     /**
@@ -429,7 +479,7 @@ interface BgmWebApi {
     @GET("/search/tag/{mediaType}/{keyword}")
     suspend fun querySearchTag(
         @Path("mediaType") mediaType: String,
-        @Path("keyword") keyword: String
+        @Path("keyword") keyword: String,
     ): Document
 
     /**
@@ -445,7 +495,7 @@ interface BgmWebApi {
         @Path("tag") tag: String,
         @Path("time", encoded = true) time: String,
         @Query("sort") @BrowserSortType sortType: String? = null,
-        @Query("page") page: Int
+        @Query("page") page: Int,
     ): Document
 
 
@@ -465,7 +515,7 @@ interface BgmWebApi {
     @POST("/magi/answer")
     suspend fun postMagiAnswer(
         @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB + "/magi",
-        @FieldMap params: Map<String, String>
+        @FieldMap params: Map<String, String>,
     ): Document
 
     @GET("/index")
@@ -474,8 +524,20 @@ interface BgmWebApi {
     @GET("/index/browser")
     suspend fun queryIndexList(
         @Query("orderby") orderBy: String? = null,
-        @Query("page") page: Int
+        @Query("page") page: Int,
     ): Document
+
+    @GET("/user/{userId}/index")
+    suspend fun queryUserIndex(
+        @Path("userId", encoded = true) userId: String,
+        @Query("page") page: Int,
+    ): Document
+
+    @GET("/user/{userId}/groups")
+    suspend fun queryUserGroup(@Path("userId", encoded = true) userId: String): Document
+
+    @GET("/user/{userId}/friends")
+    suspend fun queryUserFriends(@Path("userId", encoded = true) userId: String): Document
 }
 
 

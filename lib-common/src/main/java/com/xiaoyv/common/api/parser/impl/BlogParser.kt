@@ -18,27 +18,40 @@ import org.jsoup.nodes.Document
  * @author why
  * @since 11/28/23
  */
-fun Document.parserBlogList(mediaType: String): List<BlogEntity> {
+fun Document.parserBlogList(userCenter: Boolean): List<BlogEntity> {
     requireNoError()
+    val div = if (userCenter) "div" else "div.entry"
 
-    return select("#news_list > .item, .entry_list > .item").map {
+    return select("#news_list > .item, #entry_list > .item").map {
         val blogEntity = BlogEntity()
-        blogEntity.mediaType = mediaType
         blogEntity.image = it.select(".cover a img").attr("src").optImageUrl()
-        blogEntity.title = it.select(".entry .title a").text()
-        blogEntity.id = it.select(".entry .title a").hrefId()
-        blogEntity.time = it.select(".entry .time small").lastOrNull()?.text().orEmpty()
-            .replace("/", "").trim()
-        it.select(".entry .content").apply {
-            blogEntity.commentCount = select("small").remove().text().parseCount()
-            blogEntity.content = text()
+        blogEntity.title = it.select("$div .title a").text()
+        blogEntity.id = it.select("$div .title a").hrefId()
+
+        // 区别解析
+        if (userCenter) {
+            blogEntity.time = it.select("$div small.time").text()
+            it.select("$div .content").apply {
+                select("small").remove()
+                blogEntity.content = text()
+                blogEntity.commentCount = it.select("$div small.orange").text().parseCount()
+            }
+        } else {
+            blogEntity.time = it.select("$div .time small").lastOrNull()?.text().orEmpty()
+                .replace("/", "").trim()
+            it.select("$div .content").apply {
+                blogEntity.commentCount = select("small").remove().text().parseCount()
+                blogEntity.content = text()
+            }
         }
-        it.select(".entry .time a.blue").apply {
+
+        it.select("$div .time a.blue").apply {
             blogEntity.recentUserName = getOrNull(0)?.text().orEmpty()
-            blogEntity.recentUserId = getOrNull(0)?.attr("href").orEmpty()
-                .substringAfterLast("/")
+            blogEntity.recentUserId = getOrNull(0)?.hrefId().orEmpty()
             blogEntity.mediaName = getOrNull(1)?.text().orEmpty()
         }
+        // 是否嵌套在用户中心的解析
+        blogEntity.nestingProfile = userCenter
         blogEntity
     }
 }

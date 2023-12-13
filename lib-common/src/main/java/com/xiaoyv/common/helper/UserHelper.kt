@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.blankj.utilcode.util.SPUtils
+import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
@@ -25,8 +26,14 @@ import kotlinx.coroutines.withContext
  * @since 11/26/23
  */
 class UserHelper private constructor() {
+
     private val onUserInfoLiveData = MutableLiveData<UserEntity>()
     private val empty = UserEntity(isEmpty = true)
+
+    /**
+     * 全局删除操作刷新通知
+     */
+    private val deleteAction = UnPeekLiveData<String>()
 
     /**
      * 单独缓存用户邮箱和密码
@@ -168,8 +175,25 @@ class UserHelper private constructor() {
             helper.initCache()
         }
 
-        fun observe(lifecycleOwner: LifecycleOwner, observer: Observer<UserEntity>) {
+        /**
+         * 注册用户身份信息变化
+         */
+        fun observeUserInfo(lifecycleOwner: LifecycleOwner, observer: Observer<UserEntity>) {
             helper.onUserInfoLiveData.observe(lifecycleOwner, observer)
+        }
+
+        /**
+         * 注册删除了内容变化监听
+         */
+        fun observeDeleteAction(lifecycleOwner: LifecycleOwner, observer: Observer<String>) {
+            helper.deleteAction.observe(lifecycleOwner, observer)
+        }
+
+        /**
+         * 通知删除了内容
+         */
+        fun notifyDelete(pathType: String) {
+            helper.deleteAction.postValue(pathType)
         }
 
         fun logout() {

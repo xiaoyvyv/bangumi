@@ -129,6 +129,7 @@ class BgmApiManager {
                 BgmPathType.TYPE_GROUP -> "$URL_BASE_WEB/group/$id"
                 BgmPathType.TYPE_PERSON -> "$URL_BASE_WEB/person/$id"
                 BgmPathType.TYPE_MESSAGE_BOX -> "$URL_BASE_WEB/pm/$id.chii"
+                BgmPathType.TYPE_INDEX -> "$URL_BASE_WEB/user/$id/index"
                 else -> URL_BASE_WEB
             }
         }

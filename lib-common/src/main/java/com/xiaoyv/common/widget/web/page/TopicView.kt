@@ -20,11 +20,6 @@ import com.xiaoyv.widget.webview.UiWebView
  */
 @SuppressLint("JavascriptInterface")
 class TopicView(override val webView: UiWebView) : WebBase(webView) {
-    /**
-     * 评论数据缓存
-     */
-    private var commentPagination: CommentPaginationHelper? = null
-
     var onReplyUserListener: (String, CommentTreeEntity) -> Unit = { _, _ -> }
     var onReplyNewListener: () -> Unit = {}
 
@@ -37,20 +32,10 @@ class TopicView(override val webView: UiWebView) : WebBase(webView) {
 
     suspend fun loadTopicDetail(detailEntity: TopicDetailEntity?) {
         val entity = detailEntity ?: return
-        commentPagination = CommentPaginationHelper(entity.comments)
+        commentPagination.refreshComments(entity.comments)
         entity.comments = emptyList()
 
         callJs("window.topic.loadTopicDetail(${entity.toJson()})")
-    }
-
-    /**
-     * 优化评论加载
-     */
-    @Keep
-    @JvmOverloads
-    @JavascriptInterface
-    fun onLoadComments(page: Int, size: Int = 10, isDesc: Boolean = false): String {
-        return commentPagination?.loadComments(page, size, isDesc).orEmpty().toJson()
     }
 
     @Keep

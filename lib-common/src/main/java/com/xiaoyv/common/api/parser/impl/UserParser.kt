@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
+import com.xiaoyv.common.api.parser.parserSecParamHash
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
@@ -29,11 +30,7 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
         entity.nickname = select(".inner .name a").text()
 
         select(".actions small").apply {
-            entity.ignoreHash = select("a").firstOrNull()?.attr("onclick").orEmpty()
-                .let {
-                    "ignoreUser\\('[\\s\\S]+','(.*?)'\\)".toRegex()
-                        .find(it)?.groupValues?.getOrNull(1).orEmpty()
-                }
+            entity.ignoreHash = select("a[onclick]").parserSecParamHash("ignoreUser")
         }
     }
 

@@ -86,6 +86,12 @@
         app:textEndPadding="@dimen/ui_size_4"
         app:textStartPadding="@dimen/ui_size_4" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="list_type,type_tag" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
@@ -104,4 +110,9 @@
             tools:itemCount="10"
             tools:listitem="@layout/fragment_blog_item" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.xiaoyv.common.widget.state.AnimeStateView
+        android:id="@+id/state_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

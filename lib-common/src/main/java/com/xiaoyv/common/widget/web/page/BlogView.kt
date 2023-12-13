@@ -2,11 +2,9 @@ package com.xiaoyv.common.widget.web.page
 
 import android.annotation.SuppressLint
 import android.webkit.JavascriptInterface
-import androidx.annotation.Keep
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.BlogDetailEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
-import com.xiaoyv.common.helper.CommentPaginationHelper
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.widget.web.WebBase
 import com.xiaoyv.widget.webview.UiWebView
@@ -20,7 +18,6 @@ import com.xiaoyv.widget.webview.UiWebView
  */
 @SuppressLint("JavascriptInterface")
 class BlogView(override val webView: UiWebView) : WebBase(webView) {
-    private var commentPagination: CommentPaginationHelper? = null
 
     var onReplyUserListener: (String, CommentTreeEntity) -> Unit = { _, _ -> }
     var onReplyNewListener: () -> Unit = {}
@@ -34,21 +31,12 @@ class BlogView(override val webView: UiWebView) : WebBase(webView) {
 
     suspend fun loadBlogDetail(detailEntity: BlogDetailEntity?) {
         val entity = detailEntity ?: return
-        commentPagination = CommentPaginationHelper(entity.comments)
+        commentPagination.refreshComments(entity.comments)
         entity.comments = emptyList()
 
         callJs("window.blog.loadBlogDetail(${entity.toJson()})")
     }
 
-    /**
-     * 优化评论加载
-     */
-    @Keep
-    @JvmOverloads
-    @JavascriptInterface
-    fun onLoadComments(page: Int, size: Int = 10, isDesc: Boolean = false): String {
-        return commentPagination?.loadComments(page, size, isDesc).orEmpty().toJson()
-    }
 
     @JavascriptInterface
     fun onReplyUser(replyJs: String, json: String) {

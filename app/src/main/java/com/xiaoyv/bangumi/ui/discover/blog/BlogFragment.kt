@@ -1,6 +1,8 @@
 package com.xiaoyv.bangumi.ui.discover.blog
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.QuickAdapterHelper
@@ -11,11 +13,10 @@ import com.xiaoyv.bangumi.databinding.FragmentBlogBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.blueprint.kts.toJson
-import com.xiaoyv.common.config.GlobalConfig
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.getAttrColor
@@ -50,15 +51,16 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
     private val layoutManager: LinearLayoutManager?
         get() = binding.rvContent.layoutManager as? LinearLayoutManager
 
-    private val mediaTypes get() = GlobalConfig.mediaTypes
-
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh { viewModel.isRefresh }
+        binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
+
+        // 用户页面嵌套时，不显示分类
+        binding.gpFilter.isGone = viewModel.userId.isNotBlank()
     }
 
     override fun initData() {
@@ -107,8 +109,25 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
     }
 
     override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingBias = if (viewModel.isMine) 0.3f else 0.5f,
+            loadingViewState = viewModel.loadingViewState,
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing },
+        )
+
         viewModel.onListLiveData.observe(this) {
-            contentAdapter.submitList(it.orEmpty()) {
+            // 加载失败
+            if (it == null) {
+                // 刷新失败清空
+                if (viewModel.isRefresh) {
+                    contentAdapter.submitList(emptyList())
+                }
+                adapterHelper.trailingLoadState = viewModel.loadingMoreState
+                return@observe
+            }
+
+            contentAdapter.submitList(it) {
                 if (viewModel.isRefresh) {
                     layoutManager?.scrollToPositionWithOffset(0, 0)
                 }
@@ -116,11 +135,22 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
             }
         }
+
+        // 自己的内容删除时刷新列表
+        if (viewModel.isMine) {
+            UserHelper.observeDeleteAction(this) {
+                if (it == BgmPathType.TYPE_BLOG) {
+                    viewModel.refresh()
+                }
+            }
+        }
     }
 
     companion object {
-        fun newInstance(): BlogFragment {
-            return BlogFragment()
+        fun newInstance(userId: String? = null): BlogFragment {
+            return BlogFragment().apply {
+                arguments = bundleOf(NavKey.KEY_STRING to userId)
+            }
         }
     }
 }
