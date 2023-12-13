@@ -1,9 +1,10 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.BlogDetailEntity
 import com.xiaoyv.common.api.parser.entity.BlogEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.replaceSmiles
@@ -75,16 +76,18 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
         // src="/img/smiles/tv/19.gif" -> src="https://bgm.tv/img/smiles/tv/19.gif"
         blogEntity.content = select("#entry_content").html().replaceSmiles()
 
-        blogEntity.related = select("#related_subject_list > li").map { item ->
-            val relative = MediaDetailEntity.MediaRelative()
-
+        // 关联的条目
+        select("#related_subject_list > li").forEach { item ->
+            val relative = SampleRelatedEntity.Item()
             item.select("li > a.avatar").apply {
-                relative.id = hrefId()
-                relative.cover = select("img").attr("src").optImageUrl()
-                relative.titleCn = attr("title")
-                relative.titleNative = attr("title")
+                relative.image = select("img").attr("src").optImageUrl()
+                relative.title = attr("title")
+
+                relative.imageLink = attr("href")
+                relative.titleLink = attr("href")
             }
-            relative
+            blogEntity.related.title = "关联的内容"
+            blogEntity.related.items.add(relative)
         }
 
         blogEntity.tags = select(".tags > a").map { item ->

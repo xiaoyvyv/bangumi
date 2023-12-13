@@ -108,8 +108,6 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
 
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onListLiveData.observe(this) {
-            debugLog { it.toJson(true) }
-
             contentAdapter.submitList(it.orEmpty()) {
                 if (viewModel.isRefresh) {
                     layoutManager?.scrollToPositionWithOffset(0, 0)

@@ -1,67 +1,41 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {MediaRelative, PostInfoEntity} from "../../util/interface/entity.ts";
+import {PostInfoEntity} from "../../util/interface/PostInfoEntity.ts";
+import RelativeItemView from "../../components/RelativeItemView.vue";
 
-const postInfo = ref<PostInfoEntity>({} as PostInfoEntity);
+const blog = ref<PostInfoEntity>({} as PostInfoEntity);
 
 const blogPostHandler = {
   setPostInfo: (newPostInfo: PostInfoEntity) => {
-    newPostInfo.related = optRelatedList(newPostInfo.related);
     newPostInfo.filled = true;
+
     if (newPostInfo.userName.length === 0) {
       newPostInfo.userName = "未登录"
     }
-    postInfo.value = newPostInfo;
+    blog.value = newPostInfo;
   },
-  addRelated: (related: MediaRelative) => {
-    if (related.id == null || related.id.length === 0) return;
-    const tmp = postInfo.value;
-    const added = tmp.related || [];
-
-    for (let i = 0; i < added.length; i++) {
-      if (related.id == added[i].id) return;
-    }
-    added.push(related);
-    tmp.related = added;
-    postInfo.value = tmp
-  },
+  /*
+    addRelated: (related: SampleRelateEntity) => {
+      // if (related.id == null || related.id.length === 0) return;
+      // const tmp = postInfo.value;
+      // const added = tmp.related || [];
+      //
+      // for (let i = 0; i < added.length; i++) {
+      //   if (related.id == added[i].id) return;
+      // }
+      // added.push(related);
+      // tmp.related = added;
+      // postInfo.value = tmp
+    },*/
   getPostInfo: (): string => {
-    return JSON.stringify(postInfo.value);
+    return JSON.stringify(blog.value);
   },
 }
 
 const clickPublic = (isPublic: boolean) => {
-  const tmp = postInfo.value;
+  const tmp = blog.value;
   tmp.isPublic = isPublic;
-  postInfo.value = tmp
-}
-const onImageError = (event: Event) => {
-  const img = event.target as HTMLImageElement;
-  img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/9+p2gAAAABJRU5ErkJggg==";
-}
-
-const onClickRelated = (related: MediaRelative) => {
-  if (window.android) {
-    window.android.onClickRelated(JSON.stringify(related), related.empty)
-  }
-}
-
-const relatedRealSize = (media: MediaRelative[]) => {
-  let count = 0;
-  media.forEach(item => {
-    if ((item.id || "").length > 0) {
-      count++;
-    }
-  })
-  return count;
-}
-
-const optRelatedList = (media: MediaRelative[]): MediaRelative[] => {
-  const size = relatedRealSize(media);
-  if (size == 0) {
-    media.push({titleNative: "添加关联", cover: "", empty: true} as MediaRelative);
-  }
-  return media;
+  blog.value = tmp
 }
 
 onMounted(() => {
@@ -71,35 +45,28 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="blog-post" v-if="postInfo.filled === true">
-    <div class="blog-post-title">{{ postInfo.pageName || "发表内容" }}</div>
+  <div class="blog-post" v-if="blog.filled === true">
+    <div class="blog-post-title">{{ blog.pageName || "发表内容" }}</div>
     <div class="blog-post-info">
-      <div class="blog-post-author">{{ postInfo.userName }}</div>
-      <div class="blog-post-time">{{ postInfo.time }}</div>
+      <div class="blog-post-author">{{ blog.userName }}</div>
+      <div class="blog-post-time">{{ blog.time }}</div>
     </div>
     <div class="blog-post-form">
       <div class="title">标题</div>
-      <input name="title" type="text" class="input" placeholder="请输入标题" v-model="postInfo.title">
+      <input name="title" type="text" class="input" placeholder="请输入标题" v-model="blog.title">
       <div class="title">正文内容<span class="sub-tip">支持BBCode</span></div>
-      <textarea name="content" class="textarea" rows="8" placeholder="请输入内容" v-model="postInfo.content"></textarea>
+      <textarea name="content" class="textarea" rows="8" placeholder="请输入内容" v-model="blog.content"></textarea>
       <div class="title">标签</div>
-      <input name="tags" type="text" class="input" placeholder="请输入标签，多个空格分割" v-model="postInfo.tags">
+      <input name="tags" type="text" class="input" placeholder="请输入标签，多个空格分割" v-model="blog.tags">
       <div class="title">隐私设置</div>
       <div class="blog-post-ratio">
-        <div class="ratio" :class="{'selected': postInfo.isPublic }" @click.stop="clickPublic(true)">公开</div>
-        <div class="ratio" :class="{'selected': !postInfo.isPublic }" @click.stop="clickPublic(false)">仅好友可见</div>
+        <div class="ratio" :class="{'selected': blog.isPublic }" @click.stop="clickPublic(true)">公开</div>
+        <div class="ratio" :class="{'selected': !blog.isPublic }" @click.stop="clickPublic(false)">仅好友可见</div>
       </div>
       <div class="title">关联</div>
     </div>
-    <div class="blog-post-relative" v-if="(postInfo.related || []).length > 0">
-      <div class="blog-post-relative-subject">
-        <div class="tip">关联的条目 {{ relatedRealSize(postInfo.related) }} 个</div>
-        <div class="relative" v-for="item in postInfo.related" @click.stop="onClickRelated(item)">
-          <img :src="item.cover" alt="img" @error="onImageError($event)">
-          <div class="title"># {{ item['titleNative'] }}</div>
-        </div>
-      </div>
-    </div>
+
+    <RelativeItemView :related="blog.related"/>
   </div>
 </template>
 
@@ -120,7 +87,7 @@ onMounted(() => {
     padding: 12px;
     opacity: 0.5;
     font-size: 75%;
-    color: deepskyblue;
+    color: var(--primary-color);
   }
 }
 
@@ -143,7 +110,7 @@ onMounted(() => {
   margin-left: 16px;
 
   .blog-post-author {
-    color: deepskyblue;
+    color: var(--primary-color);
     margin-right: 6px;
   }
 
@@ -188,40 +155,6 @@ onMounted(() => {
   }
 }
 
-.blog-post-relative {
-  width: 100%;
-
-  .blog-post-relative-subject {
-    margin: 0 16px 16px 16px;
-    padding: 12px;
-    border-radius: 6px;
-    background: #cccccc3f;
-
-    .relative {
-      width: 100%;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-      margin-top: 6px;
-    }
-
-    img {
-      margin: 6px 0;
-      height: 44px;
-      width: 44px;
-      border-radius: 6px;
-      background: #cccccc7f;
-    }
-
-    .title {
-      width: 0;
-      flex: 1;
-      padding: 2px 6px 4px 12px;
-      color: deepskyblue;
-    }
-  }
-}
-
 .blog-post-ratio {
   display: flex;
   flex-flow: row nowrap;
@@ -238,7 +171,7 @@ onMounted(() => {
 
   .ratio.selected {
     color: white;
-    background: deepskyblue;
+    background: var(--primary-color);
   }
 }
 </style>

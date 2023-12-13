@@ -17,11 +17,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TopicDetailEntity(
     @SerializedName("id") var id: String = "",
-    @SerializedName("headerAvatar") var headerAvatar: String = "",
-    @SerializedName("headerName") var headerName: String = "",
-    @SerializedName("headUrl") var headUrl: String = "",
-    @SerializedName("subHeaderName") var subHeaderName: String = "",
-    @SerializedName("subHeadUrl") var subHeadUrl: String = "",
     @SerializedName("title") var title: String = "",
     @SerializedName("time") var time: String = "",
     @SerializedName("userAvatar") var userAvatar: String = "",
@@ -29,6 +24,7 @@ data class TopicDetailEntity(
     @SerializedName("userId") var userId: String = "",
     @SerializedName("userSign") var userSign: String = "",
     @SerializedName("content") var content: String = "",
+    @SerializedName("related") var related: SampleRelatedEntity = SampleRelatedEntity(),
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyForm") var replyForm: CommentFormEntity = CommentFormEntity(),
     @SerializedName("deleteHash") var deleteHash: String = "",

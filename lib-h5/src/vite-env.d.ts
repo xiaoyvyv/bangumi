@@ -8,6 +8,7 @@ declare interface Window {
     topic: any;
     sign: any;
     mounted: boolean;
+    robotSay: (message: string) => void;
     android: Android;
 }
 
@@ -18,4 +19,5 @@ declare interface Android {
     onClickUser: any;
     onNeedLogin: any;
     onClickRelated: any;
+    onLoadComments: (page: number, size: number, desc: boolean) => string;
 }

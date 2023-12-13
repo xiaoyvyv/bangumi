@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.ui.feature.topic
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserTopic
@@ -31,12 +30,17 @@ class TopicViewModel : BaseViewModel() {
             stateView = loadingViewState,
             error = {
                 it.printStackTrace()
-                onTopicDetailLiveData.value = null
             },
             block = {
-                onTopicDetailLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryTopicDetail(topicId, topicType)
-                }.parserTopic(topicId)
+                var start = System.currentTimeMillis()
+                val list = withContext(Dispatchers.IO) {
+                    BgmApiManager.bgmWebApi.queryTopicDetail(topicId, topicType).apply {
+                        debugLog { "请求消费：${System.currentTimeMillis() - start}" }
+                        start = System.currentTimeMillis()
+                    }.parserTopic(topicId)
+                }
+                debugLog { "解析消费：${System.currentTimeMillis() - start}" }
+                onTopicDetailLiveData.value = list
             }
         )
     }

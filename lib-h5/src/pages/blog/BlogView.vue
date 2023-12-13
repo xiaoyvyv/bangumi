@@ -1,86 +1,63 @@
 <script setup lang="ts">
-import {nextTick, onMounted, ref} from "vue";
-import {BlogDetailEntity, CommentTreeEntity, MediaRelative} from "../../util/interface/entity.ts";
+import {nextTick, onMounted, reactive, ref} from "vue";
+import {BlogDetailEntity} from "../../util/interface/BlogDetailEntity.ts";
+import RelativeItemView from "../../components/RelativeItemView.vue";
+import BottomRobotView from "../../components/BottomRobotView.vue";
+import CommentView from "../../components/CommentView.vue";
+import InfiniteLoading from "v3-infinite-loading";
 import common from "../../util/common.ts";
+import {CommentTreeEntity} from "../../util/interface/CommentTreeEntity.ts";
+import BottomSpinnerView from "../../components/BottomSpinnerView.vue";
 
-const blogRef = ref<BlogDetailEntity>();
+const blog = ref<BlogDetailEntity>({} as BlogDetailEntity);
 const blogContentRef = ref<HTMLDivElement>();
+
+// 评论相关
+const loadingIdentifier = ref(new Date().getDate());
+const commentPageSize = 10;
+const commentPage = ref(1);
+const commentDesc = ref(false);
+const comments = reactive<CommentTreeEntity[]>([]);
+const robotSay = ref("哼！Bangumi老娘我是有底线的人");
 
 const blogHandler = {
   loadBlogDetail: async (obj: BlogDetailEntity) => {
-    blogRef.value = obj;
+    blog.value = obj;
+    console.log("blog: " + JSON.stringify(obj, null, 3))
+    // Html 交互处理
     await nextTick();
-    const content = blogContentRef.value;
-
-    // 图片处理
-    common.injectImageClick(content);
+    common.optContentJs(blogContentRef.value);
   }
-}
-
-const optText = (text: string | null | undefined) => {
-  const content = (text || '').trim()
-  const space = "\u3000\u3000";
-  const str = space + content
-      .replace(/&nbsp;/g, " ").trim()
-      .replace(/(\r\n|\n|\r)\s+/g, "$1")
-      .replace(/(\r\n|\n|\r)/g, `$1${space}`);
-
-  console.log(str);
-  return str;
 }
 
 /**
- * 点击评论
+ * 加载评论
+ *
+ * @param $state
  */
-const onClickComment = (event: Event, mainComment: CommentTreeEntity, subComment: CommentTreeEntity | null) => {
-  const item = event.target as HTMLElement;
-  if (common.injectHandleItemClick(item)) {
-    return;
-  }
-  common.scrollIntoView(event, document.getElementById('blog'), subComment == null);
-  const subReplyJs = subComment?.replyJs || "";
-  const replyMainJs = mainComment.replyJs || "";
-
-  // 是否回复的二级评论
-  const isReplaySub = subReplyJs.length > 0;
-  const replyJs = isReplaySub ? subReplyJs : replyMainJs;
-  const replyComment = subComment ? subComment : mainComment;
-
-  if (window.android) {
-    if (replyJs.length > 0) {
-      if (isReplaySub) {
-        replyComment.replyQuote = common.handleQuote(replyComment.userName, replyComment.replyContent);
-      }
-
-      window.android.onReplyUser(subReplyJs.length > 0 ? subReplyJs : replyJs, JSON.stringify(replyComment));
-      return
+const loadComments = async ($state: any) => {
+  const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, commentDesc.value);
+  const pageComments = JSON.parse(pageCommentJson);
+  if (pageComments.length == 0) {
+    $state.complete();
+  } else {
+    await common.delay(200);
+    comments.push(...pageComments);
+    commentPage.value++;
+    await nextTick();
+    if (pageComments.length < commentPageSize) {
+      $state.complete();
+    } else {
+      $state.loaded();
     }
-
-    window.android.onNeedLogin();
-  }
-};
-
-const onClickNewComment = (event: Event) => {
-  common.scrollIntoView(event, document.getElementById('blog'), true);
-  if (window.android) {
-    window.android.onReplyNew();
   }
 }
-
-const onClickRelated = (related: MediaRelative) => {
-  if (window.android) {
-    window.android.onClickRelated(JSON.stringify(related))
-  }
-}
-
-const onClickUser = (comment: CommentTreeEntity) => {
-  if (window.android) {
-    window.android.onClickUser(comment.userId || "");
-  }
-}
-
 
 onMounted(() => {
+  window.robotSay = (message: string) => {
+    robotSay.value = message;
+  };
+
   window.blog = blogHandler;
   window.mounted = true;
 });
@@ -89,62 +66,38 @@ onMounted(() => {
 <template>
   <div class="blog" id="blog">
     <div class="blog-title">
-      {{ blogRef?.title }}
+      {{ blog.title }}
     </div>
     <div class="blog-info">
-      <div class="blog-author">{{ blogRef?.userName }}</div>
-      <div class="blog-time">{{ blogRef?.time }}</div>
+      <div class="blog-author">{{ blog.userName }}</div>
+      <div class="blog-time">{{ blog.time }}</div>
     </div>
-    <div class="blog-relative" v-if="(blogRef?.related || []).length > 0">
-      <div class="blog-relative-subject">
-        <div class="tip">关联的条目 {{ blogRef?.related?.length }} 个</div>
-        <div class="relative" v-for="item in (blogRef?.related || [])" @click.stop="onClickRelated(item)">
-          <img :src="item.cover" alt="img">
-          <div class="title"># {{ item.titleNative }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="blog-content" ref="blogContentRef" v-html="optText(blogRef?.content)"/>
-    <div class="blog-tag" v-if="(blogRef?.tags || []).length > 0">
+
+    <relative-item-view :related="blog.related"/>
+
+    <div class="blog-content" ref="blogContentRef" v-html="common.optText(blog.content)"/>
+    <div class="blog-tag" v-if="(blog.tags || []).length > 0">
       <div class="tip">标签：</div>
-      <div class="blog-tag-item" v-for="item in (blogRef?.tags || [])">{{ item.title }}</div>
+      <div class="blog-tag-item" v-for="item in (blog.tags || [])">{{ item.title }}</div>
     </div>
-    <hr class="divider" v-if="blogRef?.content">
-    <div class="blog-comment" v-if="blogRef?.content">
-      <div class="blog-comment-title">
-        <div class="title">精选留言</div>
-        <div style="flex: 1"/>
-        <div class="write" @click.stop="onClickNewComment($event)">写留言</div>
-      </div>
-      <div class="blog-comment-item" v-for="comment in (blogRef?.comments || [])">
-        <img class="avatar" :src="comment.userAvatar" alt="img" @click.stop="onClickUser(comment)">
-        <div class="comment-content">
-          <div class="info" @click.stop="onClickComment($event, comment, null)">
-            <div class="user-name" @click.stop="onClickUser(comment)">{{ comment.userName }}</div>
-            <div class="time">{{ comment.time }}</div>
-          </div>
-          <div class="blog-html" v-html="comment.replyContent" @click.stop="onClickComment($event, comment, null)"/>
+    <div class="divider" v-if="blog.content"/>
 
-          <div style="height: 12px"/>
+    <comment-view target="#blog" :comments="comments"/>
 
-          <!-- 嵌套条目 -->
-          <div class="blog-comment-item" v-for="subComment in (comment.topicSubReply || [])">
-            <img class="avatar sub" :src="subComment.userAvatar" alt="img" @click.stop="onClickUser(subComment)">
-            <div class="comment-content"
-                 @click.stop="onClickComment($event, comment, subComment)">
-              <div class="info">
-                <div class="user-name" @click.stop="onClickUser(subComment)">{{ subComment.userName }}</div>
-                <div class="time">{{ subComment.time }}</div>
-              </div>
-              <div class="blog-html" v-html="subComment.replyContent"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="blog-space" v-if="blogRef?.content">
-      我是有底线的
-    </div>
+    <infinite-loading class="loading"
+                      target="#blog"
+                      :identifier="loadingIdentifier"
+                      @infinite="loadComments">
+      <!--suppress VueUnrecognizedSlot -->
+      <template #spinner>
+        <bottom-spinner-view/>
+      </template>
+
+      <!--suppress VueUnrecognizedSlot -->
+      <template #complete>
+        <bottom-robot-view :message="robotSay"/>
+      </template>
+    </infinite-loading>
   </div>
 </template>
 
@@ -155,15 +108,6 @@ onMounted(() => {
   overflow-x: hidden;
   overflow-y: scroll;
   overscroll-behavior-x: none;
-
-  img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
-    margin: 12px 0;
-    border: 1px #cccccc7f solid;
-  }
 }
 
 .blog-title {
@@ -185,7 +129,7 @@ onMounted(() => {
   margin-left: 16px;
 
   .blog-author {
-    color: deepskyblue;
+    color: var(--primary-color);
     margin-right: 6px;
   }
 
@@ -210,41 +154,6 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.blog-relative {
-  width: 100%;
-
-  .blog-relative-subject {
-    margin: 16px 16px;
-    padding: 12px;
-    border-radius: 6px;
-    background: #cccccc3f;
-
-
-    .relative {
-      width: 100%;
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-      margin-top: 6px;
-    }
-
-    img {
-      margin: 6px 0;
-      height: 44px;
-      width: 44px;
-      border-radius: 6px;
-      background: #cccccc7f;
-    }
-
-    .title {
-      width: 0;
-      flex: 1;
-      padding: 2px 6px 4px 12px;
-      color: deepskyblue;
-    }
-  }
-}
-
 .blog-tag {
   display: flex;
   flex-flow: row wrap;
@@ -260,107 +169,8 @@ onMounted(() => {
     color: white;
     font-size: 12px;
     border-radius: 6px;
-    background: deepskyblue;
+    background: var(--primary-color);
   }
 }
 
-.divider {
-  height: 12px;
-  background-color: #cccccc;
-  width: 100%;
-  margin-top: 24px;
-  opacity: 0.2;
-}
-
-.blog-comment {
-  padding: 12px 16px;
-
-  .blog-comment-title {
-    display: flex;
-    flex-flow: row nowrap;
-    padding-bottom: 16px;
-    align-items: center;
-
-    .title {
-      color: #cccccc;
-      font-weight: bold;
-    }
-
-    .write {
-      color: deepskyblue;
-      font-weight: bold;
-    }
-  }
-
-  .blog-comment-item {
-    display: flex;
-    flex-flow: row nowrap;
-
-    .avatar {
-      margin: 6px 0;
-      height: 36px;
-      width: 36px;
-      border-radius: 6px;
-      background: #cccccc7f;
-    }
-
-    .avatar.sub {
-      height: 24px;
-      width: 24px;
-    }
-
-    .comment-content {
-      padding-bottom: 12px;
-      margin-left: 12px;
-      width: 0;
-      flex: 1;
-
-      .info {
-        width: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-
-        .user-name {
-          font-size: 14px;
-          color: #3333339f;
-          padding: 4px 0;
-        }
-
-        .time {
-          font-size: 12px;
-          color: #3333337f;
-          margin-left: 12px;
-        }
-      }
-
-      .blog-html {
-        width: 100%;
-        max-width: 100%;
-        word-break: break-all;
-        overflow-x: hidden !important;
-
-        img {
-          min-width: 120px;
-        }
-      }
-
-      .sub-reply {
-        width: 100%;
-        display: flex;
-        flex-flow: column nowrap;
-      }
-    }
-  }
-}
-
-.blog-space {
-  height: 400px;
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  font-size: 10px;
-  opacity: 0.5;
-  padding-bottom: 24px;
-}
 </style>

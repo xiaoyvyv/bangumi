@@ -80,8 +80,6 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
 
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onBrowserRankLiveData.observe(this) {
-            debugLog { it.toJson(true) }
-
             contentAdapter.submitList(it.orEmpty()) {
                 if (viewModel.isRefresh) {
                     layoutManager?.scrollToPositionWithOffset(0, 0)

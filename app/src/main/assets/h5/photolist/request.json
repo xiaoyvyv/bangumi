@@ -1,0 +1,17 @@
+{
+  "app": "com.douban.frodo",
+  "duration": "576ms",
+  "headers": {
+    "User-Agent": "api-client/1 com.douban.frodo/7.65.0(277) Android/33 product/coral vendor/Google model/Pixel 4 XL brand/google  rom/android  network/wifi  udid/0643fa6abfd3eaff076ff3ee603211ded11fc344  platform/mobile nd/1",
+    "Host": "frodo.douban.com",
+    "Connection": "Keep-Alive",
+    "Accept-Encoding": "gzip"
+  },
+  "method": "GET",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "49.233.242.15",
+  "remotePort": 443,
+  "sessionId": "94b59ba4-b6e4-4056-83af-7f4e279e4e40",
+  "time": "2023-12-11 17:15:11",
+  "url": "https://frodo.douban.com/api/v2/tv/36093351/photos?start\u003d200\u0026count\u003d50\u0026apikey\u003d0dad551ec0f84ed02907ff5c42e8ec70\u0026channel\u003dYingyongbao_Market\u0026udid\u003d0643fa6abfd3eaff076ff3ee603211ded11fc344\u0026os_rom\u003dandroid\u0026oaid\u003dEdGi3zYQCRzmwwB1YR7WKg%3D%3D%0A\u0026timezone\u003dAsia%2FShanghai\u0026_sig\u003d49msFXEFTBvzCvGPWxFbx6sTLew%3D\u0026_ts\u003d1702286111"
+}

@@ -21,7 +21,7 @@ data class BlogDetailEntity(
     @SerializedName("userName") var userName: String = "",
     @SerializedName("userId") var userId: String = "",
     @SerializedName("content") var content: String = "",
-    @SerializedName("related") var related: List<MediaDetailEntity.MediaRelative> = emptyList(),
+    @SerializedName("related") var related: SampleRelatedEntity = SampleRelatedEntity(),
     @SerializedName("tags") var tags: List<MediaDetailEntity.MediaTag> = emptyList(),
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyForm") var replyForm: CommentFormEntity = CommentFormEntity(),

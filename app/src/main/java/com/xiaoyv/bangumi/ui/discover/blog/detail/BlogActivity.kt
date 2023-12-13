@@ -9,9 +9,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.reply.ReplyDialog
@@ -87,7 +85,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         }
 
         blogWeb.onClickRelatedListener = {
-            RouteHelper.jumpMediaDetail(it.id)
+            RouteHelper.handleUrl(it.titleLink)
         }
     }
 
@@ -99,8 +97,6 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         )
 
         viewModel.onBlogDetailLiveData.observe(this) {
-            debugLog { it.toJson(true) }
-
             launchUI {
                 blogWeb.loadBlogDetail(it)
                 binding.stateView.showContent()

@@ -9,9 +9,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.reply.ReplyDialog
@@ -88,7 +86,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         }
 
         topicView.onClickRelatedListener = {
-            // RouteHelper.jumpMediaDetail(it.id)
+            RouteHelper.handleUrl(it.titleLink)
         }
     }
 
@@ -100,8 +98,6 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         )
 
         viewModel.onTopicDetailLiveData.observe(this) {
-            debugLog { it.toJson(true) }
-
             launchUI {
                 topicView.loadTopicDetail(it)
                 binding.stateView.showContent()

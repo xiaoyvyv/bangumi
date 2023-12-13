@@ -1,7 +1,6 @@
 package com.xiaoyv.common.widget.web.page
 
 import android.annotation.SuppressLint
-import android.webkit.JavascriptInterface
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.BlogCreateEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
@@ -18,8 +17,6 @@ import com.xiaoyv.widget.webview.UiWebView
 @SuppressLint("JavascriptInterface")
 class BlogPostView(override val webView: UiWebView) : WebBase(webView) {
 
-    var onClickRelatedListener: (MediaDetailEntity.MediaRelative?, Boolean) -> Unit = { _, _ -> }
-
     suspend fun setPostInfo(info: BlogCreateEntity) {
         val json = info.toJson()
         callJs("window.blogPost.setPostInfo($json);")
@@ -27,12 +24,6 @@ class BlogPostView(override val webView: UiWebView) : WebBase(webView) {
 
     override val pageRoute: String
         get() = "blog-post"
-
-    @JavascriptInterface
-    fun onClickRelated(json: String, isAddRelated: Boolean) {
-        val related = json.fromJson<MediaDetailEntity.MediaRelative>()
-        onClickRelatedListener(related, isAddRelated)
-    }
 
     suspend fun getPostInfo(): BlogCreateEntity? {
         return callJs("window.blogPost.getPostInfo();")

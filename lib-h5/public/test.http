@@ -40,4 +40,21 @@ Host: frodo.douban.com
 Connection: Keep-Alive
 Accept-Encoding: gzip
 
+###
+GET /group/topic/8465 HTTP/2
+Host: bgm.tv
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Cookie: chii_sec_id=kdF%2FABxP80aJb6z9a8ELlL40nCqgK2Kpi0Uq4A; _ga_1109JLGMHN=GS1.1.1702403786.23.1.1702403897.0.0.0; chii_theme=light; _ga=GA1.1.1847849586.1702102284; __utma=1.1847849586.1702102284.1702399295.1702403792.23; __utmz=1.1702102284.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); chii_cookietime=0; __utmc=1; chii_sid=G8ya0S; chii_auth=lYx7BRhF8hufaPz3a8ABx8JBgE3WDFWYrREugSXlQVUIIqmbuNTvJboY9UqBUjSqTC7i5L4sBaZiSTA9ttzr70k4cPhkRqRWCSbE; __utmb=1.7.10.1702403792; __utmt=1
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers
 

@@ -27,12 +27,12 @@ class BlogViewModel : BaseViewModel() {
             stateView = loadingViewState,
             error = {
                 it.printStackTrace()
-                onBlogDetailLiveData.value = null
             },
             block = {
                 onBlogDetailLiveData.value = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.queryBlogDetail(blogId)
-                }.parserBlogDetail(blogId)
+                        .parserBlogDetail(blogId)
+                }
             }
         )
     }

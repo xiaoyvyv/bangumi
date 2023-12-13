@@ -49,8 +49,8 @@ class PostBlogActivity : BaseViewModelActivity<ActivityPostBlogBinding, PostBlog
     }
 
     override fun initListener() {
-        blogPostWeb.onClickRelatedListener = { related, isAddRelated ->
-            debugLog { "isAddRelated: $isAddRelated, related: ${related.toJson(true)}" }
+        blogPostWeb.onClickRelatedListener = {
+
         }
     }
 

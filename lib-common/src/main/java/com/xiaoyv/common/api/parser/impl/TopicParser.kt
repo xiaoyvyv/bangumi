@@ -1,9 +1,10 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.LikeEntity
+import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
@@ -30,16 +31,20 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
             entity.deleteHash = groupValues.getOrNull(2).orEmpty()
         }
 
-        select("#pageHeader a").apply {
-            useNotNull(getOrNull(0)) {
-                entity.headUrl = hrefId()
-                entity.headerAvatar = select("img.avatar").attr("src").optImageUrl()
-                entity.headerName = text()
+        // 关联的讨论条目
+        entity.related = select("#pageHeader").let { item ->
+            val related = SampleRelatedEntity(title = "关联的讨论")
+            val relatedItem = SampleRelatedEntity.Item()
+            val a = item.select("a")
+            useNotNull(a.firstOrNull()) {
+                relatedItem.image = select("img.avatar").attr("src").optImageUrl()
+                relatedItem.title = text()
+
+                relatedItem.imageLink = attr("href")
+                relatedItem.titleLink = attr("href")
             }
-            useNotNull(getOrNull(1)) {
-                entity.subHeadUrl = attr("href")
-                entity.subHeaderName = text()
-            }
+            related.items.add(relatedItem)
+            related
         }
 
         select(".postTopic").apply {

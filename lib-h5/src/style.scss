@@ -13,6 +13,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --primary-color: #A23662;
+  --surface-color: #FFFBFF;
+  --on-primary-color: #FFFFFF;
+  --on-surface-color: #201A1B;
+  --on-surface-variant-color: #514347;
+  --surface-container-color: #eeeeee;
 }
 
 html, body {
@@ -22,11 +28,14 @@ html, body {
   width: 100%;
   display: flex;
   place-items: center;
+  background: var(--surface-color);
 
   * {
     font-family: 'BgmFont', monospace;
     box-sizing: border-box;
     background: transparent;
+    user-select: none;
+    color: var(--on-surface-color);
   }
 }
 
@@ -79,55 +88,62 @@ html, body {
   cursor: pointer !important;
 }
 
+.select-none {
+  user-select: none !important;
+}
+
+.select-text {
+  user-select: text !important;
+}
+
 pre {
   overflow-x: scroll !important;
-  background: #cccccc3f;
+  background: var(--surface-container-color);
   border-radius: 6px;
   padding: 12px;
   font-size: 80%;
-  color: #ff80ab;
+  color: var(--primary-color);
   box-sizing: border-box;
 }
 
-.blinking {
-  color: #3b4f64;
-  border-radius: 6px;
-  animation: blinkAnimation 1s forwards;
-}
-
-@keyframes blinkAnimation {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: .5;
-  }
-}
-
+// 表情
 img[smileid] {
-  margin: 6px 3px 0 3px !important;
-  vertical-align: bottom !important;
-  border: 1px solid #ff80ab !important;
-  padding: 1px !important;
-  height: 20px !important;
-  width: 20px !important;
+  vertical-align: middle !important;
+  height: 24px !important;
+  width: 24px !important;
   min-width: unset !important;
-  border-radius: 4px !important;
+  border-radius: 0 !important;
   display: inline-block !important;
+  padding-bottom: 5px;
+  object-fit: contain;
+  border: none !important;
 }
 
+// 图片
+img {
+  display: block;
+  max-width: 100%;
+  flex-shrink: 0;
+  height: auto;
+  border-radius: 6px;
+  margin: 12px 0;
+  border: 1px var(--surface-container-color) solid;
+}
+
+// 引用块
 .quote {
   font-size: 75%;
   margin: 6px 0;
-  color: #666;
+  color: var(--on-surface-variant-color);
+  opacity: 0.75;
 
   span {
     font-weight: bold;
-    background: #cccccc7f;
+    background: var(--surface-container-color);
     border-radius: 6px;
     padding: 2px 4px;
     font-size: 10px;
-    color: #333333;
+    color: var(--primary-color);
   }
 
   q:before {
@@ -140,7 +156,7 @@ img[smileid] {
     top: 15px;
     font-size: 30px;
     letter-spacing: -18px;
-    color: #CCC;
+    color: var(--on-surface-variant-color);
   }
 
   q::after {
@@ -152,13 +168,55 @@ img[smileid] {
     position: relative;
     top: 20px;
     font-size: 30px;
-    color: #CCC;
+    color: var(--on-surface-variant-color);
   }
 }
 
+// 遮罩
 .text_mask {
-
+  color: var(--on-surface-variant-color) !important;
+  background: var(--on-surface-variant-color) !important;
+  margin-bottom: 4px;
+  padding: 2px 4px 2px 4px;
+  flex-shrink: 0;
+  display: inline-block;
+  border-radius: 6px !important;
+  overflow: hidden;
+  text-decoration: none;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+  transition: color ease .2s;
 }
+
+.text_mask.show {
+  color: var(--surface-color) !important;
+}
+
+a {
+  outline: none;
+  color: var(--primary-color) !important;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  background: var(--surface-container-color) !important;
+  padding: 2px 6px 4px 6px;
+  flex-shrink: 0;
+  display: inline-block;
+  border-radius: 6px !important;
+  overflow: hidden;
+  text-decoration: none;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// 分割线
+.divider {
+  height: 12px;
+  background-color: var(--surface-container-color);
+  width: 100%;
+  margin-top: 24px;
+  opacity: 0.75;
+}
+
 
 // 元素开始进入的状态 | 元素离开结束的状态
 .run-enter-from,
@@ -177,4 +235,25 @@ img[smileid] {
 .run-leave-active {
   // 过渡动画的使用
   transition: opacity 0.2s linear;
+}
+
+// 点击评论定位闪动
+.blinking {
+  border-radius: 6px;
+  animation: blinkAnimation 1s forwards;
+}
+
+@keyframes blinkAnimation {
+  0% {
+    background: transparent;
+  }
+  50% {
+    background: #9999997f;
+  }
+  90% {
+    background: transparent;
+  }
+  100% {
+    background: transparent;
+  }
 }

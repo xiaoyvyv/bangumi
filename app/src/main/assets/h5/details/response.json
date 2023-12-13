@@ -1,0 +1,29 @@
+{
+  "app": "com.douban.frodo",
+  "code": 200,
+  "duration": "198ms",
+  "headers": {
+    "Date": "Mon, 11 Dec 2023 09:11:48 GMT",
+    "Content-Type": "application/json; charset\u003dutf-8",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "Keep-Alive": "timeout\u003d30",
+    "Expires": "Sun, 1 Jan 2006 01:00:00 GMT",
+    "Pragma": "no-cache",
+    "Cache-Control": "must-revalidate, no-cache, private",
+    "X-DAE-App": "frodo",
+    "X-DAE-Instance": "movie",
+    "Set-Cookie": "bid\u003dJVsJgJ-k44M; Expires\u003dTue, 10-Dec-24 09:11:48 GMT; Domain\u003d.douban.com; Path\u003d/",
+    "X-DOUBAN-NEWBID": "JVsJgJ-k44M",
+    "Server": "dae",
+    "Strict-Transport-Security": "max-age\u003d15552000",
+    "X-Content-Type-Options": "nosniff",
+    "Content-Encoding": "gzip"
+  },
+  "message": "OK",
+  "protocol": "HTTP/1.1",
+  "remoteIp": "140.143.177.206",
+  "remotePort": 443,
+  "sessionId": "a5eb113a-1cdf-47f3-9013-937644edff71",
+  "time": "2023-12-11 17:11:48"
+}
