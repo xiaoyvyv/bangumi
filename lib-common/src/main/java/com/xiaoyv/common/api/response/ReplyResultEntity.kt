@@ -20,14 +20,16 @@ data class ReplyResultEntity(
     @SerializedName("status")
     var status: String? = null,
     @SerializedName("timestamp")
-    var timestamp: Long = 0
+    var timestamp: Long = 0,
 ) : Parcelable {
 
     @Keep
     @Parcelize
     data class Posts(
+        @SerializedName("main")
+        var main: Map<String, CommentEntity>? = null,
         @SerializedName("sub")
-        var sub: Map<String, List<CommentEntity>>? = null
+        var sub: Map<String, List<CommentEntity>>? = null,
     ) : Parcelable
 
     @Keep
@@ -54,6 +56,6 @@ data class ReplyResultEntity(
         @SerializedName("sign")
         var sign: String? = null,
         @SerializedName("username")
-        var username: String? = null
+        var username: String? = null,
     ) : Parcelable
 }

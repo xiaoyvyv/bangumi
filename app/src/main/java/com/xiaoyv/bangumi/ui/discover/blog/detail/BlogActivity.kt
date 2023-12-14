@@ -60,7 +60,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
             val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
                 ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity) {
-                    viewModel.queryBlogDetail()
+                    launchUI { blogWeb.addComment(it) }
                 }
             } else {
                 RouteHelper.jumpLogin()
@@ -71,7 +71,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
             val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
                 ReplyDialog.show(supportFragmentManager, replyForm, null, null) {
-                    viewModel.queryBlogDetail()
+                    launchUI { blogWeb.addComment(it) }
                 }
             } else {
                 RouteHelper.jumpLogin()

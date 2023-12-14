@@ -5,6 +5,7 @@ import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.replaceSmiles
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -45,7 +46,7 @@ private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
             entity.topicSubReply = topicSubReply.select(".topic_sub_reply > div")
                 .mapCommentItems()
         }
-        entity.id = item.attr("id")
+        entity.id = item.attr("id").parseCount().toString()
         item.select("a.avatar").apply {
             entity.userId = hrefId()
             entity.userAvatar = select("span").attr("style")

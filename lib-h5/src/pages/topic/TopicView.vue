@@ -55,7 +55,8 @@ const loadComments = async ($state: any) => {
   }
 }
 
-onMounted(() => { // 机器人说话
+onMounted(() => {
+  // 机器人说话
   window.robotSay = (message: string) => {
     robotSay.value = message;
   };
@@ -67,6 +68,9 @@ onMounted(() => { // 机器人说话
     comments.length = 0;
     loadingIdentifier.value++;
   };
+
+  // 评论填充初始化
+  common.initComment(() => comments);
 
   window.topic = topicHandler;
   window.mounted = true;

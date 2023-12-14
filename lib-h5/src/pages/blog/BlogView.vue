@@ -23,7 +23,7 @@ const robotSay = ref("哼！Bangumi老娘我是有底线的人");
 const blogHandler = {
   loadBlogDetail: async (obj: BlogDetailEntity) => {
     blog.value = obj;
-    console.log("blog: " + JSON.stringify(obj, null, 3))
+
     // Html 交互处理
     await nextTick();
     common.optContentJs(blogContentRef.value);
@@ -66,6 +66,9 @@ onMounted(() => {
     comments.length = 0;
     loadingIdentifier.value++;
   };
+
+  // 评论填充初始化
+  common.initComment(() => comments);
 
   window.blog = blogHandler;
   window.mounted = true;

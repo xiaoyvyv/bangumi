@@ -11,6 +11,7 @@ declare interface Window {
     robotSay: (message: string) => void;
     changeCommentSort: (sort: string) => void;
     android: Android;
+    addComment: (comment: any) => void;
 }
 
 declare interface Android {

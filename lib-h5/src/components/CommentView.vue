@@ -137,7 +137,7 @@ const onClickNewComment = (event: Event) => {
         <div style="height: 12px"/>
 
         <!-- 嵌套条目 -->
-        <div class="comment-item" v-for="subComment in (comment.topicSubReply || [])">
+        <div class="comment-item" v-for="subComment in (comment.topicSubReply || [])" :key="subComment.id">
           <image-view class="avatar" height="24px" width="24px"
                       :src="subComment.userAvatar"
                       @click.stop="onClickUser(subComment)"/>
@@ -193,7 +193,7 @@ const onClickNewComment = (event: Event) => {
     .avatar {
       margin: 6px 0;
       border-radius: 6px;
-      background: #cccccc7f;
+      background: var(--surface-container-color);
     }
 
     .comment-content {
@@ -210,13 +210,15 @@ const onClickNewComment = (event: Event) => {
 
         .user-name {
           font-size: 14px;
-          color: #3333339f;
+          color: var(--on-surface-color);
+          opacity: 0.5;
           padding: 4px 0;
         }
 
         .time {
           font-size: 12px;
-          color: #3333337f;
+          color: var(--on-surface-variant-color);
+          opacity: 0.5;
           margin-left: 12px;
         }
       }

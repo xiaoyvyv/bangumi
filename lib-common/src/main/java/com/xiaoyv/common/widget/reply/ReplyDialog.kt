@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -23,11 +22,14 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.impl.parserReplyParam
+import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.databinding.ViewReplyDialogBinding
 import com.xiaoyv.common.helper.BBCode
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getParcelObj
+import com.xiaoyv.widget.kts.toast
 import com.xiaoyv.widget.kts.updateWindowParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -41,12 +43,12 @@ import kotlinx.coroutines.withContext
  * @since 12/1/23
  */
 class ReplyDialog : DialogFragment() {
-    var onReplySuccess: () -> Unit = {}
+    var onReplySuccess: (ReplyResultEntity) -> Unit = {}
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return ViewReplyDialogBinding.inflate(inflater, container, false).root
     }
@@ -128,19 +130,20 @@ class ReplyDialog : DialogFragment() {
         binding: ViewReplyDialogBinding,
         input: String,
         replyForm: CommentFormEntity,
-        replyParam: CommentFormEntity.CommentParam
+        replyParam: CommentFormEntity.CommentParam,
     ) {
         launchUI(
             error = {
                 hideLoading(binding)
 
                 it.printStackTrace()
-                Toast.makeText(activity, it.message.orEmpty(), Toast.LENGTH_SHORT).show()
+
+                toast(it.errorMsg)
             },
             block = {
                 showLoading(binding)
 
-                withContext(Dispatchers.IO) {
+                val replyResult: ReplyResultEntity = withContext(Dispatchers.IO) {
                     val stringMap = mutableMapOf(
                         "topic_id" to replyParam.topicId.toString(),
                         "related" to replyParam.postId.toString(),
@@ -153,7 +156,7 @@ class ReplyDialog : DialogFragment() {
                     // 隐藏表单
                     stringMap.putAll(replyForm.inputs)
 
-                    BgmApiManager.bgmWebApi.postNewReply(
+                    BgmApiManager.bgmWebApi.postReply(
                         submitAction = replyForm.action,
                         param = stringMap
                     )
@@ -161,7 +164,7 @@ class ReplyDialog : DialogFragment() {
 
                 hideLoading(binding)
 
-                onReplySuccess()
+                onReplySuccess(replyResult)
 
                 dismissAllowingStateLoss()
             }
@@ -207,7 +210,7 @@ class ReplyDialog : DialogFragment() {
             replyForm: CommentFormEntity,
             replyJs: String? = null,
             targetComment: CommentTreeEntity?,
-            onReplyListener: () -> Unit = {}
+            onReplyListener: (ReplyResultEntity) -> Unit = {},
         ) {
             ReplyDialog()
                 .apply {

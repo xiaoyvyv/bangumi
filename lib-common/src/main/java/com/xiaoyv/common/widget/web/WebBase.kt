@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
+import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.CommentPaginationHelper
 import com.xiaoyv.common.kts.GoogleAttr
@@ -67,6 +68,13 @@ abstract class WebBase(open val webView: UiWebView) {
                 launchUI { callJs("window.robotSay('$it')") }
             }
         }
+    }
+
+    /**
+     * 添加评论
+     */
+    suspend fun addComment(comment: ReplyResultEntity) {
+        callJs("window.addComment(${comment.toJson()})")
     }
 
     /**
@@ -164,4 +172,5 @@ abstract class WebBase(open val webView: UiWebView) {
             it.printStackTrace()
         }
     }
+
 }
