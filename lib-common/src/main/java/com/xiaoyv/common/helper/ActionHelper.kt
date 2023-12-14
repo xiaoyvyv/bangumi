@@ -9,6 +9,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.UserDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserUserInfo
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ import kotlinx.coroutines.withContext
 fun FragmentActivity.showActionMenu(
     view: View,
     userId: String,
-    loadingState: MutableLiveData<LoadingState>? = null
+    loadingState: MutableLiveData<LoadingState>? = null,
 ) {
     PopupMenu(this, view)
         .apply {
@@ -40,7 +41,7 @@ fun FragmentActivity.showActionMenu(
  */
 fun FragmentActivity.ignoreUser(
     userId: String,
-    loadingState: MutableLiveData<LoadingState>? = null
+    loadingState: MutableLiveData<LoadingState>? = null,
 ) {
     showConfirmDialog(
         message = "确认与该用户绝交？\n绝交后将不再看到用户的所有话题、评论、日志、私信、提醒",
@@ -57,9 +58,11 @@ fun FragmentActivity.ignoreUser(
                         val userInfo: UserDetailEntity =
                             BgmApiManager.bgmWebApi.queryUserInfo(userId).parserUserInfo(userId)
                                 .apply {
-                                    require(ignoreHash.isNotBlank()) { "绝交失败" }
+                                    require(gh.isNotBlank()) { "绝交失败" }
                                 }
-                        BgmApiManager.bgmWebApi.postIgnoreUser(userId, userInfo.ignoreHash)
+                        val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
+
+                        BgmApiManager.bgmWebApi.postIgnoreUser(referer, userId, userInfo.gh)
                             .apply {
                                 require(status.equals("ok", true)) { "绝交失败" }
                             }

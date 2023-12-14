@@ -6,6 +6,10 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.UserDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserUserInfo
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,14 +21,22 @@ import kotlinx.coroutines.withContext
  */
 class UserViewModel : BaseViewModel() {
     internal val onUserInfoLiveData = MutableLiveData<UserDetailEntity?>()
+    internal val onActionResult = MutableLiveData<Boolean>()
 
     var userId: String = ""
+
+    internal val requireIsFriend
+        get() = onUserInfoLiveData.value?.isFriend == true
+    internal val requireUserName
+        get() = onUserInfoLiveData.value?.nickname.orEmpty()
+    private val requireGh
+        get() = onUserInfoLiveData.value?.gh.orEmpty()
 
     override fun onViewCreated() {
         queryUserInfo()
     }
 
-    private fun queryUserInfo() {
+     fun queryUserInfo() {
         launchUI(
             error = {
                 it.printStackTrace()
@@ -34,6 +46,54 @@ class UserViewModel : BaseViewModel() {
                 onUserInfoLiveData.value = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.queryUserInfo(userId).parserUserInfo(userId)
                 }
+            }
+        )
+    }
+
+    /**
+     * 删除好友
+     */
+    fun actionFriend(addFriend: Boolean) {
+        launchUI(
+            state = loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+
+                showToastCompat(it.errorMsg)
+            },
+            block = {
+                withContext(Dispatchers.IO) {
+                    val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
+                    if (addFriend) {
+                        BgmApiManager.bgmWebApi.connectFriend(referer, userId, requireGh)
+                    } else {
+                        BgmApiManager.bgmWebApi.disconnectFriend(referer, userId, requireGh)
+                    }
+                }
+                onActionResult.value = true
+                UserHelper.notifyDelete(BgmPathType.TYPE_USER)
+            }
+        )
+    }
+
+    /**
+     * 屏蔽用户
+     */
+    fun blockUser() {
+        launchUI(
+            state = loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+
+                showToastCompat(it.errorMsg)
+            },
+            block = {
+                withContext(Dispatchers.IO) {
+                    val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
+                    BgmApiManager.bgmWebApi.postIgnoreUser(referer, userId, requireGh)
+                }
+                onActionResult.value = true
+                UserHelper.notifyDelete(BgmPathType.TYPE_USER)
             }
         )
     }

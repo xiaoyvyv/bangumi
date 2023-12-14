@@ -186,10 +186,20 @@ fun Elements.parserSecParamHash(funName: String): String {
         .find(onclick)?.groupValues?.getOrNull(1).orEmpty()
 }
 
+fun String.parserSecParamHash(funName: String): String {
+    return "$funName\\('[\\s\\S]+'\\s*,\\s*'(.*?)'\\)".toRegex()
+        .find(this)?.groupValues?.getOrNull(1).orEmpty()
+}
+
 fun Elements.parserFriendDeleteHash(): String {
     val onclick = attr("onclick")
     return "disconnectFriend\\(\\d+\\s*,\\s*'[\\s\\S]+'\\s*,\\s*'(.*?)'\\)".toRegex()
         .find(onclick)?.groupValues?.getOrNull(1).orEmpty()
+}
+
+fun String.parserFriendDeleteHash(): String {
+    return "disconnectFriend\\(\\d+\\s*,\\s*'[\\s\\S]+'\\s*,\\s*'(.*?)'\\)".toRegex()
+        .find(this)?.groupValues?.getOrNull(1).orEmpty()
 }
 
 fun <T : Element> T.requireNoError() {

@@ -311,4 +311,12 @@ object RouteHelper {
     fun jumpMagi() {
         MagiActivity::class.open()
     }
+
+    fun jumpSendMessage(userId: String) {
+
+    }
+
+    fun jumpReport(userId: String, @BgmPathType pathType: String) {
+
+    }
 }

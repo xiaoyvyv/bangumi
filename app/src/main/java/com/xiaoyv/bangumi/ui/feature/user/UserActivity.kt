@@ -2,14 +2,18 @@ package com.xiaoyv.bangumi.ui.feature.user
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityUserBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -17,9 +21,9 @@ import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.randomOffset
 import com.xiaoyv.common.kts.randomX
 import com.xiaoyv.common.kts.randomY
-import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.dpi
-import kotlin.math.abs
+import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.dialog.UiDialog
 
 
 /**
@@ -94,7 +98,70 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
             binding.topRightTextView.text = "Ta 的人物"
             binding.middleRightTextView.text = "Ta 的日志"
             binding.bottomRightTextView.text = "Ta 的目录"
+
+            invalidateMenu()
         }
+
+        UserHelper.observeDeleteAction(this) {
+            if (it == BgmPathType.TYPE_USER) {
+                viewModel.queryUserInfo()
+            }
+        }
+    }
+
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menu.add("私信")
+            .setIcon(CommonDrawable.ic_chat)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                RouteHelper.jumpSendMessage(viewModel.userId)
+                true
+            }
+
+        if (viewModel.requireIsFriend) {
+            menu.add("解除好友")
+                .setOnMenuItemClickListener {
+                    showConfirmDialog(
+                        message = "是否解除${viewModel.requireUserName}的好友关系？",
+                        onConfirmClick = {
+                            viewModel.actionFriend(false)
+                        }
+                    )
+                    true
+                }
+        } else {
+            menu.add("加为好友")
+                .setOnMenuItemClickListener {
+                    showConfirmDialog(
+                        message = "是否将${viewModel.requireUserName}加为好友关系？",
+                        onConfirmClick = {
+                            viewModel.actionFriend(true)
+                        }
+                    )
+                    true
+                }
+            menu.add("屏蔽TA")
+                .setOnMenuItemClickListener {
+                    showConfirmDialog(
+                        message = "是否彻底屏蔽${viewModel.requireUserName}？",
+                        onConfirmClick = {
+                            viewModel.blockUser()
+                        }
+                    )
+                    true
+                }
+        }
+
+        menu.add("举报")
+            .setOnMenuItemClickListener {
+                RouteHelper.jumpReport(viewModel.userId, BgmPathType.TYPE_USER)
+                true
+            }
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

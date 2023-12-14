@@ -300,9 +300,19 @@ interface BgmWebApi {
 
     @GET("/disconnect/{frdId}")
     suspend fun disconnectFriend(
+        @Header("Referer") referer: String,
         @Path("frdId", encoded = true) frdId: String,
         @Query("gh") hash: String,
+        @Query("ajax") ajax: Int = 1,
     ): Document
+
+    @GET("/connect/{frdId}")
+    suspend fun connectFriend(
+        @Header("Referer") referer: String,
+        @Path("frdId", encoded = true) frdId: String,
+        @Query("gh") hash: String,
+        @Query("ajax") ajax: Int = 1,
+    )
 
     @FormUrlEncoded
     @POST("/subject/{mediaId}/interest/update")
@@ -418,6 +428,7 @@ interface BgmWebApi {
     @FormUrlEncoded
     @POST("/settings/privacy?ajax=1")
     suspend fun postIgnoreUser(
+        @Header("Referer") referer: String,
         @Field("ignore_user") ignoreUser: String,
         @Field("formhash") formHash: String,
         @Field("submit_ignore") submitIgnore: String = "submit_ignore",

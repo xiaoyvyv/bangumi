@@ -122,12 +122,18 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         )
 
         viewModel.onListLiveData.observe(this) {
+            if (debugLog) debugLog { "List:\n " + it.toJson(true) }
+
+            // 加载失败
             if (it == null) {
+                // 刷新失败清空
+                if (viewModel.isRefresh) {
+                    contentAdapter.submitList(emptyList())
+                }
+                adapterHelper.trailingLoadState = viewModel.loadingMoreState
                 onListDataError()
                 return@observe
             }
-
-            if (debugLog) debugLog { "List:\n " + it.toJson(true) }
 
             contentAdapter.submitList(it) {
                 if (viewModel.isRefresh && needResetPositionWhenRefresh) {
