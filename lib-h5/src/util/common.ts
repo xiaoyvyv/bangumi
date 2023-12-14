@@ -247,9 +247,11 @@ const replyCommentToTreeComment = (
     const subReplyId = isSub ? reply.pst_id : 0
     const subReplyUid = reply.pst_uid;
 
+    const avatar = reply.avatar || '';
+
     target.id = reply.pst_id
     target.time = reply.dateline;
-    target.userAvatar = reply.avatar;
+    target.userAvatar = avatar.startsWith("//") ? "https:" + avatar : avatar;
     target.userName = reply.nickname;
     target.userId = reply.username;
     target.replyContent = reply.pst_content;

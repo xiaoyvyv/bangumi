@@ -156,6 +156,7 @@ class ReplyDialog : DialogFragment() {
                     // 隐藏表单
                     stringMap.putAll(replyForm.inputs)
 
+                    // 发布结果
                     BgmApiManager.bgmWebApi.postReply(
                         submitAction = replyForm.action,
                         param = stringMap
