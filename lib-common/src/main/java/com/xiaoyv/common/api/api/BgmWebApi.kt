@@ -12,6 +12,7 @@ import com.xiaoyv.common.config.annotation.MagiType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.MessageBoxType
+import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.config.annotation.TimelineType
@@ -549,6 +550,20 @@ interface BgmWebApi {
 
     @GET("/user/{userId}/friends")
     suspend fun queryUserFriends(@Path("userId", encoded = true) userId: String): Document
+
+    @GET("/report")
+    suspend fun queryReportForm(
+        @Query("id") userId: String,
+        @Query("type") @ReportType reportType: String,
+    ): Document
+
+    @FormUrlEncoded
+    @POST("/report")
+    suspend fun postReport(
+        @Field("comment") comment: String,
+        @Field("value") value: String,
+        @FieldMap map: Map<String, String>,
+    ): Document
 }
 
 

@@ -37,11 +37,13 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.common.widget.dialog.AnimeReportDialog
 
 /**
  * Class: [RouteHelper]
@@ -316,7 +318,7 @@ object RouteHelper {
 
     }
 
-    fun jumpReport(userId: String, @BgmPathType pathType: String) {
-
+    fun jumpReport(userId: String, @ReportType type: String) {
+        AnimeReportDialog.show(userId, type)
     }
 }

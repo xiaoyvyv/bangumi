@@ -10,7 +10,9 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.UserDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserUserInfo
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.widget.dialog.AnimeReportDialog
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,6 +20,7 @@ import kotlinx.coroutines.withContext
 fun FragmentActivity.showActionMenu(
     view: View,
     userId: String,
+    @ReportType reportType: String,
     loadingState: MutableLiveData<LoadingState>? = null,
 ) {
     PopupMenu(this, view)
@@ -27,6 +30,7 @@ fun FragmentActivity.showActionMenu(
                 true
             }
             menu.add("报告疑虑").setOnMenuItemClickListener {
+                AnimeReportDialog.show(userId, reportType)
                 true
             }
         }

@@ -20,9 +20,13 @@ import kotlinx.coroutines.delay
  * @since 12/5/23
  */
 class AnimeStateView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null,
 ) : ConstraintLayout(context, attrs) {
     private val binding = ViewStateBinding.inflate(context.inflater, this)
+
+    init {
+        isVisible = false
+    }
 
     fun showLoading(bias: Float = 0.5f) {
         isVisible = true
@@ -61,7 +65,7 @@ class AnimeStateView @JvmOverloads constructor(
         showContentDelay: Long? = null,
         crossinline canShowLoading: () -> Boolean = { true },
         crossinline canShowContent: () -> Boolean = { true },
-        crossinline doOnShowContent: () -> Unit = {}
+        crossinline doOnShowContent: () -> Unit = {},
     ) {
         loadingViewState.observe(lifecycleOwner) {
             when (it.type) {

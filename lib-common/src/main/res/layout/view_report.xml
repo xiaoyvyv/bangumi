@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurface"
+    android:paddingHorizontal="@dimen/ui_layout_margin">
+
+    <!-- Collect Type Radio Group -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/collect_type_radio_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_16"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_ad"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="广告"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_argument"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="引战"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_attack"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="辱骂、人身攻击"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_irrelevant"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="刷屏、无关内容"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_political"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="政治相关"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_illegal"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="违法信息"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_privacy"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="泄露隐私"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_score"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="涉嫌刷分"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_spoiler"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="剧透"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/radio_other"
+            style="@style/Widget.Material3.Chip.Filter.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="其他"
+            android:textAppearance="?attr/textAppearanceBodySmall" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.xiaoyv.common.widget.text.AnimeEditTextView
+        android:id="@+id/comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        android:gravity="start|top"
+        android:hint="附加信息:"
+        android:maxLines="6"
+        android:minLines="4"
+        android:padding="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/collect_type_radio_group" />
+
+    <!-- Submit Button -->
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/submit_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:enabled="false"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="报告疑虑"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/comment" />
+
+    <com.xiaoyv.common.widget.state.AnimeStateView
+        android:id="@+id/state_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_0"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

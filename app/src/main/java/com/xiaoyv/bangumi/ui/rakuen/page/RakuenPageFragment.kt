@@ -13,6 +13,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.SuperTopicTab
 import com.xiaoyv.common.helper.showActionMenu
@@ -78,7 +79,8 @@ class RakuenPageFragment :
 
                 BgmPathType.TYPE_TOPIC -> when (it.topicType) {
                     TopicType.TYPE_EP,
-                    TopicType.TYPE_SUBJECT -> {
+                    TopicType.TYPE_SUBJECT,
+                    -> {
                         RouteHelper.jumpMediaDetail(it.attachId)
                     }
 
@@ -87,7 +89,8 @@ class RakuenPageFragment :
                     }
 
                     TopicType.TYPE_PERSON,
-                    TopicType.TYPE_CRT -> {
+                    TopicType.TYPE_CRT,
+                    -> {
                         RouteHelper.jumpTopicDetail(it.id, it.topicType)
                     }
                 }
@@ -100,6 +103,7 @@ class RakuenPageFragment :
                 requireActivity().showActionMenu(
                     view,
                     avatarId,
+                    ReportType.TYPE_USER,
                     viewModel.loadingDialogState(cancelable = false)
                 )
             }

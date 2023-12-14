@@ -12,6 +12,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog
@@ -114,15 +115,14 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("私信")
-            .setIcon(CommonDrawable.ic_chat)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            .setOnMenuItemClickListener {
-                RouteHelper.jumpSendMessage(viewModel.userId)
-                true
-            }
-
         if (viewModel.requireIsFriend) {
+            menu.add("私信")
+                .setIcon(CommonDrawable.ic_chat)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    RouteHelper.jumpSendMessage(viewModel.userId)
+                    true
+                }
             menu.add("解除好友")
                 .setOnMenuItemClickListener {
                     showConfirmDialog(
@@ -135,6 +135,8 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
                 }
         } else {
             menu.add("加为好友")
+                .setIcon(CommonDrawable.ic_add_friend)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
                     showConfirmDialog(
                         message = "是否将${viewModel.requireUserName}加为好友关系？",
@@ -158,7 +160,7 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
 
         menu.add("举报")
             .setOnMenuItemClickListener {
-                RouteHelper.jumpReport(viewModel.userId, BgmPathType.TYPE_USER)
+                RouteHelper.jumpReport(viewModel.userId, ReportType.TYPE_USER)
                 true
             }
         return super.onCreateOptionsMenu(menu)

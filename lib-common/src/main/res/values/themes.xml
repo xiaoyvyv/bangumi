@@ -68,6 +68,10 @@
 
     <style name="Theme.Bangumi.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
 
+    <style name="Theme.Bangumi.AppBarOverlay.Light">
+        <item name="colorControlNormal">?attr/colorOnPrimarySurface</item>
+    </style>
+
     <style name="Theme.Bangumi.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 
     <style name="Theme.Bangumi.ImageCornerSmall">
