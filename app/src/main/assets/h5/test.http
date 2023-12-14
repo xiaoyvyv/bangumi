@@ -58,3 +58,8 @@ Pragma: no-cache
 Cache-Control: no-cache
 TE: trailers
 
+
+###
+GET https://tinygrail.oss-cn-hangzhou.aliyuncs.com/avatar/edbbcd8f731821b6172a74bf1e6ba9ec.jpg
+Referer: https://bgm.tv
+

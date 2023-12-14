@@ -115,47 +115,55 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (viewModel.requireIsFriend) {
-            menu.add("私信")
-                .setIcon(CommonDrawable.ic_chat)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setOnMenuItemClickListener {
-                    RouteHelper.jumpSendMessage(viewModel.userId)
-                    true
-                }
-            menu.add("解除好友")
-                .setOnMenuItemClickListener {
-                    showConfirmDialog(
-                        message = "是否解除${viewModel.requireUserName}的好友关系？",
-                        onConfirmClick = {
-                            viewModel.actionFriend(false)
-                        }
-                    )
-                    true
-                }
-        } else {
-            menu.add("加为好友")
-                .setIcon(CommonDrawable.ic_add_friend)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setOnMenuItemClickListener {
-                    showConfirmDialog(
-                        message = "是否将${viewModel.requireUserName}加为好友关系？",
-                        onConfirmClick = {
-                            viewModel.actionFriend(true)
-                        }
-                    )
-                    true
-                }
-            menu.add("屏蔽TA")
-                .setOnMenuItemClickListener {
-                    showConfirmDialog(
-                        message = "是否彻底屏蔽${viewModel.requireUserName}？",
-                        onConfirmClick = {
-                            viewModel.blockUser()
-                        }
-                    )
-                    true
-                }
+        if (viewModel.onUserInfoLiveData.value == null) {
+            return super.onCreateOptionsMenu(menu)
+        }
+
+        when {
+            viewModel.requireIsFriend -> {
+                menu.add("私信")
+                    .setIcon(CommonDrawable.ic_chat)
+                    .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                    .setOnMenuItemClickListener {
+                        RouteHelper.jumpSendMessage(viewModel.userId)
+                        true
+                    }
+                menu.add("解除好友")
+                    .setOnMenuItemClickListener {
+                        showConfirmDialog(
+                            message = "是否解除${viewModel.requireUserName}的好友关系？",
+                            onConfirmClick = {
+                                viewModel.actionFriend(false)
+                            }
+                        )
+                        true
+                    }
+            }
+
+            else -> {
+                menu.add("加为好友")
+                    .setIcon(CommonDrawable.ic_add_friend)
+                    .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                    .setOnMenuItemClickListener {
+                        showConfirmDialog(
+                            message = "是否将${viewModel.requireUserName}加为好友关系？",
+                            onConfirmClick = {
+                                viewModel.actionFriend(true)
+                            }
+                        )
+                        true
+                    }
+                menu.add("屏蔽TA")
+                    .setOnMenuItemClickListener {
+                        showConfirmDialog(
+                            message = "是否彻底屏蔽${viewModel.requireUserName}？",
+                            onConfirmClick = {
+                                viewModel.blockUser()
+                            }
+                        )
+                        true
+                    }
+            }
         }
 
         menu.add("举报")
