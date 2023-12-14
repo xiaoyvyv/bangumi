@@ -1,6 +1,7 @@
 package com.xiaoyv.common.widget.web
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.webkit.JavascriptInterface
 import androidx.annotation.Keep
 import androidx.fragment.app.FragmentActivity
@@ -12,9 +13,11 @@ import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.CommentPaginationHelper
+import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.showOptionsDialog
+import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.useNotNull
 import com.xiaoyv.widget.webview.UiWebView
 import com.xiaoyv.widget.webview.listener.OnWindowListener
@@ -42,7 +45,13 @@ abstract class WebBase(open val webView: UiWebView) {
     var onClickUserListener: (String) -> Unit = {}
     var onClickRelatedListener: (SampleRelatedEntity.Item) -> Unit = { }
 
+
     fun startLoad() {
+        // 设置背景
+        webView.setBackgroundColor(webView.context.getAttrColor(GoogleAttr.colorSurface))
+        webView.background = ColorDrawable(webView.context.getAttrColor(GoogleAttr.colorSurface))
+
+        // 配置
         webView.multipleWindows = true
         webView.addUrlInterceptor(interceptor)
         webView.loadUrl(WebConfig.page(pageRoute))

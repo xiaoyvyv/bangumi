@@ -7,18 +7,21 @@
   font-style: normal;
 }
 
+
 :root {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --primary-color: #A23662;
-  --surface-color: #FFFBFF;
-  --on-primary-color: #FFFFFF;
-  --on-surface-color: #201A1B;
-  --on-surface-variant-color: #514347;
-  --surface-container-color: #eeeeee;
+}
+
+@media (prefers-color-scheme: dark) {
+  @import "assets/css/dark";
+}
+
+@media (prefers-color-scheme: light) {
+  @import "assets/css/light";
 }
 
 html, body {

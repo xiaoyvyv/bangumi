@@ -1,5 +1,8 @@
 package com.xiaoyv.common.widget.web
 
+import androidx.appcompat.app.AppCompatDelegate
+
+
 /**
  * Class: [WebConfig]
  *
@@ -15,4 +18,13 @@ object WebConfig {
 
     private val baseH5Url
         get() = if (DEBUG) "http://192.168.6.70:5173/#/" else "file:///android_asset/h5/index.html#"
+
+    /**
+     * 获取当前是否开启深色模式
+     */
+    val nightMode: Boolean
+        get() {
+            val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+            return currentNightMode == AppCompatDelegate.MODE_NIGHT_YES
+        }
 }

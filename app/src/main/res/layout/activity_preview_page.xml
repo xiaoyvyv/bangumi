@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:text="0%"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textColor="?attr/colorOnSurfaceInverse"
+        android:textColor="?attr/colorOnPrimarySurface"
         app:layout_constraintBottom_toBottomOf="@+id/pb_progress"
         app:layout_constraintEnd_toEndOf="@+id/pb_progress"
         app:layout_constraintStart_toStartOf="@+id/pb_progress"
