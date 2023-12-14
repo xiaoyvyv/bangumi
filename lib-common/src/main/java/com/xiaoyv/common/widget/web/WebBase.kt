@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
+import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.currentApplication
@@ -18,12 +21,16 @@ import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.showOptionsDialog
+import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getAttrColor
+import com.xiaoyv.widget.kts.showToastCompat
 import com.xiaoyv.widget.kts.useNotNull
 import com.xiaoyv.widget.webview.UiWebView
 import com.xiaoyv.widget.webview.listener.OnWindowListener
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 
 /**
  * Class: [WebBase]
@@ -111,6 +118,38 @@ abstract class WebBase(open val webView: UiWebView) {
         useNotNull(json.fromJson<SampleRelatedEntity.Item>()) {
             onClickRelatedListener(this)
         }
+    }
+
+    /**
+     * 注意：Bgm 站有一个BUG，短时间内重复发送和取消贴贴会失效。
+     */
+    @Keep
+    @JavascriptInterface
+    fun onToggleSmile(commentId: String, gh: String, emojiInfo: String) {
+        val activity = ActivityUtils.getTopActivity() as? BaseViewModelActivity<*, *> ?: return
+        val likeAction = emojiInfo.fromJson<LikeEntity.LikeAction>() ?: return
+
+        activity.launchUI(
+            state = activity.viewModel.loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+                showToastCompat(it.errorMsg)
+            },
+            block = {
+                val response = withContext(Dispatchers.IO) {
+                    BgmApiManager.bgmWebApi.queryLikeToggle(
+                        type = likeAction.type.toString(),
+                        mainId = likeAction.mainId.toString(),
+                        likeValue = likeAction.value.toString(),
+                        commendId = commentId,
+                        gh = gh
+                    ).apply { require(isOk) }.data?.toNormal().orEmpty()
+                }
+
+                // 刷新
+                callJs("window.refreshCommentEmoji(${response.toJson()})")
+            }
+        )
     }
 
     /**

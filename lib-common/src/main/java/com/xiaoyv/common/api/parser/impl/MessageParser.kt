@@ -5,7 +5,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
-import com.xiaoyv.common.api.parser.parserSecParamHash
+import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.useNotNull
@@ -41,10 +41,12 @@ fun Element.parserMessageList(boxType: String): Pair<String, List<MessageEntity>
  */
 fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
     requireNoError()
+    val gh = parserFormHash()
 
     return select("#comment_box > .item").map { item ->
         val entity = MessageEntity()
         entity.id = messageId
+        entity.gh = gh
         entity.fromAvatar = item.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.fromId = item.select("a.avatar").hrefId()
@@ -55,7 +57,6 @@ fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
         val textPm = item.select(".text_pm")
         textPm.select(".rr").remove().apply {
             entity.time = select("small.grey").text().substringBefore("/").trim()
-            entity.deleteHash = select("small.grey a[onclick]").parserSecParamHash("erasePM")
         }
         useNotNull(textPm.select("a.l").firstOrNull()) {
             entity.fromName = text()

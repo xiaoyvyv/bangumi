@@ -12,6 +12,7 @@ declare interface Window {
     changeCommentSort: (sort: string) => void;
     android: Android;
     addComment: (comment: any) => void;
+    refreshCommentEmoji: (likeMap: any) => void;
 }
 
 declare interface Android {
@@ -23,4 +24,5 @@ declare interface Android {
     onClickRelated: any;
     onClickCommentSort: any;
     onLoadComments: (page: number, size: number, sort: string) => string;
+    onToggleSmile: any;
 }

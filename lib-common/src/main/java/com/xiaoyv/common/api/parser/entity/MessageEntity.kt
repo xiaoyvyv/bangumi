@@ -24,7 +24,7 @@ data class MessageEntity(
     var subject: String = "",
     var summary: CharSequence = "",
     var time: String = "",
-    var deleteHash: String = "",
+    var gh: String = "",
     var isRead: Boolean = false,
     @MessageBoxType
     var boxType: String = MessageBoxType.TYPE_INBOX,

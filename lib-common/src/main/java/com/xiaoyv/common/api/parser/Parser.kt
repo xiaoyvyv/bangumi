@@ -11,6 +11,9 @@ import androidx.core.text.parseAsHtml
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.firstGroupValue
+import com.xiaoyv.common.kts.groupValue
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
@@ -180,31 +183,34 @@ fun Elements.parseStar(): Float {
     }
 }
 
-fun Elements.parserSecParamHash(funName: String): String {
-    val onclick = attr("onclick")
-    return "$funName\\('[\\s\\S]+'\\s*,\\s*'(.*?)'\\)".toRegex()
-        .find(onclick)?.groupValues?.getOrNull(1).orEmpty()
-}
-
-fun String.parserSecParamHash(funName: String): String {
-    return "$funName\\('[\\s\\S]+'\\s*,\\s*'(.*?)'\\)".toRegex()
-        .find(this)?.groupValues?.getOrNull(1).orEmpty()
-}
-
-fun Elements.parserFriendDeleteHash(): String {
-    val onclick = attr("onclick")
-    return "disconnectFriend\\(\\d+\\s*,\\s*'[\\s\\S]+'\\s*,\\s*'(.*?)'\\)".toRegex()
-        .find(onclick)?.groupValues?.getOrNull(1).orEmpty()
-}
-
-fun String.parserFriendDeleteHash(): String {
-    return "disconnectFriend\\(\\d+\\s*,\\s*'[\\s\\S]+'\\s*,\\s*'(.*?)'\\)".toRegex()
-        .find(this)?.groupValues?.getOrNull(1).orEmpty()
-}
-
 fun <T : Element> T.requireNoError() {
     val errorMsg = select("#colunmNotice .text").text().trim()
     if (errorMsg.isNotBlank()) {
         throw IllegalArgumentException(errorMsg.ifBlank { "Bangumi娘：报告数据出错啦" })
     }
+}
+
+/**
+ * 提取页面的 FormHash，这个值每个用户是固定的
+ */
+fun Element.parserFormHash(): String {
+    val fromHashFunName = "(ignoreUser|erasePM)"
+    val formHash = select("input[name=formhash]").attr("value")
+        .ifBlank {
+            val a = "gh=(\\S+?)\"".toRegex().firstGroupValue(toString())
+            a.trim()
+        }
+        .ifBlank {
+            val b = "$fromHashFunName\\('[\\s\\S]+?'\\s*,\\s*'(.*?)'\\)".toRegex()
+                .groupValue(toString(), 2)
+            b.trim()
+        }
+        .ifBlank {
+            val c = "disconnectFriend\\(\\d+?\\s*,\\s*'[\\s\\S]+?'\\s*,\\s*'(.*?)'\\)".toRegex()
+                .firstGroupValue(toString())
+            c.trim()
+        }
+
+    debugLog { "页面 FormHash: $formHash" }
+    return formHash
 }

@@ -1,11 +1,13 @@
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.request.CreateTokenParam
 import com.xiaoyv.common.api.response.BgmStatusEntity
 import com.xiaoyv.common.api.response.NotifyEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.api.response.UploadResultEntity
+import com.xiaoyv.common.api.response.base.BgmActionResponse
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MagiType
@@ -564,6 +566,19 @@ interface BgmWebApi {
         @Field("value") value: String,
         @FieldMap map: Map<String, String>,
     ): Document
+
+    /**
+     * 贴贴或取消
+     */
+    @GET("like")
+    suspend fun queryLikeToggle(
+        @Query("type") type: String,
+        @Query("main_id") mainId: String,
+        @Query("id") commendId: String,
+        @Query("value") likeValue: String,
+        @Query("gh") gh: String,
+        @Query("ajax") ajax: Int = 1,
+    ): BgmActionResponse<LikeEntity>
 }
 
 

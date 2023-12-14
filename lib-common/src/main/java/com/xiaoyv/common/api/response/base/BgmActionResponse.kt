@@ -13,8 +13,11 @@ import kotlinx.parcelize.RawValue
  */
 @Keep
 @Parcelize
-open class BaseResponse<T>(
-    val code: Int = 0,
-    val msg: String? = "",
-    val data: @RawValue T? = null
-) : Parcelable
+open class BgmActionResponse<T>(
+    val status: String? = "",
+    val data: @RawValue T?,
+) : Parcelable {
+
+    val isOk: Boolean
+        get() = status.orEmpty().equals("ok", true)
+}

@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
+import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.replaceSmiles
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -17,7 +18,9 @@ import org.jsoup.select.Elements
  * @since 12/1/23
  */
 fun Element.parserBottomComment(): List<CommentTreeEntity> {
-    return select("#comment_list > div").mapCommentItems()
+    // 解析 gh
+    val gh = parserFormHash()
+    return select("#comment_list > div").mapCommentItems(gh)
 }
 
 /**
@@ -35,7 +38,7 @@ fun Element.parserReplyForm(): CommentFormEntity {
 /**
  * 解析评论
  */
-private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
+private fun Elements.mapCommentItems(gh: String): List<CommentTreeEntity> {
     val entities = arrayListOf<CommentTreeEntity>()
     forEach { item ->
         if (item.id().isBlank()) return@forEach
@@ -44,7 +47,7 @@ private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
         val topicSubReply = item.select(".topic_sub_reply").remove()
         if (topicSubReply.isNotEmpty()) {
             entity.topicSubReply = topicSubReply.select(".topic_sub_reply > div")
-                .mapCommentItems()
+                .mapCommentItems(gh)
         }
         entity.id = item.attr("id").parseCount().toString()
         item.select("a.avatar").apply {
@@ -62,6 +65,7 @@ private fun Elements.mapCommentItems(): List<CommentTreeEntity> {
         entity.replyContent = item.select(".reply_content > .message")
             .ifEmpty { item.select(".inner > .cmt_sub_content") }
             .html().replaceSmiles()
+        entity.gh = gh
         entities.add(entity)
     }
     return entities

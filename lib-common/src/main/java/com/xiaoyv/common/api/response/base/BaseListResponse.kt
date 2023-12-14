@@ -1,4 +1,4 @@
-package com.xiaoyv.anime.garden.api.response.base
+package com.xiaoyv.common.api.response.base
 
 import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize

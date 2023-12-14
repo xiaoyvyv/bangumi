@@ -17,5 +17,5 @@ data class FriendEntity(
     override var id: String = "",
     var avatar: String = "",
     var name: String = "",
-    var deleteHash: String = "",
+    var gh: String = "",
 ) : IdEntity, Parcelable

@@ -1,16 +1,12 @@
 export interface LikeActionEntity {
-    emoji?: string | null;
-    mainId: number;
-    total: number;
     type: number;
-    users?: {
-        nickname?: string | null;
-        username?: string | null;
-    };
-    value?: string | null;
-}
-
-export interface LikeEmoji {
-    likeValue: string;
-    emojiUrl: string;
+    main_id: number;
+    value: string;
+    total: number;
+    emoji: string;
+    selected: boolean;
+    users: {
+        "username": string;
+        "nickname": string;
+    }[];
 }

@@ -1,5 +1,8 @@
+import {LikeActionEntity} from "./LikeActionEntity.ts";
+
 export interface CommentTreeEntity {
     id: string;
+    mineId: string;
     floor: string;
     time: string;
     userAvatar: string;
@@ -9,4 +12,6 @@ export interface CommentTreeEntity {
     replyJs: string;
     replyQuote: string;
     topicSubReply: CommentTreeEntity[];
+    emojis: Array<LikeActionEntity>;
+    gh: string;
 }

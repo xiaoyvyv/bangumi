@@ -3,6 +3,9 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.google.gson.internal.LinkedTreeMap
+import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.kts.fromJson
 import kotlinx.parcelize.Parcelize
 
 
@@ -10,6 +13,7 @@ import kotlinx.parcelize.Parcelize
  * Class: [LikeEntity]
  *
  * ```
+ *
  * {
  *   "2273678": {
  *     "132": {
@@ -398,11 +402,25 @@ data class LikeEntity(val i: Int = 10) : HashMap<String, Any>(i), Parcelable {
     @Keep
     @Parcelize
     data class LikeActionMap(val initialCapacity: Int = 10) :
-        HashMap<String, LikeAction>(initialCapacity), Parcelable
+        HashMap<String, List<LikeAction>>(initialCapacity), Parcelable
 
-    @Keep
-    @Parcelize
-    data class LikeActionList(var i: Int = 10) : ArrayList<LikeAction>(i), Parcelable
+    /**
+     * 优化数据结构，统一为 CommentId -> List<LikeAction> 结构
+     */
+    fun toNormal(): Map<String, List<LikeAction>> {
+        val emojiMap = mutableMapOf<String, List<LikeAction>>()
+        forEach { commentId, mapOrList ->
+            val emojiList = when (mapOrList) {
+                is LinkedTreeMap<*, *> -> mapOrList.values.filterIsInstance(LinkedTreeMap::class.java)
+                is ArrayList<*> -> mapOrList.filterIsInstance(LinkedTreeMap::class.java)
+                else -> emptyList()
+            }
+
+            // 将 List<LinkedTreeMap> 转为 List<LikeAction>
+            emojiMap[commentId] = emojiList.toJson().fromJson<List<LikeAction>>().orEmpty()
+        }
+        return emojiMap
+    }
 
     @Keep
     @Parcelize
@@ -418,7 +436,9 @@ data class LikeEntity(val i: Int = 10) : HashMap<String, Any>(i), Parcelable {
         @SerializedName("users")
         var users: List<User>? = listOf(),
         @SerializedName("value")
-        var value: String? = ""
+        var value: String? = "",
+        @SerializedName("selected")
+        var selected: Boolean = false,
     ) : Parcelable
 
     @Keep
@@ -427,6 +447,6 @@ data class LikeEntity(val i: Int = 10) : HashMap<String, Any>(i), Parcelable {
         @SerializedName("nickname")
         var nickname: String? = null,
         @SerializedName("username")
-        var username: String? = null
+        var username: String? = null,
     ) : Parcelable
 }

@@ -62,7 +62,7 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
             entity.content = select(".topic_content").html().replaceSmiles()
 
             select(".topic_actions").let { topicActions ->
-                entity.likeEmojis = topicActions.select(".post_actions .grid a").map { a ->
+                entity.topicEmojis = topicActions.select(".post_actions .grid a").map { a ->
                     val emoji = TopicDetailEntity.LikeEmoji()
                     emoji.emojiUrl = a.select("img").attr("src").optImageUrl()
                     emoji.likeValue = a.attr("data-like-value")
@@ -77,8 +77,9 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
 
         val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);".toRegex()
             .find(html())?.groupValues?.getOrNull(1).orEmpty()
-
-        entity.likeMap = likeJson.fromJson<LikeEntity>() ?: LikeEntity(0)
+        val likeEntity = likeJson.fromJson<LikeEntity>() ?: LikeEntity(0)
+        val likeListMap = likeEntity.toNormal()
+        entity.commentEmojiMap = likeListMap
 
         entity.title = select("#pageHeader h1")
             .firstOrNull()?.lastChild()?.toString()
@@ -86,6 +87,8 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
 
         entity.comments = parserBottomComment()
         entity.replyForm = parserReplyForm()
+        entity.fillLikeInfo()
+
         entity
     }
 }

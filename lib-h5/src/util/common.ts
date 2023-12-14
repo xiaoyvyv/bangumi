@@ -5,6 +5,7 @@ import {
     CommentReplySubContent,
     Post
 } from "./interface/CommentReplyEntity.ts";
+import {LikeActionEntity} from "./interface/LikeActionEntity.ts";
 
 /**
  * 针对特定的节点进行交互优化
@@ -213,6 +214,28 @@ const initComment = (param: () => CommentTreeEntity[]) => {
         const sub = comment.posts?.sub;
         if (sub != undefined) {
             refreshSubComment(sub);
+        }
+    }
+
+    // 刷新贴贴
+    // 数据结构：{CommentId: List<LikeAction>} 结构
+    window.refreshCommentEmoji = (likeData: any) => {
+        for (const commendId in likeData) {
+            const likeActionInfo = likeData[commendId] as LikeActionEntity[];
+
+            param().forEach(comment => {
+                // 主评论查询到则刷新
+                if (comment.id == commendId) {
+                    comment.emojis = likeActionInfo || [];
+                }
+
+                comment.topicSubReply.forEach(sub => {
+                    // 子评论查询到则刷新
+                    if (sub.id == commendId) {
+                        sub.emojis = likeActionInfo || [];
+                    }
+                });
+            });
         }
     }
 }

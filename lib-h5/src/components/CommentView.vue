@@ -3,6 +3,7 @@ import {toRefs} from "vue";
 import common from "../util/common.ts";
 import {CommentTreeEntity} from "../util/interface/CommentTreeEntity.ts";
 import ImageView from "./ImageView.vue";
+import EmojiView from "./EmojiView.vue";
 
 /**
  * 参数
@@ -53,7 +54,7 @@ const sortName = (sort: string) => {
  */
 const onClickUser = (comment: CommentTreeEntity) => {
   if (window.android && comment.userId) {
-    window.android && window.android.onClickUser(comment.userId);
+    window.android && window.android.onClickUser(comment.id, comment.userId);
   }
 }
 
@@ -134,6 +135,7 @@ const onClickNewComment = (event: Event) => {
         </div>
         <div class="topic-html" v-html="comment.replyContent" @click.stop="onClickReplyComment($event, comment, null)"/>
 
+        <emoji-view :emojis="comment.emojis" :comment="comment" style="margin-top: 16px"/>
         <div style="height: 12px"/>
 
         <!-- 嵌套条目 -->

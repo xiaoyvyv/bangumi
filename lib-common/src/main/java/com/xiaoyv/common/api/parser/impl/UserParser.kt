@@ -6,8 +6,7 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
-import com.xiaoyv.common.api.parser.parserFriendDeleteHash
-import com.xiaoyv.common.api.parser.parserSecParamHash
+import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
@@ -24,26 +23,15 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
     requireNoError()
 
     val entity = UserDetailEntity(id = userId)
+    entity.gh = parserFormHash()
 
     selectLegal("#headerProfile").apply {
         entity.avatar = select(".headerAvatar span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.nickname = select(".inner .name a").text()
 
-        val actionHtml = select(".actions").html()
-
-        // 屏蔽的 Hash
-        val ignoreHash = actionHtml.parserSecParamHash("ignoreUser")
-        // 移除的 Hash
-        val deleteHash = actionHtml.parserFriendDeleteHash()
-        // 添加的 Hash
-        val addHash = select("#connectFrd").attr("href").substringAfterLast("=")
-
         // 检测是否为好友
-        entity.isFriend = actionHtml.contains("disconnectFriend", true)
-
-        // Hash 都一样，这里取到值即可
-        entity.gh = ignoreHash.ifBlank { addHash }.ifBlank { deleteHash }
+        entity.isFriend = select(".actions").html().contains("disconnectFriend", true)
     }
 
     select("#user_home").apply {
