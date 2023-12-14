@@ -1,7 +1,7 @@
 import {CommentTreeEntity} from "./CommentTreeEntity.ts";
-import {LikeActionEntity, LikeEmoji} from "./LikeActionEntity.ts";
 import {CommentFormEntity} from "./CommentFormEntity.ts";
 import {SampleRelateEntity} from "./SampleRelateEntity.ts";
+import {LikeActionEntity} from "./LikeActionEntity.ts";
 
 export interface TopicDetailEntity {
     id: string;
@@ -16,7 +16,5 @@ export interface TopicDetailEntity {
     related: SampleRelateEntity;
     comments: CommentTreeEntity[];
     replyForm: CommentFormEntity;
-
-    likeMap: Map<string, Map<string, LikeActionEntity>>;
-    likeEmojis: LikeEmoji[];
+    topicEmojis: LikeActionEntity[];
 }
