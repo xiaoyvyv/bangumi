@@ -14,7 +14,5 @@ export interface CommentTreeEntity {
     topicSubReply: CommentTreeEntity[];
     emojis: Array<LikeActionEntity>;
     gh: string;
-    mainId: string;
-    mainPathType: string;
-    likeType: string;
+    emojiParam: any;
 }

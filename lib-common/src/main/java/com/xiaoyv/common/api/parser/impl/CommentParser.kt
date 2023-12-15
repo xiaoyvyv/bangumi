@@ -51,7 +51,7 @@ private fun Elements.mapCommentItems(gh: String): List<CommentTreeEntity> {
                 .mapCommentItems(gh)
         }
         entity.id = item.attr("id").parseCount().toString()
-        entity.emojiParam = select(".like_dropdown").parserLikeParam()
+        entity.emojiParam = item.select(".like_dropdown").parserLikeParam()
         item.select("a.avatar").apply {
             entity.userId = hrefId()
             entity.userAvatar = select("span").attr("style")

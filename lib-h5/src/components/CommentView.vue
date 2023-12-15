@@ -140,8 +140,8 @@ const onClickNewComment = (event: Event) => {
           </div>
           <div class="time">{{ comment.time }}<span class="floor">{{ comment.floor }}</span></div>
           <div style="flex: 1"/>
-          <img class="action" v-if="comment.likeType"
-               smileid src="../assets/image/ic_more.svg"
+          <img class="action" v-if="comment.emojiParam"
+               smileid src="../assets/image/ic_like.svg"
                alt="action"
                @click.stop="onClickCommentAction($event,comment)">
         </div>
@@ -161,8 +161,8 @@ const onClickNewComment = (event: Event) => {
               </div>
               <div class="time">{{ subComment.time }}<span class="floor">{{ subComment.floor }}</span></div>
               <div style="flex: 1"/>
-              <img class="action" v-if="subComment.likeType"
-                   smileid src="../assets/image/ic_more.svg"
+              <img class="action" v-if="subComment.emojiParam"
+                   smileid src="../assets/image/ic_like.svg"
                    alt="action"
                    @click.stop="onClickCommentAction($event,subComment)">
             </div>
