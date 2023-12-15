@@ -73,15 +73,31 @@ const optReplyItemClick = (element: HTMLElement): boolean => {
 };
 
 const toggleMask = (element: HTMLElement): boolean => {
-    if (element.classList.contains("text_mask")) {
-        if (element.classList.contains("show")) {
-            element.classList.remove("show");
+    const result = findParentBySelector(element, ".text_mask");
+    if (result) {
+        if (result.classList.contains("show")) {
+            result.classList.remove("show");
         } else {
-            element.classList.add("show");
+            result.classList.add("show");
         }
         return true;
     }
     return false;
+}
+
+const findParentBySelector = (element: HTMLElement | null, selector: string, maxDepth: number = 3, currentDepth = 0): HTMLElement | null => {
+    // 如果元素为空或者已经达到最大层级，返回 null
+    if (!element || currentDepth > maxDepth) {
+        return null;
+    }
+
+    // 检查当前父级元素是否匹配选择器
+    if (element.matches(selector)) {
+        return element;
+    }
+
+    // 递归查询父级元素
+    return findParentBySelector(element.parentElement, selector, maxDepth, currentDepth + 1);
 }
 
 const scrollIntoView = (event: Event, container: Element | undefined | null, isMainComment: boolean) => {
@@ -218,8 +234,9 @@ const initComment = (param: () => CommentTreeEntity[]) => {
     }
 
     // 刷新贴贴
-    // 数据结构：{CommentId: List<LikeAction>} 结构
+    // 数据结构：Map<CommentId: List<LikeAction>> 结构
     window.refreshCommentEmoji = (likeData: any) => {
+        console.log("刷新贴贴：" + JSON.stringify(likeData, null, 2));
         for (const commendId in likeData) {
             const likeActionInfo = likeData[commendId] as LikeActionEntity[];
 

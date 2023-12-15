@@ -190,10 +190,24 @@ img {
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
   transition: color ease .2s;
+
+  * {
+    color: var(--on-surface-variant-color) !important;
+    background: var(--on-surface-variant-color) !important;
+  }
 }
 
 .text_mask.show {
   color: var(--surface-color) !important;
+
+  * {
+    color: var(--surface-color) !important;
+  }
+
+  a {
+    color: var(--primary-color) !important;
+    background: var(--surface-container-color) !important;
+  }
 }
 
 a {

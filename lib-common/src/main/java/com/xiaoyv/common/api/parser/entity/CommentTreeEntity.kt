@@ -28,4 +28,17 @@ data class CommentTreeEntity(
     @SerializedName("replyQuote") var replyQuote: String = "",
     @SerializedName("emojis") var emojis: List<LikeEntity.LikeAction> = emptyList(),
     @SerializedName("gh") var gh: String = "",
-) : Parcelable, IdEntity
+    /**
+     * 添加贴贴的参数
+     */
+    @SerializedName("emojiParam") var emojiParam: EmojiParam? = null,
+) : Parcelable, IdEntity {
+
+    @Keep
+    @Parcelize
+    data class EmojiParam(
+        var likeType: String = "",
+        var likeMainId: String = "",
+        var likeCommentId: String = "",
+    ) : Parcelable
+}

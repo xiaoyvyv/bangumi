@@ -101,6 +101,13 @@ const onClickCommentSort = () => {
 }
 
 /**
+ * 新建贴贴
+ */
+const onClickCommentAction = (event: MouseEvent, comment: CommentTreeEntity) => {
+  window.android && window.android.onClickCommentAction(JSON.stringify(comment), event.clientX, event.clientY);
+};
+
+/**
  * 新建评论
  * @param event
  */
@@ -131,12 +138,16 @@ const onClickNewComment = (event: Event) => {
           <div class="user-name" @click.stop="onClickUser(comment)">
             {{ (comment as CommentTreeEntity).userName }}
           </div>
-          <div class="time">{{ comment.time }}</div>
+          <div class="time">{{ comment.time }}<span class="floor">{{ comment.floor }}</span></div>
+          <div style="flex: 1"/>
+          <img class="action" v-if="comment.likeType"
+               smileid src="../assets/image/ic_more.svg"
+               alt="action"
+               @click.stop="onClickCommentAction($event,comment)">
         </div>
         <div class="topic-html" v-html="comment.replyContent" @click.stop="onClickReplyComment($event, comment, null)"/>
 
         <emoji-view :emojis="comment.emojis" :comment="comment" style="margin-top: 16px"/>
-        <div style="height: 12px"/>
 
         <!-- 嵌套条目 -->
         <div class="comment-item" v-for="subComment in (comment.topicSubReply || [])" :key="subComment.id">
@@ -145,10 +156,18 @@ const onClickNewComment = (event: Event) => {
                       @click.stop="onClickUser(subComment)"/>
           <div class="comment-content" @click.stop="onClickReplyComment($event, comment, subComment)">
             <div class="info">
-              <div class="user-name" @click.stop="onClickUser(subComment)">{{ subComment.userName }}</div>
-              <div class="time">{{ subComment.time }}</div>
+              <div class="user-name sub" @click.stop="onClickUser(subComment)">
+                {{ (subComment as CommentTreeEntity).userName }}
+              </div>
+              <div class="time">{{ subComment.time }}<span class="floor">{{ subComment.floor }}</span></div>
+              <div style="flex: 1"/>
+              <img class="action" v-if="subComment.likeType"
+                   smileid src="../assets/image/ic_more.svg"
+                   alt="action"
+                   @click.stop="onClickCommentAction($event,subComment)">
             </div>
             <div class="topic-html" v-html="subComment.replyContent"/>
+            <emoji-view :emojis="subComment.emojis" :comment="comment" style="margin-top: 16px"/>
           </div>
         </div>
       </div>
@@ -213,8 +232,16 @@ const onClickNewComment = (event: Event) => {
         .user-name {
           font-size: 14px;
           color: var(--on-surface-color);
-          opacity: 0.5;
+          opacity: 0.75;
           padding: 4px 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 50%;
+
+          &.sub {
+            max-width: 35%;
+          }
         }
 
         .time {
@@ -222,6 +249,22 @@ const onClickNewComment = (event: Event) => {
           color: var(--on-surface-variant-color);
           opacity: 0.5;
           margin-left: 12px;
+        }
+
+        .floor {
+          padding: 0 6px;
+        }
+
+        .action {
+          height: 24px;
+          width: 24px;
+          flex-shrink: 0;
+          line-height: 24px;
+          margin: 0 !important;
+          box-sizing: border-box;
+          padding: 1px 0 !important;
+          border: none;
+          filter: invert(0.5);
         }
       }
 
@@ -243,5 +286,6 @@ const onClickNewComment = (event: Event) => {
       }
     }
   }
+
 }
 </style>

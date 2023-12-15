@@ -11,6 +11,7 @@ import androidx.core.text.parseAsHtml
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.firstGroupValue
 import com.xiaoyv.common.kts.groupValue
@@ -188,6 +189,25 @@ fun <T : Element> T.requireNoError() {
     if (errorMsg.isNotBlank()) {
         throw IllegalArgumentException(errorMsg.ifBlank { "Bangumi娘：报告数据出错啦" })
     }
+}
+
+/**
+ * 解析添加贴贴的参数信息
+ *
+ * ```
+ *   <a href="javascript:void(0);" class="icon like_dropdown" data-like-type="8" data-like-main-id="391190"
+ *      data-like-related-id="2557602" data-like-tpl-id="likes_reaction_menu">
+ *     <span class="ico ico_like">&nbsp;</span>
+ *     <span class="title">贴贴</span>
+ *   </a>
+ * ```
+ */
+fun Elements.parserLikeParam(): CommentTreeEntity.EmojiParam {
+    val element = select("a[data-like-type]")
+    val likeType = element.attr("data-like-type")
+    val likeMainId = element.attr("data-like-main-id")
+    val likeCommentId = element.attr("data-like-related-id")
+    return CommentTreeEntity.EmojiParam(likeType, likeMainId, likeCommentId)
 }
 
 /**

@@ -1,26 +1,35 @@
 package com.xiaoyv.common.widget.web
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
 import android.webkit.JavascriptInterface
+import android.widget.PopupWindow
 import androidx.annotation.Keep
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity
+import com.xiaoyv.common.api.parser.entity.LikeEntity.Companion.normal
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.databinding.ViewEmojiBinding
 import com.xiaoyv.common.helper.CommentPaginationHelper
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.GoogleStyle
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.showOptionsDialog
+import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.showToastCompat
@@ -121,38 +130,6 @@ abstract class WebBase(open val webView: UiWebView) {
     }
 
     /**
-     * 注意：Bgm 站有一个BUG，短时间内重复发送和取消贴贴会失效。
-     */
-    @Keep
-    @JavascriptInterface
-    fun onToggleSmile(commentId: String, gh: String, emojiInfo: String) {
-        val activity = ActivityUtils.getTopActivity() as? BaseViewModelActivity<*, *> ?: return
-        val likeAction = emojiInfo.fromJson<LikeEntity.LikeAction>() ?: return
-
-        activity.launchUI(
-            state = activity.viewModel.loadingDialogState(cancelable = false),
-            error = {
-                it.printStackTrace()
-                showToastCompat(it.errorMsg)
-            },
-            block = {
-                val response = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryLikeToggle(
-                        type = likeAction.type.toString(),
-                        mainId = likeAction.mainId.toString(),
-                        likeValue = likeAction.value.toString(),
-                        commendId = commentId,
-                        gh = gh
-                    ).apply { require(isOk) }.data?.toNormal().orEmpty()
-                }
-
-                // 刷新
-                callJs("window.refreshCommentEmoji(${response.toJson()})")
-            }
-        )
-    }
-
-    /**
      * 更改评论排序
      */
     @Keep
@@ -171,6 +148,105 @@ abstract class WebBase(open val webView: UiWebView) {
                 }
             )
         }
+    }
+
+
+    /**
+     * 快捷开关贴贴
+     *
+     * 注意：Bgm 站有一个BUG，短时间内重复发送和取消贴贴会失效。
+     *
+     * @param commentId 当前评论ID
+     * @param emojiInfo 当前贴贴数据
+     */
+    @Keep
+    @JavascriptInterface
+    fun onToggleSmile(commentId: String, gh: String, emojiInfo: String) {
+        val activity = ActivityUtils.getTopActivity() as? BaseViewModelActivity<*, *> ?: return
+        val likeAction = emojiInfo.fromJson<LikeEntity.LikeAction>() ?: return
+
+        activity.launchUI(
+            state = activity.viewModel.loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+                showToastCompat(it.errorMsg)
+            },
+            block = {
+                val map = withContext(Dispatchers.IO) {
+                    BgmApiManager.bgmWebApi.toggleLike(
+                        type = likeAction.type.toString(),
+                        mainId = likeAction.mainId.toString(),
+                        likeValue = likeAction.value.toString(),
+                        commendId = commentId,
+                        gh = gh
+                    ).normal(commentId)
+                }
+
+                // 刷新
+                refreshEmoji(map)
+            }
+        )
+    }
+
+    /**
+     * 点击评论 Action 按钮
+     *
+     * @param comment 当前评论数据
+     */
+    @Keep
+    @JavascriptInterface
+    @Suppress("UNUSED_PARAMETER")
+    fun onClickCommentAction(comment: String, touchX: Int, touchY: Int) {
+        val entity = comment.fromJson<CommentTreeEntity>() ?: return
+        val activity = ActivityUtils.getTopActivity() as? BaseViewModelActivity<*, *> ?: return
+        activity.runOnUiThread {
+            val decorView = activity.window.decorView
+            val binding = ViewEmojiBinding.inflate(activity.layoutInflater)
+            val offsetX = ScreenUtils.getScreenWidth() / 3
+            val window = PopupWindow(activity).apply {
+                contentView = binding.root
+                isFocusable = true
+                animationStyle = GoogleStyle.Animation_AppCompat_DropDownUp
+                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
+
+            // Show
+            window.showAtLocation(decorView, Gravity.NO_GRAVITY, offsetX, touchY.dpi)
+
+            // 映射
+            val emojiMap = mapOf(
+                binding.emoji0 to "0",
+                binding.emoji79 to "79",
+                binding.emoji54 to "54",
+                binding.emoji140 to "140",
+                binding.emoji62 to "62",
+                binding.emoji122 to "122",
+                binding.emoji104 to "104",
+                binding.emoji80 to "80",
+                binding.emoji141 to "141",
+                binding.emoji88 to "88",
+                binding.emoji85 to "85",
+                binding.emoji90 to "90"
+            )
+
+            // 发送贴贴
+            val result = { action: Map<String, List<LikeEntity.LikeAction>> ->
+                activity.launchUI { refreshEmoji(action) }
+                Unit
+            }
+
+            // 设置点击事件
+            emojiMap.forEach { (t, u) ->
+                t.setOnClickListener(WebEmojiListener(activity, window, entity, u, result))
+            }
+        }
+    }
+
+    /**
+     * 刷新贴贴数据
+     */
+    private suspend fun refreshEmoji(response: Map<String, List<LikeEntity.LikeAction>>) {
+        callJs("window.refreshCommentEmoji(${response.toJson()})")
     }
 
     suspend fun callJs(js: String): String {

@@ -1,0 +1,144 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurfaceVariant"
+    android:columnCount="4"
+    android:rowCount="3">
+
+    <!-- 第一行 -->
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_0"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_44" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_79"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_40" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_54"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_15" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_140"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_101" />
+
+    <!-- 第二行 -->
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_62"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_23" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_122"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_83" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_104"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_65" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_80"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_41" />
+
+    <!-- 第三行 -->
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_141"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_102" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_88"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_49" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_85"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_46" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/emoji_90"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/emoji_padding_size"
+        app:srcCompat="@drawable/tv_51" />
+</GridLayout>

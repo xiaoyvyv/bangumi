@@ -11,6 +11,7 @@ import com.xiaoyv.blueprint.kts.toJson
 
 
 typealias GoogleAttr = com.google.android.material.R.attr
+typealias GoogleStyle = com.google.android.material.R.style
 typealias CommonDrawable = com.xiaoyv.common.R.drawable
 typealias CommonString = com.xiaoyv.common.R.string
 typealias CommonColor = com.xiaoyv.common.R.color

@@ -74,7 +74,7 @@ const toggleSmile = (item: LikeActionEntity) => {
     flex-flow: row nowrap;
     align-items: center;
     padding: 4px 12px;
-    margin: 6px 0;
+    margin: 6px 12px 6px 0;
     border-radius: 100px;
     background: var(--surface-container-color);
 

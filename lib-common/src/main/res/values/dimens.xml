@@ -10,4 +10,6 @@
     <dimen name="avatar_size_small">40dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="emoji_size">44dp</dimen>
+    <dimen name="emoji_padding_size">10dp</dimen>
 </resources>

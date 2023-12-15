@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.response.UploadResultEntity
 import com.xiaoyv.common.api.response.base.BgmActionResponse
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
+import com.xiaoyv.common.config.annotation.LikeType
 import com.xiaoyv.common.config.annotation.MagiType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
@@ -569,10 +570,15 @@ interface BgmWebApi {
 
     /**
      * 贴贴或取消
+     *
+     * @param type 类型
+     * @param mainId 主题ID
+     * @param commendId 贴贴的目标评论ID
+     * @param likeValue Like 的值
      */
     @GET("like")
-    suspend fun queryLikeToggle(
-        @Query("type") type: String,
+    suspend fun toggleLike(
+        @Query("type") @LikeType type: String,
         @Query("main_id") mainId: String,
         @Query("id") commendId: String,
         @Query("value") likeValue: String,

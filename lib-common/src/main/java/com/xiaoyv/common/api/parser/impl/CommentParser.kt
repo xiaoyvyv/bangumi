@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parserFormHash
+import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.replaceSmiles
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -50,6 +51,7 @@ private fun Elements.mapCommentItems(gh: String): List<CommentTreeEntity> {
                 .mapCommentItems(gh)
         }
         entity.id = item.attr("id").parseCount().toString()
+        entity.emojiParam = select(".like_dropdown").parserLikeParam()
         item.select("a.avatar").apply {
             entity.userId = hrefId()
             entity.userAvatar = select("span").attr("style")

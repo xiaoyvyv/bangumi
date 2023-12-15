@@ -19,6 +19,7 @@ class PersonCharacterViewModel : BaseListViewModel<CharacterEntity>() {
     internal var isVirtual: Boolean = false
 
     override suspend fun onRequestListImpl(): List<CharacterEntity> {
-        return BgmApiManager.bgmWebApi.queryPersonWorkVoices(personId).parserPersonVoices()
+        return BgmApiManager.bgmWebApi.queryPersonWorkVoices(personId)
+            .parserPersonVoices(personId, isVirtual)
     }
 }

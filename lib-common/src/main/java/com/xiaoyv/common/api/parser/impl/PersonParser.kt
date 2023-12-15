@@ -1,10 +1,10 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.CharacterEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
@@ -135,7 +135,7 @@ fun Document.parserPerson(personId: String, isVirtual: Boolean): PersonEntity {
             }
 
             key.contains("最近演出角色") -> {
-                entity.recentCharacters = value.parserPersonVoices()
+                entity.recentCharacters = value.parserPersonVoices(personId, false)
             }
 
             key.contains("最近参与") -> {
@@ -272,7 +272,7 @@ fun Element.parserPersonOpus(): List<PersonEntity.RecentlyOpus> {
 /**
  * 解析角色的条目数据
  */
-fun Element.parserPersonVoices(): List<CharacterEntity> {
+fun Element.parserPersonVoices(personId: String, isVirtual: Boolean): List<CharacterEntity> {
     requireNoError()
 
     return select(".browserList > li").map { item ->

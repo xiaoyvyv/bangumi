@@ -1,6 +1,7 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.LikeEntity
+import com.xiaoyv.common.api.parser.entity.LikeEntity.Companion.normal
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
@@ -16,11 +17,11 @@ import org.jsoup.nodes.Document
  * @author why
  * @since 12/2/23
  */
-fun Document.parserTopic(blogId: String): TopicDetailEntity {
+fun Document.parserTopic(topicId: String): TopicDetailEntity {
     requireNoError()
 
     return select("#news_list > .item, .entry_list > .item").let {
-        val entity = TopicDetailEntity(id = blogId)
+        val entity = TopicDetailEntity(id = topicId)
 
         select(".postTopic .re_info small").outerHtml().let {
             val groupValues = "eraseEntry\\(\\s*(.*?)\\s*,\\s*'(.*?)'\\s*\\)".toRegex()
@@ -75,12 +76,11 @@ fun Document.parserTopic(blogId: String): TopicDetailEntity {
             entity.content = select("#columnCrtB .detail").html().replaceSmiles()
         }
 
+        // 全部的点赞列表
         val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);".toRegex()
             .find(html())?.groupValues?.getOrNull(1).orEmpty()
-        val likeEntity = likeJson.fromJson<LikeEntity>() ?: LikeEntity(0)
-        val likeListMap = likeEntity.toNormal()
-        entity.commentEmojiMap = likeListMap
 
+        entity.commentEmojiMap = likeJson.fromJson<LikeEntity>().normal()
         entity.title = select("#pageHeader h1")
             .firstOrNull()?.lastChild()?.toString()
             .orEmpty().trim()
