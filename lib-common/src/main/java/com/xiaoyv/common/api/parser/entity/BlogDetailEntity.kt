@@ -25,5 +25,4 @@ data class BlogDetailEntity(
     @SerializedName("tags") var tags: List<MediaDetailEntity.MediaTag> = emptyList(),
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyForm") var replyForm: CommentFormEntity = CommentFormEntity(),
-    @SerializedName("deleteHash") var deleteHash: String = ""
 ) : Parcelable

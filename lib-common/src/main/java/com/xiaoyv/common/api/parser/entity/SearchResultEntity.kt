@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
@@ -24,5 +25,7 @@ data class SearchResultEntity(
     var infoTip: BrowserEntity.InfoTip = BrowserEntity.InfoTip(),
     var rank: String = "",
     var coverImage: String = "",
-    var searchTip: String = ""
+    @MediaType
+    var searchMediaType: String = MediaType.TYPE_UNKNOWN,
+    var searchTip: String = "",
 ) : IdEntity, Parcelable

@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.databinding.ViewHomeCardBinding
 import com.xiaoyv.common.databinding.ViewHomeCardItemBinding
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.setOnDebouncedItemClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingAdapter
@@ -23,7 +24,7 @@ import com.xiaoyv.widget.kts.loadImage
  * @since 11/24/23
  */
 class HomeCardView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null,
 ) : ConstraintLayout(context, attrs) {
     private val binding = ViewHomeCardBinding.inflate(LayoutInflater.from(context), this)
     private val itemAdapter by lazy { ItemAdapter() }
@@ -66,6 +67,10 @@ class HomeCardView @JvmOverloads constructor(
         if (images.size > 1) {
             itemAdapter.submitList(images.subList(1, images.size))
         }
+    }
+
+    fun setItemTouchedListener(touchedListener: RecyclerItemTouchedListener) {
+        binding.rvSmall.addOnItemTouchListener(touchedListener)
     }
 
     class ItemAdapter :

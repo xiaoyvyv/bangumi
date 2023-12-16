@@ -18,12 +18,15 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 11/24/23
  */
 class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterViewModel>() {
+    override val isOnlyOnePage: Boolean
+        get() = true
+
+    override val loadingBias: Float
+        get() = 0.3f
+
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.mediaId = arguments.getString(NavKey.KEY_STRING).orEmpty()
     }
-
-    override val isOnlyOnePage: Boolean
-        get() = true
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<MediaChapterEntity, *> {
         return MediaChapterAdapter()

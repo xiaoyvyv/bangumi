@@ -1,13 +1,15 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.LoginFormEntity
 import com.xiaoyv.common.api.parser.entity.LoginResultEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.response.UserEntity
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * Class: [LoginParser]
@@ -54,7 +56,7 @@ object LoginParser {
     /**
      * 解析登录结果
      */
-    fun Document.parserLoginResult(): LoginResultEntity {
+    fun Element.parserLoginResult(): LoginResultEntity {
         val welcome = select("#main #header")
         if (welcome.isNotEmpty()) {
             return LoginResultEntity(
@@ -74,12 +76,13 @@ object LoginParser {
     /**
      * 解析登录成功后的用户信息
      */
-    private fun Document.parseUserInfo(): UserEntity {
+    private fun Element.parseUserInfo(): UserEntity {
         val userId = select(".idBadgerNeue a.avatar").hrefId()
         val avatarUrl = select(".idBadgerNeue a.avatar span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         val userName = select("#header a").text()
         val online = select("#header small").text()
+        val formHash = parserFormHash()
 
         return UserEntity(
             avatar = UserEntity.Avatar(avatarUrl, avatarUrl, avatarUrl),
@@ -87,6 +90,7 @@ object LoginParser {
             username = userName,
             id = userId,
             isEmpty = false,
+            formHash = formHash,
             online = online
         )
     }

@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.api.request.EmojiParam
 import kotlinx.parcelize.Parcelize
 
 
@@ -28,29 +29,26 @@ data class TopicDetailEntity(
     @SerializedName("related") var related: SampleRelatedEntity = SampleRelatedEntity(),
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyForm") var replyForm: CommentFormEntity = CommentFormEntity(),
-    @SerializedName("deleteHash") var deleteHash: String = "",
-    @SerializedName("topicEmojis") var topicEmojis: List<LikeEmoji> = emptyList(),
-    @SerializedName("commentEmojis") var commentEmojiMap: Map<String, List<LikeEntity.LikeAction>> = emptyMap(),
+    @SerializedName("gh") var gh: String = "",
+    @SerializedName("emojiParam") var emojiParam: EmojiParam = EmojiParam(),
+    @SerializedName("emojis") var emojis: List<LikeEntity.LikeAction> = emptyList(),
 ) : Parcelable {
 
     /**
      * 填充 like 信息
      */
-    fun fillLikeInfo() {
-        comments.onEach { main ->
-            main.emojis = commentEmojiMap[main.id].orEmpty()
-            main.topicSubReply.onEach { sub ->
-                sub.emojis = commentEmojiMap[sub.id].orEmpty()
-            }
+    fun fillLikeInfo(totalLikeEmojiMap: Map<String, List<LikeEntity.LikeAction>>) {
+        // 填充主题的贴贴
+        if (emojiParam.enable) {
+            emojis = totalLikeEmojiMap[emojiParam.likeCommentId].orEmpty()
         }
 
-        commentEmojiMap = emptyMap()
+        // 填充评论的贴贴
+        comments.onEach { main ->
+            main.emojis = totalLikeEmojiMap[main.id].orEmpty()
+            main.topicSubReply.onEach { sub ->
+                sub.emojis = totalLikeEmojiMap[sub.id].orEmpty()
+            }
+        }
     }
-
-    @Keep
-    @Parcelize
-    data class LikeEmoji(
-        @SerializedName("likeValue") var likeValue: String = "",
-        @SerializedName("emojiUrl") var emojiUrl: String = "",
-    ) : Parcelable
 }

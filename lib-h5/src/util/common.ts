@@ -6,6 +6,7 @@ import {
     Post
 } from "./interface/CommentReplyEntity.ts";
 import {LikeActionEntity} from "./interface/LikeActionEntity.ts";
+import {EmojiParam} from "./interface/EmojiParam.ts";
 
 /**
  * 针对特定的节点进行交互优化
@@ -110,13 +111,17 @@ const scrollIntoView = (event: Event, container: Element | undefined | null, isM
             behavior: 'smooth',
         });
 
-        const animationend = () => {
-            element.classList.remove("blinking");
-            element.removeEventListener('animationend', animationend);
-        }
 
-        element.classList.add("blinking");
-        element.addEventListener('animationend', animationend);
+        const commentItem = findParentBySelector(element, ".comment-item", 5);
+        if (commentItem != null) {
+            const animationend = () => {
+                commentItem.classList.remove("blinking");
+                commentItem.removeEventListener('animationend', animationend);
+            };
+
+            commentItem.classList.add("blinking");
+            commentItem.addEventListener('animationend', animationend);
+        }
     }
 };
 
@@ -162,16 +167,18 @@ async function delay(ms: number): Promise<void> {
 /**
  * 初始化评论发布填充逻辑
  *
- * @param param
+ * @param handEmojis
+ * @param comments
+ * @param onChangeSort
  */
-const initComment = (param: () => CommentTreeEntity[]) => {
+const initComment = (handEmojis: ((commentId: string, likeActionInfo: LikeActionEntity[]) => void) | null, comments: () => CommentTreeEntity[], onChangeSort: (sort: string) => void) => {
     const refreshMainComment = (mainComment: CommentReplyMainContent) => {
         for (const postId in mainComment) {
             const post = mainComment[postId];
             let hasTargetMainComment = false;
 
             // 判断是否存在评论
-            param().forEach((item) => {
+            comments().forEach((item) => {
                 if (item.id == postId) hasTargetMainComment = true
             });
 
@@ -184,7 +191,7 @@ const initComment = (param: () => CommentTreeEntity[]) => {
                 const newMainComment = replyCommentToTreeComment(post, mainCommentId, mainCommentUid, false);
 
                 // 添加到头部
-                param().unshift(newMainComment);
+                comments().unshift(newMainComment);
             }
         }
     }
@@ -194,7 +201,7 @@ const initComment = (param: () => CommentTreeEntity[]) => {
             const posts = subComment[postId];
 
             let targetMainComment: CommentTreeEntity | null = null;
-            param().forEach((item) => {
+            comments().forEach((item) => {
                 if (item.id == postId) {
                     targetMainComment = item;
                 }
@@ -219,7 +226,7 @@ const initComment = (param: () => CommentTreeEntity[]) => {
     }
 
     // 添加评论
-    window.addComment = (comment: CommentReplyEntity) => {
+    const addComment = (comment: CommentReplyEntity) => {
         // 主评论
         const main = comment.posts?.main;
         if (main != undefined) {
@@ -235,12 +242,15 @@ const initComment = (param: () => CommentTreeEntity[]) => {
 
     // 刷新贴贴
     // 数据结构：Map<CommentId: List<LikeAction>> 结构
-    window.refreshCommentEmoji = (likeData: any) => {
+    const refreshEmoji = (likeData: any) => {
         console.log("刷新贴贴：" + JSON.stringify(likeData, null, 2));
         for (const commendId in likeData) {
             const likeActionInfo = likeData[commendId] as LikeActionEntity[];
 
-            param().forEach(comment => {
+            // 外部处理
+            handEmojis && handEmojis(commendId, likeActionInfo);
+
+            comments().forEach(comment => {
                 // 主评论查询到则刷新
                 if (comment.id == commendId) {
                     comment.emojis = likeActionInfo || [];
@@ -255,6 +265,12 @@ const initComment = (param: () => CommentTreeEntity[]) => {
             });
         }
     }
+
+    window.comment = {
+        addComment: addComment,
+        refreshEmoji: refreshEmoji,
+        changeSort: onChangeSort,
+    } as Comment
 }
 
 /**
@@ -297,6 +313,8 @@ const replyCommentToTreeComment = (
     target.replyContent = reply.pst_content;
     target.replyJs = `subReply('${reply.model}', ${reply.pst_mid}, ${mainCommentId}, ${subReplyId}, ${subReplyUid}, ${mainCommentUid}, ${subType})`;
     target.topicSubReply = [];
+    target.emojiParam = {enable: false} as EmojiParam;
+    target.emojis = [];
     // target.floor: string;
     // target.replyQuote: string;
     // target.topicSubReply: CommentTreeEntity[];

@@ -11,7 +11,7 @@ import androidx.core.text.parseAsHtml
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
+import com.xiaoyv.common.api.request.EmojiParam
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.firstGroupValue
 import com.xiaoyv.common.kts.groupValue
@@ -202,12 +202,13 @@ fun <T : Element> T.requireNoError() {
  *   </a>
  * ```
  */
-fun Elements.parserLikeParam(): CommentTreeEntity.EmojiParam {
+fun Elements.parserLikeParam(): EmojiParam {
     val element = select("a[data-like-type]")
+    val empty = element.isEmpty()
     val likeType = element.attr("data-like-type")
     val likeMainId = element.attr("data-like-main-id")
     val likeCommentId = element.attr("data-like-related-id")
-    return CommentTreeEntity.EmojiParam(likeType, likeMainId, likeCommentId)
+    return EmojiParam(empty.not(), likeType, likeMainId, likeCommentId)
 }
 
 /**

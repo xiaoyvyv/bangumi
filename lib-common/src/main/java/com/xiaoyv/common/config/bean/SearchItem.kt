@@ -17,5 +17,6 @@ data class SearchItem(
     @BgmPathType
     var pathType: String,
     var keyword: String = "",
-    var timestamp: Long = System.currentTimeMillis()
+    var timestamp: Long = System.currentTimeMillis(),
+    var forSelectedMedia: Boolean = false,
 ) : IdEntity, Parcelable

@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.config.bean.HomeIndexFeature
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 
 /**
  * Class: [HomeAdapter]
@@ -19,15 +20,19 @@ import com.xiaoyv.common.config.bean.HomeIndexFeature
  * @since 11/25/23
  */
 class HomeAdapter(
+    touchedListener: RecyclerItemTouchedListener,
     onClickMedia: (BgmMediaEntity) -> Unit,
-    onClickFeature: (HomeIndexFeature) -> Unit
+    onClickFeature: (HomeIndexFeature) -> Unit,
 ) : BaseMultiItemAdapter<Any>() {
     private val imageCardViewPool by lazy { RecycledViewPool() }
 
     init {
         this.addItemType(TYPE_TOP_BANNER, HomeBannerBinder(onClickFeature))
-            .addItemType(TYPE_CALENDAR_PREVIEW, HomeCalendarBinder(onClickMedia))
-            .addItemType(TYPE_MEDIA_CARD, HomeCardBinder(imageCardViewPool, onClickMedia))
+            .addItemType(TYPE_CALENDAR_PREVIEW, HomeCalendarBinder(touchedListener, onClickMedia))
+            .addItemType(
+                TYPE_MEDIA_CARD,
+                HomeCardBinder(imageCardViewPool, touchedListener, onClickMedia)
+            )
             .onItemViewType(OnItemViewTypeListener { position, list ->
                 return@OnItemViewTypeListener when (list[position]) {
                     is HomeIndexCardEntity -> TYPE_MEDIA_CARD

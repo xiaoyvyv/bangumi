@@ -14,8 +14,10 @@ import com.xiaoyv.bangumi.databinding.ActivitySearchDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.SearchCatType
+import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
@@ -109,10 +111,28 @@ class SearchDetailActivity :
 
         contentItemAdapter.setOnDebouncedChildClickListener(R.id.item_search) {
             useNotNull(viewModel.currentSearchItem.value) {
-                if (pathType == BgmPathType.TYPE_SEARCH_SUBJECT) {
-                    RouteHelper.jumpMediaDetail(it.id)
-                } else {
-                    RouteHelper.jumpPerson(it.id, id == SearchCatType.TYPE_CHARACTER)
+                // 选取模式
+                if (viewModel.forSelectedMedia) {
+                    setResult(
+                        RESULT_OK,
+                        Intent().putExtra(
+                            NavKey.KEY_PARCELABLE, PostAttach(
+                                id = it.id,
+                                title = it.title,
+                                image = it.coverImage,
+                                type = GlobalConfig.mediaTypeName(it.searchMediaType)
+                            )
+                        )
+                    )
+                    finish()
+                }
+                // 正常搜索
+                else {
+                    if (pathType == BgmPathType.TYPE_SEARCH_SUBJECT) {
+                        RouteHelper.jumpMediaDetail(it.id)
+                    } else {
+                        RouteHelper.jumpPerson(it.id, id == SearchCatType.TYPE_CHARACTER)
+                    }
                 }
             }
         }

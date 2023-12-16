@@ -2,20 +2,21 @@ package com.xiaoyv.bangumi.ui.media.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import androidx.core.view.doOnPreDraw
-import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
-import com.blankj.utilcode.util.BarUtils
 import com.google.android.material.tabs.TabLayoutMediator
+import com.leinardi.android.speeddial.SpeedDialActionItem
+import com.leinardi.android.speeddial.SpeedDialView
 import com.xiaoyv.bangumi.databinding.ActivityMediaDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -23,7 +24,8 @@ import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
-import com.xiaoyv.widget.kts.getAttrDimensionPixelSize
+import com.xiaoyv.widget.kts.getAttrColor
+import kotlinx.coroutines.delay
 
 /**
  * Class: [MediaDetailActivity]
@@ -55,6 +57,28 @@ class MediaDetailActivity :
         binding.toolbar.title = viewModel.mediaName
 
         FixHelper.fixCool(binding.ivBanner, binding.toolbarLayout, 204.dpi)
+
+        binding.speedDial.addActionItem(
+            SpeedDialActionItem.Builder(CommonId.fab_new_blog, CommonDrawable.ic_post_add)
+                .setFabBackgroundColor(getAttrColor(GoogleAttr.colorPrimary))
+                .setFabImageTintColor(getAttrColor(GoogleAttr.colorOnPrimary))
+                .setLabel("发布日志影评")
+                .setLabelBackgroundColor(getAttrColor(GoogleAttr.colorPrimarySurface))
+                .setLabelColor(getAttrColor(GoogleAttr.colorOnPrimary))
+                .setLabelClickable(false)
+                .create()
+        )
+
+        binding.speedDial.addActionItem(
+            SpeedDialActionItem.Builder(CommonId.fab_new_topic, CommonDrawable.ic_add_comment)
+                .setFabBackgroundColor(getAttrColor(GoogleAttr.colorPrimary))
+                .setFabImageTintColor(getAttrColor(GoogleAttr.colorOnPrimary))
+                .setLabel("发布话题讨论")
+                .setLabelBackgroundColor(getAttrColor(GoogleAttr.colorPrimarySurface))
+                .setLabelColor(getAttrColor(GoogleAttr.colorOnPrimary))
+                .setLabelClickable(false)
+                .create()
+        )
     }
 
 
@@ -68,7 +92,34 @@ class MediaDetailActivity :
     }
 
     override fun initListener() {
+        binding.speedDial.setOnActionSelectedListener(SpeedDialView.OnActionSelectedListener { actionItem ->
+            binding.speedDial.close()
 
+            if (!UserHelper.isLogin) {
+                RouteHelper.jumpLogin()
+                return@OnActionSelectedListener false
+            }
+
+            // 构建简单的关联模型
+            val detailEntity =
+                viewModel.onMediaDetailLiveData.value ?: return@OnActionSelectedListener true
+            val postAttach = PostAttach(
+                image = detailEntity.cover,
+                title = detailEntity.titleCn.ifBlank { detailEntity.titleNative },
+                id = detailEntity.id,
+                type = detailEntity.mediaType
+            )
+
+            // 等待动画关闭后再跳转，避免掉帧
+            launchUI {
+                delay(200)
+                when (actionItem.id) {
+                    CommonId.fab_new_blog -> RouteHelper.jumpPostBlog(postAttach)
+                    CommonId.fab_new_topic -> RouteHelper.jumpPostTopic(postAttach.id)
+                }
+            }
+            true
+        })
     }
 
     override fun LifecycleOwner.initViewObserver() {
@@ -109,21 +160,6 @@ class MediaDetailActivity :
 
     override fun onCreateLoadingDialog(): UiDialog {
         return AnimeLoadingDialog(this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (viewModel.onMediaDetailLiveData.value != null) menu.add("写点评")
-            .setIcon(CommonDrawable.ic_review)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            .setOnMenuItemClickListener {
-                if (UserHelper.isLogin) {
-                    RouteHelper.jumpPostBlog(viewModel.onMediaDetailLiveData.value)
-                } else {
-                    RouteHelper.jumpLogin()
-                }
-                true
-            }
-        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

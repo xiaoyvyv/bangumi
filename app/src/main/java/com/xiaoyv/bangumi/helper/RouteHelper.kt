@@ -1,7 +1,10 @@
 package com.xiaoyv.bangumi.helper
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.os.bundleOf
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.Utils
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
@@ -33,12 +36,12 @@ import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
-import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.debugLog
@@ -139,8 +142,11 @@ object RouteHelper {
         return false
     }
 
-    fun jumpCalendar() {
-        ActivityUtils.startActivity(CalendarActivity::class.java)
+    fun jumpCalendar(isToday: Boolean) {
+        ActivityUtils.startActivity(
+            bundleOf(NavKey.KEY_BOOLEAN to isToday),
+            CalendarActivity::class.java
+        )
     }
 
     fun jumpLogin() {
@@ -184,9 +190,23 @@ object RouteHelper {
         )
     }
 
-    fun jumpPostBlog(mediaDetailEntity: MediaDetailEntity? = null) {
+    /**
+     * 跳转到发布页
+     */
+    fun jumpPostBlog(relateMedia: PostAttach? = null) {
         ActivityUtils.startActivity(
-            bundleOf(NavKey.KEY_PARCELABLE to mediaDetailEntity),
+            bundleOf(NavKey.KEY_PARCELABLE to relateMedia),
+            PostBlogActivity::class.java
+        )
+    }
+
+    fun jumpEditBlog(blogId: String) {
+        ActivityUtils.startActivity(
+            bundleOf(
+                // 编辑模式
+                NavKey.KEY_BOOLEAN to true,
+                NavKey.KEY_STRING to blogId
+            ),
             PostBlogActivity::class.java
         )
     }
@@ -252,6 +272,14 @@ object RouteHelper {
         GroupTopicsActivity::class.open(bundleOf(NavKey.KEY_STRING to groupId))
     }
 
+    /**
+     * 跳转到我的话题
+     */
+    fun jumpMyTopics(sendOrReply: Boolean) {
+        val fakeId = if (sendOrReply) "my_topic" else "my_reply"
+        GroupTopicsActivity::class.open(bundleOf(NavKey.KEY_STRING to fakeId))
+    }
+
     fun jumpNotify() {
         ActivityUtils.startActivity(NotifyActivity::class.java)
     }
@@ -274,8 +302,15 @@ object RouteHelper {
         ActivityUtils.startActivity(SettingActivity::class.java)
     }
 
-    fun jumpSearch() {
-        ActivityUtils.startActivity(SearchActivity::class.java)
+    /**
+     * @param forSelectMedia 是否为选取媒体条目
+     */
+    fun jumpSearch(forSelectMedia: Boolean = false) {
+        ActivityUtils.startActivity(
+            bundleOf(
+                NavKey.KEY_BOOLEAN to forSelectMedia
+            ), SearchActivity::class.java
+        )
     }
 
     fun jumpSearchDetail(searchItem: SearchItem) {
@@ -284,6 +319,15 @@ object RouteHelper {
         SearchDetailActivity::class.open(
             bundleOf(NavKey.KEY_PARCELABLE to searchItem)
         )
+    }
+
+    fun jumpSearchDetailForSelectMedia(
+        launcher: ActivityResultLauncher<Intent>,
+        searchItem: SearchItem,
+    ) {
+        launcher.launch(Intent(Utils.getApp(), SearchDetailActivity::class.java).apply {
+            putExtra(NavKey.KEY_PARCELABLE, searchItem)
+        })
     }
 
     fun jumpSummaryDetail(vararg htmlSummary: String) {
@@ -321,4 +365,5 @@ object RouteHelper {
     fun jumpReport(userId: String, @ReportType type: String) {
         AnimeReportDialog.show(userId, type)
     }
+
 }

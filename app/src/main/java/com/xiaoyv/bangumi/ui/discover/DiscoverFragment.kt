@@ -34,6 +34,9 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
         }
     }
 
+    internal val vp
+        get() = binding.vpContent
+
     override fun initView() {
 
     }

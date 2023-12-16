@@ -133,7 +133,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     override fun LifecycleOwner.initViewObserver() {
         binding.stateView.initObserver(
             lifecycleOwner = this,
-            loadingBias = 0.2f,
+            loadingBias = 0.3f,
             loadingViewState = viewModel.loadingViewState
         )
 

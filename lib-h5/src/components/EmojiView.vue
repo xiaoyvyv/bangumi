@@ -19,24 +19,16 @@ const {emojis, comment} = toRefs(props);
 /**
  * 构建表情
  *
- * @param emoji
+ * @param likeValue 和 bgm tv 表情编号差值 39，0 除外
  */
-const buildEmoji = (emoji: string) => {
-  const map: { [key: string]: string; } = {
-    "0": "https://bgm.tv/img/smiles/tv/44.gif",
-    "79": "https://bgm.tv/img/smiles/tv/40.gif",
-    "54": "https://bgm.tv/img/smiles/tv/15.gif",
-    "140": "https://bgm.tv/img/smiles/tv/101.gif",
-    "62": "https://bgm.tv/img/smiles/tv/23.gif",
-    "122": "https://bgm.tv/img/smiles/tv/83.gif",
-    "104": "https://bgm.tv/img/smiles/tv/65.gif",
-    "80": "https://bgm.tv/img/smiles/tv/41.gif",
-    "141": "https://bgm.tv/img/smiles/tv/102.gif",
-    "88": "https://bgm.tv/img/smiles/tv/49.gif",
-    "85": "https://bgm.tv/img/smiles/tv/46.gif",
-    "90": "https://bgm.tv/img/smiles/tv/51.gif"
+const buildEmoji = (likeValue: string) => {
+  try {
+    const value = parseInt(likeValue);
+    if (value === 0) return "https://bgm.tv/img/smiles/tv/44.gif";
+    return `https://bgm.tv/img/smiles/tv/${(value - 39)}.gif`;
+  } catch (e) {
+    return ""
   }
-  return map[emoji.toString()];
 }
 
 /**

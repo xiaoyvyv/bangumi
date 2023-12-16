@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeCalendarBinding
 import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.card.HomeCardView
@@ -16,8 +17,10 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 /**
  * 今日放送 | 明日放送模块
  */
-class HomeCalendarBinder(private val onItemClick: (BgmMediaEntity) -> Unit) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<Any, BaseQuickBindingHolder<FragmentHomeCalendarBinding>> {
+class HomeCalendarBinder(
+    private val touchedListener: RecyclerItemTouchedListener,
+    private val onItemClick: (BgmMediaEntity) -> Unit,
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<Any, BaseQuickBindingHolder<FragmentHomeCalendarBinding>> {
     private val viewPool by lazy { RecycledViewPool() }
 
     private val itemTodayAdapter by lazy {
@@ -34,7 +37,7 @@ class HomeCalendarBinder(private val onItemClick: (BgmMediaEntity) -> Unit) :
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentHomeCalendarBinding>,
         position: Int,
-        item: Any?
+        item: Any?,
     ) {
         val calendarEntity = item as? HomeIndexCalendarEntity
         val binding = holder.binding
@@ -43,9 +46,11 @@ class HomeCalendarBinder(private val onItemClick: (BgmMediaEntity) -> Unit) :
 
         binding.rvToday.setHasFixedSize(true)
         binding.rvToday.adapter = itemTodayAdapter
+        binding.rvToday.addOnItemTouchListener(touchedListener)
 
         binding.rvTomorrow.setHasFixedSize(true)
         binding.rvTomorrow.adapter = itemTomorrowAdapter
+        binding.rvTomorrow.addOnItemTouchListener(touchedListener)
 
         itemTodayAdapter.submitList(calendarEntity?.today.orEmpty())
         itemTomorrowAdapter.submitList(calendarEntity?.tomorrow.orEmpty())
@@ -54,7 +59,7 @@ class HomeCalendarBinder(private val onItemClick: (BgmMediaEntity) -> Unit) :
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): BaseQuickBindingHolder<FragmentHomeCalendarBinding> {
         val binding = FragmentHomeCalendarBinding.inflate(context.inflater, parent, false)
         binding.rvToday.setRecycledViewPool(viewPool)

@@ -128,7 +128,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
  * 解析小组首页的全部话题列表
  */
 fun Element.parserGroupTopics(groupId: String): Pair<String, List<TopicSampleEntity>> {
-    val groupName = select("h1.SecondaryNavTitle").text()
+    val groupName = select("h1.SecondaryNavTitle, #header h1").text()
     return groupName to select(".topic_list > tbody > tr")
         .filterNot { it.select("td").isEmpty() }
         .map { item ->

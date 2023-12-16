@@ -28,9 +28,6 @@ class BlogViewModel : BaseViewModel() {
     private val requireBlogUserId: String
         get() = onBlogDetailLiveData.value?.userId.orEmpty()
 
-    private val requireBlogDeleteHash: String
-        get() = onBlogDetailLiveData.value?.deleteHash.orEmpty()
-
     /**
      * 是否为自己的帖子
      */
@@ -64,7 +61,7 @@ class BlogViewModel : BaseViewModel() {
             },
             block = {
                 withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.deleteBlog(blogId, requireBlogDeleteHash)
+                    BgmApiManager.bgmWebApi.deleteBlog(blogId, UserHelper.formHash)
                 }
                 onDeleteResult.value = true
 

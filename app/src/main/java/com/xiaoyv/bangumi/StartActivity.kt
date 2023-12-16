@@ -42,7 +42,6 @@ class StartActivity : AppCompatActivity() {
         }
 
         binding.calendar.setOnFastLimitClickListener {
-            RouteHelper.jumpCalendar()
         }
 
         binding.robot.setOnFastLimitClickListener {

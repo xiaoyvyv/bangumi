@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.widget.card.HomeCardView
 
 /**
@@ -13,7 +14,8 @@ import com.xiaoyv.common.widget.card.HomeCardView
  */
 class HomeCardBinder(
     private val imageCardViewPool: RecyclerView.RecycledViewPool,
-    private val onItemClick: (BgmMediaEntity) -> Unit
+    private val touchedListener: RecyclerItemTouchedListener,
+    private val onItemClick: (BgmMediaEntity) -> Unit,
 ) : BaseMultiItemAdapter.OnMultiItemAdapterListener<Any, HomeCardBinder.HomeImageEntityViewHolder> {
 
     override fun onBind(
@@ -36,6 +38,7 @@ class HomeCardBinder(
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
+        cardView.setItemTouchedListener(touchedListener)
         cardView.setRecycledViewPool(imageCardViewPool)
         return HomeImageEntityViewHolder(cardView)
     }

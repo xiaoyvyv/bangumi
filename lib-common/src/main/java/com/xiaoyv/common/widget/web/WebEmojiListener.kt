@@ -10,6 +10,8 @@ import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity.Companion.normal
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.LikeType
+import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -26,11 +28,11 @@ class WebEmojiListener(
             state = activity.viewModel.loadingDialogState(cancelable = false),
             error = {
                 it.printStackTrace()
+
+                activity.toast(it.errorMsg)
             },
             block = {
-                val emojiParam = requireNotNull(entity.emojiParam) {
-                    "不支持贴贴"
-                }
+                val emojiParam = requireNotNull(entity.emojiParam) { "不支持贴贴" }
 
                 val response = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.toggleLike(

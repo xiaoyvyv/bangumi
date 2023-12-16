@@ -62,7 +62,10 @@ interface BgmWebApi {
      */
     @FormUrlEncoded
     @POST("/FollowTheRabbit")
-    suspend fun doLogin(@FieldMap query: Map<String, String>): Document
+    suspend fun doLogin(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @FieldMap param: Map<String, String>,
+    ): Document
 
     /**
      * 查询时间胶囊
@@ -263,8 +266,11 @@ interface BgmWebApi {
     @POST("/blog/create")
     suspend fun postCreateBlog(@Body body: MultipartBody): Document
 
-    @GET("/blog/create")
-    suspend fun queryCreateBlogForm(@Query("review") review: String?): Document
+    @GET("/blog/{blogId}/edit")
+    suspend fun queryBlogEditInfo(@Path("blogId") blogId: String): Document
+
+    @POST("/blog/{blogId}/edit")
+    suspend fun postEditBlog(@Path("blogId") blogId: String, @Body body: MultipartBody): Document
 
     @GET("/erase/entry/{blogId}")
     suspend fun deleteBlog(
@@ -396,6 +402,12 @@ interface BgmWebApi {
     @GET("/group/{groupId}/forum")
     suspend fun queryGroupTopicList(
         @Path("groupId", encoded = true) groupId: String,
+        @Query("page") page: Int,
+    ): Document
+
+    @GET("/group/{type}")
+    suspend fun queryUserTopicList(
+        @Path("type", encoded = true) type: String,
         @Query("page") page: Int,
     ): Document
 

@@ -1,9 +1,7 @@
 package com.xiaoyv.bangumi.ui.feature.post.topic
 
-import android.view.MenuItem
-import com.xiaoyv.bangumi.databinding.ActivityPostTopicBinding
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
-import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.bangumi.ui.feature.post.BasePostActivity
+
 
 /**
  * Class: [PostTopicActivity]
@@ -11,18 +9,7 @@ import com.xiaoyv.common.kts.initNavBack
  * @author why
  * @since 12/8/23
  */
-class PostTopicActivity : BaseViewModelActivity<ActivityPostTopicBinding, PostTopicViewModel>() {
+class PostTopicActivity : BasePostActivity<PostTopicViewModel>() {
 
-    override fun initView() {
-        binding.toolbar.initNavBack(this)
-    }
 
-    override fun initData() {
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        item.initNavBack(this)
-        return super.onOptionsItemSelected(item)
-    }
 }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 class CalendarViewModel : BaseViewModel() {
 
     internal val onCalendarLiveData = MutableLiveData<CalendarEntity?>()
+    internal var isShowToday: Boolean = false
 
     override fun onViewCreated() {
 

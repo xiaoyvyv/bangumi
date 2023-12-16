@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.BlogDetailEntity
 import com.xiaoyv.common.api.parser.entity.BlogEntity
+import com.xiaoyv.common.api.parser.entity.CreatePostEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.api.parser.hrefId
@@ -9,8 +10,10 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
+import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.kts.decodeUrl
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * 解析日志
@@ -63,13 +66,13 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
         val blogEntity = BlogDetailEntity()
         blogEntity.id = blogId
 
+        // 自己发布日志，解析日志 ID
         select(".re_info small").outerHtml().let {
             val groupValues = "eraseEntry\\(\\s*(.*?)\\s*,\\s*'(.*?)'\\s*\\)".toRegex()
                 .find(it)?.groupValues.orEmpty()
             if (blogEntity.id.isBlank()) {
                 blogEntity.id = groupValues.getOrNull(1).orEmpty()
             }
-            blogEntity.deleteHash = groupValues.getOrNull(2).orEmpty()
         }
 
         select("#pageHeader a.avatar").apply {
@@ -114,5 +117,33 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
         blogEntity.comments = parserBottomComment()
         blogEntity.replyForm = parserReplyForm()
         blogEntity
+    }
+}
+
+/**
+ * 解析编辑日志的信息
+ */
+fun Element.parserBlogEditInfo(): CreatePostEntity {
+    val postEntity = CreatePostEntity()
+    select("#editTopicForm").apply {
+        postEntity.title = select("input[name=title]").attr("value").trim()
+        postEntity.content = select("textarea[name=content]").text()
+        postEntity.tags = select("input[name=tags]").attr("value").trim()
+        val public = select("input[name=public][checked]").attr("value")
+        postEntity.isPublic = public == "1"
+    }
+    return postEntity
+}
+
+/**
+ * 解析编辑日志的关联条目
+ */
+fun Element.parserBlogEditAttach(): List<PostAttach> {
+    return select("#related_subject_list > li").map { item ->
+        val attach = PostAttach()
+        attach.id = item.select("a.avatar").hrefId()
+        attach.title = item.select("a.avatar").attr("title")
+        attach.image = item.select("a.avatar img").attr("src").optImageUrl()
+        attach
     }
 }

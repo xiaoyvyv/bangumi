@@ -10,8 +10,10 @@ import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.exception.NeedLoginException
 import com.xiaoyv.common.api.parser.entity.SettingBaseEntity
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.impl.LoginParser.parserCheckIsLogin
 import com.xiaoyv.common.api.parser.impl.parserSettingInfo
+import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.response.UserEntity
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
@@ -49,31 +51,30 @@ class UserHelper private constructor() {
     private fun initCache() {
         // 读取缓存用户
         val userEntity = userSp.getString(KEY_USER_INFO).orEmpty().fromJson<UserEntity>() ?: empty
+
+        // 无登录历史跳过校验
+        if (userEntity.isEmpty || userEntity.formHash.isNullOrBlank()) {
+            clearUserInfo()
+            debugLog { "校验缓存用户：无 登录历史 或 FormHash" }
+            return
+        }
+
+        // 先载入缓存用户信息，再校验
         onUserInfoLiveData.sendValue(userEntity)
 
         // 有登录历史校验缓存
-        launchProcess {
-            withContext(Dispatchers.IO) {
-                // 无登录历史跳过校验
-                if (userEntity.isEmpty) {
-                    clearUserInfo()
+        launchProcess(Dispatchers.IO) {
+            debugLog { "校验缓存用户：${userEntity.toJson(true)}" }
 
-                    debugLog { "校验缓存用户：无登录历史" }
-                    return@withContext
-                }
-
-                debugLog { "校验缓存用户：${userEntity.toJson(true)}" }
-
-                val isLogin = BgmApiManager.bgmWebApi.queryLoginPage().parserCheckIsLogin()
-                if (isLogin.not()) {
-                    debugLog { "校验缓存用户：过期清理！" }
-
-                    // 尝试自动登录
-                    clearUserInfo()
-                } else {
-                    debugLog { "校验缓存用户：有效！" }
-                }
+            // 检测缓存的用户信息是否有效
+            val isLogin = BgmApiManager.bgmWebApi.queryLoginPage().parserCheckIsLogin()
+            if (isLogin.not()) {
+                debugLog { "校验缓存用户：过期清理！" }
+                clearUserInfo()
+                return@launchProcess
             }
+
+            debugLog { "校验缓存用户：有效！" }
         }
     }
 
@@ -84,11 +85,12 @@ class UserHelper private constructor() {
         return withContext(Dispatchers.IO) {
             runCatching {
                 val document = BgmApiManager.bgmWebApi.querySettings()
-                val userId = document.select(".idBadgerNeue a").attr("href")
-                    .substringAfterLast("/")
+                val formHash = document.parserFormHash()
+                val userId = document.select(".idBadgerNeue a").hrefId()
                 val settingInfo = document.parserSettingInfo()
+
                 if (settingInfo.isNotEmpty()) {
-                    saveUserInfo(userId, settingInfo)
+                    saveUserInfo(userId, formHash, settingInfo)
                 } else {
                     clearUserInfo()
                 }
@@ -103,9 +105,13 @@ class UserHelper private constructor() {
 
     /**
      * 更新用户信息
+     *
+     * @param userId 用户ID
+     * @param formHash 用户 Hash
+     * @param userInfo 信息
      */
-    private fun saveUserInfo(userId: String, userInfo: List<SettingBaseEntity>) {
-        val newInfo = UserEntity(id = userId, isEmpty = false)
+    private fun saveUserInfo(userId: String, formHash: String, userInfo: List<SettingBaseEntity>) {
+        val newInfo = UserEntity(id = userId, isEmpty = false, formHash = formHash)
 
         userInfo.forEach { item ->
             when (item.field) {
@@ -155,6 +161,12 @@ class UserHelper private constructor() {
          */
         val isLogin: Boolean
             get() = !currentUser.isEmpty
+
+        /**
+         * 当前用户的 FromHash
+         */
+        val formHash: String
+            get() = currentUser.formHash.orEmpty()
 
         /**
          * 缓存的邮箱

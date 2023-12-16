@@ -6,9 +6,11 @@ import com.blankj.utilcode.util.ResourceUtils
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.discover.DiscoverFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.HomeFeatureType
+import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.kts.useNotNull
 
@@ -20,8 +22,18 @@ import com.xiaoyv.widget.kts.useNotNull
  */
 class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>() {
 
+    /**
+     * 优化子条目嵌套横向滑动
+     */
+    private val touchedListener = RecyclerItemTouchedListener {
+        val discoverFragment: DiscoverFragment =
+            parentFragment as? DiscoverFragment ?: return@RecyclerItemTouchedListener
+        discoverFragment.vp.isUserInputEnabled = it
+    }
+
     private val contentAdapter by lazy {
         HomeAdapter(
+            touchedListener = touchedListener,
             onClickFeature = {
                 when (it.id) {
                     HomeFeatureType.TYPE_SEARCH -> RouteHelper.jumpSearch()
@@ -52,7 +64,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
     override fun initView() {
         binding.rvContent.layoutManager =
             AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false).apply {
-                extraLayoutSpaceScale = 3f
+                extraLayoutSpaceScale = 7f
             }
     }
 
@@ -62,10 +74,10 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
 
     override fun initListener() {
         contentAdapter.addOnItemChildClickListener(R.id.tv_today_title) { _, _, _ ->
-            RouteHelper.jumpCalendar()
+            RouteHelper.jumpCalendar(true)
         }
         contentAdapter.addOnItemChildClickListener(R.id.tv_tomorrow_title) { _, _, _ ->
-            RouteHelper.jumpCalendar()
+            RouteHelper.jumpCalendar(false)
         }
     }
 

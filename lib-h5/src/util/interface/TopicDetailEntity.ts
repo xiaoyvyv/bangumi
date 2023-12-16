@@ -2,6 +2,7 @@ import {CommentTreeEntity} from "./CommentTreeEntity.ts";
 import {CommentFormEntity} from "./CommentFormEntity.ts";
 import {SampleRelateEntity} from "./SampleRelateEntity.ts";
 import {LikeActionEntity} from "./LikeActionEntity.ts";
+import {EmojiParam} from "./EmojiParam.ts";
 
 export interface TopicDetailEntity {
     id: string;
@@ -11,10 +12,11 @@ export interface TopicDetailEntity {
     userName: string;
     userId: string;
     userSign: string;
-    deleteHash: string;
     content: string;
     related: SampleRelateEntity;
     comments: CommentTreeEntity[];
     replyForm: CommentFormEntity;
-    topicEmojis: LikeActionEntity[];
+    gh: string;
+    emojiParam: EmojiParam;
+    emojis: Array<LikeActionEntity>;
 }

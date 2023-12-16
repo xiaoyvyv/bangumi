@@ -111,16 +111,16 @@ pre {
 
 // 表情
 img[smileid] {
-  box-sizing: content-box;
   vertical-align: middle !important;
-  padding-bottom: 8px;
-  height: 20px !important;
+  padding-bottom: 6px;
   width: auto !important;
   min-width: unset !important;
   border-radius: 0 !important;
   display: inline-block !important;
   object-fit: contain;
   border: none !important;
+  margin-right: 4px;
+  margin-left: 4px;
 }
 
 // 图片

@@ -3,15 +3,13 @@
 package com.xiaoyv.bangumi.ui.rakuen
 
 import android.view.MenuItem
-import androidx.core.view.ViewCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentSuperBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
-import kotlinx.coroutines.delay
 
 /**
  * Class: [RakuenFragment]
@@ -35,6 +33,8 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
         binding.vp2.offscreenPageLimit = vpAdapter.itemCount
 
         tabLayoutMediator.attach()
+
+        refreshToolbarMenu()
     }
 
     override fun initData() {
@@ -42,12 +42,38 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
     }
 
     override fun initListener() {
+
+    }
+
+    private fun refreshToolbarMenu() {
         binding.toolbar.menu.apply {
             add(getString(CommonString.common_search))
                 .setIcon(CommonDrawable.ic_search)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
                     RouteHelper.jumpSearch()
+                    true
+                }
+
+            add("我发表的话题")
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                .setOnMenuItemClickListener {
+                    if (UserHelper.isLogin.not()) {
+                        RouteHelper.jumpLogin()
+                        return@setOnMenuItemClickListener true
+                    }
+                    RouteHelper.jumpMyTopics(true)
+                    true
+                }
+
+            add("我回复的话题")
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                .setOnMenuItemClickListener {
+                    if (UserHelper.isLogin.not()) {
+                        RouteHelper.jumpLogin()
+                        return@setOnMenuItemClickListener true
+                    }
+                    RouteHelper.jumpMyTopics(false)
                     true
                 }
         }

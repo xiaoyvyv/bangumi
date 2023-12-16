@@ -54,7 +54,7 @@ const sortName = (sort: string) => {
  */
 const onClickUser = (comment: CommentTreeEntity) => {
   if (window.android && comment.userId) {
-    window.android && window.android.onClickUser(comment.id, comment.userId);
+    window.android && window.android.onClickUser(comment.userId, comment.id);
   }
 }
 
@@ -140,7 +140,7 @@ const onClickNewComment = (event: Event) => {
           </div>
           <div class="time">{{ comment.time }}<span class="floor">{{ comment.floor }}</span></div>
           <div style="flex: 1"/>
-          <img class="action" v-if="comment.emojiParam"
+          <img class="action" v-if="comment.emojiParam?.enable"
                smileid src="../assets/image/ic_like.svg"
                alt="action"
                @click.stop="onClickCommentAction($event,comment)">
@@ -161,7 +161,7 @@ const onClickNewComment = (event: Event) => {
               </div>
               <div class="time">{{ subComment.time }}<span class="floor">{{ subComment.floor }}</span></div>
               <div style="flex: 1"/>
-              <img class="action" v-if="subComment.emojiParam"
+              <img class="action" v-if="subComment.emojiParam?.enable"
                    smileid src="../assets/image/ic_like.svg"
                    alt="action"
                    @click.stop="onClickCommentAction($event,subComment)">

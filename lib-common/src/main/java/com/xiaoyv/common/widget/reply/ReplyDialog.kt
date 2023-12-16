@@ -17,15 +17,14 @@ import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.impl.parserReplyParam
+import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.databinding.ViewReplyDialogBinding
 import com.xiaoyv.common.helper.BBCode
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getParcelObj
@@ -55,16 +54,27 @@ class ReplyDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = ViewReplyDialogBinding.bind(view)
-        val replyJs = arguments?.getString(NavKey.KEY_STRING).orEmpty()
-        val replyParam = replyJs.parserReplyParam()
         val replyForm = arguments?.getParcelObj<CommentFormEntity>(NavKey.KEY_PARCELABLE)
         val commentEntity = arguments?.getParcelObj<CommentTreeEntity>(NavKey.KEY_PARCELABLE_SECOND)
+        val replyJs = arguments?.getString(NavKey.KEY_STRING).orEmpty()
+        val replyParam = replyJs.parserReplyParam()
 
-        debugLog { "ReplyJs - Form: ${replyParam.toJson(true)}" }
-        debugLog { "ReplyJs - Form: ${replyForm.toJson(true)}" }
-        debugLog { "ReplyJs - Target: ${commentEntity.toJson(true)}" }
-
-        binding.edReply.hint = String.format("回复 %s：", commentEntity?.userName)
+        // 添加新主评论
+        if (replyJs.isBlank()) {
+            binding.edReply.hint = "说点什么吧..."
+        }
+        // 回复评论
+        else {
+            // 显示回复的目标评论部分内容
+            val replyContent = commentEntity?.replyContent.orEmpty().parseHtml().toString()
+            val summaryHint = if (replyContent.length > 20) {
+                replyContent.substring(0, 20) + "..."
+            } else {
+                replyContent
+            }
+            binding.edReply.hint =
+                String.format("回复 %s：%s", commentEntity?.userName.orEmpty(), summaryHint)
+        }
 
         binding.edReply.doAfterTextChanged {
             binding.btnSend.isVisible = it.toString().trim().isNotBlank()
@@ -206,6 +216,13 @@ class ReplyDialog : DialogFragment() {
     }
 
     companion object {
+
+        /**
+         * 下面两个参数为空时，表示添加新的主评论
+         *
+         * @param replyJs 回复的js
+         * @param targetComment 回复的评论
+         */
         fun show(
             fragmentManager: FragmentManager,
             replyForm: CommentFormEntity,

@@ -17,12 +17,15 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 11/24/23
  */
 class MediaCommentFragment : BaseListFragment<MediaCommentEntity, MediaCommentViewModel>() {
+    override val isOnlyOnePage: Boolean
+        get() = false
+
+    override val loadingBias: Float
+        get() = 0.3f
+
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.mediaId = arguments.getString(NavKey.KEY_STRING).orEmpty()
     }
-
-    override val isOnlyOnePage: Boolean
-        get() = false
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<MediaCommentEntity, *> {
         return MediaCommentAdapter()

@@ -8,6 +8,7 @@ import InfiniteLoading from "v3-infinite-loading";
 import common from "../../util/common.ts";
 import {CommentTreeEntity} from "../../util/interface/CommentTreeEntity.ts";
 import BottomSpinnerView from "../../components/BottomSpinnerView.vue";
+import {Post} from "../../util/interface/CommentReplyEntity.ts";
 
 const blog = ref<BlogDetailEntity>({} as BlogDetailEntity);
 const blogContentRef = ref<HTMLDivElement>();
@@ -59,16 +60,13 @@ onMounted(() => {
     robotSay.value = message;
   };
 
-  // 更改排序
-  window.changeCommentSort = (sort: string) => {
+  // 评论填充初始化
+  common.initComment(null, () => comments, (sort: string) => {
     commentSort.value = sort;
     commentPage.value = 1;
     comments.length = 0;
     loadingIdentifier.value++;
-  };
-
-  // 评论填充初始化
-  common.initComment(() => comments);
+  });
 
   window.blog = blogHandler;
   window.mounted = true;

@@ -59,7 +59,8 @@ dependencies {
     api(libs.persistent.cookie.jar)
 
     api(libs.androidx.work.runtime.ktx)
-    api("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
+    api(libs.subsampling.scale.image.view.androidx)
+    api(libs.speed.dial)
 
     api(libs.jsoup)
 

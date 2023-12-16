@@ -15,6 +15,8 @@ material = "1.10.0"
 constraintlayout = "2.1.4"
 activity = "1.8.1"
 persistentcookiejar = "v1.0.1"
+speedDial = "3.3.0"
+subsamplingScaleImageViewAndroidx = "3.10.0"
 swiperefreshlayout = "1.1.0"
 touchimageview = "3.2.1"
 ksp = "1.9.0-1.0.11"
@@ -45,6 +47,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 persistent-cookie-jar = { module = "com.github.franmontiel:PersistentCookieJar", version.ref = "persistentcookiejar" }
+speed-dial = { module = "com.leinardi.android:speed-dial", version.ref = "speedDial" }
+subsampling-scale-image-view-androidx = { module = "com.davemorrissey.labs:subsampling-scale-image-view-androidx", version.ref = "subsamplingScaleImageViewAndroidx" }
 touch-image-view = { module = "com.github.MikeOrtiz:TouchImageView", version.ref = "touchimageview" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }

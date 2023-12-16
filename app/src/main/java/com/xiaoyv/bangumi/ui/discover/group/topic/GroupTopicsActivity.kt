@@ -53,7 +53,7 @@ class GroupTopicsActivity : BaseListActivity<TopicSampleEntity, GroupTopicsViewM
     }
 
     override fun onListDataFinish(list: List<TopicSampleEntity>) {
-        binding.toolbar.title = list.getOrNull(0)?.groupName ?: viewModel.groupName
+        binding.toolbar.title = viewModel.groupName
     }
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<TopicSampleEntity, *> {

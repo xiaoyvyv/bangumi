@@ -27,6 +27,9 @@ data class UserEntity(
     var userGroup: Int = 0,
     @SerializedName("username")
     var username: String? = null,
+
+    @SerializedName("formHash")
+    var formHash: String? = null,
     @SerializedName("online")
     var online: String? = null,
     @SerializedName("isEmpty")

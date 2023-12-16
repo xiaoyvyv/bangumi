@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.api.request.EmojiParam
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
@@ -26,19 +27,10 @@ data class CommentTreeEntity(
     @SerializedName("replyContent") var replyContent: String = "",
     @SerializedName("topicSubReply") var topicSubReply: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyQuote") var replyQuote: String = "",
-    @SerializedName("emojis") var emojis: List<LikeEntity.LikeAction> = emptyList(),
     @SerializedName("gh") var gh: String = "",
-    /**
-     * 添加贴贴的参数
-     */
-    @SerializedName("emojiParam") var emojiParam: EmojiParam? = null,
+    @SerializedName("emojiParam") var emojiParam: EmojiParam = EmojiParam(),
+    @SerializedName("emojis") var emojis: List<LikeEntity.LikeAction> = emptyList(),
 ) : Parcelable, IdEntity {
 
-    @Keep
-    @Parcelize
-    data class EmojiParam(
-        var likeType: String = "",
-        var likeMainId: String = "",
-        var likeCommentId: String = "",
-    ) : Parcelable
+
 }

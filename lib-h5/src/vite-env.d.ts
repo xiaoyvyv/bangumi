@@ -9,10 +9,14 @@ declare interface Window {
     sign: any;
     mounted: boolean;
     robotSay: (message: string) => void;
-    changeCommentSort: (sort: string) => void;
     android: Android;
+    comment: Comment;
+}
+
+declare interface Comment {
     addComment: (comment: any) => void;
-    refreshCommentEmoji: (likeMap: any) => void;
+    refreshEmoji: (likeMap: any) => void;
+    changeSort: (sort: string) => void;
 }
 
 declare interface Android {

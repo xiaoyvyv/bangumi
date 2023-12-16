@@ -25,6 +25,12 @@ import kotlin.random.Random
 class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
     internal val currentSearchItem = MutableLiveData<SearchItem?>()
 
+    /**
+     * 是否为媒体搜索选取模式
+     */
+    internal val forSelectedMedia: Boolean
+        get() = currentSearchItem.value?.forSelectedMedia == true
+
     internal val isLegacy = MutableLiveData(1)
 
     /**

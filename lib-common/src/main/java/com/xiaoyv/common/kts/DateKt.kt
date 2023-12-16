@@ -30,6 +30,9 @@ val currentSeason: Int
     @SeasonType
     get() = getSeason(currentMonth)
 
+val currentWeekDay: Int
+    get() = currentDate.get(Calendar.DAY_OF_WEEK)
+
 @IntDef(
     SeasonType.TYPE_FALL,
     SeasonType.TYPE_SPRING,

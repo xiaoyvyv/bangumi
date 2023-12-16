@@ -7,6 +7,8 @@ import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parserFormHash
+import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.kts.fromJson
@@ -19,9 +21,10 @@ import org.jsoup.nodes.Document
  */
 fun Document.parserTopic(topicId: String): TopicDetailEntity {
     requireNoError()
+    val formHash = parserFormHash()
 
     return select("#news_list > .item, .entry_list > .item").let {
-        val entity = TopicDetailEntity(id = topicId)
+        val entity = TopicDetailEntity(id = topicId, gh = formHash)
 
         select(".postTopic .re_info small").outerHtml().let {
             val groupValues = "eraseEntry\\(\\s*(.*?)\\s*,\\s*'(.*?)'\\s*\\)".toRegex()
@@ -29,7 +32,6 @@ fun Document.parserTopic(topicId: String): TopicDetailEntity {
             if (entity.id.isBlank()) {
                 entity.id = groupValues.getOrNull(1).orEmpty()
             }
-            entity.deleteHash = groupValues.getOrNull(2).orEmpty()
         }
 
         // 关联的讨论条目
@@ -62,32 +64,27 @@ fun Document.parserTopic(topicId: String): TopicDetailEntity {
             // src="/img/smiles/tv/19.gif" -> src="https://bgm.tv/img/smiles/tv/19.gif"
             entity.content = select(".topic_content").html().replaceSmiles()
 
-            select(".topic_actions").let { topicActions ->
-                entity.topicEmojis = topicActions.select(".post_actions .grid a").map { a ->
-                    val emoji = TopicDetailEntity.LikeEmoji()
-                    emoji.emojiUrl = a.select("img").attr("src").optImageUrl()
-                    emoji.likeValue = a.attr("data-like-value")
-                    emoji
-                }
-            }
+            // 解析文字添加贴贴参数
+            entity.emojiParam = select(".topic_actions .like_dropdown").parserLikeParam()
         }
 
         if (entity.content.isBlank()) {
             entity.content = select("#columnCrtB .detail").html().replaceSmiles()
         }
 
-        // 全部的点赞列表
-        val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);".toRegex()
-            .find(html())?.groupValues?.getOrNull(1).orEmpty()
-
-        entity.commentEmojiMap = likeJson.fromJson<LikeEntity>().normal()
         entity.title = select("#pageHeader h1")
             .firstOrNull()?.lastChild()?.toString()
             .orEmpty().trim()
 
         entity.comments = parserBottomComment()
         entity.replyForm = parserReplyForm()
-        entity.fillLikeInfo()
+
+        // 全部的贴贴列表
+        val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);".toRegex()
+            .find(html())?.groupValues?.getOrNull(1).orEmpty()
+
+        // 贴贴列表填充（文章和评论的贴贴）
+        entity.fillLikeInfo(likeJson.fromJson<LikeEntity>().normal())
 
         entity
     }

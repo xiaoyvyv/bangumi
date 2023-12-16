@@ -24,6 +24,7 @@ import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.databinding.ViewEmojiBinding
 import com.xiaoyv.common.helper.CommentPaginationHelper
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.GoogleStyle
 import com.xiaoyv.common.kts.debugLog
@@ -90,7 +91,7 @@ abstract class WebBase(open val webView: UiWebView) {
      * 添加评论
      */
     suspend fun addComment(comment: ReplyResultEntity) {
-        callJs("window.addComment(${comment.toJson()})")
+        callJs("window.comment.addComment(${comment.toJson()})")
     }
 
     /**
@@ -112,12 +113,14 @@ abstract class WebBase(open val webView: UiWebView) {
     @Keep
     @JavascriptInterface
     fun onNeedLogin() {
-        onNeedLoginListener()
+        if (!UserHelper.isLogin) {
+            onNeedLoginListener()
+        }
     }
 
     @Keep
     @JavascriptInterface
-    fun onClickUser(userId: String) {
+    fun onClickUser(userId: String, commentId: String? = null) {
         onClickUserListener(userId)
     }
 
@@ -143,7 +146,7 @@ abstract class WebBase(open val webView: UiWebView) {
                 items = arrayListOf("按时间正向排序", "按最新发布排序", "按热门程度排序"),
                 onItemClick = { _, which ->
                     activity.launchUI {
-                        callJs("window.changeCommentSort('${sorts[which]}')")
+                        callJs("window.comment.changeSort('${sorts[which]}')")
                     }
                 }
             )
@@ -246,7 +249,7 @@ abstract class WebBase(open val webView: UiWebView) {
      * 刷新贴贴数据
      */
     private suspend fun refreshEmoji(response: Map<String, List<LikeEntity.LikeAction>>) {
-        callJs("window.refreshCommentEmoji(${response.toJson()})")
+        callJs("window.comment.refreshEmoji(${response.toJson()})")
     }
 
     suspend fun callJs(js: String): String {

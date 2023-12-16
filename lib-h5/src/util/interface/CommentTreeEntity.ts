@@ -1,4 +1,5 @@
 import {LikeActionEntity} from "./LikeActionEntity.ts";
+import {EmojiParam} from "./EmojiParam.ts";
 
 export interface CommentTreeEntity {
     id: string;
@@ -12,7 +13,7 @@ export interface CommentTreeEntity {
     replyJs: string;
     replyQuote: string;
     topicSubReply: CommentTreeEntity[];
-    emojis: Array<LikeActionEntity>;
     gh: string;
-    emojiParam: any;
+    emojiParam: EmojiParam;
+    emojis: Array<LikeActionEntity>;
 }

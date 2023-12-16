@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" />
+
     <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -155,4 +161,18 @@
             app:layout_constraintTop_toBottomOf="@+id/table_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/speedDial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
+        app:sdMainFabClosedBackgroundColor="?attr/colorPrimary"
+        app:sdMainFabClosedIconColor="?attr/colorOnPrimary"
+        app:sdMainFabClosedSrc="@drawable/ic_add"
+        app:sdMainFabOpenedBackgroundColor="?attr/colorPrimary"
+        app:sdMainFabOpenedIconColor="?attr/colorOnPrimary"
+        app:sdOverlayLayout="@id/overlay" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -32,6 +32,11 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.blogId = bundle.getString(NavKey.KEY_STRING).orEmpty()
+
+        // NewIntent 时刷新
+        if (isNewIntent) {
+            viewModel.queryBlogDetail()
+        }
     }
 
     override fun initView() {
@@ -57,24 +62,24 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         }
 
         blogWeb.onReplyUserListener = { replyJs, formEntity ->
+            if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
+
             val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
                 ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity) {
                     launchUI { blogWeb.addComment(it) }
                 }
-            } else {
-                RouteHelper.jumpLogin()
             }
         }
 
         blogWeb.onReplyNewListener = {
+            if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
+
             val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
                 ReplyDialog.show(supportFragmentManager, replyForm, null, null) {
                     launchUI { blogWeb.addComment(it) }
                 }
-            } else {
-                RouteHelper.jumpLogin()
             }
         }
 
@@ -124,6 +129,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         if (viewModel.isMine) {
             menu.add("编辑")
                 .setOnMenuItemClickListener {
+                    RouteHelper.jumpEditBlog(viewModel.blogId)
                     true
                 }
 

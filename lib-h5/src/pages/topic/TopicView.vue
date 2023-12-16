@@ -9,6 +9,8 @@ import RelativeItemView from "../../components/RelativeItemView.vue";
 import {TopicDetailEntity} from "../../util/interface/TopicDetailEntity.ts";
 import {CommentTreeEntity} from "../../util/interface/CommentTreeEntity.ts";
 import BottomSpinnerView from "../../components/BottomSpinnerView.vue";
+import EmojiView from "../../components/EmojiView.vue";
+import {LikeActionEntity} from "../../util/interface/LikeActionEntity.ts";
 
 const topic = ref<TopicDetailEntity>({} as TopicDetailEntity);
 const topicContentRef = ref<HTMLDivElement>();
@@ -55,22 +57,54 @@ const loadComments = async ($state: any) => {
   }
 }
 
+/**
+ * 话题内容底部的贴贴，构建一个假的评论传入
+ *
+ * @param topic
+ */
+const buildFakeComment = (topic: TopicDetailEntity): CommentTreeEntity => {
+  return {
+    emojiParam: topic.emojiParam,
+    id: topic.emojiParam?.likeCommentId,
+    gh: topic.gh
+  } as CommentTreeEntity
+}
+
+/**
+ * 主题内容下方贴贴
+ *
+ * @param event
+ */
+const onClickCommentAction = (event: MouseEvent) => {
+  let fakeComment = buildFakeComment(topic.value);
+  window.android && window.android.onClickCommentAction(JSON.stringify(fakeComment), event.clientX, event.clientY);
+}
+
+/**
+ * 刷新主题内容底部的贴贴
+ *
+ * @param commentId
+ * @param likeActionInfo
+ */
+const handleEmojis = (commentId: string, likeActionInfo: LikeActionEntity[]) => {
+  if (commentId == topic.value.emojiParam.likeCommentId) {
+    topic.value.emojis = likeActionInfo;
+  }
+}
+
 onMounted(() => {
   // 机器人说话
   window.robotSay = (message: string) => {
     robotSay.value = message;
   };
 
-  // 更改排序
-  window.changeCommentSort = (sort: string) => {
+  // 评论填充初始化
+  common.initComment(handleEmojis, () => comments, (sort: string) => {
     commentSort.value = sort;
     commentPage.value = 1;
     comments.length = 0;
     loadingIdentifier.value++;
-  };
-
-  // 评论填充初始化
-  common.initComment(() => comments);
+  });
 
   window.topic = topicHandler;
   window.mounted = true;
@@ -88,6 +122,16 @@ onMounted(() => {
     <relative-item-view :related="topic.related"/>
 
     <div class="topic-content" ref="topicContentRef" v-html="common.optText(topic.content)"/>
+
+    <div class="emoji" v-if="topic.emojiParam?.enable">
+      <emoji-view class="topic-emoji" :emojis="topic.emojis" :comment="buildFakeComment(topic)"/>
+      <div style="flex: 1"/>
+      <img class="action"
+           smileid src="../../assets/image/ic_like.svg"
+           alt="action"
+           @click.stop="onClickCommentAction($event)">
+    </div>
+
     <div class="divider" v-if="topic.content"/>
 
     <comment-view target="#topic" :comments="comments" :sort="commentSort"/>
@@ -117,85 +161,116 @@ onMounted(() => {
   overflow-x: hidden;
   overscroll-behavior-x: none;
   overflow-y: scroll;
-}
 
-.topic-title {
-  font-weight: 800 !important;
-  font-size: 20px;
-  margin: 12px 16px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-}
 
-.topic-info {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-size: 15px;
-  margin-left: 16px;
-
-  .topic-author {
-    color: var(--primary-color);
-    margin-right: 6px;
+  .topic-title {
+    font-weight: 800 !important;
+    font-size: 20px;
+    margin: 12px 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
   }
 
-  .topic-time {
-    color: var(--on-surface-variant-color);
-    opacity: 0.5;
+  .topic-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 15px;
+    margin-left: 16px;
+
+    .topic-author {
+      color: var(--primary-color);
+      margin-right: 6px;
+    }
+
+    .topic-time {
+      color: var(--on-surface-variant-color);
+      opacity: 0.5;
+    }
   }
-}
 
-.topic-content {
-  overflow-x: hidden !important;
-  padding: 12px 16px;
-  font-size: 16px;
-  line-height: 1.75 !important;
-  word-break: break-all;
+  .topic-content {
+    overflow-x: hidden !important;
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 1.75 !important;
+    word-break: break-all;
 
-  img {
-    min-width: 120px;
+    img {
+      min-width: 120px;
+    }
   }
-}
 
-.tip {
-  font-weight: bold;
-}
+  .emoji {
+    margin-top: 16px;
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    align-items: center;
+    padding-right: 16px;
 
-.topic-tag {
-  display: flex;
-  flex-flow: row wrap;
-  margin: 16px 16px;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: var(--surface-container-color);
-  align-items: center;
+    .topic-emoji {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
 
-  .topic-tag-item {
-    margin: 4px 8px 4px 0;
-    padding: 4px;
-    color: var(--on-primary-color);
-    font-size: 12px;
+    .action {
+      height: 24px;
+      width: 24px;
+      flex-shrink: 0;
+      line-height: 24px;
+      margin: 0 !important;
+      box-sizing: border-box;
+      padding: 1px 0 !important;
+      border: none;
+      filter: invert(0.5);
+    }
+  }
+
+  .divider {
+    margin-top: 16px;
+  }
+
+  .tip {
+    font-weight: bold;
+  }
+
+  .topic-tag {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 16px 16px;
+    padding: 12px;
     border-radius: 6px;
-    background: var(--primary-color);
+    background-color: var(--surface-container-color);
+    align-items: center;
+
+    .topic-tag-item {
+      margin: 4px 8px 4px 0;
+      padding: 4px;
+      color: var(--on-primary-color);
+      font-size: 12px;
+      border-radius: 6px;
+      background: var(--primary-color);
+    }
   }
-}
 
 
-.loading {
-  text-align: center;
-  padding: 24px;
-}
+  .loading {
+    text-align: center;
+    padding: 24px;
+  }
 
-.topic-space {
-  height: 600px;
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  font-size: 10px;
-  opacity: 0.5;
-  padding-bottom: 24px;
+  .topic-space {
+    height: 600px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    font-size: 10px;
+    opacity: 0.5;
+    padding-bottom: 24px;
+  }
 }
 </style>

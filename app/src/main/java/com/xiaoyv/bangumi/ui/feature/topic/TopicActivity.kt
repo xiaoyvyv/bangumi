@@ -82,24 +82,24 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         }
 
         topicView.onReplyUserListener = { replyJs, formEntity ->
+            if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
+
             val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
                 ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity) {
                     launchUI { topicView.addComment(it) }
                 }
-            } else {
-                RouteHelper.jumpLogin()
             }
         }
 
         topicView.onReplyNewListener = {
+            if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
+
             val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
                 ReplyDialog.show(supportFragmentManager, replyForm, null, null) {
                     launchUI { topicView.addComment(it) }
                 }
-            } else {
-                RouteHelper.jumpLogin()
             }
         }
 

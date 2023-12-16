@@ -20,8 +20,8 @@ import org.jsoup.nodes.Element
 fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResultEntity> {
     requireNoError()
 
-    // 搜索条目解析
     return when (pathType) {
+        // 搜索条目解析
         BgmPathType.TYPE_SEARCH_SUBJECT -> {
             select("#browserItemList > li").map { item ->
                 val entity = SearchResultEntity()
@@ -50,6 +50,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                         else -> MediaType.TYPE_UNKNOWN
                     }
                 }
+                entity.searchMediaType = mediaType
                 entity.searchTip = GlobalConfig.mediaTypeName(mediaType)
                 entity
             }
