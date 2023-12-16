@@ -67,7 +67,12 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingClean.setOnFastLimitClickListener {
-            viewModel.cleanCache()
+            showConfirmDialog(
+                message = "是否清空缓存？\n\n注意：\n清空缓存后，浏览过的图片等资源需要重新加载，空间够的情况下不建议清理。",
+                onConfirmClick = {
+                    viewModel.cleanCache()
+                }
+            )
         }
 
         binding.settingTranslate.setOnFastLimitClickListener {
