@@ -120,7 +120,7 @@ abstract class WebBase(open val webView: UiWebView) {
 
     @Keep
     @JavascriptInterface
-    fun onClickUser(userId: String, commentId: String? = null) {
+    fun onClickUser(userId: String, attachId: String? = null) {
         onClickUserListener(userId)
     }
 

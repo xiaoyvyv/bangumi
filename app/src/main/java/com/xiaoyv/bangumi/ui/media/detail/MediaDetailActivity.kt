@@ -115,7 +115,7 @@ class MediaDetailActivity :
                 delay(200)
                 when (actionItem.id) {
                     CommonId.fab_new_blog -> RouteHelper.jumpPostBlog(postAttach)
-                    CommonId.fab_new_topic -> RouteHelper.jumpPostTopic(postAttach.id)
+                    CommonId.fab_new_topic -> RouteHelper.jumpPostTopic(postAttach.id, false)
                 }
             }
             true

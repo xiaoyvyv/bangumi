@@ -92,6 +92,16 @@ const handleEmojis = (commentId: string, likeActionInfo: LikeActionEntity[]) => 
   }
 }
 
+/**
+ * 点击用户
+ */
+const onClickUser = () => {
+  const topicUserId = topic.value?.userId || '';
+  if (window.android && topicUserId) {
+    window.android && window.android.onClickUser(topicUserId, topic.value?.id);
+  }
+}
+
 onMounted(() => {
   // 机器人说话
   window.robotSay = (message: string) => {
@@ -114,7 +124,7 @@ onMounted(() => {
 <template>
   <div class="topic" id="topic" v-if="topic.id">
     <div class="topic-title">{{ topic.title }}</div>
-    <div class="topic-info">
+    <div class="topic-info" @click.stop="onClickUser">
       <div class="topic-author">{{ topic.userName }}</div>
       <div class="topic-time">{{ topic.time }}</div>
     </div>

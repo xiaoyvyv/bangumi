@@ -53,6 +53,13 @@ const loadComments = async ($state: any) => {
   }
 }
 
+const onClickUser = () => {
+  const blogUserId = blog.value?.userId || '';
+  if (window.android && blogUserId) {
+    window.android && window.android.onClickUser(blogUserId, blog.value?.id);
+  }
+}
+
 onMounted(() => {
   // 机器人说话
   window.robotSay = (message: string) => {
@@ -75,7 +82,7 @@ onMounted(() => {
 <template>
   <div class="blog" id="blog" v-if="blog.id">
     <div class="blog-title">{{ blog.title }}</div>
-    <div class="blog-info">
+    <div class="blog-info" @click.stop="onClickUser">
       <div class="blog-author">{{ blog.userName }}</div>
       <div class="blog-time">{{ blog.time }}</div>
     </div>

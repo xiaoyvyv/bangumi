@@ -212,9 +212,9 @@ object RouteHelper {
         )
     }
 
-    fun jumpPostTopic(groupId: String) {
+    fun jumpPostTopic(targetId: String, groupOrSubject: Boolean) {
         ActivityUtils.startActivity(
-            bundleOf(NavKey.KEY_STRING to groupId),
+            bundleOf(NavKey.KEY_STRING to targetId, NavKey.KEY_BOOLEAN to groupOrSubject),
             PostTopicActivity::class.java
         )
     }

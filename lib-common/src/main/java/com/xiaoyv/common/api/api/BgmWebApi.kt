@@ -278,6 +278,19 @@ interface BgmWebApi {
         @Query("gh") hash: String,
     ): Document
 
+    /**
+     * 发布一个话题
+     *
+     * @param targetType 发布话题的目标类型 group|subject
+     * @param targetId 发布话题的目标类型的ID
+     */
+    @POST("/{targetType}/{targetId}/topic/new")
+    suspend fun postCreateTopic(
+        @Path("targetType", encoded = true) targetType: String,
+        @Path("targetId", encoded = true) targetId: String,
+        @Body body: MultipartBody,
+    ): Document
+
     @GET("/subject/{subjectId}/remove")
     suspend fun deleteSubjectCollect(
         @Path("subjectId", encoded = true) subjectId: String,
@@ -597,6 +610,18 @@ interface BgmWebApi {
         @Query("gh") gh: String,
         @Query("ajax") ajax: Int = 1,
     ): BgmActionResponse<LikeEntity>
+
+    @FormUrlEncoded
+    @POST("/group/new_group")
+    suspend fun newGroup(
+        @Field("formhash") formhash: String,
+        @Field("name") name: String,
+        @Field("title") title: String,
+        @Field("category") category: String,
+        @Field("desc") desc: String,
+        @Field("accessible") accessible: Int,
+        @Field("submit") submit: String,
+    ): Document
 }
 
 

@@ -17,26 +17,26 @@
         android:background="@color/ui_transparent"
         android:visibility="gone" />
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_progress"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="@dimen/ui_size_60"
-        android:layout_height="@dimen/ui_size_60"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="10"
-        android:progressTint="?attr/colorSurface"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/ui_size_24"
+        android:layout_marginVertical="@dimen/ui_size_24"
+        android:indeterminate="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackCornerRadius="@dimen/ui_size_12" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0%"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnPrimarySurface"
         app:layout_constraintBottom_toBottomOf="@+id/pb_progress"
         app:layout_constraintEnd_toEndOf="@+id/pb_progress"

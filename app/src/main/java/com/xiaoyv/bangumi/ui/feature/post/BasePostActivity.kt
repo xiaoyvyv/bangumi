@@ -48,7 +48,7 @@ import com.xiaoyv.widget.kts.toast
  * @author why
  * @since 12/8/23
  */
-open class BasePostActivity<VM : BasePostViewModel> :
+abstract class BasePostActivity<VM : BasePostViewModel> :
     BaseViewModelActivity<ActivityPostTopicBinding, VM>() {
 
     private val imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
@@ -66,9 +66,11 @@ open class BasePostActivity<VM : BasePostViewModel> :
             }
         }
 
+    abstract val toolbarTitle: String
+
     @CallSuper
     override fun initView() {
-        binding.toolbar.title = if (viewModel.isEditMode) "编辑内容" else "发布内容"
+        binding.toolbar.title = toolbarTitle
         binding.toolbar.initNavBack(this)
     }
 

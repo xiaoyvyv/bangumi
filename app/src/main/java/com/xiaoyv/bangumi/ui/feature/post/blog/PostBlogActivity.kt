@@ -19,6 +19,9 @@ import com.xiaoyv.widget.kts.getParcelObj
  */
 class PostBlogActivity : BasePostActivity<PostBlogViewModel>() {
 
+    override val toolbarTitle: String
+        get() = if (viewModel.isEditMode) "编辑日志内容" else "发布一篇日志"
+
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         val mediaAttach = bundle.getParcelObj<PostAttach>(NavKey.KEY_PARCELABLE)
         if (mediaAttach != null) {
