@@ -10,6 +10,9 @@ import com.xiaoyv.common.config.bean.MediaTab
  * @since 11/28/23
  */
 object GlobalConfig {
+    const val GROUP_MY_REPLY_TOPIC = "my_reply"
+    const val GROUP_MY_SEND_TOPIC = "my_topic"
+
 
     val mediaTypes by lazy {
         listOf(

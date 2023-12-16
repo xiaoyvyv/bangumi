@@ -65,7 +65,7 @@ class SummaryActivity : BaseViewModelActivity<ActivitySummaryBinding, SummaryVie
                 neutralText = "去申请",
                 confirmText = "去配置",
                 onConfirmClick = {
-                    RouteHelper.jumpSetting()
+                    RouteHelper.jumpTranslateConfig()
                 },
                 onNeutralClick = {
                     openInBrowser("http://api.fanyi.baidu.com/api/trans/product/desktop")

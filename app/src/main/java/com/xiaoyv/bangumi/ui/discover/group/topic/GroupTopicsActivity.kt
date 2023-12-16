@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -46,7 +47,14 @@ class GroupTopicsActivity : BaseListActivity<TopicSampleEntity, GroupTopicsViewM
                     RouteHelper.jumpLogin()
                     return@setOnMenuItemClickListener true
                 }
-                RouteHelper.jumpPostTopic(viewModel.groupId)
+                RouteHelper.jumpPostTopic(
+                    PostAttach(
+                        id = viewModel.groupId,
+                        image = "",
+                        title = viewModel.groupName,
+                        type = TopicType.TYPE_GROUP
+                    )
+                )
                 true
             }
         return super.onCreateOptionsMenu(menu)

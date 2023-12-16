@@ -18,8 +18,10 @@ import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
+import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.useNotNull
 
@@ -181,6 +183,10 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
             val position = (contentAdapter.itemCount - 1).coerceAtLeast(0)
             smoothScrollToPosition(binding.rvContent, RecyclerView.State(), position)
         }
+    }
+
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
     }
 
     @CallSuper

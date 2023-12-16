@@ -1,14 +1,20 @@
 package com.xiaoyv.bangumi.ui.profile
 
+import android.annotation.SuppressLint
 import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.ColorUtils
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
@@ -22,6 +28,7 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
  * @since 11/24/23
  */
 class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileViewModel>() {
+    private var notifyBadge: BadgeDrawable? = null
 
     private val vpAdapter by lazy {
         ProfileAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
@@ -47,7 +54,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
     override fun initListener() {
         binding.toolbar.menu.apply {
-            add("Timeline")
+            add(0, CommonId.profile_notify, 0, "Notify")
                 .setIcon(CommonDrawable.ic_notifications)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
@@ -55,7 +62,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                     true
                 }
 
-            add("Message")
+            add(0, CommonId.profile_message, 0, "Message")
                 .setIcon(CommonDrawable.ic_email_normal)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
@@ -81,7 +88,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
         }
     }
 
-
+    @SuppressLint("UnsafeOptInUsageError")
     override fun LifecycleOwner.initViewObserver() {
         UserHelper.observeUserInfo(this) {
             if (!it.isEmpty) {
@@ -97,14 +104,28 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
             }
         }
 
+        // 消息提醒
         currentApplication.globalNotify.observe(this) {
-//            val badge = binding.navView.getOrCreateBadge(R.id.bottom_menu_profile)
-//            if (it != 0) {
-//                badge.number = it
-//                badge.badgeGravity = BadgeDrawable.TOP_END
-//            } else {
-//                badge.clearNumber()
-//            }
+            if (it > 0) {
+                val badgeDrawable = BadgeDrawable.create(requireActivity())
+                    .apply {
+                        isVisible = true
+                        backgroundColor = ColorUtils.getColor(CommonColor.save_dropped)
+                        number = it
+                    }
+                BadgeUtils.attachBadgeDrawable(
+                    badgeDrawable,
+                    binding.toolbar,
+                    CommonId.profile_notify
+                )
+                notifyBadge = badgeDrawable
+            } else {
+                BadgeUtils.detachBadgeDrawable(
+                    notifyBadge,
+                    binding.toolbar,
+                    CommonId.profile_notify
+                )
+            }
         }
     }
 

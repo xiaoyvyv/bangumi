@@ -85,6 +85,7 @@ inline fun Context.showOptionsDialog(
 inline fun Context.showInputDialog(
     title: String = StringUtils.getString(CommonString.common_tip),
     inputHint: String = "输入内容...",
+    default: String = "",
     crossinline onInput: (String) -> Unit = { _ -> },
 ) {
     val editTextView = AnimeEditTextView(this).apply {
@@ -95,6 +96,12 @@ inline fun Context.showInputDialog(
         )
         hint = inputHint
     }
+
+    if (default.isNotBlank()) {
+        editTextView.setText(default)
+        editTextView.selectAll()
+    }
+
     MaterialAlertDialogBuilder(this)
         .setTitle(title)
         .setView(editTextView)

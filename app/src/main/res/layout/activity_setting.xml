@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="@string/action_settings" />
+
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:paddingHorizontal="@dimen/ui_layout_margin"
+                android:paddingVertical="@dimen/ui_size_6"
+                android:text="账号设置"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <View
+                style="@style/Theme.Bangumi.Divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ui_size_0.5"
+                android:layout_marginHorizontal="@dimen/ui_layout_margin" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:paddingHorizontal="@dimen/ui_layout_margin"
+                android:paddingVertical="@dimen/ui_size_6"
+                android:text="通用"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_robot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_clean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_translate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <View
+                style="@style/Theme.Bangumi.Divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ui_size_0.5"
+                android:layout_marginHorizontal="@dimen/ui_layout_margin" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:paddingHorizontal="@dimen/ui_layout_margin"
+                android:paddingVertical="@dimen/ui_size_6"
+                android:text="相关"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_donation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_donation_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_github"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+
+            <View
+                style="@style/Theme.Bangumi.Divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ui_size_0.5"
+                android:layout_marginHorizontal="@dimen/ui_layout_margin" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:paddingHorizontal="@dimen/ui_layout_margin"
+                android:paddingVertical="@dimen/ui_size_6"
+                android:text="关于"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_agreement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <com.xiaoyv.common.widget.button.AnimeButton
+                android:id="@+id/btn_action"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/ui_layout_margin"
+                android:layout_marginTop="@dimen/ui_size_48"
+                android:paddingVertical="@dimen/ui_size_12"
+                android:text="退出登录" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

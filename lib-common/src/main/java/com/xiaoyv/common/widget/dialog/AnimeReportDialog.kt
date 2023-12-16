@@ -12,14 +12,12 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.R
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.ReportEntity
 import com.xiaoyv.common.api.parser.impl.parserReportForm
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.databinding.ViewReportBinding
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
@@ -137,12 +135,16 @@ class AnimeReportDialog : DialogFragment() {
     }
 
     companion object {
-        fun show(userId: String, @ReportType type: String) {
+
+        /**
+         * 注意，需要 Int 类型的 UID
+         */
+        fun show(userNumberId: String, @ReportType type: String) {
             val activity = ActivityUtils.getTopActivity() as? FragmentActivity ?: return
 
             AnimeReportDialog().apply {
                 arguments = bundleOf(
-                    NavKey.KEY_STRING to userId,
+                    NavKey.KEY_STRING to userNumberId,
                     NavKey.KEY_STRING_SECOND to type
                 )
             }.show(activity.supportFragmentManager, "AnimeReportDialog")

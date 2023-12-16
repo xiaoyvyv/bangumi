@@ -62,11 +62,13 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val attach = it.data?.extras?.getParcelObj<PostAttach>(NavKey.KEY_PARCELABLE)
             if (attach != null) {
-                viewModel.addAttach(attach)
+                onAddSelectMedia(attach)
             }
         }
 
     abstract val toolbarTitle: String
+
+    open val maxAttachSize = 5
 
     @CallSuper
     override fun initView() {
@@ -140,8 +142,8 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
         }
 
         binding.tvMedia.setOnFastLimitClickListener {
-            if (viewModel.onAttachMediaList.value.orEmpty().size >= 5) {
-                toast("最多关联5个条目")
+            if (viewModel.onAttachMediaList.value.orEmpty().size >= maxAttachSize) {
+                toast(String.format("最多关联 %d 个条目", maxAttachSize))
                 return@setOnFastLimitClickListener
             }
 
@@ -159,7 +161,7 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
             }
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.clBottom) { v, i ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.clBottom) { _, i ->
             val ime = i.getInsets(WindowInsetsCompat.Type.ime())
             binding.clBottom.updatePadding(bottom = (ime.bottom - ime.top))
             i
@@ -249,6 +251,13 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
             tags = "",
             isPublic = viewModel.publicSend.value ?: false
         )
+    }
+
+    /**
+     * 添加搜索的条目
+     */
+    open fun onAddSelectMedia(attach: PostAttach) {
+        viewModel.addAttach(attach)
     }
 
     override fun onCreateLoadingDialog(): UiDialog {

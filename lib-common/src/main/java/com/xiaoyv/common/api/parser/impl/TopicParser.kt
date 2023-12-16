@@ -14,6 +14,7 @@ import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 /**
  * @author why
@@ -88,4 +89,22 @@ fun Document.parserTopic(topicId: String): TopicDetailEntity {
 
         entity
     }
+}
+
+/**
+ * 解析 TopicId
+ *
+ * <script type="text/javascript">
+ * if (top.location == self.location) {
+ *     var rakuen_redirect_url = '';
+ * rakuen_redirect_url = "/group/topic/391241";
+ *     if (rakuen_redirect_url.length > 0) {
+ *         top.location.href = rakuen_redirect_url + window.location.hash;
+ *     }
+ * }
+ * var SHOW_ROBOT = '0', CHOBITS_UID = 837364, SITE_URL = 'https://bangumi.tv', CHOBITS_VER = 'r466';var data_ignore_users = ["348370","841153"];window.parent.document.title = '关于开发中想体验 Debug 包的说明 | Bangumi 乐园 [+超展开] ';
+ * </script>
+ */
+fun Element.parserTopicSendResult(): String {
+    return "/topic/(\\d+)\"".toRegex().find(toString())?.groupValues?.getOrNull(1).orEmpty()
 }

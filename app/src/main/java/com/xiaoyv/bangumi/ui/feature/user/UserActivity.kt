@@ -24,6 +24,7 @@ import com.xiaoyv.common.kts.randomX
 import com.xiaoyv.common.kts.randomY
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.common.widget.dialog.AnimeReportDialog
 import com.xiaoyv.widget.dialog.UiDialog
 
 
@@ -168,7 +169,7 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
 
         menu.add("举报")
             .setOnMenuItemClickListener {
-                RouteHelper.jumpReport(viewModel.userId, ReportType.TYPE_USER)
+                AnimeReportDialog.show(viewModel.requireUserNumberId, ReportType.TYPE_USER)
                 true
             }
         return super.onCreateOptionsMenu(menu)

@@ -8,6 +8,7 @@ package com.xiaoyv.common.api.parser.entity
  */
 data class UserDetailEntity(
     var id: String = "",
+    var numberUid: String = "",
     var nickname: String = "",
     var avatar: String = "",
     var sign: String = "",

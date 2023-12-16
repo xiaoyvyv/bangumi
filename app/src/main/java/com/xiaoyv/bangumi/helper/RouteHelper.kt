@@ -28,6 +28,9 @@ import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
 import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
 import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
+import com.xiaoyv.bangumi.ui.feature.setting.block.BlockActivity
+import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
+import com.xiaoyv.bangumi.ui.feature.setting.translate.TranslateConfigActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
@@ -38,16 +41,15 @@ import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.parseCount
+import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
-import com.xiaoyv.common.widget.dialog.AnimeReportDialog
 
 /**
  * Class: [RouteHelper]
@@ -194,9 +196,9 @@ object RouteHelper {
     /**
      * 跳转到发布页
      */
-    fun jumpPostBlog(relateMedia: PostAttach? = null) {
+    fun jumpPostBlog(postAttach: PostAttach? = null) {
         ActivityUtils.startActivity(
-            bundleOf(NavKey.KEY_PARCELABLE to relateMedia),
+            bundleOf(NavKey.KEY_PARCELABLE to postAttach),
             PostBlogActivity::class.java
         )
     }
@@ -212,9 +214,20 @@ object RouteHelper {
         )
     }
 
-    fun jumpPostTopic(targetId: String, groupOrSubject: Boolean) {
+    fun jumpPostTopic(postAttach: PostAttach? = null) {
         ActivityUtils.startActivity(
-            bundleOf(NavKey.KEY_STRING to targetId, NavKey.KEY_BOOLEAN to groupOrSubject),
+            bundleOf(NavKey.KEY_PARCELABLE to postAttach),
+            PostTopicActivity::class.java
+        )
+    }
+
+    fun jumpEditTopic(topicId: String) {
+        ActivityUtils.startActivity(
+            bundleOf(
+                // 编辑模式
+                NavKey.KEY_BOOLEAN to true,
+                NavKey.KEY_STRING to topicId
+            ),
             PostTopicActivity::class.java
         )
     }
@@ -277,7 +290,9 @@ object RouteHelper {
      * 跳转到我的话题
      */
     fun jumpMyTopics(sendOrReply: Boolean) {
-        val fakeId = if (sendOrReply) "my_topic" else "my_reply"
+        val fakeId = if (sendOrReply) GlobalConfig.GROUP_MY_SEND_TOPIC
+        else GlobalConfig.GROUP_MY_REPLY_TOPIC
+
         GroupTopicsActivity::class.open(bundleOf(NavKey.KEY_STRING to fakeId))
     }
 
@@ -363,14 +378,22 @@ object RouteHelper {
 
     }
 
-    fun jumpReport(userId: String, @ReportType type: String) {
-        AnimeReportDialog.show(userId, type)
-    }
-
     /**
      * 预览 BBCode
      */
     fun jumpPreviewBBCode(bbCode: String) {
         PreviewBBCodeActivity::class.open(bundleOf(NavKey.KEY_STRING to bbCode))
+    }
+
+    fun jumpBlockUser() {
+        BlockActivity::class.open()
+    }
+
+    fun jumpPrivacy() {
+        PrivacyActivity::class.open()
+    }
+
+    fun jumpTranslateConfig() {
+        TranslateConfigActivity::class.open()
     }
 }

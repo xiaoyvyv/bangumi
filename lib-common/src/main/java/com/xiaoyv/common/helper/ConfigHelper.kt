@@ -12,8 +12,11 @@ object ConfigHelper {
     private const val KEY_BAIDU_TRANSLATE_APP_ID = "baidu-translate-app-id"
     private const val KEY_BAIDU_TRANSLATE_APP_SECRET = "baidu-translate-secret"
 
-    fun configBaiduTranslate(appId: String, secret: String) {
+    fun configBaiduTranslateId(appId: String) {
         SPStaticUtils.put(KEY_BAIDU_TRANSLATE_APP_ID, appId)
+    }
+
+    fun configBaiduTranslateSecret(secret: String) {
         SPStaticUtils.put(KEY_BAIDU_TRANSLATE_APP_SECRET, secret)
     }
 

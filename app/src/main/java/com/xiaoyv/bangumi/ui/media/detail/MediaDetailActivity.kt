@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -115,7 +116,11 @@ class MediaDetailActivity :
                 delay(200)
                 when (actionItem.id) {
                     CommonId.fab_new_blog -> RouteHelper.jumpPostBlog(postAttach)
-                    CommonId.fab_new_topic -> RouteHelper.jumpPostTopic(postAttach.id, false)
+                    CommonId.fab_new_topic -> {
+                        // 注意，发布话题这里 type 要改成 TopicType.TYPE_SUBJECT
+                        postAttach.type = TopicType.TYPE_SUBJECT
+                        RouteHelper.jumpPostTopic(postAttach)
+                    }
                 }
             }
             true

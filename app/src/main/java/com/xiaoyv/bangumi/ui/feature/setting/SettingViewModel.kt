@@ -1,9 +1,13 @@
 package com.xiaoyv.bangumi.ui.feature.setting
 
-import com.xiaoyv.bangumi.base.BaseListViewModel
-import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.entity.NotifyEntity
-import com.xiaoyv.common.api.parser.impl.parserNotify
+import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.PathUtils
+import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.widget.kts.showToastCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Class: [SettingViewModel]
@@ -11,9 +15,18 @@ import com.xiaoyv.common.api.parser.impl.parserNotify
  * @author why
  * @since 12/8/23
  */
-class SettingViewModel : BaseListViewModel<NotifyEntity>() {
+class SettingViewModel : BaseViewModel() {
+    internal val onRefreshItem = MutableLiveData<Boolean>()
 
-    override suspend fun onRequestListImpl(): List<NotifyEntity> {
-        return BgmApiManager.bgmWebApi.queryNotifyAll().parserNotify()
+    fun cleanCache() {
+        launchUI {
+            withContext(Dispatchers.IO) {
+                FileUtils.deleteAllInDir(PathUtils.getExternalAppCachePath())
+                FileUtils.deleteAllInDir(PathUtils.getInternalAppCachePath())
+            }
+            onRefreshItem.value = true
+
+            showToastCompat("缓存已清理")
+        }
     }
 }

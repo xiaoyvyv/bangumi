@@ -19,18 +19,18 @@ import kotlinx.coroutines.withContext
 
 fun FragmentActivity.showActionMenu(
     view: View,
-    userId: String,
+    userNumberId: String,
     @ReportType reportType: String,
     loadingState: MutableLiveData<LoadingState>? = null,
 ) {
     PopupMenu(this, view)
         .apply {
             menu.add("绝交").setOnMenuItemClickListener {
-                ignoreUser(userId, loadingState)
+                ignoreUser(userNumberId, loadingState)
                 true
             }
             menu.add("报告疑虑").setOnMenuItemClickListener {
-                AnimeReportDialog.show(userId, reportType)
+                AnimeReportDialog.show(userNumberId, reportType)
                 true
             }
         }

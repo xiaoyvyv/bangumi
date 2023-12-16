@@ -4,6 +4,7 @@ import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
 import com.xiaoyv.common.api.parser.impl.parserGroupTopics
+import com.xiaoyv.common.config.GlobalConfig
 
 /**
  * Class: [GroupTopicsViewModel]
@@ -19,7 +20,7 @@ class GroupTopicsViewModel : BaseListViewModel<TopicSampleEntity>() {
      * 我的回复和发布也是复用改类的逻辑
      */
     private val isMyTopic: Boolean
-        get() = groupId == "my_reply" || groupId == "my_topic"
+        get() = groupId == GlobalConfig.GROUP_MY_REPLY_TOPIC || groupId == GlobalConfig.GROUP_MY_SEND_TOPIC
 
     override suspend fun onRequestListImpl(): List<TopicSampleEntity> {
         require(groupId.isNotBlank()) { "小组不存在" }

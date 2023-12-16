@@ -30,8 +30,8 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     private var position: Int = 0
     private var total = 0
 
-    private val isGif
-        get() = imageUrl.endsWith(".gif", false)
+    private val isLoadNormal
+        get() = imageUrl.endsWith(".gif", false) || imageUrl.startsWith("file:///android_asset")
 
     override fun initArgumentsData(arguments: Bundle) {
         imageUrl = arguments.getString(NavKey.KEY_STRING).orEmpty()
@@ -41,7 +41,7 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
 
     override fun initView() {
         binding.ivImage.isQuickScaleEnabled = true
-        if (isGif) {
+        if (isLoadNormal) {
             binding.ivGif.isVisible = true
             binding.ivImage.isVisible = false
         } else {
@@ -51,7 +51,7 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     }
 
     override fun initData() {
-        if (isGif) {
+        if (isLoadNormal) {
             binding.ivGif.loadImage(imageUrl, cropOrFit = false)
             binding.gpProgress.isVisible = false
         } else {

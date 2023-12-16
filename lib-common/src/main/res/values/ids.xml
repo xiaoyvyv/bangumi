@@ -4,4 +4,7 @@
     <item name="toolbar_layout" type="id" />
     <item name="fab_new_blog" type="id" />
     <item name="fab_new_topic" type="id" />
+
+    <item name="profile_notify" type="id"/>
+    <item name="profile_message" type="id"/>
 </resources>

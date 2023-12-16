@@ -25,10 +25,18 @@ class UserViewModel : BaseViewModel() {
 
     var userId: String = ""
 
+    /**
+     * 部分操作需要 Int 类型的 UID
+     */
+    internal val requireUserNumberId
+        get() = onUserInfoLiveData.value?.numberUid.orEmpty().ifBlank { userId }
+
     internal val requireIsFriend
         get() = onUserInfoLiveData.value?.isFriend == true
+
     internal val requireUserName
         get() = onUserInfoLiveData.value?.nickname.orEmpty()
+
     private val requireGh
         get() = onUserInfoLiveData.value?.gh.orEmpty()
 
@@ -36,7 +44,7 @@ class UserViewModel : BaseViewModel() {
         queryUserInfo()
     }
 
-     fun queryUserInfo() {
+    fun queryUserInfo() {
         launchUI(
             error = {
                 it.printStackTrace()
@@ -65,9 +73,9 @@ class UserViewModel : BaseViewModel() {
                 withContext(Dispatchers.IO) {
                     val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
                     if (addFriend) {
-                        BgmApiManager.bgmWebApi.connectFriend(referer, userId, requireGh)
+                        BgmApiManager.bgmWebApi.connectFriend(referer, requireUserNumberId, requireGh)
                     } else {
-                        BgmApiManager.bgmWebApi.disconnectFriend(referer, userId, requireGh)
+                        BgmApiManager.bgmWebApi.disconnectFriend(referer, requireUserNumberId, requireGh)
                     }
                 }
                 onActionResult.value = true

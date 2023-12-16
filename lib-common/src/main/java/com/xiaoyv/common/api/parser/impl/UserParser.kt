@@ -25,6 +25,11 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
     val entity = UserDetailEntity(id = userId)
     entity.gh = parserFormHash()
 
+    // 解析 Int 类型好友ID
+    entity.numberUid = select(".actions a.chiiBtn").attr("href").let {
+        "(\\d{6,})".toRegex().find(it)?.groupValues?.getOrNull(1).orEmpty()
+    }
+
     selectLegal("#headerProfile").apply {
         entity.avatar = select(".headerAvatar span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()

@@ -272,23 +272,18 @@ interface BgmWebApi {
     @POST("/blog/{blogId}/edit")
     suspend fun postEditBlog(@Path("blogId") blogId: String, @Body body: MultipartBody): Document
 
-    @GET("/erase/entry/{blogId}")
-    suspend fun deleteBlog(
-        @Path("blogId", encoded = true) blogId: String,
-        @Query("gh") hash: String,
-    ): Document
-
     /**
      * 发布一个话题
      *
      * @param targetType 发布话题的目标类型 group|subject
      * @param targetId 发布话题的目标类型的ID
      */
+    @FormUrlEncoded
     @POST("/{targetType}/{targetId}/topic/new")
     suspend fun postCreateTopic(
         @Path("targetType", encoded = true) targetType: String,
         @Path("targetId", encoded = true) targetId: String,
-        @Body body: MultipartBody,
+        @FieldMap map: Map<String, String>,
     ): Document
 
     @GET("/subject/{subjectId}/remove")
@@ -315,9 +310,9 @@ interface BgmWebApi {
         @Query("gh") hash: String,
     ): Document
 
-    @GET("/erase/entry/{id}")
-    suspend fun deleteEntry(
-        @Path("id", encoded = true) id: String,
+    @GET("/erase/entry/{blogId}")
+    suspend fun deleteBlog(
+        @Path("blogId", encoded = true) blogId: String,
         @Query("gh") hash: String,
     ): Document
 
@@ -450,6 +445,15 @@ interface BgmWebApi {
 
     @GET("/notify/all")
     suspend fun queryNotifyAll(): Document
+
+    /**
+     * 标记全部通知已读
+     */
+    @GET("/erase/notify/all")
+    suspend fun markNotifyRead(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @Query("gh") formHash: String,
+    ): Document
 
     /**
      * 绝交用户
@@ -621,6 +625,19 @@ interface BgmWebApi {
         @Field("desc") desc: String,
         @Field("accessible") accessible: Int,
         @Field("submit") submit: String,
+    ): Document
+
+    @GET("/settings/privacy")
+    suspend fun queryPrivacy(
+        @Query("ignore_reset") numberId: String? = null,
+        @Query("gh") formHash: String? = null,
+    ): Document
+
+    @FormUrlEncoded
+    @POST("/settings/privacy")
+    suspend fun postPrivacy(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @FieldMap param: Map<String, String>,
     ): Document
 }
 
