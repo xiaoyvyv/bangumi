@@ -8,7 +8,6 @@ import InfiniteLoading from "v3-infinite-loading";
 import common from "../../util/common.ts";
 import {CommentTreeEntity} from "../../util/interface/CommentTreeEntity.ts";
 import BottomSpinnerView from "../../components/BottomSpinnerView.vue";
-import {Post} from "../../util/interface/CommentReplyEntity.ts";
 
 const blog = ref<BlogDetailEntity>({} as BlogDetailEntity);
 const blogContentRef = ref<HTMLDivElement>();

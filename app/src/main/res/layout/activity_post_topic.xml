@@ -139,6 +139,25 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/ui_layout_margin"
+                android:background="@drawable/ui_shape_rectangle_corner_6"
+                android:backgroundTint="?attr/colorSurfaceContainer"
+                android:drawablePadding="@dimen/ui_size_4"
+                android:gravity="center"
+                android:padding="@dimen/ui_size_4"
+                android:text="预览正文"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                app:drawableStartCompat="@drawable/ic_preview"
+                app:drawableTint="?attr/colorOnSurfaceVariant"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_public"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
                 android:id="@+id/tv_public"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -157,10 +176,5 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.xiaoyv.common.widget.state.AnimeStateView
-            android:id="@+id/state_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

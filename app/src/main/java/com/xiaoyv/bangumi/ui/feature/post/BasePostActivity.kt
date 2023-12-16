@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -65,11 +66,13 @@ open class BasePostActivity<VM : BasePostViewModel> :
             }
         }
 
+    @CallSuper
     override fun initView() {
-        binding.toolbar.initNavBack(this)
         binding.toolbar.title = if (viewModel.isEditMode) "编辑内容" else "发布内容"
+        binding.toolbar.initNavBack(this)
     }
 
+    @CallSuper
     override fun initData() {
         showTip()
 
@@ -114,6 +117,7 @@ open class BasePostActivity<VM : BasePostViewModel> :
             }
     }
 
+    @CallSuper
     override fun initListener() {
         binding.etContent.doAfterTextChanged {
             binding.ivAvatar.isVisible = it.toString().isBlank()
@@ -121,6 +125,10 @@ open class BasePostActivity<VM : BasePostViewModel> :
 
         binding.tvPublic.setOnClickListener {
             viewModel.publicSend.value = (viewModel.publicSend.value ?: false).not()
+        }
+
+        binding.tvPreview.setOnFastLimitClickListener {
+            RouteHelper.jumpPreviewBBCode(binding.etContent.text.toString().trim())
         }
 
         binding.ivImage.setOnFastLimitClickListener {
@@ -158,6 +166,7 @@ open class BasePostActivity<VM : BasePostViewModel> :
         ViewCompat.requestApplyInsets(binding.clBottom)
     }
 
+    @CallSuper
     override fun LifecycleOwner.initViewObserver() {
         viewModel.publicSend.observe(this) {
             binding.tvPublic.text = if (it) "公开" else "仅好友可见"
@@ -209,11 +218,14 @@ open class BasePostActivity<VM : BasePostViewModel> :
 
     open fun LifecycleOwner.initViewObserverExt() {}
 
+    @CallSuper
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(if (viewModel.isEditMode) "保存" else "发送")
             .setIcon(if (viewModel.isEditMode) CommonDrawable.ic_save else CommonDrawable.ic_send)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
+                KeyboardUtils.hideSoftInput(activity)
+
                 // 编辑或发布
                 if (viewModel.isEditMode) {
                     viewModel.editPost(onCreatePost())

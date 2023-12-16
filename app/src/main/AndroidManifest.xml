@@ -209,6 +209,10 @@
             android:name="com.xiaoyv.bangumi.ui.discover.index.list.IndexListActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.post.preview.PreviewBBCodeActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

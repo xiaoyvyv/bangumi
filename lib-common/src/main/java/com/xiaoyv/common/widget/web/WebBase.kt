@@ -82,7 +82,7 @@ abstract class WebBase(open val webView: UiWebView) {
         // 机器人说话
         useNotNull(webView.findViewTreeLifecycleOwner()) {
             currentApplication.globalRobotSpeech.observe(this) {
-                launchUI { callJs("window.robotSay('$it')") }
+                launchUI { callJs("window.robotSay && window.robotSay('$it')") }
             }
         }
     }

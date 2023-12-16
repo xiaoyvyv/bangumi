@@ -1,11 +1,11 @@
 const blog = () => import('../pages/blog/BlogView.vue');
-const blogPost = () => import('../pages/post/BlogPostView.vue');
-const index = () => import('../pages/IndexView.vue');
 const topic = () => import('../pages/topic/TopicView.vue');
+const bbCode = () => import('../pages/bbcode/BBCodeView.vue');
+const index = () => import('../pages/IndexView.vue');
 export const RoutePaths = {
     blog: 'blog',
     topic: 'topic',
-    blogPost: 'blog-post',
+    bbcode: 'bb-code',
     index: 'index',
 };
 
@@ -25,8 +25,8 @@ export default [
         component: topic
     },
     {
-        name: RoutePaths.blogPost,
-        path: '/blog-post',
-        component: blogPost
+        name: RoutePaths.bbcode,
+        path: '/bb-code',
+        component: bbCode
     }
 ];

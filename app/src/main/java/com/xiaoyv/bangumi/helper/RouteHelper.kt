@@ -22,6 +22,7 @@ import com.xiaoyv.bangumi.ui.feature.musmme.MusumeActivity
 import com.xiaoyv.bangumi.ui.feature.notify.NotifyActivity
 import com.xiaoyv.bangumi.ui.feature.person.PersonActivity
 import com.xiaoyv.bangumi.ui.feature.post.blog.PostBlogActivity
+import com.xiaoyv.bangumi.ui.feature.post.preview.PreviewBBCodeActivity
 import com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
 import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
@@ -366,4 +367,10 @@ object RouteHelper {
         AnimeReportDialog.show(userId, type)
     }
 
+    /**
+     * 预览 BBCode
+     */
+    fun jumpPreviewBBCode(bbCode: String) {
+        PreviewBBCodeActivity::class.open(bundleOf(NavKey.KEY_STRING to bbCode))
+    }
 }

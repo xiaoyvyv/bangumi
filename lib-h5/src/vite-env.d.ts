@@ -4,9 +4,8 @@ declare module '@bbob/html';
 
 declare interface Window {
     blog: any;
-    blogPost: any;
     topic: any;
-    sign: any;
+    bbcode: any;
     mounted: boolean;
     robotSay: (message: string) => void;
     android: Android;

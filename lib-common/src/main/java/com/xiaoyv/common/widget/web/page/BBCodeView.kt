@@ -6,23 +6,19 @@ import com.xiaoyv.common.widget.web.WebBase
 import com.xiaoyv.widget.webview.UiWebView
 
 /**
- * Class: [SignView]
+ * Class: [BBCodeView]
  *
  * @author why
  * @since 12/2/23
  */
 @SuppressLint("JavascriptInterface")
-class SignView(override val webView: UiWebView) : WebBase(webView) {
+class BBCodeView(override val webView: UiWebView) : WebBase(webView) {
     override val pageRoute: String
-        get() = "sign"
+        get() = "bb-code"
 
-    suspend fun setSign(sign: String) {
-        val json = mapOf("sign" to sign).toJson(true)
-        callJs("window.sign.setSign($json);")
-    }
+    suspend fun setCode(code: String) {
+        val json = mapOf("code" to code).toJson(true)
 
-
-    init {
-        webView.addJavascriptInterface(this, "android")
+        callJs("window.bbcode.setCode($json);")
     }
 }
