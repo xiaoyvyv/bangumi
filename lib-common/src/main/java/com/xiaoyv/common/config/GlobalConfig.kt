@@ -10,15 +10,19 @@ import com.xiaoyv.common.config.bean.MediaTab
  * @since 11/28/23
  */
 object GlobalConfig {
+    private const val DOC_ROOT = "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build"
+
     const val GROUP_MY_REPLY_TOPIC = "my_reply"
     const val GROUP_MY_SEND_TOPIC = "my_topic"
 
-    const val DOC_PRIVACY =
-        "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/starter.html"
-    const val DOC_AUTHOR =
-        "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/author.html"
-    const val DOC_DONATION =
-        "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/donation.html"
+    val docPrivacy: String
+        get() = "$DOC_ROOT/starter.html?_=" + System.currentTimeMillis()
+
+    val docAuthor: String
+        get() = "$DOC_ROOT/author.html?_=" + System.currentTimeMillis()
+
+    val docDonation
+        get() = "$DOC_ROOT/donation.html?_=" + System.currentTimeMillis()
 
     val mediaTypes by lazy {
         listOf(

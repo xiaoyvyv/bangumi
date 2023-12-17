@@ -65,7 +65,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingRobot.setOnFastLimitClickListener {
-            showConfirmDialog(message = "正在调试中，敬请期待")
+            showConfirmDialog(message = "正在调试中，敬请期待", cancelText = null)
         }
 
         binding.settingClean.setOnFastLimitClickListener {
@@ -102,7 +102,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingDonationUser.setOnFastLimitClickListener {
-            RouteHelper.jumpWeb(GlobalConfig.DOC_DONATION, fitToolbar = true, smallToolbar = true)
+            RouteHelper.jumpWeb(GlobalConfig.docDonation, fitToolbar = true, smallToolbar = true)
         }
 
         binding.settingGroup.setOnFastLimitClickListener {
@@ -114,11 +114,11 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingAgreement.setOnFastLimitClickListener {
-            RouteHelper.jumpWeb(GlobalConfig.DOC_PRIVACY, fitToolbar = true, smallToolbar = true)
+            RouteHelper.jumpWeb(GlobalConfig.docPrivacy, fitToolbar = true, smallToolbar = true)
         }
 
         binding.settingAuthor.setOnFastLimitClickListener {
-            RouteHelper.jumpWeb(GlobalConfig.DOC_AUTHOR, fitToolbar = true, smallToolbar = true)
+            RouteHelper.jumpWeb(GlobalConfig.docAuthor, fitToolbar = true, smallToolbar = true)
         }
 
         binding.settingAbout.setOnFastLimitClickListener {
