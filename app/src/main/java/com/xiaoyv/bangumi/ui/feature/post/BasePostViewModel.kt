@@ -69,8 +69,8 @@ open class BasePostViewModel : BaseViewModel() {
             block = {
                 onUploadImageResult.value = withContext(Dispatchers.IO) {
                     val file = UriUtils.uri2File(uri)
-                    if (file.length() > MemoryConstants.MB * 10) {
-                        throw IllegalArgumentException("请选择小于 10M 的图片")
+                    if (file.length() > MemoryConstants.MB * 5) {
+                        throw IllegalArgumentException("请选择小于 5M 的图片")
                     }
 
                     if (ConfigHelper.isImageCompress()) {
