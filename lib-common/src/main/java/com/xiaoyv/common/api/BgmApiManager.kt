@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api
 
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.Utils
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
@@ -39,7 +40,11 @@ class BgmApiManager {
             .addInterceptor(CommonInterceptor())
             .addInterceptor(DouBanInterceptor())
             .addNetworkInterceptor(CookieInterceptor())
-            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            .apply {
+                if (AppUtils.isAppDebug()) {
+                    addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+                }
+            }
             .cookieJar(cookieJar)
             .callTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

@@ -7,6 +7,8 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.blankj.utilcode.util.AppUtils
+import com.blankj.utilcode.util.LogUtils
 import com.xiaoyv.blueprint.BluePrint
 import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -41,6 +43,8 @@ class MainApp : Application() {
         UserHelper.initLoad()
         UiFaceManager.manager.initEmojiMap()
         startIdleWork()
+
+        LogUtils.getConfig().isLogSwitch = AppUtils.isAppDebug()
     }
 
     private fun startIdleWork() {
