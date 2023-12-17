@@ -13,6 +13,7 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TimelineAdapterType
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.kts.getAttrColor
@@ -67,9 +68,6 @@ class TimelinePageFragment :
 
     override fun initData() {
         binding.rvContent.adapter = contentAdapter
-        binding.srlRefresh.isRefreshing = true
-
-        viewModel.queryTimeline()
     }
 
     override fun initListener() {
@@ -126,6 +124,16 @@ class TimelinePageFragment :
 
         viewModel.onTimelineLiveData.observe(this) {
             contentAdapter.submitList(it.orEmpty())
+        }
+
+        // 嵌套在 Profile 页面的情况
+        if (viewModel.timelineTab?.requireLogin == true) {
+            UserHelper.observeUserInfo(this) {
+                viewModel.timelineTab?.userId = it.id.orEmpty()
+                viewModel.queryTimeline()
+            }
+        } else {
+            viewModel.queryTimeline()
         }
     }
 

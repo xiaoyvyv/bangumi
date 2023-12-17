@@ -13,6 +13,8 @@ object ConfigHelper {
     private const val KEY_BAIDU_TRANSLATE_APP_SECRET = "baidu-translate-secret"
     private const val KEY_ROBOT_DISABLE = "robot-disable"
     private const val KEY_ROBOT_VOICE_DISABLE = "robot-voice-disable"
+    private const val KEY_IMAGE_ANIMATION = "image-animation"
+    private const val KEY_IMAGE_COMPRESS = "image-compress"
 
     fun configBaiduTranslateId(appId: String) {
         SPStaticUtils.put(KEY_BAIDU_TRANSLATE_APP_ID, appId)
@@ -42,4 +44,21 @@ object ConfigHelper {
     fun setRobotVoiceDisable(disable: Boolean) {
         return SPStaticUtils.put(KEY_ROBOT_VOICE_DISABLE, disable)
     }
+
+    fun isImageAnimation(): Boolean {
+        return SPStaticUtils.getBoolean(KEY_IMAGE_ANIMATION, false)
+    }
+
+    fun setImageAnimation(enable: Boolean) {
+        return SPStaticUtils.put(KEY_IMAGE_ANIMATION, enable)
+    }
+
+    fun isImageCompress(): Boolean {
+        return SPStaticUtils.getBoolean(KEY_IMAGE_COMPRESS, true)
+    }
+
+    fun setImageCompress(enable: Boolean) {
+        return SPStaticUtils.put(KEY_IMAGE_COMPRESS, enable)
+    }
+
 }

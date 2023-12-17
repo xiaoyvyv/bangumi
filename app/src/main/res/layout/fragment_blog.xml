@@ -114,5 +114,6 @@
     <com.xiaoyv.common.widget.state.AnimeStateView
         android:id="@+id/state_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface" />
 </androidx.constraintlayout.widget.ConstraintLayout>

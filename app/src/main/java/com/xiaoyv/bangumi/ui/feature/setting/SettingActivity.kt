@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.GlobalConfig
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.initNavBack
@@ -95,6 +96,24 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
             )
         }
 
+        binding.settingImageAnimation.setOnFastLimitClickListener {
+            if (ConfigHelper.isImageAnimation()) {
+                ConfigHelper.setImageAnimation(false)
+            } else {
+                ConfigHelper.setImageAnimation(true)
+            }
+            refresh()
+        }
+
+        binding.settingImageCompress.setOnFastLimitClickListener {
+            if (ConfigHelper.isImageCompress()) {
+                ConfigHelper.setImageCompress(false)
+            } else {
+                ConfigHelper.setImageCompress(true)
+            }
+            refresh()
+        }
+
         binding.settingDonation.setOnFastLimitClickListener {
             RouteHelper.jumpPreviewImage(
                 showImage = "file:///android_asset/image/ic_donation.jpg"
@@ -150,6 +169,10 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         binding.settingAuthor.title = "关于作者"
 
         binding.settingRobot.title = "Bangumi 娘"
+        binding.settingImageAnimation.title = "图片渐变动画"
+        binding.settingImageAnimation.desc = if (ConfigHelper.isImageAnimation()) "开启" else "关闭"
+        binding.settingImageCompress.title = "图片上传压缩"
+        binding.settingImageCompress.desc = if (ConfigHelper.isImageCompress()) "开启" else "关闭"
         binding.settingFeedback.title = "反馈 BUG"
         binding.settingFeedback.desc = "建议或反馈"
         binding.settingDonation.title = "投食🍚"

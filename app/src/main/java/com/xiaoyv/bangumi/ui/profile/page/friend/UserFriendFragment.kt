@@ -44,6 +44,16 @@ class UserFriendFragment : BaseListFragment<FriendEntity, UserFriendViewModel>()
                 viewModel.refresh()
             }
         }
+
+        // 嵌套在 Profile 页面的情况
+        if (viewModel.requireLogin) {
+            UserHelper.observeUserInfo(this) {
+                viewModel.userId = it.id.orEmpty()
+                viewModel.refresh()
+            }
+        } else {
+            viewModel.refresh()
+        }
     }
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<FriendEntity, *> {

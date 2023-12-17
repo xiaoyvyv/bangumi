@@ -70,7 +70,7 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
     }
 
     override fun initListener() {
-        binding.listType.setOnCheckedStateChangeListener { chipGroup, ints ->
+        binding.listType.setOnCheckedStateChangeListener { _, ints ->
             val type = when (ints.firstOrNull()) {
                 R.id.type_wish -> InterestCollectType.TYPE_WISH
                 R.id.type_collect -> InterestCollectType.TYPE_COLLECT
@@ -126,14 +126,11 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
             }
         }
 
+        // 嵌套在 Profile 页面的情况
         if (viewModel.requireLogin) {
             UserHelper.observeUserInfo(this) {
-                if (it.isEmpty) {
-                    viewModel.clearList()
-                } else {
-                    viewModel.userId = it.id.orEmpty()
-                    viewModel.refresh()
-                }
+                viewModel.userId = it.id.orEmpty()
+                viewModel.refresh()
             }
         } else {
             viewModel.refresh()

@@ -15,6 +15,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.CreatePostEntity
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.config.bean.PostAttach
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -71,18 +72,24 @@ open class BasePostViewModel : BaseViewModel() {
                         throw IllegalArgumentException("请选择小于 5M 的图片")
                     }
 
-                    // 复制到沙盒
-                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                    val tmpDir = PathUtils.getCachePathExternalFirst() + "/image"
-                    val tmp = tmpDir + "/${System.currentTimeMillis()}.png"
-                    val quality =
-                        ImageUtils.compressByQuality(bitmap, MemoryConstants.KB * 500L, true)
+                    if (ConfigHelper.isImageCompress()) {
+                        // 压缩图片
+                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                        val tmpDir = PathUtils.getCachePathExternalFirst() + "/image"
+                        val tmp = tmpDir + "/${System.currentTimeMillis()}.png"
+                        val quality =
+                            ImageUtils.compressByQuality(bitmap, MemoryConstants.KB * 500L, true)
 
-                    FileUtils.deleteAllInDir(tmpDir)
-                    FileIOUtils.writeFileFromBytesByStream(tmp, quality)
+                        FileUtils.deleteAllInDir(tmpDir)
+                        FileIOUtils.writeFileFromBytesByStream(tmp, quality)
 
-                    // 开始上传
-                    uploadImage(tmp)
+                        // 开始上传
+                        uploadImage(tmp)
+                    } else {
+
+                        // 开始上传
+                        uploadImage(file.absolutePath)
+                    }
                 }
             }
         )

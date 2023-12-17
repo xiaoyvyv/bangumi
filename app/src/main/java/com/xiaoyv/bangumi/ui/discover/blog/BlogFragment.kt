@@ -66,8 +66,6 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
 
     override fun initData() {
         binding.rvContent.adapter = adapterHelper.adapter
-
-        viewModel.refresh()
     }
 
     override fun initListener() {
@@ -97,6 +95,16 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_root) {
             RouteHelper.jumpBlogDetail(it.id)
+        }
+
+        // 嵌套在 Profile 页面的情况
+        if (viewModel.requireLogin) {
+            UserHelper.observeUserInfo(this) {
+                viewModel.userId = it.id.orEmpty()
+                viewModel.refresh()
+            }
+        } else {
+            viewModel.refresh()
         }
     }
 

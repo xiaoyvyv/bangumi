@@ -7,6 +7,7 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.blur.BlurTransformation
 import com.xiaoyv.widget.kts.listener
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,10 @@ inline fun ImageView.loadImageAnimate(
                     .error(CommonDrawable.layer_error)
             } else it
         }
-        .transition(DrawableTransitionOptions.withCrossFade())
+        .let {
+            if (ConfigHelper.isImageAnimation()) it.transition(DrawableTransitionOptions.withCrossFade())
+            else it
+        }
         .into(this)
 }
 
