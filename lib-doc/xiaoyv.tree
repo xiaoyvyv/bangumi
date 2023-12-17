@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="xiaoyv"
+                  name="Bangumi for Android"
+                  start-page="Home.md">
+
+    <toc-element topic="Home.md">
+        <toc-element topic="Starter.md"/>
+        <toc-element topic="Preview.md"/>
+    </toc-element>
+    <toc-element topic="Download.md"/>
+    <toc-element topic="Question.md"/>
+    <toc-element topic="Overview.md"/>
+    <toc-element topic="Update.md"/>
+</instance-profile>

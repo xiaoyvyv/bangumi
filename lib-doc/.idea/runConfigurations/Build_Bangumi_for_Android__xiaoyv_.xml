@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Build Bangumi for Android (xiaoyv)" type="StardustRunConfiguration" factoryName="save-as-zip">
+    <option name="folderPath" value="$PROJECT_DIR$/build" />
+    <option name="instanceId" value="xiaoyv" />
+    <option name="instanceName" value="Bangumi for Android" />
+    <method v="2" />
+  </configuration>
+</component>
