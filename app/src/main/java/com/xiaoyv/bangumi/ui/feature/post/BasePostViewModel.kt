@@ -109,7 +109,7 @@ open class BasePostViewModel : BaseViewModel() {
         )
         val url = blogImage.thumbUrl.orEmpty()
 
-        return if (url.startsWith("//")) "https://$url" else url
+        return if (url.startsWith("//")) "https:$url" else url
     }
 
     /**
