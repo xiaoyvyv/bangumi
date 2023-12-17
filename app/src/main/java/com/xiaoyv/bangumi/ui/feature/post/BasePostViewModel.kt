@@ -107,9 +107,7 @@ open class BasePostViewModel : BaseViewModel() {
         val blogImage = BgmApiManager.bgmWebApi.uploadBlogImage(
             MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
         )
-        val url = blogImage.thumbUrl.orEmpty()
-
-        return if (url.startsWith("//")) "https:$url" else url
+        return blogImage.thumbUrl.orEmpty().optImageUrl(largest = true)
     }
 
     /**
