@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -9,17 +10,94 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/ui_transparent"
         android:fitsSystemWindows="true"
         app:theme="@style/Theme.Bangumi.AppBarOverlay">
 
-        <com.xiaoyv.common.widget.appbar.AnimeToolbar
-            android:id="@id/toolbar"
+        <com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout
+            android:id="@id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_collapseMode="pin"
-            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title=" " />
+            android:layout_height="@dimen/ui_size_200"
+            android:background="?attr/colorPrimaryContainer"
+            android:fitsSystemWindows="true"
+            android:paddingVertical="@dimen/ui_size_0"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:scrimVisibleHeightTrigger="@dimen/ui_size_140"
+            app:titleEnabled="false"
+            app:toolbarId="@id/toolbar">
 
+            <com.xiaoyv.common.widget.image.AnimeImageView
+                android:id="@+id/iv_banner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.2"
+                app:srcCompat="@color/ui_black_60" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ui_size_180"
+                android:layout_gravity="bottom"
+                android:background="@drawable/shape_bottom_edge"
+                android:fitsSystemWindows="true" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.1">
+
+                <com.xiaoyv.common.widget.image.AnimeImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="@dimen/avatar_size"
+                    android:layout_height="@dimen/avatar_size"
+                    android:layout_marginStart="@dimen/ui_layout_margin"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_name"
+                    app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="@dimen/ui_size_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ui_layout_margin"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_desc"
+                    app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+                    tools:text="@tools:sample/full_names" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_desc"
+                    android:layout_width="@dimen/ui_size_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/ui_layout_margin"
+                    android:layout_marginBottom="@dimen/ui_layout_margin"
+                    android:ellipsize="end"
+                    android:lineSpacingMultiplier="1.25"
+                    android:maxLines="2"
+                    android:paddingVertical="@dimen/ui_size_12"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_name"
+                    tools:text="@tools:sample/lorem/random" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.xiaoyv.common.widget.appbar.AnimeToolbar
+                android:id="@id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+                app:title="目录详情" />
+
+        </com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout>
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,10 +105,25 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-        <com.xiaoyv.common.widget.state.AnimeStateView
-            android:id="@+id/state_view"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/table_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabMode="scrollable" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/table_layout" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.xiaoyv.common.widget.state.AnimeStateView
+        android:id="@+id/state_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

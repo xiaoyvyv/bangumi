@@ -2,6 +2,7 @@
 
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.entity.IndexAttachEntity
 import com.xiaoyv.common.api.parser.entity.IndexDetailEntity
 import com.xiaoyv.common.api.parser.entity.IndexEntity
 import com.xiaoyv.common.api.parser.entity.IndexItemEntity
@@ -9,9 +10,13 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
+import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.styleBackground
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.IndexTabCatType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.bean.IndexDetailAttachTab
 import org.jsoup.nodes.Element
 
 /**
@@ -135,6 +140,8 @@ fun Element.parserIndexDetail(indexId: String): IndexDetailEntity {
         entity.userName = select(".grp_box > a").text()
         entity.isCollected = select(".chiiBtn").attr("href").contains("erase_collect")
         entity.mediaCount = select("#indexCatBox .selected small").text().parseCount()
+        entity.contentHtml = select(".line_detail .tip").html()
+        entity.content = entity.contentHtml.parseHtml().toString().trim()
 
         select(".grp_box .tip_j .tip").apply {
             entity.time = firstOrNull()?.text().orEmpty()
@@ -142,10 +149,132 @@ fun Element.parserIndexDetail(indexId: String): IndexDetailEntity {
         }
     }
 
+    // 解析 TAB
+    entity.tabs = select("#indexCatBox > ul > li").toList()
+        .filter { it.hasClass("add").not() }
+        .map { item ->
+            val catUrl = item.select("a").attr("href")
+            IndexDetailAttachTab(
+                title = item.text(),
+                type = if (catUrl.contains("=")) catUrl.substringAfterLast("=")
+                else IndexTabCatType.TYPE_ALL
+            )
+        }
+
     // 删除相关的表单
     entity.deleteForms = select("#IndexEraseForm input")
         .map { it.attr("name") to it.attr("value") }
         .associate { it }
 
+    // 解析全部的附件条目
+    entity.totalAttach = parserIndexAttach(IndexTabCatType.TYPE_ALL)
     return entity
+}
+
+/**
+ * 解析页面的附件条目
+ */
+fun Element.parserIndexAttach(@IndexTabCatType type: String): List<IndexAttachEntity> {
+    return when (type) {
+        // 人物角色类型
+        IndexTabCatType.TYPE_CHARACTER, IndexTabCatType.TYPE_PERSON -> parserIndexAttachPerson()
+        // 章节类型
+        IndexTabCatType.TYPE_EP -> parserIndexAttachEp()
+        // 条目类型
+        IndexTabCatType.TYPE_BOOK,
+        IndexTabCatType.TYPE_ANIME,
+        IndexTabCatType.TYPE_MUSIC,
+        IndexTabCatType.TYPE_GAME,
+        IndexTabCatType.TYPE_REAL,
+        -> parserIndexAttachSubject()
+        // 全部
+        else -> {
+            val entities = mutableListOf<IndexAttachEntity>()
+            entities.addAll(parserIndexAttachSubject())
+            entities.addAll(parserIndexAttachPerson())
+            entities.addAll(parserIndexAttachEp())
+            entities
+        }
+    }
+}
+
+/**
+ * 解析页面的附件条目
+ */
+private fun Element.parserIndexAttachSubject(): List<IndexAttachEntity> {
+    return select("#browserItemList > li").mapIndexed { index, item ->
+        val entity = IndexAttachEntity()
+        entity.id = item.select("a.cover").hrefId()
+        entity.coverImage = item.select("a.cover img").attr("src").optImageUrl()
+        entity.title = item.select(".inner h3 a").text()
+        entity.desc = item.select(".info").text()
+        entity.isCollection = item.select(".collectBlock .collectModify").isNotEmpty()
+        entity.comment = item.select("#comment_box").text()
+        entity.pathType = BgmPathType.TYPE_SUBJECT
+        entity.no = index + 1
+        entity.mediaType = item.select(".ico_subject_type").toString().let { clsName ->
+            when {
+                clsName.contains("subject_type_1") -> MediaType.TYPE_BOOK
+                clsName.contains("subject_type_2") -> MediaType.TYPE_ANIME
+                clsName.contains("subject_type_3") -> MediaType.TYPE_MUSIC
+                clsName.contains("subject_type_4") -> MediaType.TYPE_GAME
+                clsName.contains("subject_type_6") -> MediaType.TYPE_REAL
+                else -> MediaType.TYPE_UNKNOWN
+            }
+        }
+        entity
+    }
+}
+
+/**
+ * 解析页面的附件章节
+ */
+private fun Element.parserIndexAttachEp(): List<IndexAttachEntity> {
+    return select(".browserList > li").mapIndexed { index, item ->
+        val entity = IndexAttachEntity()
+        entity.id = item.select("a.avatar").hrefId()
+        entity.coverImage = item.select("a.avatar img").attr("src").optImageUrl()
+        entity.title = item.select(".inner h3 a").text()
+        entity.desc = item.select(".tip").text()
+        entity.comment = item.select("#comment_box").text()
+        entity.pathType = BgmPathType.TYPE_EP
+        entity.no = index + 1
+        entity.mediaType = item.select(".ico_subject_type").toString().let { clsName ->
+            when {
+                clsName.contains("subject_type_1") -> MediaType.TYPE_BOOK
+                clsName.contains("subject_type_2") -> MediaType.TYPE_ANIME
+                clsName.contains("subject_type_3") -> MediaType.TYPE_MUSIC
+                clsName.contains("subject_type_4") -> MediaType.TYPE_GAME
+                clsName.contains("subject_type_6") -> MediaType.TYPE_REAL
+                else -> MediaType.TYPE_UNKNOWN
+            }
+        }
+        entity
+    }
+}
+
+/**
+ * 解析页面的附件人物或角色
+ */
+private fun Element.parserIndexAttachPerson(): List<IndexAttachEntity> {
+    return select(".browserCrtList > div").mapIndexed { index, item ->
+        val entity = IndexAttachEntity()
+        val href = item.select("a.avatar").attr("href")
+        entity.id = item.select("a.avatar").hrefId()
+        entity.coverImage = item.select("a.avatar img").attr("src").optImageUrl()
+        entity.title = item.select("h3 a").text()
+        entity.desc = item.select(".prsn_info").text()
+        entity.comment = item.select("#comment_box").text()
+        entity.no = index + 1
+        when {
+            href.contains(BgmPathType.TYPE_CHARACTER) -> {
+                entity.pathType = BgmPathType.TYPE_CHARACTER
+            }
+
+            href.contains(BgmPathType.TYPE_PERSON) -> {
+                entity.pathType = BgmPathType.TYPE_PERSON
+            }
+        }
+        entity
+    }
 }

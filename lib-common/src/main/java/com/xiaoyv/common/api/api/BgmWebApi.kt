@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.response.base.BgmActionResponse
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.IndexAttachCatType
+import com.xiaoyv.common.config.annotation.IndexTabCatType
 import com.xiaoyv.common.config.annotation.LikeType
 import com.xiaoyv.common.config.annotation.MagiType
 import com.xiaoyv.common.config.annotation.MediaDetailType
@@ -167,7 +168,10 @@ interface BgmWebApi {
      * 目录详情
      */
     @GET("/index/{indexId}")
-    suspend fun queryIndexDetail(@Path("indexId", encoded = true) indexId: String): Document
+    suspend fun queryIndexDetail(
+        @Path("indexId", encoded = true) indexId: String,
+        @Query("cat") @IndexTabCatType cat: String? = null,
+    ): Document
 
     @FormUrlEncoded
     @POST("/index/{indexId}/erase")

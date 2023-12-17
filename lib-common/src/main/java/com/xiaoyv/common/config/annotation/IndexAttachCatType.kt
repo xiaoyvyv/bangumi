@@ -5,6 +5,8 @@ import androidx.annotation.StringDef
 /**
  * Class: [IndexAttachCatType]
  *
+ * 添加到目录时，添加目标的类型
+ *
  * @author why
  * @since 11/25/23
  */

@@ -37,6 +37,12 @@ class IndexDetailViewModel : BaseViewModel() {
     internal val isMine: Boolean
         get() = requireIndexUserId.isNotBlank() && requireIndexUserId == UserHelper.currentUser.id
 
+    /**
+     * 是否已经收藏了
+     */
+    internal val isCollected: Boolean
+        get() = onIndexDetailLiveData.value?.isCollected == true
+
     fun queryIndexDetail() {
         launchUI(
             stateView = loadingViewState,
@@ -66,7 +72,7 @@ class IndexDetailViewModel : BaseViewModel() {
                 withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.deleteIndex(
                         indexId = indexId,
-                        referer = BgmApiManager.buildReferer(
+                        referer = BgmApiManager.buildUserReferer(
                             type = BgmPathType.TYPE_INDEX,
                             id = requireIndexUserId
                         ),
@@ -76,6 +82,38 @@ class IndexDetailViewModel : BaseViewModel() {
                 onDeleteResult.value = true
 
                 UserHelper.notifyActionChange(BgmPathType.TYPE_INDEX)
+            }
+        )
+    }
+
+    /**
+     * 收藏目录开关
+     */
+    fun actionCollection(collect: Boolean) {
+        launchUI(
+            state = loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+            },
+            block = {
+                val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_INDEX, indexId)
+                onIndexDetailLiveData.value = withContext(Dispatchers.IO) {
+                    if (collect) {
+                        BgmApiManager.bgmWebApi.postAddCollect(
+                            referer = referer,
+                            type = BgmPathType.TYPE_INDEX,
+                            id = indexId,
+                            gh = UserHelper.formHash
+                        )
+                    } else {
+                        BgmApiManager.bgmWebApi.postRemoveCollect(
+                            referer = referer,
+                            type = BgmPathType.TYPE_INDEX,
+                            id = indexId,
+                            gh = UserHelper.formHash
+                        )
+                    }.parserIndexDetail(indexId)
+                }
             }
         )
     }

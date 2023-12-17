@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.config.bean.IndexDetailAttachTab
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -21,9 +22,12 @@ data class IndexDetailEntity(
     @SerializedName("userName") var userName: String = "",
     @SerializedName("userId") var userId: String = "",
     @SerializedName("content") var content: String = "",
+    @SerializedName("contentHtml") var contentHtml: String = "",
     @SerializedName("mediaCount") var mediaCount: Int = 0,
     @SerializedName("collectCount") var collectCount: Int = 0,
     @SerializedName("isCollected") var isCollected: Boolean = false,
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
     @SerializedName("deleteForms") var deleteForms: Map<String, String> = emptyMap(),
+    @SerializedName("tabs") var tabs: List<IndexDetailAttachTab> = emptyList(),
+    @SerializedName("totalAttach") var totalAttach: List<IndexAttachEntity> = emptyList(),
 ) : Parcelable

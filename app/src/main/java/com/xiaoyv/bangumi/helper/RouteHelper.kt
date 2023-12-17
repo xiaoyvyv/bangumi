@@ -140,6 +140,11 @@ object RouteHelper {
                 jumpGroupDetail(id)
                 return true
             }
+            // 目录
+            titleLink.contains(BgmPathType.TYPE_INDEX) -> {
+                jumpIndexDetail(id)
+                return true
+            }
         }
 
         return false
