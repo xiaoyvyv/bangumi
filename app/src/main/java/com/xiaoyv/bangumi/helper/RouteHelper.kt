@@ -30,6 +30,7 @@ import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
 import com.xiaoyv.bangumi.ui.feature.setting.block.BlockActivity
 import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
+import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.translate.TranslateConfigActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
@@ -406,5 +407,9 @@ object RouteHelper {
 
     fun jumpTranslateConfig() {
         TranslateConfigActivity::class.open()
+    }
+
+    fun jumpRobotConfig() {
+        RobotConfigActivity::class.open()
     }
 }

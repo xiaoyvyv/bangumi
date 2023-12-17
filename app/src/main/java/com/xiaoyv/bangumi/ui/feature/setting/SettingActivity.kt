@@ -65,7 +65,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingRobot.setOnFastLimitClickListener {
-            showConfirmDialog(message = "正在调试中，敬请期待", cancelText = null)
+            RouteHelper.jumpRobotConfig()
         }
 
         binding.settingClean.setOnFastLimitClickListener {
@@ -150,8 +150,6 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         binding.settingAuthor.title = "关于作者"
 
         binding.settingRobot.title = "Bangumi 娘"
-        binding.settingRobot.desc = "关闭"
-
         binding.settingFeedback.title = "反馈 BUG"
         binding.settingFeedback.desc = "建议或反馈"
         binding.settingDonation.title = "投食🍚"

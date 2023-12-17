@@ -11,6 +11,6 @@
 
     <gradient
         android:angle="-90"
-        android:endColor="@color/ui_black_20"
-        android:startColor="?attr/colorPrimaryContainer" />
+        android:endColor="@color/ui_black_40"
+        android:startColor="?attr/colorSurfaceVariant" />
 </shape>

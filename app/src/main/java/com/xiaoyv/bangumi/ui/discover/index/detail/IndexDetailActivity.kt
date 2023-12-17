@@ -19,6 +19,7 @@ import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.kts.showInputLine2Dialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
@@ -123,27 +124,15 @@ class IndexDetailActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (viewModel.onIndexDetailLiveData.value == null) return super.onCreateOptionsMenu(menu)
-        val isCollected = viewModel.isCollected
-        menu.add(if (isCollected) "取消收藏" else "收藏")
-            .setIcon(if (isCollected) CommonDrawable.ic_bookmark_added else CommonDrawable.ic_bookmark_add)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            .setOnMenuItemClickListener {
-                if (UserHelper.isLogin.not()) {
-                    RouteHelper.jumpLogin()
-                    return@setOnMenuItemClickListener true
-                }
-
-                val tip = if (isCollected) "是否取消收藏该目录？" else "是否收藏该目录？"
-                showConfirmDialog(message = tip) {
-                    viewModel.actionCollection(isCollected.not())
-                }
-                true
-            }
-
+        val entity = viewModel.onIndexDetailLiveData.value ?: return super.onCreateOptionsMenu(menu)
         if (viewModel.isMine) {
             menu.add("修改")
                 .setOnMenuItemClickListener {
+                    showInputLine2Dialog(
+                        title = "修改目录",
+                        default1 = entity.title,
+                        default2 = entity.content,
+                    )
                     true
                 }
 
@@ -155,6 +144,23 @@ class IndexDetailActivity :
                             viewModel.deleteIndex()
                         }
                     )
+                    true
+                }
+        } else {
+            val isCollected = viewModel.isCollected
+            menu.add(if (isCollected) "取消收藏" else "收藏")
+                .setIcon(if (isCollected) CommonDrawable.ic_bookmark_added else CommonDrawable.ic_bookmark_add)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    if (UserHelper.isLogin.not()) {
+                        RouteHelper.jumpLogin()
+                        return@setOnMenuItemClickListener true
+                    }
+
+                    val tip = if (isCollected) "是否取消收藏该目录？" else "是否收藏该目录？"
+                    showConfirmDialog(message = tip) {
+                        viewModel.actionCollection(isCollected.not())
+                    }
                     true
                 }
         }

@@ -15,7 +15,7 @@
         android:layout_marginEnd="@dimen/ui_size_100"
         android:background="@drawable/shape_message"
         android:padding="@dimen/ui_size_6"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/text_label"
         android:textStyle="bold"
         android:visibility="gone"
@@ -25,7 +25,8 @@
         app:layout_constraintTop_toTopOf="@+id/robot_view"
         app:layout_constraintVertical_bias="0"
         tools:ignore="SmallSp"
-        tools:text="@tools:sample/lorem" />
+        tools:text="@tools:sample/lorem"
+        tools:visibility="visible" />
 
     <com.xiaoyv.common.widget.musume.LAppMusumeView
         android:id="@+id/robot_view"
