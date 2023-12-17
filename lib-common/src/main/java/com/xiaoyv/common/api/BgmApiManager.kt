@@ -39,7 +39,7 @@ class BgmApiManager {
             .addInterceptor(CommonInterceptor())
             .addInterceptor(DouBanInterceptor())
             .addNetworkInterceptor(CookieInterceptor())
-            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
             .cookieJar(cookieJar)
             .callTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
