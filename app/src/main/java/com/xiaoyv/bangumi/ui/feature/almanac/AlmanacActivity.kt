@@ -35,7 +35,7 @@ class AlmanacActivity : BaseListActivity<AlmanacEntity, AlmanacViewModel>() {
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_year) {
-            RouteHelper.jumpWeb(BgmApiManager.URL_BASE_WEB + "/award/${it.id}")
+            RouteHelper.jumpWeb(BgmApiManager.URL_BASE_WEB + "/award/${it.id}", fitToolbar = false)
         }
     }
 

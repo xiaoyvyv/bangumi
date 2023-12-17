@@ -1,9 +1,11 @@
 package com.xiaoyv.bangumi.ui.feature.setting.translate
 
 import android.view.Menu
+import android.view.MenuItem
 import com.xiaoyv.bangumi.databinding.ActivitySettingTranslateBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showInputDialog
@@ -19,6 +21,8 @@ class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBind
     override fun initView() {
         binding.settingAppId.title = "百度翻译 AppId"
         binding.settingAppSecret.title = "百度翻译 AppSecret"
+
+        binding.toolbar.initNavBack(this)
     }
 
     override fun initData() {
@@ -79,5 +83,10 @@ class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBind
                 true
             }
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.initNavBack(this)
+        return super.onOptionsItemSelected(item)
     }
 }

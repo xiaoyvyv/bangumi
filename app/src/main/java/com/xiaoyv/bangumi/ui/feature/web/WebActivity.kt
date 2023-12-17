@@ -16,10 +16,12 @@ import com.xiaoyv.bangumi.databinding.ActivityWebBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.blueprint.kts.activity
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.GoogleStyle
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.webview.listener.OnWebLoadListener
 import com.xiaoyv.widget.webview.listener.OnWindowListener
 
@@ -34,15 +36,27 @@ class WebActivity : BaseBindingActivity<ActivityWebBinding>() {
     private var url = ""
     private var injectJs = ""
     private var fitToolbar = false
+    private var hideToolbar = false
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         url = bundle.getString(NavKey.KEY_STRING).orEmpty()
         injectJs = bundle.getString(NavKey.KEY_STRING_SECOND).orEmpty()
         fitToolbar = bundle.getBoolean(NavKey.KEY_BOOLEAN, false)
+        hideToolbar = bundle.getBoolean(NavKey.KEY_BOOLEAN_SECOND, false)
     }
 
     override fun initView() {
-        binding.toolbar.initNavBack(this)
+        if (hideToolbar) {
+            binding.toolbar.setTitleTextAppearance(
+                activity,
+                GoogleStyle.TextAppearance_Material3_LabelSmall
+            )
+            binding.toolbar.updateLayoutParams {
+                height = 32.dpi
+            }
+        } else {
+            binding.toolbar.initNavBack(this)
+        }
 
         binding.webView.bindTitleToolbar(binding.toolbar)
         binding.webView.bindWebProgress(binding.pbProgress)
@@ -80,7 +94,8 @@ class WebActivity : BaseBindingActivity<ActivityWebBinding>() {
                 if (RouteHelper.handleUrl(url)) {
                     return
                 }
-                RouteHelper.jumpWeb(url)
+
+                RouteHelper.jumpWeb(url, fitToolbar, hideToolbar)
             }
         }
 

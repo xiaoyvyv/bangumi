@@ -9,6 +9,7 @@
     <toc-element topic="Home.md">
         <toc-element topic="Starter.md"/>
         <toc-element topic="Preview.md"/>
+        <toc-element topic="Author.md"/>
     </toc-element>
     <toc-element topic="Download.md"/>
     <toc-element topic="Question.md"/>

@@ -11,11 +11,13 @@ import com.xiaoyv.bangumi.databinding.ActivitySettingBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
@@ -63,7 +65,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingRobot.setOnFastLimitClickListener {
-
+            showConfirmDialog(message = "正在调试中，敬请期待")
         }
 
         binding.settingClean.setOnFastLimitClickListener {
@@ -80,7 +82,17 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingFeedback.setOnFastLimitClickListener {
-
+            showOptionsDialog(
+                title = "反馈建议",
+                items = listOf("Github Issues", "班固米小组"),
+                onItemClick = { _, position ->
+                    if (position == 0) {
+                        openInBrowser("https://github.com/xiaoyvyv/Bangumi-for-Android/issues")
+                    } else {
+                        RouteHelper.jumpGroupDetail("android_client")
+                    }
+                }
+            )
         }
 
         binding.settingDonation.setOnFastLimitClickListener {
@@ -90,7 +102,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingDonationUser.setOnFastLimitClickListener {
-
+            RouteHelper.jumpWeb(GlobalConfig.DOC_DONATION, fitToolbar = true, smallToolbar = true)
         }
 
         binding.settingGroup.setOnFastLimitClickListener {
@@ -102,19 +114,15 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingAgreement.setOnFastLimitClickListener {
-
+            RouteHelper.jumpWeb(GlobalConfig.DOC_PRIVACY, fitToolbar = true, smallToolbar = true)
         }
 
         binding.settingAuthor.setOnFastLimitClickListener {
-
+            RouteHelper.jumpWeb(GlobalConfig.DOC_AUTHOR, fitToolbar = true, smallToolbar = true)
         }
 
         binding.settingAbout.setOnFastLimitClickListener {
             UpdateHelper.checkUpdate(this, true)
-        }
-
-        binding.settingAuthor.setOnFastLimitClickListener {
-
         }
     }
 

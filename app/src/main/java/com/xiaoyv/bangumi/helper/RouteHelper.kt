@@ -356,12 +356,18 @@ object RouteHelper {
 
     }
 
-    fun jumpWeb(url: String, fitToolbar: Boolean = false, injectJs: String = "") {
+    fun jumpWeb(
+        url: String,
+        fitToolbar: Boolean = true,
+        smallToolbar: Boolean = false,
+        injectJs: String = "",
+    ) {
         WebActivity::class.open(
             bundleOf(
                 NavKey.KEY_STRING to url,
                 NavKey.KEY_STRING_SECOND to injectJs,
-                NavKey.KEY_BOOLEAN to fitToolbar
+                NavKey.KEY_BOOLEAN to fitToolbar,
+                NavKey.KEY_BOOLEAN_SECOND to smallToolbar
             )
         )
     }

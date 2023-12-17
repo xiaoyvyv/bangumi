@@ -13,6 +13,12 @@ object GlobalConfig {
     const val GROUP_MY_REPLY_TOPIC = "my_reply"
     const val GROUP_MY_SEND_TOPIC = "my_topic"
 
+    const val DOC_PRIVACY =
+        "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/starter.html"
+    const val DOC_AUTHOR =
+        "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/author.html"
+    const val DOC_DONATION =
+        "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/donation.html"
 
     val mediaTypes by lazy {
         listOf(
