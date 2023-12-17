@@ -33,9 +33,9 @@ class UserHelper private constructor() {
     private val empty = UserEntity(isEmpty = true)
 
     /**
-     * 全局删除操作刷新通知
+     * 全局通知删除、更新了内容等刷新通知
      */
-    private val deleteAction = UnPeekLiveData<String>()
+    private val notifyAction = UnPeekLiveData<String>()
 
     /**
      * 单独缓存用户邮箱和密码
@@ -195,17 +195,17 @@ class UserHelper private constructor() {
         }
 
         /**
-         * 注册删除了内容变化监听
+         * 注册用户的内容变化监听
          */
-        fun observeDeleteAction(lifecycleOwner: LifecycleOwner, observer: Observer<String>) {
-            helper.deleteAction.observe(lifecycleOwner, observer)
+        fun observeAction(lifecycleOwner: LifecycleOwner, observer: Observer<String>) {
+            helper.notifyAction.observe(lifecycleOwner, observer)
         }
 
         /**
-         * 通知删除了内容
+         * 通知删除、更新了内容等
          */
-        fun notifyDelete(pathType: String) {
-            helper.deleteAction.postValue(pathType)
+        fun notifyActionChange(pathType: String) {
+            helper.notifyAction.postValue(pathType)
         }
 
         fun logout() {

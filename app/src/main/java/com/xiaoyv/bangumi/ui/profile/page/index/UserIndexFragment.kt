@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.ui.profile.page.index
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.core.view.updatePadding
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
@@ -15,7 +14,6 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
-import com.xiaoyv.widget.kts.dpi
 
 /**
  * Class: [UserIndexFragment]
@@ -31,15 +29,22 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
     override val loadingBias: Float
         get() = 0.3f
 
+    private var onSelectedListener: ((IndexItemEntity) -> Unit)? = null
+
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.selectedMode = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
     }
 
     override fun initListener() {
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_index) {
-            RouteHelper.jumpIndexDetail(it.id)
+            if (viewModel.selectedMode) {
+                onSelectedListener?.invoke(it)
+            } else {
+                RouteHelper.jumpIndexDetail(it.id)
+            }
         }
     }
 
@@ -50,7 +55,7 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
     override fun LifecycleOwner.initViewObserverExt() {
         // 自己的内容删除时刷新列表
         if (viewModel.isMine) {
-            UserHelper.observeDeleteAction(this) {
+            UserHelper.observeAction(this) {
                 if (it == BgmPathType.TYPE_INDEX) {
                     viewModel.refresh()
                 }
@@ -63,9 +68,17 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
     }
 
     companion object {
-        fun newInstance(userId: String): UserIndexFragment {
+        fun newInstance(
+            userId: String,
+            selectedMode: Boolean = false,
+            onSelectedListener: ((IndexItemEntity) -> Unit)? = null,
+        ): UserIndexFragment {
             return UserIndexFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to userId)
+                this.onSelectedListener = onSelectedListener
+                this.arguments = bundleOf(
+                    NavKey.KEY_STRING to userId,
+                    NavKey.KEY_BOOLEAN to selectedMode
+                )
             }
         }
     }

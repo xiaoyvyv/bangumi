@@ -38,7 +38,7 @@ class UserFriendFragment : BaseListFragment<FriendEntity, UserFriendViewModel>()
     }
 
     override fun LifecycleOwner.initViewObserverExt() {
-        UserHelper.observeDeleteAction(this) {
+        UserHelper.observeAction(this) {
             if (it == BgmPathType.TYPE_USER) {
                 viewModel.refresh()
             }

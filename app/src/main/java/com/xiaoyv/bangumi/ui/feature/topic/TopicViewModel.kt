@@ -83,7 +83,7 @@ class TopicViewModel : BaseViewModel() {
                 }
                 onDeleteResult.value = true
 
-                UserHelper.notifyDelete(BgmPathType.TYPE_TOPIC)
+                UserHelper.notifyActionChange(BgmPathType.TYPE_TOPIC)
             }
         )
     }

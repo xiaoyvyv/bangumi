@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.xiaoyv.bangumi.ui.media.action
 
 import android.os.Bundle
@@ -67,7 +65,7 @@ class MediaSaveActionDialog : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ) = FragmentMediaActionBinding.inflate(inflater, container, false).root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -147,7 +145,7 @@ class MediaSaveActionDialog : DialogFragment() {
 
     private fun doSendAction(
         binding: FragmentMediaActionBinding,
-        form: MediaCollectForm
+        form: MediaCollectForm,
     ) {
         launchUI(
             error = {
@@ -215,7 +213,7 @@ class MediaSaveActionDialog : DialogFragment() {
     private fun fillTags(
         container: ViewGroup,
         input: EditText,
-        tags: List<MediaDetailEntity.MediaTag>?
+        tags: List<MediaDetailEntity.MediaTag>?,
     ) {
         for (tag in tags.orEmpty()) {
             val tagItemBinding = FragmentOverviewTagItemBinding.inflate(
@@ -300,7 +298,7 @@ class MediaSaveActionDialog : DialogFragment() {
         fun show(
             fragmentManager: FragmentManager,
             collectForm: MediaCollectForm?,
-            onUpdateResultListener: (MediaCollectForm) -> Unit = {}
+            onUpdateResultListener: (MediaCollectForm) -> Unit = {},
         ) {
             MediaSaveActionDialog()
                 .apply {

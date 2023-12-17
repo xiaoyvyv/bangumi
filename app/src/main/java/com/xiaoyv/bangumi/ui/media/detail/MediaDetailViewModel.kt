@@ -21,6 +21,15 @@ class MediaDetailViewModel : BaseViewModel() {
     internal var mediaType: String = MediaType.TYPE_ANIME
     internal var mediaName: String = ""
 
+    /**
+     * 媒体名称
+     */
+    internal val requireMediaName: String
+        get() {
+            val entity = onMediaDetailLiveData.value ?: return mediaName
+            return entity.titleCn.ifBlank { entity.titleNative }.ifBlank { mediaName }
+        }
+
     internal val onMediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
 
     internal val vpEnableLiveData = MutableLiveData(true)

@@ -65,7 +65,7 @@ class BlogViewModel : BaseViewModel() {
                 }
                 onDeleteResult.value = true
 
-                UserHelper.notifyDelete(BgmPathType.TYPE_BLOG)
+                UserHelper.notifyActionChange(BgmPathType.TYPE_BLOG)
             }
         )
     }

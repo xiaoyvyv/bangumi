@@ -75,7 +75,7 @@ class IndexDetailViewModel : BaseViewModel() {
                 }
                 onDeleteResult.value = true
 
-                UserHelper.notifyDelete(BgmPathType.TYPE_INDEX)
+                UserHelper.notifyActionChange(BgmPathType.TYPE_INDEX)
             }
         )
     }

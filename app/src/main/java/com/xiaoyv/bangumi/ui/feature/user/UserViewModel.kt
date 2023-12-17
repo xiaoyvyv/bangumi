@@ -79,7 +79,7 @@ class UserViewModel : BaseViewModel() {
                     }
                 }
                 onActionResult.value = true
-                UserHelper.notifyDelete(BgmPathType.TYPE_USER)
+                UserHelper.notifyActionChange(BgmPathType.TYPE_USER)
             }
         )
     }
@@ -101,7 +101,7 @@ class UserViewModel : BaseViewModel() {
                     BgmApiManager.bgmWebApi.postIgnoreUser(referer, userId, requireGh)
                 }
                 onActionResult.value = true
-                UserHelper.notifyDelete(BgmPathType.TYPE_USER)
+                UserHelper.notifyActionChange(BgmPathType.TYPE_USER)
             }
         )
     }

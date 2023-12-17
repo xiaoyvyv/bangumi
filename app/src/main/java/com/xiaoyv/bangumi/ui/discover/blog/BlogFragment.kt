@@ -138,7 +138,7 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
 
         // 自己的内容删除时刷新列表
         if (viewModel.isMine) {
-            UserHelper.observeDeleteAction(this) {
+            UserHelper.observeAction(this) {
                 if (it == BgmPathType.TYPE_BLOG) {
                     viewModel.refresh()
                 }

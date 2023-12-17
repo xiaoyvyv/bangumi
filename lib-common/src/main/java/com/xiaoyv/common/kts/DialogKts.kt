@@ -1,15 +1,11 @@
 package com.xiaoyv.common.kts
 
 import android.content.Context
-import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.StringUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.xiaoyv.common.widget.text.AnimeEditTextView
-import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.common.databinding.ViewInputLine1Binding
+import com.xiaoyv.common.databinding.ViewInputLine2Binding
 
 /**
  * showConfirmDialog
@@ -88,41 +84,68 @@ inline fun Context.showInputDialog(
     default: String = "",
     crossinline onInput: (String) -> Unit = { _ -> },
 ) {
-    val editTextView = AnimeEditTextView(this).apply {
-        updatePadding(top = 12.dpi, bottom = 12.dpi)
-        layoutParams = MarginLayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        hint = inputHint
-    }
+    val binding = ViewInputLine1Binding.inflate(inflater)
+    binding.etLine1.hint = inputHint
 
     if (default.isNotBlank()) {
-        editTextView.setText(default)
-        editTextView.selectAll()
+        binding.etLine1.setText(default)
+        binding.etLine1.selectAll()
     }
 
     MaterialAlertDialogBuilder(this)
         .setTitle(title)
-        .setView(editTextView)
+        .setView(binding.root)
         .setNegativeButton(getString(CommonString.common_cancel), null)
         .setPositiveButton(getString(CommonString.common_done)) { _, _ ->
-            val content = editTextView.text.toString().trim()
+            val content = binding.etLine1.text.toString().trim()
             if (content.isNotBlank()) {
-                onInput(editTextView.text.toString().trim())
+                onInput(binding.etLine1.text.toString().trim())
             }
         }
         .create()
         .show()
 
-    // 更新边距
-    editTextView.updateLayoutParams<MarginLayoutParams> {
-        leftMargin = 22.dpi
-        rightMargin = 22.dpi
-        topMargin = 16.dpi
+    binding.etLine1.postDelayed({
+        KeyboardUtils.showSoftInput(binding.etLine1)
+    }, 100)
+}
+
+/**
+ * 输入弹窗
+ */
+inline fun Context.showInputLine2Dialog(
+    title: String = StringUtils.getString(CommonString.common_tip),
+    inputHint1: String = "输入内容...",
+    inputHint2: String = "输入内容...",
+    default1: String = "",
+    default2: String = "",
+    crossinline onInput: (String, String) -> Unit = { _, _ -> },
+) {
+    val binding = ViewInputLine2Binding.inflate(inflater)
+    binding.etLine1.hint = inputHint1
+    binding.etLine2.hint = inputHint2
+
+    if (default1.isNotBlank()) {
+        binding.etLine1.setText(default1)
+        binding.etLine1.selectAll()
+    } else {
+        binding.etLine2.setText(default2)
+        binding.etLine2.selectAll()
     }
 
-    editTextView.postDelayed({
-        KeyboardUtils.showSoftInput(editTextView)
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setView(binding.root)
+        .setNegativeButton(getString(CommonString.common_cancel), null)
+        .setPositiveButton(getString(CommonString.common_done)) { _, _ ->
+            val content1 = binding.etLine1.text.toString().trim()
+            val content2 = binding.etLine2.text.toString().trim()
+            onInput(content1, content2)
+        }
+        .create()
+        .show()
+
+    binding.etLine1.postDelayed({
+        KeyboardUtils.showSoftInput(binding.etLine1)
     }, 100)
 }

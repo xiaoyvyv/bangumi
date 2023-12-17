@@ -17,6 +17,7 @@ class IndexListViewModel : BaseListViewModel<IndexItemEntity>() {
     internal var isSortByNewest = false
 
     internal var userId: String = ""
+    internal var selectedMode: Boolean = false
 
     internal val isMine: Boolean
         get() = userId.isNotBlank() && userId == UserHelper.currentUser.id

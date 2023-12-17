@@ -104,7 +104,7 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
             invalidateMenu()
         }
 
-        UserHelper.observeDeleteAction(this) {
+        UserHelper.observeAction(this) {
             if (it == BgmPathType.TYPE_USER) {
                 viewModel.queryUserInfo()
             }

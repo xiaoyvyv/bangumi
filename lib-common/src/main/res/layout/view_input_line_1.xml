@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/ui_size_22"
+    android:paddingTop="@dimen/ui_size_16">
+
+    <com.xiaoyv.common.widget.text.AnimeEditTextView
+        android:id="@+id/et_line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/ui_size_12" />
+</androidx.appcompat.widget.LinearLayoutCompat>

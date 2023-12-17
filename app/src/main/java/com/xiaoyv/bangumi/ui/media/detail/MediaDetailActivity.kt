@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.media.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
@@ -9,6 +10,7 @@ import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import com.xiaoyv.bangumi.databinding.ActivityMediaDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.media.action.MediaIndexActionDialog
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
@@ -161,6 +163,21 @@ class MediaDetailActivity :
                 binding.vpContent.setCurrentItem(index, true)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menu.add("添加目录")
+            .setIcon(CommonDrawable.ic_add_index)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                MediaIndexActionDialog.show(
+                    supportFragmentManager,
+                    viewModel.mediaId,
+                    viewModel.requireMediaName
+                )
+                true
+            }
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onCreateLoadingDialog(): UiDialog {

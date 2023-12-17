@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.response.UploadResultEntity
 import com.xiaoyv.common.api.response.base.BgmActionResponse
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
+import com.xiaoyv.common.config.annotation.IndexAttachCatType
 import com.xiaoyv.common.config.annotation.LikeType
 import com.xiaoyv.common.config.annotation.MagiType
 import com.xiaoyv.common.config.annotation.MediaDetailType
@@ -171,9 +172,30 @@ interface BgmWebApi {
     @FormUrlEncoded
     @POST("/index/{indexId}/erase")
     suspend fun deleteIndex(
-        @Header("Referer") referer: String = "",
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
         @Path("indexId", encoded = true) indexId: String,
         @FieldMap map: Map<String, String>,
+    ): Document
+
+    @FormUrlEncoded
+    @POST("/index/create")
+    suspend fun createIndex(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @Field("formhash") formHash: String,
+        @Field("title") title: String,
+        @Field("desc") desc: String,
+        @Field("submit") submit: String = "创建目录",
+    ): Document
+
+    @FormUrlEncoded
+    @POST("/index/{indexId}/add_related")
+    suspend fun addMediaToIndex(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @Path("indexId", encoded = true) indexId: String,
+        @Field("formhash") formHash: String,
+        @Field("cat") @IndexAttachCatType cat: String,
+        @Field("add_related") targetId: String,
+        @Field("submit") submit: String = "添加关联",
     ): Document
 
     /**
