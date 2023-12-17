@@ -61,7 +61,7 @@ class TimelinePageFragment :
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh()
+        binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
     }
 
@@ -117,6 +117,13 @@ class TimelinePageFragment :
     }
 
     override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingBias = 0.3f,
+            loadingViewState = viewModel.loadingViewState,
+            canShowLoading = { !binding.srlRefresh.isRefreshing }
+        )
+
         viewModel.onTimelineLiveData.observe(this) {
             contentAdapter.submitList(it.orEmpty())
         }
@@ -132,12 +139,17 @@ class TimelinePageFragment :
         /**
          * 指定人物的时间胶囊
          */
-        fun newInstance(@TimelineType type: String, userId: String): TimelinePageFragment {
+        fun newInstance(
+            @TimelineType type: String,
+            userId: String,
+            requireLogin: Boolean,
+        ): TimelinePageFragment {
             return TimelinePageFragment().apply {
                 val timeline = TimelineTab(
                     title = "User:$userId",
                     timelineType = type,
-                    userId = userId
+                    userId = userId,
+                    requireLogin = requireLogin
                 )
                 arguments = bundleOf(NavKey.KEY_PARCELABLE to timeline)
             }

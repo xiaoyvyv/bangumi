@@ -16,6 +16,7 @@ class GroupListViewModel : BaseListViewModel<SampleAvatar>() {
     internal var isSortByNewest = false
 
     internal var userId: String = ""
+    internal var requireLogin: Boolean = false
 
     internal val isMine: Boolean
         get() = userId.isNotBlank() && userId == UserHelper.currentUser.id
@@ -67,6 +68,10 @@ class GroupListViewModel : BaseListViewModel<SampleAvatar>() {
     }
 
     override suspend fun onRequestListImpl(): List<SampleAvatar> {
+        if (requireLogin) {
+            require(UserHelper.isLogin) { "你还没有登录呢" }
+        }
+
         return if (userId.isNotBlank()) {
             BgmApiManager.bgmWebApi.queryUserGroup(userId).parserGroupList()
         } else {

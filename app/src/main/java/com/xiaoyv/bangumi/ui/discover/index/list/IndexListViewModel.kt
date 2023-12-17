@@ -18,11 +18,16 @@ class IndexListViewModel : BaseListViewModel<IndexItemEntity>() {
 
     internal var userId: String = ""
     internal var selectedMode: Boolean = false
+    internal var requireLogin: Boolean = false
 
     internal val isMine: Boolean
         get() = userId.isNotBlank() && userId == UserHelper.currentUser.id
 
     override suspend fun onRequestListImpl(): List<IndexItemEntity> {
+        if (requireLogin) {
+            require(UserHelper.isLogin) { "你还没有登录呢" }
+        }
+
         return if (userId.isNotBlank()) {
             BgmApiManager.bgmWebApi.queryUserIndex(userId, current)
                 .parserUserIndexList()

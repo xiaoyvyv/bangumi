@@ -17,8 +17,8 @@ import com.xiaoyv.common.kts.CommonString
  * @since 11/24/23
  */
 class BlogViewModel : BaseListViewModel<BlogEntity>() {
-
     internal var userId = ""
+    internal var requireLogin = false
 
     @MediaType
     internal var mediaType: String = MediaType.TYPE_ANIME
@@ -43,6 +43,10 @@ class BlogViewModel : BaseListViewModel<BlogEntity>() {
 
     override suspend fun onRequestListImpl(): List<BlogEntity> {
         buildQueryTagPath()
+
+        if (requireLogin) {
+            require(UserHelper.isLogin) { "你还没有登录呢" }
+        }
 
         return BgmApiManager.bgmWebApi.queryBlogList(
             queryPath = queryPath,

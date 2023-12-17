@@ -34,6 +34,7 @@ class UserGroupFragment : BaseListFragment<SampleAvatar, GroupListViewModel>() {
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.isSortByNewest = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.requireLogin = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
     }
 
     override fun onCreateLayoutManager(): LinearLayoutManager {
@@ -62,9 +63,12 @@ class UserGroupFragment : BaseListFragment<SampleAvatar, GroupListViewModel>() {
     }
 
     companion object {
-        fun newInstance(userId: String): UserGroupFragment {
+        fun newInstance(userId: String, requireLogin: Boolean): UserGroupFragment {
             return UserGroupFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to userId)
+                arguments = bundleOf(
+                    NavKey.KEY_STRING to userId,
+                    NavKey.KEY_BOOLEAN to requireLogin
+                )
             }
         }
     }

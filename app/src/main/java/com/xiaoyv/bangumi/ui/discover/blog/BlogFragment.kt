@@ -53,6 +53,7 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.requireLogin = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
     }
 
     override fun initView() {
@@ -87,15 +88,6 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
         }
 
         binding.typeTag.setOnFastLimitClickListener {
-            /*      val item = mediaTypes.map { it.title }.toTypedArray()
-                  MaterialAlertDialogBuilder(hostActivity)
-                      .setItems(item) { _, position ->
-      //                    binding.chipMediaType.text = mediaTypes[position].title
-                          viewModel.mediaType = mediaTypes[position].type
-                          viewModel.refresh()
-                      }
-                      .create()
-                      .show()*/
         }
 
         binding.srlRefresh.setOnRefreshListener {
@@ -111,7 +103,7 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
     override fun LifecycleOwner.initViewObserver() {
         binding.stateView.initObserver(
             lifecycleOwner = this,
-            loadingBias = if (viewModel.isMine) 0.3f else 0.5f,
+            loadingBias = if (viewModel.requireLogin) 0.3f else 0.5f,
             loadingViewState = viewModel.loadingViewState,
             canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing },
         )
@@ -147,9 +139,12 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
     }
 
     companion object {
-        fun newInstance(userId: String? = null): BlogFragment {
+        fun newInstance(userId: String? = null, requireLogin: Boolean = false): BlogFragment {
             return BlogFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to userId)
+                arguments = bundleOf(
+                    NavKey.KEY_STRING to userId,
+                    NavKey.KEY_BOOLEAN to requireLogin
+                )
             }
         }
     }

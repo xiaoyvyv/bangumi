@@ -56,11 +56,11 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
-        viewModel.isMine = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
+        viewModel.requireLogin = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh { viewModel.isRefresh }
+        binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
     }
 
@@ -109,6 +109,13 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
     }
 
     override fun LifecycleOwner.initViewObserver() {
+        binding.stateView.initObserver(
+            lifecycleOwner = this,
+            loadingBias = 0.3f,
+            loadingViewState = viewModel.loadingViewState,
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing }
+        )
+
         viewModel.onListLiveData.observe(this) {
             contentAdapter.submitList(it.orEmpty()) {
                 if (viewModel.isRefresh) {
@@ -119,7 +126,7 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
             }
         }
 
-        if (viewModel.isMine) {
+        if (viewModel.requireLogin) {
             UserHelper.observeUserInfo(this) {
                 if (it.isEmpty) {
                     viewModel.clearList()
@@ -134,11 +141,11 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
     }
 
     companion object {
-        fun newInstance(userId: String, isMine: Boolean = false): SaveListFragment {
+        fun newInstance(userId: String, requireLogin: Boolean = false): SaveListFragment {
             return SaveListFragment().apply {
                 arguments = bundleOf(
                     NavKey.KEY_STRING to userId,
-                    NavKey.KEY_BOOLEAN to isMine
+                    NavKey.KEY_BOOLEAN to requireLogin
                 )
             }
         }

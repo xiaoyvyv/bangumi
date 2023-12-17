@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.parser.impl.BrowserParser.parserBrowserPage
 import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.InterestCollectType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.copyAddAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +26,7 @@ class SaveListViewModel : BaseViewModel() {
 
     internal var listType = InterestCollectType.TYPE_WISH
     internal var userId = ""
-    internal var isMine = false
+    internal var requireLogin = false
 
     /**
      * 搜索条件
@@ -61,6 +62,8 @@ class SaveListViewModel : BaseViewModel() {
                 onListLiveData.value = null
             },
             block = {
+                if (requireLogin) require(UserHelper.isLogin) { "你还没有登录呢" }
+
                 val response = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.queryUserCollect(
                         mediaType = mediaType,

@@ -28,6 +28,7 @@ class UserFriendFragment : BaseListFragment<FriendEntity, UserFriendViewModel>()
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.requireLogin = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
     }
 
     override fun initListener() {
@@ -50,9 +51,12 @@ class UserFriendFragment : BaseListFragment<FriendEntity, UserFriendViewModel>()
     }
 
     companion object {
-        fun newInstance(userId: String): UserFriendFragment {
+        fun newInstance(userId: String, requireLogin: Boolean): UserFriendFragment {
             return UserFriendFragment().apply {
-                arguments = bundleOf(NavKey.KEY_STRING to userId)
+                arguments = bundleOf(
+                    NavKey.KEY_STRING to userId,
+                    NavKey.KEY_BOOLEAN to requireLogin
+                )
             }
         }
     }

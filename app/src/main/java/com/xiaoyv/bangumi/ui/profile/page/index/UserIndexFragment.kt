@@ -34,6 +34,7 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
         viewModel.selectedMode = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
+        viewModel.requireLogin = arguments.getBoolean(NavKey.KEY_BOOLEAN_SECOND, false)
     }
 
     override fun initListener() {
@@ -72,12 +73,14 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
             userId: String,
             selectedMode: Boolean = false,
             onSelectedListener: ((IndexItemEntity) -> Unit)? = null,
+            requireLogin: Boolean,
         ): UserIndexFragment {
             return UserIndexFragment().apply {
                 this.onSelectedListener = onSelectedListener
                 this.arguments = bundleOf(
                     NavKey.KEY_STRING to userId,
-                    NavKey.KEY_BOOLEAN to selectedMode
+                    NavKey.KEY_BOOLEAN to selectedMode,
+                    NavKey.KEY_BOOLEAN_SECOND to requireLogin
                 )
             }
         }

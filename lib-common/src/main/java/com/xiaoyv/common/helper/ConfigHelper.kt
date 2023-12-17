@@ -28,7 +28,7 @@ object ConfigHelper {
     }
 
     fun isRobotDisable(): Boolean {
-        return SPStaticUtils.getBoolean(KEY_ROBOT_DISABLE, false)
+        return SPStaticUtils.getBoolean(KEY_ROBOT_DISABLE, true)
     }
 
     fun setRobotDisable(disable: Boolean) {
@@ -36,7 +36,7 @@ object ConfigHelper {
     }
 
     fun isRobotVoiceDisable(): Boolean {
-        return SPStaticUtils.getBoolean(KEY_ROBOT_VOICE_DISABLE, false)
+        return SPStaticUtils.getBoolean(KEY_ROBOT_VOICE_DISABLE, true)
     }
 
     fun setRobotVoiceDisable(disable: Boolean) {

@@ -64,7 +64,8 @@ class MediaIndexActionDialog : DialogFragment() {
                             saveMediaToIndex(mediaId, it)
                         }
                     )
-                }
+                },
+                requireLogin = true
             )
         )
 

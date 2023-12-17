@@ -8,6 +8,7 @@ import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.impl.parserTimelineForms
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
+import com.xiaoyv.common.helper.UserHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -39,6 +40,10 @@ class TimelinePageViewModel : BaseViewModel() {
             },
             block = {
                 val forUser = userId.isNotBlank()
+
+                if (timelineTab?.requireLogin == true) {
+                    require(UserHelper.isLogin) { "你还没有登录呢" }
+                }
 
                 onTimelineLiveData.value = withContext(Dispatchers.IO) {
                     if (forUser) {

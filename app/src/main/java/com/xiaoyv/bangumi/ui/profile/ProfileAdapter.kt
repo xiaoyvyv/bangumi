@@ -45,21 +45,22 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             // 收藏
             ProfileType.TYPE_COLLECTION -> SaveListFragment.newInstance(
                 userId = myId,
-                isMine = true
+                requireLogin = true
             )
             // 时间线
             ProfileType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
                 type = TimelineType.TYPE_USER,
-                userId = myId
+                userId = myId,
+                requireLogin = true
             )
             // 日志
-            ProfileType.TYPE_BLOG -> BlogFragment.newInstance(myId)
+            ProfileType.TYPE_BLOG -> BlogFragment.newInstance(myId, requireLogin = true)
             // 目录
-            ProfileType.TYPE_INDEX -> UserIndexFragment.newInstance(myId)
+            ProfileType.TYPE_INDEX -> UserIndexFragment.newInstance(myId, requireLogin = true)
             // 小组
-            ProfileType.TYPE_GROUP -> UserGroupFragment.newInstance(myId)
+            ProfileType.TYPE_GROUP -> UserGroupFragment.newInstance(myId, requireLogin = true)
             // 好友
-            ProfileType.TYPE_FRIEND-> UserFriendFragment.newInstance(myId)
+            ProfileType.TYPE_FRIEND -> UserFriendFragment.newInstance(myId, requireLogin = true)
             else -> EmptyFragment.newInstance()
         }
     }
