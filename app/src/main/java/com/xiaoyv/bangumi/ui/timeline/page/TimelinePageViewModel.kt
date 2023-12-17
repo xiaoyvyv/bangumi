@@ -46,12 +46,12 @@ class TimelinePageViewModel : BaseViewModel() {
                             userId = userId,
                             type = timelineType,
                             ajax = 0
-                        ).parserTimelineForms(true)
+                        ).parserTimelineForms(userId)
                     } else {
                         BgmApiManager.bgmJsonApi.queryWholeTimeline(
                             type = timelineType,
                             ajax = 1
-                        ).parserTimelineForms(false)
+                        ).parserTimelineForms()
                     }
                 }
             }

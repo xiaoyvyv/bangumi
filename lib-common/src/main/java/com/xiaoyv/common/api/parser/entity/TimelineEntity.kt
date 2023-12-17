@@ -24,6 +24,7 @@ data class TimelineEntity(
     var titleId: String = "",
     @BgmPathType
     var titleType: String = BgmPathType.TYPE_UNKNOWN,
+    var titleLink: String = "",
     var content: String = "",
     var time: String = "",
     var platform: String = "",

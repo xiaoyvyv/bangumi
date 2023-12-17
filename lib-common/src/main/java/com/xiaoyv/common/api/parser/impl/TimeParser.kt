@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.styleBackground
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TimelineAdapterType
+import com.xiaoyv.common.helper.UserHelper
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -22,20 +23,22 @@ import org.jsoup.select.Elements
  * @since 11/25/23
  */
 fun Document.parserTimelineForms(
-    isUserTimeline: Boolean
+    userId: String = "",
 ): List<TimelineEntity> {
     requireNoError()
     return select("#timeline ul > li").map { item ->
         val entity = TimelineEntity()
-        item.handleItem(entity)
+        item.handleItem(entity, userId)
         entity
     }
 }
 
 /**
  * 解析条目
+ *
+ * @param userId 不为空时，数据为对应用户的时间线
  */
-private fun Element.handleItem(entity: TimelineEntity) {
+private fun Element.handleItem(entity: TimelineEntity, userId: String) {
     // 辨别条目的 UI 类型
     val adapterType = when {
         select(".imgs, .rr").isNotEmpty() -> TimelineAdapterType.TYPE_GRID
@@ -50,80 +53,18 @@ private fun Element.handleItem(entity: TimelineEntity) {
         TimelineAdapterType.TYPE_GRID -> parserTimelineGrid(this, entity)
     }
 
+    // 当解析的指定用户的时间线时，设置用户ID
+    if (userId.isNotBlank()) {
+        entity.id = userId
+
+        // 如果为自己的时间线，填充头像
+        if (userId == UserHelper.currentUser.id) {
+            entity.avatar = UserHelper.currentUser.avatar?.medium.orEmpty()
+        }
+    }
+
     entity.adapterType = adapterType
 }
-
-/*
-
-    // 用户的时间线单独解析头像和ID
-    var userId = ""
-    var userAvatar = ""
-    if (isUserTimeline) {
-        userId = select(".headerAvatar > a").attr("href")
-            .substringAfterLast("/")
-        userAvatar = select(".headerAvatar > a > span").attr("style")
-            .fetchStyleBackgroundUrl().optImageUrl()
-    }
-
-    select("#timeline ul > li").map {
-        val entity = TimelineEntity()
-
-        if (isUserTimeline) {
-            entity.id = userId
-            entity.avatar = userAvatar
-        } else {
-            entity.id = it.select("li").attr("data-item-user")
-            entity.avatar = it.select("li a.avatar span").styleBackground()
-            entity.time = it.select(".post_actions").text()
-        }
-
-
-        var infoUserActionText = ""
-        val infoSpan = it.select("li > .info").ifEmpty {
-            it.select("li > .info_full")
-        }
-
-        // 右侧人物解析
-        var avatar = ""
-        var characterSubjectId = ""
-        var userId = ""
-        infoSpan.select("a").forEach { a ->
-            val characterImg = a.select("img.rr")
-            if (characterImg.isNotEmpty()) {
-                avatar = characterImg.attr("src").optImageUrl()
-                characterSubjectId = a.hrefId()
-                a.remove()
-            }
-
-            val userImage = a.select("a.rr img")
-            if (userImage.isNotEmpty()) {
-                avatar = userImage.attr("src").optImageUrl()
-                userId = a.hrefId()
-                a.remove()
-            }
-        }
-        if (avatar.isNotBlank()) {
-            entity.character = TimelineEntity.Character(
-                avatar = avatar,
-                subjectId = characterSubjectId,
-                userId = userId
-            )
-        }
-
-        val nodes = infoSpan.firstOrNull()?.childNodes().orEmpty()
-        for (node in nodes) {
-            if (node is Element && node.tagName().lowercase() == "div") break
-            infoUserActionText += node.outerHtml()
-        }
-        entity.title = infoUserActionText.parseHtml()
-
-
-        // images
-
-
-        entities.add(entity)
-    }
-*/
 
 /**
  * 解析多图网格类型的时间线
@@ -205,14 +146,19 @@ fun parserTimelineText(item: Element, entity: TimelineEntity) {
     entity.time = time
     entity.platform = platform
 
-    val (titleId, titleType) = item.select(".info > a.l").getOrNull(1).fetchLinkIdAndType()
+    val infoA = item.select(".info > a.l")
+    val infoFullA = item.select(".info_full > a.l")
+    val (titleId, titleType, titleLink) =
+        (infoA.getOrNull(1) ?: infoFullA.firstOrNull()).fetchLinkIdAndType()
+
     entity.titleId = titleId
     entity.titleType = titleType
+    entity.titleLink = titleLink
 
     entity.id = item.select("a.avatar").hrefId()
     entity.name = item.select(".info > a").firstOrNull()?.text().orEmpty()
     entity.avatar = item.select("a.avatar > span").styleBackground()
-    entity.title = item.select(".info").fetchHtmlTitle()
+    entity.title = item.select(".info, .info_full").fetchHtmlTitle()
     entity.content = item.select("p.status, .info_sub").text()
 }
 
@@ -250,8 +196,8 @@ private fun Elements.fetchHtmlTitle(): CharSequence {
 /**
  * 解析标题的链接和类型，目前仅解析结果用于 [TimelineAdapterType.TYPE_TEXT] 类型的条目点击使用
  */
-private fun Element?.fetchLinkIdAndType(): Pair<String, String> {
-    this ?: return ("" to "")
+private fun Element?.fetchLinkIdAndType(): Triple<String, String, String> {
+    this ?: return Triple("", "", "")
 
     // 解析标题的链接 ID
     val titleLink = attr("href").orEmpty()
@@ -269,5 +215,5 @@ private fun Element?.fetchLinkIdAndType(): Pair<String, String> {
         titleLink.contains(BgmPathType.TYPE_USER) -> BgmPathType.TYPE_USER
         else -> BgmPathType.TYPE_USER
     }
-    return titleId to titleType
+    return Triple(titleId, titleType, titleLink)
 }

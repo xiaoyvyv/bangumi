@@ -102,6 +102,10 @@ class TimelinePageFragment :
                         BgmPathType.TYPE_INDEX -> {
                             RouteHelper.jumpIndexDetail(it.titleId)
                         }
+                        // 跳转小组详情
+                        BgmPathType.TYPE_GROUP -> {
+                            RouteHelper.jumpGroupDetail(it.titleId)
+                        }
                     }
                 }
             }

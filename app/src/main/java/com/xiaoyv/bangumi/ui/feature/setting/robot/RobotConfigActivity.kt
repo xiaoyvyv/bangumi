@@ -46,7 +46,7 @@ class RobotConfigActivity : BaseBindingActivity<ActivitySettingRobotBinding>() {
         }
 
         binding.settingVoice.setOnFastLimitClickListener {
-            if (ConfigHelper.isRobotDisable()) {
+            if (ConfigHelper.isRobotVoiceDisable()) {
                 showConfirmDialog(
                     message = "是否开启首页 Live2D 班固米娘的触摸语音彩蛋？\n\n重启后生效",
                     onConfirmClick = {
