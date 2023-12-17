@@ -16,6 +16,7 @@ import com.xiaoyv.common.api.parser.entity.CreatePostEntity
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -68,11 +69,13 @@ open class BasePostViewModel : BaseViewModel() {
             block = {
                 onUploadImageResult.value = withContext(Dispatchers.IO) {
                     val file = UriUtils.uri2File(uri)
-                    if (file.length() > MemoryConstants.MB * 5) {
-                        throw IllegalArgumentException("请选择小于 5M 的图片")
+                    if (file.length() > MemoryConstants.MB * 10) {
+                        throw IllegalArgumentException("请选择小于 10M 的图片")
                     }
 
                     if (ConfigHelper.isImageCompress()) {
+                        debugLog { "压缩图片：$file" }
+
                         // 压缩图片
                         val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                         val tmpDir = PathUtils.getCachePathExternalFirst() + "/image"
@@ -86,6 +89,7 @@ open class BasePostViewModel : BaseViewModel() {
                         // 开始上传
                         uploadImage(tmp)
                     } else {
+                        debugLog { "跳过压缩：$file" }
 
                         // 开始上传
                         uploadImage(file.absolutePath)
