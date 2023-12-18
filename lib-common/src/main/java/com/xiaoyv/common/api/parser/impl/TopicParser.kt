@@ -1,5 +1,9 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.blankj.utilcode.util.FileIOUtils
+import com.blankj.utilcode.util.PathUtils
+import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity.Companion.normal
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
@@ -11,10 +15,10 @@ import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
-import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import java.io.StringReader
 
 /**
  * @author why
@@ -81,11 +85,16 @@ fun Document.parserTopic(topicId: String): TopicDetailEntity {
         entity.replyForm = parserReplyForm()
 
         // 全部的贴贴列表
-        val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);".toRegex()
+        val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);\\s+?</script>".toRegex()
             .find(html())?.groupValues?.getOrNull(1).orEmpty()
 
+        val reader = JsonReader(StringReader(likeJson))
+        val gson = Gson()
+        val create = gson.newBuilder().setLenient().create()
+        val likeEntity = create.fromJson<LikeEntity>(reader, LikeEntity::class.java)
+
         // 贴贴列表填充（文章和评论的贴贴）
-        entity.fillLikeInfo(likeJson.fromJson<LikeEntity>().normal())
+        entity.fillLikeInfo(likeEntity.normal())
 
         entity
     }

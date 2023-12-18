@@ -42,7 +42,7 @@ class BgmApiManager {
             .addNetworkInterceptor(CookieInterceptor())
             .apply {
                 if (AppUtils.isAppDebug()) {
-                    addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                 }
             }
             .cookieJar(cookieJar)
