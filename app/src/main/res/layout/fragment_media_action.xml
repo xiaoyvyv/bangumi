@@ -140,7 +140,7 @@
         android:background="@drawable/ui_shape_rectangle_corner_6"
         android:backgroundTint="?attr/colorSurfaceContainer"
         android:gravity="top"
-        android:hint="吐槽"
+        android:hint="吐槽：公开情况下该内容会显示在详情页面最下方"
         android:minLines="4"
         android:paddingHorizontal="@dimen/ui_size_12"
         android:paddingVertical="@dimen/ui_size_12"

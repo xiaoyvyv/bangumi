@@ -35,6 +35,8 @@ fun Document.parserMediaChapters(): List<MediaChapterEntity> {
     return select(".line_detail > ul > li").map {
         if (it.select("h6").isEmpty()) return@map null
         val entity = MediaChapterEntity()
+        entity.aired = it.select(".Air").isNotEmpty()
+        entity.stateText = it.select(".epAirStatus").attr("title")
         entity.id = it.select("h6 a").hrefId()
         entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
         entity.titleNative = it.select("h6 a").text()

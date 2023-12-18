@@ -157,7 +157,7 @@ fun parserTimelineText(item: Element, entity: TimelineEntity) {
 
     entity.id = item.select("a.avatar").hrefId()
     entity.name = item.select(".info > a").firstOrNull()?.text().orEmpty()
-    entity.avatar = item.select("a.avatar > span").styleBackground()
+    entity.avatar = item.select("a.avatar > span").styleBackground(false)
     entity.title = item.select(".info, .info_full").fetchHtmlTitle()
     entity.content = item.select("p.status, .info_sub").text()
 }

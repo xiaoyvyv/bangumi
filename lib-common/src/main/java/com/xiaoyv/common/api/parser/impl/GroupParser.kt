@@ -25,6 +25,8 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
     requireNoError()
 
     val entity = GroupDetailEntity(id = groupId)
+    entity.groupNumberId = select("form[name=new_comment]").attr("action")
+        .parseCount().toString()
 
     selectLegal("#columnA").apply {
         entity.avatar = select(".grp_box > img").attr("src").optImageUrl()

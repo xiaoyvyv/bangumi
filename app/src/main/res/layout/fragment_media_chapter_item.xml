@@ -11,14 +11,16 @@
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/title_native"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingTop="@dimen/ui_size_12"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_size_12"
         android:paddingBottom="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorPrimary"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/v_aired"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem" />
 
@@ -33,14 +35,29 @@
         tools:text="@tools:sample/lorem" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/v_aired"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        android:padding="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title_native"
+        tools:text="未播出" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_time"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingTop="@dimen/ui_size_6"
-        android:paddingBottom="@dimen/ui_layout_margin"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_size_10"
+        android:paddingVertical="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceLabelMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_comment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_cn"

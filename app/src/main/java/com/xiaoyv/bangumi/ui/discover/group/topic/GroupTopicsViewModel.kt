@@ -17,16 +17,16 @@ class GroupTopicsViewModel : BaseListViewModel<TopicSampleEntity>() {
     internal var groupName = ""
 
     /**
-     * 我的回复和发布也是复用改类的逻辑
+     * 我的回复和发布页面，复用此类的逻辑
      */
-    private val isMyTopic: Boolean
+    val isQueryMyTopic: Boolean
         get() = groupId == GlobalConfig.GROUP_MY_REPLY_TOPIC || groupId == GlobalConfig.GROUP_MY_SEND_TOPIC
 
     override suspend fun onRequestListImpl(): List<TopicSampleEntity> {
         require(groupId.isNotBlank()) { "小组不存在" }
 
         // 如果是查询我的回复或发布
-        if (isMyTopic) {
+        if (isQueryMyTopic) {
             val (groupName, topics) = BgmApiManager.bgmWebApi
                 .queryUserTopicList(type = groupId, page = current)
                 .parserGroupTopics(groupId)

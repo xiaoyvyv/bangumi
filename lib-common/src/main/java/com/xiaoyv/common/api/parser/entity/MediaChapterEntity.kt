@@ -19,5 +19,7 @@ data class MediaChapterEntity(
     var titleNative: String = "",
     var finished: Boolean = false,
     var time: String = "",
-    var commentCount: Int = 0
+    var commentCount: Int = 0,
+    var stateText: String = "",
+    var aired: Boolean = false,
 ) : Parcelable, IdEntity

@@ -49,7 +49,11 @@ fun String.fetchStyleBackgroundUrl(): String {
  * --->
  * https://lain.bgm.tv/pic/photo/g/41/30/823739_i8sWx.jpg
  */
-fun String.optImageUrl(large: Boolean = true, largest: Boolean = false): String {
+fun String.optImageUrl(
+    large: Boolean = true,
+    largest: Boolean = false,
+    default: Boolean = true,
+): String {
     val imageUrl = when {
         startsWith("//") -> "https:$this"
         startsWith("/") -> "${BgmApiManager.URL_BASE_WEB}$this"
@@ -64,7 +68,7 @@ fun String.optImageUrl(large: Boolean = true, largest: Boolean = false): String 
         .replace("https://(.*?)/no_icon.jpg".toRegex(), defaultImage)
         .replace("https://(.*?)/no_icon_subject.png".toRegex(), defaultImage)
         .replace("https://(.*?)/icon.jpg".toRegex(), defaultImage)
-        .ifBlank { defaultImage }
+        .ifBlank { if (default) defaultImage else "" }
 }
 
 fun String?.parseCount(): Int {
@@ -160,8 +164,8 @@ fun Elements.firsTextNode(): String {
     return textNodes().firstOrNull()?.text().orEmpty()
 }
 
-fun Elements.styleBackground(): String {
-    return attr("style").fetchStyleBackgroundUrl().optImageUrl()
+fun Elements.styleBackground(default: Boolean = true): String {
+    return attr("style").fetchStyleBackgroundUrl().optImageUrl(default = default)
 }
 
 fun Element.parseStar(): Float {

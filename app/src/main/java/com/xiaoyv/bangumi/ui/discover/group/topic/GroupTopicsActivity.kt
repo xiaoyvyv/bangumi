@@ -38,31 +38,39 @@ class GroupTopicsActivity : BaseListActivity<TopicSampleEntity, GroupTopicsViewM
         }
     }
 
+    override fun onListDataFinish(list: List<TopicSampleEntity>) {
+        binding.toolbar.title = viewModel.groupName
+
+        invalidateMenu()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("发表")
-            .setIcon(CommonDrawable.ic_post_add)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            .setOnMenuItemClickListener {
-                if (UserHelper.isLogin.not()) {
-                    RouteHelper.jumpLogin()
-                    return@setOnMenuItemClickListener true
-                }
-                RouteHelper.jumpPostTopic(
-                    PostAttach(
-                        id = viewModel.groupId,
-                        image = "",
-                        title = viewModel.groupName,
-                        type = TopicType.TYPE_GROUP
+        // 只有在小组详情内才显示发布按钮
+        if (viewModel.isQueryMyTopic.not()) {
+            menu.add("发表")
+                .setIcon(CommonDrawable.ic_post_add)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    if (UserHelper.isLogin.not()) {
+                        RouteHelper.jumpLogin()
+                        return@setOnMenuItemClickListener true
+                    }
+
+                    // 构建小组话题发布的附件模型，跳转到发布小组话题
+                    RouteHelper.jumpPostTopic(
+                        PostAttach(
+                            id = viewModel.groupId,
+                            image = "",
+                            title = viewModel.groupName,
+                            type = TopicType.TYPE_GROUP
+                        )
                     )
-                )
-                true
-            }
+                    true
+                }
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onListDataFinish(list: List<TopicSampleEntity>) {
-        binding.toolbar.title = viewModel.groupName
-    }
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<TopicSampleEntity, *> {
         return GroupTopicsAdapter()

@@ -16,6 +16,7 @@ import kotlinx.parcelize.Parcelize
 @Keep
 data class GroupDetailEntity(
     override var id: String = "",
+    var groupNumberId: String = "",
     var avatar: String = "",
     var name: String = "",
     var time: String = "",
@@ -24,5 +25,5 @@ data class GroupDetailEntity(
     var recently: List<SampleAvatar> = emptyList(),
     var otherGroups: List<SampleAvatar> = emptyList(),
     var gh: String = "",
-    var isJoin: Boolean = false
+    var isJoin: Boolean = false,
 ) : IdEntity, Parcelable
