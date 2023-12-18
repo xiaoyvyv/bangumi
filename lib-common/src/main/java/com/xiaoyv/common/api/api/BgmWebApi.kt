@@ -617,9 +617,10 @@ interface BgmWebApi {
         @Query("page") page: Int,
     ): Document
 
-    @GET("/user/{userId}/index")
+    @GET("/user/{userId}/index{collect}")
     suspend fun queryUserIndex(
         @Path("userId", encoded = true) userId: String,
+        @Path("collect", encoded = true) collect: String = "",
         @Query("page") page: Int,
     ): Document
 

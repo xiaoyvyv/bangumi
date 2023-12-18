@@ -25,6 +25,7 @@ import com.xiaoyv.common.kts.randomY
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.dialog.AnimeReportDialog
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
 
 
@@ -82,7 +83,13 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
     }
 
     override fun initListener() {
+        binding.bottomRightTextView.setOnFastLimitClickListener {
+            RouteHelper.jumpIndexList(true, viewModel.userId)
+        }
 
+        binding.middleRightTextView.setOnFastLimitClickListener {
+            RouteHelper.jumpUserBlog(viewModel.userId)
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {

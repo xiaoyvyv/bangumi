@@ -9,6 +9,8 @@ import com.xiaoyv.bangumi.ui.feature.user.chart.ChartFragment
 import com.xiaoyv.bangumi.ui.feature.user.overview.UserOverviewFragment
 import com.xiaoyv.bangumi.ui.feature.user.sign.SignFragment
 import com.xiaoyv.bangumi.ui.profile.page.save.SaveListFragment
+import com.xiaoyv.bangumi.ui.timeline.page.TimelinePageFragment
+import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.annotation.UserCenterType
 import com.xiaoyv.common.config.bean.UserCenterTab
 
@@ -28,7 +30,6 @@ class UserAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         UserCenterTab("收藏", UserCenterType.TYPE_SAVE),
         UserCenterTab("统计", UserCenterType.TYPE_CHART),
         UserCenterTab("时间线", UserCenterType.TYPE_TIMELINE),
-        UserCenterTab("超展开", UserCenterType.TYPE_SUPER),
         UserCenterTab("关于", UserCenterType.TYPE_ABOUT)
     )
 
@@ -40,6 +41,11 @@ class UserAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             UserCenterType.TYPE_SAVE -> SaveListFragment.newInstance(userId)
             UserCenterType.TYPE_ABOUT -> SignFragment.newInstance()
             UserCenterType.TYPE_CHART -> ChartFragment.newInstance()
+            UserCenterType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
+                type = TimelineType.TYPE_ALL,
+                userId = userId,
+                requireLogin = false
+            )
             else -> EmptyFragment.newInstance()
         }
     }

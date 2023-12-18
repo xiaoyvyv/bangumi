@@ -37,6 +37,7 @@ import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
+import com.xiaoyv.bangumi.ui.feature.user.blog.UserBlogActivity
 import com.xiaoyv.bangumi.ui.feature.web.WebActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
@@ -52,6 +53,7 @@ import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.widget.kts.showToastCompat
 
 /**
  * Class: [RouteHelper]
@@ -226,6 +228,13 @@ object RouteHelper {
         )
     }
 
+    fun jumpUserBlog(userId: String) {
+        ActivityUtils.startActivity(
+            bundleOf(NavKey.KEY_STRING to userId),
+            UserBlogActivity::class.java
+        )
+    }
+
     fun jumpPostTopic(postAttach: PostAttach? = null) {
         ActivityUtils.startActivity(
             bundleOf(NavKey.KEY_PARCELABLE to postAttach),
@@ -270,8 +279,18 @@ object RouteHelper {
         IndexDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to id))
     }
 
-    fun jumpIndexList(isSortByNewest: Boolean) {
-        IndexListActivity::class.open(bundleOf(NavKey.KEY_BOOLEAN to isSortByNewest))
+    /**
+     * 目录列表查询，没有指定用户则查询全部目录
+     *
+     * @param targetUserId 如果指定了用户ID，[isSortByNewest] 则表示是否查询用户创建的目录，否则查询收藏的目录
+     */
+    fun jumpIndexList(isSortByNewest: Boolean, targetUserId: String? = null) {
+        IndexListActivity::class.open(
+            bundleOf(
+                NavKey.KEY_BOOLEAN to isSortByNewest,
+                NavKey.KEY_STRING to targetUserId
+            )
+        )
     }
 
     fun jumpGroupList() {
@@ -393,7 +412,7 @@ object RouteHelper {
     }
 
     fun jumpSendMessage(userId: String) {
-
+        showToastCompat("正在开发中...")
     }
 
     /**

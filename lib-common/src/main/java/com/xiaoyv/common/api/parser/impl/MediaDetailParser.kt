@@ -257,11 +257,13 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             // 序号
             progress.number = text().ifBlank { item.text() }
             // 是否已经放送
-            progress.isRelease = hasClass("epBtnAir")
+            progress.isRelease = hasClass("epBtnAir") || hasClass("epBtnWatched")
             // 是否今天放送
             progress.isToday = hasClass("epBtnToday")
             // 是否正在等待放送中
             progress.isWaiting = hasClass("epBtnNA")
+            // 是否看过了
+            progress.isWatched = hasClass("epBtnWatched")
         }
 
         val relId = item.select("a").attr("rel")

@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ColorUtils
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -78,6 +79,19 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                     true
                 }
         }
+
+        binding.tableLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                binding.appBar.setExpanded(false, true)
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+                 binding.appBar.setExpanded(false, true)
+            }
+        })
 
         binding.ivAvatar.setOnFastLimitClickListener {
             editProfileOrLogin()

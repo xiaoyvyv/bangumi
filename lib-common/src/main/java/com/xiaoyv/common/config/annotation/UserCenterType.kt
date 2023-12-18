@@ -13,7 +13,6 @@ import androidx.annotation.IntDef
     UserCenterType.TYPE_SAVE,
     UserCenterType.TYPE_CHART,
     UserCenterType.TYPE_TIMELINE,
-    UserCenterType.TYPE_SUPER,
     UserCenterType.TYPE_ABOUT
 )
 @Retention(AnnotationRetention.SOURCE)
@@ -23,7 +22,6 @@ annotation class UserCenterType {
         const val TYPE_SAVE = 1
         const val TYPE_CHART = 2
         const val TYPE_TIMELINE = 3
-        const val TYPE_SUPER = 4
-        const val TYPE_ABOUT = 5
+        const val TYPE_ABOUT = 4
     }
 }

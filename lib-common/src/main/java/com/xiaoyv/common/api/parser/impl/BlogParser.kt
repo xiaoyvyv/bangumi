@@ -21,9 +21,9 @@ import org.jsoup.nodes.Element
  * @author why
  * @since 11/28/23
  */
-fun Document.parserBlogList(userCenter: Boolean): List<BlogEntity> {
+fun Document.parserBlogList(isQueryTargetUser: Boolean, isQueryMine: Boolean): List<BlogEntity> {
     requireNoError()
-    val div = if (userCenter) "div" else "div.entry"
+    val div = if (isQueryTargetUser) "div" else "div.entry"
 
     return select("#news_list > .item, #entry_list > .item").map {
         val blogEntity = BlogEntity()
@@ -32,12 +32,12 @@ fun Document.parserBlogList(userCenter: Boolean): List<BlogEntity> {
         blogEntity.id = it.select("$div .title a").hrefId()
 
         // 区别解析
-        if (userCenter) {
+        if (isQueryTargetUser) {
             blogEntity.time = it.select("$div small.time").text()
             it.select("$div .content").apply {
                 select("small").remove()
-                blogEntity.content = text()
                 blogEntity.commentCount = it.select("$div small.orange").text().parseCount()
+                blogEntity.content = text()
             }
         } else {
             blogEntity.time = it.select("$div .time small").lastOrNull()?.text().orEmpty()
@@ -54,7 +54,7 @@ fun Document.parserBlogList(userCenter: Boolean): List<BlogEntity> {
             blogEntity.mediaName = getOrNull(1)?.text().orEmpty()
         }
         // 是否嵌套在用户中心的解析
-        blogEntity.nestingProfile = userCenter
+        blogEntity.nestingProfile = isQueryMine
         blogEntity
     }
 }

@@ -63,3 +63,20 @@ TE: trailers
 GET https://tinygrail.oss-cn-hangzhou.aliyuncs.com/avatar/edbbcd8f731821b6172a74bf1e6ba9ec.jpg
 Referer: https://bgm.tv
 
+###
+GET https://upload.cc/i1/2018/12/29/GIA76g.png HTTP/2
+Host: upload.cc
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Cookie: __ddgid_=9RP6cs60ITY5p0ro; __ddgmark_=gABL0LPoM3izzR3x; __ddg5_=hGq0ym764UxhScLw; __ddg2_=su92IOC1Wxb2UvsS; __ddg1_=LsTrPSbwyN45Hhj5zl37
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers

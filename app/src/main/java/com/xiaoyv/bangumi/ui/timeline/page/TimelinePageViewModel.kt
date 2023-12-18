@@ -46,6 +46,7 @@ class TimelinePageViewModel : BaseViewModel() {
                 }
 
                 onTimelineLiveData.value = withContext(Dispatchers.IO) {
+                    // 指定用户的时间线
                     if (hasTargetUserId) {
                         BgmApiManager.bgmWebApi.queryUserTimeline(
                             userId = userId,

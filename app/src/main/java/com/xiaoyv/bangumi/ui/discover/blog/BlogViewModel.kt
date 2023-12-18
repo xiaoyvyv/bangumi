@@ -1,14 +1,11 @@
 package com.xiaoyv.bangumi.ui.discover.blog
 
-import com.blankj.utilcode.util.StringUtils
 import com.xiaoyv.bangumi.base.BaseListViewModel
-import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.BlogEntity
 import com.xiaoyv.common.api.parser.impl.parserBlogList
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.CommonString
 
 /**
  * Class: [BlogViewModel]
@@ -48,30 +45,8 @@ class BlogViewModel : BaseListViewModel<BlogEntity>() {
             require(UserHelper.isLogin) { "你还没有登录呢" }
         }
 
-        return BgmApiManager.bgmWebApi.queryBlogList(
-            queryPath = queryPath,
-            tagPath = tagPath,
-            page = current
-        ).parserBlogList(userId.isNotBlank()).apply {
-            // 刷新时，检测是否为空数据
-            if (isRefresh) require(isNotEmpty()) {
-                StringUtils.getString(CommonString.common_empty_tip)
-            }
-        }
-    }
-
-    private fun queryBlogList() {
-        launchUI(
-            stateView = loadingViewState,
-            error = {
-                it.printStackTrace()
-                if (isRefresh) onListLiveData.value = null
-                else current--
-            },
-            block = {
-
-            }
-        )
+        return BgmApiManager.bgmWebApi.queryBlogList(queryPath, tagPath, current)
+            .parserBlogList(userId.isNotBlank(), isMine)
     }
 
     /**

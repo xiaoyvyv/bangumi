@@ -227,6 +227,10 @@
             android:name="com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.user.blog.UserBlogActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

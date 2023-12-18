@@ -145,6 +145,7 @@ data class MediaDetailEntity(
         @SerializedName("isToday") var isToday: Boolean = false,
         @SerializedName("isWaiting") var isWaiting: Boolean = false,
         @SerializedName("isRelease") var isRelease: Boolean = false,
+        @SerializedName("isWatched") var isWatched: Boolean = false,
         @SerializedName("commentCount") var commentCount: Int = 0,
     ) : Parcelable, IdEntity
 

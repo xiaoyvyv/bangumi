@@ -13,8 +13,8 @@ data class BlogEntity(
     var time: String = "",
     var content: String = "",
     var commentCount: Int = 0,
-    var nestingProfile: Boolean = false,
     var mediaName: String = "",
     var recentUserName: String = "",
     var recentUserId: String = "",
+    var nestingProfile: Boolean = false,
 )

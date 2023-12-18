@@ -29,6 +29,11 @@ fun Document.parserTimelineForms(
     return select("#timeline ul > li").map { item ->
         val entity = TimelineEntity()
         item.handleItem(entity, userId)
+        // 如果指定了用户的时间线，单独解析头像和用户名登
+        if (userId.isNotBlank()) {
+            entity.name = select(".nameSingle .name").text()
+            entity.avatar = select(".headerAvatar a.avatar > span").styleBackground()
+        }
         entity
     }
 }
@@ -190,6 +195,7 @@ private fun Elements.fetchHtmlTitle(): CharSequence {
         }
         infoUserActionText += node.toString()
     }
+    if (infoUserActionText.isBlank()) infoUserActionText = "时间线"
     return infoUserActionText.parseHtml()
 }
 

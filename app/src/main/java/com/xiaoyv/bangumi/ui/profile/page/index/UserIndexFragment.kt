@@ -1,7 +1,10 @@
 package com.xiaoyv.bangumi.ui.profile.page.index
 
 import android.os.Bundle
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
@@ -11,7 +14,9 @@ import com.xiaoyv.bangumi.ui.discover.index.list.IndexListViewModel
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.IndexItemEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.databinding.ViewIndexFilterBinding
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -22,6 +27,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @since 12/14/23
  */
 class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>() {
+    private lateinit var filter: ViewIndexFilterBinding
 
     override val isOnlyOnePage: Boolean
         get() = false
@@ -35,6 +41,38 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
         viewModel.selectedMode = arguments.getBoolean(NavKey.KEY_BOOLEAN, false)
         viewModel.requireLogin = arguments.getBoolean(NavKey.KEY_BOOLEAN_SECOND, false)
+
+        // 个人中心嵌套，默认显示自己的目录
+        if (viewModel.requireLogin) {
+            viewModel.isSortByNewest = true
+        }
+    }
+
+    override fun initView() {
+        super.initView()
+        if (viewModel.requireLogin) {
+            filter = ViewIndexFilterBinding.inflate(layoutInflater, binding.flContainer, true)
+            filter.root.doOnPreDraw {
+                binding.rvContent.updateLayoutParams<MarginLayoutParams> {
+                    topMargin = filter.root.height
+                }
+            }
+
+            // 创建的和收藏的切换
+            filter.listType.setOnCheckedStateChangeListener { _, ints ->
+                when (ints.firstOrNull()) {
+                    CommonId.type_create -> {
+                        viewModel.isSortByNewest = true
+                        viewModel.refresh()
+                    }
+
+                    CommonId.type_collect -> {
+                        viewModel.isSortByNewest = false
+                        viewModel.refresh()
+                    }
+                }
+            }
+        }
     }
 
     override fun initListener() {

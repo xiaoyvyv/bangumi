@@ -27,12 +27,12 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
 
     internal val tabs = listOf(
         ProfileTab("收藏", ProfileType.TYPE_COLLECTION),
-        ProfileTab("日志", ProfileType.TYPE_BLOG),
         ProfileTab("目录", ProfileType.TYPE_INDEX),
+        ProfileTab("时间胶囊", ProfileType.TYPE_TIMELINE),
+        ProfileTab("日志", ProfileType.TYPE_BLOG),
+        ProfileTab("小组", ProfileType.TYPE_GROUP),
         ProfileTab("好友", ProfileType.TYPE_FRIEND),
         ProfileTab("人物", ProfileType.TYPE_MONO),
-        ProfileTab("小组", ProfileType.TYPE_GROUP),
-        ProfileTab("时间胶囊", ProfileType.TYPE_TIMELINE),
         ProfileTab("维基", ProfileType.TYPE_WIKI)
     )
 
@@ -49,7 +49,7 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             )
             // 时间线
             ProfileType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
-                type = TimelineType.TYPE_USER,
+                type = TimelineType.TYPE_ALL,
                 userId = myId,
                 requireLogin = true
             )

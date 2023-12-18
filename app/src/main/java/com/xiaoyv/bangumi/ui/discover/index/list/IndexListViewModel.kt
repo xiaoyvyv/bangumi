@@ -23,19 +23,32 @@ class IndexListViewModel : BaseListViewModel<IndexItemEntity>() {
     internal val isMine: Boolean
         get() = userId.isNotBlank() && userId == UserHelper.currentUser.id
 
+    internal val queryForUser: Boolean
+        get() = userId.isNotBlank()
+
     override suspend fun onRequestListImpl(): List<IndexItemEntity> {
         if (requireLogin) {
             require(UserHelper.isLogin) { "你还没有登录呢" }
         }
 
-        return if (userId.isNotBlank()) {
-            BgmApiManager.bgmWebApi.queryUserIndex(userId, current)
-                .parserUserIndexList()
-        } else {
-            BgmApiManager.bgmWebApi.queryIndexList(
-                orderBy = if (isSortByNewest) null else "collect",
-                page = current
-            ).parserIndexList()
+        return when {
+            // 查询指定用户的目录
+            queryForUser -> {
+                // 是否拼接查询收藏路径，复用下 isSortByNewest 字段
+                // 指定用户ID时，isSortByNewest == true，查询创建的目录，反之查询收藏的目录
+                val queryCollect = if (isSortByNewest) "" else "/collect"
+                BgmApiManager.bgmWebApi.queryUserIndex(userId, queryCollect, current).let {
+                    if (isSortByNewest) it.parserUserIndexList()
+                    else it.parserIndexList()
+                }
+            }
+            // 查询全部目录列表
+            else -> {
+                BgmApiManager.bgmWebApi.queryIndexList(
+                    orderBy = if (isSortByNewest) null else "collect",
+                    page = current
+                ).parserIndexList()
+            }
         }
     }
 }

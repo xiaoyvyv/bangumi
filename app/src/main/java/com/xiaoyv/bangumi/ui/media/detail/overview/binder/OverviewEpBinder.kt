@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
+import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -98,6 +99,13 @@ class OverviewEpBinder(
         override fun BaseQuickBindingHolder<FragmentOverviewEpItemBinding>.converted(item: MediaDetailEntity.MediaProgress) {
             binding.tvEp.text = item.number
             when {
+                item.isWatched -> {
+                    binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
+                    binding.tvEp.backgroundTintList = ColorStateList.valueOf(
+                        context.getColor(CommonColor.save_collect)
+                    )
+                }
+
                 item.isRelease -> {
                     binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimaryContainer))
                     binding.tvEp.backgroundTintList = ColorStateList.valueOf(

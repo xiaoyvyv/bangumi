@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.ChipGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_type"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurface"
+    android:paddingHorizontal="@dimen/ui_size_12"
+    app:layout_constraintTop_toTopOf="parent"
+    app:selectionRequired="true"
+    app:singleSelection="true">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/type_create"
+        style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="我创建的"
+        android:textSize="@dimen/text_label"
+        app:chipMinHeight="@dimen/ui_size_24"
+        app:textEndPadding="@dimen/ui_size_4"
+        app:textStartPadding="@dimen/ui_size_4" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/type_collect"
+        style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我收藏的"
+        android:textSize="@dimen/text_label"
+        app:chipMinHeight="@dimen/ui_size_24"
+        app:textEndPadding="@dimen/ui_size_4"
+        app:textStartPadding="@dimen/ui_size_4" />
+</com.google.android.material.chip.ChipGroup>

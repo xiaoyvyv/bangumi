@@ -27,6 +27,7 @@ class IndexListActivity : BaseListActivity<IndexItemEntity, IndexListViewModel>(
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.isSortByNewest = bundle.getBoolean(NavKey.KEY_BOOLEAN, false)
+        viewModel.userId = bundle.getString(NavKey.KEY_STRING).orEmpty()
     }
 
     override fun initListener() {
@@ -43,9 +44,9 @@ class IndexListActivity : BaseListActivity<IndexItemEntity, IndexListViewModel>(
 
     override fun onListDataFinish(list: List<IndexItemEntity>) {
         binding.toolbar.title = if (viewModel.isSortByNewest) {
-            "目录列表-时间排序"
+            if (viewModel.queryForUser) "目录列表-TA 的创建" else "目录列表-时间排序"
         } else {
-            "目录列表-热门排序"
+            if (viewModel.queryForUser) "目录列表-TA 的收藏" else "目录列表-热门排序"
         }
 
         invalidateMenu()
@@ -53,14 +54,14 @@ class IndexListActivity : BaseListActivity<IndexItemEntity, IndexListViewModel>(
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (viewModel.isSortByNewest) {
-            menu.add("按热门排序")
+            menu.add(if (viewModel.queryForUser) "TA 收藏的目录" else "按热门排序")
                 .setOnMenuItemClickListener {
                     viewModel.isSortByNewest = false
                     viewModel.refresh()
                     true
                 }
         } else {
-            menu.add("按创建时间排序")
+            menu.add(if (viewModel.queryForUser) "TA 创建的目录" else "按热门排序")
                 .setOnMenuItemClickListener {
                     viewModel.isSortByNewest = true
                     viewModel.refresh()
