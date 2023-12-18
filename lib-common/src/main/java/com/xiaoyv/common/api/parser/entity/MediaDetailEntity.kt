@@ -37,7 +37,9 @@ data class MediaDetailEntity(
     @SerializedName("countOnHold") var countOnHold: Int = 0,
     @SerializedName("countCollect") var countCollect: Int = 0,
     @SerializedName("countDropped") var countDropped: Int = 0,
-    @SerializedName("progressList") var progressList: List<MediaProgress> = emptyList(),
+    @SerializedName("myProgress") var myProgress: Int = 0,
+    @SerializedName("totalProgress") var totalProgress: Int = 0,
+    @SerializedName("progressList") var progressList: ArrayList<MediaProgress> = arrayListOf(),
     @SerializedName("subjectSummary") var subjectSummary: String = "",
     @SerializedName("tags") var tags: List<MediaTag> = emptyList(),
     @SerializedName("characters") var characters: List<MediaCharacter> = emptyList(),
@@ -47,7 +49,7 @@ data class MediaDetailEntity(
     @SerializedName("boards") var boards: List<MediaBoardEntity> = emptyList(),
     @SerializedName("comments") var comments: List<MediaCommentEntity> = emptyList(),
     @SerializedName("rating") var rating: MediaRating = MediaRating(),
-    @SerializedName("photos") var photos: List<DouBanPhotoEntity.Photo> = emptyList()
+    @SerializedName("photos") var photos: List<DouBanPhotoEntity.Photo> = emptyList(),
 ) : Parcelable {
 
 
@@ -59,7 +61,7 @@ data class MediaDetailEntity(
         @SerializedName("globalRank") var globalRank: Int = 0,
         @SerializedName("ratingCount") var ratingCount: Int = 0,
         @SerializedName("ratingDetail") var ratingDetail: List<RatingItem> = emptyList(),
-        @SerializedName("standardDeviation") var standardDeviation: Double = 0.0
+        @SerializedName("standardDeviation") var standardDeviation: Double = 0.0,
     ) : Parcelable {
 
         fun calculateStandardDeviation(): Double {
@@ -86,7 +88,7 @@ data class MediaDetailEntity(
     data class RatingItem(
         @SerializedName("label") var label: Int = 1,
         @SerializedName("count") var count: Int = 0,
-        @SerializedName("percent") var percent: Float = 0f
+        @SerializedName("percent") var percent: Float = 0f,
     ) : Parcelable
 
     @Parcelize
@@ -97,7 +99,7 @@ data class MediaDetailEntity(
         @SerializedName("titleCn") var titleCn: String = "",
         @SerializedName("titleNative") var titleNative: String = "",
         @SerializedName("type") var type: String = "",
-        @SerializedName("characterJobs") var characterJobs: List<String> = emptyList()
+        @SerializedName("characterJobs") var characterJobs: List<String> = emptyList(),
     ) : Parcelable
 
     @Parcelize
@@ -127,7 +129,7 @@ data class MediaDetailEntity(
         @SerializedName("title") var title: String = "",
         @SerializedName("count") var count: Int = 0,
         @SerializedName("mediaType") var mediaType: String = "",
-        @SerializedName("url") var url: String = ""
+        @SerializedName("url") var url: String = "",
     ) : Parcelable
 
     @Parcelize
@@ -138,10 +140,12 @@ data class MediaDetailEntity(
         @SerializedName("firstTime") var firstTime: String = "",
         @SerializedName("duration") var duration: String = "",
         @SerializedName("id") override var id: String = "",
-        @SerializedName("no") var no: String = "",
-        @SerializedName("notEp") var notEp: Boolean = false,
+        @SerializedName("number") var number: String = "",
+        @SerializedName("isNotEp") var isNotEp: Boolean = false,
+        @SerializedName("isToday") var isToday: Boolean = false,
+        @SerializedName("isWaiting") var isWaiting: Boolean = false,
         @SerializedName("isRelease") var isRelease: Boolean = false,
-        @SerializedName("commentCount") var commentCount: Int = 0
+        @SerializedName("commentCount") var commentCount: Int = 0,
     ) : Parcelable, IdEntity
 
     @Parcelize
@@ -151,7 +155,7 @@ data class MediaDetailEntity(
         @SerializedName("userId") var userId: String = "",
         @SerializedName("userAvatar") var userAvatar: String = "",
         @SerializedName("id") var id: String = "",
-        @SerializedName("title") var title: String = ""
+        @SerializedName("title") var title: String = "",
     ) : Parcelable
 
     @Parcelize
@@ -161,7 +165,7 @@ data class MediaDetailEntity(
         @SerializedName("name") var name: String = "",
         @SerializedName("avatar") var avatar: String = "",
         @SerializedName("time") var time: String = "",
-        @SerializedName("star") var star: Float = 0f
+        @SerializedName("star") var star: Float = 0f,
     ) : Parcelable, IdEntity
 }
 

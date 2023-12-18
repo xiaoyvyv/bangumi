@@ -5,8 +5,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog
 import com.xiaoyv.bangumi.ui.media.action.MediaSaveActionDialog
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
@@ -89,6 +91,30 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     }
 
     override fun initListener() {
+        // 章节完成度点击
+        overviewAdapter.setOnDebouncedChildClickListener(R.id.tv_ep_my_progress) {
+            val position = overviewAdapter.itemIndexOfFirst(it)
+            val entity = viewModel.mediaDetailLiveData.value
+                ?: return@setOnDebouncedChildClickListener
+
+            // 更新我的进度
+            if (entity.progressList.isEmpty().not()) {
+                MediaEpActionDialog.show(
+                    childFragmentManager,
+                    viewModel.mediaId,
+                    viewModel.requireMediaName,
+                    entity.progressList,
+                    entity.myProgress
+                ) { myProgress ->
+                    entity.myProgress = myProgress
+
+                    // 刷新章节的进度 Item
+                    it.entity = entity
+                    overviewAdapter[position] = it
+                }
+            }
+        }
+
         overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
             when (it.type) {
                 OverviewAdapter.TYPE_EP -> {
@@ -160,17 +186,22 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         }
     }
 
-
     private fun showCollectPanel(item: OverviewAdapter.Item, position: Int) {
         if (!UserHelper.isLogin) {
             RouteHelper.jumpLogin()
             return
         }
-        val forceCast = item.entity.forceCast<MediaDetailEntity>()
-        MediaSaveActionDialog.show(childFragmentManager, forceCast.collectState) {
+
+        val media = item.entity.forceCast<MediaDetailEntity>()
+        MediaSaveActionDialog.show(childFragmentManager, media.collectState) {
             val entity = viewModel.refreshCollectState(it) ?: return@show
             item.entity = entity
+            // 刷新收藏的 Item
             overviewAdapter[position] = item
+
+            // 刷新章节的进度 Item
+            overviewAdapter.getItem(position + 1)?.entity = entity
+            overviewAdapter.notifyItemChanged(position + 1)
         }
     }
 

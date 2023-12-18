@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.helper
 
 import android.content.Intent
+import android.webkit.URLUtil
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.os.bundleOf
 import com.blankj.utilcode.util.ActivityUtils
@@ -69,6 +70,11 @@ object RouteHelper {
             .substringBefore("?")
 
         debugLog { "Handle Url: $titleLink" }
+
+        if (URLUtil.isNetworkUrl(titleLink) && !titleLink.contains("bgm") && !titleLink.contains("bangumi")) {
+            jumpWeb(titleLink, fitToolbar = true)
+            return true
+        }
 
         when {
             // 话题

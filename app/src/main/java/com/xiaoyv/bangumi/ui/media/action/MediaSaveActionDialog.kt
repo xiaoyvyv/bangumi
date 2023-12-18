@@ -60,7 +60,7 @@ class MediaSaveActionDialog : DialogFragment() {
         }
     }
 
-    private var onUpdateResult: (MediaCollectForm) -> Unit = {}
+    private var onUpdateResult: (MediaDetailEntity) -> Unit = { _ -> }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -154,7 +154,7 @@ class MediaSaveActionDialog : DialogFragment() {
             },
             block = {
                 showLoading(binding)
-                val collectState = withContext(Dispatchers.IO) {
+                val media = withContext(Dispatchers.IO) {
                     val paramMap = mapOf(
                         "referer" to form.referer.ifBlank { "subject" },
                         "interest" to form.interest,
@@ -165,18 +165,13 @@ class MediaSaveActionDialog : DialogFragment() {
                         "update" to form.update.ifBlank { "保存" },
                     )
 
-                    val collectState = BgmApiManager.bgmWebApi.updateInterest(
+                    BgmApiManager.bgmWebApi.updateInterest(
                         map = paramMap,
                         mediaId = form.mediaId,
                         gh = form.gh
-                    ).parserMediaDetail().collectState
-
-                    if (collectState.gh.isNotBlank()) {
-                        return@withContext collectState
-                    }
-                    throw IllegalStateException("更新失败！")
+                    ).parserMediaDetail()
                 }
-                onUpdateResult(collectState)
+                onUpdateResult(media)
 
                 hideLoading(binding)
 
@@ -298,7 +293,7 @@ class MediaSaveActionDialog : DialogFragment() {
         fun show(
             fragmentManager: FragmentManager,
             collectForm: MediaCollectForm?,
-            onUpdateResultListener: (MediaCollectForm) -> Unit = {},
+            onUpdateResultListener: (MediaDetailEntity) -> Unit = {},
         ) {
             MediaSaveActionDialog()
                 .apply {

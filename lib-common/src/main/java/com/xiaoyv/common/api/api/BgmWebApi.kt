@@ -70,13 +70,24 @@ interface BgmWebApi {
     ): Document
 
     /**
-     * 查询时间胶囊
+     * 查询指定好友时间胶囊
      *
      * @param ajax 仅返回嵌套的 html
      */
     @GET("/user/{userId}/timeline")
-    suspend fun queryTimeline(
+    suspend fun queryUserTimeline(
         @Path("userId", encoded = true) userId: String,
+        @Query("type") @TimelineType type: String,
+        @Query("ajax") ajax: Long = 1,
+    ): Document
+
+    /**
+     * 查询登录状态下，全部好友时间胶囊
+
+     * @param ajax 仅返回嵌套的 html
+     */
+    @GET("/timeline")
+    suspend fun queryFriendTimeline(
         @Query("type") @TimelineType type: String,
         @Query("ajax") ajax: Long = 1,
     ): Document
@@ -156,6 +167,15 @@ interface BgmWebApi {
         @Path("mediaId", encoded = true) mediaId: String,
         @Path("mediaDetailType", encoded = true) @MediaDetailType type: String,
         @Query("page") page: Int? = null,
+    ): Document
+
+    @FormUrlEncoded
+    @POST("/subject/set/watched/{mediaId}")
+    suspend fun updateMediaProgress(
+        @Path("mediaId") mediaId: String,
+        @Field("watchedeps") watch: String,
+        @Field("referer") referer: String = "subject",
+        @Field("submit") submit: String = "更新",
     ): Document
 
     /**

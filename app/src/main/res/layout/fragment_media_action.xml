@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingHorizontal="@dimen/ui_size_32"
+        android:paddingHorizontal="@dimen/ui_size_36"
         android:paddingVertical="@dimen/ui_layout_margin"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="?attr/colorOnSurface"

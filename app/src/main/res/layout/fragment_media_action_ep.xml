@@ -20,43 +20,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="无职转生" />
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_subtitle"
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+        android:id="@+id/rv_ep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_size_12"
-        android:text="添加到我的目录"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_new"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="start"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_size_12"
-        android:text="新建目录"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:textColor="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
-    <FrameLayout
-        android:id="@+id/fl_container"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_size_0"
-        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        android:paddingVertical="@dimen/ui_size_8"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle">
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintVertical_bias="0"
+        app:spanCount="8"
+        tools:listitem="@layout/fragment_overview_ep_item" />
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_cancel"

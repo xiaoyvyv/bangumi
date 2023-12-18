@@ -23,6 +23,7 @@ import androidx.annotation.StringDef
     BgmPathType.TYPE_SUBJECT,
     BgmPathType.TYPE_INDEX,
     BgmPathType.TYPE_EP,
+    BgmPathType.TYPE_TIMELINE,
     BgmPathType.TYPE_FRIEND
 )
 @Retention(AnnotationRetention.SOURCE)
@@ -40,6 +41,7 @@ annotation class BgmPathType {
         const val TYPE_INDEX = "index"
         const val TYPE_FRIEND = "friends"
         const val TYPE_EP = "ep"
+        const val TYPE_TIMELINE = "timeline"
         const val TYPE_SEARCH_SUBJECT = "subject_search"
         const val TYPE_SEARCH_MONO = "mono_search"
         const val TYPE_SEARCH_TAG = "tag"
@@ -60,6 +62,7 @@ annotation class BgmPathType {
                 TYPE_INDEX -> "目录"
                 TYPE_FRIEND -> "好友"
                 TYPE_EP -> "章节"
+                TYPE_TIMELINE -> "时间线"
                 else -> ""
             }
         }

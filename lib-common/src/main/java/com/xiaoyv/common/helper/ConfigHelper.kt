@@ -15,6 +15,7 @@ object ConfigHelper {
     private const val KEY_ROBOT_VOICE_DISABLE = "robot-voice-disable"
     private const val KEY_IMAGE_ANIMATION = "image-animation"
     private const val KEY_IMAGE_COMPRESS = "image-compress"
+    private const val KEY_SHOW_USER_TIMELINE = "show-user-timeline"
 
     fun configBaiduTranslateId(appId: String) {
         SPStaticUtils.put(KEY_BAIDU_TRANSLATE_APP_ID, appId)
@@ -61,4 +62,12 @@ object ConfigHelper {
         return SPStaticUtils.put(KEY_IMAGE_COMPRESS, enable)
     }
 
+    /**
+     * 时间线默认展示好友还是全部
+     */
+    var isShowUserTimeline: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_SHOW_USER_TIMELINE, false)
+        set(value) {
+            SPStaticUtils.put(KEY_SHOW_USER_TIMELINE, value)
+        }
 }

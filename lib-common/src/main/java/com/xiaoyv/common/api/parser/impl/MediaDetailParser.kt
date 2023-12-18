@@ -239,17 +239,23 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         entity.countCollect = getOrNull(3)?.text().parseCount()
         entity.countDropped = getOrNull(4)?.text().parseCount()
     }
-
-    entity.progressList = select(".prg_list > li").map { item ->
+    select(".prg_list > li").forEach { item ->
         val progress = MediaDetailEntity.MediaProgress()
 
-        progress.notEp = item.hasClass("subtitle")
+        // 不是章节，如：SP OVA等格子
+        progress.isNotEp = item.hasClass("subtitle")
 
         item.select("a").apply {
             progress.id = hrefId()
             progress.titleNative = attr("title")
-            progress.no = text().ifBlank { item.text() }
+            // 序号
+            progress.number = text().ifBlank { item.text() }
+            // 是否已经放送
             progress.isRelease = hasClass("epBtnAir")
+            // 是否今天放送
+            progress.isToday = hasClass("epBtnToday")
+            // 是否正在等待放送中
+            progress.isWaiting = hasClass("epBtnNA")
         }
 
         val relId = item.select("a").attr("rel")
@@ -268,9 +274,11 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             }
             progress.commentCount = select("span.cmt small").text().parseCount()
         }
-        progress
+        entity.progressList.add(progress)
     }
 
+    entity.myProgress = select("input[name=watchedeps]").attr("value").toIntOrNull() ?: 0
+    entity.totalProgress = select(".prgText").text().parseCount()
     entity.subjectSummary = select("#subject_summary").text()
 
     entity.tags = select(".subject_tag_section .inner a").map { item ->

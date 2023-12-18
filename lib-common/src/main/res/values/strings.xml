@@ -27,7 +27,8 @@
     <string name="login_input_verify">验证码</string>
     <string name="login_btn_login">登录</string>
 
-    <string name="timeline_title">所有人的时间胶囊/时空管理局 </string>
+    <string name="timeline_title">时间胶囊-时空管理局</string>
+    <string name="timeline_user_title">时间胶囊-好友</string>
 
     <string name="calendar_title">每日放送</string>
     <string name="calendar_today_title">今日放送</string>

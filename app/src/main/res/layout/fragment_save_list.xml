@@ -43,7 +43,7 @@
             style="@style/Widget.Material3.Chip.Suggestion.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="再看"
+            android:text="在看"
             android:textSize="@dimen/text_label"
             app:chipMinHeight="@dimen/ui_size_24"
             app:textEndPadding="@dimen/ui_size_4"
@@ -108,6 +108,5 @@
     <com.xiaoyv.common.widget.state.AnimeStateView
         android:id="@+id/state_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/colorSurface" />
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

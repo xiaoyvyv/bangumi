@@ -8,6 +8,7 @@ import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.impl.parserTimelineForms
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -39,24 +40,33 @@ class TimelinePageViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
-                val forUser = userId.isNotBlank()
-
+                val hasTargetUserId = userId.isNotBlank()
                 if (timelineTab?.requireLogin == true) {
                     require(UserHelper.isLogin) { "你还没有登录呢" }
                 }
 
                 onTimelineLiveData.value = withContext(Dispatchers.IO) {
-                    if (forUser) {
-                        BgmApiManager.bgmWebApi.queryTimeline(
+                    if (hasTargetUserId) {
+                        BgmApiManager.bgmWebApi.queryUserTimeline(
                             userId = userId,
                             type = timelineType,
                             ajax = 0
                         ).parserTimelineForms(userId)
                     } else {
-                        BgmApiManager.bgmJsonApi.queryWholeTimeline(
-                            type = timelineType,
-                            ajax = 1
-                        ).parserTimelineForms()
+                        // 好友的时间线
+                        if (ConfigHelper.isShowUserTimeline) {
+                            BgmApiManager.bgmWebApi.queryFriendTimeline(
+                                type = timelineType,
+                                ajax = 1
+                            ).parserTimelineForms()
+                        }
+                        // 全部的时间线
+                        else {
+                            BgmApiManager.bgmJsonApi.queryWholeTimeline(
+                                type = timelineType,
+                                ajax = 1
+                            ).parserTimelineForms()
+                        }
                     }
                 }
             }

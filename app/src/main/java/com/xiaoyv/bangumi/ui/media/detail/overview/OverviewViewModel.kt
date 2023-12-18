@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
@@ -13,7 +12,6 @@ import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.config.bean.SampleAvatar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.random.Random
 
 /**
  * Class: [OverviewViewModel]
@@ -27,6 +25,15 @@ class OverviewViewModel : BaseViewModel() {
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
     internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.Item>>()
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
+
+    /**
+     * 媒体名称
+     */
+    internal val requireMediaName: String
+        get() {
+            val entity = mediaDetailLiveData.value ?: return "条目：$mediaId"
+            return entity.titleCn.ifBlank { entity.titleNative }
+        }
 
     private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(
@@ -156,8 +163,9 @@ class OverviewViewModel : BaseViewModel() {
     /**
      * 刷新收藏模型
      */
-    fun refreshCollectState(it: MediaCollectForm): MediaDetailEntity? {
-        mediaDetailLiveData.value?.collectState = it
+    fun refreshCollectState(it: MediaDetailEntity): MediaDetailEntity? {
+        mediaDetailLiveData.value?.collectState = it.collectState
+        mediaDetailLiveData.value?.totalProgress = it.totalProgress
         return mediaDetailLiveData.value
     }
 }

@@ -3,11 +3,16 @@ package com.xiaoyv.bangumi.ui.discover.index.detail.page
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.discover.index.detail.IndexDetailViewModel
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.IndexAttachEntity
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.IndexTabCatType
+import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
@@ -30,6 +35,19 @@ class IndexAttachFragment : BaseListFragment<IndexAttachEntity, IndexAttachViewM
     override fun initView() {
         viewModel.activityViewModel = activityViewModel
         super.initView()
+    }
+
+    override fun initListener() {
+        super.initListener()
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.item_index) {
+            when (it.pathType) {
+                BgmPathType.TYPE_SUBJECT -> RouteHelper.jumpMediaDetail(it.id)
+                BgmPathType.TYPE_PERSON -> RouteHelper.jumpPerson(it.id, false)
+                BgmPathType.TYPE_CHARACTER -> RouteHelper.jumpPerson(it.id, true)
+                BgmPathType.TYPE_EP -> RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
+            }
+        }
     }
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<IndexAttachEntity, *> {

@@ -17,11 +17,14 @@ data class MediaCollectForm(
     @SerializedName("comment") var comment: String = "",
     @SerializedName("referer") var referer: String = "subject",
     @SerializedName("update") var update: String = "保存",
-    @SerializedName("interest") @InterestType var interest: String = InterestType.TYPE_UNKNOWN,
     @SerializedName("privacy") var privacy: Int = 0,
     @SerializedName("score") var score: Int = 0,
     @SerializedName("myTags") var myTags: List<MediaDetailEntity.MediaTag> = emptyList(),
     @SerializedName("normalTags") var normalTags: List<MediaDetailEntity.MediaTag> = emptyList(),
+    /**
+     * 我的收藏状态
+     */
+    @SerializedName("interest") @InterestType var interest: String = InterestType.TYPE_UNKNOWN,
 
     var showMyTags: Boolean = false,
 ) : Parcelable

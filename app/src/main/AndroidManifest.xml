@@ -109,8 +109,7 @@
         <activity
             android:name="com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity"
             android:configChanges="orientation|keyboard|screenSize"
-            android:exported="false"
-            android:launchMode="singleTask" />
+            android:exported="false" />
         <activity
             android:name="com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity"
             android:configChanges="orientation|keyboard|screenSize"
@@ -130,8 +129,7 @@
         <activity
             android:name="com.xiaoyv.bangumi.ui.feature.topic.TopicActivity"
             android:configChanges="orientation|keyboard|screenSize"
-            android:exported="false"
-            android:launchMode="singleTask" />
+            android:exported="false" />
         <activity
             android:name="com.xiaoyv.bangumi.ui.feature.user.UserActivity"
             android:configChanges="orientation|keyboard|screenSize"

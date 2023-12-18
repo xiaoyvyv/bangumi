@@ -134,6 +134,13 @@ class TimelinePageFragment :
             }
         } else {
             viewModel.queryTimeline()
+
+            // 时间线类型切换刷新
+            UserHelper.observeAction(this) {
+                if (it == BgmPathType.TYPE_TIMELINE) {
+                    viewModel.queryTimeline()
+                }
+            }
         }
     }
 
