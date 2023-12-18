@@ -239,7 +239,11 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         entity.countCollect = getOrNull(3)?.text().parseCount()
         entity.countDropped = getOrNull(4)?.text().parseCount()
     }
+
+    // 仅截取前24个
     select(".prg_list > li").forEach { item ->
+        if (entity.progressList.size >= 24) return@forEach
+
         val progress = MediaDetailEntity.MediaProgress()
 
         // 不是章节，如：SP OVA等格子

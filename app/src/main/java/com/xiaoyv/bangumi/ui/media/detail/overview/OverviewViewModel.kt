@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.SampleImageGridClickType
+import com.xiaoyv.common.config.bean.EpSaveProgress
 import com.xiaoyv.common.config.bean.SampleAvatar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,6 +35,17 @@ class OverviewViewModel : BaseViewModel() {
             val entity = mediaDetailLiveData.value ?: return "条目：$mediaId"
             return entity.titleCn.ifBlank { entity.titleNative }
         }
+
+    /**
+     * 用户的进度信息
+     */
+    internal val requireProgress: EpSaveProgress
+        get() = EpSaveProgress(
+            mediaId = mediaId,
+            mediaName = requireMediaName,
+            myProgress = mediaDetailLiveData.value?.myProgress ?: 0,
+            totalProgress = mediaDetailLiveData.value?.totalProgress ?: 0
+        )
 
     private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(

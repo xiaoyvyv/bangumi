@@ -13,12 +13,10 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
-import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
-import com.xiaoyv.common.kts.tint
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.getAttrColor
@@ -41,7 +39,7 @@ class OverviewEpBinder(
     private val subSize = 24
 
     private val itemAdapter by lazy {
-        ItemEpAdapter().apply {
+        ItemAdapter().apply {
             setOnDebouncedChildClickListener(R.id.item_ep, block = clickItemListener)
         }
     }
@@ -56,9 +54,22 @@ class OverviewEpBinder(
         holder.binding.tvTitleEp.title = item.title
 
         item.entity.forceCast<MediaDetailEntity>().apply {
+            holder.binding.pbMedia.max = totalProgress
+            holder.binding.pbMedia.progress = myProgress
+
+            // 进度文字颜色
+            if (totalProgress == 0 || myProgress < totalProgress / 2) {
+                holder.binding.tvEpMyProgress.setTextColor(
+                    holder.binding.pbMedia.context.getAttrColor(GoogleAttr.colorOnSurfaceVariant)
+                )
+            } else {
+                holder.binding.tvEpMyProgress.setTextColor(
+                    holder.binding.pbMedia.context.getAttrColor(GoogleAttr.colorOnPrimary)
+                )
+            }
+
             holder.binding.tvEpMyProgress.isVisible =
                 (collectState.interest != InterestType.TYPE_UNKNOWN && collectState.interest != InterestType.TYPE_WISH)
-
             holder.binding.tvEpMyProgress.text =
                 String.format("我的完成度：%d/%d", myProgress, totalProgress)
             itemAdapter.submitList(progressList.subListLimit(subSize))
@@ -81,42 +92,12 @@ class OverviewEpBinder(
      *
      * @param selectedMode 是否为完成格子时的选取模式
      */
-    internal class ItemEpAdapter(
-        val selectedMode: Boolean = false,
-        var selectIndex: Int = -1,
-    ) : BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaProgress,
+    class ItemAdapter : BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaProgress,
             FragmentOverviewEpItemBinding>(IdDiffItemCallback()) {
-
-        override fun onBindViewHolder(
-            holder: BaseQuickBindingHolder<FragmentOverviewEpItemBinding>,
-            position: Int,
-            item: MediaDetailEntity.MediaProgress?,
-            payloads: List<Any>,
-        ) {
-            super.onBindViewHolder(holder, position, item, payloads)
-            payloads.forEach {
-                if (it == PAYLOAD_REFRESH_COLOR) {
-                    refreshColor(position, holder)
-                }
-            }
-        }
-
-        override fun onBindViewHolder(
-            holder: BaseQuickBindingHolder<FragmentOverviewEpItemBinding>,
-            position: Int,
-            item: MediaDetailEntity.MediaProgress?,
-        ) {
-            super.onBindViewHolder(holder, position, item)
-
-            // 完成进度复用时的UI逻辑
-            refreshColor(position, holder)
-        }
 
         override fun BaseQuickBindingHolder<FragmentOverviewEpItemBinding>.converted(item: MediaDetailEntity.MediaProgress) {
             binding.tvEp.text = item.number
-
-            // 完成进度复用时，不执行这里逻辑
-            if (selectedMode.not()) when {
+            when {
                 item.isRelease -> {
                     binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimaryContainer))
                     binding.tvEp.backgroundTintList = ColorStateList.valueOf(
@@ -131,27 +112,6 @@ class OverviewEpBinder(
                     )
                 }
             }
-        }
-
-        private fun refreshColor(
-            position: Int,
-            holder: BaseQuickBindingHolder<FragmentOverviewEpItemBinding>,
-        ) {
-            if (selectedMode) {
-                if (position <= selectIndex) {
-                    holder.binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-                    holder.binding.tvEp.backgroundTintList =
-                        context.getColor(CommonColor.save_collect).tint
-                } else {
-                    holder.binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurface))
-                    holder.binding.tvEp.backgroundTintList =
-                        context.getAttrColor(GoogleAttr.colorSurfaceContainer).tint
-                }
-            }
-        }
-
-        companion object {
-            const val PAYLOAD_REFRESH_COLOR = 1
         }
     }
 }

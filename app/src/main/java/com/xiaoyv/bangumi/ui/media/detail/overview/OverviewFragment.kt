@@ -92,25 +92,19 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
 
     override fun initListener() {
         // 章节完成度点击
-        overviewAdapter.setOnDebouncedChildClickListener(R.id.tv_ep_my_progress) {
-            val position = overviewAdapter.itemIndexOfFirst(it)
+        overviewAdapter.setOnDebouncedChildClickListener(R.id.tv_ep_my_progress) { item ->
+            val position = overviewAdapter.itemIndexOfFirst(item)
             val entity = viewModel.mediaDetailLiveData.value
-                ?: return@setOnDebouncedChildClickListener
+            val saveProgress = viewModel.requireProgress
 
-            // 更新我的进度
-            if (entity.progressList.isEmpty().not()) {
-                MediaEpActionDialog.show(
-                    childFragmentManager,
-                    viewModel.mediaId,
-                    viewModel.requireMediaName,
-                    entity.progressList,
-                    entity.myProgress
-                ) { myProgress ->
-                    entity.myProgress = myProgress
-
+            // 修改进度面板
+            if (entity != null) {
+                MediaEpActionDialog.show(childFragmentManager, saveProgress) { progress ->
                     // 刷新章节的进度 Item
-                    it.entity = entity
-                    overviewAdapter[position] = it
+                    item.entity = entity.apply {
+                        myProgress = progress
+                    }
+                    overviewAdapter[position] = item
                 }
             }
         }
