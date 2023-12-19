@@ -28,7 +28,7 @@ class OverviewCharacterBinder(private val clickItemListener: (MediaDetailEntity.
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
-            setOnDebouncedChildClickListener(R.id.item_character, block = clickItemListener)
+            setOnDebouncedChildClickListener(R.id.item_mono, block = clickItemListener)
         }
     }
 
