@@ -15,7 +15,5 @@ data class TimelineTab(
     var title: String,
     @TimelineType
     var timelineType: String,
-
-    var userId: String = "",
-    var requireLogin: Boolean = false,
+    var userId: String = ""
 ) : Parcelable

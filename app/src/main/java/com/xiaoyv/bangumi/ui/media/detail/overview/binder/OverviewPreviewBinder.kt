@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewPreviewBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewPreviewItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
@@ -26,7 +27,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 class OverviewPreviewBinder(
     private val touchedListener: RecyclerItemTouchedListener,
     private val clickItemListener: (DouBanPhotoEntity.Photo) -> Unit
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewPreviewBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewPreviewBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
@@ -37,7 +38,7 @@ class OverviewPreviewBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewPreviewBinding>,
         position: Int,
-        item: OverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.tvSectionPreview.title = item.title

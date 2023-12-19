@@ -8,7 +8,8 @@ import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewGridBi
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewOpusBinder
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.feature.person.overview.binder.PersonOverviewVoiceBinder
-import com.xiaoyv.common.config.annotation.SampleImageGridClickType
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.widget.kts.useNotNull
 
@@ -20,8 +21,8 @@ import com.xiaoyv.widget.kts.useNotNull
  */
 class PersonOverviewAdapter(
     touchedListener: RecyclerItemTouchedListener,
-    clickSubItem: (Int, String) -> Unit
-) : BaseMultiItemAdapter<PersonOverviewAdapter.Item>() {
+    clickSubItem: (String, String) -> Unit,
+) : BaseMultiItemAdapter<AdapterTypeItem>() {
     init {
         val gridPool = RecycledViewPool()
 
@@ -55,7 +56,7 @@ class PersonOverviewAdapter(
                 }
             ))
             .addItemType(TYPE_OPUS, PersonOverviewOpusBinder {
-                clickSubItem(SampleImageGridClickType.TYPE_OPUS, it.id)
+                clickSubItem(BgmPathType.TYPE_SUBJECT, it.id)
             })
             .onItemViewType { position, list ->
                 list[position].type
@@ -72,10 +73,4 @@ class PersonOverviewAdapter(
         const val TYPE_CHARACTER = 7
         const val TYPE_OPUS = 8
     }
-
-    data class Item(
-        var entity: Any,
-        var type: Int,
-        var title: String
-    )
 }

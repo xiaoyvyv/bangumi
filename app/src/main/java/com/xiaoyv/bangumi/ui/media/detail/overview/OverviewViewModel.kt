@@ -7,10 +7,11 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaDetailType
-import com.xiaoyv.common.config.annotation.SampleImageGridClickType
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.config.bean.EpSaveProgress
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -24,7 +25,7 @@ class OverviewViewModel : BaseViewModel() {
     internal var mediaId: String = ""
 
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
-    internal val mediaBinderListLiveData = MutableLiveData<List<OverviewAdapter.Item>>()
+    internal val mediaBinderListLiveData = MutableLiveData<List<AdapterTypeItem>>()
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
 
     /**
@@ -82,21 +83,21 @@ class OverviewViewModel : BaseViewModel() {
         )
     }
 
-    private fun buildBinderList(entity: MediaDetailEntity): List<OverviewAdapter.Item> {
-        val items = mutableListOf<OverviewAdapter.Item>()
+    private fun buildBinderList(entity: MediaDetailEntity): List<AdapterTypeItem> {
+        val items = mutableListOf<AdapterTypeItem>()
 
-        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_SAVE, "收藏"))
-        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_EP, "章节"))
-        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_TAG, "标签"))
-        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_SUMMARY, "简介"))
-        items.add(OverviewAdapter.Item(entity.photos, OverviewAdapter.TYPE_PREVIEW, "预览"))
-        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_DETAIL, "详情"))
-        items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_RATING, "评分"))
+        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_SAVE, "收藏"))
+        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_EP, "章节"))
+        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_TAG, "标签"))
+        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_SUMMARY, "简介"))
+        items.add(AdapterTypeItem(entity.photos, OverviewAdapter.TYPE_PREVIEW, "预览"))
+        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_DETAIL, "详情"))
+        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_RATING, "评分"))
 
         // 角色介绍
         if (entity.characters.isNotEmpty()) {
             items.add(
-                OverviewAdapter.Item(
+                AdapterTypeItem(
                     entity.characters,
                     OverviewAdapter.TYPE_CHARACTER,
                     "角色介绍"
@@ -107,7 +108,7 @@ class OverviewViewModel : BaseViewModel() {
         // 相关的媒体条目
         if (entity.relativeMedia.isNotEmpty()) {
             items.add(
-                OverviewAdapter.Item(
+                AdapterTypeItem(
                     entity.relativeMedia,
                     OverviewAdapter.TYPE_RELATIVE,
                     "相关的条目"
@@ -117,14 +118,14 @@ class OverviewViewModel : BaseViewModel() {
 
         // 谁在看这部动画
         if (entity.whoSee.isNotEmpty()) items.add(
-            OverviewAdapter.Item(
+            AdapterTypeItem(
                 entity.whoSee.map {
-                    SampleAvatar(
+                    SampleImageEntity(
                         id = it.id,
                         image = it.avatar,
                         title = it.name,
                         desc = it.time,
-                        type = SampleImageGridClickType.TYPE_USER
+                        type = BgmPathType.TYPE_USER
                     )
                 },
                 OverviewAdapter.TYPE_COLLECTOR, "谁在看这部动画"
@@ -133,14 +134,14 @@ class OverviewViewModel : BaseViewModel() {
 
         // 推荐本条目的目录
         if (entity.recommendIndex.isNotEmpty()) items.add(
-            OverviewAdapter.Item(
+            AdapterTypeItem(
                 entity.recommendIndex.map {
-                    SampleAvatar(
+                    SampleImageEntity(
                         id = it.id,
                         image = it.userAvatar,
                         title = it.title,
                         desc = it.userName,
-                        type = SampleImageGridClickType.TYPE_INDEX
+                        type = BgmPathType.TYPE_INDEX
                     )
                 }, OverviewAdapter.TYPE_INDEX, "推荐本条目的目录"
             )
@@ -148,7 +149,7 @@ class OverviewViewModel : BaseViewModel() {
 
         // 吐槽
         if (entity.comments.isNotEmpty()) {
-            items.add(OverviewAdapter.Item(entity, OverviewAdapter.TYPE_COMMENT, "吐槽"))
+            items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_COMMENT, "吐槽"))
         }
 
         return items

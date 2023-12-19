@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.api.parser.impl.parserPerson
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.helper.UserHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -84,6 +85,9 @@ class PersonViewModel : BaseViewModel() {
                         )
                     }.parserPerson(personId, isVirtual)
                 }
+
+                // 刷新收藏
+                UserHelper.notifyActionChange(collectType)
             }
         )
     }

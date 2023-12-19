@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.databinding.FragmentTimelineBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.TimelinePageType
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
@@ -57,7 +58,7 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
             add(getString(CommonString.timeline_title))
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                 .setOnMenuItemClickListener {
-                    ConfigHelper.isShowUserTimeline = false
+                    ConfigHelper.timelinePageType = TimelinePageType.TYPE_ALL
                     UserHelper.notifyActionChange(BgmPathType.TYPE_TIMELINE)
                     true
                 }
@@ -70,10 +71,24 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
                         RouteHelper.jumpLogin()
                         return@setOnMenuItemClickListener true
                     }
-                    ConfigHelper.isShowUserTimeline = true
+                    ConfigHelper.timelinePageType = TimelinePageType.TYPE_FRIEND
                     UserHelper.notifyActionChange(BgmPathType.TYPE_TIMELINE)
                     true
                 }
+
+            // 自己的时间线
+            add(getString(CommonString.timeline_mine_title))
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                .setOnMenuItemClickListener {
+                    if (UserHelper.isLogin.not()) {
+                        RouteHelper.jumpLogin()
+                        return@setOnMenuItemClickListener true
+                    }
+                    ConfigHelper.timelinePageType = TimelinePageType.TYPE_MINE
+                    UserHelper.notifyActionChange(BgmPathType.TYPE_TIMELINE)
+                    true
+                }
+
         }
     }
 
@@ -86,10 +101,10 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
     }
 
     private fun refreshToolbarTitle() {
-        binding.toolbar.title = if (ConfigHelper.isShowUserTimeline) {
-            getString(CommonString.timeline_user_title)
-        } else {
-            getString(CommonString.timeline_title)
+        binding.toolbar.title = when (ConfigHelper.timelinePageType) {
+            1 -> getString(CommonString.timeline_user_title)
+            2 -> getString(CommonString.timeline_mine_title)
+            else -> getString(CommonString.timeline_title)
         }
     }
 

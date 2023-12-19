@@ -90,6 +90,10 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
         binding.middleRightTextView.setOnFastLimitClickListener {
             RouteHelper.jumpUserBlog(viewModel.userId)
         }
+
+        binding.topRightTextView.setOnFastLimitClickListener {
+            RouteHelper.jumpUserMono(viewModel.userId)
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {

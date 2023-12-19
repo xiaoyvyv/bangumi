@@ -2,7 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -14,7 +14,7 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class GroupIndexEntity(
-    var hotGroups: List<SampleAvatar> = emptyList(),
-    var newGroups: List<SampleAvatar> = emptyList(),
+    var hotGroups: List<SampleImageEntity> = emptyList(),
+    var newGroups: List<SampleImageEntity> = emptyList(),
     var hotTopics: List<TopicSampleEntity> = emptyList()
 ) : Parcelable

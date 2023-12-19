@@ -14,7 +14,6 @@ import androidx.annotation.StringDef
     DiscoverType.TYPE_BLOG,
     DiscoverType.TYPE_INDEX,
     DiscoverType.TYPE_GROUP,
-    DiscoverType.TYPE_FRIEND,
     DiscoverType.TYPE_WIKI,
 )
 @Retention(AnnotationRetention.SOURCE)
@@ -25,7 +24,6 @@ annotation class DiscoverType {
         const val TYPE_BLOG = "blog"
         const val TYPE_INDEX = "index"
         const val TYPE_GROUP = "groups"
-        const val TYPE_FRIEND = "friends"
         const val TYPE_WIKI = "wiki"
     }
 }

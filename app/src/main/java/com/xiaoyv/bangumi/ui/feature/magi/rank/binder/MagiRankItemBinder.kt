@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentMagiRankBinding
-import com.xiaoyv.bangumi.ui.feature.magi.rank.MagiRankAdapter
 import com.xiaoyv.common.api.parser.entity.MagiRankEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -19,11 +19,11 @@ import kotlin.math.max
  * @since 12/12/23
  */
 class MagiRankItemBinder :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<MagiRankAdapter.Item, BaseQuickBindingHolder<FragmentMagiRankBinding>> {
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentMagiRankBinding>> {
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentMagiRankBinding>,
         position: Int,
-        item: MagiRankAdapter.Item?
+        item: AdapterTypeItem?,
     ) {
         val entity = item?.entity
         if (entity !is MagiRankEntity.MagiRank) return
@@ -46,7 +46,7 @@ class MagiRankItemBinder :
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): BaseQuickBindingHolder<FragmentMagiRankBinding> {
         return BaseQuickBindingHolder(
             FragmentMagiRankBinding.inflate(context.inflater, parent, false)

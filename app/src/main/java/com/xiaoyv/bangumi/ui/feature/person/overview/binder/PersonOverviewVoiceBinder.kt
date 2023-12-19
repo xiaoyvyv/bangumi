@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListVoiceBinding
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.PersonEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -28,7 +29,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 class PersonOverviewVoiceBinder(
     private val clickPersonItem: (PersonEntity.RecentlyPerformer) -> Unit,
     private val clickMediaItem: (PersonEntity.RecentlyPerformer) -> Unit,
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<PersonOverviewAdapter.Item, BaseQuickBindingHolder<FragmentPersonOverviewListBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentPersonOverviewListBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
@@ -41,7 +42,7 @@ class PersonOverviewVoiceBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentPersonOverviewListBinding>,
         position: Int,
-        item: PersonOverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.tvItemTitle.text = item.title

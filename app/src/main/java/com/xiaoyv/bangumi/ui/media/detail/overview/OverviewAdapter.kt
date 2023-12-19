@@ -16,7 +16,8 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.AdapterTypeItem
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 
 /**
@@ -27,17 +28,17 @@ import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
  */
 class OverviewAdapter(
     touchedListener: RecyclerItemTouchedListener,
-    onClickSave: (Item, Int) -> Unit,
+    onClickSave: (AdapterTypeItem, Int) -> Unit,
     onClickEpItem: (MediaDetailEntity.MediaProgress) -> Unit,
     onClickCrtItem: (MediaDetailEntity.MediaCharacter) -> Unit,
     onClickTagItem: (MediaDetailEntity.MediaTag) -> Unit,
     onClickRelatedItem: (MediaDetailEntity.MediaRelative) -> Unit,
-    onClickCollectorItem: (SampleAvatar) -> Unit,
-    onClickIndexItem: (SampleAvatar) -> Unit,
+    onClickCollectorItem: (SampleImageEntity) -> Unit,
+    onClickIndexItem: (SampleImageEntity) -> Unit,
     onClickPreview: (DouBanPhotoEntity.Photo) -> Unit,
     onClickCommentItem: (MediaCommentEntity) -> Unit,
     onClickCommentUser: (MediaCommentEntity) -> Unit,
-) : BaseMultiItemAdapter<OverviewAdapter.Item>() {
+) : BaseMultiItemAdapter<AdapterTypeItem>() {
 
     init {
         val gridPool = RecyclerView.RecycledViewPool()
@@ -49,7 +50,7 @@ class OverviewAdapter(
             .addItemType(TYPE_PREVIEW, OverviewPreviewBinder(touchedListener, onClickPreview))
             .addItemType(TYPE_DETAIL, OverviewSummaryBinder(false))
             .addItemType(TYPE_RATING, OverviewRatingBinder())
-            .addItemType(TYPE_CHARACTER, OverviewCharacterBinder(touchedListener, onClickCrtItem))
+            .addItemType(TYPE_CHARACTER, OverviewCharacterBinder(onClickCrtItem))
             .addItemType(TYPE_RELATIVE, OverviewRelativeBinder(touchedListener, onClickRelatedItem))
             .addItemType(
                 TYPE_COLLECTOR,
@@ -94,10 +95,4 @@ class OverviewAdapter(
         const val TYPE_INDEX = 11
         const val TYPE_COMMENT = 12
     }
-
-    data class Item(
-        var entity: Any,
-        var type: Int,
-        var title: String
-    )
 }

@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.ui.discover.group.list
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
@@ -12,8 +11,7 @@ import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailAdapter
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.config.bean.SampleAvatar
-import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -23,7 +21,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @author why
  * @since 12/12/23
  */
-class GroupListActivity : BaseListActivity<SampleAvatar, GroupListViewModel>() {
+class GroupListActivity : BaseListActivity<SampleImageEntity, GroupListViewModel>() {
 
     override val toolbarTitle: String
         get() = "小组列表"
@@ -47,11 +45,11 @@ class GroupListActivity : BaseListActivity<SampleAvatar, GroupListViewModel>() {
         }
     }
 
-    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<SampleAvatar, *> {
+    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<SampleImageEntity, *> {
         return GroupDetailAdapter()
     }
 
-    override fun onListDataFinish(list: List<SampleAvatar>) {
+    override fun onListDataFinish(list: List<SampleImageEntity>) {
         binding.toolbar.title = buildString {
             append("小组列表-")
             append(viewModel.currentCategoryName())

@@ -29,6 +29,7 @@
 
     <string name="timeline_title">时间胶囊-时空管理局</string>
     <string name="timeline_user_title">时间胶囊-好友</string>
+    <string name="timeline_mine_title">时间胶囊-自己</string>
 
     <string name="calendar_title">每日放送</string>
     <string name="calendar_today_title">今日放送</string>

@@ -78,12 +78,10 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
 
     @CallSuper
     override fun initData() {
-        showTip()
-
         binding.ivAvatar.loadImageAnimate(UserHelper.currentUser.avatar?.medium)
     }
 
-    private fun showTip() {
+    internal fun showTip() {
         SpanUtils.with(null)
             .append("讨论版欢迎")
             .setForegroundColor(getColor(CommonColor.save_collect))

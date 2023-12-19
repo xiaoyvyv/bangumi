@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.ui.discover.group.list
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.impl.parserGroupList
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.UserHelper
 
 /**
@@ -12,7 +12,7 @@ import com.xiaoyv.common.helper.UserHelper
  * @author why
  * @since 12/12/23
  */
-class GroupListViewModel : BaseListViewModel<SampleAvatar>() {
+class GroupListViewModel : BaseListViewModel<SampleImageEntity>() {
     internal var isSortByNewest = false
 
     internal var userId: String = ""
@@ -67,7 +67,7 @@ class GroupListViewModel : BaseListViewModel<SampleAvatar>() {
         return monolayer.find { it.first == category }?.second.orEmpty()
     }
 
-    override suspend fun onRequestListImpl(): List<SampleAvatar> {
+    override suspend fun onRequestListImpl(): List<SampleImageEntity> {
         if (requireLogin) {
             require(UserHelper.isLogin) { "你还没有登录呢" }
         }

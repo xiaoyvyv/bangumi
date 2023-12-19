@@ -14,7 +14,7 @@ import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailAdapter
 import com.xiaoyv.bangumi.ui.discover.group.list.GroupListViewModel
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
@@ -26,7 +26,7 @@ import com.xiaoyv.widget.kts.dpi
  * @author why
  * @since 12/14/23
  */
-class UserGroupFragment : BaseListFragment<SampleAvatar, GroupListViewModel>() {
+class UserGroupFragment : BaseListFragment<SampleImageEntity, GroupListViewModel>() {
 
     override val isOnlyOnePage: Boolean
         get() = true
@@ -78,11 +78,11 @@ class UserGroupFragment : BaseListFragment<SampleAvatar, GroupListViewModel>() {
         }
     }
 
-    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<SampleAvatar, *> {
+    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<SampleImageEntity, *> {
         return GroupDetailAdapter()
     }
 
-    override fun onListDataFinish(list: List<SampleAvatar>) {
+    override fun onListDataFinish(list: List<SampleImageEntity>) {
 
     }
 

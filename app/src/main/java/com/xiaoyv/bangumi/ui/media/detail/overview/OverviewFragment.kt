@@ -17,6 +17,7 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
@@ -180,7 +181,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         }
     }
 
-    private fun showCollectPanel(item: OverviewAdapter.Item, position: Int) {
+    private fun showCollectPanel(item: AdapterTypeItem, position: Int) {
         if (!UserHelper.isLogin) {
             RouteHelper.jumpLogin()
             return

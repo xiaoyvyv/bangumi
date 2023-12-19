@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.GoogleAttr
@@ -26,12 +27,12 @@ import com.xiaoyv.widget.kts.getAttrColor
  * @author why
  * @since 11/30/23
  */
-class OverviewSaveBinder(private var onSaveBtnClickListener: (OverviewAdapter.Item, Int) -> Unit) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewSaveBinding>> {
+class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, Int) -> Unit) :
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewSaveBinding>> {
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewSaveBinding>,
         position: Int,
-        item: OverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         item.entity.forceCast<MediaDetailEntity>().apply {

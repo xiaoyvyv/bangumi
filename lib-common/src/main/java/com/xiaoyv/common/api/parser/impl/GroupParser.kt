@@ -10,7 +10,7 @@ import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -44,7 +44,7 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
     select("#columnB > .SidePanel").apply {
         useNotNull(getOrNull(0)) {
             entity.recently = select("dl").map { item ->
-                val avatar = SampleAvatar()
+                val avatar = SampleImageEntity()
                 avatar.id = item.select(".avatar").hrefId()
                 avatar.image = item.select(".avatar > span").attr("style")
                     .fetchStyleBackgroundUrl().optImageUrl()
@@ -54,7 +54,7 @@ fun Document.parserGroupDetail(groupId: String): GroupDetailEntity {
         }
         useNotNull(getOrNull(1)) {
             entity.otherGroups = select("dl").map { item ->
-                val avatar = SampleAvatar()
+                val avatar = SampleImageEntity()
                 avatar.id = item.select(".avatar").hrefId()
                 avatar.image = item.select(".avatar > span").attr("style")
                     .fetchStyleBackgroundUrl().optImageUrl()
@@ -75,7 +75,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
 
     selectLegal("#columnA").apply {
         entity.hotGroups = select(".groupsLarge > li").map { item ->
-            val avatar = SampleAvatar()
+            val avatar = SampleImageEntity()
             avatar.image = item.select("img").attr("src").optImageUrl()
             avatar.id = item.select("a").hrefId()
             avatar.title = item.select("a").text()
@@ -114,7 +114,7 @@ fun Element.parserGroupIndex(): GroupIndexEntity {
 
     select("#columnB").apply {
         entity.newGroups = select(".groupsSmall > li").map { item ->
-            val avatar = SampleAvatar()
+            val avatar = SampleImageEntity()
             avatar.image = item.select("img").attr("src").optImageUrl()
             avatar.id = item.select(".inner a").hrefId()
             avatar.title = item.select(".inner a").text()
@@ -165,10 +165,10 @@ fun Element.parserGroupTopics(groupId: String): Pair<String, List<TopicSampleEnt
 /**
  * 小组列表
  */
-fun Document.parserGroupList(): List<SampleAvatar> {
+fun Document.parserGroupList(): List<SampleImageEntity> {
     requireNoError()
     return select("#memberGroupList > li").map { item ->
-        val avatar = SampleAvatar()
+        val avatar = SampleImageEntity()
         item.select(".userContainer a.avatar").apply {
             avatar.id = hrefId()
             avatar.title = text()

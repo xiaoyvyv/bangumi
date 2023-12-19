@@ -5,14 +5,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.discover.blog.BlogFragment
+import com.xiaoyv.bangumi.ui.discover.mono.MonoFragment
 import com.xiaoyv.bangumi.ui.feature.empty.EmptyFragment
 import com.xiaoyv.bangumi.ui.profile.page.friend.UserFriendFragment
 import com.xiaoyv.bangumi.ui.profile.page.group.UserGroupFragment
 import com.xiaoyv.bangumi.ui.profile.page.index.UserIndexFragment
 import com.xiaoyv.bangumi.ui.profile.page.save.SaveListFragment
-import com.xiaoyv.bangumi.ui.timeline.page.TimelinePageFragment
 import com.xiaoyv.common.config.annotation.ProfileType
-import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.ProfileTab
 import com.xiaoyv.common.helper.UserHelper
 
@@ -28,7 +27,6 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     internal val tabs = listOf(
         ProfileTab("收藏", ProfileType.TYPE_COLLECTION),
         ProfileTab("目录", ProfileType.TYPE_INDEX),
-        ProfileTab("时间胶囊", ProfileType.TYPE_TIMELINE),
         ProfileTab("日志", ProfileType.TYPE_BLOG),
         ProfileTab("小组", ProfileType.TYPE_GROUP),
         ProfileTab("好友", ProfileType.TYPE_FRIEND),
@@ -47,12 +45,6 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
                 userId = myId,
                 requireLogin = true
             )
-            // 时间线
-            ProfileType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
-                type = TimelineType.TYPE_ALL,
-                userId = myId,
-                requireLogin = true
-            )
             // 日志
             ProfileType.TYPE_BLOG -> BlogFragment.newInstance(myId, requireLogin = true)
             // 目录
@@ -61,6 +53,8 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             ProfileType.TYPE_GROUP -> UserGroupFragment.newInstance(myId, requireLogin = true)
             // 好友
             ProfileType.TYPE_FRIEND -> UserFriendFragment.newInstance(myId, requireLogin = true)
+            // 人物
+            ProfileType.TYPE_MONO -> MonoFragment.newInstance(myId, requireLogin = true)
             else -> EmptyFragment.newInstance()
         }
     }

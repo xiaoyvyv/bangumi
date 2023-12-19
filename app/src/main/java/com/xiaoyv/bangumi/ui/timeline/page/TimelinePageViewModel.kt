@@ -6,6 +6,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.impl.parserTimelineForms
+import com.xiaoyv.common.config.annotation.TimelinePageType
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
 import com.xiaoyv.common.helper.ConfigHelper
@@ -41,33 +42,37 @@ class TimelinePageViewModel : BaseViewModel() {
             },
             block = {
                 val hasTargetUserId = userId.isNotBlank()
-                if (timelineTab?.requireLogin == true) {
-                    require(UserHelper.isLogin) { "你还没有登录呢" }
-                }
 
                 onTimelineLiveData.value = withContext(Dispatchers.IO) {
                     // 指定用户的时间线
                     if (hasTargetUserId) {
-                        BgmApiManager.bgmWebApi.queryUserTimeline(
+                        return@withContext BgmApiManager.bgmWebApi.queryUserTimeline(
                             userId = userId,
                             type = timelineType,
                             ajax = 0
                         ).parserTimelineForms(userId)
-                    } else {
-                        // 好友的时间线
-                        if (ConfigHelper.isShowUserTimeline) {
-                            BgmApiManager.bgmWebApi.queryFriendTimeline(
-                                type = timelineType,
-                                ajax = 1
-                            ).parserTimelineForms()
+                    }
+
+                    // 未指定ID的情况
+                    when (ConfigHelper.timelinePageType) {
+                        // 全部好友的时间线
+                        TimelinePageType.TYPE_FRIEND -> {
+                            require(UserHelper.isLogin) { "你还没有登录呢" }
+                            BgmApiManager.bgmWebApi.queryFriendTimeline(timelineType)
+                                .parserTimelineForms()
                         }
-                        // 全部的时间线
-                        else {
-                            BgmApiManager.bgmJsonApi.queryWholeTimeline(
+                        // 自己的时间线
+                        TimelinePageType.TYPE_MINE -> {
+                            require(UserHelper.isLogin) { "你还没有登录呢" }
+                            BgmApiManager.bgmWebApi.queryUserTimeline(
+                                userId = UserHelper.currentUser.id.orEmpty(),
                                 type = timelineType,
-                                ajax = 1
-                            ).parserTimelineForms()
+                                ajax = 0
+                            ).parserTimelineForms(UserHelper.currentUser.id.orEmpty())
                         }
+                        // 全部时间线
+                        else -> BgmApiManager.bgmJsonApi.queryWholeTimeline(timelineType)
+                            .parserTimelineForms()
                     }
                 }
             }

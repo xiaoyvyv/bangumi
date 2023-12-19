@@ -5,7 +5,8 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.ui.discover.group.binder.GroupItemGridBinder
 import com.xiaoyv.bangumi.ui.discover.group.binder.GroupItemTopicBinder
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.AdapterTypeItem
+import com.xiaoyv.common.config.bean.SampleImageEntity
 
 /**
  * Class: [GroupAdapter]
@@ -14,9 +15,9 @@ import com.xiaoyv.common.config.bean.SampleAvatar
  * @since 12/8/23
  */
 class GroupAdapter(
-    onClickGroupListener: (SampleAvatar) -> Unit,
+    onClickGroupListener: (SampleImageEntity) -> Unit,
     onClickTopicListener: (TopicSampleEntity) -> Unit,
-) : BaseMultiItemAdapter<GroupAdapter.Item>() {
+) : BaseMultiItemAdapter<AdapterTypeItem>() {
     private val viewPool by lazy { RecycledViewPool() }
 
     init {
@@ -33,10 +34,4 @@ class GroupAdapter(
         const val TYPE_GROUP_NEW = 2
         const val TYPE_TOPIC = 3
     }
-
-    data class Item(
-        var title: String,
-        var entity: Any,
-        var type: Int,
-    )
 }

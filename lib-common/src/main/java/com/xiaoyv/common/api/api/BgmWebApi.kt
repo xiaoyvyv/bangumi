@@ -686,6 +686,12 @@ interface BgmWebApi {
         @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
         @FieldMap param: Map<String, String>,
     ): Document
+
+    @GET("/mono")
+    suspend fun queryMonoIndex(): Document
+
+    @GET("/user/{userId}/mono")
+    suspend fun queryUserMono(@Path("userId") userId: String): Document
 }
 
 

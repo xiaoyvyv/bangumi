@@ -38,6 +38,7 @@ import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
 import com.xiaoyv.bangumi.ui.feature.user.blog.UserBlogActivity
+import com.xiaoyv.bangumi.ui.feature.user.mono.UserMonoActivity
 import com.xiaoyv.bangumi.ui.feature.web.WebActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
@@ -232,6 +233,13 @@ object RouteHelper {
         ActivityUtils.startActivity(
             bundleOf(NavKey.KEY_STRING to userId),
             UserBlogActivity::class.java
+        )
+    }
+
+    fun jumpUserMono(userId: String) {
+        ActivityUtils.startActivity(
+            bundleOf(NavKey.KEY_STRING to userId),
+            UserMonoActivity::class.java
         )
     }
 

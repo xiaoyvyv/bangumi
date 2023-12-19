@@ -7,8 +7,8 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewGridBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewGridItemBinding
-import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.bean.AdapterTypeItem
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
@@ -27,8 +27,8 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 class OverviewGridBinder(
     private val pool: RecyclerView.RecycledViewPool,
     private val touchedListener: RecyclerItemTouchedListener,
-    private val clickItem: (SampleAvatar) -> Unit
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentPersonOverviewGridBinding>> {
+    private val clickItem: (SampleImageEntity) -> Unit
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentPersonOverviewGridBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
@@ -39,7 +39,7 @@ class OverviewGridBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentPersonOverviewGridBinding>,
         position: Int,
-        item: OverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.tvItemTitle.text = item.title
@@ -61,9 +61,9 @@ class OverviewGridBinder(
     /**
      * 横向 Grid
      */
-    private class ItemAdapter : BaseQuickDiffBindingAdapter<SampleAvatar,
+    private class ItemAdapter : BaseQuickDiffBindingAdapter<SampleImageEntity,
             FragmentPersonOverviewGridItemBinding>(IdDiffItemCallback()) {
-        override fun BaseQuickBindingHolder<FragmentPersonOverviewGridItemBinding>.converted(item: SampleAvatar) {
+        override fun BaseQuickBindingHolder<FragmentPersonOverviewGridItemBinding>.converted(item: SampleImageEntity) {
             binding.ivAvatar.loadImageAnimate(item.image)
             binding.tvName.text = item.title
             binding.tvDesc.text = item.desc

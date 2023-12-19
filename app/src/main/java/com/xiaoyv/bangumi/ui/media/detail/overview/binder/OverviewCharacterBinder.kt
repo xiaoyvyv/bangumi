@@ -3,15 +3,13 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 import android.content.Context
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewCharacterBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewCharacterItemBinding
-import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
-import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -25,10 +23,8 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @author why
  * @since 11/30/23
  */
-class OverviewCharacterBinder(
-    private val touchedListener: RecyclerItemTouchedListener,
-    private val clickItemListener: (MediaDetailEntity.MediaCharacter) -> Unit
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewCharacterBinding>> {
+class OverviewCharacterBinder(private val clickItemListener: (MediaDetailEntity.MediaCharacter) -> Unit) :
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewCharacterBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
@@ -39,19 +35,17 @@ class OverviewCharacterBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewCharacterBinding>,
         position: Int,
-        item: OverviewAdapter.Item?
+        item: AdapterTypeItem?,
     ) {
         item ?: return
         holder.binding.rvCharacter.adapter = itemAdapter
-        holder.binding.rvCharacter.addOnItemTouchListener(touchedListener)
-        holder.binding.rvCharacter.setInitialPrefetchItemCount(5)
         itemAdapter.submitList(item.entity.forceCast())
     }
 
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ) = BaseQuickBindingHolder(
         FragmentOverviewCharacterBinding.inflate(context.inflater, parent, false)
     )

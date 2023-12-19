@@ -2,8 +2,9 @@ package com.xiaoyv.bangumi.ui.feature.person.overview
 
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.common.api.parser.entity.PersonEntity
-import com.xiaoyv.common.config.annotation.SampleImageGridClickType
-import com.xiaoyv.common.config.bean.SampleAvatar
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.bean.AdapterTypeItem
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -20,18 +21,18 @@ class PersonOverviewViewModel : BaseViewModel() {
     internal var personId: String = ""
     internal var isVirtual: Boolean = false
 
-    suspend fun buildBinderList(entity: PersonEntity): List<PersonOverviewAdapter.Item> {
+    suspend fun buildBinderList(entity: PersonEntity): List<AdapterTypeItem> {
         return withContext(Dispatchers.IO) {
-            val items = mutableListOf<PersonOverviewAdapter.Item>()
+            val items = mutableListOf<AdapterTypeItem>()
             items.add(
-                PersonOverviewAdapter.Item(
+                AdapterTypeItem(
                     entity = entity,
                     type = PersonOverviewAdapter.TYPE_INFOS,
                     title = "基本信息"
                 )
             )
             items.add(
-                PersonOverviewAdapter.Item(
+                AdapterTypeItem(
                     entity = entity,
                     type = PersonOverviewAdapter.TYPE_SUMMARY,
                     title = "人物介绍"
@@ -40,7 +41,7 @@ class PersonOverviewViewModel : BaseViewModel() {
             if (isVirtual) {
                 // 出演
                 if (entity.performers.isNotEmpty()) items.add(
-                    PersonOverviewAdapter.Item(
+                    AdapterTypeItem(
                         entity = entity.performers,
                         type = PersonOverviewAdapter.TYPE_VOICE,
                         title = "出演",
@@ -49,7 +50,7 @@ class PersonOverviewViewModel : BaseViewModel() {
             } else {
                 // 最近出演的角色
                 if (entity.recentCharacters.isNotEmpty()) items.add(
-                    PersonOverviewAdapter.Item(
+                    AdapterTypeItem(
                         entity = entity.recentCharacters,
                         type = PersonOverviewAdapter.TYPE_CHARACTER,
                         title = "最近出演的角色",
@@ -57,7 +58,7 @@ class PersonOverviewViewModel : BaseViewModel() {
                 )
                 // 最近参与
                 if (entity.recentOpuses.isNotEmpty()) items.add(
-                    PersonOverviewAdapter.Item(
+                    AdapterTypeItem(
                         entity = entity.recentOpuses,
                         type = PersonOverviewAdapter.TYPE_OPUS,
                         title = "最近参与",
@@ -65,14 +66,14 @@ class PersonOverviewViewModel : BaseViewModel() {
                 )
                 // 合作
                 if (entity.recentCooperates.isNotEmpty()) items.add(
-                    PersonOverviewAdapter.Item(
+                    AdapterTypeItem(
                         entity = entity.recentCooperates.map {
-                            SampleAvatar(
+                            SampleImageEntity(
                                 it.id,
                                 it.avatar,
                                 it.name,
                                 String.format("x%d", it.times),
-                                SampleImageGridClickType.TYPE_PERSON_REAL
+                                BgmPathType.TYPE_PERSON
                             )
                         },
                         type = PersonOverviewAdapter.TYPE_COOPERATE,
@@ -83,14 +84,14 @@ class PersonOverviewViewModel : BaseViewModel() {
 
             // 谁收藏了
             if (entity.whoCollects.isNotEmpty()) items.add(
-                PersonOverviewAdapter.Item(
+                AdapterTypeItem(
                     entity = entity.whoCollects.map {
-                        SampleAvatar(
+                        SampleImageEntity(
                             it.id,
                             it.avatar,
                             it.name,
                             it.time,
-                            SampleImageGridClickType.TYPE_USER
+                            BgmPathType.TYPE_USER
                         )
                     },
                     type = PersonOverviewAdapter.TYPE_COLLECTOR,
@@ -100,14 +101,14 @@ class PersonOverviewViewModel : BaseViewModel() {
 
             // 推荐的目录
             if (entity.recommendIndexes.isNotEmpty()) items.add(
-                PersonOverviewAdapter.Item(
+                AdapterTypeItem(
                     entity = entity.recommendIndexes.map {
-                        SampleAvatar(
+                        SampleImageEntity(
                             it.userId,
                             it.userAvatar,
                             it.title,
                             String.format("by：%s", it.userName),
-                            SampleImageGridClickType.TYPE_INDEX
+                            BgmPathType.TYPE_INDEX
                         )
                     },
                     type = PersonOverviewAdapter.TYPE_INDEX,

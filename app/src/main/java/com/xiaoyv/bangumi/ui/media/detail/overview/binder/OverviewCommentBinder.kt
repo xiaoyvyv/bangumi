@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.ui.media.detail.comments.MediaCommentAdapter
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -25,7 +26,7 @@ class OverviewCommentBinder(
     private val touchedListener: RecyclerItemTouchedListener,
     private val clickItemListener: (MediaCommentEntity) -> Unit,
     private val clickUserListener: (MediaCommentEntity) -> Unit,
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewCommentBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewCommentBinding>> {
 
     private val itemAdapter by lazy {
         MediaCommentAdapter().apply {
@@ -37,7 +38,7 @@ class OverviewCommentBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewCommentBinding>,
         position: Int,
-        item: OverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.sectionComment.title = item.title

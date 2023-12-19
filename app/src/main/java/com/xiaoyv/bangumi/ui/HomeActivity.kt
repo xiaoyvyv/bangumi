@@ -1,17 +1,26 @@
 package com.xiaoyv.bangumi.ui
 
+import android.graphics.Typeface
 import android.view.MotionEvent
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.SpanUtils
 import com.google.android.material.badge.BadgeDrawable
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UpdateHelper
+import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.openInBrowser
+import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.widget.kts.getAttrColor
+import kotlinx.coroutines.delay
 
 
 /**
@@ -32,12 +41,14 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     }
 
     override fun initData() {
-        if (ConfigHelper.isRobotDisable()){
+        if (ConfigHelper.isRobotDisable()) {
             robot.disable()
         }
 
         // 更新检测
         UpdateHelper.checkUpdate(this, false)
+
+        showTip()
     }
 
     override fun initListener() {
@@ -74,6 +85,42 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
                 badge.badgeGravity = BadgeDrawable.TOP_END
             } else {
                 binding.navView.removeBadge(R.id.bottom_menu_profile)
+            }
+        }
+    }
+
+    private fun showTip() {
+        if (ConfigHelper.showVersionTip) {
+            launchUI {
+                delay(2000)
+                showConfirmDialog(
+                    title = "App 声明",
+                    message = SpanUtils.with(null)
+                        .append("此客户端为班固米用户：")
+                        .appendSpace(4.dpi)
+                        .append("小玉")
+                        .setTypeface(Typeface.DEFAULT_BOLD)
+                        .setForegroundColor(getAttrColor(GoogleAttr.colorPrimary))
+                        .appendSpace(4.dpi)
+                        .append("为爱发电，耗时半个多月打造的班固米全功能三方客户端。")
+                        .appendLine()
+                        .appendLine()
+                        .append("此 App 为原生安卓应用，并且有做大量优化如评论分页，缓存等，保证你在使用过程中响应极速不卡顿。")
+                        .setForegroundColor(getAttrColor(GoogleAttr.colorPrimary))
+                        .appendLine()
+                        .appendLine()
+                        .append("欢迎大家积极提出反馈或建议，或者加入交流群讨论，需求反馈等将第一时间得到回复。\n\n此软件不收集任何隐私数据并且完全开源。")
+                        .create(),
+                    cancelText = "加群",
+                    neutralText = "不再提醒",
+                    confirmText = "我知道了",
+                    onCancelClick = {
+                        openInBrowser("https://qm.qq.com/q/YomiSMeyUs")
+                    },
+                    onNeutralClick = {
+                        ConfigHelper.showVersionTip = false
+                    }
+                )
             }
         }
     }

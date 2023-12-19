@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.ui.media.detail.state
 
-import com.xiaoyv.bangumi.databinding.FragmentCharacterBinding
+import com.xiaoyv.bangumi.databinding.FragmentEmptyBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 
 /**
@@ -9,7 +9,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
  * @author why
  * @since 11/24/23
  */
-class MediaStateFragment : BaseViewModelFragment<FragmentCharacterBinding, MediaStateViewModel>() {
+class MediaStateFragment : BaseViewModelFragment<FragmentEmptyBinding, MediaStateViewModel>() {
     override fun initView() {
 
     }

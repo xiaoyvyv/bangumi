@@ -12,7 +12,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.parser.entity.PersonEntity
-import com.xiaoyv.common.config.annotation.SampleImageGridClickType
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -36,11 +36,11 @@ class PersonOverviewFragment :
             },
             clickSubItem = { type, id ->
                 when (type) {
-                    SampleImageGridClickType.TYPE_USER -> RouteHelper.jumpUserDetail(id)
-                    SampleImageGridClickType.TYPE_PERSON_REAL -> RouteHelper.jumpPerson(id, false)
-                    SampleImageGridClickType.TYPE_PERSON_VIRTUAL -> RouteHelper.jumpPerson(id, true)
-                    SampleImageGridClickType.TYPE_INDEX -> RouteHelper.jumpIndexDetail(id)
-                    SampleImageGridClickType.TYPE_OPUS -> RouteHelper.jumpMediaDetail(id)
+                    BgmPathType.TYPE_USER -> RouteHelper.jumpUserDetail(id)
+                    BgmPathType.TYPE_PERSON -> RouteHelper.jumpPerson(id, false)
+                    BgmPathType.TYPE_CHARACTER -> RouteHelper.jumpPerson(id, true)
+                    BgmPathType.TYPE_INDEX -> RouteHelper.jumpIndexDetail(id)
+                    BgmPathType.TYPE_SUBJECT -> RouteHelper.jumpMediaDetail(id)
                 }
             }
         )

@@ -11,6 +11,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewEpItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.CommonColor
@@ -32,7 +33,7 @@ import com.xiaoyv.widget.kts.subListLimit
 class OverviewEpBinder(
     private val touchedListener: RecyclerItemTouchedListener,
     private val clickItemListener: (MediaDetailEntity.MediaProgress) -> Unit,
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewEpBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewEpBinding>> {
 
     /**
      * 最大显示 48 个
@@ -48,7 +49,7 @@ class OverviewEpBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewEpBinding>,
         position: Int,
-        item: OverviewAdapter.Item?,
+        item: AdapterTypeItem?,
     ) {
         item ?: return
         holder.binding.tvEpMyProgress.text = String.format("%s/10", 1)

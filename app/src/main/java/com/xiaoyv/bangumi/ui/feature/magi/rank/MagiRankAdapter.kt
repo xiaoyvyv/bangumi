@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.ui.feature.magi.rank
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.ui.feature.magi.rank.binder.MagiRankHeaderBinder
 import com.xiaoyv.bangumi.ui.feature.magi.rank.binder.MagiRankItemBinder
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 
 /**
  * Class: [MagiRankAdapter]
@@ -10,7 +11,7 @@ import com.xiaoyv.bangumi.ui.feature.magi.rank.binder.MagiRankItemBinder
  * @author why
  * @since 11/24/23
  */
-class MagiRankAdapter : BaseMultiItemAdapter<MagiRankAdapter.Item>() {
+class MagiRankAdapter : BaseMultiItemAdapter<AdapterTypeItem>() {
 
     init {
         this.addItemType(TYPE_HEADER, MagiRankHeaderBinder())
@@ -19,11 +20,6 @@ class MagiRankAdapter : BaseMultiItemAdapter<MagiRankAdapter.Item>() {
                 list[position].type
             }
     }
-
-    data class Item(
-        var type: Int,
-        var entity: Any
-    )
 
     companion object {
         const val TYPE_HEADER = 1

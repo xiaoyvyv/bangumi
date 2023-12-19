@@ -137,7 +137,21 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingAuthor.setOnFastLimitClickListener {
-            RouteHelper.jumpWeb(GlobalConfig.docAuthor, fitToolbar = true, smallToolbar = true)
+            showOptionsDialog(
+                title = "关于作者",
+                items = listOf("个人介绍", "班固米主页"),
+                onItemClick = { _, position ->
+                    if (position == 0) {
+                        RouteHelper.jumpWeb(
+                            GlobalConfig.docAuthor,
+                            fitToolbar = true,
+                            smallToolbar = true
+                        )
+                    } else {
+                        RouteHelper.jumpUserDetail("837364")
+                    }
+                }
+            )
         }
 
         binding.settingAbout.setOnFastLimitClickListener {

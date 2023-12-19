@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.databinding.FragmentGroupTopicBinding
 import com.xiaoyv.bangumi.databinding.FragmentGroupTopicItemBinding
 import com.xiaoyv.bangumi.ui.discover.group.GroupAdapter
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -16,14 +17,14 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
- * Class: [GroupItemTopicBinder]
+ * Class: [MonoItemTitleBinder]
  *
  * @author why
  * @since 12/8/23
  */
 class GroupItemTopicBinder(
     private val onClickTopicListener: (TopicSampleEntity) -> Unit,
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<GroupAdapter.Item, BaseQuickBindingHolder<FragmentGroupTopicBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentGroupTopicBinding>> {
 
     private val topicAdapter by lazy {
         TopicItemAdapter().apply {
@@ -34,7 +35,7 @@ class GroupItemTopicBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentGroupTopicBinding>,
         position: Int,
-        item: GroupAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.sectionTopic.title = item.title

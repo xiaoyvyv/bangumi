@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.PersonEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.widget.state.AnimeSummaryView
 
@@ -15,12 +16,12 @@ import com.xiaoyv.common.widget.state.AnimeSummaryView
  * @since 11/30/23
  */
 class PersonOverviewSummaryBinder(private val isSummary: Boolean) :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<PersonOverviewAdapter.Item, AnimeSummaryView.Holder> {
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, AnimeSummaryView.Holder> {
 
     override fun onBind(
         holder: AnimeSummaryView.Holder,
         position: Int,
-        item: PersonOverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.summaryView.section.title = item.title

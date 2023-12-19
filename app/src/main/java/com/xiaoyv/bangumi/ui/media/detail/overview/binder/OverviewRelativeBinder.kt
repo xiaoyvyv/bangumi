@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewRelativeBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewRelativeItemBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -26,7 +27,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 class OverviewRelativeBinder(
     private val touchedListener: RecyclerItemTouchedListener,
     private val clickItemListener: (MediaDetailEntity.MediaRelative) -> Unit
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewRelativeBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewRelativeBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
@@ -37,7 +38,7 @@ class OverviewRelativeBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewRelativeBinding>,
         position: Int,
-        item: OverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.rvRelative.adapter = itemAdapter

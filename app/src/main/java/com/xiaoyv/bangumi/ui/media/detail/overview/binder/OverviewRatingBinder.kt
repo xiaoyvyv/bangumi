@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewRatingBinding
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -17,11 +18,11 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
  * @since 11/30/23
  */
 class OverviewRatingBinder :
-    BaseMultiItemAdapter.OnMultiItemAdapterListener<OverviewAdapter.Item, BaseQuickBindingHolder<FragmentOverviewRatingBinding>> {
+    BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewRatingBinding>> {
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewRatingBinding>,
         position: Int,
-        item: OverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.tvSection.title = item.title

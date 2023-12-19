@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListOpusBinding
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.config.GlobalConfig
+import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
@@ -27,7 +28,7 @@ import com.xiaoyv.widget.kts.dpi
  */
 class PersonOverviewOpusBinder(
     private val clickItem: (PersonEntity.RecentlyOpus) -> Unit
-) : BaseMultiItemAdapter.OnMultiItemAdapterListener<PersonOverviewAdapter.Item, BaseQuickBindingHolder<FragmentPersonOverviewListBinding>> {
+) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentPersonOverviewListBinding>> {
 
     private val itemAdapter by lazy {
         ItemAdapter().apply {
@@ -38,7 +39,7 @@ class PersonOverviewOpusBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentPersonOverviewListBinding>,
         position: Int,
-        item: PersonOverviewAdapter.Item?
+        item: AdapterTypeItem?
     ) {
         item ?: return
         holder.binding.tvItemTitle.text = item.title

@@ -2,22 +2,21 @@ package com.xiaoyv.common.config.bean
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.xiaoyv.common.config.annotation.SampleImageGridClickType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
 /**
- * Class: [SampleAvatar]
+ * Class: [SampleImageEntity]
  *
  * @author why
  * @since 12/6/23
  */
 @Parcelize
 @Keep
-data class SampleAvatar(
+data class SampleImageEntity(
     override var id: String = "",
     var image: String = "",
     var title: String = "",
     var desc: String = "",
-    @SampleImageGridClickType var type: Int = 0
+    var type: String = "",
 ) : Parcelable, IdEntity

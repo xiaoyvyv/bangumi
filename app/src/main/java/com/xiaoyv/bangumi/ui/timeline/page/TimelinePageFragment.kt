@@ -68,6 +68,8 @@ class TimelinePageFragment :
 
     override fun initData() {
         binding.rvContent.adapter = contentAdapter
+
+        viewModel.queryTimeline()
     }
 
     override fun initListener() {
@@ -126,20 +128,10 @@ class TimelinePageFragment :
             contentAdapter.submitList(it.orEmpty())
         }
 
-        // 嵌套在 Profile 页面的情况
-        if (viewModel.timelineTab?.requireLogin == true) {
-            UserHelper.observeUserInfo(this) {
-                viewModel.timelineTab?.userId = it.id.orEmpty()
+        // 时间线类型切换刷新
+        UserHelper.observeAction(this) {
+            if (it == BgmPathType.TYPE_TIMELINE) {
                 viewModel.queryTimeline()
-            }
-        } else {
-            viewModel.queryTimeline()
-
-            // 时间线类型切换刷新
-            UserHelper.observeAction(this) {
-                if (it == BgmPathType.TYPE_TIMELINE) {
-                    viewModel.queryTimeline()
-                }
             }
         }
     }
@@ -154,17 +146,12 @@ class TimelinePageFragment :
         /**
          * 指定人物的时间胶囊
          */
-        fun newInstance(
-            @TimelineType type: String,
-            userId: String,
-            requireLogin: Boolean,
-        ): TimelinePageFragment {
+        fun newInstance(@TimelineType type: String, userId: String): TimelinePageFragment {
             return TimelinePageFragment().apply {
                 val timeline = TimelineTab(
-                    title = "User:$userId",
+                    title = "User: $userId",
                     timelineType = type,
-                    userId = userId,
-                    requireLogin = requireLogin
+                    userId = userId
                 )
                 arguments = bundleOf(NavKey.KEY_PARCELABLE to timeline)
             }

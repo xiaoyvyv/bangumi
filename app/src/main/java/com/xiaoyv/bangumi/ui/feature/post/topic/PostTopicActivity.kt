@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.feature.post.BasePostActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.showConfirmDialog
@@ -43,6 +44,11 @@ class PostTopicActivity : BasePostActivity<PostTopicViewModel>() {
 
         // 发布话题不能设置的选项
         binding.tvPublic.isVisible = false
+
+        // 讨论板提示弹窗
+        if (viewModel.topicType == TopicType.TYPE_SUBJECT) {
+            showTip()
+        }
     }
 
     override fun LifecycleOwner.initViewObserverExt() {

@@ -43,8 +43,7 @@ class UserAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             UserCenterType.TYPE_CHART -> ChartFragment.newInstance()
             UserCenterType.TYPE_TIMELINE -> TimelinePageFragment.newInstance(
                 type = TimelineType.TYPE_ALL,
-                userId = userId,
-                requireLogin = false
+                userId = userId
             )
             else -> EmptyFragment.newInstance()
         }
