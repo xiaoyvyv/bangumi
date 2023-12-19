@@ -66,7 +66,9 @@ class UserGroupFragment : BaseListFragment<SampleImageEntity, GroupListViewModel
                 }
             }
         }
+    }
 
+    override fun autoInitData() {
         // 嵌套在 Profile 页面的情况
         if (viewModel.requireLogin) {
             UserHelper.observeUserInfo(this) {
@@ -74,7 +76,7 @@ class UserGroupFragment : BaseListFragment<SampleImageEntity, GroupListViewModel
                 viewModel.refresh()
             }
         } else {
-            viewModel.refresh()
+            super.autoInitData()
         }
     }
 

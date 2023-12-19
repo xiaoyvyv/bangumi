@@ -50,7 +50,7 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
 
     override fun initView() {
         super.initView()
-        if (viewModel.requireLogin) {
+        if (viewModel.requireLogin && !viewModel.selectedMode) {
             filter = ViewIndexFilterBinding.inflate(layoutInflater, binding.flContainer, true)
             filter.root.doOnPreDraw {
                 binding.rvContent.updateLayoutParams<MarginLayoutParams> {
@@ -100,7 +100,9 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
                 }
             }
         }
+    }
 
+    override fun autoInitData() {
         // 嵌套在 Profile 页面的情况
         if (viewModel.requireLogin) {
             UserHelper.observeUserInfo(this) {
@@ -108,7 +110,7 @@ class UserIndexFragment : BaseListFragment<IndexItemEntity, IndexListViewModel>(
                 viewModel.refresh()
             }
         } else {
-            viewModel.refresh()
+            super.autoInitData()
         }
     }
 

@@ -66,6 +66,8 @@
                     android:layout_width="@dimen/ui_size_0"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/ui_layout_margin"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textAppearance="?attr/textAppearanceBodyLarge"
                     android:textColor="?attr/colorOnPrimarySurface"
                     app:layout_constraintEnd_toStartOf="@+id/btn_enter"
@@ -77,12 +79,16 @@
                     android:id="@+id/tv_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:paddingVertical="@dimen/ui_size_12"
                     android:textAppearance="?attr/textAppearanceBodySmall"
                     android:textColor="?attr/colorOnPrimarySurface"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_enter"
                     app:layout_constraintStart_toStartOf="@+id/tv_name"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name"
-                    tools:text="@tools:sample/full_names" />
+                    tools:text="@tools:sample/lorem/random" />
 
                 <com.xiaoyv.common.widget.button.AnimeButton
                     android:id="@+id/btn_enter"

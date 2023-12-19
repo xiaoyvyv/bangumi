@@ -2,9 +2,9 @@ package com.xiaoyv.bangumi.ui.media.option
 
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
-import com.xiaoyv.common.config.annotation.BrowserSortType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.MediaOptionConfig
+import com.xiaoyv.common.kts.currentYear
 
 /**
  * Class: [MediaOptionViewModel]
@@ -20,18 +20,28 @@ class MediaOptionViewModel : BaseViewModel() {
      */
     internal var currentMediaType: String = MediaType.TYPE_ANIME
 
-    override fun onViewCreated() {
-        val mediaOptions = MediaOptionConfig.buildMediaOptions()
+    private var yearPage = 0
+    private var yearPageCount = 18
 
-        // Tile: 类型
-        // Items: [xxx,xxx,xx]
-        // Tile: 时间
-        // Items: [xxx,xxx,xx]
-        // Tile: 拼音
-        // Items: [xxx,xxx,xx]
-        val option = mediaOptions.find {
-            it.mediaType == currentMediaType
-        }?.option.orEmpty()
+    override fun onViewCreated() {
+        refreshConfig()
+    }
+
+    fun yearUp() {
+        yearPage += 1
+        refreshConfig()
+    }
+
+    fun yearDown() {
+        yearPage -= 1
+        refreshConfig()
+    }
+
+    private fun refreshConfig() {
+        // 设置年份起始时间
+        val fromYear = (currentYear + 1) + yearPageCount * yearPage
+        val option = MediaOptionConfig.buildMediaOptions(fromYear, yearPageCount)
+            .find { it.mediaType == currentMediaType }?.option.orEmpty()
 
         val list = option.flatMap {
             val listOf = arrayListOf<Any>()

@@ -75,8 +75,9 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
         } else {
             binding.rvContent.adapter = adapterHelper.adapter
         }
-        viewModel.refresh()
+       autoInitData()
     }
+
 
     open fun onCreateLayoutManager(): LinearLayoutManager {
         return AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -122,6 +123,10 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
         }
 
         initViewObserverExt()
+    }
+
+    open fun autoInitData() {
+        viewModel.refresh()
     }
 
     open fun canShowStateLoading(): Boolean {

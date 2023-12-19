@@ -27,7 +27,7 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
         @SerializedName("mediaType")
         var mediaType: String? = null,
         @SerializedName("option")
-        var option: List<Option>? = null
+        var option: List<Option>? = null,
     ) : Parcelable {
 
         @Keep
@@ -71,6 +71,10 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
     }
 
     companion object {
+        const val YEAR_UP = "YEAR_UP"
+        const val YEAR_DOWN = "YEAR_DOWN"
+
+
         private val config: MediaOptionConfig by lazy {
             ResourceUtils.readAssets2String("config/media.options.json")
                 .fromJson<MediaOptionConfig>() ?: MediaOptionConfig()
@@ -79,13 +83,16 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
         /**
          * 创建媒体查询参数
          */
-        fun buildMediaOptions(fromYear: Int = currentYear + 1): MediaOptionConfig {
+        fun buildMediaOptions(
+            fromYear: Int = currentYear + 1,
+            yearCount: Int = 18,
+        ): MediaOptionConfig {
             // 补充时间拼音等选项
             config.onEach {
                 val mediaType = it.mediaType.orEmpty()
                 val option = it.option.orEmpty().toMutableList()
                 option.removeIf { item -> item.generate }
-                option.add(buildTimeOption(mediaType, fromYear))
+                option.add(buildTimeOption(mediaType, fromYear, yearCount))
                 option.add(buildSort(mediaType))
                 option.add(buildPinYinOption(mediaType))
                 it.option = option
@@ -135,14 +142,21 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
             return option
         }
 
-        private fun buildTimeOption(mediaType: String, fromYear: Int): Config.Option {
+        /**
+         * 构建年份选项
+         */
+        private fun buildTimeOption(
+            mediaType: String,
+            fromYear: Int,
+            yearCount: Int,
+        ): Config.Option {
             val option = Config.Option()
             option.title = "时间"
             option.pathIndex = 10
             option.generate = true
             option.items = arrayListOf<Config.Option.Item>().apply {
                 var tmp = fromYear
-                repeat(20) {
+                repeat(yearCount) {
                     add(
                         Config.Option.Item(
                             groupTitle = option.title.orEmpty(),
@@ -155,6 +169,8 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
                     )
                     tmp--
                 }
+                add(0, Config.Option.Item(title = "来年", value = YEAR_UP))
+                add(yearCount + 1, Config.Option.Item(title = "往年", value = YEAR_DOWN))
             }
             return option
         }

@@ -54,6 +54,17 @@ class MediaOptionFragment :
     override fun initListener() {
         optionAdapter.setOnDebouncedChildClickListener(R.id.tv_option_item) {
             if (it is MediaOptionConfig.Config.Option.Item) {
+                // 增加年份
+                if (it.value == MediaOptionConfig.YEAR_UP) {
+                    viewModel.yearUp()
+                    return@setOnDebouncedChildClickListener
+                }
+                // 降低年份
+                if (it.value == MediaOptionConfig.YEAR_DOWN) {
+                    viewModel.yearDown()
+                    return@setOnDebouncedChildClickListener
+                }
+
                 if (optionAdapter.isSelected(it)) {
                     optionAdapter.unselectItem(it)
                 } else {

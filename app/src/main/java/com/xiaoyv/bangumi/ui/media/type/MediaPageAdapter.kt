@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.ui.media.type
 
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.xiaoyv.bangumi.databinding.FragmentMediaPageItemBinding
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
@@ -20,6 +22,9 @@ class MediaPageAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
         binding.ivCover.loadImageAnimate(item.coverImage, holder = true)
         binding.tvTitle.text = item.title
         binding.tvSource.text = item.ratingScore
+        binding.tvRank.isInvisible = item.rank.isBlank()
+        binding.tvRank.text = item.rank
+        binding.tvCollect.isVisible = item.isCollection
 
         item.infoTip.apply {
             binding.tvTag.text = time.ifBlank { eps }
@@ -29,14 +34,14 @@ class MediaPageAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
     object BrowserListDiffCallback : DiffUtil.ItemCallback<BrowserEntity.Item>() {
         override fun areItemsTheSame(
             oldItem: BrowserEntity.Item,
-            newItem: BrowserEntity.Item
+            newItem: BrowserEntity.Item,
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
             oldItem: BrowserEntity.Item,
-            newItem: BrowserEntity.Item
+            newItem: BrowserEntity.Item,
         ): Boolean {
             return oldItem == newItem
         }

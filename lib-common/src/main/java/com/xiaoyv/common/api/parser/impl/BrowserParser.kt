@@ -22,7 +22,7 @@ object BrowserParser {
      */
     fun Element.parserBrowserPage(
         @MediaType mediaType: String? = null,
-        isCollectList: Boolean = false
+        isCollectList: Boolean = false,
     ): BrowserEntity {
         requireNoError()
 
@@ -35,7 +35,7 @@ object BrowserParser {
             item.coverImage = it.select("a.cover img").attr("src").optImageUrl()
             item.title = it.select(".inner h3 a").text()
             item.subtitle = it.select(".inner h3 small").text()
-            item.rank = it.select(".rank").text()
+            item.rank = it.select(".rank").text().replace("Rank\\s+".toRegex(), "No.")
             item.infoTip = parserInfoTip(it.select(".tip").text())
 
             val rateInfo = it.select(".rateInfo")
