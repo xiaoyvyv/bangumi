@@ -28,12 +28,12 @@ jobs:
     - name: Upload APK and ProGuard Files
       uses: actions/upload-artifact@v3
       with:
-        name: app-debug
-        path: app/build/outputs/apk/debug/*.apk
+        name: app-release.apk
+        path: app/build/outputs/apk/release/*.apk
 
     - name: Upload ProGuard Mapping File
       uses: actions/upload-artifact@v3
       with:
-        name: proguard-mapping
+        name: proguard-mapping.txt
         path: app/build/proguard/mapping.txt
     
