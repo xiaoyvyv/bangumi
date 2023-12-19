@@ -15,6 +15,9 @@
 
 RN的体验效果并不是很好，我决定开发一款纯原生的 Android 客户端，达到B站、抖音等的软件般体验流畅度。
 
+- 进度超出预期，v1.0.0 全功能覆盖95%于项目计划后半个多月开发完成，欢迎大家反馈和建议。
+- 下载请移步 `Release`
+
 ### Bangumi
 [https://bgm.tv](https://bgm.tv)
 
@@ -23,17 +26,21 @@ RN的体验效果并不是很好，我决定开发一款纯原生的 Android 客
 ### 项目更新地址
 https://github.com/xiaoyvyv/Bangumi-for-Android
 
-### Github CI 下载测试开发包
+### Github CI 下载安装包
 [https://github.com/xiaoyvyv/Bangumi-for-Android/actions](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
 
 ### 项目最终目标
-实现 Bangumi tv 官网的全部功能（目前只包含主站，不包含天窗等旗下功能站点）
+
+- [x] 实现 Bangumi tv 官网的全部功能（目前只包含主站，不包含天窗等旗下功能站点）
 
 ### Deadline
-预计首个版本开发周期 3 个月 (2024年2月下旬)
+~~预计首个版本开发周期 3 个月 (2024年2月下旬)！~~
+
+进度超出预期，于2023年11月20多号开始开发，`2023-12-19` `v1.0.0` 发布，开发周期半个月多点，官网全功能覆盖95%
+
+欢迎大家加QQ群讨论交流：671395625
 
 ### Features
 
-- v1.0.0
-  实现官网的动画、音乐、游戏、三次元模块
-  登录模块
+- `v1.0.0` (2023-12-19)
+  实现官网的全功能覆盖95%
