@@ -19,22 +19,23 @@
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="@dimen/ui_size_0"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ui_size_0"
         android:background="@drawable/shape_cover_mask"
+        android:gravity="bottom"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/card_small"
         app:layout_constraintEnd_toEndOf="@+id/card_small"
-        app:layout_constraintStart_toStartOf="@+id/card_small">
+        app:layout_constraintStart_toStartOf="@+id/card_small"
+        app:layout_constraintTop_toTopOf="@+id/card_small">
 
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:id="@+id/card_small_attention"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/ui_size_8"
             android:paddingTop="@dimen/ui_size_8"
             android:textAppearance="?attr/textAppearanceOverline"
@@ -45,7 +46,7 @@
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:id="@+id/card_small_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="start|bottom"
             android:maxLines="2"

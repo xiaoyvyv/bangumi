@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_more"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem/random" />
+        tools:text="@tools:sample/lorem" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_more"

@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.feature.person.cooperate
 
+import android.widget.ImageView
 import com.xiaoyv.bangumi.databinding.FragmentPersonCooperateItemBinding
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
@@ -17,7 +18,7 @@ class PersonCooperateAdapter : BaseQuickDiffBindingAdapter<PersonEntity.RecentCo
         FragmentPersonCooperateItemBinding>(IdDiffItemCallback()) {
 
     override fun BaseQuickBindingHolder<FragmentPersonCooperateItemBinding>.converted(item: PersonEntity.RecentCooperate) {
-        binding.ivAvatar.loadImageAnimate(item.avatar)
+        binding.ivAvatar.loadImageAnimate(item.avatar, cropType = ImageView.ScaleType.FIT_START)
         binding.tvName.text = item.name
         binding.tvTimes.text = String.format("x%d", item.times)
         binding.tvJobs.text = item.jobs.joinToString("、")

@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
@@ -53,7 +54,7 @@ class OverviewCharacterBinder(private val clickItemListener: (MediaDetailEntity.
     private class ItemAdapter : BaseQuickDiffBindingAdapter<MediaDetailEntity.MediaCharacter,
             FragmentOverviewCharacterItemBinding>(IdDiffItemCallback()) {
         override fun BaseQuickBindingHolder<FragmentOverviewCharacterItemBinding>.converted(item: MediaDetailEntity.MediaCharacter) {
-            binding.ivAvatar.loadImageAnimate(item.avatar)
+            binding.ivAvatar.loadImageAnimate(item.avatar, cropType = ImageView.ScaleType.FIT_START)
             binding.tvName.text = item.characterNameCn.ifBlank { item.characterName }
             binding.tvJobs.text = item.jobs.joinToString(";")
             binding.tvCommentCount.text = String.format("讨论：%d", item.saveCount)

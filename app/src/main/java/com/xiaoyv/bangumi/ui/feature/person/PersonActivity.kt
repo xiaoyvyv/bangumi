@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -83,7 +84,7 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
             debugLog { "Person: " + entity.toJson(true) }
 
             binding.ivCover.loadImageBlurBackground(entity.poster)
-            binding.ivCover.loadImageAnimate(entity.poster, centerCrop = false)
+            binding.ivCover.loadImageAnimate(entity.poster, cropType = ImageView.ScaleType.FIT_START)
             binding.ivCover.setOnFastLimitClickListener {
                 RouteHelper.jumpPreviewImage(entity.posterLarge)
             }

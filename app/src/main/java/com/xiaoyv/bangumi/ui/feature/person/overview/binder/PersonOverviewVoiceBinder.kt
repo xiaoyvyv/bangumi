@@ -2,13 +2,13 @@ package com.xiaoyv.bangumi.ui.feature.person.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListVoiceBinding
-import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
@@ -42,7 +42,7 @@ class PersonOverviewVoiceBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentPersonOverviewListBinding>,
         position: Int,
-        item: AdapterTypeItem?
+        item: AdapterTypeItem?,
     ) {
         item ?: return
         holder.binding.tvItemTitle.text = item.title
@@ -56,7 +56,7 @@ class PersonOverviewVoiceBinder(
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): BaseQuickBindingHolder<FragmentPersonOverviewListBinding> {
         val binding =
             FragmentPersonOverviewListBinding.inflate(context.inflater, parent, false)
@@ -73,10 +73,13 @@ class PersonOverviewVoiceBinder(
             FragmentPersonOverviewListVoiceBinding>(IdDiffItemCallback()) {
 
         override fun BaseQuickBindingHolder<FragmentPersonOverviewListVoiceBinding>.converted(
-            item: PersonEntity.RecentlyPerformer
+            item: PersonEntity.RecentlyPerformer,
         ) {
             binding.ivAvatar.isInvisible = item.character.id.isBlank()
-            binding.ivAvatar.loadImageAnimate(item.character.avatar)
+            binding.ivAvatar.loadImageAnimate(
+                item.character.avatar,
+                cropType = ImageView.ScaleType.FIT_START
+            )
             binding.tvName.text = item.character.characterName
             binding.tvNameCn.text = item.character.personJob
 

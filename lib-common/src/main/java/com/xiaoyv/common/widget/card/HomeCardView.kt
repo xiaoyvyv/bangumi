@@ -29,7 +29,6 @@ class HomeCardView @JvmOverloads constructor(
     private val binding = ViewHomeCardBinding.inflate(LayoutInflater.from(context), this)
     private val itemAdapter by lazy { ItemAdapter() }
 
-
     var data: HomeIndexCardEntity? = null
         set(value) {
             field = value
@@ -55,17 +54,30 @@ class HomeCardView @JvmOverloads constructor(
         val images = data?.images.orEmpty()
         if (images.isEmpty()) return
 
-        val bigCard = images.first()
-        binding.cardTitle.text = data?.title
-        binding.cardBigTitle.text = bigCard.title
-        binding.cardBigAttention.text = bigCard.attention
-        binding.cardBig.loadImageAnimate(bigCard.image)
-        binding.cardBig.setOnFastLimitClickListener {
-            onItemClick(bigCard)
+        // 左侧
+        val card1 = images.first()
+        binding.cardTitle.title = data?.title.orEmpty()
+        binding.cardTitle.more = ""
+        binding.mask1.cardBigTitle.text = card1.title
+        binding.mask1.cardBigAttention.text = card1.attention
+        binding.cardLeft.loadImageAnimate(card1.image)
+        binding.cardLeft.setOnFastLimitClickListener {
+            onItemClick(card1)
         }
 
-        if (images.size > 1) {
-            itemAdapter.submitList(images.subList(1, images.size))
+        // 右侧
+        val card2 = images.getOrNull(1)
+        binding.cardTitle.title = data?.title.orEmpty()
+        binding.cardTitle.more = ""
+        binding.mask2.cardBigTitle.text = card2?.title
+        binding.mask2.cardBigAttention.text = card2?.attention
+        binding.cardRight.loadImageAnimate(card2?.image)
+        binding.cardRight.setOnFastLimitClickListener {
+            card2?.let { entity -> onItemClick(entity) }
+        }
+
+        if (images.size > 2) {
+            itemAdapter.submitList(images.subList(2, images.size))
         }
     }
 

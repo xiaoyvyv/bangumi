@@ -6,64 +6,64 @@
     android:layout_height="wrap_content"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
+    <com.xiaoyv.common.widget.menu.AnimeSectionView
         android:id="@+id/card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_right"
-        android:foreground="?attr/selectableItemBackground"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_layout_margin"
-        android:textAppearance="?attr/textAppearanceTitleLarge"
-        android:textColor="?attr/colorOnSurface"
-        android:textStyle="bold"
-        app:drawableTint="?attr/colorOnSurface"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="动画" />
 
     <com.xiaoyv.common.widget.image.AnimeImageView
-        android:id="@+id/card_big"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:id="@+id/card_left"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:layout_marginEnd="@dimen/ui_size_8"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintDimensionRatio="3:4"
+        app:layout_constraintEnd_toStartOf="@+id/card_right"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_title"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/card_right"
         android:layout_width="@dimen/ui_size_0"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_cover_mask"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/card_big"
-        app:layout_constraintEnd_toEndOf="@+id/card_big"
-        app:layout_constraintStart_toStartOf="@+id/card_big">
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginStart="@dimen/ui_size_8"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintDimensionRatio="3:4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/card_left"
+        app:layout_constraintTop_toBottomOf="@+id/card_title"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-        <com.xiaoyv.common.widget.text.AnimeTextView
-            android:id="@+id/card_big_attention"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/ui_size_12"
-            android:paddingTop="@dimen/ui_size_12"
-            android:textAppearance="?attr/textAppearanceTitleSmall"
-            android:textColor="?attr/colorOnPrimarySurface"
-            android:textStyle="bold"
-            tools:text="123923 人关注" />
+    <include
+        android:id="@+id/mask_1"
+        layout="@layout/view_home_card_mask"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        app:layout_constraintBottom_toBottomOf="@+id/card_left"
+        app:layout_constraintEnd_toEndOf="@+id/card_left"
+        app:layout_constraintStart_toStartOf="@+id/card_left"
+        app:layout_constraintTop_toTopOf="@+id/card_left" />
 
-        <com.xiaoyv.common.widget.text.AnimeTextView
-            android:id="@+id/card_big_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:paddingHorizontal="@dimen/ui_size_12"
-            android:paddingVertical="@dimen/ui_size_12"
-            android:textAppearance="?attr/textAppearanceTitleLarge"
-            android:textColor="?attr/colorOnPrimarySurface"
-            android:textStyle="bold"
-            tools:text="从零开始的异世界生活" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    <include
+        android:id="@+id/mask_2"
+        layout="@layout/view_home_card_mask"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        app:layout_constraintBottom_toBottomOf="@+id/card_right"
+        app:layout_constraintEnd_toEndOf="@+id/card_right"
+        app:layout_constraintStart_toStartOf="@+id/card_right"
+        app:layout_constraintTop_toTopOf="@+id/card_right" />
 
     <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
         android:id="@+id/rv_small"
@@ -73,6 +73,6 @@
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/ui_size_8"
         app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/card_big"
+        app:layout_constraintTop_toBottomOf="@+id/card_left"
         tools:listitem="@layout/view_home_card_item" />
 </merge>

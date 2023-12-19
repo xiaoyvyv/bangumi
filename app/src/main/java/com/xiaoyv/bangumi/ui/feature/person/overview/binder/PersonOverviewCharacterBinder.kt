@@ -2,12 +2,12 @@ package com.xiaoyv.bangumi.ui.feature.person.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListCharacterBinding
-import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.CharacterEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
@@ -41,7 +41,7 @@ class PersonOverviewCharacterBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentPersonOverviewListBinding>,
         position: Int,
-        item: AdapterTypeItem?
+        item: AdapterTypeItem?,
     ) {
         item ?: return
         holder.binding.tvItemTitle.text = item.title
@@ -55,7 +55,7 @@ class PersonOverviewCharacterBinder(
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): BaseQuickBindingHolder<FragmentPersonOverviewListBinding> {
         val binding =
             FragmentPersonOverviewListBinding.inflate(context.inflater, parent, false)
@@ -71,9 +71,9 @@ class PersonOverviewCharacterBinder(
             FragmentPersonOverviewListCharacterBinding>(IdDiffItemCallback()) {
 
         override fun BaseQuickBindingHolder<FragmentPersonOverviewListCharacterBinding>.converted(
-            item: CharacterEntity
+            item: CharacterEntity,
         ) {
-            binding.ivAvatar.loadImageAnimate(item.avatar)
+            binding.ivAvatar.loadImageAnimate(item.avatar, cropType = ImageView.ScaleType.FIT_START)
             binding.tvName.text = item.nameNative
             binding.tvNameCn.text = item.nameCn
 

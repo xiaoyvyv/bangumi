@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_cover_mask"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/card_big_attention"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingTop="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textStyle="bold"
+        tools:text="123923 人关注" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/card_big_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:breakStrategy="balanced"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textStyle="bold"
+        tools:text="从零开始的异世界生活" />
+</androidx.appcompat.widget.LinearLayoutCompat>

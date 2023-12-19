@@ -50,7 +50,7 @@ object ConfigHelper {
     }
 
     fun isImageAnimation(): Boolean {
-        return SPStaticUtils.getBoolean(KEY_IMAGE_ANIMATION, false)
+        return SPStaticUtils.getBoolean(KEY_IMAGE_ANIMATION, true)
     }
 
     fun setImageAnimation(enable: Boolean) {

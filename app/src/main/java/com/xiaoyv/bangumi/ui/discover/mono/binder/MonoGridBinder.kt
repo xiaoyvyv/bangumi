@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.discover.mono.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewCharacterItemBinding
 import com.xiaoyv.common.config.bean.AdapterTypeItem
@@ -26,7 +27,7 @@ class MonoGridBinder :
     ) {
         val entity = item?.entity as? SampleImageEntity ?: return
         val binding = holder.binding
-        binding.ivAvatar.loadImageAnimate(entity.image)
+        binding.ivAvatar.loadImageAnimate(entity.image, cropType = ImageView.ScaleType.FIT_START)
         binding.tvName.text = entity.title
         binding.tvPerson.text = entity.desc
     }

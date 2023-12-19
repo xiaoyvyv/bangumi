@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.media.detail.maker
 
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.xiaoyv.bangumi.databinding.FragmentMediaMakerItemBinding
@@ -18,7 +19,7 @@ class MediaMakerAdapter : BaseQuickDiffBindingAdapter<MediaMakerEntity,
         FragmentMediaMakerItemBinding>(ItemDiffItemCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaMakerItemBinding>.converted(item: MediaMakerEntity) {
-        binding.ivAvatar.loadImageAnimate(item.avatar)
+        binding.ivAvatar.loadImageAnimate(item.avatar, ImageView.ScaleType.FIT_START)
         binding.tvTitle.text = String.format("%s/%s", item.titleNative, item.titleCn)
         binding.tvJob.text = item.personInfo.joinToString(";")
         binding.tvComment.text = String.format("讨论：%s", item.commentCount)
@@ -30,14 +31,14 @@ class MediaMakerAdapter : BaseQuickDiffBindingAdapter<MediaMakerEntity,
     private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaMakerEntity>() {
         override fun areItemsTheSame(
             oldItem: MediaMakerEntity,
-            newItem: MediaMakerEntity
+            newItem: MediaMakerEntity,
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
             oldItem: MediaMakerEntity,
-            newItem: MediaMakerEntity
+            newItem: MediaMakerEntity,
         ): Boolean {
             return oldItem == newItem
         }
