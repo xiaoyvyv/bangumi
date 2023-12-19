@@ -1,16 +1,14 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.blueprint.kts.toJson
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.BgmMediaEntity
-import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCalendarEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexCardEntity
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
-import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.config.bean.SampleImageEntity
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
@@ -24,14 +22,6 @@ object HomeParser {
 
     fun Document.parserHomePage(): HomeIndexEntity {
         val entity = HomeIndexEntity()
-
-        entity.banner = HomeIndexBannerEntity(
-            listOf(
-                "https://lain.bgm.tv/pic/cover/l/13/c5/400602_ZI8Y9.jpg",
-                "https://lain.bgm.tv/pic/cover/l/13/c5/400602_ZI8Y9.jpg",
-                "https://lain.bgm.tv/pic/cover/l/13/c5/400602_ZI8Y9.jpg"
-            )
-        )
         entity.images = select("#featuredItems li").map {
             val imageCardEntity = HomeIndexCardEntity()
 
@@ -81,8 +71,14 @@ object HomeParser {
             )
         }
 
-        debugLog { entity.toJson(true) }
-
+        entity.banner.banners = entity.images.map {
+            val media = it.images.firstOrNull() ?: return@map null
+            SampleImageEntity(
+                id = media.id,
+                image = media.image.optImageUrl(largest = true),
+                title = media.title.toString()
+            )
+        }.filterNotNull()
         return entity
     }
 

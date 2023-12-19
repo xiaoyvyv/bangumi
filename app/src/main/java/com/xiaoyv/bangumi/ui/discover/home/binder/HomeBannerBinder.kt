@@ -8,14 +8,17 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeBannerBinding
 import com.xiaoyv.bangumi.databinding.FragmentHomeBannerFeatureBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.common.api.parser.entity.HomeIndexBannerEntity
 import com.xiaoyv.common.config.bean.HomeIndexFeature
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
+import com.xiaoyv.common.helper.callback.InterceptTouchListener
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 /**
  * 顶部 Banner 模块
@@ -28,6 +31,7 @@ class HomeBannerBinder(private val onClickFeature: (HomeIndexFeature) -> Unit) :
             setOnDebouncedChildClickListener(R.id.item_feature, block = onClickFeature)
         }
     }
+    private val interceptTouchListener = InterceptTouchListener()
 
     private val bannerItemParams by lazy {
         RelativeLayout.LayoutParams(
@@ -39,13 +43,15 @@ class HomeBannerBinder(private val onClickFeature: (HomeIndexFeature) -> Unit) :
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentHomeBannerBinding>,
         position: Int,
-        item: Any?
+        item: Any?,
     ) {
         if (item !is HomeIndexBannerEntity) return
-        holder.binding.banner.setData(item.banners.map {
+        holder.binding.banner.setData(item.banners.map { entity ->
             AppCompatImageView(holder.binding.root.context, null).apply {
                 layoutParams = bannerItemParams
-                loadImageAnimate(it)
+                loadImageAnimate(entity.image)
+                setOnFastLimitClickListener { RouteHelper.jumpMediaDetail(entity.id) }
+                setOnTouchListener(interceptTouchListener)
             }
         })
         holder.binding.rvEnter.adapter = itemAdapter
@@ -55,7 +61,7 @@ class HomeBannerBinder(private val onClickFeature: (HomeIndexFeature) -> Unit) :
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): BaseQuickBindingHolder<FragmentHomeBannerBinding> {
         return BaseQuickBindingHolder(
             FragmentHomeBannerBinding.inflate(context.inflater, parent, false)
