@@ -27,7 +27,7 @@ class HomeAdapter(
     private val imageCardViewPool by lazy { RecycledViewPool() }
 
     init {
-        this.addItemType(TYPE_TOP_BANNER, HomeBannerBinder(onClickFeature))
+        this.addItemType(TYPE_TOP_BANNER, HomeBannerBinder(touchedListener,onClickFeature))
             .addItemType(TYPE_CALENDAR_PREVIEW, HomeCalendarBinder(touchedListener, onClickMedia))
             .addItemType(
                 TYPE_MEDIA_CARD,

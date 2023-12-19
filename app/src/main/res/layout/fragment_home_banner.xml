@@ -6,30 +6,17 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.google.android.material.card.MaterialCardView
+    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+        android:id="@+id/rv_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/ui_layout_margin"
         android:layout_marginTop="@dimen/ui_layout_margin"
-        app:cardCornerRadius="@dimen/ui_layout_radius"
-        app:strokeColor="@color/ui_transparent"
-        app:strokeWidth="@dimen/ui_size_0">
-
-        <cn.bingoogolapple.bgabanner.BGABanner
-            android:id="@+id/banner"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_size_180"
-            android:background="@color/ui_transparent"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:banner_isNumberIndicator="true"
-            app:banner_numberIndicatorBackground="@color/ui_transparent"
-            app:banner_numberIndicatorTextColor="@color/ui_transparent"
-            app:banner_pointAutoPlayAble="true"
-            app:banner_pointContainerBackground="@color/ui_transparent"
-            app:banner_transitionEffect="depth" />
-    </com.google.android.material.card.MaterialCardView>
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/ui_size_8"
+        app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
+        tools:listitem="@layout/fragment_home_banner_image" />
 
     <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
         android:id="@+id/rv_enter"
