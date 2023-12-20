@@ -30,7 +30,8 @@
         android:ellipsize="end"
         android:gravity="bottom|start"
         android:maxLines="1"
-        android:paddingHorizontal="@dimen/ui_size_6"
+        android:paddingStart="@dimen/ui_size_6"
+        android:paddingEnd="@dimen/ui_size_24"
         android:paddingBottom="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceLabelMedium"
         android:textColor="?attr/colorOnPrimarySurface"
@@ -39,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="@+id/iv_cover"
         app:layout_constraintStart_toStartOf="@+id/iv_cover"
         app:layout_constraintTop_toTopOf="@+id/iv_cover"
-        tools:text="2023" />
+        tools:text="2023年12月24日" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_rank"
@@ -104,6 +105,7 @@
         android:text="♥️"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnPrimarySurface"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
         app:layout_constraintEnd_toEndOf="@+id/iv_cover"
         app:layout_constraintVertical_bias="0"

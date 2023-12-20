@@ -64,7 +64,7 @@ dependencies {
     api(libs.speed.dial)
 
     api(libs.jsoup)
-
+    api("com.qcloud.cos:avif:1.1.0")
     ksp(libs.glide.ksp)
     annotationProcessor(libs.glide.compiler)
 

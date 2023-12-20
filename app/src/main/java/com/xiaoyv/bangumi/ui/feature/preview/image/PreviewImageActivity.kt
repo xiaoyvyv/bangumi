@@ -42,7 +42,7 @@ class PreviewImageActivity :
                 "图片预览（%d/%d）", position + 1,
                 viewModel.totalImageUrls.size
             )
-            
+
             binding.vpImage.adapter = PreviewImageAdapter(activity, it.second)
             if (position != -1 && position < it.second.size) {
                 binding.vpImage.setCurrentItem(position, false)
@@ -57,10 +57,6 @@ class PreviewImageActivity :
                 binding.toolbar.title = String.format("图片预览（%d/%d）", position + 1, count)
             }
         })
-    }
-
-    fun setVpEnable(enable: Boolean) {
-        binding.vpImage.isUserInputEnabled = enable
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

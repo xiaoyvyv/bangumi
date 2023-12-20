@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:text="0.0"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
-                    android:textColor="@color/ui_pink"
+                    android:textColor="?attr/colorPrimary"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -120,14 +120,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/ui_size_12"
                     android:background="@drawable/ui_shape_rectangle_corner_6"
-                    android:backgroundTint="@color/ui_pink"
+                    android:backgroundTint="?attr/colorPrimary"
                     android:padding="@dimen/ui_size_4"
                     android:text="\u3000\u3000"
                     android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="?attr/colorOnPrimarySurface"
+                    android:textColor="?attr/colorOnPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_score"
                     app:layout_constraintStart_toEndOf="@+id/tv_score"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText"
+                    tools:text="No.1" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.xiaoyv.common.widget.appbar.AnimeToolbar

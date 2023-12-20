@@ -33,7 +33,7 @@ data class DouBanPhotoEntity(
     @SerializedName("total")
     var total: Int = 0,
     @SerializedName("w")
-    var w: Int = 0
+    var w: Int = 0,
 ) : Parcelable {
 
     @Keep
@@ -82,7 +82,7 @@ data class DouBanPhotoEntity(
         @SerializedName("uri")
         var uri: String? = null,
         @SerializedName("url")
-        var url: String? = null
+        var url: String? = null,
     ) : Parcelable, IdEntity
 
     @Keep
@@ -109,7 +109,7 @@ data class DouBanPhotoEntity(
         @SerializedName("uri")
         var uri: String? = null,
         @SerializedName("url")
-        var url: String? = null
+        var url: String? = null,
     ) : Parcelable
 
     @Keep
@@ -120,7 +120,7 @@ data class DouBanPhotoEntity(
         @SerializedName("name")
         var name: String? = null,
         @SerializedName("uid")
-        var uid: String? = null
+        var uid: String? = null,
     ) : Parcelable
 
     @Keep
@@ -129,27 +129,14 @@ data class DouBanPhotoEntity(
         @SerializedName("is_animated")
         var isAnimated: Boolean = false,
         @SerializedName("large")
-        var large: ImageItem? = null,
+        var large: DouBanImageEntity? = null,
         @SerializedName("normal")
-        var normal: ImageItem? = null,
+        var normal: DouBanImageEntity? = null,
         @SerializedName("primary_color")
         var primaryColor: String? = null,
         @SerializedName("raw")
         var raw: String? = null,
         @SerializedName("small")
-        var small: ImageItem? = null
-    ) : Parcelable
-
-    @Keep
-    @Parcelize
-    data class ImageItem(
-        @SerializedName("height")
-        var height: Int = 0,
-        @SerializedName("size")
-        var size: Int = 0,
-        @SerializedName("url")
-        var url: String? = null,
-        @SerializedName("width")
-        var width: Int = 0
+        var small: DouBanImageEntity? = null,
     ) : Parcelable
 }

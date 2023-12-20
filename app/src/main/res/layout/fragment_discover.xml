@@ -26,7 +26,8 @@
                 android:background="@color/ui_transparent"
                 android:paddingStart="@dimen/ui_size_0"
                 android:paddingEnd="@dimen/ui_size_12"
-                app:srcCompat="@drawable/ic_logo_banner" />
+                app:srcCompat="@drawable/ic_logo_banner"
+                app:tint="?attr/colorPrimary" />
 
             <com.xiaoyv.common.widget.text.AnimeTextView
                 android:id="@+id/bgm"

@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.ui.feature.preview.image
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.xiaoyv.bangumi.ui.feature.preview.image.page.PreviewPageFragment
 
 /**
  * Class: [PreviewImageAdapter]
@@ -18,7 +19,7 @@ class PreviewImageAdapter(fragmentActivity: FragmentActivity, private val imageU
     }
 
     override fun createFragment(position: Int): Fragment {
-        return PreviewImageFragment.newInstance(
+        return PreviewPageFragment.newInstance(
             imageUrl = imageUrls[position],
             position,
             imageUrls.size

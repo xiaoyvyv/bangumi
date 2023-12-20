@@ -4,6 +4,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
+import com.xiaoyv.common.api.response.ImageGalleryEntity
 import com.xiaoyv.common.api.response.MediaJsonEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
@@ -34,7 +35,7 @@ interface BgmJsonApi {
     @GET("${BgmApiManager.URL_BASE_WEB}/timeline")
     suspend fun queryWholeTimeline(
         @Query("type") @TimelineType type: String,
-        @Query("ajax") ajax: Long = 1
+        @Query("ajax") ajax: Long = 1,
     ): Document
 
     /**
@@ -68,7 +69,7 @@ interface BgmJsonApi {
     @GET("https://frodo.douban.com/api/v2/search/suggestion")
     suspend fun queryDouBanSuggestion(
         @Query("q") q: String,
-        @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70"
+        @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
     ): DouBanSuggestEntity
 
     @GET("https://frodo.douban.com/api/v2/tv/{mediaId}/photos")
@@ -78,4 +79,12 @@ interface BgmJsonApi {
         @Query("count") count: Int = 10,
         @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
     ): DouBanPhotoEntity
+
+    @GET("https://api.anime-pictures.net/api/v3/posts")
+    suspend fun queryAnimePicture(
+        @Query("lang") lang: String = "zh_CN",
+        @Query("ldate") lDate: String = "0",
+        @Query("order_by") orderBy: String = "date",
+        @Query("page") page: Int = 0,
+    ): ImageGalleryEntity
 }

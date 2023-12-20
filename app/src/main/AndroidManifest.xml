@@ -235,6 +235,14 @@
             android:name="com.xiaoyv.bangumi.ui.feature.user.mono.UserMonoActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.picture.gallery.AnimeGalleryActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

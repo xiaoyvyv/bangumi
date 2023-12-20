@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.ui.media.option
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.FragmentMediaOptionItemBinding
@@ -9,6 +8,7 @@ import com.xiaoyv.bangumi.databinding.FragmentMediaOptionTitleBinding
 import com.xiaoyv.common.config.bean.MediaOptionConfig
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
+import com.xiaoyv.common.kts.tint
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.kts.getAttrColor
 
@@ -69,7 +69,7 @@ class MediaOptionAdapter : BaseMultiItemAdapter<Any>() {
         override fun onBind(
             holder: BaseQuickBindingHolder<FragmentMediaOptionTitleBinding>,
             position: Int,
-            item: Any?
+            item: Any?,
         ) {
             holder.binding.tvOptionTitle.text = item.toString()
         }
@@ -77,7 +77,7 @@ class MediaOptionAdapter : BaseMultiItemAdapter<Any>() {
         override fun onCreate(
             context: Context,
             parent: ViewGroup,
-            viewType: Int
+            viewType: Int,
         ): BaseQuickBindingHolder<FragmentMediaOptionTitleBinding> {
             return BaseQuickBindingHolder(
                 FragmentMediaOptionTitleBinding.inflate(
@@ -98,25 +98,27 @@ class MediaOptionAdapter : BaseMultiItemAdapter<Any>() {
         override fun onBind(
             holder: BaseQuickBindingHolder<FragmentMediaOptionItemBinding>,
             position: Int,
-            item: Any?
+            item: Any?,
         ) {
             val content = item as? MediaOptionConfig.Config.Option.Item
             val binding = holder.binding
 
             binding.tvOptionItem.text = content?.title
-            binding.tvOptionItem.backgroundTintList = ColorStateList.valueOf(
-                if (selected.contains(item)) {
-                    context.getAttrColor(GoogleAttr.colorSurfaceVariant)
-                } else {
-                    context.getAttrColor(GoogleAttr.colorSurfaceContainer)
-                }
-            )
+            if (selected.contains(item)) {
+                binding.tvOptionItem.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimaryContainer))
+                binding.tvOptionItem.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorPrimaryContainer).tint
+            } else {
+                binding.tvOptionItem.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurface))
+                binding.tvOptionItem.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorSurfaceContainer).tint
+            }
         }
 
         override fun onCreate(
             context: Context,
             parent: ViewGroup,
-            viewType: Int
+            viewType: Int,
         ): BaseQuickBindingHolder<FragmentMediaOptionItemBinding> {
             return BaseQuickBindingHolder(
                 FragmentMediaOptionItemBinding.inflate(

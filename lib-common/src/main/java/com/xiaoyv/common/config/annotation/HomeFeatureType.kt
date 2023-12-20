@@ -12,6 +12,7 @@ import androidx.annotation.StringDef
     HomeFeatureType.TYPE_DOLLARS,
     HomeFeatureType.TYPE_MAGI,
     HomeFeatureType.TYPE_SEARCH,
+    HomeFeatureType.TYPE_ANIME_PICTURES,
     HomeFeatureType.TYPE_EMAIL,
     HomeFeatureType.TYPE_ALMANAC,
     HomeFeatureType.TYPE_WIKI,
@@ -21,6 +22,7 @@ annotation class HomeFeatureType {
     companion object {
         const val TYPE_DOLLARS = "dollars"
         const val TYPE_MAGI = "magi"
+        const val TYPE_ANIME_PICTURES = "anime-pictures"
         const val TYPE_SEARCH = "search"
         const val TYPE_EMAIL = "email"
         const val TYPE_ALMANAC = "almanac"

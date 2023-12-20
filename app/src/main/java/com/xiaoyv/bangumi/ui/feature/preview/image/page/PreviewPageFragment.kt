@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.preview.image
+package com.xiaoyv.bangumi.ui.feature.preview.image.page
 
 import android.content.Context
 import android.os.Bundle
@@ -6,42 +6,39 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.bangumi.databinding.ActivityPreviewPageBinding
-import com.xiaoyv.blueprint.base.binding.BaseBindingFragment
+import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.glide.ProgressTarget
 import com.xiaoyv.common.helper.callback.SubsamplingEventListener
 import com.xiaoyv.common.helper.callback.SubsamplingTarget
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.loadImage
 import kotlin.math.roundToInt
 
 
 /**
- * Class: [PreviewImageFragment]
+ * Class: [PreviewPageFragment]
  *
  * TODO:// Crash https://bangumi.tv/blog/327666
  *
  * @author why
  * @since 12/1/23
  */
-class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
-    private var imageUrl: String = ""
-    private var position: Int = 0
-    private var total = 0
-
-    private val isLoadNormal
-        get() = imageUrl.endsWith(".gif", false) || imageUrl.startsWith("file:///android_asset")
+class PreviewPageFragment :
+    BaseViewModelFragment<ActivityPreviewPageBinding, PreviewPageViewModel>() {
 
     override fun initArgumentsData(arguments: Bundle) {
-        imageUrl = arguments.getString(NavKey.KEY_STRING).orEmpty()
-        position = arguments.getInt(NavKey.KEY_INTEGER)
-        total = arguments.getInt(NavKey.KEY_INTEGER_SECOND)
+        viewModel.imageUrl = arguments.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.position = arguments.getInt(NavKey.KEY_INTEGER)
+        viewModel.total = arguments.getInt(NavKey.KEY_INTEGER_SECOND)
     }
 
     override fun initView() {
         binding.ivImage.isQuickScaleEnabled = true
-        if (isLoadNormal) {
+        if (viewModel.isLoadNormal) {
             binding.ivGif.isVisible = true
             binding.ivImage.isVisible = false
         } else {
@@ -51,18 +48,18 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     }
 
     override fun initData() {
-        if (isLoadNormal) {
-            binding.ivGif.loadImage(imageUrl, cropOrFit = false)
+        if (viewModel.isLoadNormal) {
+            binding.ivGif.loadImage(viewModel.imageUrl, cropOrFit = false)
             binding.gpProgress.isVisible = false
         } else {
             val target = ImageProgressTarget(
-                imageUrl, requireContext(),
+                viewModel.imageUrl, requireContext(),
                 SubsamplingTarget(binding.ivImage)
             )
 
             Glide.with(requireContext())
                 .asFile()
-                .load(imageUrl)
+                .load(viewModel.imageUrl)
                 .into(target)
         }
     }
@@ -77,6 +74,20 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
                 binding.ivImage.resetScaleAndCenter()
             }
         })
+
+        binding.ivImage.setOnLongClickListener {
+            showActionDialog(viewModel.imageUrl)
+            true
+        }
+    }
+
+    private fun showActionDialog(url: String) {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setItems(viewModel.shareMenus) { _, which ->
+                viewModel.downloadWallpaperFromUrl(url, viewModel.shareMenus[which])
+            }
+            .create()
+            .show()
     }
 
     inner class ImageProgressTarget<Z>(model: String?, context: Context, target: Target<Z>) :
@@ -111,8 +122,8 @@ class PreviewImageFragment : BaseBindingFragment<ActivityPreviewPageBinding>() {
     }
 
     companion object {
-        fun newInstance(imageUrl: String, position: Int, total: Int): PreviewImageFragment {
-            return PreviewImageFragment().apply {
+        fun newInstance(imageUrl: String, position: Int, total: Int): PreviewPageFragment {
+            return PreviewPageFragment().apply {
                 arguments = bundleOf(
                     NavKey.KEY_STRING to imageUrl,
                     NavKey.KEY_INTEGER to position,

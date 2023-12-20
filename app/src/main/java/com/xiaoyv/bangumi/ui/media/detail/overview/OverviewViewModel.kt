@@ -6,6 +6,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
+import com.xiaoyv.common.api.response.douban.DouBanImageEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaDetailType
@@ -50,11 +51,7 @@ class OverviewViewModel : BaseViewModel() {
 
     private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(
-            image = DouBanPhotoEntity.Image(
-                large = DouBanPhotoEntity.ImageItem(
-                    url = "https://bgm.tv/pic/wallpaper/02.png"
-                )
-            )
+            image = DouBanPhotoEntity.Image(large = DouBanImageEntity(url = "https://bgm.tv/pic/wallpaper/02.png"))
         )
     }
 

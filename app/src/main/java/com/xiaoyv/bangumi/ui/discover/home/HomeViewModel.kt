@@ -44,9 +44,9 @@ class HomeViewModel : BaseViewModel() {
                                 icon = CommonDrawable.ic_magi
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_DOLLARS,
-                                title = "Dollars",
-                                icon = CommonDrawable.ic_dollars
+                                id = HomeFeatureType.TYPE_ANIME_PICTURES,
+                                title = "A-P 图站",
+                                icon = CommonDrawable.ic_format_image
                             ),
                             HomeIndexFeature(
                                 id = HomeFeatureType.TYPE_SEARCH,
@@ -54,14 +54,19 @@ class HomeViewModel : BaseViewModel() {
                                 icon = CommonDrawable.ic_search
                             ),
                             HomeIndexFeature(
+                                id = HomeFeatureType.TYPE_ALMANAC,
+                                title = "年鉴",
+                                icon = CommonDrawable.ic_calendar
+                            ),
+                            HomeIndexFeature(
                                 id = HomeFeatureType.TYPE_EMAIL,
                                 title = "短信",
                                 icon = CommonDrawable.ic_email_normal
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_ALMANAC,
-                                title = "年鉴",
-                                icon = CommonDrawable.ic_calendar
+                                id = HomeFeatureType.TYPE_DOLLARS,
+                                title = "Dollars",
+                                icon = CommonDrawable.ic_dollars
                             ),
                             HomeIndexFeature(
                                 id = HomeFeatureType.TYPE_WIKI,

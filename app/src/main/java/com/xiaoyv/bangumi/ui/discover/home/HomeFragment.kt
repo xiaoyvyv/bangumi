@@ -38,20 +38,15 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                 when (it.id) {
                     HomeFeatureType.TYPE_SEARCH -> RouteHelper.jumpSearch()
                     HomeFeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
-                    HomeFeatureType.TYPE_MAGI -> {
-                        RouteHelper.jumpMagi()
-                    }
-
+                    HomeFeatureType.TYPE_MAGI -> RouteHelper.jumpMagi()
+                    HomeFeatureType.TYPE_ANIME_PICTURES -> RouteHelper.jumpAnimePictures()
+                    HomeFeatureType.TYPE_ALMANAC -> RouteHelper.jumpAlmanac()
                     HomeFeatureType.TYPE_DOLLARS -> {
                         RouteHelper.jumpWeb(
                             url = BgmApiManager.URL_BASE_WEB + "/dollars",
                             injectJs = ResourceUtils.readAssets2String("js/dollars.js"),
                             fitToolbar = true
                         )
-                    }
-
-                    HomeFeatureType.TYPE_ALMANAC -> {
-                        RouteHelper.jumpAlmanac()
                     }
                 }
             },
