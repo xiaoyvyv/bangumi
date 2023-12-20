@@ -27,6 +27,7 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
         binding.tvTime.text = item.time
         binding.tvComment.text = String.format("讨论：%d", item.commentCount)
         binding.vAired.text = item.stateText
+        binding.vAired.isVisible = item.stateText.isNotBlank()
        if (item.aired) {
            binding.vAired.backgroundTintList =   context.getColor(CommonColor.save_collect).tint
             binding.vAired.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))

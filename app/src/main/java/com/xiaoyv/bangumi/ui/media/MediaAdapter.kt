@@ -6,7 +6,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.media.type.MediaPageFragment
 import com.xiaoyv.common.config.GlobalConfig
-import com.xiaoyv.common.config.annotation.MediaType
 
 /**
  * Class: [MediaAdapter]
@@ -26,10 +25,6 @@ class MediaAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
 
     fun getCurrentMediaTypeName(currentItem: Int): String {
         return bottomTabs[currentItem].title
-    }
-
-    fun getMediaTypeName(@MediaType type: String): String {
-        return bottomTabs.find { it.type == type }?.title.orEmpty()
     }
 
     override fun createFragment(position: Int): Fragment {

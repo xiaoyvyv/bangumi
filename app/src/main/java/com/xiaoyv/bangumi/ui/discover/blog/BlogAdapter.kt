@@ -7,6 +7,7 @@ import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.FragmentBlogItemBinding
 import com.xiaoyv.common.api.parser.entity.BlogEntity
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.IMAGE_HOLDER_3X4
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
@@ -29,7 +30,10 @@ class BlogAdapter : BaseQuickDiffBindingAdapter<BlogEntity,
         binding.tvRecent.isVisible = item.recentUserName.isNotBlank()
         binding.tvCommentCount.text = String.format("讨论：+%d", item.commentCount)
 
-        if (!item.nestingProfile) binding.ivCover.loadImageAnimate(item.image, holder = true)
+        if (!item.nestingProfile) binding.ivCover.loadImageAnimate(
+            item.image,
+            holderType = IMAGE_HOLDER_3X4
+        )
 
         SpanUtils.with(binding.tvRecent)
             .append(item.recentUserName)

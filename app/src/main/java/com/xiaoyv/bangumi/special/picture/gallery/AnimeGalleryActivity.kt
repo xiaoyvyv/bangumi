@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.DebouncingUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
@@ -23,7 +22,6 @@ import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.dialog.UiDialog
-import com.xiaoyv.widget.kts.dpi
 
 /**
  * AnimeGalleryActivity
@@ -48,12 +46,6 @@ class AnimeGalleryActivity : BaseListActivity<GalleryEntity, AnimeGalleryViewMod
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.douBanPhotoId = bundle.getString(NavKey.KEY_STRING).orEmpty()
-    }
-
-    override fun initView() {
-        super.initView()
-        val offsetStart = BarUtils.getStatusBarHeight()
-        binding.srlRefresh.setProgressViewOffset(true, offsetStart, offsetStart + 40.dpi)
     }
 
     override fun initData() {

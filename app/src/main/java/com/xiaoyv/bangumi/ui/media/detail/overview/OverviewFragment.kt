@@ -138,11 +138,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                 }
 
                 OverviewAdapter.TYPE_PREVIEW -> {
-                    if (viewModel.targetId.isNotBlank()) {
-                        RouteHelper.jumpMediaPreview(viewModel.targetId)
-                    } else {
-                        toast("没有找到更多预览图")
-                    }
+                    RouteHelper.jumpMediaPreview(viewModel.targetId)
                 }
             }
         }

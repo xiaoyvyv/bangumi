@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.ActivityCalendarItemBinding
 import com.xiaoyv.bangumi.databinding.ActivityCalendarTitleBinding
 import com.xiaoyv.common.api.response.CalendarEntity
+import com.xiaoyv.common.kts.IMAGE_HOLDER_3X4
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -42,7 +43,7 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
         override fun onBind(
             holder: BaseQuickBindingHolder<ActivityCalendarTitleBinding>,
             position: Int,
-            item: Any?
+            item: Any?,
         ) {
             useNotNull(item as? CalendarEntity.CalendarEntityItem.Weekday) {
                 holder.binding.tvCalendarTitle.text = cn ?: en ?: ja
@@ -52,7 +53,7 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
         override fun onCreate(
             context: Context,
             parent: ViewGroup,
-            viewType: Int
+            viewType: Int,
         ): BaseQuickBindingHolder<ActivityCalendarTitleBinding> {
             return BaseQuickBindingHolder(
                 ActivityCalendarTitleBinding.inflate(
@@ -73,14 +74,14 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
         override fun onBind(
             holder: BaseQuickBindingHolder<ActivityCalendarItemBinding>,
             position: Int,
-            item: Any?
+            item: Any?,
         ) {
             val content = item as? CalendarEntity.CalendarEntityItem.Item
             val binding = holder.binding
             val score = content?.rating?.score ?: 0.0
             val epsCount = content?.epsCount ?: 0
 
-            binding.ivCover.loadImageAnimate(content?.images?.large, holder = true)
+            binding.ivCover.loadImageAnimate(content?.images?.large, holderType = IMAGE_HOLDER_3X4)
             binding.tvTitle.text = content?.nameCn.orEmpty().ifBlank { content?.name }
 
             binding.tvSummary.text = content?.summary.orEmpty()
@@ -95,7 +96,7 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
         override fun onCreate(
             context: Context,
             parent: ViewGroup,
-            viewType: Int
+            viewType: Int,
         ): BaseQuickBindingHolder<ActivityCalendarItemBinding> {
             return BaseQuickBindingHolder(
                 ActivityCalendarItemBinding.inflate(

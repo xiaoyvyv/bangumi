@@ -13,10 +13,8 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.MediaFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.config.bean.MediaTab
 import com.xiaoyv.common.kts.GoogleAttr
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
@@ -31,7 +29,7 @@ import com.xiaoyv.widget.kts.getParcelObj
  */
 class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaPageViewModel>() {
 
-    private val contentAdapter by lazy { MediaPageAdapter() }
+    private val contentAdapter by lazy { MediaPageAdapter(viewModel.mediaType) }
 
     private val adapterHelper by lazy {
         QuickAdapterHelper.Builder(contentAdapter)

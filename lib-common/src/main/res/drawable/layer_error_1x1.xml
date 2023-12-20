@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="@dimen/ui_size_120"
+        android:height="@dimen/ui_size_120">
+        <shape
+            android:shape="rectangle"
+            android:useLevel="false">
+            <solid android:color="?attr/colorSurfaceContainer" />
+        </shape>
+    </item>
+    <item
+        android:width="@dimen/ui_size_60"
+        android:height="@dimen/ui_size_45"
+        android:drawable="@drawable/bg_login"
+        android:left="30dp"
+        android:top="37.5dp" />
+</layer-list>

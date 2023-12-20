@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.ImageView.ScaleType
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.helper.ConfigHelper
@@ -15,6 +14,9 @@ import com.xiaoyv.common.helper.blur.BlurTransformation
 import com.xiaoyv.widget.kts.listener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
+const val IMAGE_HOLDER_1X1 = 1
+const val IMAGE_HOLDER_3X4 = 43
 
 /**
  * 展示顶部
@@ -32,7 +34,7 @@ val topCropTransformation by lazy {
 inline fun ImageView.loadImageAnimate(
     model: Any?,
     cropType: ScaleType = ScaleType.CENTER_CROP,
-    holder: Boolean = false,
+    holderType: Int = IMAGE_HOLDER_3X4,
     crossinline onReady: (Drawable) -> Unit = {},
     crossinline onFail: (Any?) -> Unit = {},
 ) {
@@ -47,8 +49,17 @@ inline fun ImageView.loadImageAnimate(
         }
         .listener(onLoadFailed = onFail, onResourceReady = onReady)
         .let {
-            if (holder) it.placeholder(CommonDrawable.layer_error).error(CommonDrawable.layer_error)
-            else it
+            when (holderType) {
+                IMAGE_HOLDER_1X1 -> it
+                    .placeholder(CommonDrawable.layer_error_1x1)
+                    .error(CommonDrawable.layer_error_1x1)
+
+                IMAGE_HOLDER_3X4 -> it
+                    .placeholder(CommonDrawable.layer_error_3x4)
+                    .error(CommonDrawable.layer_error_3x4)
+
+                else -> it
+            }
         }
         .let {
             if (ConfigHelper.isImageAnimation()) it.transition(DrawableTransitionOptions.withCrossFade())
