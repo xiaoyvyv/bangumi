@@ -138,5 +138,9 @@ data class DouBanPhotoEntity(
         var raw: String? = null,
         @SerializedName("small")
         var small: DouBanImageEntity? = null,
-    ) : Parcelable
+    ) : Parcelable {
+
+        val availableImage: DouBanImageEntity?
+            get() = large ?: normal ?: small
+    }
 }

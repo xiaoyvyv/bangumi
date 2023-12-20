@@ -14,7 +14,6 @@ import com.xiaoyv.common.config.glide.ProgressTarget
 import com.xiaoyv.common.helper.callback.SubsamplingEventListener
 import com.xiaoyv.common.helper.callback.SubsamplingTarget
 import com.xiaoyv.common.kts.debugLog
-import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.loadImage
 import kotlin.math.roundToInt
 
@@ -67,6 +66,8 @@ class PreviewPageFragment :
     override fun initListener() {
         binding.ivImage.setOnImageEventListener(object : SubsamplingEventListener() {
             override fun onImageLoaded() {
+                if (isDetached) return
+
                 val scale = binding.ivImage.scale
                 binding.ivImage.minScale = scale
                 binding.ivImage.maxScale = scale * 5f
@@ -74,8 +75,9 @@ class PreviewPageFragment :
                 binding.ivImage.resetScaleAndCenter()
             }
         })
-
         binding.ivImage.setOnLongClickListener {
+            if (isDetached || activity == null) return@setOnLongClickListener true
+
             showActionDialog(viewModel.imageUrl)
             true
         }
@@ -119,6 +121,11 @@ class PreviewPageFragment :
             binding.pbProgress.progress = 100
             binding.gpProgress.isVisible = false
         }
+    }
+
+    override fun onDestroyView() {
+        binding.ivImage.recycle()
+        super.onDestroyView()
     }
 
     companion object {

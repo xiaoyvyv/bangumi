@@ -63,20 +63,18 @@ TE: trailers
 GET https://tinygrail.oss-cn-hangzhou.aliyuncs.com/avatar/edbbcd8f731821b6172a74bf1e6ba9ec.jpg
 Referer: https://bgm.tv
 
+
 ###
-GET https://upload.cc/i1/2018/12/29/GIA76g.png HTTP/2
-Host: upload.cc
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
-Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
-Accept-Encoding: gzip, deflate, br
-Connection: keep-alive
-Cookie: __ddgid_=9RP6cs60ITY5p0ro; __ddgmark_=gABL0LPoM3izzR3x; __ddg5_=hGq0ym764UxhScLw; __ddg2_=su92IOC1Wxb2UvsS; __ddg1_=LsTrPSbwyN45Hhj5zl37
-Upgrade-Insecure-Requests: 1
-Sec-Fetch-Dest: document
-Sec-Fetch-Mode: navigate
-Sec-Fetch-Site: none
-Sec-Fetch-User: ?1
+GET https://frodo.douban.com/api/v2/search/suggestion?q=%E6%B5%B7%E8%B4%BC%E7%8E%8B&apikey=0dad551ec0f84ed02907ff5c42e8ec70&_sig=YIaBWngsMazLHzYtVn50BAbHTkc%3D&_ts=1703084439&count=10
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: cross-site
 Pragma: no-cache
 Cache-Control: no-cache
 TE: trailers
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Referer: https://frodo.douban.com/api/v2/search/suggestion?q=%E6%B5%B7%E8%B4%BC%E7%8E%8B&apikey=0dad551ec0f84ed02907ff5c42e8ec70
+User-Agent: api-client/1 com.douban.frodo/7.65.0(277) Android/33 product/coral vendor/Google model/Pixel 4 XL brand/google  rom/android  network/wifi  udid/0643fa6abfd3eaff076ff3ee603211ded11fc344  platform/mobile nd/1
+Host: frodo.douban.com
+Connection: Keep-Alive
+Accept-Encoding: gzip

@@ -30,9 +30,14 @@ class OverviewViewModel : BaseViewModel() {
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
 
     /**
+     * 对应的豆瓣预览图片ID
+     */
+    internal var targetId: String = ""
+
+    /**
      * 媒体名称
      */
-    internal val requireMediaName: String
+    private val requireMediaName: String
         get() {
             val entity = mediaDetailLiveData.value ?: return "条目：$mediaId"
             return entity.titleCn.ifBlank { entity.titleNative }
@@ -162,7 +167,8 @@ class OverviewViewModel : BaseViewModel() {
                 requireNotNull(mediaName)
                 onMediaPreviewLiveData.value = withContext(Dispatchers.IO) {
                     val searchResult = BgmApiManager.bgmJsonApi.queryDouBanSuggestion(mediaName)
-                    val targetId = searchResult.cards?.firstOrNull()?.targetId.orEmpty()
+                    targetId = searchResult.cards.orEmpty()
+                        .firstOrNull { it?.targetType != "explore" }?.targetId.orEmpty()
                     BgmApiManager.bgmJsonApi.queryDouBanPhotoList(targetId)
                         .photos.orEmpty().let { it.ifEmpty { listOf(defaultImage) } }
                 }

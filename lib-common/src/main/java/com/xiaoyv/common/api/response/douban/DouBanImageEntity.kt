@@ -11,7 +11,7 @@ data class DouBanImageEntity(
     @SerializedName("height")
     var height: Int = 0,
     @SerializedName("size")
-    var size: Int = 0,
+    var size: Long = 0,
     @SerializedName("url")
     var url: String? = null,
     @SerializedName("width")

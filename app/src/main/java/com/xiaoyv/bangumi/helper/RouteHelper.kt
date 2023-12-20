@@ -7,6 +7,7 @@ import androidx.core.os.bundleOf
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.Utils
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
+import com.xiaoyv.bangumi.special.picture.gallery.AnimeGalleryActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
@@ -449,5 +450,9 @@ object RouteHelper {
 
     fun jumpAnimePictures() {
         AnimePicturesNetActivity::class.open()
+    }
+
+    fun jumpMediaPreview(photoId: String) {
+        AnimeGalleryActivity::class.open(bundleOf(NavKey.KEY_STRING to photoId))
     }
 }

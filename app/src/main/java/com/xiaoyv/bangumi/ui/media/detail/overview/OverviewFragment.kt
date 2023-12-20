@@ -23,6 +23,7 @@ import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
+import com.xiaoyv.widget.kts.toast
 
 /**
  * Class: [OverviewFragment]
@@ -134,6 +135,14 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
 
                 OverviewAdapter.TYPE_DETAIL -> {
                     RouteHelper.jumpSummaryDetail(*it.entity.forceCast<MediaDetailEntity>().infoHtml.toTypedArray())
+                }
+
+                OverviewAdapter.TYPE_PREVIEW -> {
+                    if (viewModel.targetId.isNotBlank()) {
+                        RouteHelper.jumpMediaPreview(viewModel.targetId)
+                    } else {
+                        toast("没有找到更多预览图")
+                    }
                 }
             }
         }

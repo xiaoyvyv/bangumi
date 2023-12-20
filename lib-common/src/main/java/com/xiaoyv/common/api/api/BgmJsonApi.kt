@@ -4,7 +4,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
-import com.xiaoyv.common.api.response.ImageGalleryEntity
+import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
 import com.xiaoyv.common.api.response.MediaJsonEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.api.response.douban.DouBanSearchEntity

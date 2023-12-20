@@ -1,4 +1,4 @@
-package com.xiaoyv.common.api.response
+package com.xiaoyv.common.api.response.anime
 
 import android.os.Parcelable
 import androidx.annotation.Keep

@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.special.picture.gallery
 
+import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,8 +14,9 @@ import com.gyf.immersionbar.ImmersionBar
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.activity
-import com.xiaoyv.common.api.response.ImageGalleryEntity
+import com.xiaoyv.common.api.response.GalleryEntity
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
@@ -28,7 +31,7 @@ import com.xiaoyv.widget.kts.dpi
  * @author why
  * @since 11/19/23
  */
-class AnimeGalleryActivity : BaseListActivity<ImageGalleryEntity.Post, AnimeGalleryViewModel>() {
+class AnimeGalleryActivity : BaseListActivity<GalleryEntity, AnimeGalleryViewModel>() {
     override fun initBarConfig() {
         ImmersionBar.with(this)
             .transparentStatusBar()
@@ -38,17 +41,13 @@ class AnimeGalleryActivity : BaseListActivity<ImageGalleryEntity.Post, AnimeGall
     }
 
     override val toolbarTitle: String
-        get() = "Anime-Pictures"
+        get() = if (viewModel.isPreviewSubject) "条目预览" else "Anime-Pictures"
 
     override val isOnlyOnePage: Boolean
         get() = false
 
-    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<ImageGalleryEntity.Post, *> {
-        return AnimeGalleryAdapter()
-    }
-
-    override fun onCreateLayoutManager(): LinearLayoutManager {
-        return QuickGridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false)
+    override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
+        viewModel.douBanPhotoId = bundle.getString(NavKey.KEY_STRING).orEmpty()
     }
 
     override fun initView() {
@@ -69,9 +68,18 @@ class AnimeGalleryActivity : BaseListActivity<ImageGalleryEntity.Post, AnimeGall
         contentAdapter.addOnItemChildClickListener(R.id.iv_image) { adapter, v, position ->
             val item = adapter.getItem(position) ?: return@addOnItemChildClickListener
             if (DebouncingUtils.isValid(v)) {
-                RouteHelper.jumpPreviewImage(item.largeUrl.orEmpty())
+                RouteHelper.jumpPreviewImage(item.largeImageUrl)
             }
         }
+    }
+
+    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<GalleryEntity, *> {
+        return AnimeGalleryAdapter(viewModel.isPreviewSubject)
+    }
+
+    override fun onCreateLayoutManager(): LinearLayoutManager {
+        val spanCount = if (viewModel.isPreviewSubject) 1 else 2
+        return QuickGridLayoutManager(activity, spanCount, GridLayoutManager.VERTICAL, false)
     }
 
     override fun onCreateLoadingDialog(): UiDialog {
@@ -79,7 +87,7 @@ class AnimeGalleryActivity : BaseListActivity<ImageGalleryEntity.Post, AnimeGall
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("Help")
+        if (!viewModel.isPreviewSubject) menu.add("Help")
             .setIcon(CommonDrawable.ic_notifications)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {

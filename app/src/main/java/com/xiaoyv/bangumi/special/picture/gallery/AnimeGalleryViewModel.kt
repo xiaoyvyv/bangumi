@@ -2,7 +2,8 @@ package com.xiaoyv.bangumi.special.picture.gallery
 
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.response.ImageGalleryEntity
+import com.xiaoyv.common.api.response.GalleryEntity
+import com.xiaoyv.widget.kts.orEmpty
 
 /**
  * AnimeGalleryViewModel
@@ -10,14 +11,60 @@ import com.xiaoyv.common.api.response.ImageGalleryEntity
  * @author why
  * @since 11/19/23
  */
-class AnimeGalleryViewModel : BaseListViewModel<ImageGalleryEntity.Post>() {
+class AnimeGalleryViewModel : BaseListViewModel<GalleryEntity>() {
 
-    override suspend fun onRequestListImpl(): List<ImageGalleryEntity.Post> {
-        // https://cpreview.anime-pictures.net/f4f/f4fb2fa5b021f27cffc6b7d51e2ca8e1_bp.jpg.avif
-        // https://cpreview.anime-pictures.net/f4f/f4fb2fa5b021f27cffc6b7d51e2ca8e1_bp.jpg.avif
-        // https://cimages.anime-pictures.net/f4f/f4fb2fa5b021f27cffc6b7d51e2ca8e1.jpg
-        return BgmApiManager.bgmJsonApi
-            .queryAnimePicture(page = current)
-            .posts.orEmpty()
+    /**
+     * 豆瓣媒体画廊
+     */
+    var douBanPhotoId: String = ""
+
+    /**
+     * 页数大小
+     */
+    private var pageSize = 30
+
+    internal val isPreviewSubject: Boolean
+        get() = douBanPhotoId.isNotBlank()
+
+    override suspend fun onRequestListImpl(): List<GalleryEntity> {
+        return when {
+            // 豆瓣画廊
+            isPreviewSubject -> {
+                BgmApiManager.bgmJsonApi.queryDouBanPhotoList(
+                    mediaId = douBanPhotoId,
+                    start = pageSize * (current - 1),
+                    count = pageSize
+                ).photos
+                    .orEmpty()
+                    .map {
+                        val availableImage = it.image?.availableImage
+                        val normalImage = it.image?.normal
+                        GalleryEntity(
+                            id = it.id,
+                            width = availableImage?.width.orEmpty(),
+                            height = availableImage?.height.orEmpty(),
+                            size = availableImage?.size ?: 0L,
+                            imageUrl = normalImage?.url.orEmpty(),
+                            largeImageUrl = availableImage?.url.orEmpty()
+                        )
+                    }
+            }
+
+            else -> {
+                BgmApiManager.bgmJsonApi
+                    .queryAnimePicture(page = (current - 1).coerceAtLeast(0))
+                    .posts.orEmpty()
+                    .map {
+                        GalleryEntity(
+                            id = it.id,
+                            width = it.width,
+                            height = it.height,
+                            size = it.size,
+                            imageUrl = it.url,
+                            largeImageUrl = it.largeUrl
+                        )
+                    }
+            }
+        }
     }
 }
