@@ -1,6 +1,6 @@
 # Bangumi-for-Android
 
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/xiaoyvyv/Bangumi-for-Android/)](https://github.com/xiaoyvyv/Bangumi-for-Android)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/xiaoyvyv/Bangumi-for-Android)](https://github.com/xiaoyvyv/Bangumi-for-Android)
 [![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/Bangumi-for-Android/total)](https://github.com/xiaoyvyv/Bangumi-for-Android)
 [![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android)
 [![GitHub forks](https://img.shields.io/github/forks/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/fork)
