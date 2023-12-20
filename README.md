@@ -26,7 +26,7 @@
 ### 项目更新地址
 https://github.com/xiaoyvyv/Bangumi-for-Android
 
-### Github CI 下载安装包
+### Github CI 下载安装包 `main` 分支
 [https://github.com/xiaoyvyv/Bangumi-for-Android/actions](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
 
 ### 项目最终目标
