@@ -51,7 +51,7 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_ep) {
             if (activityViewModel.requireMediaCollectType != InterestType.TYPE_DO) {
                 requireActivity().showConfirmDialog(
-                    message = "只有收藏为再看|在玩|在读|在听的条目才可以单独修改章节进度",
+                    message = "只有收藏为 (在看 | 在玩 | 在读 | 在听) 的条目才可以单独修改章节进度",
                     cancelText = null
                 )
                 return@setOnDebouncedChildClickListener
