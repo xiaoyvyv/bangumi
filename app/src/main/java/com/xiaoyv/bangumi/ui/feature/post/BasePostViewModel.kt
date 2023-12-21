@@ -73,7 +73,7 @@ open class BasePostViewModel : BaseViewModel() {
                         throw IllegalArgumentException("请选择小于 5M 的图片")
                     }
 
-                    if (ConfigHelper.isImageCompress()) {
+                    if (ConfigHelper.isImageCompress) {
                         debugLog { "压缩图片：$file" }
 
                         // 压缩图片

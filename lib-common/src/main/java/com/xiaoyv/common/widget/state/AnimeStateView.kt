@@ -64,8 +64,8 @@ class AnimeStateView @JvmOverloads constructor(
         loadingBias: Float = 0.5f,
         showContentDelay: Long? = null,
         crossinline canShowLoading: () -> Boolean = { true },
+        crossinline canShowTip: () -> Boolean = { true },
         crossinline canShowContent: () -> Boolean = { true },
-        crossinline doOnShowContent: () -> Unit = {},
     ) {
         loadingViewState.observe(lifecycleOwner) {
             when (it.type) {
@@ -74,18 +74,16 @@ class AnimeStateView @JvmOverloads constructor(
                 }
 
                 StateViewLiveData.StateType.STATE_TIPS -> {
-                    showTip(it.tipImage, it.tipMsg)
+                    if (canShowTip()) showTip(it.tipImage, it.tipMsg)
                 }
 
                 StateViewLiveData.StateType.STATE_HIDE -> {
                     if (showContentDelay == null) {
                         if (canShowContent()) showContent()
-                        doOnShowContent()
                     } else {
                         lifecycleOwner.launchUI {
                             delay(showContentDelay)
                             if (canShowContent()) showContent()
-                            doOnShowContent()
                         }
                     }
                 }

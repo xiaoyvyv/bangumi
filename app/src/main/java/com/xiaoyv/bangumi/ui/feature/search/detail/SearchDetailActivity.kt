@@ -151,7 +151,8 @@ class SearchDetailActivity :
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing }
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing },
+            canShowTip = { viewModel.isRefresh }
         )
 
         viewModel.currentSearchItem.observe(this) {

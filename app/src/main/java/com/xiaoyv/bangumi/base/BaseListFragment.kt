@@ -96,7 +96,8 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
             lifecycleOwner = this,
             loadingBias = loadingBias,
             loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() }
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() },
+            canShowTip = { viewModel.isRefresh }
         )
 
         viewModel.onListLiveData.observe(this) {

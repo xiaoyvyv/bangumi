@@ -113,7 +113,8 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
             lifecycleOwner = this,
             loadingBias = 0.3f,
             loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing }
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing },
+            canShowTip = { viewModel.isRefresh }
         )
 
         viewModel.onListLiveData.observe(this) {

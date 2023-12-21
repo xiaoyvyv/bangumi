@@ -2,6 +2,7 @@ package com.xiaoyv.common.helper
 
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.SPStaticUtils
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.xiaoyv.common.config.annotation.TimelinePageType
 
 /**
@@ -17,6 +18,7 @@ object ConfigHelper {
     private const val KEY_ROBOT_VOICE_DISABLE = "robot-voice-disable"
     private const val KEY_IMAGE_ANIMATION = "image-animation"
     private const val KEY_IMAGE_COMPRESS = "image-compress"
+    private const val KEY_GRID_ANIMATION = "grid-animation"
     private const val KEY_TIMELINE_TYPE = "timeline"
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -33,37 +35,58 @@ object ConfigHelper {
                 SPStaticUtils.getString(KEY_BAIDU_TRANSLATE_APP_SECRET).orEmpty()
     }
 
-    fun isRobotDisable(): Boolean {
-        return SPStaticUtils.getBoolean(KEY_ROBOT_DISABLE, true)
+    /**
+     * 配置条目加载动画
+     */
+    fun configAdapterAnimation(adapter: BaseQuickAdapter<*, *>) {
+        if (isAdapterAnimation.not()) return
+        adapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
     }
 
-    fun setRobotDisable(disable: Boolean) {
-        return SPStaticUtils.put(KEY_ROBOT_DISABLE, disable)
-    }
+    /**
+     * Robot 是否关闭
+     */
+    var isRobotDisable: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_ROBOT_DISABLE, true)
+        set(value) {
+            SPStaticUtils.put(KEY_ROBOT_DISABLE, value)
+        }
 
-    fun isRobotVoiceDisable(): Boolean {
-        return SPStaticUtils.getBoolean(KEY_ROBOT_VOICE_DISABLE, true)
-    }
+    /**
+     * Robot 语音是否关闭
+     */
+    var isRobotVoiceDisable: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_ROBOT_VOICE_DISABLE, true)
+        set(value) {
+            SPStaticUtils.put(KEY_ROBOT_VOICE_DISABLE, value)
+        }
 
-    fun setRobotVoiceDisable(disable: Boolean) {
-        return SPStaticUtils.put(KEY_ROBOT_VOICE_DISABLE, disable)
-    }
+    /**
+     * 上传开启图片加载动画
+     */
+    var isImageAnimation: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_IMAGE_ANIMATION, true)
+        set(value) {
+            SPStaticUtils.put(KEY_IMAGE_ANIMATION, value)
+        }
 
-    fun isImageAnimation(): Boolean {
-        return SPStaticUtils.getBoolean(KEY_IMAGE_ANIMATION, true)
-    }
+    /**
+     * 条目宫格类型是否加载动画
+     */
+    var isAdapterAnimation: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_GRID_ANIMATION, true)
+        set(value) {
+            SPStaticUtils.put(KEY_GRID_ANIMATION, value)
+        }
 
-    fun setImageAnimation(enable: Boolean) {
-        return SPStaticUtils.put(KEY_IMAGE_ANIMATION, enable)
-    }
-
-    fun isImageCompress(): Boolean {
-        return SPStaticUtils.getBoolean(KEY_IMAGE_COMPRESS, true)
-    }
-
-    fun setImageCompress(enable: Boolean) {
-        return SPStaticUtils.put(KEY_IMAGE_COMPRESS, enable)
-    }
+    /**
+     * 上传是否压缩图片
+     */
+    var isImageCompress: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_IMAGE_COMPRESS, true)
+        set(value) {
+            SPStaticUtils.put(KEY_IMAGE_COMPRESS, value)
+        }
 
     /**
      * 时间线默认展示好友还是全部

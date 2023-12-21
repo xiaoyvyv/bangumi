@@ -23,7 +23,7 @@ class MonoHeaderBinder :
     ) {
         item ?: return
         (holder.itemView as AnimeSectionView).apply {
-            title = item.entity.toString()
+            title = item.title
         }
     }
 

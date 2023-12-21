@@ -6,7 +6,7 @@ import com.xiaoyv.common.helper.ConfigHelper
 class LAppWavFileHandler(private val filePath: String) : Thread() {
 
     override fun run() {
-        if (ConfigHelper.isRobotVoiceDisable()) return
+        if (ConfigHelper.isRobotVoiceDisable) return
 
         runCatching {
             AudioPlayer.instance

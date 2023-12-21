@@ -2,6 +2,7 @@
 
 package com.xiaoyv.bangumi.ui.rakuen.page
 
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.blankj.utilcode.util.SpanUtils
@@ -25,7 +26,7 @@ class RakuenPageAdapter : BaseQuickDiffBindingAdapter<SuperTopicEntity,
         FragmentSuperPageItemBinding>(SuperTopicDiffCallback) {
 
     override fun BaseQuickBindingHolder<FragmentSuperPageItemBinding>.converted(item: SuperTopicEntity) {
-        binding.ivAvatar.loadImageAnimate(item.avatarUrl)
+        binding.ivAvatar.loadImageAnimate(item.avatarUrl, cropType = ImageView.ScaleType.FIT_START)
         binding.tvAttach.text = item.attachTitle
         binding.tvTime.text = item.time
         binding.ivAction.isVisible = item.canShowActionMenu
@@ -42,14 +43,14 @@ class RakuenPageAdapter : BaseQuickDiffBindingAdapter<SuperTopicEntity,
     object SuperTopicDiffCallback : DiffUtil.ItemCallback<SuperTopicEntity>() {
         override fun areItemsTheSame(
             oldItem: SuperTopicEntity,
-            newItem: SuperTopicEntity
+            newItem: SuperTopicEntity,
         ): Boolean {
             return oldItem.userName == newItem.userName && oldItem.title == newItem.title
         }
 
         override fun areContentsTheSame(
             oldItem: SuperTopicEntity,
-            newItem: SuperTopicEntity
+            newItem: SuperTopicEntity,
         ): Boolean {
             return oldItem == newItem
         }

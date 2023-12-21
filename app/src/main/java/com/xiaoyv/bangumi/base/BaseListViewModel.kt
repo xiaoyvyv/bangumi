@@ -8,7 +8,10 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.widget.kts.copyAddAll
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Class: [BaseListViewModel]
@@ -17,10 +20,10 @@ import kotlinx.coroutines.withContext
  * @since 11/29/23
  */
 abstract class BaseListViewModel<T> : BaseViewModel() {
+    private var loadJob: Job? = null
+
     internal val onListLiveData = MutableLiveData<List<T>?>()
-
     internal var loadingMoreState: LoadState = LoadState.None
-
     internal var current = 1
 
     internal val isRefresh: Boolean
@@ -40,10 +43,15 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     private fun loadListData() {
-        launchUI(
+        loadJob?.cancel()
+        loadJob = launchUI(
             stateView = loadingViewState,
             error = {
+                loadJob = null
+
                 it.printStackTrace()
+                if (it is CancellationException) return@launchUI
+
                 if (isRefresh) {
                     loadingMoreState = LoadState.None
                     onListLiveData.value = null
@@ -61,6 +69,8 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
                     }
                 }
 
+                ensureActive()
+
                 if (isRefresh) {
                     onListLiveData.value = responseList
                 } else {
@@ -72,6 +82,8 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
                 } else {
                     LoadState.NotLoading(responseList.isEmpty())
                 }
+
+                loadJob = null
             }
         )
     }

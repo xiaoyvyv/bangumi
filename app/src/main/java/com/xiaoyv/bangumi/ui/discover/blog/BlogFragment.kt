@@ -114,6 +114,7 @@ class BlogFragment : BaseViewModelFragment<FragmentBlogBinding, BlogViewModel>()
             loadingBias = if (viewModel.requireLogin) 0.3f else 0.5f,
             loadingViewState = viewModel.loadingViewState,
             canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing },
+            canShowTip = { viewModel.isRefresh }
         )
 
         viewModel.onListLiveData.observe(this) {

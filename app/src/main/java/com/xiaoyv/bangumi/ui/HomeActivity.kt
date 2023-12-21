@@ -41,9 +41,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     }
 
     override fun initData() {
-        if (ConfigHelper.isRobotDisable()) {
-            robot.disable()
-        }
+        if (ConfigHelper.isRobotDisable) robot.disable()
 
         // 更新检测
         UpdateHelper.checkUpdate(this, false)

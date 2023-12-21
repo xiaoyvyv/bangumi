@@ -81,6 +81,7 @@ class MagiQuestionFragment :
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
             canShowLoading = { !binding.srlRefresh.isRefreshing },
+            canShowTip = { viewModel.isRefresh }
         )
 
         viewModel.onMagiQuestionLiveData.observe(this) {

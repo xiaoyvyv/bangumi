@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.StringUtils
 import com.chad.library.adapter.base.BaseDifferAdapter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.xiaoyv.bangumi.databinding.ActivityListBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
@@ -37,7 +39,9 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     abstract val isOnlyOnePage: Boolean
 
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
-        onCreateContentAdapter()
+        onCreateContentAdapter().apply {
+            ConfigHelper.configAdapterAnimation(this)
+        }
     }
 
     internal open val needResetPositionWhenRefresh = true
@@ -49,7 +53,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         get() = binding.rvContent.layoutManager as? LinearLayoutManager
 
 
-    private val adapterHelper by lazy {
+    internal val adapterHelper by lazy {
         QuickAdapterHelper.Builder(contentAdapter)
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
                 override fun isAllowLoading(): Boolean {
@@ -74,6 +78,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         binding.toolbar.initNavBack(this)
         binding.toolbar.title = toolbarTitle
 
+        binding.rvContent.itemAnimator = null
         binding.rvContent.setHasFixedSize(hasFixedSize)
         binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(getAttrColor(GoogleAttr.colorPrimary))
@@ -120,7 +125,8 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         binding.stateView.initObserver(
             lifecycleOwner = this,
             loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() }
+            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() },
+            canShowTip = { viewModel.isRefresh }
         )
 
         viewModel.onListLiveData.observe(this) {

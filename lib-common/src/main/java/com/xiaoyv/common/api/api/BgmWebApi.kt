@@ -692,6 +692,14 @@ interface BgmWebApi {
 
     @GET("/user/{userId}/mono")
     suspend fun queryUserMono(@Path("userId") userId: String): Document
+
+    @GET("/{monoType}")
+    suspend fun queryMonoList(
+        @Path("monoType", encoded = true) monoType: String,
+        @Query("orderby") orderByType: String?,
+        @Query("page") page: Int,
+        @QueryMap param: Map<String, String>,
+    ): Document
 }
 
 

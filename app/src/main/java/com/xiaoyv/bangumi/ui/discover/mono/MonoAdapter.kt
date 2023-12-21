@@ -4,6 +4,7 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.ui.discover.mono.binder.MonoGridBinder
 import com.xiaoyv.bangumi.ui.discover.mono.binder.MonoHeaderBinder
 import com.xiaoyv.common.config.bean.AdapterTypeItem
+import com.xiaoyv.common.helper.ConfigHelper
 
 /**
  * Class: [MonoAdapter]
@@ -19,6 +20,8 @@ class MonoAdapter : BaseMultiItemAdapter<AdapterTypeItem>() {
             .onItemViewType { position, list ->
                 list[position].type
             }
+
+        ConfigHelper.configAdapterAnimation(this)
     }
 
     companion object {

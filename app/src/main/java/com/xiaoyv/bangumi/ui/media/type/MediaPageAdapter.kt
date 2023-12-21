@@ -9,6 +9,7 @@ import androidx.core.view.updateLayoutParams
 import com.xiaoyv.bangumi.databinding.FragmentMediaPageItemBinding
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.IMAGE_HOLDER_1X1
 import com.xiaoyv.common.kts.IMAGE_HOLDER_3X4
@@ -25,6 +26,10 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 class MediaPageAdapter(@MediaType private val mediaType: String) :
     BaseQuickDiffBindingAdapter<BrowserEntity.Item,
             FragmentMediaPageItemBinding>(IdDiffItemCallback()) {
+    init {
+        ConfigHelper.configAdapterAnimation(this)
+    }
+
     private val isMusic get() = mediaType == MediaType.TYPE_MUSIC
 
     override fun BaseQuickBindingHolder<FragmentMediaPageItemBinding>.converted(item: BrowserEntity.Item) {

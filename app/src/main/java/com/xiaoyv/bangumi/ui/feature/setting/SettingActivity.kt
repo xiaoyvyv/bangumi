@@ -97,20 +97,12 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingImageAnimation.setOnFastLimitClickListener {
-            if (ConfigHelper.isImageAnimation()) {
-                ConfigHelper.setImageAnimation(false)
-            } else {
-                ConfigHelper.setImageAnimation(true)
-            }
+            ConfigHelper.isImageAnimation = !ConfigHelper.isImageAnimation
             refresh()
         }
 
         binding.settingImageCompress.setOnFastLimitClickListener {
-            if (ConfigHelper.isImageCompress()) {
-                ConfigHelper.setImageCompress(false)
-            } else {
-                ConfigHelper.setImageCompress(true)
-            }
+            ConfigHelper.isImageCompress = !ConfigHelper.isImageCompress
             refresh()
         }
 
@@ -184,9 +176,9 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
 
         binding.settingRobot.title = "Bangumi 娘"
         binding.settingImageAnimation.title = "图片渐变动画"
-        binding.settingImageAnimation.desc = if (ConfigHelper.isImageAnimation()) "开启" else "关闭"
+        binding.settingImageAnimation.desc = if (ConfigHelper.isImageAnimation) "开启" else "关闭"
         binding.settingImageCompress.title = "图片上传压缩"
-        binding.settingImageCompress.desc = if (ConfigHelper.isImageCompress()) "开启" else "关闭"
+        binding.settingImageCompress.desc = if (ConfigHelper.isImageCompress) "开启" else "关闭"
         binding.settingFeedback.title = "反馈 BUG"
         binding.settingFeedback.desc = "建议或反馈"
         binding.settingDonation.title = "投食🍚"

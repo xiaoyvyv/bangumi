@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiaoyv.common.widget.text.AnimeTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tv_option_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/ui_size_6"
+    android:layout_marginVertical="@dimen/ui_size_6"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurfaceContainer"
+    android:gravity="center"
+    android:paddingHorizontal="@dimen/ui_size_6"
+    android:paddingVertical="@dimen/ui_size_6"
+    android:text="@string/calendar_today_title"
+    android:textAppearance="?attr/textAppearanceBodyLarge"
+    android:textColor="?attr/colorOnSurface"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />

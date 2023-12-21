@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.ui.discover.group.list.GroupListActivity
 import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
 import com.xiaoyv.bangumi.ui.discover.index.detail.IndexDetailActivity
 import com.xiaoyv.bangumi.ui.discover.index.list.IndexListActivity
+import com.xiaoyv.bangumi.ui.discover.mono.list.MonoListActivity
 import com.xiaoyv.bangumi.ui.feature.almanac.AlmanacActivity
 import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
@@ -50,6 +51,7 @@ import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.annotation.MonoOrderByType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.config.bean.SearchItem
@@ -454,5 +456,17 @@ object RouteHelper {
 
     fun jumpMediaPreview(photoId: String) {
         AnimeGalleryActivity::class.open(bundleOf(NavKey.KEY_STRING to photoId))
+    }
+
+    fun jumpMonoList(
+        isCharacter: Boolean,
+        orderByType: String = MonoOrderByType.TYPE_COLLECT,
+    ) {
+        MonoListActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to orderByType,
+                NavKey.KEY_BOOLEAN to isCharacter,
+            )
+        )
     }
 }

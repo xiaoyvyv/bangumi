@@ -28,36 +28,36 @@ class RobotConfigActivity : BaseBindingActivity<ActivitySettingRobotBinding>() {
 
     override fun initListener() {
         binding.settingEnable.setOnFastLimitClickListener {
-            if (ConfigHelper.isRobotDisable()) {
+            if (ConfigHelper.isRobotDisable) {
                 showConfirmDialog(
                     message = "是否开启首页 Live2D 班固米娘？\n\n重启后生效",
                     onConfirmClick = {
-                        ConfigHelper.setRobotDisable(false)
+                        ConfigHelper.isRobotDisable = false
                         refresh()
                     })
             } else {
                 showConfirmDialog(
                     message = "是否关闭首页 Live2D 班固米娘？\n\n重启后生效",
                     onConfirmClick = {
-                        ConfigHelper.setRobotDisable(true)
+                        ConfigHelper.isRobotDisable = true
                         refresh()
                     })
             }
         }
 
         binding.settingVoice.setOnFastLimitClickListener {
-            if (ConfigHelper.isRobotVoiceDisable()) {
+            if (ConfigHelper.isRobotVoiceDisable) {
                 showConfirmDialog(
                     message = "是否开启首页 Live2D 班固米娘的触摸语音彩蛋？\n\n重启后生效",
                     onConfirmClick = {
-                        ConfigHelper.setRobotVoiceDisable(false)
+                        ConfigHelper.isRobotVoiceDisable = false
                         refresh()
                     })
             } else {
                 showConfirmDialog(
                     message = "是否关闭首页 Live2D 班固米娘触摸语音彩蛋？\n\n重启后生效",
                     onConfirmClick = {
-                        ConfigHelper.setRobotVoiceDisable(true)
+                        ConfigHelper.isRobotVoiceDisable = true
                         refresh()
                     })
             }
@@ -68,8 +68,8 @@ class RobotConfigActivity : BaseBindingActivity<ActivitySettingRobotBinding>() {
      * 刷新 UI
      */
     private fun refresh() {
-        binding.settingEnable.desc = if (ConfigHelper.isRobotDisable()) "关闭" else "开启"
-        binding.settingVoice.desc = if (ConfigHelper.isRobotVoiceDisable()) "关闭" else "开启"
+        binding.settingEnable.desc = if (ConfigHelper.isRobotDisable) "关闭" else "开启"
+        binding.settingVoice.desc = if (ConfigHelper.isRobotVoiceDisable) "关闭" else "开启"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

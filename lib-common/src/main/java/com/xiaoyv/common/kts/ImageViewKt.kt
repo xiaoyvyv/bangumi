@@ -15,7 +15,8 @@ import com.xiaoyv.widget.kts.listener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-const val IMAGE_HOLDER_1X1 = 1
+const val IMAGE_HOLDER_NONE = 0
+const val IMAGE_HOLDER_1X1 = 11
 const val IMAGE_HOLDER_3X4 = 43
 
 /**
@@ -34,7 +35,7 @@ val topCropTransformation by lazy {
 inline fun ImageView.loadImageAnimate(
     model: Any?,
     cropType: ScaleType = ScaleType.CENTER_CROP,
-    holderType: Int = IMAGE_HOLDER_3X4,
+    holderType: Int = IMAGE_HOLDER_NONE,
     crossinline onReady: (Drawable) -> Unit = {},
     crossinline onFail: (Any?) -> Unit = {},
 ) {
@@ -62,7 +63,7 @@ inline fun ImageView.loadImageAnimate(
             }
         }
         .let {
-            if (ConfigHelper.isImageAnimation()) it.transition(DrawableTransitionOptions.withCrossFade())
+            if (ConfigHelper.isImageAnimation) it.transition(DrawableTransitionOptions.withCrossFade())
             else it
         }
         .into(this)

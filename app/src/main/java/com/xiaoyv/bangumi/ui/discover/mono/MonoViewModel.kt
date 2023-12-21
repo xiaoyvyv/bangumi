@@ -44,7 +44,7 @@ class MonoViewModel : BaseViewModel() {
                                 items.add(
                                     AdapterTypeItem(
                                         title = grid.title,
-                                        entity = grid.title,
+                                        entity = grid.items.first().type,
                                         type = MonoAdapter.TYPE_TITLE
                                     )
                                 )
