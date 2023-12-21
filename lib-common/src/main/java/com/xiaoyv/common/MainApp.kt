@@ -10,10 +10,13 @@ import androidx.work.WorkManager
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
 import com.xiaoyv.blueprint.BluePrint
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.work.IdleWorker
+import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.widget.emoji.UiFaceManager
 import java.util.concurrent.TimeUnit
 
@@ -38,7 +41,19 @@ class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        DynamicColors.applyToActivitiesIfAvailable(this)
+
+        // 跟随壁纸主题
+        if (ConfigHelper.isDynamicTheme) {
+            DynamicColors.applyToActivitiesIfAvailable(this)
+        }
+        // 固定主题色
+        else {
+            DynamicColors.applyToActivitiesIfAvailable(
+                this, DynamicColorsOptions.Builder()
+                    .setContentBasedSource(getColor(CommonColor.seed))
+                    .build()
+            )
+        }
 
         currentApplication = this
         BluePrint.init(this, false)

@@ -36,6 +36,7 @@ import com.xiaoyv.bangumi.ui.feature.setting.block.BlockActivity
 import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
 import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.translate.TranslateConfigActivity
+import com.xiaoyv.bangumi.ui.feature.setting.ui.UiConfigActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
@@ -448,6 +449,9 @@ object RouteHelper {
 
     fun jumpRobotConfig() {
         RobotConfigActivity::class.open()
+    }
+    fun jumpUiConfig() {
+        UiConfigActivity::class.open()
     }
 
     fun jumpAnimePictures() {

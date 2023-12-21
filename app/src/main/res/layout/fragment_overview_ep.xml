@@ -54,4 +54,16 @@
         app:layout_constraintTop_toTopOf="@+id/pb_media"
         tools:text="我的完成度：0/22" />
 
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_add"
+        android:layout_width="@dimen/ui_size_24"
+        android:layout_height="@dimen/ui_size_24"
+        android:layout_marginStart="@dimen/ui_size_6"
+        app:contentPadding="@dimen/ui_size_4"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_ep_my_progress"
+        app:layout_constraintStart_toEndOf="@+id/tv_ep_my_progress"
+        app:layout_constraintTop_toTopOf="@+id/tv_ep_my_progress"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="?attr/colorPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

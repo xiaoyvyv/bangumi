@@ -13,6 +13,7 @@ import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.config.bean.EpSaveProgress
 import com.xiaoyv.common.config.bean.SampleImageEntity
+import com.xiaoyv.common.helper.UserHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -183,5 +184,24 @@ class OverviewViewModel : BaseViewModel() {
         mediaDetailLiveData.value?.collectState = it.collectState
         mediaDetailLiveData.value?.totalProgress = it.totalProgress
         return mediaDetailLiveData.value
+    }
+
+    /**
+     * 进度加一
+     */
+    fun progressIncrease(progress: Int) {
+        launchUI(
+            state = loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+            },
+            block = {
+                withContext(Dispatchers.IO) {
+                    BgmApiManager.bgmWebApi.updateMediaProgress(mediaId, watch = progress.toString())
+                }
+
+                UserHelper.notifyActionChange(BgmPathType.TYPE_EP)
+            }
+        )
     }
 }

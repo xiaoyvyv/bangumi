@@ -81,7 +81,6 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onPersonLiveData.observe(this) {
             val entity = it ?: return@observe
-            debugLog { "Person: " + entity.toJson(true) }
 
             binding.ivCover.loadImageBlurBackground(entity.poster)
             binding.ivCover.loadImageAnimate(entity.poster, cropType = ImageView.ScaleType.FIT_START)

@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewEpBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewEpItemBinding
-import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
@@ -52,12 +51,11 @@ class OverviewEpBinder(
         item: AdapterTypeItem?,
     ) {
         item ?: return
-        holder.binding.tvEpMyProgress.text = String.format("%s/10", 1)
         holder.binding.tvTitleEp.title = item.title
 
         item.entity.forceCast<MediaDetailEntity>().apply {
             holder.binding.pbMedia.max = totalProgress
-            holder.binding.pbMedia.progress = myProgress
+            holder.binding.pbMedia.setProgress(myProgress, true)
 
             // 进度文字颜色
             if (totalProgress == 0 || myProgress < totalProgress / 2) {
@@ -72,9 +70,15 @@ class OverviewEpBinder(
 
             holder.binding.tvEpMyProgress.isVisible =
                 (collectState.interest != InterestType.TYPE_UNKNOWN && collectState.interest != InterestType.TYPE_WISH)
+            holder.binding.ivAdd.isVisible =
+                holder.binding.tvEpMyProgress.isVisible && myProgress != totalProgress
+
             holder.binding.tvEpMyProgress.text =
                 String.format("我的完成度：%d/%d", myProgress, totalProgress)
+
+            // 设置进度格子
             itemAdapter.submitList(progressList.subListLimit(subSize))
+            itemAdapter.notifyItemRangeChanged(0, itemAdapter.itemCount)
         }
     }
 

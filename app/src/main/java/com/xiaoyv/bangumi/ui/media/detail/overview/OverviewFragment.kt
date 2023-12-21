@@ -22,8 +22,9 @@ import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
-import com.xiaoyv.widget.kts.toast
+import com.xiaoyv.widget.dialog.UiDialog
 
 /**
  * Class: [OverviewFragment]
@@ -95,20 +96,23 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     override fun initListener() {
         // 章节完成度点击
         overviewAdapter.setOnDebouncedChildClickListener(R.id.tv_ep_my_progress) { item ->
-            val position = overviewAdapter.itemIndexOfFirst(item)
             val entity = viewModel.mediaDetailLiveData.value
             val saveProgress = viewModel.requireProgress
 
             // 修改进度面板
             if (entity != null) {
                 MediaEpActionDialog.show(childFragmentManager, saveProgress) { progress ->
-                    // 刷新章节的进度 Item
-                    item.entity = entity.apply {
-                        myProgress = progress
-                    }
-                    overviewAdapter[position] = item
+                    overviewAdapter.refreshEpProgress(entity, progress)
                 }
             }
+        }
+
+        // 进度加 1
+        overviewAdapter.setOnDebouncedChildClickListener(R.id.iv_add) {
+            val entity = viewModel.mediaDetailLiveData.value
+            val newProgress = viewModel.requireProgress.myProgress + 1
+            overviewAdapter.refreshEpProgress(entity, newProgress)
+            viewModel.progressIncrease(newProgress)
         }
 
         overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
@@ -211,6 +215,10 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         val showImageUrl = photo.image?.large?.url.orEmpty()
         val totalImageUrls = photos.map { it.image?.large?.url.orEmpty() }
         RouteHelper.jumpPreviewImage(showImageUrl, totalImageUrls)
+    }
+
+    override fun createLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(requireActivity())
     }
 
     companion object {

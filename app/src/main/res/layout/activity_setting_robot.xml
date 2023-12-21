@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:ignore="HardcodedText">
 
     <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
         android:id="@+id/app_bar"
@@ -43,7 +45,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:text="班固米娘" />
 
         <com.xiaoyv.common.widget.setting.SettingItemView
             android:id="@+id/setting_voice"
@@ -51,6 +54,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:text="触摸语音" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

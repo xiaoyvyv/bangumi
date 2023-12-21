@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:ignore="HardcodedText">
+
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="UI 配置" />
+
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:paddingHorizontal="@dimen/ui_layout_margin"
+                android:paddingVertical="@dimen/ui_size_6"
+                android:text="UI 配置"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_image_animation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="图片渐变动画" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_image_compress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="图片上传压缩" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_grid_animation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="宫格条目动画" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_dynamic_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="动态主题" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

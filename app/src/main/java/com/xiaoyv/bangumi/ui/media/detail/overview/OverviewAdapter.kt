@@ -81,6 +81,21 @@ class OverviewAdapter(
         }
     }
 
+    fun refreshEpProgress(media: MediaDetailEntity? = null, progress: Int) {
+        media ?: return
+        val item = items.find { it.type == TYPE_EP } ?: return
+        val targetIndex = itemIndexOfFirst(item)
+        if (targetIndex != -1) {
+            item.entity = media.apply {
+                myProgress = progress
+                progressList.filterNot { it.isNotEp }.forEachIndexed { index, mediaProgress ->
+                    mediaProgress.isWatched = (index + 1) <= progress
+                }
+            }
+            set(targetIndex, item)
+        }
+    }
+
     companion object {
         const val TYPE_SAVE = 1
         const val TYPE_EP = 2

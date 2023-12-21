@@ -11,14 +11,20 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class RecyclerItemTouchedListener(val isUserInputEnabled: (Boolean) -> Unit) :
     RecyclerView.OnItemTouchListener {
+    private val resetHandler = {
+        isUserInputEnabled(true)
+    }
+
     override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
         when (e.action) {
             MotionEvent.ACTION_MOVE -> {
+                rv.removeCallbacks(resetHandler)
                 isUserInputEnabled(false)
             }
 
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                isUserInputEnabled(true)
+                rv.removeCallbacks(resetHandler)
+                rv.postDelayed(resetHandler, 300)
             }
         }
         return false
