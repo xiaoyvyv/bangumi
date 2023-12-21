@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
@@ -98,7 +99,8 @@ data class MediaDetailEntity(
         @SerializedName("id") var id: String = "",
         @SerializedName("titleCn") var titleCn: String = "",
         @SerializedName("titleNative") var titleNative: String = "",
-        @SerializedName("type") var type: String = "",
+        @SerializedName("type") @MediaType var type: String = MediaType.TYPE_UNKNOWN,
+        @SerializedName("collectType") @InterestType var collectType: String = InterestType.TYPE_UNKNOWN,
         @SerializedName("characterJobs") var characterJobs: List<String> = emptyList(),
     ) : Parcelable
 

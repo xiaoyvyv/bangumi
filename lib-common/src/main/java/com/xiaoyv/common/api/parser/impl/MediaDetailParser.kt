@@ -40,12 +40,27 @@ fun Document.parserMediaChapters(): List<MediaChapterEntity> {
         entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
         entity.titleNative = it.select("h6 a").text()
         entity.isAired = it.select(".Air").isNotEmpty()
+        entity.isAiring = it.select(".Today").isNotEmpty()
         entity.airedStateText = it.select(".epAirStatus").attr("title")
-        entity.collectType = when {
-            it.select(".statusWatched").isNotEmpty() -> InterestType.TYPE_COLLECT
-            it.select(".statusQueue").isNotEmpty() -> InterestType.TYPE_WISH
-            it.select(".statusDrop").isNotEmpty() -> InterestType.TYPE_DROPPED
-            else -> InterestType.TYPE_UNKNOWN
+        when {
+            it.select(".statusWatched").isNotEmpty() -> {
+                entity.collectType = InterestType.TYPE_COLLECT
+                entity.collectStateText = it.select(".statusWatched").text()
+            }
+
+            it.select(".statusQueue").isNotEmpty() -> {
+                entity.collectType = InterestType.TYPE_WISH
+                entity.collectStateText = it.select(".statusQueue").text()
+            }
+
+            it.select(".statusDrop").isNotEmpty() -> {
+                entity.collectType = InterestType.TYPE_DROPPED
+                entity.collectStateText = it.select(".statusDrop").text()
+            }
+
+            else -> {
+                entity.collectType = InterestType.TYPE_UNKNOWN
+            }
         }
 
         useNotNull(it.select("small")) {

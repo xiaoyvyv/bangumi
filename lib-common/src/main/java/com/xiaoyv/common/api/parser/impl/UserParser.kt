@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
@@ -58,11 +59,11 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
             synchronize
         }
 
-        entity.anime = select("#anime").parserUserSaveOverview()
-        entity.book = select("#book").parserUserSaveOverview()
-        entity.music = select("#music").parserUserSaveOverview()
-        entity.game = select("#game").parserUserSaveOverview()
-        entity.real = select("#real").parserUserSaveOverview()
+        entity.anime = select("#anime").parserUserSaveOverview(MediaType.TYPE_ANIME)
+        entity.book = select("#book").parserUserSaveOverview(MediaType.TYPE_BOOK)
+        entity.music = select("#music").parserUserSaveOverview(MediaType.TYPE_MUSIC)
+        entity.game = select("#game").parserUserSaveOverview(MediaType.TYPE_GAME)
+        entity.real = select("#real").parserUserSaveOverview(MediaType.TYPE_REAL)
         entity.blog = select("#blog").firstOrNull()?.parserMediaReviews().orEmpty()
     }
 
@@ -108,7 +109,7 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
 }
 
 
-fun Elements.parserUserSaveOverview(): UserDetailEntity.SaveOverview {
+fun Elements.parserUserSaveOverview(@MediaType mediaType: String): UserDetailEntity.SaveOverview {
     val overview = UserDetailEntity.SaveOverview()
     val horizontalOptions = select(".horizontalOptions li")
     if (horizontalOptions.isEmpty()) return overview
@@ -122,7 +123,8 @@ fun Elements.parserUserSaveOverview(): UserDetailEntity.SaveOverview {
             relative.titleNative = item.select(".name").text()
             relative.id = item.hrefId()
             relative.cover = item.select("img").attr("src").optImageUrl(false)
-            relative.type = InterestType.TYPE_DO
+            relative.collectType = InterestType.TYPE_DO
+            relative.type = mediaType
             relative
         }
     }
@@ -133,7 +135,8 @@ fun Elements.parserUserSaveOverview(): UserDetailEntity.SaveOverview {
             relative.titleNative = item.select(".name").text()
             relative.id = item.hrefId()
             relative.cover = item.select("img").attr("src").optImageUrl(false)
-            relative.type = InterestType.TYPE_COLLECT
+            relative.collectType = InterestType.TYPE_COLLECT
+            relative.type = mediaType
             relative
         }
     }

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    tools:ignore="HardcodedText">
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/list_type"
@@ -85,28 +86,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:textEndPadding="@dimen/ui_size_4"
         app:textStartPadding="@dimen/ui_size_4" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srl_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_size_0"
-        android:background="?attr/colorSurface"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_type">
-
-        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-            android:id="@+id/rv_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
-            tools:itemCount="10"
-            tools:listitem="@layout/fragment_save_list_item" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <com.xiaoyv.common.widget.state.AnimeStateView
-        android:id="@+id/state_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

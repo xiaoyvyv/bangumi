@@ -25,5 +25,17 @@ annotation class MediaType {
         const val TYPE_MUSIC = "music"
         const val TYPE_GAME = "game"
         const val TYPE_REAL = "real"
+
+        fun action(@MediaType mediaType: String): String {
+            return when (mediaType) {
+                TYPE_UNKNOWN -> ""
+                TYPE_ANIME -> "看"
+                TYPE_BOOK -> "读"
+                TYPE_MUSIC -> "听"
+                TYPE_GAME -> "玩"
+                TYPE_REAL -> "看"
+                else -> ""
+            }
+        }
     }
 }

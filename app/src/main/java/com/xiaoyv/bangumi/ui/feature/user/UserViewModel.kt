@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
  */
 class UserViewModel : BaseViewModel() {
     internal val onUserInfoLiveData = MutableLiveData<UserDetailEntity?>()
-    internal val onActionResult = MutableLiveData<Boolean>()
+    private val onActionResult = MutableLiveData<Boolean>()
 
     var userId: String = ""
 

@@ -46,7 +46,7 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, I
 
             holder.binding.tvSave.text = StringUtils.getString(
                 CommonString.media_save_tip,
-                InterestType.string(collectState.interest),
+                InterestType.string(collectState.interest, mediaType),
                 GlobalConfig.mediaTypeName(mediaType)
             )
             holder.binding.tvSave.setOnFastLimitClickListener {

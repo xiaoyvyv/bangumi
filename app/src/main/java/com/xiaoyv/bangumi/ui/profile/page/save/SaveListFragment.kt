@@ -1,25 +1,25 @@
 package com.xiaoyv.bangumi.ui.profile.page.save
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.bangumi.R
-import com.xiaoyv.bangumi.databinding.FragmentSaveListBinding
+import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.InterestCollectType
+import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.databinding.ViewSaveListFilterBinding
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.getAttrColor
 
 /**
  * Class: [SaveListFragment]
@@ -27,32 +27,20 @@ import com.xiaoyv.widget.kts.getAttrColor
  * @author why
  * @since 11/24/23
  */
-class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveListViewModel>() {
-
-    private val contentAdapter by lazy { SaveListAdapter() }
-
-    private val adapterHelper by lazy {
-        QuickAdapterHelper.Builder(contentAdapter)
-            .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
-                override fun isAllowLoading(): Boolean {
-                    return binding.srlRefresh.isRefreshing.not()
-                }
-
-                override fun onFailRetry() {
-                    viewModel.loadMore()
-                }
-
-                override fun onLoad() {
-                    viewModel.loadMore()
-                }
-            })
-            .build()
-    }
-
-    private val layoutManager: LinearLayoutManager?
-        get() = binding.rvContent.layoutManager as? LinearLayoutManager
-
+class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>() {
     private val mediaTypes get() = GlobalConfig.mediaTypes
+
+    private lateinit var filter: ViewSaveListFilterBinding
+
+    override val isOnlyOnePage: Boolean
+        get() = false
+
+    override val loadingBias: Float
+        get() = 0.3f
+
+    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<BrowserEntity.Item, *> {
+        return SaveListAdapter()
+    }
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.userId = arguments.getString(NavKey.KEY_STRING).orEmpty()
@@ -60,23 +48,24 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh { false }
-        binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
-    }
+        super.initView()
 
-    override fun initData() {
-        binding.rvContent.setHasFixedSize(true)
-        binding.rvContent.adapter = adapterHelper.adapter
-    }
+        // 过滤菜单
+        filter = ViewSaveListFilterBinding.inflate(layoutInflater, binding.flContainer, true)
+        filter.root.doOnPreDraw {
+            binding.rvContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = filter.root.height
+            }
+        }
 
-    override fun initListener() {
-        binding.listType.setOnCheckedStateChangeListener { _, ints ->
+        // 切换
+        filter.listType.setOnCheckedStateChangeListener { _, ints ->
             val type = when (ints.firstOrNull()) {
-                R.id.type_wish -> InterestCollectType.TYPE_WISH
-                R.id.type_collect -> InterestCollectType.TYPE_COLLECT
-                R.id.type_do -> InterestCollectType.TYPE_DO
-                R.id.type_on_hold -> InterestCollectType.TYPE_ON_HOLD
-                R.id.type_dropped -> InterestCollectType.TYPE_DROPPED
+                CommonId.type_wish -> InterestCollectType.TYPE_WISH
+                CommonId.type_collect -> InterestCollectType.TYPE_COLLECT
+                CommonId.type_do -> InterestCollectType.TYPE_DO
+                CommonId.type_on_hold -> InterestCollectType.TYPE_ON_HOLD
+                CommonId.type_dropped -> InterestCollectType.TYPE_DROPPED
                 else -> null
             }
 
@@ -86,47 +75,42 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
             }
         }
 
-        binding.chipMediaType.setOnFastLimitClickListener {
+        // 类别切换
+        filter.chipMediaType.setOnFastLimitClickListener {
             val item = mediaTypes.map { it.title }.toTypedArray()
             MaterialAlertDialogBuilder(hostActivity)
                 .setItems(item) { _, position ->
-                    binding.chipMediaType.text = mediaTypes[position].title
-                    viewModel.mediaType = mediaTypes[position].type
+                    val mediaType = mediaTypes[position].type
+                    filter.chipMediaType.text = mediaTypes[position].title
+
+                    // 设置文案
+                    filter.typeWish.text = InterestType.string(InterestType.TYPE_WISH, mediaType)
+                    filter.typeCollect.text =
+                        InterestType.string(InterestType.TYPE_COLLECT, mediaType)
+                    filter.typeDo.text = InterestType.string(InterestType.TYPE_DO, mediaType)
+                    filter.typeOnHold.text =
+                        InterestType.string(InterestType.TYPE_ON_HOLD, mediaType)
+                    filter.typeDropped.text =
+                        InterestType.string(InterestType.TYPE_DROPPED, mediaType)
+
+                    // 刷新
+                    viewModel.mediaType = mediaType
                     viewModel.refresh()
                 }
                 .create()
                 .show()
         }
+    }
 
-        binding.srlRefresh.setOnRefreshListener {
-            adapterHelper.trailingLoadState = LoadState.None
-            viewModel.refresh()
-        }
+    override fun initListener() {
+        super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_save) {
             RouteHelper.jumpMediaDetail(it.id)
         }
     }
 
-    override fun LifecycleOwner.initViewObserver() {
-        binding.stateView.initObserver(
-            lifecycleOwner = this,
-            loadingBias = 0.3f,
-            loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing },
-            canShowTip = { viewModel.isRefresh }
-        )
-
-        viewModel.onListLiveData.observe(this) {
-            contentAdapter.submitList(it.orEmpty()) {
-                if (viewModel.isRefresh) {
-                    layoutManager?.scrollToPositionWithOffset(0, 0)
-                }
-
-                adapterHelper.trailingLoadState = viewModel.loadingMoreState
-            }
-        }
-
+    override fun autoInitData() {
         // 嵌套在 Profile 页面的情况
         if (viewModel.requireLogin) {
             UserHelper.observeUserInfo(this) {
@@ -134,7 +118,7 @@ class SaveListFragment : BaseViewModelFragment<FragmentSaveListBinding, SaveList
                 viewModel.refresh()
             }
         } else {
-            viewModel.refresh()
+            super.autoInitData()
         }
     }
 

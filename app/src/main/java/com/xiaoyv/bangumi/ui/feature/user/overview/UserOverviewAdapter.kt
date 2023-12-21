@@ -43,7 +43,7 @@ class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
         override fun onBind(
             holder: BaseQuickBindingHolder<FragmentUserOverviewTitleBinding>,
             position: Int,
-            item: Any?
+            item: Any?,
         ) {
             val overview = item as? UserDetailEntity.SaveOverview
             holder.binding.tvTitle.text = overview?.title
@@ -52,7 +52,7 @@ class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
         override fun onCreate(
             context: Context,
             parent: ViewGroup,
-            viewType: Int
+            viewType: Int,
         ): BaseQuickBindingHolder<FragmentUserOverviewTitleBinding> {
             return BaseQuickBindingHolder(
                 FragmentUserOverviewTitleBinding.inflate(context.inflater, parent, false)
@@ -65,14 +65,14 @@ class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
     }
 
     /**
-     * 收藏的媒体表格
+     * 用户页面收藏的媒体表格
      */
     private class ItemGridBinder :
         OnMultiItemAdapterListener<Any, BaseQuickBindingHolder<FragmentUserOverviewItemBinding>> {
         override fun onBind(
             holder: BaseQuickBindingHolder<FragmentUserOverviewItemBinding>,
             position: Int,
-            item: Any?
+            item: Any?,
         ) {
             val relative = item as? MediaDetailEntity.MediaRelative ?: return
             if (relative.id.isBlank()) {
@@ -85,14 +85,13 @@ class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
                 holder.binding.ivCover.loadImageAnimate(relative.cover)
             }
 
-            @SuppressLint("WrongConstant")
-            holder.binding.tvTip.text = InterestType.string(relative.type)
+            holder.binding.tvTip.text = InterestType.string(relative.collectType, relative.type)
         }
 
         override fun onCreate(
             context: Context,
             parent: ViewGroup,
-            viewType: Int
+            viewType: Int,
         ): BaseQuickBindingHolder<FragmentUserOverviewItemBinding> {
             return BaseQuickBindingHolder(
                 FragmentUserOverviewItemBinding.inflate(context.inflater, parent, false)

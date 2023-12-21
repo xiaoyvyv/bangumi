@@ -15,6 +15,9 @@
     <color name="save_dropped">#F44336</color>
     <color name="save_dropped_text">@color/ui_white</color>
 
+    <color name="state_airing">#4CAF50</color>
+    <color name="state_airing_text">@color/ui_white</color>
+
     <color name="rank_bar_1">#4CAF50</color>
     <color name="rank_bar_1_alpha">#3F4CAF50</color>
     <color name="rank_bar_2">#999999</color>

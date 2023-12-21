@@ -23,6 +23,8 @@ data class MediaChapterEntity(
     var commentCount: Int = 0,
     var airedStateText: String = "",
     var isAired: Boolean = false,
+    var isAiring: Boolean = false,
     @InterestType
     var collectType: String = InterestType.TYPE_UNKNOWN,
+    var collectStateText: String = "",
 ) : Parcelable, IdEntity

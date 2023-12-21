@@ -26,11 +26,11 @@ annotation class InterestType {
         const val TYPE_ON_HOLD = "4"
         const val TYPE_DROPPED = "5"
 
-        fun string(@InterestType type: String): String {
+        fun string(@InterestType type: String, @MediaType mediaType: String): String {
             return when (type) {
-                TYPE_WISH -> "想看"
-                TYPE_COLLECT -> "看过"
-                TYPE_DO -> "在看"
+                TYPE_WISH -> String.format("想%s", MediaType.action(mediaType))
+                TYPE_COLLECT -> String.format("%s过", MediaType.action(mediaType))
+                TYPE_DO -> String.format("在%s", MediaType.action(mediaType))
                 TYPE_ON_HOLD -> "搁置"
                 TYPE_DROPPED -> "抛弃"
                 else -> ""
