@@ -31,6 +31,11 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
      */
     open val loadingBias: Float = 0.5f
 
+    /**
+     * 刷新时是否滑动到顶部
+     */
+    open val scrollTopWhenRefresh: Boolean = true
+
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
         onCreateContentAdapter()
     }
@@ -75,7 +80,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
         } else {
             binding.rvContent.adapter = adapterHelper.adapter
         }
-       autoInitData()
+        autoInitData()
     }
 
 
@@ -113,7 +118,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
             }
 
             contentAdapter.submitList(it) {
-                if (viewModel.isRefresh) {
+                if (viewModel.isRefresh && scrollTopWhenRefresh) {
                     layoutManager?.scrollToPositionWithOffset(0, 0)
                 }
 

@@ -26,6 +26,9 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
     override val loadingBias: Float
         get() = 0.3f
 
+    override val scrollTopWhenRefresh: Boolean
+        get() = false
+    
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.mediaId = arguments.getString(NavKey.KEY_STRING).orEmpty()
     }

@@ -96,6 +96,16 @@
             android:padding="@dimen/ui_size_0"
             android:text="抛弃"
             android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_remove"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="撤销"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <com.xiaoyv.common.widget.image.AnimeImageView

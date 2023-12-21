@@ -70,7 +70,7 @@ class MediaEpCollectDialog : DialogFragment() {
             append(entity.titleCn)
         }
         binding.tvDesc.text = entity.time
-        binding.tvComment.text = String.format("讨论：%d", entity.commentCount)
+        binding.tvComment.text = String.format("讨论：%d，点击查看", entity.commentCount)
 
         binding.tvComment.setOnFastLimitClickListener {
             jumpDetail(entity)
@@ -106,7 +106,8 @@ class MediaEpCollectDialog : DialogFragment() {
                 }
 
                 else -> {
-                    InterestType.TYPE_UNKNOWN
+                    entity.collectType = InterestType.TYPE_UNKNOWN
+                    EpCollectType.TYPE_REMOVE
                 }
             }
 

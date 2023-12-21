@@ -12,6 +12,7 @@ import androidx.annotation.StringDef
     EpCollectType.TYPE_WATCHED,
     EpCollectType.TYPE_QUEUE,
     EpCollectType.TYPE_DROP,
+    EpCollectType.TYPE_REMOVE
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class EpCollectType {
@@ -19,5 +20,6 @@ annotation class EpCollectType {
         const val TYPE_WATCHED = "watched"
         const val TYPE_QUEUE = "queue"
         const val TYPE_DROP = "drop"
+        const val TYPE_REMOVE = "remove"
     }
 }
