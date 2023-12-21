@@ -16,6 +16,7 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
@@ -89,7 +90,11 @@ class OverviewAdapter(
             item.entity = media.apply {
                 myProgress = progress
                 progressList.filterNot { it.isNotEp }.forEachIndexed { index, mediaProgress ->
-//                    mediaProgress.collectType = (index + 1) <= progress
+                    if ((index + 1) <= progress) {
+                        mediaProgress.collectType = InterestType.TYPE_COLLECT
+                    } else {
+                        mediaProgress.collectType = InterestType.TYPE_UNKNOWN
+                    }
                 }
             }
             set(targetIndex, item)
