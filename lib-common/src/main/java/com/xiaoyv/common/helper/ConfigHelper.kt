@@ -21,6 +21,8 @@ object ConfigHelper {
     private const val KEY_GRID_ANIMATION = "grid-animation"
     private const val KEY_TIMELINE_TYPE = "timeline"
     private const val KEY_DYNAMIC_THEME = "dynamic-theme"
+    private const val KEY_FILTER_DELETE_COMMENT = "filter-delete-comment"
+    private const val KEY_FILTER_BREAK_UP_COMMENT = "filter-break-up-comment"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -100,4 +102,18 @@ object ConfigHelper {
     var isDynamicTheme: Boolean
         get() = SPStaticUtils.getBoolean(KEY_DYNAMIC_THEME, true)
         set(value) = SPStaticUtils.put(KEY_DYNAMIC_THEME, value)
+
+    /**
+     * 是否过滤删除的回复
+     */
+    var isFilterDeleteComment: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_FILTER_DELETE_COMMENT, true)
+        set(value) = SPStaticUtils.put(KEY_FILTER_DELETE_COMMENT, value)
+
+    /**
+     * 是否过滤绝交者的回复
+     */
+    var isFilterBreakUpComment: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_FILTER_BREAK_UP_COMMENT, true)
+        set(value) = SPStaticUtils.put(KEY_FILTER_BREAK_UP_COMMENT, value)
 }

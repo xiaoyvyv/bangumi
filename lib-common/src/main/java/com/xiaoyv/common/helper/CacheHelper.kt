@@ -43,10 +43,16 @@ object CacheHelper {
         }.getOrNull().orEmpty()
     }
 
+    /**
+     * 缓存翻译结果
+     */
     fun saveTranslate(cacheKey: String, text: String) {
         CacheDiskUtils.getInstance().put(cacheKey, text)
     }
 
+    /**
+     * 读取翻译缓存
+     */
     fun readTranslate(cacheKey: String): String {
         return CacheDiskUtils.getInstance().getString(cacheKey).orEmpty()
     }

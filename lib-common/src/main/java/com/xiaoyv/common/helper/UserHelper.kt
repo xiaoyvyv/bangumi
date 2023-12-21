@@ -12,6 +12,7 @@ import com.xiaoyv.common.api.exception.NeedLoginException
 import com.xiaoyv.common.api.parser.entity.SettingBaseEntity
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.impl.LoginParser.parserCheckIsLogin
+import com.xiaoyv.common.api.parser.impl.parserBlockUser
 import com.xiaoyv.common.api.parser.impl.parserSettingInfo
 import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.response.UserEntity
@@ -76,10 +77,13 @@ class UserHelper private constructor() {
 
             debugLog { "校验缓存用户：有效！" }
         }
+
+        // 缓存绝交用户
+        cacheBreakUserIds()
     }
 
     /**
-     * 刷新用户信息
+     * 通过查询用户设置，刷新用户信息
      */
     private suspend fun refresh(): List<SettingBaseEntity> {
         return withContext(Dispatchers.IO) {
@@ -125,6 +129,9 @@ class UserHelper private constructor() {
         // 更新
         onUserInfoLiveData.sendValue(newInfo)
         userSp.put(KEY_USER_INFO, newInfo.toJson())
+
+        // 刷新绝交用户
+        cacheBreakUserIds()
     }
 
     /**
@@ -133,6 +140,7 @@ class UserHelper private constructor() {
     private fun clearUserInfo(clearEmailAndPassword: Boolean = false) {
         BgmApiManager.resetCookie()
         userSp.put(KEY_USER_INFO, "")
+        userSp.put(KEY_BLOCK_USER, "")
 
         // 是否清空账户和密码
         if (clearEmailAndPassword) userSp.clear()
@@ -140,15 +148,35 @@ class UserHelper private constructor() {
         onUserInfoLiveData.sendValue(empty)
     }
 
+    private fun cacheBreakUserIds() {
+        launchProcess(Dispatchers.IO) {
+            require(isLogin)
+            val blockUserIds = BgmApiManager.bgmWebApi.queryPrivacy()
+                .parserBlockUser()
+                .map { it.id }
+
+            userSp.put(KEY_BLOCK_USER, blockUserIds.toJson())
+        }
+    }
+
+    /**
+     * 获取全部的绝交用户
+     */
+    fun breakUsers(): List<String> {
+        return userSp.getString(KEY_BLOCK_USER).fromJson<List<String>>().orEmpty()
+    }
+
     companion object {
+        private const val NAME = "user"
         private const val KEY_USER_INFO = "user-info"
+        private const val KEY_BLOCK_USER = "user-block"
 
         private val helper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             UserHelper()
         }
 
         private val userSp: SPUtils
-            get() = SPUtils.getInstance("user")
+            get() = SPUtils.getInstance(NAME)
 
         /**
          * 当前用户
@@ -161,6 +189,12 @@ class UserHelper private constructor() {
          */
         val isLogin: Boolean
             get() = !currentUser.isEmpty
+
+        /**
+         * 获取绝交的用户
+         */
+        val blockUsers: List<String>
+            get() = helper.breakUsers()
 
         /**
          * 当前用户的 FromHash
@@ -221,6 +255,13 @@ class UserHelper private constructor() {
          */
         suspend fun refresh(): List<SettingBaseEntity> {
             return helper.refresh()
+        }
+
+        /**
+         * 刷新屏蔽的用户缓存
+         */
+        fun refreshBlockUser() {
+            return helper.cacheBreakUserIds()
         }
 
         /**

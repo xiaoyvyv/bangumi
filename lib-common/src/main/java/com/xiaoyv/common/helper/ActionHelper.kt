@@ -70,6 +70,8 @@ fun FragmentActivity.ignoreUser(
                             .apply {
                                 require(status.equals("ok", true)) { "绝交失败" }
                             }
+                        // 刷新屏蔽用户缓存
+                        UserHelper.refreshBlockUser()
                     }
                     showToastCompat("绝交成功")
                 }

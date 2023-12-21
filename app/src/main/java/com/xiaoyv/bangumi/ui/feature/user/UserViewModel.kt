@@ -99,6 +99,9 @@ class UserViewModel : BaseViewModel() {
                 withContext(Dispatchers.IO) {
                     val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
                     BgmApiManager.bgmWebApi.postIgnoreUser(referer, userId, requireGh)
+
+                    // 刷新屏蔽用户缓存
+                    UserHelper.refreshBlockUser()
                 }
                 onActionResult.value = true
                 UserHelper.notifyActionChange(BgmPathType.TYPE_USER)

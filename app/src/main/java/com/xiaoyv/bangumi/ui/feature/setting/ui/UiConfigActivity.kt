@@ -33,6 +33,8 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
                 AppUtils.relaunchApp(true)
             }
         })
+        binding.settingFilterDelete.bindBoolean(this, ConfigHelper::isFilterDeleteComment)
+        binding.settingBreakUp.bindBoolean(this, ConfigHelper::isFilterBreakUpComment)
     }
 
     override fun initListener() {

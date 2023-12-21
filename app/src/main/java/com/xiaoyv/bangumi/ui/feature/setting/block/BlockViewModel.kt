@@ -43,6 +43,9 @@ class BlockViewModel : BaseListViewModel<BlockEntity>() {
 
                 // 刷新
                 refresh()
+
+                // 刷新屏蔽用户
+                UserHelper.refreshBlockUser()
             }
         )
     }

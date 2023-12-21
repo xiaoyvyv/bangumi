@@ -1,5 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
@@ -9,6 +10,9 @@ import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.debugLog
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
@@ -21,7 +25,19 @@ import org.jsoup.select.Elements
 fun Element.parserBottomComment(): List<CommentTreeEntity> {
     // 解析 gh
     val gh = parserFormHash()
-    return select("#comment_list > div").mapCommentItems(gh)
+    val filterDeleteComment = ConfigHelper.isFilterDeleteComment
+    val isFilterBreakUpComment = ConfigHelper.isFilterBreakUpComment
+    val blockUsers = UserHelper.blockUsers
+
+    debugLog { "绝交用户过滤：${isFilterBreakUpComment}：" + blockUsers.toJson(true) }
+
+    // 解析评论
+    return select("#comment_list > div").mapCommentItems(
+        gh,
+        filterDeleteComment,
+        isFilterBreakUpComment,
+        blockUsers
+    )
 }
 
 /**
@@ -38,9 +54,20 @@ fun Element.parserReplyForm(): CommentFormEntity {
 
 /**
  * 解析评论
+ *
+ * @param gh 表单
+ * @param filterDeleteComment 是否过滤删除的评论
+ * @param filterBlockUserComment 是否过滤屏蔽用户评论
+ * @param blockUsers 屏蔽的用户
  */
-private fun Elements.mapCommentItems(gh: String): List<CommentTreeEntity> {
+private fun Elements.mapCommentItems(
+    gh: String,
+    filterDeleteComment: Boolean,
+    filterBlockUserComment: Boolean,
+    blockUsers: List<String>,
+): List<CommentTreeEntity> {
     val entities = arrayListOf<CommentTreeEntity>()
+
     forEach { item ->
         if (item.id().isBlank()) return@forEach
 
@@ -48,7 +75,7 @@ private fun Elements.mapCommentItems(gh: String): List<CommentTreeEntity> {
         val topicSubReply = item.select(".topic_sub_reply").remove()
         if (topicSubReply.isNotEmpty()) {
             entity.topicSubReply = topicSubReply.select(".topic_sub_reply > div")
-                .mapCommentItems(gh)
+                .mapCommentItems(gh, filterDeleteComment, filterBlockUserComment, blockUsers)
         }
         entity.id = item.attr("id").parseCount().toString()
         entity.emojiParam = item.select(".like_dropdown").parserLikeParam()
@@ -68,6 +95,17 @@ private fun Elements.mapCommentItems(gh: String): List<CommentTreeEntity> {
             .ifEmpty { item.select(".inner > .cmt_sub_content") }
             .html().replaceSmiles()
         entity.gh = gh
+
+        // 过滤删除数据
+        if (filterDeleteComment && entity.replyContent.contains("删除了回复")) {
+            return@forEach
+        }
+
+        // 过滤绝交用户数据
+        if (filterBlockUserComment && blockUsers.contains(entity.userId)) {
+            debugLog { "过滤绝交用户（${entity.id}）评论：" + entity.replyContent }
+            return@forEach
+        }
         entities.add(entity)
     }
     return entities

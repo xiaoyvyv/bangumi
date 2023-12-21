@@ -44,12 +44,12 @@ class SettingItemView @JvmOverloads constructor(
     /**
      * 绑定 Boolean 类型开关
      */
-    fun bindBoolean(
+    inline fun bindBoolean(
         activity: FragmentActivity,
         property: KMutableProperty0<Boolean>,
         bindTitle: String? = null,
-        dialogTip: (Boolean) -> String? = { null },
-        onChange: (Boolean) -> Unit = {},
+        crossinline dialogTip: (Boolean) -> String? = { null },
+        crossinline onChange: (Boolean) -> Unit = {},
     ) {
         if (bindTitle != null) title = bindTitle
         setOnFastLimitClickListener {
@@ -75,7 +75,7 @@ class SettingItemView @JvmOverloads constructor(
         refresh(property)
     }
 
-    private fun refresh(property: KMutableProperty0<Boolean>) {
+    fun refresh(property: KMutableProperty0<Boolean>) {
         desc = if (property.get()) "开启" else "关闭"
     }
 }
