@@ -144,10 +144,9 @@ data class MediaDetailEntity(
         @SerializedName("id") override var id: String = "",
         @SerializedName("number") var number: String = "",
         @SerializedName("isNotEp") var isNotEp: Boolean = false,
-        @SerializedName("isToday") var isToday: Boolean = false,
-        @SerializedName("isWaiting") var isWaiting: Boolean = false,
-        @SerializedName("isRelease") var isRelease: Boolean = false,
-        @SerializedName("isWatched") var isWatched: Boolean = false,
+        @SerializedName("isAiring") var isAiring: Boolean = false,
+        @SerializedName("isAired") var isAired: Boolean = false,
+        @SerializedName("collectType") var collectType: String = InterestType.TYPE_UNKNOWN,
         @SerializedName("commentCount") var commentCount: Int = 0,
     ) : Parcelable, IdEntity
 

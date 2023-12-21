@@ -56,9 +56,8 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
             // 已经播出
             item.isAired -> {
                 binding.vAired.text = item.airedStateText
-                binding.vAired.backgroundTintList =
-                    context.getAttrColor(GoogleAttr.colorPrimarySurface).tint
-                binding.vAired.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
+                binding.vAired.backgroundTintList = context.getColor(CommonColor.state_aired).tint
+                binding.vAired.setTextColor(context.getColor(CommonColor.state_aired_text))
             }
             // 未播出
             else -> {

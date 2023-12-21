@@ -16,6 +16,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MediaChapterEntity(
     override var id: String = "",
+    var mediaId: String = "",
     var titleCn: String = "",
     var titleNative: String = "",
     var finished: Boolean = false,

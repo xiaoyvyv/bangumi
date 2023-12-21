@@ -2,12 +2,14 @@ package com.xiaoyv.bangumi.ui.media.detail.chapter
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
-import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.media.action.MediaEpCollectDialog
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
-import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -34,9 +36,17 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
 
     override fun initListener() {
         super.initListener()
-        
+
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_ep) {
-            RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
+            MediaEpCollectDialog.show(childFragmentManager, it)
+        }
+    }
+
+    override fun LifecycleOwner.initViewObserverExt() {
+        UserHelper.observeAction(this) {
+            if (it == BgmPathType.TYPE_EP) {
+                viewModel.refresh()
+            }
         }
     }
 

@@ -21,6 +21,6 @@ class MediaChapterViewModel : BaseListViewModel<MediaChapterEntity>() {
     override suspend fun onRequestListImpl(): List<MediaChapterEntity> {
         require(mediaId.isNotBlank()) { "媒体ID不存在" }
         return BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_CHAPTER)
-            .parserMediaChapters()
+            .parserMediaChapters(mediaId)
     }
 }

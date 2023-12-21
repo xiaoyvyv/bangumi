@@ -30,12 +30,13 @@ import org.jsoup.nodes.Element
  * @author why
  * @since 11/29/23
  */
-fun Document.parserMediaChapters(): List<MediaChapterEntity> {
+fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
     requireNoError()
 
     return select(".line_detail > ul > li").map {
         if (it.select("h6").isEmpty()) return@map null
         val entity = MediaChapterEntity()
+        entity.mediaId = mediaId
         entity.id = it.select("h6 a").hrefId()
         entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
         entity.titleNative = it.select("h6 a").text()
@@ -273,19 +274,32 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         // 不是章节，如：SP OVA等格子
         progress.isNotEp = item.hasClass("subtitle")
 
-        item.select("a").apply {
-            progress.id = hrefId()
-            progress.titleNative = attr("title")
-            // 序号
-            progress.number = text().ifBlank { item.text() }
+        item.select("a").let {
+            progress.id = it.hrefId()
+            progress.titleNative = it.attr("title")
+            progress.number = it.text().ifBlank { item.text() }
+            // 我的收藏状态
+            when {
+                it.select(".epBtnWatched").isNotEmpty() -> {
+                    progress.collectType = InterestType.TYPE_COLLECT
+                }
+
+                it.select(".epBtnQueue").isNotEmpty() -> {
+                    progress.collectType = InterestType.TYPE_WISH
+                }
+
+                it.select(".epBtnDrop").isNotEmpty() -> {
+                    progress.collectType = InterestType.TYPE_DROPPED
+                }
+
+                else -> {
+                    progress.collectType = InterestType.TYPE_UNKNOWN
+                }
+            }
             // 是否已经放送
-            progress.isRelease = hasClass("epBtnAir") || hasClass("epBtnWatched")
+            progress.isAired = it.hasClass("epBtnAir")
             // 是否今天放送
-            progress.isToday = hasClass("epBtnToday")
-            // 是否正在等待放送中
-            progress.isWaiting = hasClass("epBtnNA")
-            // 是否看过了
-            progress.isWatched = hasClass("epBtnWatched")
+            progress.isAiring = it.hasClass("epBtnToday")
         }
 
         val relId = item.select("a").attr("rel")

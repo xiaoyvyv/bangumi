@@ -6,9 +6,9 @@
 
     <color name="save_wish">#F09199</color>
     <color name="save_wish_text">@color/ui_white</color>
-    <color name="save_collect">#369CF8</color>
+    <color name="save_collect">#4897ff</color>
     <color name="save_collect_text">@color/ui_white</color>
-    <color name="save_do">#369CF8</color>
+    <color name="save_do">#4897ff</color>
     <color name="save_do_text">@color/ui_white</color>
     <color name="save_on_hold">#FF9800</color>
     <color name="save_on_hold_text">@color/ui_white</color>
@@ -17,6 +17,10 @@
 
     <color name="state_airing">#4CAF50</color>
     <color name="state_airing_text">@color/ui_white</color>
+    <color name="state_aired">#DAEAFF</color>
+    <color name="state_aired_text">#06C</color>
+    <color name="state_na">#e0e0e0</color>
+    <color name="state_na_text">#909090</color>
 
     <color name="rank_bar_1">#4CAF50</color>
     <color name="rank_bar_1_alpha">#3F4CAF50</color>

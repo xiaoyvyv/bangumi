@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.response.UploadResultEntity
 import com.xiaoyv.common.api.response.base.BgmActionResponse
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
+import com.xiaoyv.common.config.annotation.EpCollectType
 import com.xiaoyv.common.config.annotation.IndexAttachCatType
 import com.xiaoyv.common.config.annotation.IndexTabCatType
 import com.xiaoyv.common.config.annotation.LikeType
@@ -167,6 +168,14 @@ interface BgmWebApi {
         @Path("mediaId", encoded = true) mediaId: String,
         @Path("mediaDetailType", encoded = true) @MediaDetailType type: String,
         @Query("page") page: Int? = null,
+    ): Document
+
+    @POST("/subject/ep/{epId}/status/{epCollectType}")
+    suspend fun postEpCollect(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @Path("epId", encoded = true) epId: String,
+        @Path("epCollectType", encoded = true) @EpCollectType epCollectType: String,
+        @Query("gh") gh: String,
     ): Document
 
     @FormUrlEncoded

@@ -89,7 +89,7 @@ class OverviewAdapter(
             item.entity = media.apply {
                 myProgress = progress
                 progressList.filterNot { it.isNotEp }.forEachIndexed { index, mediaProgress ->
-                    mediaProgress.isWatched = (index + 1) <= progress
+//                    mediaProgress.collectType = (index + 1) <= progress
                 }
             }
             set(targetIndex, item)

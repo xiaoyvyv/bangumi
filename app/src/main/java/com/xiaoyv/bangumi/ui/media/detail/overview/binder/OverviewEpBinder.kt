@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Paint
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseMultiItemAdapter
@@ -18,10 +19,12 @@ import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.kts.tint
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.subListLimit
+
 
 /**
  * Class: [OverviewEpBinder]
@@ -103,21 +106,39 @@ class OverviewEpBinder(
 
         override fun BaseQuickBindingHolder<FragmentOverviewEpItemBinding>.converted(item: MediaDetailEntity.MediaProgress) {
             binding.tvEp.text = item.number
+            binding.tvEp.paintFlags = binding.tvEp.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             when {
-                item.isWatched -> {
-                    binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-                    binding.tvEp.backgroundTintList = ColorStateList.valueOf(
-                        context.getColor(CommonColor.save_collect)
-                    )
+                // 看过
+                item.collectType == InterestType.TYPE_COLLECT -> {
+                    binding.tvEp.backgroundTintList =
+                        context.getColor(CommonColor.save_collect).tint
+                    binding.tvEp.setTextColor(context.getColor(CommonColor.save_collect_text))
                 }
-
-                item.isRelease -> {
-                    binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimaryContainer))
-                    binding.tvEp.backgroundTintList = ColorStateList.valueOf(
-                        context.getAttrColor(GoogleAttr.colorPrimaryContainer)
-                    )
+                // 想看
+                item.collectType == InterestType.TYPE_WISH -> {
+                    binding.tvEp.backgroundTintList = context.getColor(CommonColor.save_wish).tint
+                    binding.tvEp.setTextColor(context.getColor(CommonColor.save_wish_text))
                 }
-
+                // 抛弃
+                item.collectType == InterestType.TYPE_DROPPED -> {
+                    binding.tvEp.backgroundTintList =
+                        context.getColor(CommonColor.save_dropped).tint
+                    binding.tvEp.setTextColor(context.getColor(CommonColor.save_dropped_text))
+                    binding.tvEp.paintFlags = binding.tvEp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                // 放送中
+                item.isAiring -> {
+                    binding.tvEp.setTextColor(context.getColor(CommonColor.state_airing_text))
+                    binding.tvEp.backgroundTintList =
+                        context.getColor(CommonColor.state_airing).tint
+                }
+                // 已播出
+                item.isAired -> {
+                    binding.tvEp.backgroundTintList =
+                        context.getColor(CommonColor.state_aired).tint
+                    binding.tvEp.setTextColor(context.getColor(CommonColor.state_aired_text))
+                }
+                // 未播出
                 else -> {
                     binding.tvEp.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurface))
                     binding.tvEp.backgroundTintList = ColorStateList.valueOf(
