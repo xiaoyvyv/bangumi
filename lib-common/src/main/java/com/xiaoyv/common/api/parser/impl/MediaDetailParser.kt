@@ -66,6 +66,8 @@ fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
 
         useNotNull(it.select("small")) {
             entity.time = getOrNull(0)?.text().orEmpty()
+                .replace("时长:", "时长：")
+                .replace("首播:", "首播：")
             entity.commentCount = getOrNull(1)?.text().orEmpty().parseCount()
         }
         entity

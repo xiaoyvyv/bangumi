@@ -197,7 +197,11 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         }
 
         val media = item.entity.forceCast<MediaDetailEntity>()
-        MediaSaveActionDialog.show(childFragmentManager, media.collectState) {
+        MediaSaveActionDialog.show(
+            childFragmentManager,
+            media.collectState,
+            activityViewModel.requireMediaType
+        ) {
             val entity = viewModel.refreshCollectState(it) ?: return@show
             item.entity = entity
             // 刷新收藏的 Item

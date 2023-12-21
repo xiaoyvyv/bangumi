@@ -21,6 +21,7 @@ import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.EpCollectType
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.hideSnackBar
@@ -48,14 +49,22 @@ class MediaEpCollectDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val entity = arguments?.getParcelObj<MediaChapterEntity>(NavKey.KEY_PARCELABLE) ?: return
-        initView(FragmentMediaActionEpCollectBinding.bind(view), entity)
+        val mediaType = arguments?.getString(NavKey.KEY_STRING).orEmpty()
+        initView(FragmentMediaActionEpCollectBinding.bind(view), entity, mediaType)
     }
 
-    private fun initView(binding: FragmentMediaActionEpCollectBinding, entity: MediaChapterEntity) {
+    private fun initView(
+        binding: FragmentMediaActionEpCollectBinding,
+        entity: MediaChapterEntity,
+        mediaType: String,
+    ) {
         binding.tvTitle.text = entity.titleNative.ifBlank { entity.titleCn }
         binding.ivCancel.setOnClickListener {
             dismissAllowingStateLoss()
         }
+        binding.btnWish.text = InterestType.string(InterestType.TYPE_WISH, mediaType)
+        binding.btnCollect.text = InterestType.string(InterestType.TYPE_COLLECT, mediaType)
+        binding.btnDropped.text = InterestType.string(InterestType.TYPE_DROPPED, mediaType)
 
         // 设置状态
         when (entity.collectType) {
@@ -166,9 +175,16 @@ class MediaEpCollectDialog : DialogFragment() {
 
     companion object {
 
-        fun show(fragmentManager: FragmentManager, chapterEntity: MediaChapterEntity) {
+        fun show(
+            fragmentManager: FragmentManager,
+            chapterEntity: MediaChapterEntity,
+            @MediaType mediaType: String,
+        ) {
             MediaEpCollectDialog().apply {
-                arguments = bundleOf(NavKey.KEY_PARCELABLE to chapterEntity)
+                arguments = bundleOf(
+                    NavKey.KEY_PARCELABLE to chapterEntity,
+                    NavKey.KEY_STRING to mediaType
+                )
             }.show(fragmentManager, "MediaEpCollectDialog")
         }
     }

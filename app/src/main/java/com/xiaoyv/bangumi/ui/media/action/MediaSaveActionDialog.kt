@@ -24,6 +24,7 @@ import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.ScoreStarType
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
@@ -70,7 +71,7 @@ class MediaSaveActionDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         info.value = arguments?.getParcelObj<MediaCollectForm>(NavKey.KEY_PARCELABLE)
-
+        val mediaType = arguments?.getString(NavKey.KEY_STRING).orEmpty()
         val binding = FragmentMediaActionBinding.bind(view)
 
         info.observe(viewLifecycleOwner) {
@@ -114,6 +115,12 @@ class MediaSaveActionDialog : DialogFragment() {
         binding.etTag.doAfterTextChanged {
             info.value?.tags = it.toString().trim()
         }
+
+        binding.btnWish.text = InterestType.string(InterestType.TYPE_WISH, mediaType)
+        binding.btnCollect.text = InterestType.string(InterestType.TYPE_COLLECT, mediaType)
+        binding.btnDropped.text = InterestType.string(InterestType.TYPE_DROPPED, mediaType)
+        binding.btnOnHold.text = InterestType.string(InterestType.TYPE_ON_HOLD, mediaType)
+        binding.btnDo.text = InterestType.string(InterestType.TYPE_DO, mediaType)
 
         binding.gpButtons.addOnButtonCheckedListener { _, i, checked ->
             if (!checked) {
@@ -293,12 +300,16 @@ class MediaSaveActionDialog : DialogFragment() {
         fun show(
             fragmentManager: FragmentManager,
             collectForm: MediaCollectForm?,
+            @MediaType mediaType: String,
             onUpdateResultListener: (MediaDetailEntity) -> Unit = {},
         ) {
             MediaSaveActionDialog()
                 .apply {
                     onUpdateResult = onUpdateResultListener
-                    arguments = bundleOf(NavKey.KEY_PARCELABLE to collectForm?.copy())
+                    arguments = bundleOf(
+                        NavKey.KEY_PARCELABLE to collectForm?.copy(),
+                        NavKey.KEY_STRING to mediaType
+                    )
                 }
                 .show(fragmentManager, "MediaSaveActionDialog")
         }
