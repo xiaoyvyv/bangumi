@@ -24,6 +24,7 @@ class UserBlogActivity : BaseBindingActivity<ActivityUserContainerBinding>() {
     }
 
     override fun initView() {
+        binding.toolbar.title = "TA 的日志"
         binding.toolbar.initNavBack(this)
     }
 

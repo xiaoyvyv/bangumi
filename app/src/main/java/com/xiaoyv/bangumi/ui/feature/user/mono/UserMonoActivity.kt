@@ -18,12 +18,12 @@ import com.xiaoyv.common.kts.initNavBack
  */
 class UserMonoActivity : BaseBindingActivity<ActivityUserContainerBinding>() {
     private var userId: String = ""
-
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         userId = bundle.getString(NavKey.KEY_STRING).orEmpty()
     }
 
     override fun initView() {
+        binding.toolbar.title = "TA 的人物"
         binding.toolbar.initNavBack(this)
     }
 

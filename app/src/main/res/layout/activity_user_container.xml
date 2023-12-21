@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
-            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title="用户日志" />
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay" />
 
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 

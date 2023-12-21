@@ -52,23 +52,23 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
     }
 
     override fun initView() {
-        randomX(binding.topLeftTextView, randomOffset)
-        randomY(binding.topLeftTextView, randomOffset)
+        randomX(binding.tvJoin, randomOffset)
+        randomY(binding.tvJoin, randomOffset)
 
-        randomX(binding.middleLeftTextView, randomOffset)
-        randomY(binding.middleLeftTextView, randomOffset)
+        randomX(binding.tvSync, randomOffset)
+        randomY(binding.tvSync, randomOffset)
 
-        randomX(binding.bottomLeftTextView, randomOffset)
-        randomY(binding.bottomLeftTextView, randomOffset)
+        randomX(binding.tvOnline, randomOffset)
+        randomY(binding.tvOnline, randomOffset)
 
-        randomX(binding.topRightTextView, randomOffset)
-        randomY(binding.topRightTextView, randomOffset)
+        randomX(binding.tvIndex, randomOffset)
+        randomY(binding.tvIndex, randomOffset)
 
-        randomX(binding.middleRightTextView, randomOffset)
-        randomY(binding.middleRightTextView, randomOffset)
+        randomX(binding.tvMono, randomOffset)
+        randomY(binding.tvMono, randomOffset)
 
-        randomX(binding.bottomRightTextView, randomOffset)
-        randomY(binding.bottomRightTextView, randomOffset)
+        randomX(binding.tvBlog, randomOffset)
+        randomY(binding.tvBlog, randomOffset)
 
         binding.toolbar.initNavBack(this)
     }
@@ -83,15 +83,15 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
     }
 
     override fun initListener() {
-        binding.bottomRightTextView.setOnFastLimitClickListener {
+        binding.tvIndex.setOnFastLimitClickListener {
             RouteHelper.jumpIndexList(true, viewModel.userId)
         }
 
-        binding.middleRightTextView.setOnFastLimitClickListener {
+        binding.tvBlog.setOnFastLimitClickListener {
             RouteHelper.jumpUserBlog(viewModel.userId)
         }
 
-        binding.topRightTextView.setOnFastLimitClickListener {
+        binding.tvMono.setOnFastLimitClickListener {
             RouteHelper.jumpUserMono(viewModel.userId)
         }
     }
@@ -104,13 +104,13 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
             binding.ivBanner.loadImageBlur(it.avatar)
             binding.ivAvatar.loadImageAnimate(it.avatar)
 
-            binding.topLeftTextView.text = it.createTime
-            binding.middleLeftTextView.text = it.userSynchronize.rate.ifBlank { "同步率 -%" }
-            binding.bottomLeftTextView.text =
+            binding.tvJoin.text = it.createTime
+            binding.tvSync.text = it.userSynchronize.rate.ifBlank { "同步率 -%" }
+            binding.tvOnline.text =
                 String.format("最近活跃 %s", it.lastOnlineTime.ifBlank { "暂无" })
-            binding.topRightTextView.text = "Ta 的人物"
-            binding.middleRightTextView.text = "Ta 的日志"
-            binding.bottomRightTextView.text = "Ta 的目录"
+            binding.tvMono.text = "Ta 的人物"
+            binding.tvBlog.text = "Ta 的日志"
+            binding.tvIndex.text = "Ta 的目录"
 
             invalidateMenu()
         }

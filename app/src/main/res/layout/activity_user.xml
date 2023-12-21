@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             android:paddingVertical="@dimen/ui_size_0"
             app:expandedTitleGravity="center|bottom"
-            app:expandedTitleMarginBottom="@dimen/ui_size_60"
+            app:expandedTitleMarginBottom="@dimen/ui_size_40"
             app:expandedTitleTextAppearance="@style/Theme.Bangumi.ExpandTitle"
             app:expandedTitleTextColor="?attr/colorOnPrimarySurface"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -64,7 +64,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5"
+                    app:layout_constraintVertical_bias="0.6"
                     app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
                     app:strokeColor="@android:color/white"
                     app:strokeWidth="@dimen/ui_size_2"
@@ -72,7 +72,7 @@
 
                 <!-- 左上文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/topLeftTextView"
+                    android:id="@+id/tv_join"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
@@ -89,7 +89,7 @@
 
                 <!-- 左中文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/middleLeftTextView"
+                    android:id="@+id/tv_sync"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
@@ -108,7 +108,7 @@
 
                 <!-- 左下文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/bottomLeftTextView"
+                    android:id="@+id/tv_online"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
@@ -126,7 +126,7 @@
 
                 <!-- 右上文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/topRightTextView"
+                    android:id="@+id/tv_mono"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
@@ -143,7 +143,7 @@
 
                 <!-- 右中文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/middleRightTextView"
+                    android:id="@+id/tv_blog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
@@ -162,7 +162,7 @@
 
                 <!-- 右下文案 -->
                 <com.xiaoyv.common.widget.text.AnimeTextView
-                    android:id="@+id/bottomRightTextView"
+                    android:id="@+id/tv_index"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
