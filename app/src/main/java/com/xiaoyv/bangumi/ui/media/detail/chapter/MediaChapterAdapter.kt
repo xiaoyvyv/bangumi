@@ -4,6 +4,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.xiaoyv.bangumi.databinding.FragmentMediaChapterItemBinding
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.tint
@@ -26,14 +27,40 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
         binding.titleCn.isVisible = item.titleCn.isNotBlank()
         binding.tvTime.text = item.time
         binding.tvComment.text = String.format("讨论：%d", item.commentCount)
-        binding.vAired.text = item.stateText
-        binding.vAired.isVisible = item.stateText.isNotBlank()
-       if (item.aired) {
-           binding.vAired.backgroundTintList =   context.getColor(CommonColor.save_collect).tint
-            binding.vAired.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
-        } else {
-           binding.vAired.backgroundTintList = context.getAttrColor(GoogleAttr.colorSurfaceContainer).tint
-           binding.vAired.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurfaceVariant))
+        binding.vAired.isVisible = item.airedStateText.isNotBlank()
+        when {
+            // 看过
+            item.collectType == InterestType.TYPE_COLLECT -> {
+                binding.vAired.text = InterestType.string(item.collectType)
+                binding.vAired.backgroundTintList = context.getColor(CommonColor.save_collect).tint
+                binding.vAired.setTextColor(context.getColor(CommonColor.save_collect_text))
+            }
+            // 想看
+            item.collectType == InterestType.TYPE_WISH -> {
+                binding.vAired.text = InterestType.string(item.collectType)
+                binding.vAired.backgroundTintList = context.getColor(CommonColor.save_wish).tint
+                binding.vAired.setTextColor(context.getColor(CommonColor.save_wish_text))
+            }
+            // 抛弃
+            item.collectType == InterestType.TYPE_DROPPED -> {
+                binding.vAired.text = InterestType.string(item.collectType)
+                binding.vAired.backgroundTintList = context.getColor(CommonColor.save_dropped).tint
+                binding.vAired.setTextColor(context.getColor(CommonColor.save_dropped_text))
+            }
+            // 已经播出
+            item.isAired -> {
+                binding.vAired.text = item.airedStateText
+                binding.vAired.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorPrimarySurface).tint
+                binding.vAired.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimarySurface))
+            }
+            // 未播出
+            else -> {
+                binding.vAired.text = item.airedStateText
+                binding.vAired.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorSurfaceContainer).tint
+                binding.vAired.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurfaceVariant))
+            }
         }
     }
 

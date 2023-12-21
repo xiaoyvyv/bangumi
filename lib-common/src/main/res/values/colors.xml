@@ -4,12 +4,16 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="save_wish">#FF9800</color>
-    <color name="save_collect">#4CAF50</color>
-    <color name="save_collect_alpha">#3F4CAF50</color>
-    <color name="save_do">#2196F3</color>
-    <color name="save_on_hold">#9C27B0</color>
+    <color name="save_wish">#F09199</color>
+    <color name="save_wish_text">@color/ui_white</color>
+    <color name="save_collect">#369CF8</color>
+    <color name="save_collect_text">@color/ui_white</color>
+    <color name="save_do">#369CF8</color>
+    <color name="save_do_text">@color/ui_white</color>
+    <color name="save_on_hold">#FF9800</color>
+    <color name="save_on_hold_text">@color/ui_white</color>
     <color name="save_dropped">#F44336</color>
+    <color name="save_dropped_text">@color/ui_white</color>
 
     <color name="rank_bar_1">#4CAF50</color>
     <color name="rank_bar_1_alpha">#3F4CAF50</color>

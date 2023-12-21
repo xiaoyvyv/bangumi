@@ -18,6 +18,7 @@ import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.widget.kts.subListLimit
@@ -35,11 +36,17 @@ fun Document.parserMediaChapters(): List<MediaChapterEntity> {
     return select(".line_detail > ul > li").map {
         if (it.select("h6").isEmpty()) return@map null
         val entity = MediaChapterEntity()
-        entity.aired = it.select(".Air").isNotEmpty()
-        entity.stateText = it.select(".epAirStatus").attr("title")
         entity.id = it.select("h6 a").hrefId()
         entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
         entity.titleNative = it.select("h6 a").text()
+        entity.isAired = it.select(".Air").isNotEmpty()
+        entity.airedStateText = it.select(".epAirStatus").attr("title")
+        entity.collectType = when {
+            it.select(".statusWatched").isNotEmpty() -> InterestType.TYPE_COLLECT
+            it.select(".statusQueue").isNotEmpty() -> InterestType.TYPE_WISH
+            it.select(".statusDrop").isNotEmpty() -> InterestType.TYPE_DROPPED
+            else -> InterestType.TYPE_UNKNOWN
+        }
 
         useNotNull(it.select("small")) {
             entity.time = getOrNull(0)?.text().orEmpty()

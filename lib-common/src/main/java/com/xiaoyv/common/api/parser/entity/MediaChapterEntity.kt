@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
@@ -20,6 +21,8 @@ data class MediaChapterEntity(
     var finished: Boolean = false,
     var time: String = "",
     var commentCount: Int = 0,
-    var stateText: String = "",
-    var aired: Boolean = false,
+    var airedStateText: String = "",
+    var isAired: Boolean = false,
+    @InterestType
+    var collectType: String = InterestType.TYPE_UNKNOWN,
 ) : Parcelable, IdEntity
