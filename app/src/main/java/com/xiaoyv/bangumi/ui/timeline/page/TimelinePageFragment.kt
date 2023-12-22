@@ -16,6 +16,7 @@ import com.xiaoyv.common.config.bean.TimelineTab
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
 
@@ -113,6 +114,24 @@ class TimelinePageFragment :
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
             RouteHelper.jumpUserDetail(it.id)
+        }
+
+        // 长按
+        contentAdapter.addOnItemChildLongClickListener(R.id.item_timeline) { adapter, _, position ->
+            val entity = adapter.getItem(position)
+            val deleteId = entity?.deleteId.orEmpty()
+
+            // 删除
+            if (deleteId.isNotBlank()) {
+                requireActivity().showConfirmDialog(
+                    message = "是否删除该条时间线？",
+                    onConfirmClick = {
+                        contentAdapter.removeAt(position)
+                        viewModel.deleteTimeline(deleteId)
+                    }
+                )
+            }
+            true
         }
     }
 

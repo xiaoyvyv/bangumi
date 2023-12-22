@@ -11,6 +11,8 @@ import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -74,6 +76,24 @@ class TimelinePageViewModel : BaseViewModel() {
                         else -> BgmApiManager.bgmJsonApi.queryWholeTimeline(timelineType)
                             .parserTimelineForms()
                     }
+                }
+            }
+        )
+    }
+
+    /**
+     * 删除时间线
+     */
+    fun deleteTimeline(timelineId: String) {
+        launchUI(
+            error = {
+                it.printStackTrace()
+
+                showToastCompat(it.errorMsg)
+            },
+            block = {
+                withContext(Dispatchers.IO) {
+                    BgmApiManager.bgmWebApi.deleteTimeline(timelineId, UserHelper.formHash)
                 }
             }
         )

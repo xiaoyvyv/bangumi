@@ -5,6 +5,7 @@ package com.xiaoyv.common.api.parser.impl
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.requireNoError
@@ -165,6 +166,7 @@ fun parserTimelineText(item: Element, entity: TimelineEntity) {
     entity.avatar = item.select("a.avatar > span").styleBackground(false)
     entity.title = item.select(".info, .info_full").fetchHtmlTitle()
     entity.content = item.select("p.status, .info_sub").text()
+    entity.deleteId = item.select(".tml_del").hrefId()
 }
 
 /**

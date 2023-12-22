@@ -367,6 +367,13 @@ interface BgmWebApi {
         @Query("gh") hash: String,
     ): Document
 
+    @GET("/erase/tml/{tmlId}")
+    suspend fun deleteTimeline(
+        @Path("tmlId", encoded = true) tmlId: String,
+        @Query("gh") hash: String,
+        @Query("ajax") ajax: Int = 1,
+    ): Document
+
     @GET("/erase/entry/{blogId}")
     suspend fun deleteBlog(
         @Path("blogId", encoded = true) blogId: String,

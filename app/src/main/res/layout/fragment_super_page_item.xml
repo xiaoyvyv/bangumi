@@ -40,6 +40,7 @@
         app:layout_constraintEnd_toStartOf="@+id/iv_action"
         app:layout_constraintStart_toEndOf="@+id/iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+        app:layout_goneMarginEnd="@dimen/ui_layout_margin"
         tools:text="@tools:sample/lorem/random" />
 
     <com.xiaoyv.common.widget.image.AnimeImageView

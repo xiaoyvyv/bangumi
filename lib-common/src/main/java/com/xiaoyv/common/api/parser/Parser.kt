@@ -150,11 +150,11 @@ fun <T : Element> T.selectLegal(selector: String): Elements {
 }
 
 fun Elements.hrefId(): String {
-    return attr("href").substringAfterLast("/")
+    return attr("href").substringAfterLast("/").substringBefore("?")
 }
 
 fun Element.hrefId(): String {
-    return attr("href").substringAfterLast("/")
+    return attr("href").substringAfterLast("/").substringBefore("?")
 }
 
 fun Elements.lastTextNode(): String {

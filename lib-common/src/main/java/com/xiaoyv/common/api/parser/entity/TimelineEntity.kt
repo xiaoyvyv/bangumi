@@ -18,6 +18,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TimelineEntity(
     override var id: String = "",
+    var deleteId: String = "",
     var avatar: String = "",
     var name: String = "",
     var title: CharSequence = "",
@@ -52,6 +53,6 @@ data class TimelineEntity(
         var cover: String = "",
         var cardRate: String = "",
         var cardRateTotal: String = "",
-        var score: Float = 0f
+        var score: Float = 0f,
     ) : IdEntity, Parcelable
 }
