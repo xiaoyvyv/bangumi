@@ -170,6 +170,7 @@ interface BgmWebApi {
         @Query("page") page: Int? = null,
     ): Document
 
+    @FormUrlEncoded
     @POST("/subject/ep/{epId}/status/{epCollectType}")
     suspend fun postEpCollect(
         @Header("Referer") referer: String,
