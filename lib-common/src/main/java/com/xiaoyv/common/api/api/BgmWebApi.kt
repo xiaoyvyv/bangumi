@@ -718,6 +718,18 @@ interface BgmWebApi {
         @Query("page") page: Int,
         @QueryMap param: Map<String, String>,
     ): Document
+
+    /**
+     * 吐个槽
+     */
+    @FormUrlEncoded
+    @POST("/update/user/say?ajax=1")
+    suspend fun postTimelineSay(
+        @Field("say_input") sayInput: String,
+        @Field("formhash") gh: String,
+        @Field("submit") submit: String = "submit",
+        @Query("ajax") ajax: Int = 1,
+    )
 }
 
 

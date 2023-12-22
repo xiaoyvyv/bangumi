@@ -2,7 +2,10 @@ package com.xiaoyv.bangumi.ui
 
 import android.graphics.Typeface
 import android.view.MotionEvent
+import android.view.Window
+import android.view.WindowManager
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.google.android.material.badge.BadgeDrawable
 import com.xiaoyv.bangumi.R
@@ -33,6 +36,16 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     private val vpAdapter by lazy { HomeAdapter(this) }
 
     private val robot by lazy { HomeRobot(this) }
+
+    override fun initWindowConfig(window: Window) {
+        ScreenUtils.setPortrait(this)
+
+        // 窗口参数
+        window.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                    or WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        )
+    }
 
     override fun initView() {
         binding.vpView.isUserInputEnabled = false

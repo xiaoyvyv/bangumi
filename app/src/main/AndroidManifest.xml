@@ -93,7 +93,8 @@
         <activity
             android:name=".ui.HomeActivity"
             android:configChanges="orientation|keyboard|screenSize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name="com.xiaoyv.bangumi.ui.feature.login.LoginActivity"
             android:configChanges="orientation|keyboard|screenSize"

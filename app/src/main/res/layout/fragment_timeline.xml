@@ -33,4 +33,15 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/ui_size_24"
+        android:contentDescription="@string/app_name"
+        app:backgroundTint="?attr/colorPrimary"
+        app:srcCompat="@drawable/ic_comment"
+        app:tint="?attr/colorOnPrimary" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

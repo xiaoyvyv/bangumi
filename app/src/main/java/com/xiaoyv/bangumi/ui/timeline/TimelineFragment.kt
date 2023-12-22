@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.ui.timeline
 
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentTimelineBinding
@@ -12,6 +13,8 @@ import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.showInputDialog
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 /**
  * Class: [TimelineFragment]
@@ -90,6 +93,14 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
                 }
 
         }
+
+        binding.fabComment.setOnFastLimitClickListener {
+            requireActivity().showInputDialog(title = "吐个槽", onInput = {
+                if (it.isNotBlank()) {
+                    viewModel.addTimelineComment(it)
+                }
+            })
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {
@@ -97,6 +108,10 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
             if (it == BgmPathType.TYPE_TIMELINE) {
                 refreshToolbarTitle()
             }
+        }
+
+        UserHelper.observeUserInfo(this) {
+            binding.fabComment.isVisible = it.isEmpty.not()
         }
     }
 
