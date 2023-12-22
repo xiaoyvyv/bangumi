@@ -12,12 +12,13 @@ import androidx.fragment.app.FragmentManager
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SnackbarUtils
 import com.xiaoyv.bangumi.R
-import com.xiaoyv.bangumi.databinding.FragmentMediaActionEpCollectBinding
+import com.xiaoyv.bangumi.databinding.FragmentMediaActionEpBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
+import com.xiaoyv.common.api.parser.impl.parserMediaChapters
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.EpCollectType
 import com.xiaoyv.common.config.annotation.InterestType
@@ -41,20 +42,22 @@ import kotlinx.coroutines.withContext
  * @since 12/18/23
  */
 class MediaEpCollectDialog : DialogFragment() {
+    var onUpdateResult: (List<MediaChapterEntity>) -> Unit = {}
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ) = FragmentMediaActionEpCollectBinding.inflate(inflater, container, false).root
+    ) = FragmentMediaActionEpBinding.inflate(inflater, container, false).root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val entity = arguments?.getParcelObj<MediaChapterEntity>(NavKey.KEY_PARCELABLE) ?: return
         val mediaType = arguments?.getString(NavKey.KEY_STRING).orEmpty()
-        initView(FragmentMediaActionEpCollectBinding.bind(view), entity, mediaType)
+        initView(FragmentMediaActionEpBinding.bind(view), entity, mediaType)
     }
 
     private fun initView(
-        binding: FragmentMediaActionEpCollectBinding,
+        binding: FragmentMediaActionEpBinding,
         entity: MediaChapterEntity,
         mediaType: String,
     ) {
@@ -63,8 +66,8 @@ class MediaEpCollectDialog : DialogFragment() {
             dismissAllowingStateLoss()
         }
         binding.btnWish.text = InterestType.string(InterestType.TYPE_WISH, mediaType)
-        binding.btnCollect.text = InterestType.string(InterestType.TYPE_COLLECT, mediaType)
         binding.btnDropped.text = InterestType.string(InterestType.TYPE_DROPPED, mediaType)
+        binding.btnCollect.text = InterestType.string(InterestType.TYPE_COLLECT, mediaType)
 
         // 设置状态
         when (entity.collectType) {
@@ -104,14 +107,15 @@ class MediaEpCollectDialog : DialogFragment() {
                     EpCollectType.TYPE_QUEUE
                 }
 
-                R.id.btn_collect -> {
-                    entity.collectType = InterestType.TYPE_COLLECT
-                    EpCollectType.TYPE_WATCHED
-                }
-
                 R.id.btn_dropped -> {
                     entity.collectType = InterestType.TYPE_DROPPED
                     EpCollectType.TYPE_DROP
+                }
+
+                // 看过
+                R.id.btn_collect -> {
+                    entity.collectType = InterestType.TYPE_COLLECT
+                    EpCollectType.TYPE_WATCHED
                 }
 
                 else -> {
@@ -135,21 +139,31 @@ class MediaEpCollectDialog : DialogFragment() {
             error = {
                 it.printStackTrace()
 
+                isCancelable = true
                 showSnackBar(it.errorMsg, error = true)
             },
             block = {
+                // 提示加载中
+                isCancelable = false
                 showSnackBar("正在为你保存进度...", SnackbarUtils.LENGTH_INDEFINITE)
-                withContext(Dispatchers.IO) {
+
+                // 保存进度
+                val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_EP, entity.mediaId)
+                val newChapters = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.postEpCollect(
+                        referer = referer,
                         epId = entity.id,
                         epCollectType = epCollectType,
                         gh = UserHelper.formHash
-                    )
+                    ).parserMediaChapters(entity.mediaId)
                 }
-                hideSnackBar()
+                onUpdateResult(newChapters)
 
                 UserHelper.notifyActionChange(BgmPathType.TYPE_EP)
 
+                // 关闭
+                isCancelable = true
+                hideSnackBar()
                 dismissAllowingStateLoss()
             }
         )
@@ -179,8 +193,10 @@ class MediaEpCollectDialog : DialogFragment() {
             fragmentManager: FragmentManager,
             chapterEntity: MediaChapterEntity,
             @MediaType mediaType: String,
+            onUpdateResultListener: (List<MediaChapterEntity>) -> Unit = {},
         ) {
             MediaEpCollectDialog().apply {
+                onUpdateResult = onUpdateResultListener
                 arguments = bundleOf(
                     NavKey.KEY_PARCELABLE to chapterEntity,
                     NavKey.KEY_STRING to mediaType

@@ -40,7 +40,7 @@ data class MediaDetailEntity(
     @SerializedName("countDropped") var countDropped: Int = 0,
     @SerializedName("myProgress") var myProgress: Int = 0,
     @SerializedName("totalProgress") var totalProgress: Int = 0,
-    @SerializedName("progressList") var progressList: ArrayList<MediaProgress> = arrayListOf(),
+    @SerializedName("epList") var epList: List<MediaChapterEntity> = emptyList(),
     @SerializedName("subjectSummary") var subjectSummary: String = "",
     @SerializedName("tags") var tags: List<MediaTag> = emptyList(),
     @SerializedName("characters") var characters: List<MediaCharacter> = emptyList(),

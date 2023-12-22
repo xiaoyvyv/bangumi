@@ -6,6 +6,14 @@ import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
+@Keep
+@Parcelize
+data class MediaChapterPageEntity(
+    override var id: String = "",
+    var pages: List<MediaChapterEntity> = emptyList(),
+) : Parcelable, IdEntity
+
+
 /**
  * Class: [MediaChapterEntity]
  *
@@ -19,7 +27,6 @@ data class MediaChapterEntity(
     var mediaId: String = "",
     var titleCn: String = "",
     var titleNative: String = "",
-    var finished: Boolean = false,
     var time: String = "",
     var commentCount: Int = 0,
     var airedStateText: String = "",
@@ -28,4 +35,8 @@ data class MediaChapterEntity(
     @InterestType
     var collectType: String = InterestType.TYPE_UNKNOWN,
     var collectStateText: String = "",
+    var epType: String = "",
+    var number: String = "",
+
+    var splitter: Boolean = false,
 ) : Parcelable, IdEntity

@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
@@ -15,6 +17,7 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parseStar
+import com.xiaoyv.common.api.parser.parserEpNumber
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
@@ -32,14 +35,34 @@ import org.jsoup.nodes.Element
  */
 fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
     requireNoError()
+    val elements = select(".line_detail > ul > li")
+    val items = arrayListOf<MediaChapterEntity>()
+    elements.forEachIndexed { index, it ->
+        if (index == elements.size - 1 && it.select("input").isNotEmpty()) {
+            return@forEachIndexed
+        }
+        if (it.text() == "本篇") return@forEachIndexed
 
-    return select(".line_detail > ul > li").map {
-        if (it.select("h6").isEmpty()) return@map null
+        // 分隔符
+        if (it.select("h6").isEmpty()) {
+            items.add(
+                MediaChapterEntity(
+                    splitter = true,
+                    id = it.text(),
+                    number = it.text().replace("特别篇", "SP")
+                )
+            )
+            return@forEachIndexed
+        }
+
         val entity = MediaChapterEntity()
         entity.mediaId = mediaId
         entity.id = it.select("h6 a").hrefId()
         entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
         entity.titleNative = it.select("h6 a").text()
+        val (number, type) = parserEpNumber(entity.titleNative)
+        entity.number = number
+        entity.epType = type
         entity.isAired = it.select(".Air").isNotEmpty()
         entity.isAiring = it.select(".Today").isNotEmpty()
         entity.airedStateText = it.select(".epAirStatus").attr("title")
@@ -70,8 +93,10 @@ fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
                 .replace("首播:", "首播：")
             entity.commentCount = getOrNull(1)?.text().orEmpty().parseCount()
         }
-        entity
-    }.filterNotNull()
+
+        items.add(entity)
+    }
+    return items
 }
 
 fun Element.parserMediaComments(): List<MediaCommentEntity> {
@@ -268,61 +293,63 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 仅截取前24个
-    select(".prg_list > li").forEach { item ->
-        if (entity.progressList.size >= 24) return@forEach
+    /*   select(".prg_list > li").forEach { item ->
+           if (entity.progressList.size >= 24) return@forEach
 
-        val progress = MediaDetailEntity.MediaProgress()
+           val progress = MediaChapterEntity()
 
-        // 不是章节，如：SP OVA等格子
-        progress.isNotEp = item.hasClass("subtitle")
+           // 不是章节，如：SP OVA等格子
+           progress.isNotEp = item.hasClass("subtitle")
 
-        item.select("a").let {
-            progress.id = it.hrefId()
-            progress.titleNative = it.attr("title")
-            progress.number = it.text().ifBlank { item.text() }
-            // 我的收藏状态
-            when {
-                it.select(".epBtnWatched").isNotEmpty() -> {
-                    progress.collectType = InterestType.TYPE_COLLECT
-                }
+           item.select("a").let {
+               progress.id = it.hrefId()
+               progress.titleNative = it.attr("title")
+               progress.number = it.text().ifBlank { item.text() }
+               // 我的收藏状态
+               when {
+                   it.select(".epBtnWatched").isNotEmpty() -> {
+                       progress.collectType = InterestType.TYPE_COLLECT
+                   }
 
-                it.select(".epBtnQueue").isNotEmpty() -> {
-                    progress.collectType = InterestType.TYPE_WISH
-                }
+                   it.select(".epBtnQueue").isNotEmpty() -> {
+                       progress.collectType = InterestType.TYPE_WISH
+                   }
 
-                it.select(".epBtnDrop").isNotEmpty() -> {
-                    progress.collectType = InterestType.TYPE_DROPPED
-                }
+                   it.select(".epBtnDrop").isNotEmpty() -> {
+                       progress.collectType = InterestType.TYPE_DROPPED
+                   }
 
-                else -> {
-                    progress.collectType = InterestType.TYPE_UNKNOWN
-                }
-            }
-            // 是否已经放送
-            progress.isAired = it.hasClass("epBtnAir")
-            // 是否今天放送
-            progress.isAiring = it.hasClass("epBtnToday")
-        }
+                   else -> {
+                       progress.collectType = InterestType.TYPE_UNKNOWN
+                   }
+               }
+               // 是否已经放送
+               progress.isAired = it.hasClass("epBtnAir")
+               // 是否今天放送
+               progress.isAiring = it.hasClass("epBtnToday")
+           }
 
-        val relId = item.select("a").attr("rel")
-        if (relId.isNotBlank()) select(relId).apply {
-            select("span.tip").textNodes().forEach { text ->
-                val t = text.text()
-                if (t.startsWith("中文标题")) {
-                    progress.titleCn = t.removePrefix("中文标题").removePrefix(":").trim()
-                }
-                if (t.startsWith("首播")) {
-                    progress.firstTime = t.removePrefix("首播").removePrefix(":").trim()
-                }
-                if (t.startsWith("时长")) {
-                    progress.duration = t.removePrefix("时长").removePrefix(":").trim()
-                }
-            }
-            progress.commentCount = select("span.cmt small").text().parseCount()
-        }
-        entity.progressList.add(progress)
-    }
+           val relId = item.select("a").attr("rel")
+           if (relId.isNotBlank()) select(relId).apply {
+               select("span.tip").textNodes().forEach { text ->
+                   val t = text.text()
+                   if (t.startsWith("中文标题")) {
+                       progress.titleCn = t.removePrefix("中文标题").removePrefix(":").trim()
+                   }
+                   if (t.startsWith("首播")) {
+                       progress.firstTime = t.removePrefix("首播").removePrefix(":").trim()
+                   }
+                   if (t.startsWith("时长")) {
+                       progress.duration = t.removePrefix("时长").removePrefix(":").trim()
+                   }
+               }
+               progress.commentCount = select("span.cmt small").text().parseCount()
+           }
+           entity.progressList.add(progress)
+       }
+   */
 
+    // 总进度
     entity.myProgress = select("input[name=watchedeps]").attr("value").toIntOrNull() ?: 0
     entity.totalProgress = select(".prgText").text().parseCount()
     entity.subjectSummary = select("#subject_summary").text()

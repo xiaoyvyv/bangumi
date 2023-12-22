@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/ui_shape_rectangle_corner_6"
     android:backgroundTint="?attr/colorSurface"
     android:elevation="@dimen/ui_layout_elevation">
@@ -20,19 +20,92 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="无职转生" />
 
-    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-        android:id="@+id/rv_ep"
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@id/tv_title_cn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_size_8"
-        android:paddingVertical="@dimen/ui_size_8"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="@string/app_name"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:text="@string/app_name"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_cn" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@id/tv_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="@string/app_name"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/gp_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:gravity="center"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment"
         app:layout_constraintVertical_bias="0"
-        app:spanCount="8"
-        tools:listitem="@layout/fragment_overview_ep_item" />
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_wish"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="想看"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_collect"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="看过"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_dropped"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="抛弃"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_remove"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="撤销"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_cancel"

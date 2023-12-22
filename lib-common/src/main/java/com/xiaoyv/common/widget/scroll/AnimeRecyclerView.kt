@@ -14,7 +14,7 @@ import com.xiaoyv.widget.kts.isDestroyed
  * @author why
  * @since 11/23/23
  */
-class AnimeRecyclerView @JvmOverloads constructor(
+open class AnimeRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
     private var scrolling = false

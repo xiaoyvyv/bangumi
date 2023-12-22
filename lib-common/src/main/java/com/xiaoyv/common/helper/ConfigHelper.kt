@@ -23,6 +23,7 @@ object ConfigHelper {
     private const val KEY_DYNAMIC_THEME = "dynamic-theme"
     private const val KEY_FILTER_DELETE_COMMENT = "filter-delete-comment"
     private const val KEY_FILTER_BREAK_UP_COMMENT = "filter-break-up-comment"
+    private const val KEY_SPLIT_EP_LIST = "split-ep-list"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -116,4 +117,11 @@ object ConfigHelper {
     var isFilterBreakUpComment: Boolean
         get() = SPStaticUtils.getBoolean(KEY_FILTER_BREAK_UP_COMMENT, true)
         set(value) = SPStaticUtils.put(KEY_FILTER_BREAK_UP_COMMENT, value)
+
+    /**
+     * 章节是否分割
+     */
+    var isSplitEpList: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_SPLIT_EP_LIST, true)
+        set(value) = SPStaticUtils.put(KEY_SPLIT_EP_LIST, value)
 }

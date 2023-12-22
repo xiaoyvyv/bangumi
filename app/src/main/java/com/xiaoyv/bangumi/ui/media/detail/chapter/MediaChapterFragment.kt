@@ -49,6 +49,8 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_ep) {
+            if (it.splitter) return@setOnDebouncedChildClickListener
+
             if (activityViewModel.requireMediaCollectType != InterestType.TYPE_DO) {
                 requireActivity().showConfirmDialog(
                     message = "只有收藏为 (在看 | 在玩 | 在读 | 在听) 的条目才可以单独修改章节进度",
@@ -57,7 +59,14 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
                 return@setOnDebouncedChildClickListener
             }
 
-            MediaEpCollectDialog.show(childFragmentManager, it, activityViewModel.requireMediaType)
+            // 弹窗
+            MediaEpCollectDialog.show(
+                fragmentManager = childFragmentManager,
+                chapterEntity = it,
+                mediaType = activityViewModel.requireMediaType
+            ) { entities ->
+                viewModel.onListLiveData.value = entities
+            }
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.tv_comment) {

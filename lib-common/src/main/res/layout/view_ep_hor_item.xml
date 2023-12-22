@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_ep"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/ui_size_6">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_ep"
+        android:layout_width="@dimen/ui_size_36"
+        android:layout_height="@dimen/ui_size_36"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorPrimaryContainer"
+        android:breakStrategy="balanced"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="1"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_ep_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/ui_size_3"
+        android:text="SP"
+        android:textSize="6sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_ep"
+        app:layout_constraintTop_toTopOf="@+id/tv_ep"
+        tools:ignore="HardcodedText,SmallSp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

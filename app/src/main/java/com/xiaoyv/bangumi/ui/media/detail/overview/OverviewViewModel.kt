@@ -1,10 +1,14 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.xiaoyv.bangumi.ui.media.detail.overview
 
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.parser.impl.parserMediaChapters
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.api.response.douban.DouBanImageEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
@@ -13,8 +17,12 @@ import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.config.bean.EpSaveProgress
 import com.xiaoyv.common.config.bean.SampleImageEntity
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.widget.grid.EpGridView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 /**
@@ -29,6 +37,11 @@ class OverviewViewModel : BaseViewModel() {
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
     internal val mediaBinderListLiveData = MutableLiveData<List<AdapterTypeItem>>()
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
+
+    /**
+     * 刷新进度
+     */
+    internal val onRefreshEpLiveData = MutableLiveData<List<MediaChapterEntity>?>()
 
     /**
      * 对应的豆瓣预览图片ID
@@ -62,6 +75,10 @@ class OverviewViewModel : BaseViewModel() {
     }
 
     fun queryMediaInfo() {
+        queryMediaDetail()
+    }
+
+    private fun queryMediaDetail() {
         launchUI(
             stateView = loadingViewState,
             error = {
@@ -71,7 +88,7 @@ class OverviewViewModel : BaseViewModel() {
                 mediaBinderListLiveData.value = emptyList()
             },
             block = {
-                val (mediaEntity, binderList) = withContext(Dispatchers.IO) {
+                val deferred1 = async(Dispatchers.IO) {
                     val entity = BgmApiManager.bgmWebApi.queryMediaDetail(
                         mediaId = mediaId,
                         type = MediaDetailType.TYPE_OVERVIEW
@@ -79,11 +96,60 @@ class OverviewViewModel : BaseViewModel() {
                     entity.photos = listOf(defaultImage)
                     entity to buildBinderList(entity)
                 }
+                val deferred2 = async(Dispatchers.IO) { queryMediaEpList() }
+
+                // 并发执行
+                val list = awaitAll(deferred1, deferred2)
+
+                // 设置章节数据
+                val (mediaEntity, binderList) = list[0] as Pair<MediaDetailEntity, List<AdapterTypeItem>>
+                mediaEntity.epList = list[1] as List<MediaChapterEntity>
 
                 mediaDetailLiveData.value = mediaEntity
                 mediaBinderListLiveData.value = binderList
             }
         )
+    }
+
+    /**
+     * 查询进度列表
+     */
+    private suspend fun queryMediaEpList(): List<MediaChapterEntity> {
+        return withContext(Dispatchers.IO) {
+            val list =
+                BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_CHAPTER)
+                    .parserMediaChapters(mediaId)
+
+            val horSpanCount = EpGridView.SPAN_COUNT_HORIZONTAL
+
+            // 是否另起一行
+            if (ConfigHelper.isSplitEpList && EpGridView.isHorizontalGrid(list.size)) {
+                val newList = arrayListOf<MediaChapterEntity>()
+                list.forEach { item ->
+                    if (item.splitter) {
+                        val i = newList.size % horSpanCount
+                        // 补位
+                        if (i != 0) {
+                            repeat(horSpanCount - i) {
+                                newList.add(
+                                    MediaChapterEntity(
+                                        id = System.currentTimeMillis().toString(),
+                                        splitter = true
+                                    )
+                                )
+                            }
+                        }
+                        newList.add(item)
+                    } else {
+                        newList.add(item)
+                    }
+                }
+
+                newList
+            } else {
+                list
+            }
+        }
     }
 
     private fun buildBinderList(entity: MediaDetailEntity): List<AdapterTypeItem> {
@@ -197,11 +263,20 @@ class OverviewViewModel : BaseViewModel() {
             },
             block = {
                 withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.updateMediaProgress(mediaId, watch = progress.toString())
+                    BgmApiManager.bgmWebApi.updateMediaProgress(
+                        mediaId,
+                        watch = progress.toString()
+                    )
                 }
 
                 UserHelper.notifyActionChange(BgmPathType.TYPE_EP)
             }
         )
+    }
+
+    fun refreshEpList() {
+        launchUI {
+            onRefreshEpLiveData.value = queryMediaEpList()
+        }
     }
 }

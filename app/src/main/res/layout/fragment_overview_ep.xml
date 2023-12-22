@@ -11,19 +11,30 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-        android:id="@+id/rv_ep"
+    <com.xiaoyv.common.widget.grid.EpGridView
+        android:id="@+id/ep_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
-        android:orientation="vertical"
         android:overScrollMode="never"
-        android:paddingHorizontal="@dimen/ui_size_8"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:paddingHorizontal="@dimen/ui_size_10"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_ep"
-        app:spanCount="8"
-        tools:listitem="@layout/fragment_overview_ep_item" />
+        app:spanCount="5"
+        tools:listitem="@layout/view_ep_hor_item" />
+
+    <View
+        android:id="@+id/v_holder"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_size_120"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_ep" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="v_holder,ep_grid" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/pb_media"
@@ -37,7 +48,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_ep_my_progress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_ep"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
         app:trackCornerRadius="@dimen/ui_size_6"
         app:trackThickness="@dimen/ui_size_35" />
 
@@ -65,5 +76,18 @@
         app:layout_constraintTop_toTopOf="@+id/tv_ep_my_progress"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
         app:srcCompat="@drawable/ic_add"
+        app:tint="?attr/colorPrimary" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_location"
+        android:layout_width="@dimen/ui_size_24"
+        android:layout_height="@dimen/ui_size_24"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        app:contentPadding="@dimen/ui_size_4"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_ep_my_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_ep_my_progress"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
+        app:srcCompat="@drawable/ic_location"
         app:tint="?attr/colorPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

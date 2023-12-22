@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EmojiParam
+import com.xiaoyv.common.config.annotation.EpType
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.firstGroupValue
 import com.xiaoyv.common.kts.groupValue
@@ -239,3 +240,55 @@ fun Element.parserFormHash(): String {
     debugLog { "页面 FormHash: $formHash" }
     return formHash
 }
+
+/**
+ * 提取章节序号
+ *
+1106.キッドＶＳ安室　王妃の前髪（クイーンズ・バング）（後編） / 基德VS安室 王妃的刘海（后篇）
+1107.ハメられたのは私 / 被陷害的是我
+1108.カードに伏せられた秘密 / 卡牌中隐藏的秘密
+1108.5.カードに伏せられた秘密 / 卡牌中隐藏的秘密
+OP1.胸がドキドキ / 胸中动荡不安
+OP31.Feel Your Heart / Feel Your Heart
+OP53.謎 / 谜
+OP1000.ZEROからハジメテ / 从零开始
+ED1.STEP BY STEP / STEP BY STEP
+ED27.迷宮のラヴァーズ / 迷宫情人
+SP1.STEP BY STEP / STEP BY STEP
+SP27.5.迷宮のラヴァーズ / 迷宫情人
+ED71.君がいない夏 / 没有你的夏天
+ED977.星合 / 星合
+ED993.Reboot / Reboot
+ */
+fun parserEpNumber(title: String): Pair<String, String> {
+    // 返回
+    // 1107
+    // 1108.5.
+    // SP27.5.
+    // ED993
+    val epTip = "(^(ED|OP|SP|MAD|PV|O)*(\\d+\\.\\d*\\.))|(^(ED|OP|SP|MAD|PV|O)*\\d+\\.)"
+        .toRegex(RegexOption.IGNORE_CASE)
+        .find(title.trim())?.value.orEmpty()
+
+    val epType = when {
+        epTip.contains(EpType.TYPE_ED) -> EpType.TYPE_ED
+        epTip.contains(EpType.TYPE_OP) -> EpType.TYPE_OP
+        epTip.contains(EpType.TYPE_SP) -> EpType.TYPE_SP
+        epTip.contains(EpType.TYPE_MAD) -> EpType.TYPE_MAD
+        epTip.contains(EpType.TYPE_PV) -> EpType.TYPE_PV
+        epTip.contains(EpType.TYPE_OTHER) -> EpType.TYPE_OTHER
+        else -> EpType.TYPE_MAIN
+    }
+    val number = epTip.removePrefix(epType).removeSuffix(".")
+    return number to epType
+}
+
+
+
+
+
+
+
+
+
+

@@ -35,6 +35,7 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         })
         binding.settingFilterDelete.bindBoolean(this, ConfigHelper::isFilterDeleteComment)
         binding.settingBreakUp.bindBoolean(this, ConfigHelper::isFilterBreakUpComment)
+        binding.settingEpSplit.bindBoolean(this, ConfigHelper::isSplitEpList)
     }
 
     override fun initListener() {

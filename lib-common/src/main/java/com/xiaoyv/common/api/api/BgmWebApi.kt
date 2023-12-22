@@ -172,10 +172,11 @@ interface BgmWebApi {
 
     @POST("/subject/ep/{epId}/status/{epCollectType}")
     suspend fun postEpCollect(
-        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @Header("Referer") referer: String,
         @Path("epId", encoded = true) epId: String,
         @Path("epCollectType", encoded = true) @EpCollectType epCollectType: String,
         @Query("gh") gh: String,
+        @Field("ep_id") watchedEpId: Array<String>? = null,
     ): Document
 
     @FormUrlEncoded

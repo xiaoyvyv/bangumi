@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.media.detail.chapter
 
+import android.graphics.Color
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import com.xiaoyv.bangumi.databinding.FragmentMediaChapterItemBinding
@@ -22,13 +23,25 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
         FragmentMediaChapterItemBinding>(ItemDiffItemCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaChapterItemBinding>.converted(item: MediaChapterEntity) {
-        binding.titleNative.text = item.titleNative
+        binding.titleNative.text = if (item.splitter) item.number else item.titleNative
         binding.titleCn.text = item.titleCn
         binding.titleCn.isVisible = item.titleCn.isNotBlank()
+
         binding.tvTime.text = item.time
+        binding.tvTime.isVisible = item.splitter.not()
+
         binding.tvComment.text = String.format("讨论：%d", item.commentCount)
+        binding.tvComment.isVisible = item.splitter.not()
+
+        binding.vDivider.isVisible = item.splitter.not()
         binding.vAired.isVisible = item.airedStateText.isNotBlank()
         when {
+            // 分割
+            item.splitter -> {
+                binding.vAired.text = null
+                binding.vAired.backgroundTintList = Color.TRANSPARENT.tint
+                binding.vAired.setTextColor(Color.TRANSPARENT)
+            }
             // 看过
             item.collectType == InterestType.TYPE_COLLECT -> {
                 binding.vAired.text = item.collectStateText

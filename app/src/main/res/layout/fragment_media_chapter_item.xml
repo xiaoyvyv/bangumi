@@ -77,6 +77,7 @@
         tools:text="讨论：124" />
 
     <View
+        android:id="@+id/v_divider"
         style="@style/Theme.Bangumi.Divider"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0.5"

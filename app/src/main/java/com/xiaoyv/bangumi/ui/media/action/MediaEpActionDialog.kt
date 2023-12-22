@@ -1,3 +1,4 @@
+/*
 package com.xiaoyv.bangumi.ui.media.action
 
 import android.os.Bundle
@@ -40,12 +41,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
+*/
 /**
  * Class: [MediaEpActionDialog]
  *
  * @author why
  * @since 12/18/23
- */
+ *//*
+
 class MediaEpActionDialog : DialogFragment() {
     private var onSaveListener: ((Int) -> Unit)? = null
 
@@ -103,9 +106,11 @@ class MediaEpActionDialog : DialogFragment() {
         }
     }
 
-    /**
+    */
+/**
      * 保存进度
-     */
+     *//*
+
     private fun finishEp(mediaId: String, number: String) {
         launchUI(
             error = {
@@ -212,4 +217,4 @@ class MediaEpActionDialog : DialogFragment() {
             }.show(fragmentManager, "MediaEpActionDialog")
         }
     }
-}
+}*/
