@@ -1,6 +1,7 @@
 package com.xiaoyv.common.kts
 
 import android.content.Context
+import android.text.InputFilter.LengthFilter
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.StringUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -81,11 +82,16 @@ inline fun Context.showOptionsDialog(
 inline fun Context.showInputDialog(
     title: String = StringUtils.getString(CommonString.common_tip),
     inputHint: String = "输入内容...",
+    maxInput: Int = 1000,
     default: String = "",
     crossinline onInput: (String) -> Unit = { _ -> },
 ) {
     val binding = ViewInputLine1Binding.inflate(inflater)
     binding.etLine1.hint = inputHint
+
+    if (maxInput > 0) {
+        binding.etLine1.filters = arrayOf(LengthFilter(maxInput))
+    }
 
     if (default.isNotBlank()) {
         binding.etLine1.setText(default)
