@@ -46,7 +46,6 @@ class OverviewEpBinder(
 
             holder.binding.pb1.bind(this, true, clickAddEpProgress)
             holder.binding.pb2.bind(this, false, clickAddEpProgress)
-            holder.binding.pb2.isVisible = mediaType == MediaType.TYPE_BOOK
 
             holder.binding.ivLocation.isVisible = EpGridView.isHorizontalGrid(epList.size)
             holder.binding.ivLocation.setOnFastLimitClickListener {

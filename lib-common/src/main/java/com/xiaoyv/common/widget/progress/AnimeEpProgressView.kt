@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.databinding.ViewEpProgressBinding
 import com.xiaoyv.common.kts.inflater
@@ -37,6 +38,15 @@ class AnimeEpProgressView @JvmOverloads constructor(
         epOrVol: Boolean,
         clickAddListener: (MediaDetailEntity, Boolean) -> Unit,
     ) {
+        isVisible = entity.collectState.interest == InterestType.TYPE_DO
+                || entity.collectState.interest == InterestType.TYPE_COLLECT
+        if (!isVisible) return
+
+        // Vol的进度条，仅书籍能显示
+        if (isVisible && !epOrVol) {
+            isVisible = entity.mediaType == MediaType.TYPE_BOOK
+        }
+
         val progressTip = when {
             entity.mediaType == MediaType.TYPE_BOOK && epOrVol -> "Chap"
             entity.mediaType == MediaType.TYPE_BOOK -> "Vol"
@@ -52,8 +62,8 @@ class AnimeEpProgressView @JvmOverloads constructor(
                 append(" / ")
                 append(entity.totalProgressSecondTip)
             }
-            binding.ivAdd.isVisible = entity.progressSecond != entity.progressSecondMax
-                    || entity.progressSecondMax == 0
+            binding.ivAdd.isVisible = (entity.progressSecond != entity.progressSecondMax
+                    || entity.progressSecondMax == 0)
         } else {
             binding.pbMedia.max = entity.progressMax
             binding.pbMedia.setProgress(entity.progress, true)
@@ -64,8 +74,8 @@ class AnimeEpProgressView @JvmOverloads constructor(
                 append(" / ")
                 append(entity.totalProgressTip)
             }
-            binding.ivAdd.isVisible = entity.progress != entity.progressMax
-                    || entity.progressMax == 0
+            binding.ivAdd.isVisible = (entity.progress != entity.progressMax
+                    || entity.progressMax == 0)
         }
 
         binding.ivAdd.setOnFastLimitClickListener {
