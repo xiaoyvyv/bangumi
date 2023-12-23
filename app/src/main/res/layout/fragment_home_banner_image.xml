@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/ui_size_180"
-    android:layout_marginHorizontal="@dimen/ui_size_8">
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="@dimen/ui_size_8"
+    tools:showIn="@layout/fragment_home_banner">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_cover"

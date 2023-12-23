@@ -40,13 +40,17 @@ class OverviewEpBinder(
         holder.binding.tvTitleEp.title = item.title
 
         item.entity.forceCast<MediaDetailEntity>().apply {
-            holder.binding.epGrid.isVisible = MediaType.canEditEpProgress(mediaType)
-            holder.binding.vHolder.isVisible = MediaType.canEditEpProgress(mediaType) && isFirstBind
+            val canEditEpProgress = MediaType.canEditEpProgress(mediaType)
+
+            holder.binding.epGrid.isVisible = canEditEpProgress
+            holder.binding.vHolder.isVisible = canEditEpProgress && isFirstBind
 
             holder.binding.pb1.bind(this, true, clickAddEpProgress)
             holder.binding.pb2.bind(this, false, clickAddEpProgress)
 
-            holder.binding.ivLocation.isVisible = EpGridView.isHorizontalGrid(epList.size)
+            holder.binding.ivLocation.isVisible =
+                canEditEpProgress && EpGridView.isHorizontalGrid(epList.size)
+            
             holder.binding.ivLocation.setOnFastLimitClickListener {
                 holder.binding.epGrid.scrollToWatched()
             }
