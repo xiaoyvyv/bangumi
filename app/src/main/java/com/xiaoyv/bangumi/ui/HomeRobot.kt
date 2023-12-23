@@ -111,10 +111,13 @@ class HomeRobot(private val homeActivity: HomeActivity) {
         if (disable || popupWindow == null || binding == null) {
             return
         }
-        binding?.tvSpeech?.isVisible = true
-        binding?.tvSpeech?.text = text
-        binding?.tvSpeech?.removeCallbacks(dismissRunnable)
-        binding?.tvSpeech?.postDelayed(dismissRunnable, 5000)
+
+        useNotNull(binding?.tvSpeech) {
+            this.isVisible = true
+            this.text = text
+            this.removeCallbacks(dismissRunnable)
+            this.postDelayed(dismissRunnable, SHOW_DURATION)
+        }
     }
 
     private fun show() {
@@ -133,5 +136,9 @@ class HomeRobot(private val homeActivity: HomeActivity) {
         }
 
         popupWindow?.showAsDropDown(anchorView, 0, 0, Gravity.END)
+    }
+
+    companion object {
+        const val SHOW_DURATION = 5000L
     }
 }

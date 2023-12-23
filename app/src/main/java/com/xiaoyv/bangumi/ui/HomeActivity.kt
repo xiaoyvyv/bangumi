@@ -23,7 +23,6 @@ import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
-import com.xiaoyv.widget.kts.orEmpty
 import kotlinx.coroutines.delay
 
 
@@ -74,7 +73,12 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     }
 
     override fun initData() {
-        if (ConfigHelper.isRobotEnable.not()) robot.disable()
+        // Bangumi 娘开关
+        if (ConfigHelper.isRobotEnable) {
+            viewModel.startRobotSayQueue()
+        } else {
+            robot.disable()
+        }
 
         // 更新检测
         UpdateHelper.checkUpdate(this, false)
@@ -104,9 +108,10 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     }
 
     override fun LifecycleOwner.initViewObserver() {
+        // 多条语句可能同时触发，先加个列队
         currentApplication.globalRobotSpeech.observe(this) {
             debugLog { "春菜：$it" }
-            robot.onSay(it)
+            viewModel.addRobotSayQueue(it.trim())
         }
 
         currentApplication.globalNotify.observe(this) {
@@ -117,6 +122,10 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
             } else {
                 binding.navView.removeBadge(R.id.bottom_menu_profile)
             }
+        }
+
+        viewModel.onRobotSay.observe(this) {
+            robot.onSay(it)
         }
     }
 
