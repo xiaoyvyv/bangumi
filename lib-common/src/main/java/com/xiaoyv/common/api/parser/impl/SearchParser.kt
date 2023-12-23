@@ -30,7 +30,8 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                 entity.title = item.select(".inner h3 a").text()
                 entity.subtitle = item.select(".inner h3 small").text()
                 entity.rank = item.select(".rank").text()
-                entity.infoTip = BrowserParser.parserInfoTip(item.select(".tip").text())
+                entity.infoTip = BrowserParser.parserInfoTip(item.select(".info.tip").text())
+                entity.tags = item.select(".collectInfo .tip").text()
 
                 val rateInfo = item.select(".rateInfo")
                 entity.rating = rateInfo.parseStar()

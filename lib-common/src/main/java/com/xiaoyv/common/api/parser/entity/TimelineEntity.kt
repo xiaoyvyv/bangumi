@@ -34,6 +34,7 @@ data class TimelineEntity(
     var commentUserId: String = "",
     var commentAble: Boolean = false,
     var commentCount: Int = 0,
+    var isTotalTimeline: Boolean = false,
 
     var mediaCard: MediaTimeline = MediaTimeline(),
     var gridCard: List<GridTimeline> = emptyList(),

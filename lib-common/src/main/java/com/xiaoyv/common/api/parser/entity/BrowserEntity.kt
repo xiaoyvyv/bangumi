@@ -28,11 +28,12 @@ data class BrowserEntity(var items: List<Item> = emptyList()) : Parcelable {
         var rating: Float = 0f,
         var infoTip: InfoTip = InfoTip(),
         var rank: String = "",
+        var tags: String = "",
         var coverImage: String = "",
-
         @MediaType
         var mediaType: String = MediaType.TYPE_ANIME,
-        var mediaTypeName: String = ""
+        var mediaTypeName: String = "",
+        var collectTime: String = "",
     ) : Parcelable, IdEntity
 
     @Keep
@@ -40,6 +41,10 @@ data class BrowserEntity(var items: List<Item> = emptyList()) : Parcelable {
     data class InfoTip(
         var time: String = "",
         var eps: String = "",
-        var fullTip: String = ""
-    ) : Parcelable
+        var info: String = "",
+    ) : Parcelable {
+        override fun toString(): String {
+            return info
+        }
+    }
 }

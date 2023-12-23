@@ -67,16 +67,32 @@
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/ui_size_12"
+        android:layout_marginEnd="@dimen/ui_size_6"
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingBottom="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_ep"
         app:layout_constraintStart_toEndOf="@+id/iv_cover"
         app:layout_constraintTop_toTopOf="@+id/iv_cover"
+        app:layout_goneMarginEnd="@dimen/ui_size_0"
         tools:text="@tools:sample/lorem" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_ep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorPrimary"
+        android:padding="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_title"
+        tools:text="12 话" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_desc"
@@ -88,7 +104,7 @@
         android:paddingVertical="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         tools:text="@tools:sample/lorem/random" />

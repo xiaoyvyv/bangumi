@@ -14,18 +14,17 @@ import com.xiaoyv.common.api.parser.styleBackground
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TimelineAdapterType
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.groupValueOne
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 /**
- * Class: [TimeParser]
- *
- * @author why
- * @since 11/25/23
+ * @param isTotalTimeline 是否为网站全部时间线，禁止回复
  */
 fun Document.parserTimelineForms(
     userId: String = "",
+    isTotalTimeline: Boolean = false,
 ): List<TimelineEntity> {
     requireNoError()
     return select("#timeline ul > li").map { item ->
@@ -36,6 +35,7 @@ fun Document.parserTimelineForms(
             entity.name = select(".nameSingle .name").text()
             entity.avatar = select(".headerAvatar a.avatar > span").styleBackground()
         }
+        entity.isTotalTimeline = isTotalTimeline
         entity
     }
 }
@@ -184,8 +184,7 @@ private fun Elements.fetchTimeAndPlatform(entity: TimelineEntity) {
     entity.platform = platform
     entity.commentAble = commentA.isNotEmpty()
     entity.commentCount = commentA.text().parseCount()
-    entity.commentUserId = "user/(.*?)/timeline".toRegex().find(commentA.attr("href"))
-        ?.groupValues?.getOrNull(1).orEmpty()
+    entity.commentUserId = "user/(.*?)/timeline".toRegex().groupValueOne(commentA.attr("href"))
 
     if (entity.userId.isBlank()) {
         entity.userId = entity.commentUserId

@@ -21,19 +21,21 @@
         app:layout_constraintEnd_toStartOf="@+id/iv_comment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="@dimen/ui_layout_margin"
         tools:text="@tools:sample/lorem/random" />
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_comment"
         android:layout_width="@dimen/ui_size_44"
         android:layout_height="@dimen/ui_size_44"
-        android:layout_marginTop="@dimen/ui_size_6"
+        android:layout_marginTop="@dimen/ui_size_4"
         android:background="@color/ui_transparent"
-        app:contentPadding="@dimen/ui_size_12"
+        android:visibility="gone"
+        app:contentPadding="@dimen/ui_size_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_reply"
-        app:tint="?attr/colorOnSurfaceVariant" />
+        app:tint="?attr/colorPrimary" />
 
     <View
         style="@style/Theme.Bangumi.Divider"

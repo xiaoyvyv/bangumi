@@ -21,7 +21,7 @@ class SearchDetailItemAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
         binding.ivCover.loadImageAnimate(item.coverImage)
         binding.tvTitle.text = item.title
         binding.tvTitleCn.text = item.subtitle
-        binding.tvDesc.text = item.infoTip.fullTip
+        binding.tvDesc.text = item.infoTip.toString()
         binding.tvCommentCount.text = item.count
         binding.ivStar.rating = item.rating / 2f
         binding.ivStar.isVisible = item.rating != 0f

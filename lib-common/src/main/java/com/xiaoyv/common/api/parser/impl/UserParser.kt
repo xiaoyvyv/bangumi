@@ -12,6 +12,7 @@ import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
@@ -28,7 +29,7 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
 
     // 解析 Int 类型好友ID
     entity.numberUid = select(".actions a.chiiBtn").attr("href").let {
-        "(\\d{6,})".toRegex().find(it)?.groupValues?.getOrNull(1).orEmpty()
+        "(\\d{6,})".toRegex().groupValueOne(it)
     }
 
     selectLegal("#headerProfile").apply {

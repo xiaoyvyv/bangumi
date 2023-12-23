@@ -1,7 +1,5 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.blankj.utilcode.util.FileIOUtils
-import com.blankj.utilcode.util.PathUtils
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.xiaoyv.common.api.parser.entity.LikeEntity
@@ -15,6 +13,7 @@ import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.api.parser.requireNoError
+import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -86,7 +85,7 @@ fun Document.parserTopic(topicId: String): TopicDetailEntity {
 
         // 全部的贴贴列表
         val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);\\s+?</script>".toRegex()
-            .find(html())?.groupValues?.getOrNull(1).orEmpty()
+            .groupValueOne(html())
 
         val reader = JsonReader(StringReader(likeJson))
         val gson = Gson()
@@ -115,5 +114,5 @@ fun Document.parserTopic(topicId: String): TopicDetailEntity {
  * </script>
  */
 fun Element.parserTopicSendResult(): String {
-    return "/topic/(\\d+)\"".toRegex().find(toString())?.groupValues?.getOrNull(1).orEmpty()
+    return "/topic/(\\d+)\"".toRegex().groupValueOne(toString())
 }

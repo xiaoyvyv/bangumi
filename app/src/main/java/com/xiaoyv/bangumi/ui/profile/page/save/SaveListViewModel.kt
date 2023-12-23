@@ -35,6 +35,6 @@ class SaveListViewModel : BaseListViewModel<BrowserEntity.Item>() {
             listType = listType,
             sortType = sortType,
             page = current
-        ).parserBrowserPage(mediaType).items
+        ).parserBrowserPage(mediaType = mediaType).items
     }
 }

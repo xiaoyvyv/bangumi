@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.text.method.LinkMovementMethodCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.blankj.utilcode.util.SnackbarUtils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -29,6 +30,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getParcelObj
+import com.xiaoyv.widget.kts.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -54,6 +56,8 @@ class TimelineReplyDialog : BottomSheetDialogFragment() {
 
     private fun initView(binding: FragmentTimelineDialogBinding, entity: TimelineEntity) {
         TimelinePageAdapter.onBindText(binding.layoutTimeline, entity)
+        itemAdapter.isTotalTimeline = entity.isTotalTimeline
+
         binding.rvContent.adapter = itemAdapter
         binding.sectionComment.title = "回复"
         binding.sectionComment.more = null
@@ -62,11 +66,15 @@ class TimelineReplyDialog : BottomSheetDialogFragment() {
         queryTimelineReply(binding, entity.commentUserId, entity.id)
 
         binding.layoutTimeline.root.setOnFastLimitClickListener {
-            showSubReply(binding, entity.id, entity.commentUserId, "")
+            if (!entity.isTotalTimeline) {
+                showSubReply(binding, entity.id, entity.commentUserId, entity.name, "")
+            }
         }
 
         itemAdapter.setOnDebouncedChildClickListener(R.id.iv_comment) {
-            showSubReply(binding, entity.id, entity.commentUserId, it.id)
+            if (!entity.isTotalTimeline) {
+                showSubReply(binding, entity.id, entity.commentUserId, entity.name, it.id)
+            }
         }
     }
 
@@ -77,10 +85,16 @@ class TimelineReplyDialog : BottomSheetDialogFragment() {
         binding: FragmentTimelineDialogBinding,
         timelineId: String,
         userId: String,
+        userUserName: String,
         atUserId: String,
     ) {
+        if (!UserHelper.isLogin) {
+            toast("你还没有登录呢")
+            return
+        }
+
         requireActivity().showInputDialog(
-            title = "吐槽回复",
+            title = "$userUserName 的吐槽",
             inputHint = "吐槽回复",
             default = if (atUserId.isNotBlank()) "@$atUserId " else "",
             onInput = { content ->
@@ -141,9 +155,12 @@ class TimelineReplyDialog : BottomSheetDialogFragment() {
 
     private class ItemAdapter : BaseQuickDiffBindingAdapter<TimelineReplyEntity,
             FragmentTimelineDialogItemBinding>(IdDiffItemCallback()) {
+        var isTotalTimeline: Boolean = false
+
         override fun BaseQuickBindingHolder<FragmentTimelineDialogItemBinding>.converted(item: TimelineReplyEntity) {
             binding.tvContent.text = item.content
             binding.tvContent.movementMethod = LinkMovementMethodCompat.getInstance()
+            binding.ivComment.isVisible = isTotalTimeline.not()
         }
     }
 

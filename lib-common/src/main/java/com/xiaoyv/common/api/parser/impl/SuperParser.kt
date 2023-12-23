@@ -1,13 +1,14 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.SuperTopicEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.kts.groupValueOne
 import org.jsoup.nodes.Document
 
 /**
@@ -40,9 +41,7 @@ fun Document.parserSuperTopic(): List<SuperTopicEntity> {
 
             titleLink.contains("/topic/") -> {
                 entity.pathType = BgmPathType.TYPE_TOPIC
-                entity.topicType = "/topic/(.*?)/".toRegex()
-                    .find(titleLink)?.groupValues?.getOrNull(1)
-                    .orEmpty()
+                entity.topicType = "/topic/(.*?)/".toRegex().groupValueOne(titleLink)
 
                 if (entity.topicType == TopicType.TYPE_CRT) {
                     entity.attachTitle = "虚拟人物"

@@ -81,7 +81,7 @@ class TimelinePageViewModel : BaseListViewModel<TimelineEntity>() {
             else -> BgmApiManager.bgmJsonApi.queryWholeTimeline(
                 type = timelineType,
                 page = current
-            ).parserTimelineForms()
+            ).parserTimelineForms(isTotalTimeline = true)
         }
     }
 

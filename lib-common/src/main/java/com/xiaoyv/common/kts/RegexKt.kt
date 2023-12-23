@@ -4,7 +4,7 @@ package com.xiaoyv.common.kts
  * @author why
  * @since 12/15/23
  */
-fun Regex.firstGroupValue(targetText: String): String {
+fun Regex.groupValueOne(targetText: String): String {
     return groupValue(targetText, 1)
 }
 

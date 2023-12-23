@@ -747,6 +747,7 @@ interface BgmWebApi {
     @FormUrlEncoded
     @POST("timeline/{tmlId}/new_reply")
     suspend fun postTimelineReply(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
         @Path("tmlId") tmlId: String,
         @Field("content") content: String,
         @Field("formhash") formHash: String,

@@ -4,6 +4,7 @@ import com.xiaoyv.common.api.parser.entity.BlockEntity
 import com.xiaoyv.common.api.parser.entity.PrivacyEntity
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.config.annotation.PrivacyType
+import com.xiaoyv.common.kts.groupValueOne
 import org.jsoup.nodes.Element
 
 /**
@@ -18,7 +19,7 @@ fun Element.parserBlockUser(): List<BlockEntity> {
             avatar.id = item.select("td > a").hrefId()
             avatar.name = item.select("td > a").text()
             avatar.numberId = item.select("a.tip_i").attr("href").let {
-                "(\\d{6,})".toRegex().find(it)?.groupValues?.getOrNull(1).orEmpty()
+                "(\\d{6,})".toRegex().groupValueOne(it)
             }
             avatar
         }

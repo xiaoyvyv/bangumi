@@ -24,8 +24,10 @@ class SaveListAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
         binding.ivCover.loadImageAnimate(item.coverImage, holderType = IMAGE_HOLDER_3X4)
         binding.tvTitle.text = item.title
         binding.tvTag.text = item.mediaTypeName
-        binding.tvDesc.text = infoTip.fullTip.ifBlank { item.subtitle }
-        binding.tvTime.text = infoTip.time
+        binding.tvDesc.text = infoTip.toString().ifBlank { item.subtitle }
+        binding.tvTime.text = item.collectTime
+        binding.tvEp.text = item.infoTip.eps
+        binding.tvEp.isVisible = item.infoTip.eps.isNotBlank()
 
         binding.tvSource.isVisible = false
     }

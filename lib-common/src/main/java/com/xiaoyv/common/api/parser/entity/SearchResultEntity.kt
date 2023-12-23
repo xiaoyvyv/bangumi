@@ -23,6 +23,7 @@ data class SearchResultEntity(
     var ratingScore: String = "",
     var rating: Float = 0f,
     var infoTip: BrowserEntity.InfoTip = BrowserEntity.InfoTip(),
+    var tags: String = "",
     var rank: String = "",
     var coverImage: String = "",
     @MediaType

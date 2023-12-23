@@ -14,7 +14,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EmojiParam
 import com.xiaoyv.common.config.annotation.EpType
 import com.xiaoyv.common.kts.debugLog
-import com.xiaoyv.common.kts.firstGroupValue
+import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.common.kts.groupValue
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -223,7 +223,7 @@ fun Element.parserFormHash(): String {
     val fromHashFunName = "(ignoreUser|erasePM)"
     val formHash = select("input[name=formhash]").attr("value")
         .ifBlank {
-            val a = "gh=(\\S+?)\"".toRegex().firstGroupValue(toString())
+            val a = "gh=(\\S+?)\"".toRegex().groupValueOne(toString())
             a.trim()
         }
         .ifBlank {
@@ -233,7 +233,7 @@ fun Element.parserFormHash(): String {
         }
         .ifBlank {
             val c = "disconnectFriend\\(\\d+?\\s*,\\s*'[\\s\\S]+?'\\s*,\\s*'(.*?)'\\)".toRegex()
-                .firstGroupValue(toString())
+                .groupValueOne(toString())
             c.trim()
         }
 
