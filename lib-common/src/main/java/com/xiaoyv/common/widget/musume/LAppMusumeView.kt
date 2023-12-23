@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
-import android.view.MotionEvent
 
 /**
  * Class: [LAppMusumeView]
@@ -23,6 +22,7 @@ class LAppMusumeView @JvmOverloads constructor(context: Context?, attrs: Attribu
 
         setEGLConfigChooser(8, 8, 8, 8, 16, 0)
         setEGLContextClientVersion(2)
+        setZOrderOnTop(true)
 
         holder.setFormat(PixelFormat.TRANSLUCENT)
     }
@@ -31,16 +31,6 @@ class LAppMusumeView @JvmOverloads constructor(context: Context?, attrs: Attribu
     fun init() {
         setRenderer(LAppDelegate.getInstance())
         renderMode = RENDERMODE_CONTINUOUSLY
-    }
-
-    fun onDelegateTouchEvent(event: MotionEvent) {
-        val pointX = event.x
-        val pointY = event.y
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> LAppDelegate.getInstance().onTouchBegan(pointX, pointY)
-            MotionEvent.ACTION_UP -> LAppDelegate.getInstance().onTouchEnd(pointX, pointY)
-            MotionEvent.ACTION_MOVE -> LAppDelegate.getInstance().onTouchMoved(pointX, pointY)
-        }
     }
 
     override fun onResume() {

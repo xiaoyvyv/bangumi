@@ -21,9 +21,9 @@ class MainViewModel : BaseViewModel() {
     internal val onRobotSay = MutableLiveData<String>()
 
     /**
-     * 30 条数据
+     * 1 条数据，队列额外保存一条数据
      */
-    private val robotSayQueue = LinkedBlockingQueue<String>(30)
+    private val robotSayQueue = LinkedBlockingQueue<String>(1)
 
     /**
      * 队列轮询

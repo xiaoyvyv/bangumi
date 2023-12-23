@@ -169,22 +169,15 @@ public class LAppDelegate implements GLSurfaceView.Renderer {
         // 時間更新
         LAppPal.updateTime();
 
-        // 画面初期化
-        glClearColor(1.0f, 1.0f, 1.0f, .0f);
+        // 清理背景为透明
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearDepthf(1.0f);
 
         if (view != null) {
             view.render();
         }
-
-        // 停用应用程序
-        if (!isActive) {
-            // activity.finishAndRemoveTask();
-            // System.exit(0);
-        }
     }
-
 
     public void onTouchBegan(float x, float y) {
         mouseX = x;

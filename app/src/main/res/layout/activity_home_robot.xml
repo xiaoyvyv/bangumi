@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="end|bottom"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:background="@color/ui_transparent">
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_speech"
@@ -32,6 +33,7 @@
         android:id="@+id/robot_view"
         android:layout_width="@dimen/ui_size_100"
         android:layout_height="@dimen/ui_size_200"
+        android:background="@color/ui_transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
