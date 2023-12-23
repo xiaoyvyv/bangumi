@@ -292,63 +292,6 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         entity.countDropped = getOrNull(4)?.text().parseCount()
     }
 
-    // 仅截取前24个
-    /*   select(".prg_list > li").forEach { item ->
-           if (entity.progressList.size >= 24) return@forEach
-
-           val progress = MediaChapterEntity()
-
-           // 不是章节，如：SP OVA等格子
-           progress.isNotEp = item.hasClass("subtitle")
-
-           item.select("a").let {
-               progress.id = it.hrefId()
-               progress.titleNative = it.attr("title")
-               progress.number = it.text().ifBlank { item.text() }
-               // 我的收藏状态
-               when {
-                   it.select(".epBtnWatched").isNotEmpty() -> {
-                       progress.collectType = InterestType.TYPE_COLLECT
-                   }
-
-                   it.select(".epBtnQueue").isNotEmpty() -> {
-                       progress.collectType = InterestType.TYPE_WISH
-                   }
-
-                   it.select(".epBtnDrop").isNotEmpty() -> {
-                       progress.collectType = InterestType.TYPE_DROPPED
-                   }
-
-                   else -> {
-                       progress.collectType = InterestType.TYPE_UNKNOWN
-                   }
-               }
-               // 是否已经放送
-               progress.isAired = it.hasClass("epBtnAir")
-               // 是否今天放送
-               progress.isAiring = it.hasClass("epBtnToday")
-           }
-
-           val relId = item.select("a").attr("rel")
-           if (relId.isNotBlank()) select(relId).apply {
-               select("span.tip").textNodes().forEach { text ->
-                   val t = text.text()
-                   if (t.startsWith("中文标题")) {
-                       progress.titleCn = t.removePrefix("中文标题").removePrefix(":").trim()
-                   }
-                   if (t.startsWith("首播")) {
-                       progress.firstTime = t.removePrefix("首播").removePrefix(":").trim()
-                   }
-                   if (t.startsWith("时长")) {
-                       progress.duration = t.removePrefix("时长").removePrefix(":").trim()
-                   }
-               }
-               progress.commentCount = select("span.cmt small").text().parseCount()
-           }
-           entity.progressList.add(progress)
-       }
-   */
-
     // 总进度
     entity.myProgress = select("input[name=watchedeps]").attr("value").toIntOrNull() ?: 0
     entity.totalProgress = select(".prgText").text().parseCount()

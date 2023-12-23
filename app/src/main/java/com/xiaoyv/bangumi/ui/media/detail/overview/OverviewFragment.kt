@@ -100,19 +100,6 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     }
 
     override fun initListener() {
-        // 章节完成度点击
-        overviewAdapter.setOnDebouncedChildClickListener(R.id.tv_ep_my_progress) { item ->
-            val entity = viewModel.mediaDetailLiveData.value
-            val saveProgress = viewModel.requireProgress
-
-            // 修改进度面板
-            if (entity != null) {
-                /*    MediaEpActionDialog.show(childFragmentManager, saveProgress) { progress ->
-                        overviewAdapter.refreshEpProgress(entity, progress)
-                    }*/
-            }
-        }
-
         // 进度加 1
         overviewAdapter.setOnDebouncedChildClickListener(R.id.iv_add) {
             val entity = viewModel.mediaDetailLiveData.value
@@ -192,7 +179,8 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         }
 
         viewModel.onRefreshEpLiveData.observe(this) {
-            overviewAdapter.refreshEpList(it.orEmpty())
+            it ?: return@observe
+            overviewAdapter.refreshEpList(it.first, it.second)
         }
 
         UserHelper.observeUserInfo(this) {
@@ -224,8 +212,8 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             fragmentManager = childFragmentManager,
             chapterEntity = chapterEntity,
             mediaType = activityViewModel.requireMediaType
-        ) {
-            overviewAdapter.refreshEpList(it)
+        ) { epList, myProgress ->
+            overviewAdapter.refreshEpList(epList, myProgress)
         }
     }
 

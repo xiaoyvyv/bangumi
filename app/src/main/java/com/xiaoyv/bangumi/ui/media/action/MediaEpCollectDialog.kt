@@ -21,9 +21,11 @@ import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaChapters
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.EpCollectType
+import com.xiaoyv.common.config.annotation.EpType
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.hideSnackBar
 import com.xiaoyv.common.kts.showSnackBar
@@ -42,7 +44,7 @@ import kotlinx.coroutines.withContext
  * @since 12/18/23
  */
 class MediaEpCollectDialog : DialogFragment() {
-    var onUpdateResult: (List<MediaChapterEntity>) -> Unit = {}
+    var onUpdateResult: ((List<MediaChapterEntity>, Int) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -149,15 +151,23 @@ class MediaEpCollectDialog : DialogFragment() {
 
                 // 保存进度
                 val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_EP, entity.mediaId)
-                val newChapters = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.postEpCollect(
+                val (newChapters, myProgress) = withContext(Dispatchers.IO) {
+                    val list = BgmApiManager.bgmWebApi.postEpCollect(
                         referer = referer,
                         epId = entity.id,
                         epCollectType = epCollectType,
                         gh = UserHelper.formHash
                     ).parserMediaChapters(entity.mediaId)
+
+                    // 计算本篇的看过或抛弃数目
+                    val progressCount = list.count {
+                        it.epType == EpType.TYPE_MAIN && (it.collectType == InterestType.TYPE_DROPPED || it.collectType == InterestType.TYPE_COLLECT)
+                    }
+
+                    list to progressCount
                 }
-                onUpdateResult(newChapters)
+
+                onUpdateResult?.invoke(newChapters, myProgress)
 
                 UserHelper.notifyActionChange(BgmPathType.TYPE_EP)
 
@@ -180,7 +190,7 @@ class MediaEpCollectDialog : DialogFragment() {
         val window = dialog.window ?: return
 
         window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(0.25f)
+        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
         window.updateWindowParams {
             width = ScreenUtils.getScreenWidth() - 32.dpi
             gravity = Gravity.CENTER
@@ -193,7 +203,7 @@ class MediaEpCollectDialog : DialogFragment() {
             fragmentManager: FragmentManager,
             chapterEntity: MediaChapterEntity,
             @MediaType mediaType: String,
-            onUpdateResultListener: (List<MediaChapterEntity>) -> Unit = {},
+            onUpdateResultListener: ((List<MediaChapterEntity>, Int) -> Unit)? = null,
         ) {
             MediaEpCollectDialog().apply {
                 onUpdateResult = onUpdateResultListener

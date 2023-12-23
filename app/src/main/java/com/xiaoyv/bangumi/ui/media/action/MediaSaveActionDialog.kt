@@ -26,6 +26,7 @@ import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.ScoreStarType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
@@ -289,7 +290,7 @@ class MediaSaveActionDialog : DialogFragment() {
         val window = dialog.window ?: return
 
         window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(0.25f)
+        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
         window.updateWindowParams {
             width = ScreenUtils.getScreenWidth() - 32.dpi
             gravity = Gravity.CENTER

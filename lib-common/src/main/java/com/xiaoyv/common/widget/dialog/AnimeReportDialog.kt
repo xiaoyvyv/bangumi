@@ -18,6 +18,7 @@ import com.xiaoyv.common.api.parser.entity.ReportEntity
 import com.xiaoyv.common.api.parser.impl.parserReportForm
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.databinding.ViewReportBinding
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
@@ -127,7 +128,7 @@ class AnimeReportDialog : DialogFragment() {
         val window = dialog.window ?: return
 
         window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(0.25f)
+        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
         window.updateWindowParams {
             width = ScreenUtils.getScreenWidth() - 32.dpi
             gravity = Gravity.CENTER

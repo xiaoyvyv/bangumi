@@ -82,12 +82,13 @@ class OverviewAdapter(
         }
     }
 
-    fun refreshEpList(chapters: List<MediaChapterEntity>) {
+    fun refreshEpList(chapters: List<MediaChapterEntity>, myProgress: Int) {
         val item = items.find { it.type == TYPE_EP } ?: return
         val targetIndex = itemIndexOfFirst(item)
         val entity = item.entity as MediaDetailEntity
         if (targetIndex != -1 && chapters.isNotEmpty()) {
             entity.epList = chapters
+            entity.myProgress = myProgress
             item.entity = entity
             set(targetIndex, item)
         }

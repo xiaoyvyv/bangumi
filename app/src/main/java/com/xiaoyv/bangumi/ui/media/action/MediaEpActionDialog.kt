@@ -146,7 +146,7 @@ class MediaEpActionDialog : DialogFragment() {
         val window = dialog.window ?: return
 
         window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(0.25f)
+        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
         window.updateWindowParams {
             width = ScreenUtils.getScreenWidth() - 32.dpi
             gravity = Gravity.CENTER

@@ -28,6 +28,8 @@ object ConfigHelper {
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
+    const val DIALOG_DIM_AMOUNT = 0.5f
+
     fun configBaiduTranslateId(appId: String) {
         SPStaticUtils.put(KEY_BAIDU_TRANSLATE_APP_ID, appId)
     }

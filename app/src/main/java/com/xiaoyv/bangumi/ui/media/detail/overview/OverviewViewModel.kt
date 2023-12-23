@@ -13,6 +13,8 @@ import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.api.response.douban.DouBanImageEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.EpType
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.config.bean.EpSaveProgress
@@ -40,8 +42,11 @@ class OverviewViewModel : BaseViewModel() {
 
     /**
      * 刷新进度
+     *
+     * first: 章节数据
+     * second: 本篇进度值
      */
-    internal val onRefreshEpLiveData = MutableLiveData<List<MediaChapterEntity>?>()
+    internal val onRefreshEpLiveData = MutableLiveData<Pair<List<MediaChapterEntity>, Int>?>()
 
     /**
      * 对应的豆瓣预览图片ID
@@ -109,47 +114,6 @@ class OverviewViewModel : BaseViewModel() {
                 mediaBinderListLiveData.value = binderList
             }
         )
-    }
-
-    /**
-     * 查询进度列表
-     */
-    private suspend fun queryMediaEpList(): List<MediaChapterEntity> {
-        return withContext(Dispatchers.IO) {
-            val list =
-                BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_CHAPTER)
-                    .parserMediaChapters(mediaId)
-
-            val horSpanCount = EpGridView.SPAN_COUNT_HORIZONTAL
-
-            // 是否另起一行
-            if (ConfigHelper.isSplitEpList && EpGridView.isHorizontalGrid(list.size)) {
-                val newList = arrayListOf<MediaChapterEntity>()
-                list.forEach { item ->
-                    if (item.splitter) {
-                        val i = newList.size % horSpanCount
-                        // 补位
-                        if (i != 0) {
-                            repeat(horSpanCount - i) {
-                                newList.add(
-                                    MediaChapterEntity(
-                                        id = System.currentTimeMillis().toString(),
-                                        splitter = true
-                                    )
-                                )
-                            }
-                        }
-                        newList.add(item)
-                    } else {
-                        newList.add(item)
-                    }
-                }
-
-                newList
-            } else {
-                list
-            }
-        }
     }
 
     private fun buildBinderList(entity: MediaDetailEntity): List<AdapterTypeItem> {
@@ -224,6 +188,9 @@ class OverviewViewModel : BaseViewModel() {
         return items
     }
 
+    /**
+     * 查询预览图片
+     */
     fun queryPhotos(mediaName: String?) {
         launchUI(
             error = {
@@ -274,9 +241,62 @@ class OverviewViewModel : BaseViewModel() {
         )
     }
 
+    /**
+     * 刷新章节信息
+     */
     fun refreshEpList() {
         launchUI {
-            onRefreshEpLiveData.value = queryMediaEpList()
+            onRefreshEpLiveData.value = withContext(Dispatchers.IO) {
+                val chapterList = queryMediaEpList()
+                val progressCount = chapterList.count {
+                    // 计算本篇的看过或抛弃数目
+                    it.epType == EpType.TYPE_MAIN && (it.collectType == InterestType.TYPE_DROPPED || it.collectType == InterestType.TYPE_COLLECT)
+                }
+
+                chapterList to progressCount
+            }
+        }
+    }
+
+
+    /**
+     * 查询进度列表
+     */
+    private suspend fun queryMediaEpList(): List<MediaChapterEntity> {
+        return withContext(Dispatchers.IO) {
+            val list =
+                BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_CHAPTER)
+                    .parserMediaChapters(mediaId)
+
+            val horSpanCount = EpGridView.SPAN_COUNT_HORIZONTAL
+
+            // 是否另起一行
+            if (ConfigHelper.isSplitEpList && EpGridView.isHorizontalGrid(list.size)) {
+                val newList = arrayListOf<MediaChapterEntity>()
+                list.forEach { item ->
+                    if (item.splitter) {
+                        val i = newList.size % horSpanCount
+                        // 补位
+                        if (i != 0) {
+                            repeat(horSpanCount - i) {
+                                newList.add(
+                                    MediaChapterEntity(
+                                        id = System.currentTimeMillis().toString(),
+                                        splitter = true
+                                    )
+                                )
+                            }
+                        }
+                        newList.add(item)
+                    } else {
+                        newList.add(item)
+                    }
+                }
+
+                newList
+            } else {
+                list
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.xiaoyv.common.R
 import com.xiaoyv.common.databinding.ViewLoadingBinding
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.updateWindowParams
@@ -48,7 +49,7 @@ class AnimeLoadingDialog(context: Context) : AlertDialog(context), UiDialog {
         super.onStart()
 
         val window = window ?: return
-        window.setDimAmount(0.25f)
+        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
         window.setBackgroundDrawableResource(com.xiaoyv.widget.R.color.ui_transparent)
         window.updateWindowParams {
             width = 24.dpi * 2 + context.resources.getDimensionPixelSize(R.dimen.avatar_size)

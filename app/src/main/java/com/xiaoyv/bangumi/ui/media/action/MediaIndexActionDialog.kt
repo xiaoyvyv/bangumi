@@ -19,6 +19,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.IndexItemEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.IndexAttachCatType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.hideSnackBar
 import com.xiaoyv.common.kts.showConfirmDialog
@@ -160,7 +161,7 @@ class MediaIndexActionDialog : DialogFragment() {
         val window = dialog.window ?: return
 
         window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(0.25f)
+        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
         window.updateWindowParams {
             width = ScreenUtils.getScreenWidth() - 32.dpi
             height = (ScreenUtils.getScreenHeight() * 0.8f).roundToInt()

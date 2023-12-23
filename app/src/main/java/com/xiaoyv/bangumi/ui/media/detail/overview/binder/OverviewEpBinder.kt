@@ -11,12 +11,11 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
-import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
+import com.xiaoyv.common.widget.grid.EpGridView
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.getAttrColor
 
 
 /**
@@ -46,23 +45,15 @@ class OverviewEpBinder(
             holder.binding.pbMedia.max = totalProgress
             holder.binding.pbMedia.setProgress(myProgress, true)
 
-            holder.binding.tvEpMyProgress.text =
-                String.format("我的完成度：%d/%d", myProgress, totalProgress)
-
-            // 进度文字颜色
-            if (totalProgress == 0 || myProgress < totalProgress / 2) {
-                holder.binding.tvEpMyProgress.setTextColor(
-                    holder.binding.pbMedia.context.getAttrColor(GoogleAttr.colorOnSurfaceVariant)
-                )
-            } else {
-                holder.binding.tvEpMyProgress.setTextColor(
-                    holder.binding.pbMedia.context.getAttrColor(GoogleAttr.colorOnPrimary)
-                )
-            }
+            holder.binding.tvEpMyProgress.text = String.format(
+                "我的完成度：%d / %s",
+                myProgress, if (totalProgress == 0) "*" else totalProgress.toString()
+            )
 
             holder.binding.tvEpMyProgress.isVisible = canShowProgress
-            holder.binding.ivLocation.isVisible = canShowProgress
             holder.binding.ivAdd.isVisible = canShowProgress && myProgress != totalProgress
+            holder.binding.ivLocation.isVisible =
+                canShowProgress && EpGridView.isHorizontalGrid(epList.size)
 
             holder.binding.ivLocation.setOnFastLimitClickListener {
                 holder.binding.epGrid.scrollToWatched()

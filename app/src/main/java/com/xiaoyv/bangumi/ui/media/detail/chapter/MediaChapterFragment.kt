@@ -64,7 +64,7 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
                 fragmentManager = childFragmentManager,
                 chapterEntity = it,
                 mediaType = activityViewModel.requireMediaType
-            ) { entities ->
+            ) { entities, _ ->
                 viewModel.onListLiveData.value = entities
             }
         }
