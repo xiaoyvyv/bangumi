@@ -23,7 +23,7 @@ import androidx.annotation.StringDef
 @Retention(AnnotationRetention.SOURCE)
 annotation class TimelineType {
     companion object {
-        const val TYPE_ALL = ""
+        const val TYPE_ALL = "all"
         const val TYPE_SAY = "say"
         const val TYPE_SUBJECT = "subject"
         const val TYPE_PROGRESS = "process"

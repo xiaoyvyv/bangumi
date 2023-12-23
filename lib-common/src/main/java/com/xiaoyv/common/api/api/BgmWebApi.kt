@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.BgmApiManager
@@ -93,6 +95,12 @@ interface BgmWebApi {
         @Query("type") @TimelineType type: String,
         @Query("page") page: Int? = null,
         @Query("ajax") ajax: Long = 1,
+    ): Document
+
+    @GET("/user/{userId}/timeline/status/{timelineId}")
+    suspend fun queryTimelineReply(
+        @Path("userId", encoded = true) userId: String,
+        @Path("timelineId", encoded = true) timelineId: String,
     ): Document
 
     /**
@@ -732,6 +740,19 @@ interface BgmWebApi {
         @Field("submit") submit: String = "submit",
         @Query("ajax") ajax: Int = 1,
     )
+
+    /**
+     * 回复时间线
+     */
+    @FormUrlEncoded
+    @POST("timeline/{tmlId}/new_reply")
+    suspend fun postTimelineReply(
+        @Path("tmlId") tmlId: String,
+        @Field("content") content: String,
+        @Field("formhash") formHash: String,
+        @Field("submit") submit: String = "submit",
+        @Query("ajax") ajax: Int = 1,
+    ): Document
 }
 
 

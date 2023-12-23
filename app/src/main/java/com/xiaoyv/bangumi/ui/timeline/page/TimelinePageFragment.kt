@@ -34,7 +34,7 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
         get() = !viewModel.hasMultiPage
 
     override fun onCreateContentAdapter(): BaseDifferAdapter<TimelineEntity, *> {
-        return TimelinePageDiffAdapter {
+        return TimelinePageAdapter {
             if (it is TimelineEntity.GridTimeline && it.id.isNotBlank()) {
                 when (it.pathType) {
                     // 跳转媒体详情
@@ -77,6 +77,13 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
                 }
 
                 TimelineAdapterType.TYPE_TEXT -> {
+                    // 是否为有回复的吐槽时间线
+                    if (it.commentAble) {
+                        TimelineReplyDialog.show(childFragmentManager, it)
+                        return@setOnDebouncedChildClickListener
+                    }
+
+                    // 跳转 Title Id 对应的页面
                     if (it.titleId.isNotBlank()) when (it.titleType) {
                         // 跳转用户详情
                         BgmPathType.TYPE_USER -> {

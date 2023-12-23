@@ -3,6 +3,7 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
+import com.xiaoyv.common.api.parser.entity.TimelineReplyEntity
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
@@ -148,10 +149,6 @@ fun parserTimelineMedia(item: Element, entity: TimelineEntity) {
  * 解析文本类型的时间线
  */
 fun parserTimelineText(item: Element, entity: TimelineEntity) {
-    val (time, platform) = item.select(".post_actions").fetchTimeAndPlatform()
-    entity.time = time
-    entity.platform = platform
-
     val infoA = item.select(".info > a.l")
     val infoFullA = item.select(".info_full > a.l")
     val (titleId, titleType, titleLink) =
@@ -168,19 +165,31 @@ fun parserTimelineText(item: Element, entity: TimelineEntity) {
     entity.title = item.select(".info, .info_full").fetchHtmlTitle()
     entity.content = item.select("p.status, .info_sub").text()
     entity.deleteId = item.select(".tml_del").hrefId()
+
+    // 解析 Action
+    item.select(".post_actions").fetchTimeAndPlatform(entity)
 }
 
 /**
  * 解析时间和平台解析
  */
-private fun Elements.fetchTimeAndPlatform(): Pair<String, String> {
-    val timeInfo = select(".post_actions")
-        .apply { select("a").remove() }
-        .text().trim().trim('·').trim()
-        .split("·")
+private fun Elements.fetchTimeAndPlatform(entity: TimelineEntity) {
+    val actions = select(".post_actions")
+    val commentA = select("a").remove()
+    val timeInfo = actions.text().split("·").filter { it.isNotBlank() }
     val time = timeInfo.getOrNull(0).orEmpty().trim()
     val platform = timeInfo.getOrNull(1).orEmpty().trim()
-    return time to platform
+
+    entity.time = time
+    entity.platform = platform
+    entity.commentAble = commentA.isNotEmpty()
+    entity.commentCount = commentA.text().parseCount()
+    entity.commentUserId = "user/(.*?)/timeline".toRegex().find(commentA.attr("href"))
+        ?.groupValues?.getOrNull(1).orEmpty()
+
+    if (entity.userId.isBlank()) {
+        entity.userId = entity.commentUserId
+    }
 }
 
 /**
@@ -225,4 +234,22 @@ private fun Element?.fetchLinkIdAndType(): Triple<String, String, String> {
         else -> BgmPathType.TYPE_USER
     }
     return Triple(titleId, titleType, titleLink)
+}
+
+/**
+ * 解析时间线回复
+ */
+fun Element.parserTimelineSayReply(): List<TimelineReplyEntity> {
+    return select(".subReply > li[data-item-user]").map { item ->
+        item.select(".cmt_reply").remove()
+        val html = item.html()
+        val userName = item.select("a").firstOrNull()?.text().orEmpty()
+
+        TimelineReplyEntity(
+            id = item.attr("data-item-user"),
+            userName = userName,
+            contentHtml = html,
+            content = html.parseHtml(true),
+        )
+    }
 }

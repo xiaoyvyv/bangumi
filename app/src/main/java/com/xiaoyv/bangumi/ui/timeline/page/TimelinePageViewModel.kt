@@ -63,7 +63,8 @@ class TimelinePageViewModel : BaseListViewModel<TimelineEntity>() {
                 require(UserHelper.isLogin) { "你还没有登录呢" }
                 BgmApiManager.bgmWebApi.queryFriendTimeline(
                     type = timelineType,
-                    page = current
+                    page = current,
+                    ajax = 0
                 ).parserTimelineForms()
             }
             // 自己的时间线
