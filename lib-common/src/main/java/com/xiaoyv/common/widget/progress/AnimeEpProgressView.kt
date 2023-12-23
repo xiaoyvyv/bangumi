@@ -53,6 +53,7 @@ class AnimeEpProgressView @JvmOverloads constructor(
                 append(entity.totalProgressSecondTip)
             }
             binding.ivAdd.isVisible = entity.progressSecond != entity.progressSecondMax
+                    || entity.progressSecondMax == 0
         } else {
             binding.pbMedia.max = entity.progressMax
             binding.pbMedia.setProgress(entity.progress, true)
@@ -64,6 +65,7 @@ class AnimeEpProgressView @JvmOverloads constructor(
                 append(entity.totalProgressTip)
             }
             binding.ivAdd.isVisible = entity.progress != entity.progressMax
+                    || entity.progressMax == 0
         }
 
         binding.ivAdd.setOnFastLimitClickListener {
