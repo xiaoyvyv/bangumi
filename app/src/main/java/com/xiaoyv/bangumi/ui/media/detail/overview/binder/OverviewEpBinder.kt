@@ -39,8 +39,7 @@ class OverviewEpBinder(
         holder.binding.tvTitleEp.title = item.title
 
         item.entity.forceCast<MediaDetailEntity>().apply {
-            val canShowProgress = collectState.interest != InterestType.TYPE_UNKNOWN
-                    && collectState.interest != InterestType.TYPE_WISH
+            val canShowProgress = collectState.interest == InterestType.TYPE_DO
 
             holder.binding.pbMedia.max = totalProgress
             holder.binding.pbMedia.setProgress(myProgress, true)
@@ -52,9 +51,8 @@ class OverviewEpBinder(
 
             holder.binding.tvEpMyProgress.isVisible = canShowProgress
             holder.binding.ivAdd.isVisible = canShowProgress && myProgress != totalProgress
-            holder.binding.ivLocation.isVisible =
-                canShowProgress && EpGridView.isHorizontalGrid(epList.size)
 
+            holder.binding.ivLocation.isVisible = EpGridView.isHorizontalGrid(epList.size)
             holder.binding.ivLocation.setOnFastLimitClickListener {
                 holder.binding.epGrid.scrollToWatched()
             }
