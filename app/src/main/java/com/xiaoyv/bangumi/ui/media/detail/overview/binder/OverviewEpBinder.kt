@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewEpBinding
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
-import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
@@ -27,6 +27,7 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 class OverviewEpBinder(
     private val touchedListener: RecyclerItemTouchedListener,
     private val clickItemListener: BaseQuickAdapter.OnItemChildClickListener<MediaChapterEntity>,
+    private val clickAddEpProgress: (MediaDetailEntity, Boolean) -> Unit,
 ) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewEpBinding>> {
     private var autoScrollWatched = true
 
@@ -39,18 +40,13 @@ class OverviewEpBinder(
         holder.binding.tvTitleEp.title = item.title
 
         item.entity.forceCast<MediaDetailEntity>().apply {
-            val canShowProgress = collectState.interest == InterestType.TYPE_DO
+            val hasProgress = mediaType == MediaType.TYPE_ANIME || mediaType == MediaType.TYPE_REAL
+            holder.binding.epGrid.isVisible = hasProgress
+            holder.binding.vHolder.isVisible = hasProgress
 
-            holder.binding.pbMedia.max = totalProgress
-            holder.binding.pbMedia.setProgress(myProgress, true)
-
-            holder.binding.tvEpMyProgress.text = String.format(
-                "我的完成度：%d / %s",
-                myProgress, if (totalProgress == 0) "*" else totalProgress.toString()
-            )
-
-            holder.binding.tvEpMyProgress.isVisible = canShowProgress
-            holder.binding.ivAdd.isVisible = canShowProgress && myProgress != totalProgress
+            holder.binding.pb1.bind(this, true, clickAddEpProgress)
+            holder.binding.pb2.bind(this, false, clickAddEpProgress)
+            holder.binding.pb2.isVisible = mediaType == MediaType.TYPE_BOOK
 
             holder.binding.ivLocation.isVisible = EpGridView.isHorizontalGrid(epList.size)
             holder.binding.ivLocation.setOnFastLimitClickListener {
@@ -69,7 +65,7 @@ class OverviewEpBinder(
         context: Context,
         parent: ViewGroup,
         viewType: Int,
-    ): BaseQuickBindingHolder<FragmentOverviewEpBinding> = BaseQuickBindingHolder(
+    ) = BaseQuickBindingHolder(
         FragmentOverviewEpBinding.inflate(context.inflater, parent, false)
     )
 }

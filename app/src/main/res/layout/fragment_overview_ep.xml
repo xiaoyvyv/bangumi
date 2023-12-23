@@ -36,49 +36,19 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="v_holder,ep_grid" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/pb_media"
-        android:layout_width="@dimen/ui_size_0"
+    <com.xiaoyv.common.widget.progress.AnimeEpProgressView
+        android:id="@+id/pb_1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/ui_layout_margin"
         android:layout_marginTop="@dimen/ui_size_12"
-        android:layout_marginBottom="@dimen/ui_size_12"
-        android:max="100"
-        android:progress="10"
-        app:indicatorColor="@color/save_collect"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_ep_my_progress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrier"
-        app:trackColor="@color/save_collect_alpha"
-        app:trackCornerRadius="@dimen/ui_size_6"
-        app:trackThickness="@dimen/ui_size_35" />
+        app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_ep_my_progress"
-        android:layout_width="wrap_content"
+    <com.xiaoyv.common.widget.progress.AnimeEpProgressView
+        android:id="@+id/pb_2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_size_12"
-        android:textAppearance="?attr/textAppearanceLabelSmall"
-        android:textColor="@color/save_collect_text"
-        app:layout_constraintBottom_toBottomOf="@+id/pb_media"
-        app:layout_constraintStart_toStartOf="@+id/pb_media"
-        app:layout_constraintTop_toTopOf="@+id/pb_media"
-        tools:text="我的完成度：0/22" />
-
-    <com.xiaoyv.common.widget.image.AnimeImageView
-        android:id="@+id/iv_add"
-        android:layout_width="@dimen/ui_size_24"
-        android:layout_height="@dimen/ui_size_24"
-        android:layout_marginStart="@dimen/ui_size_6"
-        app:contentPadding="@dimen/ui_size_4"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_ep_my_progress"
-        app:layout_constraintStart_toEndOf="@+id/tv_ep_my_progress"
-        app:layout_constraintTop_toTopOf="@+id/tv_ep_my_progress"
-        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
-        app:srcCompat="@drawable/ic_add"
-        app:tint="?attr/colorPrimary" />
+        android:layout_marginTop="@dimen/ui_size_12"
+        app:layout_constraintTop_toBottomOf="@+id/pb_1" />
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_location"
@@ -86,9 +56,9 @@
         android:layout_height="@dimen/ui_size_24"
         android:layout_marginEnd="@dimen/ui_layout_margin"
         app:contentPadding="@dimen/ui_size_4"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_ep_my_progress"
+        app:layout_constraintBottom_toBottomOf="@+id/pb_1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_ep_my_progress"
+        app:layout_constraintTop_toTopOf="@+id/pb_1"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
         app:srcCompat="@drawable/ic_location"
         app:tint="?attr/colorPrimary" />

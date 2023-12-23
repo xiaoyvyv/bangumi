@@ -31,6 +31,7 @@ class OverviewAdapter(
     touchedListener: RecyclerItemTouchedListener,
     onClickSave: (AdapterTypeItem, Int) -> Unit,
     onClickEpItem: OnItemChildClickListener<MediaChapterEntity>,
+    onClickEpAdd: (MediaDetailEntity, Boolean) -> Unit,
     onClickCrtItem: (MediaDetailEntity.MediaCharacter) -> Unit,
     onClickTagItem: (MediaDetailEntity.MediaTag) -> Unit,
     onClickRelatedItem: (MediaDetailEntity.MediaRelative) -> Unit,
@@ -45,7 +46,7 @@ class OverviewAdapter(
         val gridPool = RecyclerView.RecycledViewPool()
 
         this.addItemType(TYPE_SAVE, OverviewSaveBinder(onClickSave))
-            .addItemType(TYPE_EP, OverviewEpBinder(touchedListener, onClickEpItem))
+            .addItemType(TYPE_EP, OverviewEpBinder(touchedListener, onClickEpItem, onClickEpAdd))
             .addItemType(TYPE_TAG, OverviewTagBinder(onClickTagItem))
             .addItemType(TYPE_SUMMARY, OverviewSummaryBinder(true))
             .addItemType(TYPE_PREVIEW, OverviewPreviewBinder(touchedListener, onClickPreview))
@@ -71,7 +72,7 @@ class OverviewAdapter(
     }
 
     /**
-     * 刷新预览
+     * 刷新预览板块
      */
     fun refreshPhotos(photos: List<DouBanPhotoEntity.Photo>) {
         val item = items.find { it.type == TYPE_PREVIEW } ?: return
@@ -82,35 +83,20 @@ class OverviewAdapter(
         }
     }
 
-    fun refreshEpList(chapters: List<MediaChapterEntity>, myProgress: Int) {
+    /**
+     * 刷新进度板块
+     */
+    fun refreshEpList(chapters: List<MediaChapterEntity>, progress: Int, progressSecond: Int) {
         val item = items.find { it.type == TYPE_EP } ?: return
         val targetIndex = itemIndexOfFirst(item)
         val entity = item.entity as MediaDetailEntity
-        if (targetIndex != -1 && chapters.isNotEmpty()) {
+        if (targetIndex != -1) {
             entity.epList = chapters
-            entity.myProgress = myProgress
+            entity.progress = progress
+            entity.progressSecond = progressSecond
             item.entity = entity
             set(targetIndex, item)
         }
-    }
-
-    fun refreshEpProgress(media: MediaDetailEntity? = null, progress: Int) {
-        /* media ?: return
-         val item = items.find { it.type == TYPE_EP } ?: return
-         val targetIndex = itemIndexOfFirst(item)
-         if (targetIndex != -1) {
-             item.entity = media.apply {
-                 myProgress = progress
-                 progressList.filterNot { it.isNotEp }.forEachIndexed { index, mediaProgress ->
-                     if ((index + 1) <= progress) {
-                         mediaProgress.collectType = InterestType.TYPE_COLLECT
-                     } else {
-                         mediaProgress.collectType = InterestType.TYPE_UNKNOWN
-                     }
-                 }
-             }
-             set(targetIndex, item)
-         }*/
     }
 
     companion object {

@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package com.xiaoyv.bangumi.ui.media.detail.overview
 
 import androidx.lifecycle.MutableLiveData
@@ -16,15 +14,13 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.EpType
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaDetailType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
-import com.xiaoyv.common.config.bean.EpSaveProgress
 import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.widget.grid.EpGridView
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 /**
@@ -46,7 +42,8 @@ class OverviewViewModel : BaseViewModel() {
      * first: 章节数据
      * second: 本篇进度值
      */
-    internal val onRefreshEpLiveData = MutableLiveData<Pair<List<MediaChapterEntity>, Int>?>()
+    internal val onRefreshEpLiveData =
+        MutableLiveData<Triple<List<MediaChapterEntity>, Int, Int>?>()
 
     /**
      * 对应的豆瓣预览图片ID
@@ -54,24 +51,10 @@ class OverviewViewModel : BaseViewModel() {
     internal var targetId: String = ""
 
     /**
-     * 媒体名称
+     * 媒体类型
      */
-    private val requireMediaName: String
-        get() {
-            val entity = mediaDetailLiveData.value ?: return "条目：$mediaId"
-            return entity.titleCn.ifBlank { entity.titleNative }
-        }
-
-    /**
-     * 用户的进度信息
-     */
-    internal val requireProgress: EpSaveProgress
-        get() = EpSaveProgress(
-            mediaId = mediaId,
-            mediaName = requireMediaName,
-            myProgress = mediaDetailLiveData.value?.myProgress ?: 0,
-            totalProgress = mediaDetailLiveData.value?.totalProgress ?: 0
-        )
+    private val requireMediaType: String
+        get() = mediaDetailLiveData.value?.mediaType ?: MediaType.TYPE_UNKNOWN
 
     private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(
@@ -93,25 +76,21 @@ class OverviewViewModel : BaseViewModel() {
                 mediaBinderListLiveData.value = emptyList()
             },
             block = {
-                val deferred1 = async(Dispatchers.IO) {
-                    val entity = BgmApiManager.bgmWebApi.queryMediaDetail(
-                        mediaId = mediaId,
-                        type = MediaDetailType.TYPE_OVERVIEW
-                    ).parserMediaDetail()
+                val (mediaEntity, binderList) = withContext(Dispatchers.IO) {
+                    val entity = BgmApiManager.bgmWebApi
+                        .queryMediaDetail(mediaId, MediaDetailType.TYPE_OVERVIEW)
+                        .parserMediaDetail()
                     entity.photos = listOf(defaultImage)
                     entity to buildBinderList(entity)
                 }
-                val deferred2 = async(Dispatchers.IO) { queryMediaEpList() }
-
-                // 并发执行
-                val list = awaitAll(deferred1, deferred2)
-
-                // 设置章节数据
-                val (mediaEntity, binderList) = list[0] as Pair<MediaDetailEntity, List<AdapterTypeItem>>
-                mediaEntity.epList = list[1] as List<MediaChapterEntity>
 
                 mediaDetailLiveData.value = mediaEntity
                 mediaBinderListLiveData.value = binderList
+
+                // 动画、音乐、三次元 继续查询章节数据
+                if (mediaEntity.mediaType == MediaType.TYPE_ANIME || mediaEntity.mediaType == MediaType.TYPE_REAL || mediaEntity.mediaType == MediaType.TYPE_MUSIC) {
+                    refreshEpList()
+                }
             }
         )
     }
@@ -215,14 +194,14 @@ class OverviewViewModel : BaseViewModel() {
      */
     fun refreshCollectState(it: MediaDetailEntity): MediaDetailEntity? {
         mediaDetailLiveData.value?.collectState = it.collectState
-        mediaDetailLiveData.value?.totalProgress = it.totalProgress
+        mediaDetailLiveData.value?.progressMax = it.progressMax
         return mediaDetailLiveData.value
     }
 
     /**
      * 进度加一
      */
-    fun progressIncrease(progress: Int) {
+    fun progressIncrease(progress: Int, progressSecond: Int) {
         launchUI(
             state = loadingDialogState(cancelable = false),
             error = {
@@ -231,12 +210,21 @@ class OverviewViewModel : BaseViewModel() {
             block = {
                 withContext(Dispatchers.IO) {
                     BgmApiManager.bgmWebApi.updateMediaProgress(
-                        mediaId,
-                        watch = progress.toString()
+                        mediaId = mediaId,
+                        watch = progress.toString(),
+                        watchedVols = progressSecond.toString()
                     )
                 }
 
-                UserHelper.notifyActionChange(BgmPathType.TYPE_EP)
+                // 动画或三次元才刷新章节
+                if (requireMediaType == MediaType.TYPE_ANIME || requireMediaType == MediaType.TYPE_REAL) {
+                    UserHelper.notifyActionChange(BgmPathType.TYPE_EP)
+                }
+
+                // 书籍章节单独更新
+                if (requireMediaType == MediaType.TYPE_BOOK) {
+                    onRefreshEpLiveData.value = Triple(emptyList(), progress, progressSecond)
+                }
             }
         )
     }
@@ -248,12 +236,12 @@ class OverviewViewModel : BaseViewModel() {
         launchUI {
             onRefreshEpLiveData.value = withContext(Dispatchers.IO) {
                 val chapterList = queryMediaEpList()
-                val progressCount = chapterList.count {
+                val progress = chapterList.count {
                     // 计算本篇的看过或抛弃数目
                     it.epType == EpType.TYPE_MAIN && (it.collectType == InterestType.TYPE_DROPPED || it.collectType == InterestType.TYPE_COLLECT)
                 }
 
-                chapterList to progressCount
+                Triple(chapterList, progress, 0)
             }
         }
     }

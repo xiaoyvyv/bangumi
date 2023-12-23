@@ -218,6 +218,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.infoShort = entity.infoHtml.subListLimit(10).map { it.parseHtml() }
     entity.time = select("#infobox").text().parserTime()
 
+    // 收藏状态
     entity.collectState = select("#panelInterestWrapper").let { item ->
         val collectForm = MediaCollectForm()
         collectForm.gh = select("#collectBoxForm").attr("action").substringAfterLast("=")
@@ -284,6 +285,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         whoSee
     }
 
+    // 统计数据
     select("#subjectPanelCollect .tip_i > a").apply {
         entity.countWish = getOrNull(0)?.text().parseCount()
         entity.countDoing = getOrNull(1)?.text().parseCount()
@@ -292,11 +294,45 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         entity.countDropped = getOrNull(4)?.text().parseCount()
     }
 
-    // 总进度
-    entity.myProgress = select("input[name=watchedeps]").attr("value").toIntOrNull() ?: 0
-    entity.totalProgress = select(".prgText").text().parseCount()
+    // 简介
     entity.subjectSummary = select("#subject_summary").text()
 
+    // 媒体类型
+    entity.mediaType = select(".global_rating .global_score small.grey").text().lowercase().let {
+        when {
+            it.contains("anime") -> MediaType.TYPE_ANIME
+            it.contains("book") -> MediaType.TYPE_BOOK
+            it.contains("music") -> MediaType.TYPE_MUSIC
+            it.contains("game") -> MediaType.TYPE_GAME
+            it.contains("real") -> MediaType.TYPE_REAL
+            else -> MediaType.TYPE_ANIME
+        }
+    }
+
+    // 进度框
+    val prgTexts = select(".prgText")
+    when (entity.mediaType) {
+        // 书籍进度
+        MediaType.TYPE_BOOK -> {
+            useNotNull(prgTexts.getOrNull(0)) {
+                entity.progress = select("input").attr("value").parseCount()
+                entity.progressMax = text().parseCount()
+            }
+            useNotNull(prgTexts.getOrNull(1)) {
+                entity.progressSecond = select("input").attr("value").parseCount()
+                entity.progressSecondMax = text().parseCount()
+            }
+        }
+        // 动画或三次元总进度
+        MediaType.TYPE_ANIME, MediaType.TYPE_REAL -> {
+            useNotNull(prgTexts.getOrNull(0)) {
+                entity.progress = select("input").attr("value").parseCount()
+                entity.progressMax = text().parseCount()
+            }
+        }
+    }
+
+    // 标签
     entity.tags = select(".subject_tag_section .inner a").map { item ->
         if (item.id() == "show_user_tags") return@map null
         val mediaTag = MediaDetailEntity.MediaTag()
@@ -312,6 +348,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         mediaTag
     }.filterNotNull()
 
+    // 角色
     entity.characters = select("#browserItemList > li").map { item ->
         val mediaCharacter = MediaDetailEntity.MediaCharacter()
         mediaCharacter.saveCount = item.select(".userContainer .fade").text().parseCount()
@@ -335,6 +372,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         mediaCharacter
     }
 
+    // 关联的条目
     entity.relativeMedia = select(".browserCoverMedium > li").map { item ->
         val mediaRelative = MediaDetailEntity.MediaRelative()
         mediaRelative.type = item.select("span.sub").text()
@@ -348,6 +386,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         mediaRelative
     }
 
+    // 喜欢的会员大概会喜欢
     entity.sameLikes = select(".coversSmall > li").map { item ->
         val mediaRelative = MediaDetailEntity.MediaRelative()
         mediaRelative.type = item.select("span.sub").text()
@@ -360,6 +399,8 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         mediaRelative.titleNative = item.select(".info").text()
         mediaRelative
     }
+
+    // 评分
     entity.rating = select(".global_rating, #ChartWarpper").let { item ->
         val rating = MediaDetailEntity.MediaRating()
         rating.globalRating = item.select(".global_score .number").text().toFloatOrNull()
@@ -377,16 +418,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         rating.standardDeviation = rating.calculateStandardDeviation()
         rating
     }
-    entity.mediaType = select(".global_rating .global_score small.grey").text().lowercase().let {
-        when {
-            it.contains("anime") -> MediaType.TYPE_ANIME
-            it.contains("book") -> MediaType.TYPE_BOOK
-            it.contains("music") -> MediaType.TYPE_MUSIC
-            it.contains("game") -> MediaType.TYPE_GAME
-            it.contains("real") -> MediaType.TYPE_REAL
-            else -> MediaType.TYPE_ANIME
-        }
-    }
+
     entity.reviews = parserMediaReviews()
     entity.boards = parserMediaBoards()
     entity.comments = parserMediaComments()

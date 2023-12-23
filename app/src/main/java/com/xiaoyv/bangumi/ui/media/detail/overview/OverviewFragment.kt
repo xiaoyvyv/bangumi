@@ -5,7 +5,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.action.MediaEpCollectDialog
@@ -55,6 +54,9 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                     showEpCollectDialog(chapterEntity)
                 }
             },
+            onClickEpAdd = { entity, isAddEp ->
+                autoIncreaseProgress(entity, isAddEp)
+            },
             onClickCrtItem = {
                 RouteHelper.jumpPerson(it.id, true)
             },
@@ -100,14 +102,6 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     }
 
     override fun initListener() {
-        // 进度加 1
-        overviewAdapter.setOnDebouncedChildClickListener(R.id.iv_add) {
-            val entity = viewModel.mediaDetailLiveData.value
-            val newProgress = viewModel.requireProgress.myProgress + 1
-            overviewAdapter.refreshEpProgress(entity, newProgress)
-            viewModel.progressIncrease(newProgress)
-        }
-
         overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
             when (it.type) {
                 OverviewAdapter.TYPE_EP -> {
@@ -180,7 +174,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
 
         viewModel.onRefreshEpLiveData.observe(this) {
             it ?: return@observe
-            overviewAdapter.refreshEpList(it.first, it.second)
+            overviewAdapter.refreshEpList(it.first, it.second, it.third)
         }
 
         UserHelper.observeUserInfo(this) {
@@ -195,9 +189,19 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         }
     }
 
+    /**
+     * 自动增加进度
+     */
+    private fun autoIncreaseProgress(entity: MediaDetailEntity, addEp: Boolean) {
+        if (addEp) {
+            viewModel.progressIncrease(entity.progress + 1, entity.progressSecond)
+        } else {
+            viewModel.progressIncrease(entity.progress, entity.progressSecond + 1)
+        }
+    }
 
     /**
-     * 章节收藏弹窗
+     * 章节收藏弹窗，仅动画或三次元有这个章节格子
      */
     private fun showEpCollectDialog(chapterEntity: MediaChapterEntity) {
         if (activityViewModel.requireMediaCollectType != InterestType.TYPE_DO) {
@@ -208,12 +212,13 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             return
         }
 
+        // 收藏
         MediaEpCollectDialog.show(
             fragmentManager = childFragmentManager,
             chapterEntity = chapterEntity,
             mediaType = activityViewModel.requireMediaType
-        ) { epList, myProgress ->
-            overviewAdapter.refreshEpList(epList, myProgress)
+        ) { epList, progress ->
+            overviewAdapter.refreshEpList(epList, progress, 0)
         }
     }
 

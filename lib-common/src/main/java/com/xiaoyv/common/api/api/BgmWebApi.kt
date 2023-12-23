@@ -197,7 +197,8 @@ interface BgmWebApi {
     @POST("/subject/set/watched/{mediaId}")
     suspend fun updateMediaProgress(
         @Path("mediaId") mediaId: String,
-        @Field("watchedeps") watch: String,
+        @Field("watchedeps") watch: String? = null,
+        @Field("watched_vols") watchedVols: String? = null,
         @Field("referer") referer: String = "subject",
         @Field("submit") submit: String = "更新",
     ): Document
