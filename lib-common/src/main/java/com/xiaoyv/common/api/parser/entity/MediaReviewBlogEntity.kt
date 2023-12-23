@@ -5,14 +5,14 @@ import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
 /**
- * Class: [MediaReviewEntity]
+ * Class: [MediaReviewBlogEntity]
  *
  * @author why
  * @since 11/29/23
  */
 @Parcelize
 @Keep
-data class MediaReviewEntity(
+data class MediaReviewBlogEntity(
     var id: String = "",
     var title: String = "",
     var avatar: String = "",

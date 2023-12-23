@@ -9,7 +9,7 @@ import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
-import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
+import com.xiaoyv.common.api.parser.entity.MediaReviewBlogEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.hrefId
@@ -30,26 +30,25 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
 /**
- * @author why
- * @since 11/29/23
+ * 解析媒体的章节页面数据
  */
 fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
     requireNoError()
     val elements = select(".line_detail > ul > li")
     val items = arrayListOf<MediaChapterEntity>()
-    elements.forEachIndexed { index, it ->
-        if (index == elements.size - 1 && it.select("input").isNotEmpty()) {
+    elements.forEachIndexed { index, item ->
+        if (index == elements.size - 1 && item.select("input").isNotEmpty()) {
             return@forEachIndexed
         }
-        if (it.text() == "本篇") return@forEachIndexed
+        if (item.text() == "本篇") return@forEachIndexed
 
         // 分隔符
-        if (it.select("h6").isEmpty()) {
+        if (item.select("h6").isEmpty()) {
             items.add(
                 MediaChapterEntity(
                     splitter = true,
-                    id = it.text(),
-                    number = it.text()
+                    id = item.text(),
+                    number = item.text()
                         .replace("特别篇", "SP")
                         .replace("预告/宣传/广告", "TPA")
                 )
@@ -59,29 +58,29 @@ fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
 
         val entity = MediaChapterEntity()
         entity.mediaId = mediaId
-        entity.id = it.select("h6 a").hrefId()
-        entity.titleCn = it.select("h6 .tip").text().substringAfterLast("/").trim()
-        entity.titleNative = it.select("h6 a").text()
+        entity.id = item.select("h6 a").hrefId()
+        entity.titleCn = item.select("h6 .tip").text().substringAfterLast("/").trim()
+        entity.titleNative = item.select("h6 a").text()
         val (number, type) = parserEpNumber(entity.titleNative)
         entity.number = number
         entity.epType = type
-        entity.isAired = it.select(".Air").isNotEmpty()
-        entity.isAiring = it.select(".Today").isNotEmpty()
-        entity.airedStateText = it.select(".epAirStatus").attr("title")
+        entity.isAired = item.select(".Air").isNotEmpty()
+        entity.isAiring = item.select(".Today").isNotEmpty()
+        entity.airedStateText = item.select(".epAirStatus").attr("title")
         when {
-            it.select(".statusWatched").isNotEmpty() -> {
+            item.select(".statusWatched").isNotEmpty() -> {
                 entity.collectType = InterestType.TYPE_COLLECT
-                entity.collectStateText = it.select(".statusWatched").text()
+                entity.collectStateText = item.select(".statusWatched").text()
             }
 
-            it.select(".statusQueue").isNotEmpty() -> {
+            item.select(".statusQueue").isNotEmpty() -> {
                 entity.collectType = InterestType.TYPE_WISH
-                entity.collectStateText = it.select(".statusQueue").text()
+                entity.collectStateText = item.select(".statusQueue").text()
             }
 
-            it.select(".statusDrop").isNotEmpty() -> {
+            item.select(".statusDrop").isNotEmpty() -> {
                 entity.collectType = InterestType.TYPE_DROPPED
-                entity.collectStateText = it.select(".statusDrop").text()
+                entity.collectStateText = item.select(".statusDrop").text()
             }
 
             else -> {
@@ -89,11 +88,19 @@ fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
             }
         }
 
-        useNotNull(it.select("small")) {
-            entity.time = getOrNull(0)?.text().orEmpty()
-                .replace("时长:", "时长：")
-                .replace("首播:", "首播：")
-            entity.commentCount = getOrNull(1)?.text().orEmpty().parseCount()
+        item.select("small").apply {
+            // 动画或三次元的章节
+            if (size > 1) {
+                entity.time = getOrNull(0)?.text().orEmpty()
+                    .replace("时长:", "时长：")
+                    .replace("首播:", "首播：")
+                entity.commentCount = getOrNull(1)?.text().orEmpty().parseCount()
+            }
+            // 音乐的曲目
+            else {
+                entity.time = ""
+                entity.commentCount = firstOrNull()?.text().orEmpty().parseCount()
+            }
         }
 
         items.add(entity)
@@ -101,6 +108,9 @@ fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
     return items
 }
 
+/**
+ * 解析媒体底部吐槽评论
+ */
 fun Element.parserMediaComments(): List<MediaCommentEntity> {
     requireNoError()
 
@@ -121,11 +131,14 @@ fun Element.parserMediaComments(): List<MediaCommentEntity> {
     }
 }
 
-fun Element.parserMediaReviews(): List<MediaReviewEntity> {
+/**
+ * 解析媒体的评论日志
+ */
+fun Element.parserMediaBlog(): List<MediaReviewBlogEntity> {
     requireNoError()
 
     return select("#entry_list > .item").map { item ->
-        val entity = MediaReviewEntity()
+        val entity = MediaReviewBlogEntity()
         item.select(".entry .title").apply {
             entity.id = select("a").hrefId()
             entity.title = text()
@@ -144,6 +157,9 @@ fun Element.parserMediaReviews(): List<MediaReviewEntity> {
     }
 }
 
+/**
+ * 解析媒体的话题讨论板
+ */
 fun Document.parserMediaBoards(): List<MediaBoardEntity> {
     requireNoError()
 
@@ -163,7 +179,9 @@ fun Document.parserMediaBoards(): List<MediaBoardEntity> {
     }.filterNotNull()
 }
 
-
+/**
+ * 解析媒体的制作者
+ */
 fun Document.parserMediaMakers(): List<MediaMakerEntity> {
     requireNoError()
 
@@ -180,6 +198,9 @@ fun Document.parserMediaMakers(): List<MediaMakerEntity> {
     }
 }
 
+/**
+ * 解析媒体的角色
+ */
 fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
     requireNoError()
 
@@ -204,7 +225,9 @@ fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
     }
 }
 
-
+/**
+ * 解析媒体详情
+ */
 fun Document.parserMediaDetail(): MediaDetailEntity {
     requireNoError()
 
@@ -421,7 +444,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         rating
     }
 
-    entity.reviews = parserMediaReviews()
+    entity.reviews = parserMediaBlog()
     entity.boards = parserMediaBoards()
     entity.comments = parserMediaComments()
     return entity

@@ -65,7 +65,7 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
         entity.music = select("#music").parserUserSaveOverview(MediaType.TYPE_MUSIC)
         entity.game = select("#game").parserUserSaveOverview(MediaType.TYPE_GAME)
         entity.real = select("#real").parserUserSaveOverview(MediaType.TYPE_REAL)
-        entity.blog = select("#blog").firstOrNull()?.parserMediaReviews().orEmpty()
+        entity.blog = select("#blog").firstOrNull()?.parserMediaBlog().orEmpty()
     }
 
     entity.lastOnlineTime = select("#pinnedLayout .timeline > li")

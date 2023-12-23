@@ -24,7 +24,7 @@ data class UserDetailEntity(
     var book: SaveOverview = SaveOverview(),
     var music: SaveOverview = SaveOverview(),
     var real: SaveOverview = SaveOverview(),
-    var blog: List<MediaReviewEntity> = emptyList(),
+    var blog: List<MediaReviewBlogEntity> = emptyList(),
 ) {
     data class SaveOverview(
         var isEmpty: Boolean = true,

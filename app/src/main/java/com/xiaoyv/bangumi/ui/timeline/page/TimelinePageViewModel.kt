@@ -27,7 +27,7 @@ class TimelinePageViewModel : BaseListViewModel<TimelineEntity>() {
     /**
      * 是否指定了用户 ID
      */
-    private val userId: String
+    internal val userId: String
         get() = timelineTab?.userId.orEmpty()
 
     private val timelineType: String

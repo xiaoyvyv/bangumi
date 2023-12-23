@@ -48,7 +48,7 @@ data class MediaDetailEntity(
     @SerializedName("characters") var characters: List<MediaCharacter> = emptyList(),
     @SerializedName("relativeMedia") var relativeMedia: List<MediaRelative> = emptyList(),
     @SerializedName("sameLikes") var sameLikes: List<MediaRelative> = emptyList(),
-    @SerializedName("reviews") var reviews: List<MediaReviewEntity> = emptyList(),
+    @SerializedName("reviews") var reviews: List<MediaReviewBlogEntity> = emptyList(),
     @SerializedName("boards") var boards: List<MediaBoardEntity> = emptyList(),
     @SerializedName("comments") var comments: List<MediaCommentEntity> = emptyList(),
     @SerializedName("rating") var rating: MediaRating = MediaRating(),

@@ -13,6 +13,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -51,6 +52,13 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_ep) {
             if (it.splitter) return@setOnDebouncedChildClickListener
 
+            // 不支持编辑进度直接打开讨论话题
+            if (!MediaType.canEditEpProgress(activityViewModel.requireMediaType)) {
+                RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
+                return@setOnDebouncedChildClickListener
+            }
+
+            // 校验收藏状态是否可以编辑进度
             if (activityViewModel.requireMediaCollectType != InterestType.TYPE_DO) {
                 requireActivity().showConfirmDialog(
                     message = "只有收藏为 (在看 | 在玩 | 在读 | 在听) 的条目才可以单独修改章节进度",

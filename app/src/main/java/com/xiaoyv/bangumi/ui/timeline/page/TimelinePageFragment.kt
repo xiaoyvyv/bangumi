@@ -32,6 +32,9 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
 
     override val isOnlyOnePage: Boolean
         get() = !viewModel.hasMultiPage
+    
+    override val loadingBias: Float
+        get() = if (viewModel.userId.isNotBlank()) 0.3f else super.loadingBias
 
     override fun onCreateContentAdapter(): BaseDifferAdapter<TimelineEntity, *> {
         return TimelinePageAdapter {

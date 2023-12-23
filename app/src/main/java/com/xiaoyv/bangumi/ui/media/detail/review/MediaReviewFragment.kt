@@ -6,7 +6,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.api.parser.entity.MediaReviewEntity
+import com.xiaoyv.common.api.parser.entity.MediaReviewBlogEntity
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -16,7 +16,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @author why
  * @since 11/24/23
  */
-class MediaReviewFragment : BaseListFragment<MediaReviewEntity, MediaReviewViewModel>() {
+class MediaReviewFragment : BaseListFragment<MediaReviewBlogEntity, MediaReviewViewModel>() {
     override val isOnlyOnePage: Boolean
         get() = false
 
@@ -27,7 +27,7 @@ class MediaReviewFragment : BaseListFragment<MediaReviewEntity, MediaReviewViewM
         viewModel.mediaId = arguments.getString(NavKey.KEY_STRING).orEmpty()
     }
 
-    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<MediaReviewEntity, *> {
+    override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<MediaReviewBlogEntity, *> {
         return MediaReviewAdapter()
     }
 

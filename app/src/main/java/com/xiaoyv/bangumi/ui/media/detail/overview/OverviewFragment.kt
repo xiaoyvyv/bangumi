@@ -18,6 +18,7 @@ import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaDetailType
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
@@ -50,8 +51,12 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             },
             onClickEpItem = { adapter, _, position ->
                 val chapterEntity = adapter.getItem(position)
-                if (chapterEntity != null && chapterEntity.splitter.not() && viewModel.canChangeEpProgress) {
-                    showEpCollectDialog(chapterEntity)
+                if (chapterEntity != null && chapterEntity.splitter.not()) {
+                    if (viewModel.canChangeEpProgress) {
+                        showEpCollectDialog(chapterEntity)
+                    } else {
+                        RouteHelper.jumpTopicDetail(chapterEntity.id, TopicType.TYPE_EP)
+                    }
                 }
             },
             onClickEpAdd = { entity, isAddEp ->
