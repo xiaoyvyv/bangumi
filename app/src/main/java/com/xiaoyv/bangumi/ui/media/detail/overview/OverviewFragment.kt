@@ -50,7 +50,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             },
             onClickEpItem = { adapter, _, position ->
                 val chapterEntity = adapter.getItem(position)
-                if (chapterEntity != null && chapterEntity.splitter.not()) {
+                if (chapterEntity != null && chapterEntity.splitter.not() && viewModel.canChangeEpProgress) {
                     showEpCollectDialog(chapterEntity)
                 }
             },

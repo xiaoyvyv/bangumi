@@ -16,8 +16,9 @@ import com.xiaoyv.common.helper.UserHelper
  * @since 11/24/23
  */
 class SaveListViewModel : BaseListViewModel<BrowserEntity.Item>() {
+    @InterestCollectType
+    internal var listType = InterestCollectType.TYPE_DO
 
-    internal var listType = InterestCollectType.TYPE_WISH
     internal var userId = ""
     internal var requireLogin = false
 

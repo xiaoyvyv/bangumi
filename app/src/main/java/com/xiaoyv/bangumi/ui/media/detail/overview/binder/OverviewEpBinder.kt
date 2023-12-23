@@ -40,9 +40,8 @@ class OverviewEpBinder(
         holder.binding.tvTitleEp.title = item.title
 
         item.entity.forceCast<MediaDetailEntity>().apply {
-            val hasProgress = mediaType == MediaType.TYPE_ANIME || mediaType == MediaType.TYPE_REAL
-            holder.binding.epGrid.isVisible = hasProgress
-            holder.binding.vHolder.isVisible = hasProgress && isFirstBind
+            holder.binding.epGrid.isVisible = MediaType.canEditEpProgress(mediaType)
+            holder.binding.vHolder.isVisible = MediaType.canEditEpProgress(mediaType) && isFirstBind
 
             holder.binding.pb1.bind(this, true, clickAddEpProgress)
             holder.binding.pb2.bind(this, false, clickAddEpProgress)

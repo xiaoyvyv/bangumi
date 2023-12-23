@@ -37,5 +37,9 @@ annotation class MediaType {
                 else -> ""
             }
         }
+
+        fun canEditEpProgress(@MediaType mediaType: String): Boolean {
+            return mediaType == TYPE_ANIME || mediaType == TYPE_REAL || mediaType == TYPE_BOOK
+        }
     }
 }

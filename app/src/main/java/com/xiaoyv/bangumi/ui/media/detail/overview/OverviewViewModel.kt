@@ -56,6 +56,9 @@ class OverviewViewModel : BaseViewModel() {
     private val requireMediaType: String
         get() = mediaDetailLiveData.value?.mediaType ?: MediaType.TYPE_UNKNOWN
 
+    internal val canChangeEpProgress: Boolean
+        get() = MediaType.canEditEpProgress(requireMediaType)
+
     private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(
             image = DouBanPhotoEntity.Image(large = DouBanImageEntity(url = "https://bgm.tv/pic/wallpaper/02.png"))
@@ -140,7 +143,7 @@ class OverviewViewModel : BaseViewModel() {
                         type = BgmPathType.TYPE_USER
                     )
                 },
-                OverviewAdapter.TYPE_COLLECTOR, "谁在看这部动画"
+                OverviewAdapter.TYPE_COLLECTOR, "最近收藏"
             )
         )
 
