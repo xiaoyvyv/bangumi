@@ -23,6 +23,7 @@ import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
+import com.xiaoyv.widget.kts.orEmpty
 import kotlinx.coroutines.delay
 
 
@@ -36,6 +37,16 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     private val vpAdapter by lazy { HomeAdapter(this) }
 
     private val robot by lazy { HomeRobot(this) }
+
+    private val pageMap by lazy {
+        mapOf(
+            0 to R.id.bottom_menu_home,
+            1 to R.id.bottom_menu_timeline,
+            2 to R.id.bottom_menu_media,
+            3 to R.id.bottom_menu_discover,
+            4 to R.id.bottom_menu_profile
+        )
+    }
 
     override fun initWindowConfig(window: Window) {
         ScreenUtils.setPortrait(this)
@@ -51,6 +62,15 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
         binding.vpView.isUserInputEnabled = false
         binding.vpView.offscreenPageLimit = vpAdapter.itemCount
         binding.vpView.adapter = vpAdapter
+
+        // 初始 TAB
+        val defaultTab = ConfigHelper.homeDefaultTab
+        if (defaultTab != 0) {
+            binding.vpView.setCurrentItem(defaultTab, false)
+            if (pageMap[defaultTab] != null) {
+                binding.navView.selectedItemId = pageMap[defaultTab]!!
+            }
+        }
     }
 
     override fun initData() {

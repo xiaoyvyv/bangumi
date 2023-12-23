@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.databinding.FragmentOverviewSaveBinding
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonString
@@ -35,11 +36,12 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, I
     ) {
         item ?: return
         item.entity.forceCast<MediaDetailEntity>().apply {
+            val action = MediaType.action(mediaType)
             holder.binding.tvSaveSummary.text = StringUtils.getString(
                 CommonString.media_save_summary,
-                countWish,
-                countCollect,
-                countDoing,
+                countWish, action,
+                countCollect, action,
+                countDoing, action,
                 countOnHold,
                 countDropped
             )

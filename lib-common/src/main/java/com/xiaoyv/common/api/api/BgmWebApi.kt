@@ -79,6 +79,7 @@ interface BgmWebApi {
     suspend fun queryUserTimeline(
         @Path("userId", encoded = true) userId: String,
         @Query("type") @TimelineType type: String,
+        @Query("page") page: Int? = null,
         @Query("ajax") ajax: Long = 1,
     ): Document
 
@@ -90,6 +91,7 @@ interface BgmWebApi {
     @GET("/timeline")
     suspend fun queryFriendTimeline(
         @Query("type") @TimelineType type: String,
+        @Query("page") page: Int? = null,
         @Query("ajax") ajax: Long = 1,
     ): Document
 

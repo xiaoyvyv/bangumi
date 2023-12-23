@@ -3,10 +3,10 @@ package com.xiaoyv.bangumi.ui.timeline.page
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
+import com.chad.library.adapter.base.BaseDifferAdapter
 import com.xiaoyv.bangumi.R
-import com.xiaoyv.bangumi.databinding.FragmentTimelinePageBinding
+import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
@@ -14,10 +14,8 @@ import com.xiaoyv.common.config.annotation.TimelineAdapterType
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.bean.TimelineTab
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog
-import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
 
 /**
@@ -26,11 +24,17 @@ import com.xiaoyv.widget.kts.getParcelObj
  * @author why
  * @since 11/24/23
  */
-class TimelinePageFragment :
-    BaseViewModelFragment<FragmentTimelinePageBinding, TimelinePageViewModel>() {
+class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewModel>() {
 
-    private val contentAdapter by lazy {
-        TimelinePageAdapter {
+    override fun initArgumentsData(arguments: Bundle) {
+        viewModel.timelineTab = arguments.getParcelObj(NavKey.KEY_PARCELABLE)
+    }
+
+    override val isOnlyOnePage: Boolean
+        get() = !viewModel.hasMultiPage
+
+    override fun onCreateContentAdapter(): BaseDifferAdapter<TimelineEntity, *> {
+        return TimelinePageDiffAdapter {
             if (it is TimelineEntity.GridTimeline && it.id.isNotBlank()) {
                 when (it.pathType) {
                     // 跳转媒体详情
@@ -58,25 +62,8 @@ class TimelinePageFragment :
         }
     }
 
-    override fun initArgumentsData(arguments: Bundle) {
-        viewModel.timelineTab = arguments.getParcelObj(NavKey.KEY_PARCELABLE)
-    }
-
-    override fun initView() {
-        binding.srlRefresh.initRefresh { false }
-        binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
-    }
-
-    override fun initData() {
-        binding.rvContent.adapter = contentAdapter
-
-        viewModel.queryTimeline()
-    }
-
     override fun initListener() {
-        binding.srlRefresh.setOnRefreshListener {
-            viewModel.queryTimeline()
-        }
+        super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_timeline) {
             when (it.adapterType) {
@@ -93,7 +80,7 @@ class TimelinePageFragment :
                     if (it.titleId.isNotBlank()) when (it.titleType) {
                         // 跳转用户详情
                         BgmPathType.TYPE_USER -> {
-                            RouteHelper.jumpIndexDetail(it.id)
+                            RouteHelper.jumpIndexDetail(it.userId)
                         }
                         // 跳转日志详情
                         BgmPathType.TYPE_BLOG -> {
@@ -113,7 +100,7 @@ class TimelinePageFragment :
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
-            RouteHelper.jumpUserDetail(it.id)
+            RouteHelper.jumpUserDetail(it.userId)
         }
 
         // 长按
@@ -135,22 +122,15 @@ class TimelinePageFragment :
         }
     }
 
-    override fun LifecycleOwner.initViewObserver() {
-        binding.stateView.initObserver(
-            lifecycleOwner = this,
-            loadingBias = 0.3f,
-            loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { !binding.srlRefresh.isRefreshing }
-        )
-
-        viewModel.onTimelineLiveData.observe(this) {
-            contentAdapter.submitList(it.orEmpty())
-        }
-
+    override fun LifecycleOwner.initViewObserverExt() {
         // 时间线类型切换刷新
         UserHelper.observeAction(this) {
             if (it == BgmPathType.TYPE_TIMELINE) {
-                viewModel.queryTimeline()
+                // 刷新适配器类型
+                refreshAdapter()
+
+                // 刷新数据
+                viewModel.refresh()
             }
         }
     }

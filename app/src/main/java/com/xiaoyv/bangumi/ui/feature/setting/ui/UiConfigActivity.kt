@@ -36,6 +36,12 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingFilterDelete.bindBoolean(this, ConfigHelper::isFilterDeleteComment)
         binding.settingBreakUp.bindBoolean(this, ConfigHelper::isFilterBreakUpComment)
         binding.settingEpSplit.bindBoolean(this, ConfigHelper::isSplitEpList)
+        binding.settingFirstTab.bindInt(
+            activity = this,
+            property = ConfigHelper::homeDefaultTab,
+            names = listOf("第1个", "第2个", "第3个", "第4个", "第5个"),
+            values = listOf(0, 1, 2, 3, 4)
+        )
     }
 
     override fun initListener() {

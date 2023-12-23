@@ -12,7 +12,6 @@ import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
-import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.getAttrColor
 
 /**
@@ -63,7 +62,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     internal open val layoutManager: LinearLayoutManager?
         get() = binding.rvContent.layoutManager as? LinearLayoutManager
 
-    abstract fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<T, *>
+    abstract fun onCreateContentAdapter(): BaseDifferAdapter<T, *>
 
     @CallSuper
     override fun initView() {
@@ -75,14 +74,17 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     @CallSuper
     override fun initData() {
         binding.rvContent.layoutManager = onCreateLayoutManager()
+        refreshAdapter()
+        autoInitData()
+    }
+
+    fun refreshAdapter() {
         if (isOnlyOnePage) {
             binding.rvContent.adapter = contentAdapter
         } else {
             binding.rvContent.adapter = adapterHelper.adapter
         }
-        autoInitData()
     }
-
 
     open fun onCreateLayoutManager(): LinearLayoutManager {
         return AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

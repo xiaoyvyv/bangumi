@@ -19,6 +19,7 @@ import kotlinx.parcelize.Parcelize
 data class TimelineEntity(
     override var id: String = "",
     var deleteId: String = "",
+    var userId: String = "",
     var avatar: String = "",
     var name: String = "",
     var title: CharSequence = "",

@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.ui.timeline.page
 
-import androidx.lifecycle.MutableLiveData
-import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
@@ -22,7 +21,7 @@ import kotlinx.coroutines.withContext
  * @author why
  * @since 11/24/23
  */
-class TimelinePageViewModel : BaseViewModel() {
+class TimelinePageViewModel : BaseListViewModel<TimelineEntity>() {
     internal var timelineTab: TimelineTab? = null
 
     /**
@@ -34,51 +33,55 @@ class TimelinePageViewModel : BaseViewModel() {
     private val timelineType: String
         get() = timelineTab?.timelineType ?: TimelineType.TYPE_ALL
 
-    internal val onTimelineLiveData = MutableLiveData<List<TimelineEntity>?>()
+    /**
+     * 是否有多页
+     */
+    internal val hasMultiPage: Boolean
+        get() {
+            if (userId.isNotBlank()) return true
+            val pageType = ConfigHelper.timelinePageType
+            return pageType == TimelinePageType.TYPE_FRIEND || pageType == TimelinePageType.TYPE_MINE
+        }
 
-    fun queryTimeline() {
-        launchUI(
-            stateView = loadingViewState,
-            error = {
-                it.printStackTrace()
-            },
-            block = {
-                val hasTargetUserId = userId.isNotBlank()
+    override suspend fun onRequestListImpl(): List<TimelineEntity> {
+        val hasTargetUserId = userId.isNotBlank()
 
-                onTimelineLiveData.value = withContext(Dispatchers.IO) {
-                    // 指定用户的时间线
-                    if (hasTargetUserId) {
-                        return@withContext BgmApiManager.bgmWebApi.queryUserTimeline(
-                            userId = userId,
-                            type = timelineType,
-                            ajax = 0
-                        ).parserTimelineForms(userId)
-                    }
+        // 指定用户的时间线
+        if (hasTargetUserId) {
+            return BgmApiManager.bgmWebApi.queryUserTimeline(
+                userId = userId,
+                type = timelineType,
+                page = current,
+                ajax = 0
+            ).parserTimelineForms(userId)
+        }
 
-                    // 未指定ID的情况
-                    when (ConfigHelper.timelinePageType) {
-                        // 全部好友的时间线
-                        TimelinePageType.TYPE_FRIEND -> {
-                            require(UserHelper.isLogin) { "你还没有登录呢" }
-                            BgmApiManager.bgmWebApi.queryFriendTimeline(timelineType)
-                                .parserTimelineForms()
-                        }
-                        // 自己的时间线
-                        TimelinePageType.TYPE_MINE -> {
-                            require(UserHelper.isLogin) { "你还没有登录呢" }
-                            BgmApiManager.bgmWebApi.queryUserTimeline(
-                                userId = UserHelper.currentUser.id.orEmpty(),
-                                type = timelineType,
-                                ajax = 0
-                            ).parserTimelineForms(UserHelper.currentUser.id.orEmpty())
-                        }
-                        // 全部时间线
-                        else -> BgmApiManager.bgmJsonApi.queryWholeTimeline(timelineType)
-                            .parserTimelineForms()
-                    }
-                }
+        // 未指定ID的情况
+        return when (ConfigHelper.timelinePageType) {
+            // 全部好友的时间线
+            TimelinePageType.TYPE_FRIEND -> {
+                require(UserHelper.isLogin) { "你还没有登录呢" }
+                BgmApiManager.bgmWebApi.queryFriendTimeline(
+                    type = timelineType,
+                    page = current
+                ).parserTimelineForms()
             }
-        )
+            // 自己的时间线
+            TimelinePageType.TYPE_MINE -> {
+                require(UserHelper.isLogin) { "你还没有登录呢" }
+                BgmApiManager.bgmWebApi.queryUserTimeline(
+                    userId = UserHelper.currentUser.id.orEmpty(),
+                    type = timelineType,
+                    page = current,
+                    ajax = 0
+                ).parserTimelineForms(UserHelper.currentUser.id.orEmpty())
+            }
+            // 全部时间线
+            else -> BgmApiManager.bgmJsonApi.queryWholeTimeline(
+                type = timelineType,
+                page = current
+            ).parserTimelineForms()
+        }
     }
 
     /**

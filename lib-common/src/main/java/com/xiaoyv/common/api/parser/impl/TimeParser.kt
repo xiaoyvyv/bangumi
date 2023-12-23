@@ -61,7 +61,7 @@ private fun Element.handleItem(entity: TimelineEntity, userId: String) {
 
     // 当解析的指定用户的时间线时，设置用户ID
     if (userId.isNotBlank()) {
-        entity.id = userId
+        entity.userId = userId
 
         // 如果为自己的时间线，填充头像
         if (userId == UserHelper.currentUser.id) {
@@ -157,11 +157,12 @@ fun parserTimelineText(item: Element, entity: TimelineEntity) {
     val (titleId, titleType, titleLink) =
         (infoA.getOrNull(1) ?: infoFullA.firstOrNull()).fetchLinkIdAndType()
 
+    entity.id = item.id().parseCount().toString()
     entity.titleId = titleId
     entity.titleType = titleType
     entity.titleLink = titleLink
 
-    entity.id = item.select("a.avatar").hrefId()
+    entity.userId = item.select("a.avatar").hrefId()
     entity.name = item.select(".info > a").firstOrNull()?.text().orEmpty()
     entity.avatar = item.select("a.avatar > span").styleBackground(false)
     entity.title = item.select(".info, .info_full").fetchHtmlTitle()

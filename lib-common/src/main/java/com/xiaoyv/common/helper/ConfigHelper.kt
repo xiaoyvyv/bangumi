@@ -24,6 +24,7 @@ object ConfigHelper {
     private const val KEY_FILTER_DELETE_COMMENT = "filter-delete-comment"
     private const val KEY_FILTER_BREAK_UP_COMMENT = "filter-break-up-comment"
     private const val KEY_SPLIT_EP_LIST = "split-ep-list"
+    private const val KEY_HOME_DEFAULT_TAB = "home-default-tab"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -39,6 +40,13 @@ object ConfigHelper {
         return SPStaticUtils.getString(KEY_BAIDU_TRANSLATE_APP_ID).orEmpty() to
                 SPStaticUtils.getString(KEY_BAIDU_TRANSLATE_APP_SECRET).orEmpty()
     }
+
+    /**
+     * 首页默认TAB
+     */
+    var homeDefaultTab: Int
+        get() = SPStaticUtils.getInt(KEY_HOME_DEFAULT_TAB, 0)
+        set(value) = SPStaticUtils.put(KEY_HOME_DEFAULT_TAB, value)
 
     /**
      * 配置条目加载动画

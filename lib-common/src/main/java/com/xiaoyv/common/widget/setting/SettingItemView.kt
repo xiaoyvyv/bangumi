@@ -4,10 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
+import com.blankj.utilcode.util.StringUtils
 import com.xiaoyv.common.R
 import com.xiaoyv.common.databinding.ViewSettingItemBinding
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import kotlin.reflect.KMutableProperty0
 
@@ -57,7 +60,7 @@ class SettingItemView @JvmOverloads constructor(
             if (tip == null) {
                 val value = property.get().not()
                 property.set(value)
-                refresh(property)
+                refreshBoolean(property)
                 onChange(value)
             } else {
                 activity.showConfirmDialog(
@@ -65,17 +68,48 @@ class SettingItemView @JvmOverloads constructor(
                     onConfirmClick = {
                         val value = property.get().not()
                         property.set(value)
-                        refresh(property)
+                        refreshBoolean(property)
                         onChange(value)
                     }
                 )
             }
         }
 
-        refresh(property)
+        refreshBoolean(property)
     }
 
-    fun refresh(property: KMutableProperty0<Boolean>) {
+    fun bindInt(
+        activity: FragmentActivity,
+        property: KMutableProperty0<Int>,
+        names: List<String>,
+        values: List<Int>,
+        bindTitle: String? = null,
+    ) {
+        if (bindTitle != null) title = bindTitle
+        setOnFastLimitClickListener {
+            activity.showOptionsDialog(
+                title = bindTitle ?: StringUtils.getString(CommonString.common_tip),
+                items = names,
+                onItemClick = { _, which ->
+                    property.set(values[which])
+                    refreshInt(names, values, property)
+                }
+            )
+        }
+        refreshInt(names, values, property)
+    }
+
+    fun refreshBoolean(property: KMutableProperty0<Boolean>) {
         desc = if (property.get()) "开启" else "关闭"
+    }
+
+    private fun refreshInt(
+        keys: List<String>,
+        values: List<Int>,
+        property: KMutableProperty0<Int>,
+    ) {
+        val valueIndex = values.indexOfFirst { it == property.get() }
+        val name = keys.getOrNull(valueIndex).orEmpty().ifBlank { property.get().toString() }
+        desc = name
     }
 }
