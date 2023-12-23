@@ -18,6 +18,8 @@
         android:breakStrategy="balanced"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:text="1"
         android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnSurface"

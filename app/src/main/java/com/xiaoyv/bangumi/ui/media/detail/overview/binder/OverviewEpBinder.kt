@@ -29,7 +29,7 @@ class OverviewEpBinder(
     private val clickItemListener: BaseQuickAdapter.OnItemChildClickListener<MediaChapterEntity>,
     private val clickAddEpProgress: (MediaDetailEntity, Boolean) -> Unit,
 ) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewEpBinding>> {
-    private var autoScrollWatched = true
+    private var isFirstBind = true
 
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewEpBinding>,
@@ -42,7 +42,7 @@ class OverviewEpBinder(
         item.entity.forceCast<MediaDetailEntity>().apply {
             val hasProgress = mediaType == MediaType.TYPE_ANIME || mediaType == MediaType.TYPE_REAL
             holder.binding.epGrid.isVisible = hasProgress
-            holder.binding.vHolder.isVisible = hasProgress
+            holder.binding.vHolder.isVisible = hasProgress && isFirstBind
 
             holder.binding.pb1.bind(this, true, clickAddEpProgress)
             holder.binding.pb2.bind(this, false, clickAddEpProgress)
@@ -53,10 +53,10 @@ class OverviewEpBinder(
             }
 
             holder.binding.epGrid.addOnItemTouchListener(touchedListener)
-            holder.binding.epGrid.fillMediaChapters(epList, autoScrollWatched, clickItemListener)
+            holder.binding.epGrid.fillMediaChapters(epList, isFirstBind, clickItemListener)
 
             // 仅初始化刷新操作才自动滚到定位
-            autoScrollWatched = false
+            isFirstBind = false
         }
     }
 

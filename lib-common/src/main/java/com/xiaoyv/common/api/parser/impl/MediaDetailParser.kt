@@ -49,7 +49,9 @@ fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
                 MediaChapterEntity(
                     splitter = true,
                     id = it.text(),
-                    number = it.text().replace("特别篇", "SP")
+                    number = it.text()
+                        .replace("特别篇", "SP")
+                        .replace("预告/宣传/广告", "TPA")
                 )
             )
             return@forEachIndexed

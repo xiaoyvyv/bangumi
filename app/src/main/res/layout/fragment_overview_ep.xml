@@ -23,11 +23,14 @@
         app:spanCount="5"
         tools:listitem="@layout/view_ep_hor_item" />
 
-    <View
+    <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/v_holder"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_size_120"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title_ep" />
+        android:layout_height="@dimen/ui_size_200"
+        android:gravity="center"
+        android:text="章节数据加载中..."
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_ep"
+        tools:ignore="HardcodedText" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"

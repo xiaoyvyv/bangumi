@@ -52,6 +52,8 @@ class AnimeEpProgressView @JvmOverloads constructor(
             entity.mediaType == MediaType.TYPE_BOOK -> "Vol"
             else -> "我的完成度"
         }
+
+        // 书籍的VOL进度条
         if (entity.mediaType == MediaType.TYPE_BOOK && epOrVol.not()) {
             binding.pbMedia.max = entity.progressSecondMax
             binding.pbMedia.setProgress(entity.progressSecond, true)
@@ -64,7 +66,9 @@ class AnimeEpProgressView @JvmOverloads constructor(
             }
             binding.ivAdd.isVisible = (entity.progressSecond != entity.progressSecondMax
                     || entity.progressSecondMax == 0)
-        } else {
+        }
+        // EP 进度条
+        else {
             binding.pbMedia.max = entity.progressMax
             binding.pbMedia.setProgress(entity.progress, true)
             binding.tvProgress.text = buildString {
@@ -76,6 +80,11 @@ class AnimeEpProgressView @JvmOverloads constructor(
             }
             binding.ivAdd.isVisible = (entity.progress != entity.progressMax
                     || entity.progressMax == 0)
+
+            // 动画三次元的加号、再次校验收藏状态是否为在看
+            if (binding.ivAdd.isVisible && (entity.mediaType == MediaType.TYPE_ANIME || entity.mediaType == MediaType.TYPE_REAL)) {
+                binding.ivAdd.isVisible = entity.collectState.interest == InterestType.TYPE_DO
+            }
         }
 
         binding.ivAdd.setOnFastLimitClickListener {

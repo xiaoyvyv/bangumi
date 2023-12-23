@@ -2,6 +2,7 @@ package com.xiaoyv.common.widget.grid
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ScreenUtils
@@ -45,16 +46,18 @@ class EpGridView @JvmOverloads constructor(
         autoScrollWatched: Boolean,
         listener: BaseQuickAdapter.OnItemChildClickListener<MediaChapterEntity>,
     ) {
+        isVisible = true
+
         if (isHorizontalGrid(list.size)) {
-            if (layoutManager == null) layoutManager = horizontalManager
-            if (adapter == null) adapter = gridHorAdapter
+            layoutManager = horizontalManager
+            adapter = gridHorAdapter
             gridHorAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
             gridHorAdapter.submitList(list) {
                 if (autoScrollWatched) scrollToWatched()
             }
         } else {
-            if (layoutManager == null) layoutManager = verticalManager
-            if (adapter == null) adapter = gridVerAdapter
+            layoutManager = verticalManager
+            adapter = gridVerAdapter
             gridVerAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
             gridVerAdapter.submitList(list)
         }

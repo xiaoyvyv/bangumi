@@ -265,8 +265,8 @@ fun parserEpNumber(title: String): Pair<String, String> {
     // 1107
     // 1108.5.
     // SP27.5.
-    // ED993
-    val epTip = "(^(ED|OP|SP|MAD|PV|O)*(\\d+\\.\\d*\\.))|(^(ED|OP|SP|MAD|PV|O)*\\d+\\.)"
+    // ED993.
+    val epTip = "(^(ED|OP|SP|MAD|PV|O|Trailer)*(\\d+\\.\\d*\\.))|(^(ED|OP|SP|MAD|PV|O|Trailer)*\\d+\\.)"
         .toRegex(RegexOption.IGNORE_CASE)
         .find(title.trim())?.value.orEmpty()
 
