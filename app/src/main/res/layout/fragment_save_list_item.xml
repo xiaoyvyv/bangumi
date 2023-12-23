@@ -84,14 +84,15 @@
         android:id="@+id/tv_ep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_layout_margin"
         android:background="@drawable/ui_shape_rectangle_corner_6"
         android:backgroundTint="?attr/colorPrimary"
-        android:padding="@dimen/ui_size_6"
+        android:padding="@dimen/ui_size_4"
         android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        android:textSize="@dimen/ui_font_10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_title"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="12 话" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView

@@ -12,11 +12,10 @@ import com.xiaoyv.bangumi.databinding.ActivityPersonBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.callback.AutoHideTitleListener
 import com.xiaoyv.common.kts.CommonDrawable
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
@@ -67,6 +66,8 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
     }
 
     override fun initListener() {
+        binding.appBar.addOnOffsetChangedListener(AutoHideTitleListener(binding.toolbar) { viewModel.requireName })
+
         binding.vpContent.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if ((position == 1 || position == 2) && viewModel.isVirtual.not()) {
@@ -83,7 +84,10 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
             val entity = it ?: return@observe
 
             binding.ivCover.loadImageBlurBackground(entity.poster)
-            binding.ivCover.loadImageAnimate(entity.poster, cropType = ImageView.ScaleType.FIT_START)
+            binding.ivCover.loadImageAnimate(
+                entity.poster,
+                cropType = ImageView.ScaleType.FIT_START
+            )
             binding.ivCover.setOnFastLimitClickListener {
                 RouteHelper.jumpPreviewImage(entity.posterLarge)
             }
@@ -105,7 +109,8 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val isCollected = viewModel.isCollected
-        menu.add(if (isCollected) "取消收藏" else "收藏")
+
+        if (viewModel.requireEntity != null) menu.add(if (isCollected) "取消收藏" else "收藏")
             .setIcon(if (isCollected) CommonDrawable.ic_bookmark_added else CommonDrawable.ic_bookmark_add)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {

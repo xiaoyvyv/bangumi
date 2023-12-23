@@ -190,6 +190,9 @@ interface BgmWebApi {
         @Field("ep_id") watchedEpId: Array<String>? = null,
     ): Document
 
+    @GET("/ep/{epId}")
+    suspend fun queryEpDetail(@Path("epId") epId: String): Document
+
     @FormUrlEncoded
     @POST("/subject/set/watched/{mediaId}")
     suspend fun updateMediaProgress(

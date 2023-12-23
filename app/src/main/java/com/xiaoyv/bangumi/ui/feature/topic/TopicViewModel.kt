@@ -6,10 +6,10 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserTopic
+import com.xiaoyv.common.api.parser.impl.parserTopicEp
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -46,14 +46,16 @@ class TopicViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
-                var start = System.currentTimeMillis()
                 val list = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryTopicDetail(topicId, topicType).apply {
-                        debugLog { "请求消费：${System.currentTimeMillis() - start}" }
-                        start = System.currentTimeMillis()
-                    }.parserTopic(topicId)
+                    when (topicType) {
+                        // 章节类型话题
+                        TopicType.TYPE_EP -> BgmApiManager.bgmWebApi.queryEpDetail(topicId)
+                            .parserTopicEp(topicId)
+                        // 其它类型话题
+                        else -> BgmApiManager.bgmWebApi.queryTopicDetail(topicId, topicType)
+                            .parserTopic(topicId)
+                    }
                 }
-                debugLog { "解析消费：${System.currentTimeMillis() - start}" }
                 onTopicDetailLiveData.value = list
             }
         )

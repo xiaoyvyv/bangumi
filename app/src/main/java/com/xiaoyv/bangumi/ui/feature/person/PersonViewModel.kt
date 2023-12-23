@@ -23,11 +23,16 @@ class PersonViewModel : BaseViewModel() {
     internal val onPersonLiveData = MutableLiveData<PersonEntity?>()
     internal val vpEnableLiveData = MutableLiveData<Boolean>()
 
+    internal val requireEntity get() = onPersonLiveData.value
+
     /**
      * 是否收集
      */
     internal val isCollected: Boolean
-        get() = onPersonLiveData.value?.isCollected == true
+        get() = requireEntity?.isCollected == true
+
+    internal val requireName: String
+        get() = requireEntity?.nameNative.orEmpty().ifBlank { requireEntity?.nameCn.orEmpty() }
 
     override fun onViewCreated() {
         queryPersonInfo()

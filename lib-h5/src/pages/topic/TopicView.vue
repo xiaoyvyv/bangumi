@@ -125,7 +125,7 @@ onMounted(() => {
   <div class="topic" id="topic" v-if="topic.id">
     <div class="topic-title">{{ topic.title }}</div>
     <div class="topic-info" @click.stop="onClickUser">
-      <div class="topic-author">{{ topic.userName }}</div>
+      <div class="topic-author" v-if="topic.userName">{{ topic.userName }}</div>
       <div class="topic-time">{{ topic.time }}</div>
     </div>
 

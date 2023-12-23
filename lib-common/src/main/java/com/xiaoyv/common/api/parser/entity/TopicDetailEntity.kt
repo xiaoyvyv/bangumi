@@ -29,7 +29,6 @@ data class TopicDetailEntity(
     @SerializedName("related") var related: SampleRelatedEntity = SampleRelatedEntity(),
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyForm") var replyForm: CommentFormEntity = CommentFormEntity(),
-    @SerializedName("gh") var gh: String = "",
     @SerializedName("emojiParam") var emojiParam: EmojiParam = EmojiParam(),
     @SerializedName("emojis") var emojis: List<LikeEntity.LikeAction> = emptyList(),
 ) : Parcelable {

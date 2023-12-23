@@ -31,6 +31,9 @@ class PersonCharacterFragment : BaseListFragment<CharacterEntity, PersonCharacte
     override val isOnlyOnePage: Boolean
         get() = true
 
+    override val loadingBias: Float
+        get() = 0.3f
+
     override fun initView() {
         super.initView()
         binding.rvContent.updatePadding(8.dpi, 8.dpi, 8.dpi, 8.dpi)

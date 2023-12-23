@@ -33,6 +33,9 @@ class PersonCooperateFragment :
     override val isOnlyOnePage: Boolean
         get() = false
 
+    override val loadingBias: Float
+        get() = 0.3f
+
     override fun initView() {
         super.initView()
         binding.rvContent.updatePadding(8.dpi, 8.dpi, 8.dpi, 8.dpi)

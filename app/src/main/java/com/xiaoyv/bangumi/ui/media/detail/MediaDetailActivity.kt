@@ -18,6 +18,7 @@ import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.callback.AutoHideTitleListener
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.GoogleAttr
@@ -95,6 +96,8 @@ class MediaDetailActivity :
     }
 
     override fun initListener() {
+        binding.appBar.addOnOffsetChangedListener(AutoHideTitleListener(binding.toolbar) { viewModel.requireMediaName })
+
         binding.speedDial.setOnActionSelectedListener(SpeedDialView.OnActionSelectedListener { actionItem ->
             binding.speedDial.close()
 

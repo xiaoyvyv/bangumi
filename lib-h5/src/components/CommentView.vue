@@ -271,6 +271,7 @@ const onClickNewComment = (event: Event) => {
       .topic-html {
         width: 100%;
         max-width: 100%;
+        line-height: 1.5;
         word-break: break-all;
         overflow-x: hidden !important;
 
