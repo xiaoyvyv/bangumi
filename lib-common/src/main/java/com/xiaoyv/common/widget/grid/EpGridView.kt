@@ -33,11 +33,15 @@ class EpGridView @JvmOverloads constructor(
         GridLayoutManager(context, SPAN_COUNT_VERTICAL, LinearLayoutManager.VERTICAL, false)
     }
 
+    private val verticalProcessManager by lazy {
+        GridLayoutManager(context, SPAN_COUNT_VERTICAL_PROCESS, LinearLayoutManager.VERTICAL, false)
+    }
+
     init {
         hasFixedSize()
         itemAnimator = null
         if (isInEditMode) {
-            layoutManager = horizontalManager
+            layoutManager = verticalManager
         }
     }
 
@@ -71,6 +75,19 @@ class EpGridView @JvmOverloads constructor(
     }
 
     /**
+     * 进度页面格子
+     */
+    fun fillProcessChapters(
+        list: List<ApiUserEpEntity>,
+        listener: BaseQuickAdapter.OnItemChildClickListener<ApiUserEpEntity>,
+    ) {
+        layoutManager = verticalProcessManager
+        adapter = gridVerAdapter
+        gridVerAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
+        gridVerAdapter.submitList(list)
+    }
+
+    /**
      * 滑动到第一个不是看过的格子
      */
     fun scrollToWatched() {
@@ -88,6 +105,7 @@ class EpGridView @JvmOverloads constructor(
     companion object {
         const val SPAN_COUNT_HORIZONTAL = 5
         const val SPAN_COUNT_VERTICAL = 8
+        const val SPAN_COUNT_VERTICAL_PROCESS = 6
 
         fun isHorizontalGrid(size: Int): Boolean {
             return size > SPAN_COUNT_VERTICAL * SPAN_COUNT_HORIZONTAL

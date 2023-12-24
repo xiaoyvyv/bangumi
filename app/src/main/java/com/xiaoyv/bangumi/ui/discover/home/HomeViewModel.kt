@@ -6,7 +6,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
-import com.xiaoyv.common.api.parser.impl.HomeParser.parserHomePage
+import com.xiaoyv.common.api.parser.impl.parserHomePageWithoutLogin
 import com.xiaoyv.common.config.annotation.HomeFeatureType
 import com.xiaoyv.common.config.bean.HomeIndexFeature
 import com.xiaoyv.common.kts.CommonDrawable
@@ -36,7 +36,7 @@ class HomeViewModel : BaseViewModel() {
             block = {
                 readCache()
                 onHomeIndexLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmJsonApi.queryMainPage().parserHomePage().apply {
+                    BgmApiManager.bgmJsonApi.queryMainPage().parserHomePageWithoutLogin().apply {
                         banner.features = listOf(
                             HomeIndexFeature(
                                 id = HomeFeatureType.TYPE_MAGI,
@@ -52,6 +52,16 @@ class HomeViewModel : BaseViewModel() {
                                 id = HomeFeatureType.TYPE_SEARCH,
                                 title = "搜索",
                                 icon = CommonDrawable.ic_search
+                            ),
+                            HomeIndexFeature(
+                                id = HomeFeatureType.TYPE_RANK,
+                                title = "排行榜",
+                                icon = CommonDrawable.ic_bottom_rank
+                            ),
+                            HomeIndexFeature(
+                                id = HomeFeatureType.TYPE_PROCESS,
+                                title = "进度管理",
+                                icon = CommonDrawable.ic_process
                             ),
                             HomeIndexFeature(
                                 id = HomeFeatureType.TYPE_ALMANAC,

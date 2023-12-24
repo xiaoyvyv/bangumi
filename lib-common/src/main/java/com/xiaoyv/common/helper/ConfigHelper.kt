@@ -3,6 +3,7 @@ package com.xiaoyv.common.helper
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.SPStaticUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.TimelinePageType
 
 /**
@@ -25,11 +26,11 @@ object ConfigHelper {
     private const val KEY_FILTER_BREAK_UP_COMMENT = "filter-break-up-comment"
     private const val KEY_SPLIT_EP_LIST = "split-ep-list"
     private const val KEY_HOME_DEFAULT_TAB = "home-default-tab"
+    private const val KEY_CENTER_TYPE = "center-tab-type"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
     const val DIALOG_DIM_AMOUNT = 0.5f
-    const val disableApi = false
 
     fun configBaiduTranslateId(appId: String) {
         SPStaticUtils.put(KEY_BAIDU_TRANSLATE_APP_ID, appId)
@@ -135,4 +136,11 @@ object ConfigHelper {
     var isSplitEpList: Boolean
         get() = SPStaticUtils.getBoolean(KEY_SPLIT_EP_LIST, true)
         set(value) = SPStaticUtils.put(KEY_SPLIT_EP_LIST, value)
+
+    /**
+     * 中心 TAB 的类型
+     */
+    var centerTabType: Int
+        get() = SPStaticUtils.getInt(KEY_CENTER_TYPE, GlobalConfig.PAGE_RANK)
+        set(value) = SPStaticUtils.put(KEY_CENTER_TYPE, value)
 }

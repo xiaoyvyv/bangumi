@@ -17,6 +17,7 @@ import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
 import com.xiaoyv.common.api.response.douban.DouBanSuggestEntity
 import com.xiaoyv.common.config.annotation.EpApiType
 import com.xiaoyv.common.config.annotation.TimelineType
+import com.xiaoyv.common.kts.randId
 import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
 import retrofit2.Response
@@ -106,7 +107,7 @@ interface BgmJsonApi {
         @Field("grant_type") grantType: String,
         @Field("refresh_token") refreshToken: String? = null,
         @Field("redirect_uri") redirectUri: String = BgmApiManager.APP_CALLBACK,
-        @Field("state") state: String = System.currentTimeMillis().toString(),
+        @Field("state") state: String = randId(),
         @Field("client_id") clientId: String = BgmApiManager.APP_ID,
         @Field("client_secret") clientSecret: String = BgmApiManager.APP_SECRET,
     ): AuthTokenEntity
@@ -129,7 +130,7 @@ interface BgmJsonApi {
      */
     @GET("/v0/episodes")
     suspend fun querySubjectEp(
-        @Path("subject_id") subjectId: String,
+        @Query("subject_id") subjectId: String,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
         @Query("episode_type") @EpApiType episodeType: Int? = null,

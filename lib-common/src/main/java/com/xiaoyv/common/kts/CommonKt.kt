@@ -54,3 +54,7 @@ inline fun <reified T> Any.forceCast(): T {
 inline fun <reified T : Parcelable> parcelableCreator(): Parcelable.Creator<T> =
     T::class.java.getDeclaredField("CREATOR").get(null) as? Parcelable.Creator<T>
         ?: throw IllegalArgumentException("Could not access CREATOR field in class ${T::class.simpleName}")
+
+fun randId(): String {
+   return System.currentTimeMillis().toString()
+}

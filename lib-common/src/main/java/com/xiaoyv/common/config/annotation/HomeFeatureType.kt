@@ -16,6 +16,8 @@ import androidx.annotation.StringDef
     HomeFeatureType.TYPE_EMAIL,
     HomeFeatureType.TYPE_ALMANAC,
     HomeFeatureType.TYPE_WIKI,
+    HomeFeatureType.TYPE_RANK,
+    HomeFeatureType.TYPE_PROCESS,
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class HomeFeatureType {
@@ -24,6 +26,8 @@ annotation class HomeFeatureType {
         const val TYPE_MAGI = "magi"
         const val TYPE_ANIME_PICTURES = "anime-pictures"
         const val TYPE_SEARCH = "search"
+        const val TYPE_RANK = "rank"
+        const val TYPE_PROCESS = "process"
         const val TYPE_EMAIL = "email"
         const val TYPE_ALMANAC = "almanac"
         const val TYPE_WIKI = "wiki"

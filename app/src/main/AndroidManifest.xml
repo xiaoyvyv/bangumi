@@ -252,6 +252,10 @@
             android:name="com.xiaoyv.bangumi.ui.feature.setting.ui.UiConfigActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

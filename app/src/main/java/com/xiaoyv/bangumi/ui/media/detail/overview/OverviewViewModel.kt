@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.EpApiType
 import com.xiaoyv.common.config.annotation.EpCollectType
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
@@ -20,6 +21,7 @@ import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.FullQueryHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.randId
 import com.xiaoyv.common.widget.grid.EpGridView
 import com.xiaoyv.widget.kts.orEmpty
 import kotlinx.coroutines.Dispatchers
@@ -58,8 +60,18 @@ class OverviewViewModel : BaseViewModel() {
     private val requireMediaType: String
         get() = mediaDetailLiveData.value?.mediaType ?: MediaType.TYPE_UNKNOWN
 
+    /**
+     * 媒体收藏状态
+     */
+    private val requireMediaCollectType: String
+        @InterestType
+        get() = mediaDetailLiveData.value?.collectState?.interest ?: InterestType.TYPE_UNKNOWN
+
+    /**
+     * 是否满足编辑章节进度条件
+     */
     internal val canChangeEpProgress: Boolean
-        get() = MediaType.canEditEpProgress(requireMediaType)
+        get() = MediaType.canEditEpProgress(requireMediaType) && requireMediaCollectType != InterestType.TYPE_UNKNOWN
 
     private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(
@@ -268,7 +280,7 @@ class OverviewViewModel : BaseViewModel() {
                         // 在前面添加应该头描述，本篇除外
                         if (epType != EpApiType.TYPE_MAIN) {
                             newList.add(ApiUserEpEntity(splitter = true).apply {
-                                id = System.currentTimeMillis().toString()
+                                id = randId()
                                 episode = ApiEpisodeEntity(
                                     ep = EpApiType.toAbbrType(epType.orEmpty()),
                                     type = epType.orEmpty()
@@ -282,7 +294,7 @@ class OverviewViewModel : BaseViewModel() {
                         if (i != 0) {
                             repeat(horSpanCount - i) {
                                 newList.add(ApiUserEpEntity(splitter = true).apply {
-                                    id = System.currentTimeMillis().toString()
+                                    id = randId()
                                 })
                             }
                         }
@@ -294,7 +306,7 @@ class OverviewViewModel : BaseViewModel() {
                         // 在前面添加应该头描述，本篇除外
                         if (epType != EpApiType.TYPE_MAIN) {
                             newList.add(ApiUserEpEntity(splitter = true).apply {
-                                id = System.currentTimeMillis().toString()
+                                id = randId()
                                 episode = ApiEpisodeEntity(
                                     ep = EpApiType.toAbbrType(epType.orEmpty()),
                                     type = epType.orEmpty()
@@ -306,40 +318,6 @@ class OverviewViewModel : BaseViewModel() {
             }
 
             newList
-            /*
-                        val list =
-                            BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_CHAPTER)
-                                .parserMediaChapters(mediaId)
-
-
-
-                        // 是否另起一行
-                        if (ConfigHelper.isSplitEpList && EpGridView.isHorizontalGrid(list.size)) {
-                            val newList = arrayListOf<MediaChapterEntity>()
-                            list.forEach { item ->
-                                if (item.splitter) {
-                                    val i = newList.size % horSpanCount
-                                    // 补位
-                                    if (i != 0) {
-                                        repeat(horSpanCount - i) {
-                                            newList.add(
-                                                MediaChapterEntity(
-                                                    id = System.currentTimeMillis().toString(),
-                                                    splitter = true
-                                                )
-                                            )
-                                        }
-                                    }
-                                    newList.add(item)
-                                } else {
-                                    newList.add(item)
-                                }
-                            }
-
-                            newList
-                        } else {
-                            list
-                        }*/
         }
     }
 }

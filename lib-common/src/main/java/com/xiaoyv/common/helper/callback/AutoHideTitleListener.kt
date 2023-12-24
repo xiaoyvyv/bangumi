@@ -14,12 +14,16 @@ import kotlin.math.abs
  */
 class AutoHideTitleListener(private val toolbar: Toolbar, private val title: () -> String) :
     OnOffsetChangedListener {
+    private val offset by lazy { 40.dpi }
+
     override fun onOffsetChanged(p0: AppBarLayout, p1: Int) {
+        val targetTitle = title()
+
         // 完全折叠
-        if (abs(p1) > p0.totalScrollRange - 40.dpi) {
-            toolbar.title = title()
+        if (abs(p1) > p0.totalScrollRange - offset) {
+            if (toolbar.title != targetTitle) toolbar.title = targetTitle
         } else {
-            toolbar.title = null
+            if (toolbar.title != null) toolbar.title = null
         }
     }
 }

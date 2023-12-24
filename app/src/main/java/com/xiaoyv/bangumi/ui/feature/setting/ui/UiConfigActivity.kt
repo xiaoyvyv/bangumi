@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.AppUtils
 import com.xiaoyv.bangumi.databinding.ActivitySettingUiBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
@@ -41,6 +42,13 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
             property = ConfigHelper::homeDefaultTab,
             names = listOf("第1个", "第2个", "第3个", "第4个", "第5个"),
             values = listOf(0, 1, 2, 3, 4)
+        )
+
+        binding.settingCenterTab.bindInt(
+            activity = this,
+            property = ConfigHelper::centerTabType,
+            names = listOf("排行榜", "追番进度"),
+            values = listOf(GlobalConfig.PAGE_RANK, GlobalConfig.PAGE_PROCESS)
         )
     }
 

@@ -21,8 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
-
-    <com.google.android.material.textview.MaterialTextView
+    <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_tag"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="@dimen/ui_size_0"

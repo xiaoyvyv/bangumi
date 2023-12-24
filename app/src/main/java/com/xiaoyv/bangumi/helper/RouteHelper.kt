@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.picture.gallery.AnimeGalleryActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
+import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
 import com.xiaoyv.bangumi.ui.discover.group.list.GroupListActivity
 import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
@@ -450,8 +451,13 @@ object RouteHelper {
     fun jumpRobotConfig() {
         RobotConfigActivity::class.open()
     }
+
     fun jumpUiConfig() {
         UiConfigActivity::class.open()
+    }
+
+    fun jumpFragmentPage(page: Int) {
+        FragmentContainerActivity::class.open(bundleOf(NavKey.KEY_INTEGER to page))
     }
 
     fun jumpAnimePictures() {

@@ -27,6 +27,7 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<ApiUserEpEntity,
     override fun BaseQuickBindingHolder<FragmentMediaChapterItemBinding>.converted(item: ApiUserEpEntity) {
         val episode = item.episode ?: empty
         binding.titleNative.text = buildString {
+            append(EpApiType.toAbbrType(episode.type))
             append(episode.epText)
             append(". ")
             append(episode.name)

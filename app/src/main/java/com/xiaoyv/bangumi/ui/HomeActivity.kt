@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UpdateHelper
@@ -104,6 +105,13 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
                     viewModel.resetDiscoverIndex()
                 }
             }
+        }
+
+        // 中心TAB
+        val menuItem = binding.navView.menu.getItem(2)
+        when (ConfigHelper.centerTabType) {
+            GlobalConfig.PAGE_RANK -> menuItem.setTitle("排行榜")
+            GlobalConfig.PAGE_PROCESS -> menuItem.setTitle("追番进度")
         }
     }
 

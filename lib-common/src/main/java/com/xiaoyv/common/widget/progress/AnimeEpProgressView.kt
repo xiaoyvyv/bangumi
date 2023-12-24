@@ -46,11 +46,8 @@ class AnimeEpProgressView @JvmOverloads constructor(
         }
 
         // 收藏类型是否满足进度条显示条件
-        val isEditAvailable =
-            entity.collectState.interest == InterestType.TYPE_DO || entity.collectState.interest == InterestType.TYPE_COLLECT
-
-        isVisible = isEditAvailable
-        if (isEditAvailable.not()) return
+        isVisible = entity.collectState.interest != InterestType.TYPE_UNKNOWN
+        if (isVisible.not()) return
 
         // Vol的进度条，仅书籍能显示
         if (isVisible && !epOrVol) {
@@ -91,11 +88,6 @@ class AnimeEpProgressView @JvmOverloads constructor(
             }
             binding.ivAdd.isVisible = (entity.progress != entity.progressMax
                     || entity.progressMax == 0)
-
-            // 动画、三次元的自动加一功能仅再看状态才可以，书籍无所谓
-            if (binding.ivAdd.isVisible && (entity.mediaType == MediaType.TYPE_ANIME || entity.mediaType == MediaType.TYPE_REAL)) {
-                binding.ivAdd.isVisible = entity.collectState.interest == InterestType.TYPE_DO
-            }
         }
 
         binding.ivAdd.setOnFastLimitClickListener {

@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
@@ -50,7 +51,7 @@ class MediaChapterFragment : BaseListFragment<ApiUserEpEntity, MediaChapterViewM
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_ep) {
             // 不支持编辑进度直接打开讨论话题
-            if (!MediaType.canEditEpProgress(activityViewModel.requireMediaType)) {
+            if (!MediaType.canEditEpProgress(activityViewModel.requireMediaType) && viewModel.activityViewModel.requireMediaCollectType != InterestType.TYPE_UNKNOWN) {
                 RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
                 return@setOnDebouncedChildClickListener
             }

@@ -55,6 +55,9 @@ interface BgmWebApi {
     @GET("/json/notify")
     suspend fun notify(@Query("_") timestamp: Long): NotifyEntity
 
+    @GET("/")
+    suspend fun queryHomePage(): Document
+
     /**
      * 验证码
      */

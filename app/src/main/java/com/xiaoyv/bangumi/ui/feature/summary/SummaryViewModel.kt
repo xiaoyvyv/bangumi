@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +70,7 @@ class SummaryViewModel : BaseViewModel() {
                 }
 
                 val (appId, secret) = ConfigHelper.readBaiduTranslateConfig()
-                val salt = System.currentTimeMillis().toString()
+                val salt = randId()
                 val sign = generateSign(needTranslateText, appId, secret, salt)
 
                 if (appId.isBlank() || secret.isBlank()) {

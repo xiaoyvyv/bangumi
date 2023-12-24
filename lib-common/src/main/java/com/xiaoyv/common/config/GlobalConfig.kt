@@ -15,6 +15,12 @@ object GlobalConfig {
     const val GROUP_MY_REPLY_TOPIC = "my_reply"
     const val GROUP_MY_SEND_TOPIC = "my_topic"
 
+    /**
+     * 功能页面
+     */
+    const val PAGE_RANK = 0
+    const val PAGE_PROCESS = 1
+
     val docPrivacy: String
         get() = "$DOC_ROOT/starter.html?_=" + System.currentTimeMillis()
 

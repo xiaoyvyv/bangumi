@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.parser.entity.MessageEntity
 import com.xiaoyv.common.api.parser.impl.parserMessageBox
 import com.xiaoyv.common.api.parser.impl.parserMessageReplyForm
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.copyAdd
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.mutableCopyOf
@@ -63,7 +64,7 @@ class MessageDetailViewModel : BaseListViewModel<MessageEntity>() {
      */
     fun sendMessage(input: String) {
         val sendMessage = MessageEntity(
-            id = System.currentTimeMillis().toString(),
+            id = randId(),
             mineAvatar = UserHelper.currentUser.avatar?.large.orEmpty(),
             summary = input,
             time = TimeUtils.getNowString(),

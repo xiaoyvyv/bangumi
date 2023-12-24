@@ -22,7 +22,7 @@ import kotlin.math.sqrt
 @Parcelize
 @Keep
 data class MediaDetailEntity(
-    @SerializedName("id") var id: String = "",
+    @SerializedName("id") override var id: String = "",
     @SerializedName("mediaType") @MediaType var mediaType: String = MediaType.TYPE_ANIME,
     @SerializedName("titleCn") var titleCn: String = "",
     @SerializedName("titleNative") var titleNative: String = "",
@@ -54,7 +54,7 @@ data class MediaDetailEntity(
     @SerializedName("comments") var comments: List<MediaCommentEntity> = emptyList(),
     @SerializedName("rating") var rating: MediaRating = MediaRating(),
     @SerializedName("photos") var photos: List<DouBanPhotoEntity.Photo> = emptyList(),
-) : Parcelable {
+) : Parcelable, IdEntity {
 
 
     @Parcelize

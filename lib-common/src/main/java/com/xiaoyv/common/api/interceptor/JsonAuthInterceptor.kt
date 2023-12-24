@@ -19,10 +19,16 @@ class JsonAuthInterceptor : Interceptor {
             return chain.proceed(request)
         }
 
+        // Token 为空直接跳过
+        val accessToken = UserTokenHelper.authToken.accessToken
+        if (accessToken.isNullOrBlank()) {
+            return chain.proceed(request)
+        }
+
         return chain.proceed(
             request
                 .newBuilder()
-                .addHeader("Authorization", "Bearer ${UserTokenHelper.authToken.accessToken}")
+                .addHeader("Authorization", "Bearer $accessToken")
                 .build()
         )
     }

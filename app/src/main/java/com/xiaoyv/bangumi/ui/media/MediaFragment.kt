@@ -10,12 +10,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentMediaBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
 import com.xiaoyv.bangumi.ui.media.option.MediaOptionFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.bean.MediaOptionConfig
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.initNavBack
 import kotlinx.coroutines.delay
 
 /**
@@ -61,7 +63,13 @@ class MediaFragment : BaseViewModelFragment<FragmentMediaBinding, MediaViewModel
     }
 
     override fun initView() {
-        binding.drawLayout.setScrimColor(hostActivity.getColor(com.xiaoyv.widget.R.color.ui_black_20))
+        val activity = hostActivity
+        binding.drawLayout.setScrimColor(activity.getColor(com.xiaoyv.widget.R.color.ui_black_20))
+
+        // 嵌套在 FragmentContainerActivity 内
+        if (activity is FragmentContainerActivity) {
+            binding.toolbar.initNavBack(activity, true)
+        }
     }
 
     override fun initData() {
@@ -136,7 +144,7 @@ class MediaFragment : BaseViewModelFragment<FragmentMediaBinding, MediaViewModel
      */
     fun regisOptionSelectedChange(
         lifecycleOwner: LifecycleOwner,
-        block: Observer<Map<String, List<MediaOptionConfig.Config.Option.Item>>?>
+        block: Observer<Map<String, List<MediaOptionConfig.Config.Option.Item>>?>,
     ) {
         viewModel.currentSelectedOptionItem.observe(lifecycleOwner, block)
     }

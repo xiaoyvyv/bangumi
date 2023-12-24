@@ -50,12 +50,13 @@ class OverviewEpBinder(
                 else -> "章节数据加载中..."
             }
 
+            // 总进度绑定
             holder.binding.pb1.bind(this, true, clickAddEpProgress)
             holder.binding.pb2.bind(this, false, clickAddEpProgress)
 
-            holder.binding.ivLocation.isVisible =
-                canEditEpProgress && EpGridView.isHorizontalGrid(epList.orEmpty().size)
-
+            // 定位按钮
+            holder.binding.ivLocation.isVisible = canEditEpProgress
+                    && EpGridView.isHorizontalGrid(epList.orEmpty().size)
             holder.binding.ivLocation.setOnFastLimitClickListener {
                 holder.binding.epGrid.scrollToWatched()
             }

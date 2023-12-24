@@ -41,8 +41,8 @@ class MediaDetailViewModel : BaseViewModel() {
     /**
      * 当前用户对该媒体收藏类型
      */
-    @MediaType
     internal val requireMediaCollectType: String
+        @InterestType
         get() = onMediaDetailLiveData.value?.collectState?.interest ?: InterestType.TYPE_UNKNOWN
 
     internal val onMediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()

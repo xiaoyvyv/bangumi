@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginResult
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.UserTokenHelper
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.sendValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -47,7 +48,7 @@ class LoginViewModel : BaseViewModel() {
 
     private suspend fun refreshVerifyImpl() {
         onVerifyCodeLiveData.value = withContext(Dispatchers.IO) {
-            val map = mapOf(System.currentTimeMillis().toString() to "")
+            val map = mapOf(randId() to "")
             BgmApiManager.bgmWebApi.queryLoginVerify(map).bytes()
         }
     }

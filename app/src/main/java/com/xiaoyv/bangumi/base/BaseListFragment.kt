@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.base
 
+import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -69,6 +70,8 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
         binding.rvContent.setHasFixedSize(hasFixedSize)
         binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
+
+        injectFilter(binding.flContainer)
     }
 
     @CallSuper
@@ -146,6 +149,10 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     }
 
     open fun onListDataFinish(list: List<T>) {
+
+    }
+
+    open fun injectFilter(container: FrameLayout) {
 
     }
 }
