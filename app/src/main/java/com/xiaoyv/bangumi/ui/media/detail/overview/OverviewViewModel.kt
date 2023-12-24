@@ -4,22 +4,24 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
-import com.xiaoyv.common.api.parser.impl.parserMediaChapters
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
+import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.douban.DouBanImageEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.EpType
-import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.EpApiType
+import com.xiaoyv.common.config.annotation.EpCollectType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.FullQueryHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.widget.grid.EpGridView
+import com.xiaoyv.widget.kts.orEmpty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -43,7 +45,7 @@ class OverviewViewModel : BaseViewModel() {
      * second: 本篇进度值
      */
     internal val onRefreshEpLiveData =
-        MutableLiveData<Triple<List<MediaChapterEntity>, Int, Int>?>()
+        MutableLiveData<Triple<List<ApiUserEpEntity>, Int, Int>?>()
 
     /**
      * 对应的豆瓣预览图片ID
@@ -241,7 +243,7 @@ class OverviewViewModel : BaseViewModel() {
                 val chapterList = queryMediaEpList()
                 val progress = chapterList.count {
                     // 计算本篇的看过或抛弃数目
-                    it.epType == EpType.TYPE_MAIN && (it.collectType == InterestType.TYPE_DROPPED || it.collectType == InterestType.TYPE_COLLECT)
+                    it.episode?.type == EpApiType.TYPE_MAIN && (it.type == EpCollectType.TYPE_DROPPED || it.type == EpCollectType.TYPE_COLLECT)
                 }
 
                 Triple(chapterList, progress, 0)
@@ -249,45 +251,95 @@ class OverviewViewModel : BaseViewModel() {
         }
     }
 
-
     /**
      * 查询进度列表
      */
-    private suspend fun queryMediaEpList(): List<MediaChapterEntity> {
+    private suspend fun queryMediaEpList(): List<ApiUserEpEntity> {
+        val horSpanCount = EpGridView.SPAN_COUNT_HORIZONTAL
+
         return withContext(Dispatchers.IO) {
-            val list =
-                BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_CHAPTER)
-                    .parserMediaChapters(mediaId)
+            val allEpisode = FullQueryHelper.requestAllEpisode(mediaId, requireMediaType)
+            val newList = arrayListOf<ApiUserEpEntity>()
 
-            val horSpanCount = EpGridView.SPAN_COUNT_HORIZONTAL
+            if (ConfigHelper.isSplitEpList && EpGridView.isHorizontalGrid(allEpisode.size)) {
+                allEpisode
+                    .groupBy { it.episode?.type }
+                    .forEach { (epType, entities: List<ApiUserEpEntity>) ->
+                        // 在前面添加应该头描述，本篇除外
+                        if (epType != EpApiType.TYPE_MAIN) {
+                            newList.add(ApiUserEpEntity(splitter = true).apply {
+                                id = System.currentTimeMillis().toString()
+                                episode = ApiEpisodeEntity(
+                                    ep = EpApiType.toAbbrType(epType.orEmpty()),
+                                    type = epType.orEmpty()
+                                )
+                            })
+                        }
+                        newList.addAll(entities)
 
-            // 是否另起一行
-            if (ConfigHelper.isSplitEpList && EpGridView.isHorizontalGrid(list.size)) {
-                val newList = arrayListOf<MediaChapterEntity>()
-                list.forEach { item ->
-                    if (item.splitter) {
-                        val i = newList.size % horSpanCount
                         // 补位
+                        val i = newList.size % horSpanCount
                         if (i != 0) {
                             repeat(horSpanCount - i) {
-                                newList.add(
-                                    MediaChapterEntity(
-                                        id = System.currentTimeMillis().toString(),
-                                        splitter = true
-                                    )
-                                )
+                                newList.add(ApiUserEpEntity(splitter = true).apply {
+                                    id = System.currentTimeMillis().toString()
+                                })
                             }
                         }
-                        newList.add(item)
-                    } else {
-                        newList.add(item)
                     }
-                }
-
-                newList
             } else {
-                list
+                allEpisode
+                    .groupBy { it.episode?.type }
+                    .forEach { (epType, entities: List<ApiUserEpEntity>) ->
+                        // 在前面添加应该头描述，本篇除外
+                        if (epType != EpApiType.TYPE_MAIN) {
+                            newList.add(ApiUserEpEntity(splitter = true).apply {
+                                id = System.currentTimeMillis().toString()
+                                episode = ApiEpisodeEntity(
+                                    ep = EpApiType.toAbbrType(epType.orEmpty()),
+                                    type = epType.orEmpty()
+                                )
+                            })
+                        }
+                        newList.addAll(entities)
+                    }
             }
+
+            newList
+            /*
+                        val list =
+                            BgmApiManager.bgmWebApi.queryMediaDetail(mediaId, MediaDetailType.TYPE_CHAPTER)
+                                .parserMediaChapters(mediaId)
+
+
+
+                        // 是否另起一行
+                        if (ConfigHelper.isSplitEpList && EpGridView.isHorizontalGrid(list.size)) {
+                            val newList = arrayListOf<MediaChapterEntity>()
+                            list.forEach { item ->
+                                if (item.splitter) {
+                                    val i = newList.size % horSpanCount
+                                    // 补位
+                                    if (i != 0) {
+                                        repeat(horSpanCount - i) {
+                                            newList.add(
+                                                MediaChapterEntity(
+                                                    id = System.currentTimeMillis().toString(),
+                                                    splitter = true
+                                                )
+                                            )
+                                        }
+                                    }
+                                    newList.add(item)
+                                } else {
+                                    newList.add(item)
+                                }
+                            }
+
+                            newList
+                        } else {
+                            list
+                        }*/
         }
     }
 }

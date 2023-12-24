@@ -37,7 +37,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
      */
     internal val pager: Pair<Int, Int>
         get() {
-            val limit = 500
+            val limit = 1000
             val offset = (current - 1) * limit
             return offset to limit
         }

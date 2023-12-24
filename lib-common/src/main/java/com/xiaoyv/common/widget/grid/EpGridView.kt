@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ScreenUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.xiaoyv.common.R
-import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
-import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
+import com.xiaoyv.common.config.annotation.EpCollectType
 import com.xiaoyv.common.widget.scroll.AnimeRecyclerView
 
 /**
@@ -21,9 +21,9 @@ import com.xiaoyv.common.widget.scroll.AnimeRecyclerView
 class EpGridView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null,
 ) : AnimeRecyclerView(context, attrs) {
+    private var autoScrollWatched = true
     private val gridHorAdapter by lazy { EpGridHorItemAdapter() }
     private val gridVerAdapter by lazy { EpGridVerItemAdapter() }
-
 
     private val horizontalManager by lazy {
         GridLayoutManager(context, SPAN_COUNT_HORIZONTAL, LinearLayoutManager.HORIZONTAL, false)
@@ -36,28 +36,35 @@ class EpGridView @JvmOverloads constructor(
     init {
         hasFixedSize()
         itemAnimator = null
+        if (isInEditMode) {
+            layoutManager = horizontalManager
+        }
     }
 
     /**
      * 设置格子数据
      */
     fun fillMediaChapters(
-        list: List<MediaChapterEntity>,
-        autoScrollWatched: Boolean,
-        listener: BaseQuickAdapter.OnItemChildClickListener<MediaChapterEntity>,
+        list: List<ApiUserEpEntity>,
+        listener: BaseQuickAdapter.OnItemChildClickListener<ApiUserEpEntity>,
     ) {
         isVisible = true
 
         if (isHorizontalGrid(list.size)) {
             layoutManager = horizontalManager
-            adapter = gridHorAdapter
+            if (adapter !is EpGridHorItemAdapter) adapter = gridHorAdapter
             gridHorAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
             gridHorAdapter.submitList(list) {
-                if (autoScrollWatched) scrollToWatched()
+                if (autoScrollWatched) {
+                    scrollToWatched()
+
+                    // 有效滚动后才标记
+                    if (list.isNotEmpty()) autoScrollWatched = false
+                }
             }
         } else {
             layoutManager = verticalManager
-            adapter = gridVerAdapter
+            if (adapter !is EpGridVerItemAdapter) adapter = gridVerAdapter
             gridVerAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
             gridVerAdapter.submitList(list)
         }
@@ -68,7 +75,7 @@ class EpGridView @JvmOverloads constructor(
      */
     fun scrollToWatched() {
         val targetIndex = gridHorAdapter.items.indexOfLast {
-            it.collectType == InterestType.TYPE_COLLECT
+            it.type == EpCollectType.TYPE_COLLECT
         }
 
         if (targetIndex != -1) {

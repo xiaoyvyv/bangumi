@@ -3,7 +3,6 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
-import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCharacterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCollectForm
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
@@ -13,16 +12,13 @@ import com.xiaoyv.common.api.parser.entity.MediaReviewBlogEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.hrefId
-import com.xiaoyv.common.api.parser.optCatTitle
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parseStar
-import com.xiaoyv.common.api.parser.parserEpNumber
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
-import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.widget.kts.subListLimit
@@ -30,82 +26,6 @@ import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
-/**
- * 解析媒体的章节页面数据
- */
-fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
-    requireNoError()
-    val elements = select(".line_detail > ul > li")
-    val items = arrayListOf<MediaChapterEntity>()
-    elements.forEachIndexed { index, item ->
-        if (index == elements.size - 1 && item.select("input").isNotEmpty()) {
-            return@forEachIndexed
-        }
-        if (item.text() == "本篇") return@forEachIndexed
-
-        // 分隔符
-        if (item.select("h6").isEmpty()) {
-            items.add(
-                MediaChapterEntity(
-                    splitter = true,
-                    id = item.text(),
-                    number = item.text().optCatTitle()
-                )
-            )
-            return@forEachIndexed
-        }
-
-        val entity = MediaChapterEntity()
-        entity.mediaId = mediaId
-        entity.id = item.select("h6 a").hrefId()
-        entity.titleCn = item.select("h6 .tip").text().substringAfterLast("/").trim()
-        entity.titleNative = item.select("h6 a").text()
-        val (number, type) = parserEpNumber(entity.titleNative)
-        entity.number = number
-        entity.epType = type
-        entity.isAired = item.select(".Air").isNotEmpty()
-        entity.isAiring = item.select(".Today").isNotEmpty()
-        entity.airedStateText = item.select(".epAirStatus").attr("title")
-        when {
-            item.select(".statusWatched").isNotEmpty() -> {
-                entity.collectType = InterestType.TYPE_COLLECT
-                entity.collectStateText = item.select(".statusWatched").text()
-            }
-
-            item.select(".statusQueue").isNotEmpty() -> {
-                entity.collectType = InterestType.TYPE_WISH
-                entity.collectStateText = item.select(".statusQueue").text()
-            }
-
-            item.select(".statusDrop").isNotEmpty() -> {
-                entity.collectType = InterestType.TYPE_DROPPED
-                entity.collectStateText = item.select(".statusDrop").text()
-            }
-
-            else -> {
-                entity.collectType = InterestType.TYPE_UNKNOWN
-            }
-        }
-
-        item.select("small").apply {
-            // 动画或三次元的章节
-            if (size > 1) {
-                entity.time = getOrNull(0)?.text().orEmpty()
-                    .replace("时长:", "时长：")
-                    .replace("首播:", "首播：")
-                entity.commentCount = getOrNull(1)?.text().orEmpty().parseCount()
-            }
-            // 音乐的曲目
-            else {
-                entity.time = ""
-                entity.commentCount = firstOrNull()?.text().orEmpty().parseCount()
-            }
-        }
-
-        items.add(entity)
-    }
-    return items
-}
 
 /**
  * 解析媒体底部吐槽评论

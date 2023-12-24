@@ -12,7 +12,7 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EmojiParam
-import com.xiaoyv.common.config.annotation.EpType
+import com.xiaoyv.common.config.annotation.EpAbbrType
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.groupValue
 import com.xiaoyv.common.kts.groupValueOne
@@ -272,13 +272,13 @@ fun parserEpNumber(title: String): Pair<String, String> {
             .find(title.trim())?.value.orEmpty()
 
     val epType = when {
-        epTip.contains(EpType.TYPE_ED) -> EpType.TYPE_ED
-        epTip.contains(EpType.TYPE_OP) -> EpType.TYPE_OP
-        epTip.contains(EpType.TYPE_SP) -> EpType.TYPE_SP
-        epTip.contains(EpType.TYPE_MAD) -> EpType.TYPE_MAD
-        epTip.contains(EpType.TYPE_PV) -> EpType.TYPE_PV
-        epTip.contains(EpType.TYPE_OTHER) -> EpType.TYPE_OTHER
-        else -> EpType.TYPE_MAIN
+        epTip.contains(EpAbbrType.TYPE_ED) -> EpAbbrType.TYPE_ED
+        epTip.contains(EpAbbrType.TYPE_OP) -> EpAbbrType.TYPE_OP
+        epTip.contains(EpAbbrType.TYPE_SP) -> EpAbbrType.TYPE_SP
+        epTip.contains(EpAbbrType.TYPE_MAD) -> EpAbbrType.TYPE_MAD
+        epTip.contains(EpAbbrType.TYPE_PV) -> EpAbbrType.TYPE_PV
+        epTip.contains(EpAbbrType.TYPE_OTHER) -> EpAbbrType.TYPE_OTHER
+        else -> EpAbbrType.TYPE_MAIN
     }
     val number = epTip.removePrefix(epType).removeSuffix(".")
     return number to epType

@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
@@ -42,7 +43,7 @@ data class MediaDetailEntity(
     @SerializedName("progressMax") var progressMax: Int = 0,
     @SerializedName("progressSecond") var progressSecond: Int = 0,
     @SerializedName("progressSecondMax") var progressSecondMax: Int = 0,
-    @SerializedName("epList") var epList: List<MediaChapterEntity> = emptyList(),
+    @SerializedName("epList") var epList: List<ApiUserEpEntity>? = null,
     @SerializedName("subjectSummary") var subjectSummary: String = "",
     @SerializedName("tags") var tags: List<MediaTag> = emptyList(),
     @SerializedName("characters") var characters: List<MediaCharacter> = emptyList(),

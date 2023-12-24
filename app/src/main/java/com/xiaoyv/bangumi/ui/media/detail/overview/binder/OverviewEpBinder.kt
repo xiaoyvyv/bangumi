@@ -6,8 +6,8 @@ import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.xiaoyv.bangumi.databinding.FragmentOverviewEpBinding
-import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
@@ -26,10 +26,9 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
  */
 class OverviewEpBinder(
     private val touchedListener: RecyclerItemTouchedListener,
-    private val clickItemListener: BaseQuickAdapter.OnItemChildClickListener<MediaChapterEntity>,
+    private val clickItemListener: BaseQuickAdapter.OnItemChildClickListener<ApiUserEpEntity>,
     private val clickAddEpProgress: (MediaDetailEntity, Boolean) -> Unit,
 ) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewEpBinding>> {
-    private var isFirstBind = true
 
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewEpBinding>,
@@ -43,23 +42,26 @@ class OverviewEpBinder(
             val canEditEpProgress = MediaType.canEditEpProgress(mediaType)
 
             holder.binding.epGrid.isVisible = canEditEpProgress
-            holder.binding.vHolder.isVisible = canEditEpProgress && isFirstBind
+
+            // 格子加载提示
+            holder.binding.tvLoading.isVisible = epList == null
+            holder.binding.tvLoading.text = when (mediaType) {
+                MediaType.TYPE_BOOK, MediaType.TYPE_GAME -> "该条目暂无章节数据"
+                else -> "章节数据加载中..."
+            }
 
             holder.binding.pb1.bind(this, true, clickAddEpProgress)
             holder.binding.pb2.bind(this, false, clickAddEpProgress)
 
             holder.binding.ivLocation.isVisible =
-                canEditEpProgress && EpGridView.isHorizontalGrid(epList.size)
-            
+                canEditEpProgress && EpGridView.isHorizontalGrid(epList.orEmpty().size)
+
             holder.binding.ivLocation.setOnFastLimitClickListener {
                 holder.binding.epGrid.scrollToWatched()
             }
 
             holder.binding.epGrid.addOnItemTouchListener(touchedListener)
-            holder.binding.epGrid.fillMediaChapters(epList, isFirstBind, clickItemListener)
-
-            // 仅初始化刷新操作才自动滚到定位
-            isFirstBind = false
+            holder.binding.epGrid.fillMediaChapters(epList.orEmpty(), clickItemListener)
         }
     }
 

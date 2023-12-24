@@ -13,9 +13,9 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewRelativeBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSaveBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
-import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.config.bean.SampleImageEntity
@@ -30,7 +30,7 @@ import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 class OverviewAdapter(
     touchedListener: RecyclerItemTouchedListener,
     onClickSave: (AdapterTypeItem, Int) -> Unit,
-    onClickEpItem: OnItemChildClickListener<MediaChapterEntity>,
+    onClickEpItem: OnItemChildClickListener<ApiUserEpEntity>,
     onClickEpAdd: (MediaDetailEntity, Boolean) -> Unit,
     onClickCrtItem: (MediaDetailEntity.MediaCharacter) -> Unit,
     onClickTagItem: (MediaDetailEntity.MediaTag) -> Unit,
@@ -86,7 +86,7 @@ class OverviewAdapter(
     /**
      * 刷新进度板块
      */
-    fun refreshEpList(chapters: List<MediaChapterEntity>, progress: Int, progressSecond: Int) {
+    fun refreshEpList(chapters: List<ApiUserEpEntity>, progress: Int, progressSecond: Int) {
         val item = items.find { it.type == TYPE_EP } ?: return
         val targetIndex = itemIndexOfFirst(item)
         val entity = item.entity as MediaDetailEntity

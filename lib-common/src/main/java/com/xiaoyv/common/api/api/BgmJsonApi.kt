@@ -1,6 +1,7 @@
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.request.EpCollectParam
 import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
@@ -16,11 +17,15 @@ import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
 import com.xiaoyv.common.api.response.douban.DouBanSuggestEntity
 import com.xiaoyv.common.config.annotation.EpApiType
 import com.xiaoyv.common.config.annotation.TimelineType
+import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -140,4 +145,13 @@ interface BgmJsonApi {
         @Query("limit") limit: Int,
         @Query("episode_type") @EpApiType episodeType: Int? = null,
     ): BaseListResponse<ApiUserEpEntity>
+
+    /**
+     * 更新章节收藏状态
+     */
+    @PUT("/v0/users/-/collections/-/episodes/{episode_id}")
+    suspend fun putEpState(
+        @Path("episode_id") episodeId: String,
+        @Body param: EpCollectParam,
+    ): Response<ResponseBody>
 }

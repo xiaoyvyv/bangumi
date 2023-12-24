@@ -1,11 +1,12 @@
 package com.xiaoyv.bangumi.ui.media.detail.chapter
 
-import android.graphics.Color
-import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DiffUtil
+import androidx.core.view.isGone
 import com.xiaoyv.bangumi.databinding.FragmentMediaChapterItemBinding
-import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
-import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
+import com.xiaoyv.common.config.annotation.EpApiType
+import com.xiaoyv.common.config.annotation.EpCollectType
+import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.tint
@@ -19,89 +20,61 @@ import com.xiaoyv.widget.kts.getAttrColor
  * @author why
  * @since 11/24/23
  */
-class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
-        FragmentMediaChapterItemBinding>(ItemDiffItemCallback) {
+class MediaChapterAdapter : BaseQuickDiffBindingAdapter<ApiUserEpEntity,
+        FragmentMediaChapterItemBinding>(IdDiffItemCallback()) {
+    private val empty by lazy { ApiEpisodeEntity() }
 
-    override fun BaseQuickBindingHolder<FragmentMediaChapterItemBinding>.converted(item: MediaChapterEntity) {
-        if (item.splitter) {
-            binding.titleNative.text = item.number
-            binding.titleNative.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurface))
-        } else {
-            binding.titleNative.text = item.titleNative
-            binding.titleNative.setTextColor(context.getAttrColor(GoogleAttr.colorPrimary))
+    override fun BaseQuickBindingHolder<FragmentMediaChapterItemBinding>.converted(item: ApiUserEpEntity) {
+        val episode = item.episode ?: empty
+        binding.titleNative.text = buildString {
+            append(episode.epText)
+            append(". ")
+            append(episode.name)
         }
 
-        binding.titleCn.text = item.titleCn
-        binding.titleCn.isVisible = item.titleCn.isNotBlank()
+        binding.titleCn.text = episode.nameCn
+        binding.titleCn.isGone = episode.nameCn.isNullOrBlank()
+        binding.tvTime.text = episode.airdate
+        binding.tvComment.text = String.format("讨论：%d", episode.comment)
 
-        binding.tvTime.text = item.time
-        binding.tvTime.isVisible = item.splitter.not()
-
-        binding.tvComment.text = String.format("讨论：%d", item.commentCount)
-        binding.tvComment.isVisible = item.splitter.not()
-
-        binding.vDivider.isVisible = item.splitter.not()
-        binding.vAired.isVisible = item.airedStateText.isNotBlank()
         when {
-            // 分割
-            item.splitter -> {
-                binding.vAired.text = null
-                binding.vAired.backgroundTintList = Color.TRANSPARENT.tint
-                binding.vAired.setTextColor(Color.TRANSPARENT)
-            }
             // 看过
-            item.collectType == InterestType.TYPE_COLLECT -> {
-                binding.vAired.text = item.collectStateText
+            item.type == EpCollectType.TYPE_COLLECT -> {
+                binding.vAired.text = episode.infoState.collectStateText
                 binding.vAired.backgroundTintList = context.getColor(CommonColor.save_collect).tint
                 binding.vAired.setTextColor(context.getColor(CommonColor.save_collect_text))
             }
             // 想看
-            item.collectType == InterestType.TYPE_WISH -> {
-                binding.vAired.text = item.collectStateText
+            item.type == EpCollectType.TYPE_WISH -> {
+                binding.vAired.text = episode.infoState.collectStateText
                 binding.vAired.backgroundTintList = context.getColor(CommonColor.save_wish).tint
                 binding.vAired.setTextColor(context.getColor(CommonColor.save_wish_text))
             }
             // 抛弃
-            item.collectType == InterestType.TYPE_DROPPED -> {
-                binding.vAired.text = item.collectStateText
+            item.type == EpCollectType.TYPE_DROPPED -> {
+                binding.vAired.text = episode.infoState.collectStateText
                 binding.vAired.backgroundTintList = context.getColor(CommonColor.save_dropped).tint
                 binding.vAired.setTextColor(context.getColor(CommonColor.save_dropped_text))
             }
             // 放送中
-            item.isAiring -> {
-                binding.vAired.text = item.airedStateText
+            episode.infoState.isAiring -> {
+                binding.vAired.text = episode.infoState.airedStateText
                 binding.vAired.backgroundTintList = context.getColor(CommonColor.state_airing).tint
                 binding.vAired.setTextColor(context.getColor(CommonColor.state_airing_text))
             }
             // 已经播出
-            item.isAired -> {
-                binding.vAired.text = item.airedStateText
+            episode.infoState.isAired -> {
+                binding.vAired.text = episode.infoState.airedStateText
                 binding.vAired.backgroundTintList = context.getColor(CommonColor.state_aired).tint
                 binding.vAired.setTextColor(context.getColor(CommonColor.state_aired_text))
             }
             // 未播出
             else -> {
-                binding.vAired.text = item.airedStateText
+                binding.vAired.text = episode.infoState.airedStateText
                 binding.vAired.backgroundTintList =
                     context.getAttrColor(GoogleAttr.colorSurfaceContainer).tint
                 binding.vAired.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurfaceVariant))
             }
-        }
-    }
-
-    private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaChapterEntity>() {
-        override fun areItemsTheSame(
-            oldItem: MediaChapterEntity,
-            newItem: MediaChapterEntity,
-        ): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(
-            oldItem: MediaChapterEntity,
-            newItem: MediaChapterEntity,
-        ): Boolean {
-            return oldItem == newItem
         }
     }
 }

@@ -4,22 +4,22 @@ import androidx.annotation.IntDef
 import androidx.annotation.StringDef
 
 /**
- * Class: [EpType]
+ * Class: [EpAbbrType]
  *
  * @author why
  * @since 11/25/23
  */
 @StringDef(
-    EpType.TYPE_MAIN,
-    EpType.TYPE_ED,
-    EpType.TYPE_OP,
-    EpType.TYPE_SP,
-    EpType.TYPE_MAD,
-    EpType.TYPE_PV,
-    EpType.TYPE_OTHER
+    EpAbbrType.TYPE_MAIN,
+    EpAbbrType.TYPE_ED,
+    EpAbbrType.TYPE_OP,
+    EpAbbrType.TYPE_SP,
+    EpAbbrType.TYPE_MAD,
+    EpAbbrType.TYPE_PV,
+    EpAbbrType.TYPE_OTHER
 )
 @Retention(AnnotationRetention.SOURCE)
-annotation class EpType {
+annotation class EpAbbrType {
     companion object {
         const val TYPE_MAIN = ""
         const val TYPE_ED = "ED"
@@ -51,16 +51,16 @@ annotation class EpApiType {
         const val TYPE_MAD = 5
         const val TYPE_OTHER = 6
 
-        fun toEpType(@EpApiType epApiType: Int): String {
+        fun toAbbrType(@EpApiType epApiType: Int): String {
             return when (epApiType) {
-                TYPE_MAIN -> EpType.TYPE_MAIN
-                TYPE_ED -> EpType.TYPE_ED
-                TYPE_OP -> EpType.TYPE_OP
-                TYPE_SP -> EpType.TYPE_SP
-                TYPE_MAD -> EpType.TYPE_MAD
-                TYPE_PV -> EpType.TYPE_PV
-                TYPE_OTHER -> EpType.TYPE_OTHER
-                else -> EpType.TYPE_MAIN
+                TYPE_MAIN -> EpAbbrType.TYPE_MAIN
+                TYPE_ED -> EpAbbrType.TYPE_ED
+                TYPE_OP -> EpAbbrType.TYPE_OP
+                TYPE_SP -> EpAbbrType.TYPE_SP
+                TYPE_MAD -> EpAbbrType.TYPE_MAD
+                TYPE_PV -> EpAbbrType.TYPE_PV
+                TYPE_OTHER -> EpAbbrType.TYPE_OTHER
+                else -> EpAbbrType.TYPE_MAIN
             }
         }
     }

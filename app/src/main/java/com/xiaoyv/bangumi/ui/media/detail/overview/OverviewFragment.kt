@@ -7,16 +7,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
-import com.xiaoyv.bangumi.ui.media.action.MediaEpCollectDialog
+import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog
 import com.xiaoyv.bangumi.ui.media.action.MediaSaveActionDialog
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaDetailType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
@@ -24,7 +23,6 @@ import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
-import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.dialog.UiDialog
@@ -50,12 +48,12 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                 showCollectPanel(item, position)
             },
             onClickEpItem = { adapter, _, position ->
-                val chapterEntity = adapter.getItem(position)
-                if (chapterEntity != null && chapterEntity.splitter.not()) {
+                val epEntity = adapter.getItem(position)
+                if (epEntity != null && epEntity.splitter.not()) {
                     if (viewModel.canChangeEpProgress) {
-                        showEpCollectDialog(chapterEntity)
+                        showEpCollectDialog(epEntity)
                     } else {
-                        RouteHelper.jumpTopicDetail(chapterEntity.id, TopicType.TYPE_EP)
+                        RouteHelper.jumpTopicDetail(epEntity.id, TopicType.TYPE_EP)
                     }
                 }
             },
@@ -206,25 +204,15 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     }
 
     /**
-     * 章节收藏弹窗，仅动画或三次元有这个章节格子
+     * 章节进度弹窗
      */
-    private fun showEpCollectDialog(chapterEntity: MediaChapterEntity) {
-        if (activityViewModel.requireMediaCollectType != InterestType.TYPE_DO) {
-            requireActivity().showConfirmDialog(
-                message = "只有收藏为 (在看 | 在玩 | 在读 | 在听) 的条目才可以单独修改章节进度",
-                cancelText = null
-            )
-            return
-        }
-
+    private fun showEpCollectDialog(chapterEntity: ApiUserEpEntity) {
         // 收藏
-        MediaEpCollectDialog.show(
+        MediaEpActionDialog.show(
             fragmentManager = childFragmentManager,
-            chapterEntity = chapterEntity,
+            epEntity = chapterEntity,
             mediaType = activityViewModel.requireMediaType
-        ) { epList, progress ->
-            overviewAdapter.refreshEpList(epList, progress, 0)
-        }
+        )
     }
 
     /**

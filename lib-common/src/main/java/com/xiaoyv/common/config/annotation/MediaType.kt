@@ -28,16 +28,19 @@ annotation class MediaType {
 
         fun action(@MediaType mediaType: String): String {
             return when (mediaType) {
-                TYPE_UNKNOWN -> ""
+                TYPE_UNKNOWN -> "看"
                 TYPE_ANIME -> "看"
                 TYPE_BOOK -> "读"
                 TYPE_MUSIC -> "听"
                 TYPE_GAME -> "玩"
                 TYPE_REAL -> "看"
-                else -> ""
+                else -> "看"
             }
         }
 
+        /**
+         * 仅动画、三次元、书籍可以修改进度
+         */
         fun canEditEpProgress(@MediaType mediaType: String): Boolean {
             return mediaType == TYPE_ANIME || mediaType == TYPE_REAL || mediaType == TYPE_BOOK
         }
