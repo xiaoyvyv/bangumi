@@ -20,7 +20,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaChapterEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaChapters
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.EpCollectType
+import com.xiaoyv.common.config.annotation.EpCollectPathType
 import com.xiaoyv.common.config.annotation.EpType
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
@@ -106,23 +106,23 @@ class MediaEpCollectDialog : DialogFragment() {
             val epCollectType = when (i) {
                 R.id.btn_wish -> {
                     entity.collectType = InterestType.TYPE_WISH
-                    EpCollectType.TYPE_QUEUE
+                    EpCollectPathType.TYPE_QUEUE
                 }
 
                 R.id.btn_dropped -> {
                     entity.collectType = InterestType.TYPE_DROPPED
-                    EpCollectType.TYPE_DROP
+                    EpCollectPathType.TYPE_DROP
                 }
 
                 // 看过
                 R.id.btn_collect -> {
                     entity.collectType = InterestType.TYPE_COLLECT
-                    EpCollectType.TYPE_WATCHED
+                    EpCollectPathType.TYPE_WATCHED
                 }
 
                 else -> {
                     entity.collectType = InterestType.TYPE_UNKNOWN
-                    EpCollectType.TYPE_REMOVE
+                    EpCollectPathType.TYPE_REMOVE
                 }
             }
 
@@ -135,7 +135,7 @@ class MediaEpCollectDialog : DialogFragment() {
      */
     private fun saveEpCollectStatus(
         entity: MediaChapterEntity,
-        @EpCollectType epCollectType: String,
+        @EpCollectPathType epCollectType: String,
     ) {
         launchUI(
             error = {

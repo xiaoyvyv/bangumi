@@ -23,7 +23,14 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<MediaChapterEntity,
         FragmentMediaChapterItemBinding>(ItemDiffItemCallback) {
 
     override fun BaseQuickBindingHolder<FragmentMediaChapterItemBinding>.converted(item: MediaChapterEntity) {
-        binding.titleNative.text = if (item.splitter) item.number else item.titleNative
+        if (item.splitter) {
+            binding.titleNative.text = item.number
+            binding.titleNative.setTextColor(context.getAttrColor(GoogleAttr.colorOnSurface))
+        } else {
+            binding.titleNative.text = item.titleNative
+            binding.titleNative.setTextColor(context.getAttrColor(GoogleAttr.colorPrimary))
+        }
+
         binding.titleCn.text = item.titleCn
         binding.titleCn.isVisible = item.titleCn.isNotBlank()
 

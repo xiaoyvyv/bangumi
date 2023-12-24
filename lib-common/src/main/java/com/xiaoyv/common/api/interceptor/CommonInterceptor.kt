@@ -1,6 +1,7 @@
 package com.xiaoyv.common.api.interceptor
 
 import okhttp3.Interceptor
+import okhttp3.Request
 import okhttp3.Response
 
 /**
@@ -10,6 +11,8 @@ import okhttp3.Response
  * @since 11/24/23
  */
 class CommonInterceptor : Interceptor {
+    private val filterMethod = "GET"
+
     private val defaultUserAgent =
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0"
 
@@ -25,6 +28,9 @@ class CommonInterceptor : Interceptor {
         System.getProperty("http.agent", defaultUserAgent).orEmpty()
             .replace("(.*?)\\(".toRegex(), "Mozilla/5.0 (")
     }
+
+    private val Request.isNotGet
+        get() = method.equals(filterMethod, true).not()
 
     /**
      * - Host: api.bgm.tv
@@ -58,7 +64,7 @@ class CommonInterceptor : Interceptor {
                 .addHeader("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
                 .addHeader("User-Agent", userAgent)
                 .let {
-                    if (!request.header("Referer").isNullOrBlank()) it
+                    if (!request.header("Referer").isNullOrBlank() || request.isNotGet) it
                     else it.addHeader("Referer", request.url.toString())
                 }
                 .build()

@@ -1,6 +1,8 @@
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.response.AuthStatusEntity
+import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
@@ -29,6 +31,7 @@ interface BgmJsonApi {
     @GET(BgmApiManager.URL_BASE_WEB)
     suspend fun queryMainPage(): Document
 
+
     @GET("https://api.github.com/repos/xiaoyvyv/Bangumi-for-Android/releases/latest")
     suspend fun queryGithubLatest(): GithubLatestEntity
 
@@ -39,11 +42,6 @@ interface BgmJsonApi {
         @Query("ajax") ajax: Long = 1,
     ): Document
 
-    /**
-     * 每日放送
-     */
-    @GET("/calendar")
-    suspend fun queryCalendar(): CalendarEntity
 
     @GET("/v0/subjects/{mediaId}")
     suspend fun queryMediaDetail(@Path("mediaId", encoded = true) mediaId: String): MediaJsonEntity
@@ -88,4 +86,32 @@ interface BgmJsonApi {
         @Query("order_by") orderBy: String = "date",
         @Query("page") page: Int = 0,
     ): ImageGalleryEntity
+
+    /**
+     * 获取 Token
+     */
+    @FormUrlEncoded
+    @POST("${BgmApiManager.URL_BASE_WEB}/oauth/access_token")
+    suspend fun authToken(
+        @Field("code") code: String? = null,
+        @Field("grant_type") grantType: String,
+        @Field("refresh_token") refreshToken: String? = null,
+        @Field("redirect_uri") redirectUri: String = BgmApiManager.APP_CALLBACK,
+        @Field("state") state: String = System.currentTimeMillis().toString(),
+        @Field("client_id") clientId: String = BgmApiManager.APP_ID,
+        @Field("client_secret") clientSecret: String = BgmApiManager.APP_SECRET,
+    ): AuthTokenEntity
+
+    /**
+     * Token 状态
+     */
+    @FormUrlEncoded
+    @POST("${BgmApiManager.URL_BASE_WEB}/oauth/token_status")
+    suspend fun authStatus(@Field("access_token") accessToken: String): AuthStatusEntity
+
+    /**
+     * 每日放送
+     */
+    @GET("/calendar")
+    suspend fun queryCalendar(): CalendarEntity
 }

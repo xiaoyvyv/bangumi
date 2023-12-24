@@ -40,3 +40,5 @@ data class MediaChapterEntity(
 
     var splitter: Boolean = false,
 ) : Parcelable, IdEntity
+
+

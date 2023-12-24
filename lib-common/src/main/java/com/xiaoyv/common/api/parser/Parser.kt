@@ -14,8 +14,8 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EmojiParam
 import com.xiaoyv.common.config.annotation.EpType
 import com.xiaoyv.common.kts.debugLog
-import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.common.kts.groupValue
+import com.xiaoyv.common.kts.groupValueOne
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
@@ -266,9 +266,10 @@ fun parserEpNumber(title: String): Pair<String, String> {
     // 1108.5.
     // SP27.5.
     // ED993.
-    val epTip = "(^(ED|OP|SP|MAD|PV|O|Trailer)*(\\d+\\.\\d*\\.))|(^(ED|OP|SP|MAD|PV|O|Trailer)*\\d+\\.)"
-        .toRegex(RegexOption.IGNORE_CASE)
-        .find(title.trim())?.value.orEmpty()
+    val epTip =
+        "(^(ED|OP|SP|MAD|PV|O|Trailer)*(\\d+\\.\\d*\\.))|(^(ED|OP|SP|MAD|PV|O|Trailer)*\\d+\\.)"
+            .toRegex(RegexOption.IGNORE_CASE)
+            .find(title.trim())?.value.orEmpty()
 
     val epType = when {
         epTip.contains(EpType.TYPE_ED) -> EpType.TYPE_ED
@@ -283,6 +284,15 @@ fun parserEpNumber(title: String): Pair<String, String> {
     return number to epType
 }
 
+/**
+ * 有害章节的分类 Title
+ */
+fun String.optCatTitle(): String {
+    return this
+        .replace("特别篇", "SP", true)
+        .replace("预告/宣传/广告", "TPA", true)
+        .replace("Disc", "D", true)
+}
 
 
 

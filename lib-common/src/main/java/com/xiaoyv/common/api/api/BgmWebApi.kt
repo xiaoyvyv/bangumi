@@ -12,7 +12,7 @@ import com.xiaoyv.common.api.response.UploadResultEntity
 import com.xiaoyv.common.api.response.base.BgmActionResponse
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.BrowserSortType
-import com.xiaoyv.common.config.annotation.EpCollectType
+import com.xiaoyv.common.config.annotation.EpCollectPathType
 import com.xiaoyv.common.config.annotation.IndexAttachCatType
 import com.xiaoyv.common.config.annotation.IndexTabCatType
 import com.xiaoyv.common.config.annotation.LikeType
@@ -27,6 +27,7 @@ import com.xiaoyv.common.config.annotation.TimelineType
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
@@ -185,7 +186,7 @@ interface BgmWebApi {
     suspend fun postEpCollect(
         @Header("Referer") referer: String,
         @Path("epId", encoded = true) epId: String,
-        @Path("epCollectType", encoded = true) @EpCollectType epCollectType: String,
+        @Path("epCollectType", encoded = true) @EpCollectPathType epCollectType: String,
         @Query("gh") gh: String,
         @Field("ep_id") watchedEpId: Array<String>? = null,
     ): Document
@@ -758,6 +759,22 @@ interface BgmWebApi {
         @Field("submit") submit: String = "submit",
         @Query("ajax") ajax: Int = 1,
     ): Document
+
+    /**
+     * OAuth 授权
+     */
+    @FormUrlEncoded
+    @POST("/oauth/authorize")
+    suspend fun authJsonApi(
+        @Query("client_id") clientId: String = BgmApiManager.APP_ID,
+        @Query("response_type") responseType: String = "code",
+        @Query("redirect_uri", encoded = true) redirectUri: String = BgmApiManager.APP_CALLBACK,
+        @Field("formhash") formhash: String,
+        @Field("redirect_uri", encoded = true)
+        filedRedirectUri: String = BgmApiManager.APP_CALLBACK,
+        @Field("client_id") fieldClientId: String = BgmApiManager.APP_ID,
+        @Field("submit") submit: String = "授权",
+    ): Response<ResponseBody>
 }
 
 

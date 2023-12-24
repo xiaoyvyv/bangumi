@@ -12,6 +12,7 @@ import com.xiaoyv.common.api.converter.WebHtmlConverter
 import com.xiaoyv.common.api.interceptor.CommonInterceptor
 import com.xiaoyv.common.api.interceptor.CookieInterceptor
 import com.xiaoyv.common.api.interceptor.DouBanInterceptor
+import com.xiaoyv.common.api.interceptor.JsonAuthInterceptor
 import com.xiaoyv.common.config.annotation.BgmPathType
 import okhttp3.Cookie
 import okhttp3.CookieJar
@@ -34,12 +35,15 @@ class BgmApiManager {
     private val cookieJar by lazy {
         PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Utils.getApp()))
     }
+    private val commonInterceptor by lazy { CommonInterceptor() }
+    private val douBanInterceptor by lazy { DouBanInterceptor() }
+    private val cookieInterceptor by lazy { CookieInterceptor() }
 
     private val httpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(CommonInterceptor())
-            .addInterceptor(DouBanInterceptor())
-            .addNetworkInterceptor(CookieInterceptor())
+            .addInterceptor(commonInterceptor)
+            .addInterceptor(douBanInterceptor)
+            .addNetworkInterceptor(cookieInterceptor)
             .apply {
                 if (AppUtils.isAppDebug()) {
                     addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -50,12 +54,6 @@ class BgmApiManager {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
-
-    private val noCookieHttpClient by lazy {
-        httpClient.newBuilder()
-            .cookieJar(CookieJar.NO_COOKIES)
             .build()
     }
 
@@ -73,6 +71,20 @@ class BgmApiManager {
     }
 
     /**
+     * 此 Retrofit 不会自动重定向，其余的同 [webRetrofit]
+     */
+    private val webNoRedirectRetrofit by lazy {
+        webRetrofit.newBuilder()
+            .client(
+                httpClient.newBuilder()
+                    .followRedirects(false)
+                    .followSslRedirects(false)
+                    .build()
+            )
+            .build()
+    }
+
+    /**
      * 此 Retrofit 没有 Cookie 持久化
      */
     private val apiRetrofit by lazy {
@@ -80,13 +92,22 @@ class BgmApiManager {
             .addConverterFactory(WebHtmlConverter.create())
             .addConverterFactory(WebDocumentConverter.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .client(noCookieHttpClient)
+            .client(
+                httpClient.newBuilder()
+                    .addInterceptor(JsonAuthInterceptor())
+                    .cookieJar(CookieJar.NO_COOKIES)
+                    .build()
+            )
             .baseUrl(URL_BASE_API)
             .build()
     }
 
     private val bgmWebApi by lazy {
         webRetrofit.create(BgmWebApi::class.java)
+    }
+
+    private val bgmWebNoRedirectApi by lazy {
+        webNoRedirectRetrofit.create(BgmWebApi::class.java)
     }
 
     private val bgmJsonApi by lazy {
@@ -101,6 +122,10 @@ class BgmApiManager {
     }
 
     companion object {
+        const val APP_ID = "bgm285565606da641d78"
+        const val APP_SECRET = "2f6af7bc16f05f70537ec24076164d5c"
+        const val APP_CALLBACK = "http://localhost/callback"
+
         const val URL_BASE_WEB = "https://bangumi.tv"
         const val URL_BASE_API = "https://api.bgm.tv"
 
@@ -111,6 +136,9 @@ class BgmApiManager {
 
         val bgmWebApi: BgmWebApi
             get() = instance.bgmWebApi
+
+        val bgmWebNoRedirectApi: BgmWebApi
+            get() = instance.bgmWebNoRedirectApi
 
         val httpClient
             get() = instance.httpClient

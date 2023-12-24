@@ -1,6 +1,6 @@
 package com.xiaoyv.common.config.annotation
 
-import androidx.annotation.StringDef
+import androidx.annotation.IntDef
 
 /**
  * Class: [EpCollectType]
@@ -8,18 +8,18 @@ import androidx.annotation.StringDef
  * @author why
  * @since 11/25/23
  */
-@StringDef(
-    EpCollectType.TYPE_WATCHED,
-    EpCollectType.TYPE_QUEUE,
-    EpCollectType.TYPE_DROP,
-    EpCollectType.TYPE_REMOVE
+@IntDef(
+    EpCollectType.TYPE_NONE,
+    EpCollectType.TYPE_WISH,
+    EpCollectType.TYPE_COLLECT,
+    EpCollectType.TYPE_DROPPED
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class EpCollectType {
     companion object {
-        const val TYPE_WATCHED = "watched"
-        const val TYPE_QUEUE = "queue"
-        const val TYPE_DROP = "drop"
-        const val TYPE_REMOVE = "remove"
+        const val TYPE_NONE = 0
+        const val TYPE_WISH = 1
+        const val TYPE_COLLECT = 2
+        const val TYPE_DROPPED = 3
     }
 }

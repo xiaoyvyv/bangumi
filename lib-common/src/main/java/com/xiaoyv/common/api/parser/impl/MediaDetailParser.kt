@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.parser.entity.MediaReviewBlogEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.hrefId
+import com.xiaoyv.common.api.parser.optCatTitle
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
@@ -48,9 +49,7 @@ fun Document.parserMediaChapters(mediaId: String): List<MediaChapterEntity> {
                 MediaChapterEntity(
                     splitter = true,
                     id = item.text(),
-                    number = item.text()
-                        .replace("特别篇", "SP")
-                        .replace("预告/宣传/广告", "TPA")
+                    number = item.text().optCatTitle()
                 )
             )
             return@forEachIndexed

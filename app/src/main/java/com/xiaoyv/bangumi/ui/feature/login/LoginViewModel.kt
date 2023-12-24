@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.parser.entity.LoginResultEntity
 import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginForms
 import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginResult
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.UserTokenHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.kts.sendValue
 import kotlinx.coroutines.Dispatchers
@@ -81,8 +82,12 @@ class LoginViewModel : BaseViewModel() {
                     BgmApiManager.bgmWebApi.doLogin(param = forms).parserLoginResult()
                 }
 
+                // 拉取用户信息
                 UserHelper.refresh()
                 UserHelper.cacheEmailAndPassword(email, password)
+
+                // JsonApi 授权
+                UserTokenHelper.fetchAuthToken()
 
                 onLoginResultLiveData.value = loginResult
             }

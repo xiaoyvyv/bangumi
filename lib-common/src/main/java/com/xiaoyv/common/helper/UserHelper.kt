@@ -64,8 +64,21 @@ class UserHelper private constructor() {
         onUserInfoLiveData.sendValue(userEntity)
 
         // 有登录历史校验缓存
+        checkCookie()
+
+        // 缓存绝交用户
+        cacheBreakUserIds()
+
+        // JsonApi 授权
+        UserTokenHelper.init()
+    }
+
+    /**
+     * 校验缓存用户是否有效
+     */
+    private fun checkCookie() {
         launchProcess(Dispatchers.IO) {
-            debugLog { "校验缓存用户：${userEntity.toJson(true)}" }
+            debugLog { "校验缓存用户：${currentUser.toJson(true)}" }
 
             // 检测缓存的用户信息是否有效
             val isLogin = BgmApiManager.bgmWebApi.queryLoginPage().parserCheckIsLogin()
@@ -77,9 +90,20 @@ class UserHelper private constructor() {
 
             debugLog { "校验缓存用户：有效！" }
         }
+    }
 
-        // 缓存绝交用户
-        cacheBreakUserIds()
+    /**
+     * 缓存绝交用户
+     */
+    private fun cacheBreakUserIds() {
+        launchProcess(Dispatchers.IO) {
+            require(isLogin)
+            val blockUserIds = BgmApiManager.bgmWebApi.queryPrivacy()
+                .parserBlockUser()
+                .map { it.id }
+
+            userSp.put(KEY_BLOCK_USER, blockUserIds.toJson())
+        }
     }
 
     /**
@@ -139,8 +163,11 @@ class UserHelper private constructor() {
      */
     private fun clearUserInfo(clearEmailAndPassword: Boolean = false) {
         BgmApiManager.resetCookie()
+
+        // 清空
         userSp.put(KEY_USER_INFO, "")
         userSp.put(KEY_BLOCK_USER, "")
+        userSp.put(KEY_USER_TOKEN, "")
 
         // 是否清空账户和密码
         if (clearEmailAndPassword) userSp.clear()
@@ -148,16 +175,6 @@ class UserHelper private constructor() {
         onUserInfoLiveData.sendValue(empty)
     }
 
-    private fun cacheBreakUserIds() {
-        launchProcess(Dispatchers.IO) {
-            require(isLogin)
-            val blockUserIds = BgmApiManager.bgmWebApi.queryPrivacy()
-                .parserBlockUser()
-                .map { it.id }
-
-            userSp.put(KEY_BLOCK_USER, blockUserIds.toJson())
-        }
-    }
 
     /**
      * 获取全部的绝交用户
@@ -170,12 +187,13 @@ class UserHelper private constructor() {
         private const val NAME = "user"
         private const val KEY_USER_INFO = "user-info"
         private const val KEY_BLOCK_USER = "user-block"
+        internal const val KEY_USER_TOKEN = "user-token"
 
         private val helper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             UserHelper()
         }
 
-        private val userSp: SPUtils
+        internal val userSp: SPUtils
             get() = SPUtils.getInstance(NAME)
 
         /**
