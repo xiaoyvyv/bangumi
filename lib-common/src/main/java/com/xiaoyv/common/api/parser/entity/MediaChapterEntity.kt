@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.xiaoyv.common.config.annotation.EpType
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
@@ -35,7 +36,8 @@ data class MediaChapterEntity(
     @InterestType
     var collectType: String = InterestType.TYPE_UNKNOWN,
     var collectStateText: String = "",
-    var epType: String = "",
+    @EpType
+    var epType: String = EpType.TYPE_MAIN,
     var number: String = "",
 
     var splitter: Boolean = false,

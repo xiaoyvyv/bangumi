@@ -32,6 +32,16 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     internal open val emptyTip: String
         get() = StringUtils.getString(CommonString.common_empty_tip)
 
+    /**
+     * 返回 offset - limit 格式的分页参数
+     */
+    internal val pager: Pair<Int, Int>
+        get() {
+            val limit = 500
+            val offset = (current - 1) * limit
+            return offset to limit
+        }
+
     fun refresh() {
         current = 1
         loadListData()

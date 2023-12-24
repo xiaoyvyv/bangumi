@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.databinding.ActivityCalendarItemBinding
 import com.xiaoyv.bangumi.databinding.ActivityCalendarTitleBinding
-import com.xiaoyv.common.api.response.CalendarEntity
+import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.kts.IMAGE_HOLDER_3X4
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -26,8 +26,8 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
             .addItemType(TYPE_GARD, CalendarItemContentBinder())
             .onItemViewType { position, list ->
                 when (list[position]) {
-                    is CalendarEntity.CalendarEntityItem.Weekday -> TYPE_HEADER
-                    is CalendarEntity.CalendarEntityItem.Item -> TYPE_GARD
+                    is ApiCalendarEntity.CalendarEntityItem.Weekday -> TYPE_HEADER
+                    is ApiCalendarEntity.CalendarEntityItem.Item -> TYPE_GARD
                     else -> 1
                 }
             }
@@ -45,7 +45,7 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
             position: Int,
             item: Any?,
         ) {
-            useNotNull(item as? CalendarEntity.CalendarEntityItem.Weekday) {
+            useNotNull(item as? ApiCalendarEntity.CalendarEntityItem.Weekday) {
                 holder.binding.tvCalendarTitle.text = cn ?: en ?: ja
             }
         }
@@ -76,7 +76,7 @@ class CalendarAdapter : BaseMultiItemAdapter<Any>() {
             position: Int,
             item: Any?,
         ) {
-            val content = item as? CalendarEntity.CalendarEntityItem.Item
+            val content = item as? ApiCalendarEntity.CalendarEntityItem.Item
             val binding = holder.binding
             val score = content?.rating?.score ?: 0.0
             val epsCount = content?.epsCount ?: 0

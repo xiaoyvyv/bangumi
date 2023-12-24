@@ -1,4 +1,4 @@
-package com.xiaoyv.common.api.response
+package com.xiaoyv.common.api.response.api
 
 import android.os.Parcelable
 import androidx.annotation.Keep
@@ -7,14 +7,14 @@ import kotlinx.parcelize.Parcelize
 
 
 /**
- * Class: [CalendarEntity]
+ * Class: [ApiCalendarEntity]
  *
  * @author why
  * @since 11/25/23
  */
 @Keep
 @Parcelize
-class CalendarEntity : ArrayList<CalendarEntity.CalendarEntityItem>(), Parcelable {
+class ApiCalendarEntity : ArrayList<ApiCalendarEntity.CalendarEntityItem>(), Parcelable {
     @Keep
     @Parcelize
     data class CalendarEntityItem(

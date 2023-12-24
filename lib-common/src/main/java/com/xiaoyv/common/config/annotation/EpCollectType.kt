@@ -21,5 +21,15 @@ annotation class EpCollectType {
         const val TYPE_WISH = 1
         const val TYPE_COLLECT = 2
         const val TYPE_DROPPED = 3
+
+        fun toInterestType(type: Int): String {
+            return when (type) {
+                TYPE_NONE -> InterestType.TYPE_UNKNOWN
+                TYPE_WISH -> InterestType.TYPE_WISH
+                TYPE_COLLECT -> InterestType.TYPE_COLLECT
+                TYPE_DROPPED -> InterestType.TYPE_DROPPED
+                else -> InterestType.TYPE_UNKNOWN
+            }
+        }
     }
 }

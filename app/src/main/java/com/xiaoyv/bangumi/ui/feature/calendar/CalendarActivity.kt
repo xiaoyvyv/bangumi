@@ -10,15 +10,13 @@ import com.xiaoyv.bangumi.databinding.ActivityCalendarBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.common.api.response.CalendarEntity
+import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.currentWeekDay
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.useNotNull
-import kotlinx.coroutines.delay
 
 /**
  * Class: [CalendarActivity]
@@ -55,7 +53,7 @@ class CalendarActivity : BaseViewModelActivity<ActivityCalendarBinding, Calendar
         }
 
         calendarAdapter.setOnDebouncedChildClickListener(R.id.item_card) {
-            useNotNull(it as? CalendarEntity.CalendarEntityItem.Item) {
+            useNotNull(it as? ApiCalendarEntity.CalendarEntityItem.Item) {
                 RouteHelper.jumpMediaDetail(id.toString())
             }
         }
@@ -64,7 +62,7 @@ class CalendarActivity : BaseViewModelActivity<ActivityCalendarBinding, Calendar
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onCalendarLiveData.observe(this) {
             val contentList = it.orEmpty().flatMap { item ->
-                val weekday = item.weekday ?: CalendarEntity.CalendarEntityItem.Weekday()
+                val weekday = item.weekday ?: ApiCalendarEntity.CalendarEntityItem.Weekday()
                 val items = item.items.orEmpty()
                 val subItems = arrayListOf<Any>()
                 subItems.add(weekday)
@@ -89,7 +87,7 @@ class CalendarActivity : BaseViewModelActivity<ActivityCalendarBinding, Calendar
             var weekDay = currentWeekDay - 1
             if (weekDay == 0) weekDay = 7
             val targetIndex = calendarAdapter.items.indexOfFirst {
-                it is CalendarEntity.CalendarEntityItem.Weekday && it.id == weekDay
+                it is ApiCalendarEntity.CalendarEntityItem.Weekday && it.id == weekDay
             }
             if (targetIndex != -1) {
                 layoutManager.scrollToPositionWithOffset(targetIndex, 0)
@@ -99,7 +97,7 @@ class CalendarActivity : BaseViewModelActivity<ActivityCalendarBinding, Calendar
         else {
             val weekDay = currentWeekDay
             val targetIndex = calendarAdapter.items.indexOfFirst {
-                it is CalendarEntity.CalendarEntityItem.Weekday && it.id == weekDay
+                it is ApiCalendarEntity.CalendarEntityItem.Weekday && it.id == weekDay
             }
             if (targetIndex != -1) {
                 layoutManager.scrollToPositionWithOffset(targetIndex, 0)

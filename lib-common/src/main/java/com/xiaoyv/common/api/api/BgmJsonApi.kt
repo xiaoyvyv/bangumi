@@ -4,13 +4,17 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
-import com.xiaoyv.common.api.response.CalendarEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
 import com.xiaoyv.common.api.response.MediaJsonEntity
 import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
+import com.xiaoyv.common.api.response.api.ApiCalendarEntity
+import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
+import com.xiaoyv.common.api.response.api.ApiUserEpEntity
+import com.xiaoyv.common.api.response.base.BaseListResponse
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
 import com.xiaoyv.common.api.response.douban.DouBanSuggestEntity
+import com.xiaoyv.common.config.annotation.EpApiType
 import com.xiaoyv.common.config.annotation.TimelineType
 import org.jsoup.nodes.Document
 import retrofit2.http.Field
@@ -113,5 +117,27 @@ interface BgmJsonApi {
      * 每日放送
      */
     @GET("/calendar")
-    suspend fun queryCalendar(): CalendarEntity
+    suspend fun queryCalendar(): ApiCalendarEntity
+
+    /**
+     * 查询媒体的章节，适用于未登录
+     */
+    @GET("/v0/episodes")
+    suspend fun querySubjectEp(
+        @Path("subject_id") subjectId: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+        @Query("episode_type") @EpApiType episodeType: Int? = null,
+    ): BaseListResponse<ApiEpisodeEntity>
+
+    /**
+     * 查询用户的章节收藏
+     */
+    @GET("/v0/users/-/collections/{subject_id}/episodes")
+    suspend fun queryUserEp(
+        @Path("subject_id") subjectId: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+        @Query("episode_type") @EpApiType episodeType: Int? = null,
+    ): BaseListResponse<ApiUserEpEntity>
 }

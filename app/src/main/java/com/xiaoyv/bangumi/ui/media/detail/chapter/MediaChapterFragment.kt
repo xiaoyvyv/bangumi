@@ -30,7 +30,7 @@ class MediaChapterFragment : BaseListFragment<MediaChapterEntity, MediaChapterVi
     private val activityViewModel by activityViewModels<MediaDetailViewModel>()
 
     override val isOnlyOnePage: Boolean
-        get() = true
+        get() = false
 
     override val loadingBias: Float
         get() = 0.3f
