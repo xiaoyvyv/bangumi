@@ -93,7 +93,7 @@ class MediaPageFragment : BaseViewModelFragment<FragmentMediaPageBinding, MediaP
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_cover) {
-            RouteHelper.jumpMediaDetail(it.id, it.mediaType)
+            RouteHelper.jumpMediaDetail(it.id)
         }
     }
 

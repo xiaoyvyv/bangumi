@@ -7,7 +7,8 @@ import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.widget.kts.getAttrDrawable
 
 /**
  * Class: [ProcessFragment]
@@ -37,7 +38,10 @@ class ProcessFragment : BaseViewModelFragment<FragmentProcessBinding, ProcessVie
         // 嵌套在 FragmentContainerActivity 内
         val activity = requireActivity()
         if (activity is FragmentContainerActivity) {
-            binding.toolbar.initNavBack(activity, true)
+            binding.toolbar.navigationIcon = activity.getAttrDrawable(GoogleAttr.homeAsUpIndicator)
+            binding.toolbar.setNavigationOnClickListener {
+                requireActivity().finish()
+            }
         }
     }
 
@@ -51,10 +55,6 @@ class ProcessFragment : BaseViewModelFragment<FragmentProcessBinding, ProcessVie
                 refreshToolbarTitle()
             }
         }
-    }
-
-    internal fun setVpEnable(enable: Boolean) {
-        binding.vp2.isUserInputEnabled = enable
     }
 
     private fun refreshToolbarTitle() {

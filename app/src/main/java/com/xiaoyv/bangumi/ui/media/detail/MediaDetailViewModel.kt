@@ -19,7 +19,6 @@ class MediaDetailViewModel : BaseViewModel() {
      * 媒体ID
      */
     internal var mediaId: String = ""
-    internal var mediaType: String = MediaType.TYPE_ANIME
     internal var mediaName: String = ""
 
     /**

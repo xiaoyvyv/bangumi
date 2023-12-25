@@ -17,7 +17,8 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.bean.MediaOptionConfig
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
-import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.widget.kts.getAttrDrawable
 import kotlinx.coroutines.delay
 
 /**
@@ -68,7 +69,10 @@ class MediaFragment : BaseViewModelFragment<FragmentMediaBinding, MediaViewModel
 
         // 嵌套在 FragmentContainerActivity 内
         if (activity is FragmentContainerActivity) {
-            binding.toolbar.initNavBack(activity, true)
+            binding.toolbar.navigationIcon = activity.getAttrDrawable(GoogleAttr.homeAsUpIndicator)
+            binding.toolbar.setNavigationOnClickListener {
+                requireActivity().finish()
+            }
         }
     }
 
@@ -104,13 +108,13 @@ class MediaFragment : BaseViewModelFragment<FragmentMediaBinding, MediaViewModel
 
         binding.vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                binding.flOptions.setCurrentItem(position, false)
 
                 // 刷新标题
                 launchUI {
-                    delay(100)
+                    delay(300)
                     viewModel.currentSelectedOptionItem.value =
                         viewModel.currentSelectedOptionItem.value
+                    binding.flOptions.setCurrentItem(position, false)
                 }
             }
         })

@@ -189,13 +189,8 @@ object RouteHelper {
         ActivityUtils.startActivity(EditProfileActivity::class.java)
     }
 
-    fun jumpMediaDetail(mediaId: String, mediaType: String? = null) {
-        MediaDetailActivity::class.open(
-            bundleOf(
-                NavKey.KEY_STRING to mediaId,
-                NavKey.KEY_STRING_SECOND to mediaType
-            )
-        )
+    fun jumpMediaDetail(mediaId: String) {
+        MediaDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to mediaId))
     }
 
     fun jumpBlogDetail(blogId: String) {

@@ -73,58 +73,79 @@ fun Element.parserHomePageProcess(): List<MediaDetailEntity> {
             }
         }
 
-        // 仅截取前 12 个
-        entity.epList = item.select(".prg_list > li")
-            .subListLimit(12)
-            .map li@{ ep ->
-                val epA = ep.select("a")
-                if (epA.isEmpty()) {
-                    return@li ApiUserEpEntity(
-                        splitter = true,
-                        episode = ApiEpisodeEntity(ep = ep.text()),
-                    ).apply { id = randId() }
-                }
-
-                val relQuery = epA.attr("rel")
-                val rel = if (relQuery.isNotBlank()) subjectPrgContent.select(relQuery) else null
-                val relTip = rel?.select(".tip")
-
-                val epEntity = ApiUserEpEntity()
-                val episode = ApiEpisodeEntity()
-                episode.id = epA.hrefId().toLongOrNull().orEmpty()
-                episode.name = epA.attr("title")
-                episode.subjectId = epA.attr("subject_id").toLongOrNull().orEmpty()
-                episode.ep = epA.text()
-                episode.sort = epA.text().toDoubleOrNull() ?: 0.0
-                episode.comment = relTip?.select(".cmt")?.remove()?.text().parseCount()
-
-                // 中文标题:xxx
-                // 首播:xxx
-                val relInfos = relTip?.html().orEmpty().split("<br>")
-                episode.nameCn = relInfos
-                    .find { it.contains("中文标题") }.orEmpty()
-                    .replace("中文标题:", "").trim()
-
-                episode.airdate = relInfos
-                    .find { it.contains("首播") }.orEmpty()
-                    .replace("首播:", "").trim()
-
-
-                // 收藏状态
-                epEntity.type = when {
-                    epA.select(".epBtnWatched").isNotEmpty() -> EpCollectType.TYPE_COLLECT
-                    epA.select(".epBtnQueue").isNotEmpty() -> EpCollectType.TYPE_WISH
-                    epA.select(".epBtnDrop").isNotEmpty() -> EpCollectType.TYPE_DROPPED
-                    else -> EpCollectType.TYPE_NONE
-                }
-
-                // 填充放送等状态
-                episode.fillState(epEntity.type, mediaType = entity.mediaType)
-
-                epEntity.episode = episode
-                epEntity.splitter = false
-                epEntity
+        // 进度
+        entity.epList = item.select(".prg_list > li").map li@{ ep ->
+            val epA = ep.select("a")
+            if (epA.isEmpty()) {
+                return@li ApiUserEpEntity(
+                    splitter = true,
+                    episode = ApiEpisodeEntity(ep = ep.text()),
+                ).apply { id = randId() }
             }
+
+            val relQuery = epA.attr("rel")
+            val rel = if (relQuery.isNotBlank()) subjectPrgContent.select(relQuery) else null
+            val relTip = rel?.select(".tip")
+
+            val epEntity = ApiUserEpEntity()
+            val episode = ApiEpisodeEntity()
+            episode.id = epA.hrefId().toLongOrNull().orEmpty()
+            episode.name = epA.attr("title")
+            episode.subjectId = epA.attr("subject_id").toLongOrNull().orEmpty()
+            episode.ep = epA.text()
+            episode.sort = epA.text().toDoubleOrNull() ?: 0.0
+            episode.comment = relTip?.select(".cmt")?.remove()?.text().parseCount()
+
+            // 中文标题:xxx
+            // 首播:xxx
+            val relInfos = relTip?.html().orEmpty().split("<br>")
+            episode.nameCn = relInfos
+                .find { it.contains("中文标题") }.orEmpty()
+                .replace("中文标题:", "").trim()
+
+            episode.airdate = relInfos
+                .find { it.contains("首播") }.orEmpty()
+                .replace("首播:", "").trim()
+
+
+            // 收藏状态
+            epEntity.type = when {
+                epA.select(".epBtnWatched").isNotEmpty() -> EpCollectType.TYPE_COLLECT
+                epA.select(".epBtnQueue").isNotEmpty() -> EpCollectType.TYPE_WISH
+                epA.select(".epBtnDrop").isNotEmpty() -> EpCollectType.TYPE_DROPPED
+                else -> EpCollectType.TYPE_NONE
+            }
+
+            // 填充放送等状态
+            episode.fillState(epEntity.type, mediaType = entity.mediaType)
+
+            epEntity.episode = episode
+            epEntity.splitter = false
+            epEntity
+        }
+
+        // 截取合适位置的12个数据
+        useNotNull(entity.epList) {
+            if (size > 12) {
+                // 最后一个看过的位置
+                val lastCollectEpIndex = indexOfLast { it.type == EpCollectType.TYPE_COLLECT }
+                if (lastCollectEpIndex == -1) {
+                    entity.epList = subListLimit(12)
+                } else {
+                    val endList = subList(lastCollectEpIndex, size)
+                    if (endList.size >= 12) {
+                        entity.epList = endList.subList(0, 12)
+                    } else {
+                        // 向前补充
+                        val repair = 12 - endList.size
+                        val repairList = subList(lastCollectEpIndex - repair, lastCollectEpIndex)
+                        val list = repairList.toMutableList()
+                        list.addAll(endList)
+                        entity.epList = list
+                    }
+                }
+            }
+        }
         entity
     }
 }

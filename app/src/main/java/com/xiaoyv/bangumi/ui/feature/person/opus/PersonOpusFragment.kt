@@ -44,7 +44,7 @@ class PersonOpusFragment :
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_cover) {
-            RouteHelper.jumpMediaDetail(it.id, it.mediaType)
+            RouteHelper.jumpMediaDetail(it.id)
         }
     }
 

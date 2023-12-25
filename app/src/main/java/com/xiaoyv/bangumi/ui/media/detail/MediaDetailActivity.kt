@@ -52,7 +52,6 @@ class MediaDetailActivity :
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.mediaId = bundle.getString(NavKey.KEY_STRING).orEmpty()
-        viewModel.mediaType = bundle.getString(NavKey.KEY_STRING_SECOND).orEmpty()
         viewModel.mediaName = bundle.getString(NavKey.KEY_STRING_THIRD).orEmpty()
     }
 

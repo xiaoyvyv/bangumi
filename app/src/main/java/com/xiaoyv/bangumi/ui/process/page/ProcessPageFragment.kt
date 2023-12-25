@@ -5,13 +5,16 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseDifferAdapter
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.dialog.UiDialog
@@ -28,6 +31,13 @@ class ProcessPageFragment : BaseListFragment<MediaDetailEntity, ProcessPageViewM
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.mediaType = arguments.getString(NavKey.KEY_STRING).orEmpty()
+    }
+
+    override fun initListener() {
+        super.initListener()
+        contentAdapter.setOnDebouncedChildClickListener(R.id.iv_cover) {
+            RouteHelper.jumpMediaDetail(it.id)
+        }
     }
 
     override fun onCreateLayoutManager(): LinearLayoutManager {
