@@ -21,6 +21,7 @@ import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.widget.kts.subListLimit
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
@@ -156,11 +157,14 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         entity.titleCn = attr("title")
         entity.titleNative = text()
     }
+    val infoBox = select("#infobox > li")
+    val infoBoxText = infoBox.text()
+
     entity.subtype = select(".nameSingle small").text()
     entity.cover = select("img.cover").attr("src").optImageUrl()
-    entity.infoHtml = select("#infobox > li").map { it.html() }
+    entity.infoHtml = infoBox.map { it.html() }
     entity.infoShort = entity.infoHtml.subListLimit(10).map { it.parseHtml() }
-    entity.time = select("#infobox").text().parserTime()
+    entity.time = infoBoxText.parserTime()
 
     // 收藏状态
     entity.collectState = select("#panelInterestWrapper").let { item ->
@@ -272,6 +276,12 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             useNotNull(prgTexts.getOrNull(0)) {
                 entity.progress = select("input").attr("value").parseCount()
                 entity.progressMax = text().parseCount()
+            }
+
+            // 想看状态的话数解析不到，直接从 infobox 读取话数
+            if (entity.progressMax == 0) {
+                entity.progressMax = "话数:\\s*(\\d+)".toRegex()
+                    .groupValueOne(infoBoxText).parseCount()
             }
         }
     }
