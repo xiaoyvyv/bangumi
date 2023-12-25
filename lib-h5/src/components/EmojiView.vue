@@ -38,7 +38,7 @@ const buildEmoji = (likeValue: string) => {
  */
 const toggleSmile = (item: LikeActionEntity) => {
   const cmt = comment?.value as CommentTreeEntity;
-  window.android.onToggleSmile(cmt.id, cmt.gh, JSON.stringify(item));
+  window.android.onToggleSmile(cmt.id, JSON.stringify(item));
 };
 </script>
 
@@ -71,7 +71,14 @@ const toggleSmile = (item: LikeActionEntity) => {
     background: var(--surface-container-color);
 
     &.selected {
-      background: #ffc4d7;
+
+      @media (prefers-color-scheme: light) {
+        background: #ffc4d7;
+
+      }
+      @media (prefers-color-scheme: dark) {
+        background: #a2627c;
+      }
 
       span {
         color: var(--primary-color);
@@ -90,10 +97,16 @@ const toggleSmile = (item: LikeActionEntity) => {
     }
 
     .user-count {
-      color: var(--on-surface-variant-color);
       padding: 0 0 0 6px;
       line-height: 20px;
       font-size: 14px;
+
+      @media (prefers-color-scheme: light) {
+        color: var(--primary-color) !important;
+      }
+      @media (prefers-color-scheme: dark) {
+        color: white !important;
+      }
     }
   }
 }

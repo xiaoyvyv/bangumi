@@ -17,6 +17,7 @@ import com.tencent.qcloud.image.avif.glide.avif.ByteBufferAvifSequenceDecoder
 import com.tencent.qcloud.image.avif.glide.avif.StreamAvifDecoder
 import com.tencent.qcloud.image.avif.glide.avif.StreamAvifSequenceDecoder
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.kts.timeout
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.MediaType
@@ -48,6 +49,7 @@ class OkHttpProgressGlideModule : AppGlideModule() {
             OkHttpUrlLoader.Factory(
                 BgmApiManager.httpClient
                     .newBuilder()
+                    .timeout(240)
                     .apply { networkInterceptors().removeIf { it is HttpLoggingInterceptor } }
                     .addNetworkInterceptor(createInterceptor(DispatchingProgressListener()))
                     .build()
@@ -81,7 +83,7 @@ class OkHttpProgressGlideModule : AppGlideModule() {
          * Control how often the listener needs an update. 0% and 100% will always be dispatched.
          * @return in percentage (0.2 = call [.onProgress] around every 0.2 percent of progress)
          */
-        val granualityPercentage: Float
+        val granularityPercentage: Float
     }
 
     private interface ResponseProgressListener {
@@ -98,7 +100,7 @@ class OkHttpProgressGlideModule : AppGlideModule() {
                 forget(key)
             }
 
-            if (needsDispatch(key, bytesRead, contentLength, listener.granualityPercentage)) {
+            if (needsDispatch(key, bytesRead, contentLength, listener.granularityPercentage)) {
                 handler.post { listener.onProgress(bytesRead, contentLength) }
             }
         }

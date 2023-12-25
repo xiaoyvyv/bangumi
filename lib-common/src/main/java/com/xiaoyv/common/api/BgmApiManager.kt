@@ -14,6 +14,7 @@ import com.xiaoyv.common.api.interceptor.CookieInterceptor
 import com.xiaoyv.common.api.interceptor.DouBanInterceptor
 import com.xiaoyv.common.api.interceptor.JsonAuthInterceptor
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.kts.timeout
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -31,7 +32,6 @@ import java.util.concurrent.TimeUnit
  * @since 11/18/23
  */
 class BgmApiManager {
-
     private val cookieJar by lazy {
         PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Utils.getApp()))
     }
@@ -50,10 +50,7 @@ class BgmApiManager {
                 }
             }
             .cookieJar(cookieJar)
-            .callTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(30, TimeUnit.SECONDS)
+            .timeout(30)
             .build()
     }
 

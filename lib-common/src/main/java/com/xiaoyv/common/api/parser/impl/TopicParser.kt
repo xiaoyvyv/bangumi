@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.parser.entity.LikeEntity.Companion.normal
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parserLikeParam
@@ -109,7 +110,7 @@ fun Element.parserTopicEp(topicId: String): TopicDetailEntity {
     val entity = TopicDetailEntity(id = topicId)
 
     select("#columnEpA").apply {
-        entity.title = select(".title").text()
+        entity.title = select("#columnEpA > .title").firsTextNode()
 
         val desc = select(".epDesc")
         entity.time = desc.select(".tip").remove().text()

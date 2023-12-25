@@ -7,7 +7,6 @@ import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
-import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.replaceSmiles
 import com.xiaoyv.common.helper.ConfigHelper
@@ -24,7 +23,6 @@ import org.jsoup.select.Elements
  */
 fun Element.parserBottomComment(): List<CommentTreeEntity> {
     // 解析 gh
-    val gh = parserFormHash()
     val filterDeleteComment = ConfigHelper.isFilterDeleteComment
     val isFilterBreakUpComment = ConfigHelper.isFilterBreakUpComment
     val blockUsers = UserHelper.blockUsers
@@ -33,7 +31,6 @@ fun Element.parserBottomComment(): List<CommentTreeEntity> {
 
     // 解析评论
     return select("#comment_list > div").mapCommentItems(
-        gh,
         filterDeleteComment,
         isFilterBreakUpComment,
         blockUsers
@@ -61,7 +58,6 @@ fun Element.parserReplyForm(): CommentFormEntity {
  * @param blockUsers 屏蔽的用户
  */
 private fun Elements.mapCommentItems(
-    gh: String,
     filterDeleteComment: Boolean,
     filterBlockUserComment: Boolean,
     blockUsers: List<String>,
@@ -75,7 +71,7 @@ private fun Elements.mapCommentItems(
         val topicSubReply = item.select(".topic_sub_reply").remove()
         if (topicSubReply.isNotEmpty()) {
             entity.topicSubReply = topicSubReply.select(".topic_sub_reply > div")
-                .mapCommentItems(gh, filterDeleteComment, filterBlockUserComment, blockUsers)
+                .mapCommentItems(filterDeleteComment, filterBlockUserComment, blockUsers)
         }
         entity.id = item.attr("id").parseCount().toString()
         entity.emojiParam = item.select(".like_dropdown").parserLikeParam()
@@ -94,7 +90,6 @@ private fun Elements.mapCommentItems(
         entity.replyContent = item.select(".reply_content > .message")
             .ifEmpty { item.select(".inner > .cmt_sub_content") }
             .html().replaceSmiles()
-        entity.gh = gh
 
         // 过滤删除数据
         if (filterDeleteComment && entity.replyContent.contains("删除了回复")) {

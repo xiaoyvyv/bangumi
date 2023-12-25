@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity.Companion.normal
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.LikeType
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.toast
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +41,7 @@ class WebEmojiListener(
                         mainId = emojiParam.likeMainId,
                         commendId = emojiParam.likeCommentId,
                         likeValue = likeValue,
-                        gh = entity.gh
+                        gh = UserHelper.formHash
                     ).normal(entity.id)
                 }
 

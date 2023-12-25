@@ -6,6 +6,7 @@ import android.webkit.WebView
 import com.xiaoyv.common.R
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.webview.UiWebInterceptor
+import java.io.FileInputStream
 
 /**
  * Class: [WebResourceInterceptor]
@@ -13,22 +14,22 @@ import com.xiaoyv.widget.webview.UiWebInterceptor
  * @author why
  * @since 12/2/23
  */
-class WebResourceInterceptor : UiWebInterceptor {
+class WebResourceInterceptor(private val themeCssFile: String) : UiWebInterceptor {
     private var cache = 7 * 24 * 60 * 60 * 1000L
 
     override fun shouldInterceptRequest(
         view: WebView,
-        request: WebResourceRequest
+        request: WebResourceRequest,
     ): WebResourceResponse? {
         val url = request.url.toString()
         when {
             // 检查请求是否是字体文件
             url.contains("font.ttf") -> {
                 runCatching {
-                    val inputStream = view.context.resources.openRawResource(R.raw.font)
-                    val response = WebResourceResponse("font/ttf", "UTF-8", inputStream)
-                    val now = System.currentTimeMillis()
-                    response.setResponseHeaders(setCacheHeaders(now, cache))
+                    val response = view.context.resources.openRawResource(R.raw.font).let {
+                        WebResourceResponse("font/ttf", "UTF-8", it)
+                    }
+                    response.setResponseHeaders(setCacheHeaders(System.currentTimeMillis(), cache))
                     return response
                 }
             }
@@ -38,6 +39,10 @@ class WebResourceInterceptor : UiWebInterceptor {
                     debugLog { "表情：$url" }
                     return null
                 }
+            }
+            // 主题文件
+            url.contains("/css/theme.css") -> {
+                return WebResourceResponse("text/css", "UTF-8", FileInputStream(themeCssFile))
             }
         }
         return super.shouldInterceptRequest(view, request)

@@ -41,7 +41,7 @@ abstract class ProgressTarget<T, Z>(
         return model.toString()
     }
 
-    override val granualityPercentage: Float
+    override val granularityPercentage: Float
         get() = 1.0f
 
     override fun onProgress(bytesRead: Long, expectedLength: Long) {

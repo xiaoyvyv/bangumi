@@ -13,7 +13,6 @@ export interface CommentTreeEntity {
     replyJs: string;
     replyQuote: string;
     topicSubReply: CommentTreeEntity[];
-    gh: string;
     emojiParam: EmojiParam;
     emojis: Array<LikeActionEntity>;
 }

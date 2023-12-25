@@ -76,7 +76,9 @@ class PreviewPageFragment :
             }
         })
         binding.ivImage.setOnLongClickListener {
-            if (isDetached || activity == null) return@setOnLongClickListener true
+            if (isDetached || activity == null || activity?.isFinishing == true || activity?.isDestroyed == true) {
+                return@setOnLongClickListener true
+            }
 
             showActionDialog(viewModel.imageUrl)
             true

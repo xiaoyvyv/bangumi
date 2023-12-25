@@ -66,7 +66,6 @@ const buildFakeComment = (topic: TopicDetailEntity): CommentTreeEntity => {
   return {
     emojiParam: topic.emojiParam,
     id: topic.emojiParam?.likeCommentId,
-    gh: topic.gh
   } as CommentTreeEntity
 }
 

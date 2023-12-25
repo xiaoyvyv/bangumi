@@ -78,3 +78,70 @@ User-Agent: api-client/1 com.douban.frodo/7.65.0(277) Android/33 product/coral v
 Host: frodo.douban.com
 Connection: Keep-Alive
 Accept-Encoding: gzip
+
+###
+GET https://next.bgm.tv/demo/
+Host: bangumi.tv
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Referer: https://bangumi.tv/user/837364
+Cookie: chii_sec_id=wtovCh4RoRqPb7PrdMAXlqExgySQG16Y%2BRES; chii_theme=light; __utma=1.1297479166.1702737965.1703344620.1703391051.18; __utmz=1.1702737965.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga_1109JLGMHN=GS1.1.1703391043.18.1.1703391525.0.0.0; _ga=GA1.1.856405988.1702737965; chii_cookietime=0; __utmc=1; chii_searchDateLine=0; prg_list_mode=full; prg_display_mode=normal; __utmb=1.18.10.1703391051; __utmt=1; chii_sid=00ZZik; chii_auth=lYx7BRhF8hufaPz3a8ABx8JBgE3WDFWYrREugSXlQVUIIqmbuNTvJboY9UqBUjSqTC7i5L4sBaZiSTA9ttzr70k4cPhkRqRWCSbE
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Pragma: no-cache
+Cache-Control: no-cache
+
+
+###
+# @no-redirect
+POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&client_id=bgm285565606da641d78
+Host: bgm.tv
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Origin: https://bgm.tv
+Connection: keep-alive
+Cookie: chii_sec_id=ldBwUU5O8UaJb6z9a8ELlL40nCqgKy%2F0mmMD6g; _ga_1109JLGMHN=GS1.1.1703391951.34.1.1703392218.0.0.0; chii_theme=light; _ga=GA1.1.850200014.1702704411; __utma=1.850200014.1702704411.1703171716.1703391951.30; __utmz=1.1702704413.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); chii_cookietime=2592000; __utmc=1; chii_searchDateLine=0; chii_sid=KbL0uw; prg_display_mode=normal; __utmb=1.6.10.1703391951; __utmt=1; chii_auth=lYx7BRhF8hufaPz3a8ABx8JBgE3WDFWYrREugSXlQVUIIqmbuNTvJboY9UqBUjSqTC7i5L4sBaZiSTA9ttzr70k4cPhkRqRWCSbE
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers
+
+formhash=275b091c&submit=%E6%8E%88%E6%9D%83&client_id=bgm285565606da641d78
+
+###
+POST https://bgm.tv/oauth/access_token
+Content-Type: application/x-www-form-urlencoded
+
+###
+POST https://bgm.tv/oauth/token_status
+Content-Type: application/x-www-form-urlencoded
+
+access_token=0df589bbce14321dd835f6b8fe343b49a5052ad2
+
+###
+# @no-redirect
+POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&client_id=bgm285565606da641d78
+Host: bgm.tv
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Origin: https://bgm.tv
+Connection: keep-alive
+Cookie: chii_sec_id=ldBwUU5O8UaJb6z9a8ELlL40nCqgKy%2F0mmMD6g; _ga_1109JLGMHN=GS1.1.1703391951.34.1.1703392218.0.0.0; chii_theme=light; _ga=GA1.1.850200014.1702704411; __utma=1.850200014.1702704411.1703171716.1703391951.30; __utmz=1.1702704413.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); chii_cookietime=2592000; __utmc=1; chii_searchDateLine=0; chii_sid=KbL0uw; prg_display_mode=normal; __utmb=1.6.10.1703391951; __utmt=1; chii_auth=lYx7BRhF8hufaPz3a8ABx8JBgE3WDFWYrREugSXlQVUIIqmbuNTvJboY9UqBUjSqTC7i5L4sBaZiSTA9ttzr70k4cPhkRqRWCSbE
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers
+
+
+
+

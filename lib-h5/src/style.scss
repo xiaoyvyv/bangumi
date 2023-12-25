@@ -16,14 +16,6 @@
   -webkit-text-size-adjust: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-  @import "assets/css/dark";
-}
-
-@media (prefers-color-scheme: light) {
-  @import "assets/css/light";
-}
-
 html, body {
   margin: 0;
   padding: 0;

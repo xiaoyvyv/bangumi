@@ -1,5 +1,6 @@
 package com.xiaoyv.common.widget.web
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,7 +11,10 @@ import androidx.annotation.Keep
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.ColorUtils
 import com.blankj.utilcode.util.EncodeUtils
+import com.blankj.utilcode.util.FileIOUtils
+import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
@@ -50,7 +54,22 @@ import kotlinx.coroutines.withContext
  */
 abstract class WebBase(open val webView: UiWebView) {
     private var mounted = false
-    private val interceptor by lazy { WebResourceInterceptor() }
+
+    /**
+     * 主题样式文件
+     */
+    private val themeCssFile by lazy {
+        PathUtils.getFilesPathExternalFirst() + "/css/theme.css"
+    }
+
+    /**
+     * 资源拦截器
+     */
+    private val interceptor by lazy { WebResourceInterceptor(themeCssFile) }
+
+    /**
+     * 评论分页器
+     */
     internal val commentPagination by lazy { CommentPaginationHelper() }
 
     abstract val pageRoute: String
@@ -63,27 +82,58 @@ abstract class WebBase(open val webView: UiWebView) {
     var onClickUserListener: (String) -> Unit = {}
     var onClickRelatedListener: (SampleRelatedEntity.Item) -> Unit = { }
 
-
     fun startLoad() {
-        // 设置背景
-        webView.setBackgroundColor(webView.context.getAttrColor(GoogleAttr.colorSurface))
-        webView.background = ColorDrawable(webView.context.getAttrColor(GoogleAttr.colorSurface))
+        val lifecycleOwner = webView.findViewTreeLifecycleOwner() ?: return
+        lifecycleOwner.launchUI {
+            // 构建主题配置样式
+            createThemeCss(webView.context)
 
-        // 配置
-        webView.multipleWindows = true
-        webView.addUrlInterceptor(interceptor)
-        webView.loadUrl(WebConfig.page(pageRoute))
-        webView.onWindowListener = object : OnWindowListener {
-            override fun openNewWindow(url: String) {
-                openUrl(url)
+            // 设置背景
+            webView.setBackgroundColor(webView.context.getAttrColor(GoogleAttr.colorSurface))
+            webView.background =
+                ColorDrawable(webView.context.getAttrColor(GoogleAttr.colorSurface))
+
+            // 配置
+            webView.multipleWindows = true
+            webView.addUrlInterceptor(interceptor)
+            webView.loadUrl(WebConfig.page(pageRoute))
+            webView.onWindowListener = object : OnWindowListener {
+                override fun openNewWindow(url: String) {
+                    openUrl(url)
+                }
+            }
+
+            // 机器人说话
+            useNotNull(webView.findViewTreeLifecycleOwner()) {
+                currentApplication.globalRobotSpeech.observe(this) {
+                    launchUI { callJs("window.robotSay && window.robotSay('$it')") }
+                }
             }
         }
+    }
 
-        // 机器人说话
-        useNotNull(webView.findViewTreeLifecycleOwner()) {
-            currentApplication.globalRobotSpeech.observe(this) {
-                launchUI { callJs("window.robotSay && window.robotSay('$it')") }
-            }
+    /**
+     * 构建 Css 配置
+     */
+    private suspend fun createThemeCss(context: Context) {
+        withContext(Dispatchers.IO) {
+            val colorPrimary = context.getAttrColor(GoogleAttr.colorPrimary)
+            val colorOnPrimary = context.getAttrColor(GoogleAttr.colorOnPrimary)
+            val colorSurface = context.getAttrColor(GoogleAttr.colorSurface)
+            val colorSurfaceContainer = context.getAttrColor(GoogleAttr.colorSurfaceContainer)
+            val colorOnSurface = context.getAttrColor(GoogleAttr.colorOnSurface)
+            val colorOnSurfaceVariant = context.getAttrColor(GoogleAttr.colorOnSurfaceVariant)
+
+            val themeCss = ":root {\n" +
+                    "  --primary-color: ${ColorUtils.int2RgbString(colorPrimary)} !important;\n" +
+                    "  --surface-color: ${ColorUtils.int2RgbString(colorSurface)} !important;\n" +
+                    "  --on-primary-color: ${ColorUtils.int2RgbString(colorOnPrimary)} !important;\n" +
+                    "  --on-surface-color: ${ColorUtils.int2RgbString(colorOnSurface)} !important;\n" +
+                    "  --on-surface-variant-color: ${ColorUtils.int2RgbString(colorOnSurfaceVariant)} !important;\n" +
+                    "  --surface-container-color: ${ColorUtils.int2RgbString(colorSurfaceContainer)} !important;\n" +
+                    "}"
+
+            FileIOUtils.writeFileFromString(themeCssFile, themeCss)
         }
     }
 
@@ -164,7 +214,7 @@ abstract class WebBase(open val webView: UiWebView) {
      */
     @Keep
     @JavascriptInterface
-    fun onToggleSmile(commentId: String, gh: String, emojiInfo: String) {
+    fun onToggleSmile(commentId: String, emojiInfo: String) {
         val activity = ActivityUtils.getTopActivity() as? BaseViewModelActivity<*, *> ?: return
         val likeAction = emojiInfo.fromJson<LikeEntity.LikeAction>() ?: return
 
@@ -181,7 +231,7 @@ abstract class WebBase(open val webView: UiWebView) {
                         mainId = likeAction.mainId.toString(),
                         likeValue = likeAction.value.toString(),
                         commendId = commentId,
-                        gh = gh
+                        gh = UserHelper.formHash
                     ).normal(commentId)
                 }
 
@@ -261,14 +311,13 @@ abstract class WebBase(open val webView: UiWebView) {
         }
     }
 
-    suspend fun waitMounted() {
+    private suspend fun waitMounted() {
         while (!mounted) {
             delay(100)
             mounted = isMounted()
             debugLog { "isMounted: $mounted" }
         }
     }
-
 
     private suspend fun isMounted(): Boolean {
         return suspendCancellableCoroutine { emit ->

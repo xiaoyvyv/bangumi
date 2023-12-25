@@ -688,7 +688,7 @@ interface BgmWebApi {
      * @param commendId 贴贴的目标评论ID
      * @param likeValue Like 的值
      */
-    @GET("like")
+    @GET("/like")
     suspend fun toggleLike(
         @Query("type") @LikeType type: String,
         @Query("main_id") mainId: String,

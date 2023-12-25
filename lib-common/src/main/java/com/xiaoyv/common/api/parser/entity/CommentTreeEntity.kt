@@ -27,7 +27,6 @@ data class CommentTreeEntity(
     @SerializedName("replyContent") var replyContent: String = "",
     @SerializedName("topicSubReply") var topicSubReply: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyQuote") var replyQuote: String = "",
-    @SerializedName("gh") var gh: String = "",
     @SerializedName("emojiParam") var emojiParam: EmojiParam = EmojiParam(),
     @SerializedName("emojis") var emojis: List<LikeEntity.LikeAction> = emptyList(),
 ) : Parcelable, IdEntity {
