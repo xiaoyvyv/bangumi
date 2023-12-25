@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
+import com.xiaoyv.common.config.annotation.EpApiType
 import com.xiaoyv.common.config.annotation.EpCollectType
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
@@ -74,9 +75,11 @@ fun Element.parserHomePageProcess(): List<MediaDetailEntity> {
         }
 
         // 进度
+        var hasSplitter = false
         entity.epList = item.select(".prg_list > li").map li@{ ep ->
             val epA = ep.select("a")
             if (epA.isEmpty()) {
+                hasSplitter = true
                 return@li ApiUserEpEntity(
                     splitter = true,
                     episode = ApiEpisodeEntity(ep = ep.text()),
@@ -95,6 +98,7 @@ fun Element.parserHomePageProcess(): List<MediaDetailEntity> {
             episode.ep = epA.text()
             episode.sort = epA.text().toDoubleOrNull() ?: 0.0
             episode.comment = relTip?.select(".cmt")?.remove()?.text().parseCount()
+            episode.type = if (hasSplitter) EpApiType.TYPE_OTHER else EpApiType.TYPE_MAIN
 
             // 中文标题:xxx
             // 首播:xxx
@@ -128,7 +132,9 @@ fun Element.parserHomePageProcess(): List<MediaDetailEntity> {
         useNotNull(entity.epList) {
             if (size > 12) {
                 // 最后一个看过的位置
-                val lastCollectEpIndex = indexOfLast { it.type == EpCollectType.TYPE_COLLECT }
+                val lastCollectEpIndex = indexOfLast {
+                    it.type == EpCollectType.TYPE_COLLECT && it.episode?.type == EpApiType.TYPE_MAIN
+                }
                 if (lastCollectEpIndex == -1) {
                     entity.epList = subListLimit(12)
                 } else {
