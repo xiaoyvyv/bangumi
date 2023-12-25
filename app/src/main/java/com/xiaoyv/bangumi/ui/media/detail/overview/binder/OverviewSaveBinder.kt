@@ -29,6 +29,7 @@ import com.xiaoyv.widget.kts.getAttrColor
  */
 class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, Int) -> Unit) :
     BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewSaveBinding>> {
+
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewSaveBinding>,
         position: Int,
@@ -37,6 +38,10 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, I
         item ?: return
         item.entity.forceCast<MediaDetailEntity>().apply {
             val action = MediaType.action(mediaType)
+            holder.binding.sectionSave.title = "收藏"
+            holder.binding.sectionSave.more =
+                if (collectState.interest != InterestType.TYPE_UNKNOWN) "删除 >>" else null
+
             holder.binding.tvSaveSummary.text = StringUtils.getString(
                 CommonString.media_save_summary,
                 countWish, action,

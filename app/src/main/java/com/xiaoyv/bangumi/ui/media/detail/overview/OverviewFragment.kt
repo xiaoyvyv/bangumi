@@ -23,6 +23,7 @@ import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.dialog.UiDialog
@@ -45,7 +46,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         OverviewAdapter(
             touchedListener = touchedListener,
             onClickSave = { item, position ->
-                showCollectPanel(item, position)
+                showCollectPanel(item)
             },
             onClickEpItem = { adapter, _, position ->
                 val epEntity = adapter.getItem(position)
@@ -107,6 +108,15 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     override fun initListener() {
         overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
             when (it.type) {
+                OverviewAdapter.TYPE_COLLECT -> {
+                    requireActivity().showConfirmDialog(
+                        message = "是否删除该收藏？",
+                        onConfirmClick = {
+                            viewModel.deleteCollect()
+                        }
+                    )
+                }
+
                 OverviewAdapter.TYPE_EP -> {
                     activityViewModel.vpCurrentItemType.value = MediaDetailType.TYPE_CHAPTER
                 }
@@ -170,16 +180,29 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             overviewAdapter.submitList(it)
         }
 
+        // 监听刷新预览数据结果
         viewModel.onMediaPreviewLiveData.observe(this) {
             val photos = it ?: return@observe
             overviewAdapter.refreshPhotos(photos)
         }
 
+        // 监听刷新章节格子结果
         viewModel.onRefreshEpLiveData.observe(this) {
             it ?: return@observe
             overviewAdapter.refreshEpList(it.first, it.second, it.third)
         }
 
+        // 监听删除条目收藏结果
+        viewModel.onDeleteCollectLiveData.observe(this) {
+            it ?: return@observe
+            val entity = viewModel.refreshCollectState(it) ?: return@observe
+            overviewAdapter.refreshCollect(entity)
+
+            // 刷新 HostActivity 的媒体数据
+            activityViewModel.onMediaDetailLiveData.value = entity
+        }
+
+        // 用户身份信息变化刷新
         UserHelper.observeUserInfo(this) {
             viewModel.queryMediaInfo()
         }
@@ -218,26 +241,19 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     /**
      * 条目收藏弹窗
      */
-    private fun showCollectPanel(item: AdapterTypeItem, position: Int) {
+    private fun showCollectPanel(item: AdapterTypeItem) {
         if (!UserHelper.isLogin) {
             RouteHelper.jumpLogin()
             return
         }
 
-        val media = item.entity.forceCast<MediaDetailEntity>()
         MediaSaveActionDialog.show(
             childFragmentManager,
-            media.collectState,
+            item.entity.forceCast<MediaDetailEntity>().collectState,
             activityViewModel.requireMediaType
         ) {
             val entity = viewModel.refreshCollectState(it) ?: return@show
-            item.entity = entity
-            // 刷新收藏的 Item
-            overviewAdapter[position] = item
-
-            // 刷新章节的进度 Item
-            overviewAdapter.getItem(position + 1)?.entity = entity
-            overviewAdapter.notifyItemChanged(position + 1)
+            overviewAdapter.refreshCollect(entity)
 
             // 刷新 HostActivity 的媒体数据
             activityViewModel.onMediaDetailLiveData.value = entity

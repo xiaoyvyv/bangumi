@@ -22,7 +22,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -46,7 +45,7 @@ class BgmApiManager {
             .addNetworkInterceptor(cookieInterceptor)
             .apply {
                 if (AppUtils.isAppDebug()) {
-                    addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                 }
             }
             .cookieJar(cookieJar)
@@ -161,6 +160,7 @@ class BgmApiManager {
                 BgmPathType.TYPE_MESSAGE_BOX -> "$URL_BASE_WEB/pm/$id.chii"
                 BgmPathType.TYPE_FRIEND -> "$URL_BASE_WEB/user/$id/friends"
                 BgmPathType.TYPE_INDEX -> "$URL_BASE_WEB/index/$id"
+                BgmPathType.TYPE_SUBJECT -> "$URL_BASE_WEB/subject/$id"
                 BgmPathType.TYPE_EP -> "$URL_BASE_WEB/subject/$id/ep"
                 else -> URL_BASE_WEB
             }

@@ -23,7 +23,9 @@ import com.xiaoyv.common.helper.FullQueryHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.randId
 import com.xiaoyv.common.widget.grid.EpGridView
+import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.orEmpty
+import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -39,6 +41,7 @@ class OverviewViewModel : BaseViewModel() {
     internal val mediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
     internal val mediaBinderListLiveData = MutableLiveData<List<AdapterTypeItem>>()
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
+    internal val onDeleteCollectLiveData = MutableLiveData<MediaDetailEntity?>()
 
     /**
      * 刷新进度
@@ -115,7 +118,7 @@ class OverviewViewModel : BaseViewModel() {
     private fun buildBinderList(entity: MediaDetailEntity): List<AdapterTypeItem> {
         val items = mutableListOf<AdapterTypeItem>()
 
-        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_SAVE, "收藏"))
+        items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_COLLECT, "收藏"))
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_EP, "章节"))
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_TAG, "标签"))
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_SUMMARY, "简介"))
@@ -157,7 +160,7 @@ class OverviewViewModel : BaseViewModel() {
                         type = BgmPathType.TYPE_USER
                     )
                 },
-                OverviewAdapter.TYPE_COLLECTOR, "最近收藏"
+                OverviewAdapter.TYPE_COLLECT_USER, "最近收藏"
             )
         )
 
@@ -207,9 +210,10 @@ class OverviewViewModel : BaseViewModel() {
     }
 
     /**
-     * 刷新收藏模型
+     * 刷新收藏模型，仅覆盖 collectState、progressMax
      */
-    fun refreshCollectState(it: MediaDetailEntity): MediaDetailEntity? {
+    fun refreshCollectState(it: MediaDetailEntity?): MediaDetailEntity? {
+        if (it == null) return mediaDetailLiveData.value
         mediaDetailLiveData.value?.collectState = it.collectState
         mediaDetailLiveData.value?.progressMax = it.progressMax
         return mediaDetailLiveData.value
@@ -319,5 +323,29 @@ class OverviewViewModel : BaseViewModel() {
 
             newList
         }
+    }
+
+    /**
+     * 删除收藏
+     */
+    fun deleteCollect() {
+        launchUI(
+            state = loadingDialogState(cancelable = false),
+            error = {
+                it.printStackTrace()
+
+                showToastCompat(it.errorMsg)
+            },
+            block = {
+                onDeleteCollectLiveData.value = withContext(Dispatchers.IO) {
+                    val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_SUBJECT, mediaId)
+                    BgmApiManager.bgmWebApi.deleteSubjectCollect(
+                        referer = referer,
+                        subjectId = mediaId,
+                        hash = UserHelper.formHash
+                    ).parserMediaDetail()
+                }
+            }
+        )
     }
 }

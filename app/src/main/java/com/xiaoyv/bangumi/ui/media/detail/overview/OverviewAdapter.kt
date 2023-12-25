@@ -45,7 +45,7 @@ class OverviewAdapter(
     init {
         val gridPool = RecyclerView.RecycledViewPool()
 
-        this.addItemType(TYPE_SAVE, OverviewSaveBinder(onClickSave))
+        this.addItemType(TYPE_COLLECT, OverviewSaveBinder(onClickSave))
             .addItemType(TYPE_EP, OverviewEpBinder(touchedListener, onClickEpItem, onClickEpAdd))
             .addItemType(TYPE_TAG, OverviewTagBinder(onClickTagItem))
             .addItemType(TYPE_SUMMARY, OverviewSummaryBinder(true))
@@ -55,7 +55,7 @@ class OverviewAdapter(
             .addItemType(TYPE_CHARACTER, OverviewCharacterBinder(onClickCrtItem))
             .addItemType(TYPE_RELATIVE, OverviewRelativeBinder(touchedListener, onClickRelatedItem))
             .addItemType(
-                TYPE_COLLECTOR,
+                TYPE_COLLECT_USER,
                 OverviewGridBinder(gridPool, touchedListener, onClickCollectorItem)
             )
             .addItemType(
@@ -99,8 +99,25 @@ class OverviewAdapter(
         }
     }
 
+    /**
+     * 刷新收藏板块
+     */
+    fun refreshCollect(entity: MediaDetailEntity) {
+        val item = items.find { it.type == TYPE_COLLECT } ?: return
+        val targetIndex = itemIndexOfFirst(item)
+        if (targetIndex != -1) {
+            item.entity = entity
+            // 刷新条目收藏的板块
+            set(targetIndex, item)
+        }
+
+        // 刷新条目收藏的板块下一个、章节格子板块
+        val epiItem = items.find { it.type == TYPE_EP } ?: return
+        set(targetIndex + 1, epiItem)
+    }
+
     companion object {
-        const val TYPE_SAVE = 1
+        const val TYPE_COLLECT = 1
         const val TYPE_EP = 2
         const val TYPE_TAG = 3
         const val TYPE_SUMMARY = 4
@@ -109,7 +126,7 @@ class OverviewAdapter(
         const val TYPE_RATING = 7
         const val TYPE_CHARACTER = 8
         const val TYPE_RELATIVE = 9
-        const val TYPE_COLLECTOR = 10
+        const val TYPE_COLLECT_USER = 10
         const val TYPE_INDEX = 11
         const val TYPE_COMMENT = 12
     }

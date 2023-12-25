@@ -363,6 +363,7 @@ interface BgmWebApi {
 
     @GET("/subject/{subjectId}/remove")
     suspend fun deleteSubjectCollect(
+        @Header("Referer") referer: String,
         @Path("subjectId", encoded = true) subjectId: String,
         @Query("gh") hash: String,
     ): Document

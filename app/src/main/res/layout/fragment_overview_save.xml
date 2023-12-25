@@ -5,17 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_title_save"
+    <com.xiaoyv.common.widget.menu.AnimeSectionView
+        android:id="@+id/section_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="收藏"
-        android:textAppearance="?attr/textAppearanceTitleLarge"
-        android:textColor="?attr/colorOnSurface"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.xiaoyv.common.widget.button.AnimeButton
@@ -28,7 +21,7 @@
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_size_12"
         android:text="我想看这部动画"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title_save" />
+        app:layout_constraintTop_toBottomOf="@+id/section_save" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_save_summary"
