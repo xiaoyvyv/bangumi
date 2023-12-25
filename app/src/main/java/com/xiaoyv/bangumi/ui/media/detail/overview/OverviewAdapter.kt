@@ -113,6 +113,7 @@ class OverviewAdapter(
 
         // 刷新条目收藏的板块下一个、章节格子板块
         val epiItem = items.find { it.type == TYPE_EP } ?: return
+        epiItem.entity = entity
         set(targetIndex + 1, epiItem)
     }
 
