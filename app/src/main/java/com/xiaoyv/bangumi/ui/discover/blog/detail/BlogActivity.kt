@@ -10,7 +10,10 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -144,8 +147,13 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
                     true
                 }
         }
+
+        // 公共菜单
+        menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_BLOG, viewModel.blogId))
+
         return super.onCreateOptionsMenu(menu)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         item.initNavBack(this)

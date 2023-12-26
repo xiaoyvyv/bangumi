@@ -14,10 +14,13 @@ import com.xiaoyv.bangumi.ui.media.action.MediaIndexActionDialog
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.helper.callback.AutoHideTitleListener
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
@@ -179,6 +182,7 @@ class MediaDetailActivity :
                 )
                 true
             }
+        menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_SUBJECT, viewModel.mediaId))
         return super.onCreateOptionsMenu(menu)
     }
 

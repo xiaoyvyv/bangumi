@@ -10,7 +10,9 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -136,8 +138,12 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
                     true
                 }
         }
+
+        // 公共菜单
+        menu.addCommonMenu(BgmApiManager.buildTopicUrl(viewModel.topicId, viewModel.topicType))
         return super.onCreateOptionsMenu(menu)
     }
+
     override fun onCreateLoadingDialog(): UiDialog {
         return AnimeLoadingDialog(this)
     }

@@ -14,6 +14,7 @@ import com.xiaoyv.common.api.interceptor.CookieInterceptor
 import com.xiaoyv.common.api.interceptor.DouBanInterceptor
 import com.xiaoyv.common.api.interceptor.JsonAuthInterceptor
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.kts.timeout
 import okhttp3.Cookie
 import okhttp3.CookieJar
@@ -162,8 +163,17 @@ class BgmApiManager {
                 BgmPathType.TYPE_INDEX -> "$URL_BASE_WEB/index/$id"
                 BgmPathType.TYPE_SUBJECT -> "$URL_BASE_WEB/subject/$id"
                 BgmPathType.TYPE_EP -> "$URL_BASE_WEB/subject/$id/ep"
+                BgmPathType.TYPE_USER -> "$URL_BASE_WEB/user/$id"
+                BgmPathType.TYPE_BLOG -> "$URL_BASE_WEB/blog/$id"
                 else -> URL_BASE_WEB
             }
+        }
+
+        /**
+         * 话题 Url
+         */
+        fun buildTopicUrl(topicId: String, @TopicType topicType: String): String {
+            return "$URL_BASE_WEB/rakuen/topic/$topicType/$topicId"
         }
 
         /**

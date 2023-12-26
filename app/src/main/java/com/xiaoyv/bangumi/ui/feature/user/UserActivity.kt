@@ -11,9 +11,11 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
@@ -183,6 +185,9 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
                 AnimeReportDialog.show(viewModel.requireUserNumberId, ReportType.TYPE_USER)
                 true
             }
+
+        // 公共菜单
+        menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_USER, viewModel.userId))
         return super.onCreateOptionsMenu(menu)
     }
 

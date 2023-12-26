@@ -12,8 +12,11 @@ import com.xiaoyv.bangumi.databinding.ActivityPersonBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.helper.callback.AutoHideTitleListener
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
@@ -125,6 +128,15 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
                 }
                 true
             }
+
+        // 公共菜单
+        menu.addCommonMenu(
+            if (viewModel.isVirtual) {
+                BgmApiManager.buildReferer(BgmPathType.TYPE_CHARACTER, viewModel.personId)
+            } else {
+                BgmApiManager.buildReferer(BgmPathType.TYPE_PERSON, viewModel.personId)
+            }
+        )
         return super.onCreateOptionsMenu(menu)
     }
 
