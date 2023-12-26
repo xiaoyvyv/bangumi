@@ -1,79 +1,56 @@
-# 隐私保护政策
+# Bangumi for Android 隐私政策说明
 
-<!--Writerside adds this topic when you create a new documentation project.
-You can use it as a sandbox to play with Writerside features, and remove it from the TOC when you don't need it anymore.-->
+## 1. 介绍
 
-## Add new topics
-You can create empty topics, or choose a template for different types of content that contains some boilerplate structure to help you get started:
+欢迎使用 Bangumi for Android 应用！本隐私政策解释了我们如何收集、使用和保护您的个人信息。我们致力于保护您的隐私，因此请在使用我们的应用之前仔细阅读本隐私政策。
 
-![Create new topic options](new_topic_options.png){ width=290 }{border-effect=line}
+## 2. 收集的信息
 
-## Write content
-%product% supports two types of markup: Markdown and XML.
-When you create a new help article, you can choose between two topic types, but this doesn't mean you have to stick to a single format.
-You can author content in Markdown and extend it with semantic attributes or inject entire XML elements.
+### 2.1 用户登录
 
-## Inject XML
-For example, this is how you inject a procedure:
+Bangumi for Android 应用提供用户登录功能，此过程需要您提供以下信息：
 
-<procedure title="Inject a procedure" id="inject-a-procedure">
-    <step>
-        <p>Start typing and select a procedure type from the completion suggestions:</p>
-        <img src="completion_procedure.png" alt="completion suggestions for procedure" border-effect="line"/>
-    </step>
-    <step>
-        <p>Press <shortcut>Tab</shortcut> or <shortcut>Enter</shortcut> to insert the markup.</p>
-    </step>
-</procedure>
+- **用户名和密码：** 用于验证您的身份。
 
-## Add interactive elements
+### 2.2 额外信息
 
-### Tabs
-To add switchable content, you can make use of tabs (inject them by starting to type `tab` on a new line):
+除用户登录所需的信息之外，我们不会主动收集或存储任何额外的个人信息。具体而言，我们不会：
 
-<tabs>
-    <tab title="Markdown">
-        <code-block lang="plain text">![Alt Text](new_topic_options.png){ width=450 }</code-block>
-    </tab>
-    <tab title="Semantic markup">
-        <code-block lang="xml">
-            <![CDATA[<img src="new_topic_options.png" alt="Alt text" width="450px"/>]]></code-block>
-    </tab>
-</tabs>
+- 不追踪您的位置。
+- 不记录您的设备信息。
 
-### Collapsible blocks
-Apart from injecting entire XML elements, you can use attributes to configure the behavior of certain elements.
-For example, you can collapse a chapter that contains non-essential information:
+## 3. 信息使用
 
-#### Supplementary info {collapsible="true"}
-Content under a collapsible header will be collapsed by default,
-but you can modify the behavior by adding the following attribute:
-`default-state="expanded"`
+我们仅使用您提供的信息进行以下目的：
 
-### Convert selection to XML
-If you need to extend an element with more functions, you can convert selected content from Markdown to semantic markup.
-For example, if you want to merge cells in a table, it's much easier to convert it to XML than do this in Markdown.
-Position the caret anywhere in the table and press <shortcut>Alt+Enter</shortcut>:
+- **用户身份验证：** 用于确保您的账户安全，防止未经授权的访问。
+- **应用功能运行：** 用于确保应用的正常运行。
+- **媒体图片：** 用于发布帖子时使用。
 
-<img src="convert_table_to_xml.png" alt="Convert table to XML" width="706" border-effect="line"/>
+我们不会将您的个人信息用于其他目的，也不会分享给第三方。
 
-## Feedback and support
-Please report any issues, usability improvements, or feature requests to our
-<a href="https://youtrack.jetbrains.com/newIssue?project=WRS">YouTrack project</a>
-(you will need to register).
+## 4. 信息安全
 
-You are welcome to join our
-<a href="https://jb.gg/WRS_Slack">public Slack workspace</a>.
-Before you do, please read our [Code of conduct](https://plugins.jetbrains.com/plugin/20158-writerside/docs/writerside-code-of-conduct.html).
-We assume that you’ve read and acknowledged it before joining.
+我们采取以下合理的安全措施来保护您提供的信息：
 
-You can also always email us at [writerside@jetbrains.com](mailto:writerside@jetbrains.com).
+- 数据加密：我们使用加密技术来保护传输中的数据。
+- 访问控制：仅授权人员能够访问用户数据。
+- 定期安全审查：我们进行定期的安全审查，以确保数据的安全性。
 
-<seealso>
-    <category ref="wrs">
-        <a href="https://plugins.jetbrains.com/plugin/20158-writerside/docs/markup-reference.html">Markup reference</a>
-        <a href="https://plugins.jetbrains.com/plugin/20158-writerside/docs/manage-table-of-contents.html">Reorder topics in the TOC</a>
-        <a href="https://plugins.jetbrains.com/plugin/20158-writerside/docs/local-build.html">Build and publish</a>
-        <a href="https://plugins.jetbrains.com/plugin/20158-writerside/docs/configure-search.html">Configure Search</a>
-    </category>
-</seealso>
+## 5. 链接
+
+Bangumi for Android 应用可能包含到网站（例如 https://bgm.tv）的链接。
+
+## 6. 隐私政策的修改
+
+我们可能会更新隐私政策，以反映应用程序或法规的变化。我们建议您定期查看此页面，以确保您了解我们对信息的处理方式。
+
+## 7. 联系我们
+
+如果您对本隐私政策有任何疑问或疑虑，请通过以下联系方式与我们联系：
+
+- **电子邮件：** 1223414335@qq.com
+
+感谢您使用 Bangumi for Android 应用！
+
+*最近更新：2023 年 12月 26日*

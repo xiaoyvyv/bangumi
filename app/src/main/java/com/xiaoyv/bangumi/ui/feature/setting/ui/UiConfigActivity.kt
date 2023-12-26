@@ -2,15 +2,13 @@ package com.xiaoyv.bangumi.ui.feature.setting.ui
 
 import android.view.Menu
 import android.view.MenuItem
-import com.blankj.utilcode.util.AppUtils
 import com.xiaoyv.bangumi.databinding.ActivitySettingUiBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
-import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.GlobalConfig
+import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
-import kotlinx.coroutines.delay
 
 /**
  * Class: [UiConfigActivity]
@@ -29,14 +27,14 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingImageCompress.bindBoolean(this, ConfigHelper::isImageCompress)
         binding.settingGridAnimation.bindBoolean(this, ConfigHelper::isAdapterAnimation)
         binding.settingDynamicTheme.bindBoolean(this, ConfigHelper::isDynamicTheme, onChange = {
-            launchUI {
-                delay(500)
-                AppUtils.relaunchApp(true)
-            }
+            currentApplication.recreateAllActivity()
         })
         binding.settingFilterDelete.bindBoolean(this, ConfigHelper::isFilterDeleteComment)
         binding.settingBreakUp.bindBoolean(this, ConfigHelper::isFilterBreakUpComment)
         binding.settingEpSplit.bindBoolean(this, ConfigHelper::isSplitEpList)
+        binding.settingSmoothFont.bindBoolean(this, ConfigHelper::isSmoothFont, onChange = {
+            currentApplication.recreateAllActivity()
+        })
         binding.settingFirstTab.bindInt(
             activity = this,
             property = ConfigHelper::homeDefaultTab,

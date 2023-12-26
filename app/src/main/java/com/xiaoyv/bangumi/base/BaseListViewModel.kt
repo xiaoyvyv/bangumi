@@ -21,6 +21,7 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 abstract class BaseListViewModel<T> : BaseViewModel() {
     private var loadJob: Job? = null
+    private var firstLoad = true
 
     internal val onListLiveData = MutableLiveData<List<T>?>()
     internal var loadingMoreState: LoadState = LoadState.None
@@ -41,6 +42,8 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
             val offset = (current - 1) * limit
             return offset to limit
         }
+
+    var isOnlyOnePage: Boolean = false
 
     fun refresh() {
         current = 1
@@ -71,6 +74,18 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
                 }
             },
             block = {
+                // 首次进入缓存加载
+                if (isOnlyOnePage && firstLoad) {
+                    val cacheImpl = withContext(Dispatchers.IO) { onRequestCacheImpl() }
+                    if (cacheImpl.isNotEmpty()) {
+                        onListLiveData.value = cacheImpl
+                        // 有缓存提前改变加载状态
+                        loadingViewState.showContent()
+                    }
+                }
+
+                firstLoad = false
+
                 val responseList = withContext(Dispatchers.IO) {
                     onRequestListImpl().apply {
                         if (isRefresh) {
@@ -99,4 +114,8 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
     }
 
     abstract suspend fun onRequestListImpl(): List<T>
+
+    open suspend fun onRequestCacheImpl(): List<T> {
+        return emptyList()
+    }
 }

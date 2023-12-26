@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.ui.discover.home
 
 import androidx.lifecycle.MutableLiveData
-import com.blankj.utilcode.util.CacheDiskUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
@@ -9,8 +8,8 @@ import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import com.xiaoyv.common.api.parser.impl.parserHomePageWithoutLogin
 import com.xiaoyv.common.config.annotation.HomeFeatureType
 import com.xiaoyv.common.config.bean.HomeIndexFeature
+import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.CommonDrawable
-import com.xiaoyv.common.kts.parcelableCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -31,10 +30,13 @@ class HomeViewModel : BaseViewModel() {
         launchUI(
             error = {
                 it.printStackTrace()
-                readCache()
+                onHomeIndexLiveData.value = CacheHelper.cacheHome
             },
             block = {
-                readCache()
+                onHomeIndexLiveData.value = withContext(Dispatchers.IO) {
+                    val cacheHome = CacheHelper.cacheHome
+                    cacheHome
+                }
                 onHomeIndexLiveData.value = withContext(Dispatchers.IO) {
                     BgmApiManager.bgmJsonApi.queryMainPage().parserHomePageWithoutLogin().apply {
                         banner.features = listOf(
@@ -84,24 +86,11 @@ class HomeViewModel : BaseViewModel() {
                                 icon = CommonDrawable.ic_wiki
                             ),
                         )
+                    }.apply {
+                        CacheHelper.cacheHome = this
                     }
                 }
-                saveCache()
             }
         )
-    }
-
-    private fun readCache() {
-        runCatching {
-            val cache = CacheDiskUtils.getInstance()
-                .getParcelable(javaClass.simpleName, parcelableCreator<HomeIndexEntity>())
-            if (cache != onHomeIndexLiveData.value) {
-                onHomeIndexLiveData.value = cache
-            }
-        }
-    }
-
-    private fun saveCache() {
-        CacheDiskUtils.getInstance().put(javaClass.simpleName, onHomeIndexLiveData.value)
     }
 }

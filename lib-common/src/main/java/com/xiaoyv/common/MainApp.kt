@@ -15,6 +15,7 @@ import com.xiaoyv.blueprint.BluePrint
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.callback.ThemeActivityLifecycleCallback
 import com.xiaoyv.common.helper.work.IdleWorker
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.widget.emoji.UiFaceManager
@@ -29,6 +30,8 @@ lateinit var currentApplication: MainApp
  * @since 11/24/23
  */
 class MainApp : Application() {
+    private val themeActivityLifecycleCallback by lazy { ThemeActivityLifecycleCallback() }
+
     /**
      * 春菜全局说话
      */
@@ -39,8 +42,10 @@ class MainApp : Application() {
      */
     val globalNotify = MutableLiveData<Int>()
 
+
     override fun onCreate() {
         super.onCreate()
+        registerActivityLifecycleCallbacks(themeActivityLifecycleCallback)
 
         // 跟随壁纸主题
         if (ConfigHelper.isDynamicTheme) {
@@ -85,5 +90,12 @@ class MainApp : Application() {
                     startIdleWork()
                 }
             }
+    }
+
+    /**
+     * 重构全部页面
+     */
+    fun recreateAllActivity() {
+        themeActivityLifecycleCallback.recreateAll()
     }
 }

@@ -1,0 +1,1 @@
+java -jar pepk.jar --keystore=./why.keystore --alias=whykey --output=output.zip --include-cert --rsa-aes-encryption --encryption-key-path=./encryption_public_key.pem

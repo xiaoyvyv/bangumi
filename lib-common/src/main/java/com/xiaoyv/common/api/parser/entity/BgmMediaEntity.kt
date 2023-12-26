@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class BgmMediaEntity(
-    var title: CharSequence = "",
+    var title: String = "",
     var attention: String = "",
     var image: String = "",
     var id: String = "",

@@ -32,7 +32,7 @@ object GlobalConfig {
 
     val mediaTypes by lazy {
         listOf(
-            MediaTab("动漫", MediaType.TYPE_ANIME),
+            MediaTab("动画", MediaType.TYPE_ANIME),
             MediaTab("书籍", MediaType.TYPE_BOOK),
             MediaTab("音乐", MediaType.TYPE_MUSIC),
             MediaTab("游戏", MediaType.TYPE_GAME),

@@ -5,8 +5,11 @@ import com.blankj.utilcode.util.EncryptUtils
 import com.blankj.utilcode.util.SPUtils
 import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
+import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.kts.fromJson
+import com.xiaoyv.common.kts.parcelableCreator
 import com.xiaoyv.widget.kts.subListLimit
 
 /**
@@ -16,7 +19,9 @@ import com.xiaoyv.widget.kts.subListLimit
  * @since 12/10/23
  */
 object CacheHelper {
-    private const val CACHE_HISTORY = "SearchHistory"
+    private const val KEY_CACHE_HISTORY = "cache-history"
+    private const val KEY_CACHE_HOME = "cache-home"
+    private const val KEY_CACHE_PROCESS = "cache-process"
 
     /**
      * 保存搜索历史
@@ -26,7 +31,7 @@ object CacheHelper {
         launchProcess {
             val key = EncryptUtils.encryptMD5ToString(searchItem.keyword)
             searchItem.timestamp = System.currentTimeMillis()
-            SPUtils.getInstance(CACHE_HISTORY).put(key, searchItem.toJson())
+            SPUtils.getInstance(KEY_CACHE_HISTORY).put(key, searchItem.toJson())
         }
     }
 
@@ -35,7 +40,7 @@ object CacheHelper {
      */
     fun readSearchHistory(): List<SearchItem> {
         return runCatching {
-            SPUtils.getInstance(CACHE_HISTORY).all
+            SPUtils.getInstance(KEY_CACHE_HISTORY).all
                 .map { it.value.toString().fromJson<SearchItem>() }
                 .filterNotNull()
                 .sortedByDescending { it.timestamp }
@@ -56,4 +61,19 @@ object CacheHelper {
     fun readTranslate(cacheKey: String): String {
         return CacheDiskUtils.getInstance().getString(cacheKey).orEmpty()
     }
+
+    /**
+     * 首页缓存
+     */
+    var cacheHome: HomeIndexEntity?
+        set(value) = CacheDiskUtils.getInstance().put(KEY_CACHE_HOME, value)
+        get() = CacheDiskUtils.getInstance().getParcelable(KEY_CACHE_HOME, parcelableCreator())
+
+    /**
+     * 进度缓存
+     */
+    var cacheProcess: List<MediaDetailEntity>
+        set(value) = CacheDiskUtils.getInstance().put(KEY_CACHE_PROCESS, value.toJson())
+        get() = CacheDiskUtils.getInstance().getString(KEY_CACHE_PROCESS).orEmpty()
+            .fromJson<List<MediaDetailEntity>>().orEmpty()
 }

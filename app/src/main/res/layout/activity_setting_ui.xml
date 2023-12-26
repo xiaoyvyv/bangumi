@@ -107,6 +107,15 @@
                 android:text="动态主题" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_smooth_font"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="平滑字体" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_filter_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

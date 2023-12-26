@@ -8,9 +8,6 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">true</item>
 
-        <item name="android:fontFamily">@raw/font</item>
-        <item name="android:includeFontPadding">false</item>
-
         <!-- Fix CollapsingToolbar with theme material3 -->
         <item name="collapsingToolbarLayoutStyle">@style/Theme.Bangumi.CollapsingToolbar</item>
         <item name="toolbarStyle">@style/Theme.Bangumi.Toolbar</item>
@@ -26,6 +23,11 @@
         <item name="textAppearanceLabelLarge">@style/textAppearanceLabelLarge</item>
         <item name="textAppearanceLabelMedium">@style/textAppearanceLabelMedium</item>
         <item name="textAppearanceLabelSmall">@style/textAppearanceLabelSmall</item>
+    </style>
+
+    <style name="Theme.Bangumi.Font" parent="Theme.Bangumi">
+        <item name="android:fontFamily">@raw/font</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="Theme.Bangumi.Divider">

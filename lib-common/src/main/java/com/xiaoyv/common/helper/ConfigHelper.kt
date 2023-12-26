@@ -27,6 +27,7 @@ object ConfigHelper {
     private const val KEY_SPLIT_EP_LIST = "split-ep-list"
     private const val KEY_HOME_DEFAULT_TAB = "home-default-tab"
     private const val KEY_CENTER_TYPE = "center-tab-type"
+    private const val KEY_SMOOTH_FONT = "smooth-font"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -129,6 +130,13 @@ object ConfigHelper {
     var isFilterBreakUpComment: Boolean
         get() = SPStaticUtils.getBoolean(KEY_FILTER_BREAK_UP_COMMENT, true)
         set(value) = SPStaticUtils.put(KEY_FILTER_BREAK_UP_COMMENT, value)
+
+    /**
+     * 平滑字体
+     */
+    var isSmoothFont: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_SMOOTH_FONT, true)
+        set(value) = SPStaticUtils.put(KEY_SMOOTH_FONT, value)
 
     /**
      * 章节是否分割

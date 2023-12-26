@@ -4,6 +4,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import com.xiaoyv.common.R
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.webview.UiWebInterceptor
 import java.io.FileInputStream
@@ -25,6 +26,8 @@ class WebResourceInterceptor(private val themeCssFile: String) : UiWebIntercepto
         when {
             // 检查请求是否是字体文件
             url.contains("font.ttf") -> {
+                if (ConfigHelper.isSmoothFont.not()) return null
+
                 runCatching {
                     val response = view.context.resources.openRawResource(R.raw.font).let {
                         WebResourceResponse("font/ttf", "UTF-8", it)

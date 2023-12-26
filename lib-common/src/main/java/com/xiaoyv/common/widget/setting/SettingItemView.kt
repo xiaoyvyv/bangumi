@@ -64,6 +64,7 @@ class SettingItemView @JvmOverloads constructor(
                 onChange(value)
             } else {
                 activity.showConfirmDialog(
+                    title = title,
                     message = tip,
                     onConfirmClick = {
                         val value = property.get().not()
@@ -88,7 +89,7 @@ class SettingItemView @JvmOverloads constructor(
         if (bindTitle != null) title = bindTitle
         setOnFastLimitClickListener {
             activity.showOptionsDialog(
-                title = bindTitle ?: StringUtils.getString(CommonString.common_tip),
+                title = title,
                 items = names,
                 onItemClick = { _, which ->
                     property.set(values[which])

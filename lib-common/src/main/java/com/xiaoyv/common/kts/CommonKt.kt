@@ -25,6 +25,7 @@ fun openInBrowser(url: String) {
     }
 }
 
+@Keep
 inline fun <reified T> String.fromJson(): T? {
     runCatching {
         val type = object : TypeToken<T>() {}.type
@@ -56,5 +57,5 @@ inline fun <reified T : Parcelable> parcelableCreator(): Parcelable.Creator<T> =
         ?: throw IllegalArgumentException("Could not access CREATOR field in class ${T::class.simpleName}")
 
 fun randId(): String {
-   return System.currentTimeMillis().toString()
+    return System.currentTimeMillis().toString()
 }

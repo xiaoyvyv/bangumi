@@ -225,7 +225,7 @@ private fun Element?.selectCalendarItem(): List<BgmMediaEntity> {
     val element = this ?: return emptyList()
     return element.select(".coverList .thumbTip").map {
         BgmMediaEntity(
-            title = it.select("a").attr("title").parseHtml(),
+            title = it.select("a").attr("title").parseHtml().toString(),
             id = it.select("a").hrefId(),
             image = it.select("img").attr("src").optImageUrl()
         )

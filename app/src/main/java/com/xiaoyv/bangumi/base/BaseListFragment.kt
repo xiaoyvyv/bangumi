@@ -82,6 +82,8 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     }
 
     fun refreshAdapter() {
+        viewModel.isOnlyOnePage = isOnlyOnePage
+
         if (isOnlyOnePage) {
             binding.rvContent.adapter = contentAdapter
         } else {
