@@ -21,10 +21,11 @@
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_title"
         android:layout_width="@dimen/ui_size_0"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ui_size_0"
         android:background="@drawable/shape_cover_mask"
         android:breakStrategy="balanced"
         android:ellipsize="end"
+        android:gravity="bottom"
         android:maxLines="3"
         android:padding="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceLabelSmall"
@@ -33,6 +34,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
         app:layout_constraintEnd_toEndOf="@+id/iv_cover"
         app:layout_constraintStart_toStartOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover"
         tools:text="@tools:sample/lorem/random" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
