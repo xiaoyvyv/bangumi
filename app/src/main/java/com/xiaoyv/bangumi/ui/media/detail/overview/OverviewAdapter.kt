@@ -13,8 +13,10 @@ import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewRelativeBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSaveBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewSummaryBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTagBinder
+import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewTourBinder
 import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
@@ -38,6 +40,7 @@ class OverviewAdapter(
     onClickCollectorItem: (SampleImageEntity) -> Unit,
     onClickIndexItem: (SampleImageEntity) -> Unit,
     onClickPreview: (DouBanPhotoEntity.Photo) -> Unit,
+    onClickTour: (AnimeTourEntity.LitePoint) -> Unit,
     onClickCommentItem: (MediaCommentEntity) -> Unit,
     onClickCommentUser: (MediaCommentEntity) -> Unit,
 ) : BaseMultiItemAdapter<AdapterTypeItem>() {
@@ -50,6 +53,7 @@ class OverviewAdapter(
             .addItemType(TYPE_TAG, OverviewTagBinder(onClickTagItem))
             .addItemType(TYPE_SUMMARY, OverviewSummaryBinder(true))
             .addItemType(TYPE_PREVIEW, OverviewPreviewBinder(touchedListener, onClickPreview))
+            .addItemType(TYPE_TOUR, OverviewTourBinder(touchedListener, onClickTour))
             .addItemType(TYPE_DETAIL, OverviewSummaryBinder(false))
             .addItemType(TYPE_RATING, OverviewRatingBinder())
             .addItemType(TYPE_CHARACTER, OverviewCharacterBinder(onClickCrtItem))
@@ -117,6 +121,20 @@ class OverviewAdapter(
         set(targetIndex + 1, epiItem)
     }
 
+    /**
+     * 刷新巡礼数据
+     */
+    fun refreshTour(tourEntity: AnimeTourEntity) {
+        val previewItemIndex = items.indexOfFirst { it.type == TYPE_PREVIEW }
+        if (previewItemIndex == -1) return
+        val item = items.find { it.type == TYPE_TOUR }
+        if (item == null) {
+            val typeItem =
+                AdapterTypeItem(entity = tourEntity, type = TYPE_TOUR, title = "巡礼")
+            add(previewItemIndex + 1, typeItem)
+        }
+    }
+
     companion object {
         const val TYPE_COLLECT = 1
         const val TYPE_EP = 2
@@ -130,5 +148,6 @@ class OverviewAdapter(
         const val TYPE_COLLECT_USER = 10
         const val TYPE_INDEX = 11
         const val TYPE_COMMENT = 12
+        const val TYPE_TOUR = 13
     }
 }

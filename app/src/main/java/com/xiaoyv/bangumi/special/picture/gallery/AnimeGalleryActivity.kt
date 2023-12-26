@@ -64,7 +64,7 @@ class AnimeGalleryActivity : BaseListActivity<GalleryEntity, AnimeGalleryViewMod
             }
         }
     }
-
+    
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<GalleryEntity, *> {
         return AnimeGalleryAdapter(viewModel.isPreviewSubject)
     }

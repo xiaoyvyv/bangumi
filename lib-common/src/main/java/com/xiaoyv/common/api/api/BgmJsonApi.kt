@@ -6,7 +6,7 @@ import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
-import com.xiaoyv.common.api.response.MediaJsonEntity
+import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
@@ -45,6 +45,7 @@ interface BgmJsonApi {
     @GET("https://api.github.com/repos/xiaoyvyv/Bangumi-for-Android/releases/latest")
     suspend fun queryGithubLatest(): GithubLatestEntity
 
+
     @GET("${BgmApiManager.URL_BASE_WEB}/timeline")
     suspend fun queryWholeTimeline(
         @Query("type") @TimelineType type: String,
@@ -52,9 +53,8 @@ interface BgmJsonApi {
         @Query("ajax") ajax: Long = 1,
     ): Document
 
-
-    @GET("/v0/subjects/{mediaId}")
-    suspend fun queryMediaDetail(@Path("mediaId", encoded = true) mediaId: String): MediaJsonEntity
+    @GET("https://api.anitabi.cn/bangumi/{mediaId}/lite")
+    suspend fun queryMediaTour(@Path("mediaId") mediaId: String): AnimeTourEntity
 
     @FormUrlEncoded
     @POST("http://api.fanyi.baidu.com/api/trans/vip/translate")
@@ -155,4 +155,6 @@ interface BgmJsonApi {
         @Path("episode_id") episodeId: String,
         @Body param: EpCollectParam,
     ): Response<ResponseBody>
+
+
 }

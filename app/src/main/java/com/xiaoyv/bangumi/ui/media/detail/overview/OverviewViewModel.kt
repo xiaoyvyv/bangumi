@@ -6,6 +6,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserMediaDetail
+import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.douban.DouBanImageEntity
@@ -42,6 +43,7 @@ class OverviewViewModel : BaseViewModel() {
     internal val mediaBinderListLiveData = MutableLiveData<List<AdapterTypeItem>>()
     internal val onMediaPreviewLiveData = MutableLiveData<List<DouBanPhotoEntity.Photo>?>()
     internal val onDeleteCollectLiveData = MutableLiveData<MediaDetailEntity?>()
+    internal val onTourLiveData = MutableLiveData<AnimeTourEntity?>()
 
     /**
      * 刷新进度
@@ -84,6 +86,15 @@ class OverviewViewModel : BaseViewModel() {
 
     fun queryMediaInfo() {
         queryMediaDetail()
+        queryTourInfo()
+    }
+
+    private fun queryTourInfo() {
+        launchUI {
+            onTourLiveData.value = withContext(Dispatchers.IO) {
+                BgmApiManager.bgmJsonApi.queryMediaTour(mediaId)
+            }
+        }
     }
 
     private fun queryMediaDetail() {
@@ -116,6 +127,7 @@ class OverviewViewModel : BaseViewModel() {
     }
 
     private fun buildBinderList(entity: MediaDetailEntity): List<AdapterTypeItem> {
+        val tourEntity = onTourLiveData.value
         val items = mutableListOf<AdapterTypeItem>()
 
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_COLLECT, "收藏"))
@@ -123,6 +135,12 @@ class OverviewViewModel : BaseViewModel() {
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_TAG, "标签"))
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_SUMMARY, "简介"))
         items.add(AdapterTypeItem(entity.photos, OverviewAdapter.TYPE_PREVIEW, "预览"))
+
+        // 巡礼数据
+        if (tourEntity != null) {
+            items.add(AdapterTypeItem(tourEntity, OverviewAdapter.TYPE_TOUR, "巡礼"))
+        }
+
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_DETAIL, "详情"))
         items.add(AdapterTypeItem(entity, OverviewAdapter.TYPE_RATING, "评分"))
 

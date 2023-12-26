@@ -115,14 +115,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/ui_layout_margin"
-        android:ellipsize="end"
         android:gravity="end"
-        android:maxLines="1"
         android:paddingStart="@dimen/ui_size_12"
+        android:paddingEnd="@dimen/ui_size_0"
         android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+        app:layout_constraintVertical_bias="1"
         tools:text="@tools:sample/lorem" />
 
     <View

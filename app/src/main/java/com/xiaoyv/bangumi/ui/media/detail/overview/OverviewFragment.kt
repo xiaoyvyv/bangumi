@@ -79,6 +79,13 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             onClickPreview = {
                 showPreview(it)
             },
+            onClickTour = {
+                RouteHelper.jumpWeb(
+                    url = "https://anitabi.cn/map?bangumiId=" + viewModel.mediaId,
+                    fitToolbar = true,
+                    smallToolbar = true
+                )
+            },
             onClickCommentItem = {
                 RouteHelper.jumpUserDetail(it.userId)
             },
@@ -200,6 +207,13 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
 
             // 刷新 HostActivity 的媒体数据
             activityViewModel.onMediaDetailLiveData.value = entity
+        }
+
+        // 巡礼数据
+        viewModel.onTourLiveData.observe(this) {
+            if (viewModel.mediaBinderListLiveData.value != null && it != null) {
+                overviewAdapter.refreshTour(it)
+            }
         }
 
         // 用户身份信息变化刷新

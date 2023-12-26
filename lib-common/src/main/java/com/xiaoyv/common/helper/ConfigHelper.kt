@@ -114,7 +114,7 @@ object ConfigHelper {
      * 是否动态主题
      */
     var isDynamicTheme: Boolean
-        get() = SPStaticUtils.getBoolean(KEY_DYNAMIC_THEME, true)
+        get() = SPStaticUtils.getBoolean(KEY_DYNAMIC_THEME, false)
         set(value) = SPStaticUtils.put(KEY_DYNAMIC_THEME, value)
 
     /**
