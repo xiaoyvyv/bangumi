@@ -145,6 +145,13 @@ class MediaDetailActivity :
         binding.tvLocked.setOnFastLimitClickListener {
             showLockTip()
         }
+
+        // 大图
+        binding.ivCover.setOnFastLimitClickListener {
+            if (viewModel.onMediaDetailLiveData.value != null) {
+                RouteHelper.jumpPreviewImage(viewModel.onMediaDetailLiveData.value?.cover.orEmpty())
+            }
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {
