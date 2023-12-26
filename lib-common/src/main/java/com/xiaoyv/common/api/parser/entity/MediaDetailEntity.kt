@@ -30,6 +30,7 @@ data class MediaDetailEntity(
     @SerializedName("time") var time: String = "",
     @SerializedName("subtype") var subtype: String = "",
     @SerializedName("cover") var cover: String = "",
+    @SerializedName("coverLarge") var coverLarge: String = "",
     @SerializedName("collectState") var collectState: MediaCollectForm = MediaCollectForm(),
     @SerializedName("infos") var infoShort: List<CharSequence> = emptyList(),
     @SerializedName("infoHtml") var infoHtml: List<String> = emptyList(),

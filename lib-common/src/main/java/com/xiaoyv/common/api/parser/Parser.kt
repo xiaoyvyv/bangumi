@@ -60,7 +60,7 @@ fun String.optImageUrl(
         startsWith("/") -> "${BgmApiManager.URL_BASE_WEB}$this"
         else -> this
     }
-    val size = if (largest) "800" else if (large) "400" else "200"
+    val size = if (largest) "1200" else if (large) "400" else "200"
     val defaultImage = "file:///android_asset/image/info_only.jpg"
     return imageUrl
         .replace("/r/(.*?)/".toRegex(), "/")

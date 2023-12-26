@@ -149,7 +149,7 @@ class MediaDetailActivity :
         // 大图
         binding.ivCover.setOnFastLimitClickListener {
             if (viewModel.onMediaDetailLiveData.value != null) {
-                RouteHelper.jumpPreviewImage(viewModel.onMediaDetailLiveData.value?.cover.orEmpty())
+                RouteHelper.jumpPreviewImage(viewModel.onMediaDetailLiveData.value?.coverLarge.orEmpty())
             }
         }
     }

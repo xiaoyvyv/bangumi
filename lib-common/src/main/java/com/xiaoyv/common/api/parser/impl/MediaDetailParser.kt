@@ -163,9 +163,11 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
 
     val infoBox = select("#infobox > li")
     val infoBoxText = infoBox.text()
+    val coverUrl = select("img.cover").attr("src")
 
     entity.subtype = select(".nameSingle small").text()
-    entity.cover = select("img.cover").attr("src").optImageUrl()
+    entity.cover = coverUrl.optImageUrl()
+    entity.coverLarge = coverUrl.optImageUrl(largest = true)
     entity.infoHtml = infoBox.map { it.html() }
     entity.infoShort = entity.infoHtml.subListLimit(10).map { it.parseHtml() }
     entity.time = infoBoxText.parserTime()
