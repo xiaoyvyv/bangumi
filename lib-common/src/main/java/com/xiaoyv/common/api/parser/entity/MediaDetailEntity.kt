@@ -26,6 +26,7 @@ data class MediaDetailEntity(
     @SerializedName("mediaType") @MediaType var mediaType: String = MediaType.TYPE_ANIME,
     @SerializedName("titleCn") var titleCn: String = "",
     @SerializedName("titleNative") var titleNative: String = "",
+    @SerializedName("locked") var locked: Boolean = false,
     @SerializedName("time") var time: String = "",
     @SerializedName("subtype") var subtype: String = "",
     @SerializedName("cover") var cover: String = "",

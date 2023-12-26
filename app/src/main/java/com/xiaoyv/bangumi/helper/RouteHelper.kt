@@ -190,7 +190,7 @@ object RouteHelper {
     }
 
     fun jumpMediaDetail(mediaId: String) {
-        MediaDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to mediaId))
+        MediaDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to "83130"))
     }
 
     fun jumpBlogDetail(blogId: String) {

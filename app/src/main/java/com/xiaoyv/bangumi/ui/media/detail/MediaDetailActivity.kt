@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.leinardi.android.speeddial.SpeedDialActionItem
@@ -28,7 +29,9 @@ import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
+import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
@@ -108,6 +111,12 @@ class MediaDetailActivity :
                 return@OnActionSelectedListener false
             }
 
+            // 条目锁定
+            if (viewModel.requireNotLocked.not()) {
+                showLockTip()
+                return@OnActionSelectedListener false
+            }
+
             // 构建简单的关联模型
             val detailEntity =
                 viewModel.onMediaDetailLiveData.value ?: return@OnActionSelectedListener true
@@ -132,6 +141,10 @@ class MediaDetailActivity :
             }
             true
         })
+
+        binding.tvLocked.setOnFastLimitClickListener {
+            showLockTip()
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {
@@ -148,6 +161,7 @@ class MediaDetailActivity :
             binding.tvSubtitle.text = it.titleNative
             binding.tvScore.text = String.format("%.1f", it.rating.globalRating)
             binding.tvScoreTip.text = it.rating.description
+            binding.tvLocked.isVisible = it.locked
 
             if (it.subtype.isNotBlank()) {
                 binding.tvTime.text = String.format("(%s - %s)", it.time, it.subtype)
@@ -171,7 +185,7 @@ class MediaDetailActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("添加目录")
+        if (viewModel.requireNotLocked) menu.add("添加目录")
             .setIcon(CommonDrawable.ic_add_index)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
@@ -186,6 +200,13 @@ class MediaDetailActivity :
         return super.onCreateOptionsMenu(menu)
     }
 
+    private fun showLockTip() {
+        showConfirmDialog(
+            message = "不符合收录原则，条目及相关收藏、讨论、关联等内容将会随时被移除。",
+            cancelText = null
+        )
+    }
+
     override fun onCreateLoadingDialog(): UiDialog {
         return AnimeLoadingDialog(this)
     }
@@ -194,4 +215,5 @@ class MediaDetailActivity :
         item.initNavBack(this)
         return super.onOptionsItemSelected(item)
     }
+
 }

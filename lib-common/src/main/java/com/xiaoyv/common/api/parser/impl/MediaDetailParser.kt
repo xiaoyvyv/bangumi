@@ -152,11 +152,15 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     requireNoError()
 
     val entity = MediaDetailEntity()
-    selectLegal(".nameSingle > a").apply {
+    val headerSubject = select("#headerSubject")
+    headerSubject.select(".nameSingle > a").apply {
         entity.id = hrefId()
         entity.titleCn = attr("title")
         entity.titleNative = text()
     }
+    
+    entity.locked = headerSubject.select(".tipIntro").isNotEmpty()
+
     val infoBox = select("#infobox > li")
     val infoBoxText = infoBox.text()
 

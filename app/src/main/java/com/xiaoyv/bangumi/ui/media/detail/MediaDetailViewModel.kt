@@ -31,6 +31,12 @@ class MediaDetailViewModel : BaseViewModel() {
         }
 
     /**
+     * 未锁定
+     */
+    internal val requireNotLocked: Boolean
+        get() = onMediaDetailLiveData.value != null && onMediaDetailLiveData.value?.locked == false
+
+    /**
      * 媒体类型
      */
     @MediaType

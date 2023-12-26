@@ -45,10 +45,22 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     private val overviewAdapter by lazy {
         OverviewAdapter(
             touchedListener = touchedListener,
-            onClickSave = { item, position ->
+            onClickSave = click@{ item, _ ->
+                // 条目锁定了
+                if (activityViewModel.requireNotLocked.not()) {
+                    showLockTip()
+                    return@click
+                }
                 showCollectPanel(item)
             },
-            onClickEpItem = { adapter, _, position ->
+            onClickEpItem = click@{ adapter, _, position ->
+                // 条目锁定了
+                if (activityViewModel.requireNotLocked.not()) {
+                    showLockTip()
+                    return@click
+                }
+
+                // 章节进度弹窗
                 val epEntity = adapter.getItem(position)
                 if (epEntity != null && epEntity.splitter.not()) {
                     if (viewModel.canChangeEpProgress) {
@@ -257,6 +269,13 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             fragmentManager = childFragmentManager,
             epEntity = chapterEntity,
             mediaType = activityViewModel.requireMediaType
+        )
+    }
+
+    private fun showLockTip() {
+        requireActivity().showConfirmDialog(
+            message = "不符合收录原则，条目及相关收藏、讨论、关联等内容将会随时被移除。",
+            cancelText = null
         )
     }
 
