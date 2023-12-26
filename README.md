@@ -21,8 +21,8 @@
 ### 项目更新地址
 https://github.com/xiaoyvyv/Bangumi-for-Android
 
-### Github CI 下载安装包 `main` 分支
-[https://github.com/xiaoyvyv/Bangumi-for-Android/actions](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
+### 下载地址 Github-Release
+下载地址：[Github-Release](https://github.com/xiaoyvyv/Bangumi-for-Android/releases)
 
 ### 功能介绍
 
@@ -64,8 +64,6 @@ https://github.com/xiaoyvyv/Bangumi-for-Android
 最后，感谢大家的支持和厚爱，希望我的安卓原生原生客户端能为大家带来更丰富、更愉悦的Bgm体验。
 
 快来下载安装吧，一起探索 BGM.TV 的精彩世界！
-
-下载地址：(Github-Release)[https://github.com/xiaoyvyv/Bangumi-for-Android/releases]
 
 如果有任何建议或问题，欢迎随时与我联系，让我们共同打造这个客户端的美好未来。谢谢！
 
