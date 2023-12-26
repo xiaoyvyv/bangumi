@@ -466,11 +466,13 @@ object RouteHelper {
     fun jumpMonoList(
         isCharacter: Boolean,
         orderByType: String = MonoOrderByType.TYPE_COLLECT,
+        userId: String? = null,
     ) {
         MonoListActivity::class.open(
             bundleOf(
                 NavKey.KEY_STRING to orderByType,
                 NavKey.KEY_BOOLEAN to isCharacter,
+                NavKey.KEY_STRING_SECOND to userId
             )
         )
     }

@@ -113,7 +113,16 @@ class TimelinePageAdapter(
             binding.ivMediaCover.loadImageAnimate(item.mediaCard.cover)
         }
 
-        internal fun onBindText(binding: FragmentTimelinePageTextBinding, item: TimelineEntity) {
+        internal fun onBindText(
+            binding: FragmentTimelinePageTextBinding,
+            item: TimelineEntity,
+            limitLine: Boolean = true,
+        ) {
+            if (limitLine.not()) {
+                binding.tvContent.ellipsize = null
+                binding.tvContent.maxLines = Int.MAX_VALUE
+            }
+
             binding.ivAvatar.isInvisible = item.avatar.isBlank()
             binding.ivAvatar.loadImageAnimate(item.avatar)
             binding.tvAction.text = item.title

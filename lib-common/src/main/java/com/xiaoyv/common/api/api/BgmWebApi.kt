@@ -738,6 +738,13 @@ interface BgmWebApi {
         @QueryMap param: Map<String, String>,
     ): Document
 
+    @GET("/user/{userId}/mono/{monoType}")
+    suspend fun queryUserMonoList(
+        @Path("userId", encoded = true) userId: String,
+        @Path("monoType", encoded = true) monoType: String,
+        @Query("page") page: Int,
+    ): Document
+
     /**
      * 吐个槽
      */

@@ -60,7 +60,10 @@ class MonoFragment : BaseViewModelFragment<FragmentListBinding, MonoViewModel>()
 
         contentAdapter.setOnDebouncedChildClickListener(CommonId.tv_more) {
             val type = it.entity.toString()
-            RouteHelper.jumpMonoList(isCharacter = type == BgmPathType.TYPE_CHARACTER)
+            RouteHelper.jumpMonoList(
+                isCharacter = type == BgmPathType.TYPE_CHARACTER,
+                userId = viewModel.userId
+            )
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_mono) {

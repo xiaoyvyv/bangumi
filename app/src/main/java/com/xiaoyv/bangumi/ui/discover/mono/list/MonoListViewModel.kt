@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.impl.parserMonoList
+import com.xiaoyv.common.api.parser.impl.parserUserMonoList
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MonoOrderByType
 import com.xiaoyv.common.config.bean.FilterEntity
@@ -17,6 +18,7 @@ import com.xiaoyv.common.config.bean.SampleImageEntity
  */
 class MonoListViewModel : BaseListViewModel<SampleImageEntity>() {
     internal var isCharacter: Boolean = false
+    internal var userId = ""
 
     @MonoOrderByType
     internal var orderByType = MutableLiveData(MonoOrderByType.TYPE_ALL)
@@ -100,12 +102,20 @@ class MonoListViewModel : BaseListViewModel<SampleImageEntity>() {
     }
 
     override suspend fun onRequestListImpl(): List<SampleImageEntity> {
-        return BgmApiManager.bgmWebApi.queryMonoList(
-            monoType = if (isCharacter) BgmPathType.TYPE_CHARACTER else BgmPathType.TYPE_PERSON,
-            orderByType = orderByType.value,
-            page = current,
-            param = buildQueryMap()
-        ).parserMonoList()
+        return if (userId.isNotBlank()) {
+            BgmApiManager.bgmWebApi.queryUserMonoList(
+                userId = userId,
+                monoType = if (isCharacter) BgmPathType.TYPE_CHARACTER else BgmPathType.TYPE_PERSON,
+                page = current
+            ).parserUserMonoList()
+        } else {
+            BgmApiManager.bgmWebApi.queryMonoList(
+                monoType = if (isCharacter) BgmPathType.TYPE_CHARACTER else BgmPathType.TYPE_PERSON,
+                orderByType = orderByType.value,
+                page = current,
+                param = buildQueryMap()
+            ).parserMonoList()
+        }
     }
 
     /**

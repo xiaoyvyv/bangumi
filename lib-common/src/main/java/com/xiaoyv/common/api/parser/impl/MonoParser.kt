@@ -57,16 +57,41 @@ fun Element.parserMono(): MonoEntity {
 }
 
 /**
- * 解析页面的附件人物或角色
+ * 解析全部人物或角色
  */
 fun Element.parserMonoList(): List<SampleImageEntity> {
-    return select(".browserCrtList > div").mapIndexed { index, item ->
+    return select(".browserCrtList > div").mapIndexed { _, item ->
         val entity = SampleImageEntity()
         val href = item.select("a.avatar").attr("href")
         entity.id = item.select("a.avatar").hrefId()
         entity.image = item.select("a.avatar img").attr("src").optImageUrl()
         entity.title = item.select("h3 a").text()
         entity.desc = item.select(".prsn_info").text()
+        when {
+            href.contains(BgmPathType.TYPE_CHARACTER) -> {
+                entity.type = BgmPathType.TYPE_CHARACTER
+            }
+
+            href.contains(BgmPathType.TYPE_PERSON) -> {
+                entity.type = BgmPathType.TYPE_PERSON
+            }
+        }
+        entity
+    }
+}
+
+/**
+ * 解析用户的收藏的人物或角色
+ */
+fun Element.parserUserMonoList(): List<SampleImageEntity> {
+    return select(".coversSmall > li").mapIndexed { _, item ->
+        val entity = SampleImageEntity()
+        val a = item.select("a")
+        val href = a.attr("href")
+        entity.id = a.hrefId()
+        entity.image = a.select("img").attr("src").optImageUrl()
+        entity.title = a.attr("title")
+        entity.desc = a.attr("title")
         when {
             href.contains(BgmPathType.TYPE_CHARACTER) -> {
                 entity.type = BgmPathType.TYPE_CHARACTER

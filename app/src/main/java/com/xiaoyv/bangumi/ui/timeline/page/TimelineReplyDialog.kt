@@ -55,7 +55,7 @@ class TimelineReplyDialog : BottomSheetDialogFragment() {
     }
 
     private fun initView(binding: FragmentTimelineDialogBinding, entity: TimelineEntity) {
-        TimelinePageAdapter.onBindText(binding.layoutTimeline, entity)
+        TimelinePageAdapter.onBindText(binding.layoutTimeline, entity, false)
         itemAdapter.isTotalTimeline = entity.isTotalTimeline
 
         binding.rvContent.adapter = itemAdapter

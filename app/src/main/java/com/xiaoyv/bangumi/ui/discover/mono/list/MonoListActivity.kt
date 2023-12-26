@@ -30,12 +30,10 @@ class MonoListActivity : BaseListActivity<SampleImageEntity, MonoListViewModel>(
     override val isOnlyOnePage: Boolean
         get() = false
 
-    override val toolbarTitle: String
-        get() = if (viewModel.isCharacter) "角色列表" else "人物列表"
-
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.orderByType.value = bundle.getString(NavKey.KEY_STRING).orEmpty()
         viewModel.isCharacter = bundle.getBoolean(NavKey.KEY_BOOLEAN, false)
+        viewModel.userId = bundle.getString(NavKey.KEY_STRING_SECOND).orEmpty()
     }
 
     override fun onCreateLayoutManager(): LinearLayoutManager {
@@ -50,12 +48,16 @@ class MonoListActivity : BaseListActivity<SampleImageEntity, MonoListViewModel>(
 
     override fun initData() {
         super.initData()
-        adapterHelper.addBeforeAdapter(BaseListFilterHeader(viewModel.filterMenu).apply {
-            onSelectedChangeListener = {
-                viewModel.selectedOptions = it
-                viewModel.refresh()
-            }
-        })
+
+        // 非指定用户收藏才显示筛选
+        if (viewModel.userId.isBlank()) {
+            adapterHelper.addBeforeAdapter(BaseListFilterHeader(viewModel.filterMenu).apply {
+                onSelectedChangeListener = {
+                    viewModel.selectedOptions = it
+                    viewModel.refresh()
+                }
+            })
+        }
     }
 
     override fun initListener() {
@@ -69,13 +71,21 @@ class MonoListActivity : BaseListActivity<SampleImageEntity, MonoListViewModel>(
     override fun LifecycleOwner.initViewObserverExt() {
         viewModel.orderByType.observe(this) {
             val monoTypeName = if (viewModel.isCharacter) "角色列表" else "人物列表"
-            binding.toolbar.title =
-                String.format("%s/%s排序", monoTypeName, MonoOrderByType.string(it))
+
+            if (viewModel.userId.isBlank()) {
+                binding.toolbar.title =
+                    String.format("%s/%s排序", monoTypeName, MonoOrderByType.string(it))
+            } else {
+                binding.toolbar.title = buildString {
+                    append("收藏的")
+                    append(monoTypeName)
+                }
+            }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        viewModel.toolbarMenus.forEach { type ->
+        if (viewModel.userId.isBlank()) viewModel.toolbarMenus.forEach { type ->
             menu.add(String.format("按%s排序", MonoOrderByType.string(type)))
                 .setOnMenuItemClickListener {
                     viewModel.orderByType.value = type
