@@ -56,10 +56,10 @@ https://github.com/xiaoyvyv/Bangumi-for-Android
 
 **部分页面截图预览**
 
-![https://img.xiaoyv.com.cn/image/bangumi/poster-1.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-1.jpg)
-![https://img.xiaoyv.com.cn/image/bangumi/poster-2.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-2.jpg)
-![https://img.xiaoyv.com.cn/image/bangumi/poster-3.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-3.jpg)
-![https://img.xiaoyv.com.cn/image/bangumi/poster-4.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-4.jpg)
+![https://img.xiaoyv.com.cn/image/bangumi/poster-1.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-1.jpg?_)
+![https://img.xiaoyv.com.cn/image/bangumi/poster-2.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-2.jpg?_)
+![https://img.xiaoyv.com.cn/image/bangumi/poster-3.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-3.jpg?_)
+![https://img.xiaoyv.com.cn/image/bangumi/poster-4.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-4.jpg?_)
 
 最后，感谢大家的支持和厚爱，希望我的安卓原生原生客户端能为大家带来更丰富、更愉悦的Bgm体验。
 
