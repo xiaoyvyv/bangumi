@@ -151,6 +151,14 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                 OverviewAdapter.TYPE_PREVIEW -> {
                     RouteHelper.jumpMediaPreview(viewModel.targetId)
                 }
+
+                OverviewAdapter.TYPE_TOUR -> {
+                    RouteHelper.jumpWeb(
+                        url = "https://anitabi.cn/map?bangumiId=" + viewModel.mediaId,
+                        fitToolbar = true,
+                        smallToolbar = true
+                    )
+                }
             }
         }
 

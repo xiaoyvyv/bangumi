@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.media.detail.overview.binder
 
 import android.content.Context
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewPreviewBinding
@@ -10,6 +11,7 @@ import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
+import com.xiaoyv.common.kts.clear
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -61,12 +63,24 @@ class OverviewTourBinder(
     private class ItemAdapter : BaseQuickDiffBindingAdapter<AnimeTourEntity.LitePoint,
             FragmentOverviewTourItemBinding>(IdDiffItemCallback()) {
         override fun BaseQuickBindingHolder<FragmentOverviewTourItemBinding>.converted(item: AnimeTourEntity.LitePoint) {
-            binding.ivImage.loadImageAnimate(item.image.orEmpty().substringBefore("?"))
+            // 没有图片不显示
+            if (item.image.orEmpty().isBlank()) {
+                binding.tvEmpty.isVisible = true
+                binding.ivImage.clear()
+                binding.ivImage.setImageResource(0)
+            } else {
+                binding.tvEmpty.isVisible = false
+                binding.ivImage.loadImageAnimate(item.image.orEmpty().substringBefore("?"))
+            }
+
             binding.tvEp.text = buildString {
                 append("Ep ")
                 append(item.ep)
-                append("  ")
-                append(item.s.formatHMS())
+
+                if (item.s != 0L) {
+                    append("  ")
+                    append(item.s.formatHMS())
+                }
             }
             binding.tvPlace.text = item.cn.orEmpty().ifBlank { item.name }
         }

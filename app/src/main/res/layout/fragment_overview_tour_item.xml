@@ -26,9 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/shape_cover_mask"
+        android:ellipsize="end"
         android:gravity="bottom"
         android:lineSpacingMultiplier="1.25"
-        android:maxLines="2"
+        android:maxLines="1"
         android:padding="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnPrimarySurface"
@@ -47,4 +48,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="EP1 20:01" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.25"
+        android:maxLines="2"
+        android:padding="@dimen/ui_size_12"
+        android:text="暂无照片"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnPrimarySurface"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
