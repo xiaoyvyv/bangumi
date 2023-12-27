@@ -73,6 +73,7 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
 
             if (type != null) {
                 viewModel.listType = type
+                viewModel.selectTag = null
                 viewModel.refresh()
             }
         }
