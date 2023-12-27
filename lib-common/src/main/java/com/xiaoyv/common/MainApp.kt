@@ -46,19 +46,7 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
         registerActivityLifecycleCallbacks(themeActivityLifecycleCallback)
-
-        // 跟随壁纸主题
-        if (ConfigHelper.isDynamicTheme) {
-            DynamicColors.applyToActivitiesIfAvailable(this)
-        }
-        // 固定主题色
-        else {
-            DynamicColors.applyToActivitiesIfAvailable(
-                this, DynamicColorsOptions.Builder()
-                    .setContentBasedSource(getColor(CommonColor.seed))
-                    .build()
-            )
-        }
+        initTheme()
 
         currentApplication = this
         BluePrint.init(this, false)
@@ -97,5 +85,20 @@ class MainApp : Application() {
      */
     fun recreateAllActivity() {
         themeActivityLifecycleCallback.recreateAll()
+    }
+
+    private fun initTheme() {
+        // 跟随壁纸主题
+        if (ConfigHelper.isDynamicTheme) {
+            DynamicColors.applyToActivitiesIfAvailable(this)
+        }
+        // 固定主题色
+        else {
+            DynamicColors.applyToActivitiesIfAvailable(
+                this, DynamicColorsOptions.Builder()
+                    .setContentBasedSource(getColor(CommonColor.seed))
+                    .build()
+            )
+        }
     }
 }

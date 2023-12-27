@@ -9,6 +9,7 @@ import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.widget.kts.toast
 
 /**
  * Class: [UiConfigActivity]
@@ -27,7 +28,7 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingImageCompress.bindBoolean(this, ConfigHelper::isImageCompress)
         binding.settingGridAnimation.bindBoolean(this, ConfigHelper::isAdapterAnimation)
         binding.settingDynamicTheme.bindBoolean(this, ConfigHelper::isDynamicTheme, onChange = {
-            currentApplication.recreateAllActivity()
+            toast("重启后生效")
         })
         binding.settingFilterDelete.bindBoolean(this, ConfigHelper::isFilterDeleteComment)
         binding.settingBreakUp.bindBoolean(this, ConfigHelper::isFilterBreakUpComment)

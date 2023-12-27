@@ -32,7 +32,7 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
 
     override val isOnlyOnePage: Boolean
         get() = !viewModel.hasMultiPage
-    
+
     override val loadingBias: Float
         get() = if (viewModel.userId.isNotBlank()) 0.3f else super.loadingBias
 
@@ -82,6 +82,12 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
                 TimelineAdapterType.TYPE_TEXT -> {
                     // 是否为有回复的吐槽时间线
                     if (it.commentAble) {
+                        // 头像为空则查找同ID填充
+                        if (it.avatar.isBlank()) {
+                            it.avatar = contentAdapter.items.find { item ->
+                                item.userId == it.userId && item.avatar.isNotBlank()
+                            }?.avatar.orEmpty()
+                        }
                         TimelineReplyDialog.show(childFragmentManager, it)
                         return@setOnDebouncedChildClickListener
                     }
