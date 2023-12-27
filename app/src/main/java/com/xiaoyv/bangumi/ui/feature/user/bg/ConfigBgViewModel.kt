@@ -33,7 +33,7 @@ class ConfigBgViewModel : BaseViewModel() {
      * 随机图片
      */
     fun randomImage() {
-        launchUI {
+        launchUI(stateView = loadingViewState) {
             onImageListLiveData.value = withContext(Dispatchers.IO) {
                 BgmApiManager.bgmJsonApi
                     .queryAnimePicture(page = Random.nextInt(0, 5000))

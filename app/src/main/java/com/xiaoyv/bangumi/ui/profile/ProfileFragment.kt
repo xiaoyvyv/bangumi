@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.profile
 
 import android.annotation.SuppressLint
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ColorUtils
 import com.google.android.material.badge.BadgeDrawable
@@ -82,7 +83,9 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
         }
 
         binding.ivBanner.setOnFastLimitClickListener {
-            RouteHelper.jumpConfigBg()
+            if (UserHelper.isLogin) {
+                RouteHelper.jumpConfigBg()
+            }
         }
 
         binding.tableLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

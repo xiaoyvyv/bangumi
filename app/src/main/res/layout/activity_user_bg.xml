@@ -41,6 +41,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pb_media"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            app:indicatorColor="@color/save_collect"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_banner"
+            app:layout_constraintEnd_toEndOf="@+id/iv_banner"
+            app:layout_constraintStart_toStartOf="@+id/iv_banner"
+            app:trackColor="@color/save_collect_alpha"
+            app:trackCornerRadius="@dimen/ui_size_6"
+            app:trackThickness="@dimen/ui_size_12" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_info"
             android:layout_width="@dimen/ui_size_0"
@@ -88,19 +102,25 @@
                 tools:text="@tools:sample/full_names" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-            android:id="@+id/rv_image"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_refresh"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ui_size_0"
             android:layout_marginHorizontal="@dimen/ui_size_8"
             android:layout_marginVertical="@dimen/ui_size_8"
-            android:clipToPadding="true"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_info"
-            app:spanCount="2"
-            tools:listitem="@layout/activity_user_bg_item" />
+            app:layout_constraintTop_toBottomOf="@+id/cl_info">
+
+            <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+                android:id="@+id/rv_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ui_size_0"
+                android:clipToPadding="true"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/activity_user_bg_item" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

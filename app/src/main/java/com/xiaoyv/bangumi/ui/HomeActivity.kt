@@ -159,11 +159,11 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
                         .appendLine()
                         .append("欢迎大家积极提出反馈或建议，或者加入交流群讨论，需求反馈等将第一时间得到回复。\n\n此软件不收集任何隐私数据并且完全开源。")
                         .create(),
-                    cancelText = "加群",
+//                    cancelText = "加群",
                     neutralText = "不再提醒",
                     confirmText = "我知道了",
                     onCancelClick = {
-                        openInBrowser("https://qm.qq.com/q/YomiSMeyUs")
+//                        openInBrowser("https://qm.qq.com/q/YomiSMeyUs")
                     },
                     onNeutralClick = {
                         ConfigHelper.showVersionTip = false
