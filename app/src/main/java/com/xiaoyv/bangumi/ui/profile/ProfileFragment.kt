@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonDrawable
@@ -80,6 +81,10 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                 }
         }
 
+        binding.ivBanner.setOnFastLimitClickListener {
+            RouteHelper.jumpConfigBg()
+        }
+
         binding.tableLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(p0: TabLayout.Tab?) {
                 binding.appBar.setExpanded(false, true)
@@ -89,7 +94,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
             }
 
             override fun onTabReselected(p0: TabLayout.Tab?) {
-                 binding.appBar.setExpanded(false, true)
+                binding.appBar.setExpanded(false, true)
             }
         })
 
@@ -106,7 +111,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
     override fun LifecycleOwner.initViewObserver() {
         UserHelper.observeUserInfo(this) {
             if (!it.isEmpty) {
-                binding.ivBanner.loadImageBlur(it.avatar?.large)
+                loadUserBg()
                 binding.ivAvatar.loadImageAnimate(it.avatar?.large)
                 binding.tvEmail.text = UserHelper.cacheEmail
 
@@ -143,12 +148,28 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
         }
     }
 
+    /**
+     * 加载背景
+     */
+    private fun loadUserBg() {
+        if (ConfigHelper.userBackground.isNotBlank()) {
+            binding.ivBanner.loadImageAnimate(ConfigHelper.userBackground)
+        } else {
+            binding.ivBanner.loadImageBlur(UserHelper.currentUser.avatar?.large)
+        }
+    }
+
     private fun editProfileOrLogin() {
         if (UserHelper.isLogin) {
             RouteHelper.jumpEditProfile()
         } else {
             RouteHelper.jumpLogin()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadUserBg()
     }
 
     override fun onDestroyView() {

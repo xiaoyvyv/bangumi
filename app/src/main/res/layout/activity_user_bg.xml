@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="自定义空间背景" />
+
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.xiaoyv.common.widget.image.AnimeImageView
+            android:id="@+id/iv_banner"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="@dimen/ui_size_0"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:foreground="@drawable/shape_cover_mask"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="3:2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_info"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="@dimen/ui_size_0"
+            android:fitsSystemWindows="true"
+            app:layout_collapseMode="parallax"
+            app:layout_collapseParallaxMultiplier="0.1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_banner"
+            app:layout_constraintEnd_toEndOf="@+id/iv_banner"
+            app:layout_constraintStart_toStartOf="@+id/iv_banner"
+            app:layout_constraintTop_toTopOf="@+id/iv_banner">
+
+            <com.xiaoyv.common.widget.image.AnimeImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="@dimen/ui_size_90"
+                android:layout_height="@dimen/ui_size_90"
+                android:padding="@dimen/ui_size_2"
+                app:layout_constraintBottom_toTopOf="@+id/tv_email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                app:strokeColor="@android:color/white"
+                app:strokeWidth="@dimen/ui_size_2"
+                tools:src="@tools:sample/avatars" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/ui_size_24"
+                android:paddingVertical="@dimen/ui_layout_margin"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnPrimarySurface"
+                app:layout_collapseMode="parallax"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
+                tools:src="@tools:sample/avatars"
+                tools:text="@tools:sample/full_names" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+            android:id="@+id/rv_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_0"
+            android:layout_marginHorizontal="@dimen/ui_size_8"
+            android:layout_marginVertical="@dimen/ui_size_8"
+            android:clipToPadding="true"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_info"
+            app:spanCount="2"
+            tools:listitem="@layout/activity_user_bg_item" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_random"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_size_24"
+        android:importantForAccessibility="no"
+        app:backgroundTint="?attr/colorPrimary"
+        app:srcCompat="@drawable/ic_random"
+        app:tint="?attr/colorOnPrimary" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

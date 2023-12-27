@@ -74,17 +74,15 @@ fun ImageView.clear() {
     setImageResource(0)
 }
 
-inline fun ImageView.loadImageBlur(
-    model: Any?, centerCrop: Boolean = true,
-    crossinline onReady: (Drawable) -> Unit = {},
-    crossinline onFail: (Any?) -> Unit = {},
-) {
+/**
+ * 加载模糊图
+ */
+fun ImageView.loadImageBlur(model: Any?) {
+    scaleType = ScaleType.CENTER_CROP
+
     Glide.with(this)
         .load(model ?: return)
-        .let { if (centerCrop) it.centerCrop() else it }
-        .listener(onLoadFailed = onFail, onResourceReady = onReady)
         .transform(BlurTransformation(25, 10))
-        .error(CommonDrawable.layer_error)
         .into(this)
 }
 

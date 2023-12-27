@@ -28,6 +28,7 @@ object ConfigHelper {
     private const val KEY_HOME_DEFAULT_TAB = "home-default-tab"
     private const val KEY_CENTER_TYPE = "center-tab-type"
     private const val KEY_SMOOTH_FONT = "smooth-font"
+    private const val KEY_USER_BG = "user-bg"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -151,4 +152,11 @@ object ConfigHelper {
     var centerTabType: Int
         get() = SPStaticUtils.getInt(KEY_CENTER_TYPE, GlobalConfig.PAGE_RANK)
         set(value) = SPStaticUtils.put(KEY_CENTER_TYPE, value)
+
+    /**
+     * 用户自定义背景
+     */
+    var userBackground: String
+        get() = SPStaticUtils.getString(KEY_USER_BG, "")
+        set(value) = SPStaticUtils.put(KEY_USER_BG, value)
 }

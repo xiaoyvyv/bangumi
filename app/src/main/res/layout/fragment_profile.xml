@@ -71,12 +71,12 @@
 
                 <com.xiaoyv.common.widget.text.AnimeTextView
                     android:id="@+id/tv_email"
-                    android:layout_width="@dimen/ui_size_0"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/ui_layout_margin"
                     android:gravity="center"
-                    android:paddingHorizontal="@dimen/ui_layout_margin"
+                    android:paddingHorizontal="@dimen/ui_size_24"
                     android:paddingTop="@dimen/ui_size_40"
                     android:paddingBottom="@dimen/ui_layout_margin"
                     android:textAppearance="?attr/textAppearanceBodySmall"

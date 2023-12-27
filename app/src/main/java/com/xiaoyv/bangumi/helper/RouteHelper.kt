@@ -44,6 +44,7 @@ import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
 import com.xiaoyv.bangumi.ui.feature.user.UserActivity
+import com.xiaoyv.bangumi.ui.feature.user.bg.ConfigBgActivity
 import com.xiaoyv.bangumi.ui.feature.user.blog.UserBlogActivity
 import com.xiaoyv.bangumi.ui.feature.user.mono.UserMonoActivity
 import com.xiaoyv.bangumi.ui.feature.web.WebActivity
@@ -481,6 +482,10 @@ object RouteHelper {
 
     fun jumpDetectAnime() {
         ImageDetectAnimeActivity::class.open()
+    }
+
+    fun jumpConfigBg() {
+        ConfigBgActivity::class.open()
     }
 
     fun jumpDetectCharacter() {
