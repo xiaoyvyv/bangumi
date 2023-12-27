@@ -112,6 +112,7 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
             .setOnMenuItemClickListener {
                 showInputDialog(
                     title = "输入图片链接",
+                    inputHint = "输入网络图片链接",
                     onInput = {
                         viewModel.cacheImageLink.value = it.trim()
                     }
