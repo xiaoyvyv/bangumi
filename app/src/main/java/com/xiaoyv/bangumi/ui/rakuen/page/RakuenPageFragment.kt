@@ -125,6 +125,8 @@ class RakuenPageFragment :
         // 小组类型切换
         if (viewModel.isGroupType) {
             rakuenFragment?.viewModel?.rakuenGroupType?.observe(this) {
+                binding.srlRefresh.isRefreshing = true
+
                 viewModel.topicTab?.type = it
                 viewModel.queryTimeline()
             }

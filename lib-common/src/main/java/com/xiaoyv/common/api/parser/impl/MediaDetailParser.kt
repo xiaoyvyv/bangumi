@@ -18,7 +18,6 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
-import com.xiaoyv.common.api.parser.selectLegal
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.kts.groupValueOne
@@ -158,9 +157,11 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         entity.titleCn = attr("title")
         entity.titleNative = text()
     }
-    
+
     entity.locked = headerSubject.select(".tipIntro").isNotEmpty()
 
+    val interestPanel = select("#panelInterestWrapper")
+    val subjectDetail = select("#subject_detail")
     val infoBox = select("#infobox > li")
     val infoBoxText = infoBox.text()
     val coverUrl = select("img.cover").attr("src")
@@ -173,7 +174,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.time = infoBoxText.parserTime()
 
     // 收藏状态
-    entity.collectState = select("#panelInterestWrapper").let { item ->
+    entity.collectState = interestPanel.let { item ->
         val collectForm = MediaCollectForm()
         collectForm.gh = select("#collectBoxForm").attr("action").substringAfterLast("=")
         collectForm.mediaId = entity.id
@@ -205,22 +206,23 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 推荐的条目
-    entity.recommendIndex = select("#subjectPanelIndex .groupsLine > li").map { item ->
-        val mediaIndex = MediaDetailEntity.MediaIndex()
+    entity.recommendIndex =
+        subjectDetail.select("#subjectPanelIndex .groupsLine > li").map { item ->
+            val mediaIndex = MediaDetailEntity.MediaIndex()
 
-        item.select(".innerWithAvatar a.avatar").apply {
-            mediaIndex.id = hrefId()
-            mediaIndex.title = text()
+            item.select(".innerWithAvatar a.avatar").apply {
+                mediaIndex.id = hrefId()
+                mediaIndex.title = text()
+            }
+            item.select(".innerWithAvatar small.grey a").apply {
+                mediaIndex.userId = hrefId()
+                mediaIndex.userName = text()
+            }
+            mediaIndex.userAvatar = item.select("li > a.avatar > span")
+                .attr("style")
+                .fetchStyleBackgroundUrl().optImageUrl()
+            mediaIndex
         }
-        item.select(".innerWithAvatar small.grey a").apply {
-            mediaIndex.userId = hrefId()
-            mediaIndex.userName = text()
-        }
-        mediaIndex.userAvatar = item.select("li > a.avatar > span")
-            .attr("style")
-            .fetchStyleBackgroundUrl().optImageUrl()
-        mediaIndex
-    }
 
     // 谁在看
     entity.whoSee = select("#subjectPanelCollect .groupsLine > li").map { item ->
@@ -249,22 +251,24 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 简介
-    entity.subjectSummary = select("#subject_summary").text()
+    entity.subjectSummary = subjectDetail.select("#subject_summary").text()
 
     // 媒体类型
-    entity.mediaType = select(".global_rating .global_score small.grey").text().lowercase().let {
-        when {
-            it.contains("anime") -> MediaType.TYPE_ANIME
-            it.contains("book") -> MediaType.TYPE_BOOK
-            it.contains("music") -> MediaType.TYPE_MUSIC
-            it.contains("game") -> MediaType.TYPE_GAME
-            it.contains("real") -> MediaType.TYPE_REAL
-            else -> MediaType.TYPE_ANIME
+    entity.mediaType = interestPanel.select(".global_rating .global_score small.grey")
+        .text().lowercase()
+        .let {
+            when {
+                it.contains("anime") -> MediaType.TYPE_ANIME
+                it.contains("book") -> MediaType.TYPE_BOOK
+                it.contains("music") -> MediaType.TYPE_MUSIC
+                it.contains("game") -> MediaType.TYPE_GAME
+                it.contains("real") -> MediaType.TYPE_REAL
+                else -> MediaType.TYPE_ANIME
+            }
         }
-    }
 
     // 进度框
-    val prgTexts = select(".prgText")
+    val prgTexts = interestPanel.select(".prgText")
     when (entity.mediaType) {
         // 书籍进度
         MediaType.TYPE_BOOK -> {
@@ -293,7 +297,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 标签
-    entity.tags = select(".subject_tag_section .inner a").map { item ->
+    entity.tags = subjectDetail.select(".subject_tag_section .inner a").map { item ->
         if (item.id() == "show_user_tags") return@map null
         val mediaTag = MediaDetailEntity.MediaTag()
 
@@ -309,7 +313,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }.filterNotNull()
 
     // 角色
-    entity.characters = select("#browserItemList > li").map { item ->
+    entity.characters = subjectDetail.select("#browserItemList > li").map { item ->
         val mediaCharacter = MediaDetailEntity.MediaCharacter()
         mediaCharacter.saveCount = item.select(".userContainer .fade").text().parseCount()
         item.select(".userContainer a.avatar").apply {
@@ -333,7 +337,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 关联的条目
-    entity.relativeMedia = select(".browserCoverMedium > li").map { item ->
+    entity.relativeMedia = subjectDetail.select(".browserCoverMedium > li").map { item ->
         val mediaRelative = MediaDetailEntity.MediaRelative()
         mediaRelative.type = item.select("span.sub").text()
         item.select("a.avatar").apply {
@@ -347,7 +351,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 喜欢的会员大概会喜欢
-    entity.sameLikes = select(".coversSmall > li").map { item ->
+    entity.sameLikes = subjectDetail.select(".coversSmall > li").map { item ->
         val mediaRelative = MediaDetailEntity.MediaRelative()
         mediaRelative.type = item.select("span.sub").text()
         item.select("a.avatar").apply {
@@ -361,7 +365,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 评分
-    entity.rating = select(".global_rating, #ChartWarpper").let { item ->
+    entity.rating = interestPanel.select(".global_rating, #ChartWarpper").let { item ->
         val rating = MediaDetailEntity.MediaRating()
         rating.globalRating = item.select(".global_score .number").text().toFloatOrNull()
         rating.description = item.select(".description").text()
@@ -376,6 +380,15 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
             ratingItem
         }
         rating.standardDeviation = rating.calculateStandardDeviation()
+        rating
+    }
+
+    // 好友评分
+    entity.friendRating = interestPanel.select(".frdScore").let { item ->
+        val rating = MediaDetailEntity.FriendRating()
+        rating.score = item.select(".num").text().toDoubleOrNull() ?: 0.0
+        rating.desc = item.select(".desc").text()
+        rating.count = item.select("a.l").text().parseCount()
         rating
     }
 
