@@ -29,6 +29,12 @@ class RakuenPageViewModel : BaseViewModel() {
 
     private var superTopicFilter = ""
 
+    /**
+     * 是否为小组类型的超展开
+     */
+    internal val isGroupType
+        get() = topicTab?.type == SuperType.TYPE_GROUP || topicTab?.type == SuperType.TYPE_MY_GROUP
+
     fun queryTimeline() {
         launchUI(
             stateView = loadingViewState,

@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.util.addOnDebouncedChildClick
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentTimelinePageBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.rakuen.RakuenFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.annotation.BgmPathType
@@ -35,6 +36,9 @@ class RakuenPageFragment :
     BaseViewModelFragment<FragmentTimelinePageBinding, RakuenPageViewModel>() {
 
     private val contentAdapter by lazy { RakuenPageAdapter() }
+
+    private val rakuenFragment
+        get() = parentFragment as? RakuenFragment
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.topicTab = arguments.getParcelObj(NavKey.KEY_PARCELABLE)
@@ -110,10 +114,6 @@ class RakuenPageFragment :
         }
     }
 
-    override fun createLoadingDialog(): UiDialog {
-        return AnimeLoadingDialog(requireContext())
-    }
-
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onSuperTopicLiveData.observe(this) {
             contentAdapter.submitList(it.orEmpty()) {
@@ -121,7 +121,21 @@ class RakuenPageFragment :
                 layoutManager?.scrollToPositionWithOffset(0, 0)
             }
         }
+
+        // 小组类型切换
+        if (viewModel.isGroupType) {
+            rakuenFragment?.viewModel?.rakuenGroupType?.observe(this) {
+                viewModel.topicTab?.type = it
+                viewModel.queryTimeline()
+            }
+        }
     }
+
+
+    override fun createLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(requireContext())
+    }
+
 
     companion object {
         fun newInstance(topicTab: SuperTopicTab): RakuenPageFragment {

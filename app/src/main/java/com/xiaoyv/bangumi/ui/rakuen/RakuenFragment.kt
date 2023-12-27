@@ -3,13 +3,17 @@
 package com.xiaoyv.bangumi.ui.rakuen
 
 import android.view.MenuItem
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentSuperBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.callback.SimpleTabSelectedListener
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.showOptionsDialog
 
 /**
  * Class: [RakuenFragment]
@@ -24,7 +28,11 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
 
     private val tabLayoutMediator by lazy {
         TabLayoutMediator(binding.tabLayout, binding.vp2) { tab, position ->
-            tab.text = vpAdapter.tabs[position].title
+            if (position == 1) {
+                tab.text = buildIconTab(vpAdapter.tabs[position].title)
+            } else {
+                tab.text = vpAdapter.tabs[position].title
+            }
         }
     }
 
@@ -42,7 +50,39 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
     }
 
     override fun initListener() {
+        binding.tabLayout.addOnTabSelectedListener(object : SimpleTabSelectedListener {
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+                p0 ?: return
 
+                // 点击小组的 TAB
+                if (p0.position == 1) {
+                    changeGroupType()
+                }
+            }
+        })
+    }
+
+    /**
+     * 更改小组类型 全部小组|我加入的小组
+     */
+    private fun changeGroupType() {
+        requireActivity().showOptionsDialog(
+            title = "切换小组类型",
+            items = listOf("全部小组", "我加入的小组"),
+            onItemClick = { _, index ->
+                if (index == 0) {
+                    binding.tabLayout.getTabAt(1)?.setText(buildIconTab("小组"))
+                    viewModel.rakuenGroupType.value = SuperType.TYPE_GROUP
+                } else {
+                    binding.tabLayout.getTabAt(1)?.setText(buildIconTab("加入的小组"))
+                    viewModel.rakuenGroupType.value = SuperType.TYPE_MY_GROUP
+                }
+            }
+        )
+    }
+
+    private fun buildIconTab(title: String): CharSequence {
+        return "$title ↓"
     }
 
     private fun refreshToolbarMenu() {
