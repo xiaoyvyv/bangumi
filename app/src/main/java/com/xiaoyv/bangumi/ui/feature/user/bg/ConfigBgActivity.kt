@@ -124,7 +124,7 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "点击预览会加载大图，比较耗时，请耐心等待。\n\n数据来源：anime-pictures.net",
+                    message = "效果预览会加载大图，比较耗时，请耐心等待。\n\n数据来源：anime-pictures.net",
                     cancelText = null
                 )
                 true
