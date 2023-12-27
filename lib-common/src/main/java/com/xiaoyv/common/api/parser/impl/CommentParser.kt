@@ -8,7 +8,7 @@ import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parserLikeParam
-import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.debugLog
@@ -89,7 +89,7 @@ private fun Elements.mapCommentItems(
             .removePrefix("-").trim()
         entity.replyContent = item.select(".reply_content > .message")
             .ifEmpty { item.select(".inner > .cmt_sub_content") }
-            .html().replaceSmiles()
+            .html().preHandleHtml()
 
         // 过滤删除数据
         if (filterDeleteComment && entity.replyContent.contains("删除了回复")) {

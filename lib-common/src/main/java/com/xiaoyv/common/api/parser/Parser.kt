@@ -12,7 +12,6 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EmojiParam
-import com.xiaoyv.common.config.annotation.EpAbbrType
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.groupValue
 import com.xiaoyv.common.kts.groupValueOne
@@ -132,11 +131,16 @@ fun String.parserTime(): String {
         ?: "\\d{4}.".toRegex().find(this))?.value.orEmpty()
 }
 
-fun String?.replaceSmiles(): String {
-    return orEmpty().replace(
-        "src=\"/img/smiles/(.*?)\"".toRegex(),
-        "src=\"${BgmApiManager.URL_BASE_WEB}/img/smiles/\$1\""
-    )
+/**
+ * 处理 Html
+ */
+fun String?.preHandleHtml(): String {
+    return orEmpty()
+        .replace("src=\"//", "src=\"https://")
+        .replace(
+            "src=\"/img/smiles/(.*?)\"".toRegex(),
+            "src=\"${BgmApiManager.URL_BASE_WEB}/img/smiles/\$1\""
+        )
 }
 
 /**
@@ -240,60 +244,6 @@ fun Element.parserFormHash(): String {
     debugLog { "页面 FormHash: $formHash" }
     return formHash
 }
-
-/**
- * 提取章节序号
- *
-1106.キッドＶＳ安室　王妃の前髪（クイーンズ・バング）（後編） / 基德VS安室 王妃的刘海（后篇）
-1107.ハメられたのは私 / 被陷害的是我
-1108.カードに伏せられた秘密 / 卡牌中隐藏的秘密
-1108.5.カードに伏せられた秘密 / 卡牌中隐藏的秘密
-OP1.胸がドキドキ / 胸中动荡不安
-OP31.Feel Your Heart / Feel Your Heart
-OP53.謎 / 谜
-OP1000.ZEROからハジメテ / 从零开始
-ED1.STEP BY STEP / STEP BY STEP
-ED27.迷宮のラヴァーズ / 迷宫情人
-SP1.STEP BY STEP / STEP BY STEP
-SP27.5.迷宮のラヴァーズ / 迷宫情人
-ED71.君がいない夏 / 没有你的夏天
-ED977.星合 / 星合
-ED993.Reboot / Reboot
- */
-fun parserEpNumber(title: String): Pair<String, String> {
-    // 返回
-    // 1107
-    // 1108.5.
-    // SP27.5.
-    // ED993.
-    val epTip =
-        "(^(ED|OP|SP|MAD|PV|O|Trailer)*(\\d+\\.\\d*\\.))|(^(ED|OP|SP|MAD|PV|O|Trailer)*\\d+\\.)"
-            .toRegex(RegexOption.IGNORE_CASE)
-            .find(title.trim())?.value.orEmpty()
-
-    val epType = when {
-        epTip.contains(EpAbbrType.TYPE_ED) -> EpAbbrType.TYPE_ED
-        epTip.contains(EpAbbrType.TYPE_OP) -> EpAbbrType.TYPE_OP
-        epTip.contains(EpAbbrType.TYPE_SP) -> EpAbbrType.TYPE_SP
-        epTip.contains(EpAbbrType.TYPE_MAD) -> EpAbbrType.TYPE_MAD
-        epTip.contains(EpAbbrType.TYPE_PV) -> EpAbbrType.TYPE_PV
-        epTip.contains(EpAbbrType.TYPE_OTHER) -> EpAbbrType.TYPE_OTHER
-        else -> EpAbbrType.TYPE_MAIN
-    }
-    val number = epTip.removePrefix(epType).removeSuffix(".")
-    return number to epType
-}
-
-/**
- * 有害章节的分类 Title
- */
-fun String.optCatTitle(): String {
-    return this
-        .replace("特别篇", "SP", true)
-        .replace("预告/宣传/广告", "TPA", true)
-        .replace("Disc", "D", true)
-}
-
 
 
 

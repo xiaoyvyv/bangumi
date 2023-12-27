@@ -26,6 +26,7 @@ import com.xiaoyv.common.helper.callback.AutoHideTitleListener
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.copyText
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
@@ -151,6 +152,18 @@ class MediaDetailActivity :
             if (viewModel.onMediaDetailLiveData.value != null) {
                 RouteHelper.jumpPreviewImage(viewModel.onMediaDetailLiveData.value?.coverLarge.orEmpty())
             }
+        }
+
+        // 复制标题
+        binding.tvTitle.setOnLongClickListener {
+            copyText(binding.tvTitle.text.toString())
+            true
+        }
+
+        // 复制子标题
+        binding.tvSubtitle.setOnLongClickListener {
+            copyText(binding.tvSubtitle.text.toString())
+            true
         }
     }
 

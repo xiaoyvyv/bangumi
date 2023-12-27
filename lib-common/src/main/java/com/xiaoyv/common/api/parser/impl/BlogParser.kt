@@ -8,7 +8,7 @@ import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
-import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.kts.decodeUrl
@@ -90,7 +90,7 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
             .orEmpty().substringBefore("/").trim()
 
         // src="/img/smiles/tv/19.gif" -> src="https://bgm.tv/img/smiles/tv/19.gif"
-        blogEntity.content = select("#entry_content").html().replaceSmiles()
+        blogEntity.content = select("#entry_content").html().preHandleHtml()
 
         // 关联的条目
         select("#related_subject_list > li").forEach { item ->

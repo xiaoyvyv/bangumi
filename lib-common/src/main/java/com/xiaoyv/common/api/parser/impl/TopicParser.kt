@@ -11,7 +11,7 @@ import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parserLikeParam
-import com.xiaoyv.common.api.parser.replaceSmiles
+import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.widget.kts.useNotNull
@@ -63,14 +63,14 @@ fun Element.parserTopic(topicId: String): TopicDetailEntity {
         entity.userSign = select(".inner .sign").text()
 
         // src="/img/smiles/tv/19.gif" -> src="https://bgm.tv/img/smiles/tv/19.gif"
-        entity.content = select(".topic_content").html().replaceSmiles()
+        entity.content = select(".topic_content").html().preHandleHtml()
 
         // 解析文字添加贴贴参数
         entity.emojiParam = select(".topic_actions .like_dropdown").parserLikeParam()
     }
 
     if (entity.content.isBlank()) {
-        entity.content = select("#columnCrtB .detail").html().replaceSmiles()
+        entity.content = select("#columnCrtB .detail").html().preHandleHtml()
     }
 
     entity.title = select("#pageHeader h1")

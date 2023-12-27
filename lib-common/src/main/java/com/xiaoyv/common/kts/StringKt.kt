@@ -1,6 +1,8 @@
 package com.xiaoyv.common.kts
 
 import android.os.Build
+import com.blankj.utilcode.util.ClipboardUtils
+import com.xiaoyv.widget.kts.showToastCompat
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
@@ -15,4 +17,9 @@ fun String.decodeUrl(): String {
             URLDecoder.decode(this)
         }
     }.getOrDefault(this)
+}
+
+fun copyText(text: String) {
+    ClipboardUtils.copyText(text)
+    showToastCompat("复制成功")
 }
