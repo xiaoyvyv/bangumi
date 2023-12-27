@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.media.action
 
+import android.R
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.xiaoyv.common.config.annotation.IndexAttachCatType
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.hideSnackBar
+import com.xiaoyv.common.kts.onStartConfig
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showInputLine2Dialog
 import com.xiaoyv.common.kts.showSnackBar
@@ -157,16 +159,7 @@ class MediaIndexActionDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val dialog = dialog ?: return
-        val window = dialog.window ?: return
-
-        window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
-        window.updateWindowParams {
-            width = ScreenUtils.getScreenWidth() - 32.dpi
-            height = (ScreenUtils.getScreenHeight() * 0.8f).roundToInt()
-            gravity = Gravity.CENTER
-        }
+        onStartConfig(fixHeight = true)
     }
 
     companion object {

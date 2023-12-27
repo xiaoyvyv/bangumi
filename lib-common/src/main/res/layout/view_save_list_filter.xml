@@ -81,6 +81,8 @@
         android:layout_marginEnd="@dimen/ui_size_12"
         android:text="动画"
         android:textSize="@dimen/text_label"
+        app:chipIcon="@drawable/ic_filter"
+        app:chipIconSize="@dimen/ui_size_16"
         app:chipMinHeight="@dimen/ui_size_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

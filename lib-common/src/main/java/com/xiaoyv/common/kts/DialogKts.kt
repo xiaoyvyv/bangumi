@@ -1,12 +1,20 @@
 package com.xiaoyv.common.kts
 
+import android.R
 import android.content.Context
 import android.text.InputFilter.LengthFilter
+import android.view.Gravity
+import androidx.fragment.app.DialogFragment
 import com.blankj.utilcode.util.KeyboardUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.StringUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.common.databinding.ViewInputLine1Binding
 import com.xiaoyv.common.databinding.ViewInputLine2Binding
+import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.widget.kts.updateWindowParams
+import kotlin.math.roundToInt
 
 /**
  * showConfirmDialog
@@ -154,4 +162,22 @@ inline fun Context.showInputLine2Dialog(
     binding.etLine1.postDelayed({
         KeyboardUtils.showSoftInput(binding.etLine1)
     }, 100)
+}
+
+/**
+ * 统一配置 DialogFragment
+ */
+fun DialogFragment.onStartConfig(fixHeight: Boolean = false) {
+    val dialog = dialog ?: return
+    val window = dialog.window ?: return
+
+    window.setBackgroundDrawableResource(R.color.transparent)
+    window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
+    window.updateWindowParams {
+        if (fixHeight) {
+            height = (ScreenUtils.getScreenHeight() * 0.8f).roundToInt()
+        }
+        width = ScreenUtils.getScreenWidth() - 32.dpi
+        gravity = Gravity.CENTER
+    }
 }

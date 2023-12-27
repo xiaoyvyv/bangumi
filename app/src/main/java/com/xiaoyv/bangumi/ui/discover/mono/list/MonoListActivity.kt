@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListActivity
-import com.xiaoyv.bangumi.base.BaseListFilterHeader
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MonoOrderByType
 import com.xiaoyv.common.config.bean.SampleImageEntity
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.widget.dialog.filter.FilterHeaderAdapter
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.dpi
 
@@ -51,7 +51,7 @@ class MonoListActivity : BaseListActivity<SampleImageEntity, MonoListViewModel>(
 
         // 非指定用户收藏才显示筛选
         if (viewModel.userId.isBlank()) {
-            adapterHelper.addBeforeAdapter(BaseListFilterHeader(viewModel.filterMenu).apply {
+            adapterHelper.addBeforeAdapter(FilterHeaderAdapter(viewModel.filterMenu).apply {
                 onSelectedChangeListener = {
                     viewModel.selectedOptions = it
                     viewModel.refresh()

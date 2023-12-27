@@ -1,12 +1,16 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.parser.entity.BrowserEntity
+import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.hrefId
+import com.xiaoyv.common.api.parser.lastTextNode
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.kts.groupValue
 import com.xiaoyv.common.kts.groupValueOne
 import org.jsoup.nodes.Element
@@ -51,6 +55,17 @@ object BrowserParser {
             entity
         }
 
+        browserEntity.tags = select("#userTagList > li").map { item ->
+            val mediaTag = MediaDetailEntity.MediaTag()
+            item.select("a.l").apply {
+                mediaTag.tagName = lastTextNode()
+                mediaTag.title = lastTextNode()
+                mediaTag.count = select("small").text().parseCount()
+                mediaTag.mediaType = attr("href").trim('/').substringBefore("/").trim()
+                mediaTag.url = attr("href")
+            }
+            mediaTag
+        }
         return browserEntity
     }
 

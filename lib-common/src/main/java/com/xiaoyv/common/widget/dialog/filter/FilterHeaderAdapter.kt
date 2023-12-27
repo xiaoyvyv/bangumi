@@ -1,28 +1,42 @@
-package com.xiaoyv.bangumi.base
+package com.xiaoyv.common.widget.dialog.filter
 
 import android.content.Context
 import android.graphics.Color
 import android.view.ViewGroup
-import com.xiaoyv.bangumi.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.xiaoyv.common.R
 import com.xiaoyv.common.config.bean.FilterEntity
 import com.xiaoyv.common.databinding.ViewFilterBinding
 import com.xiaoyv.common.databinding.ViewFilterItemBinding
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.tint
+import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.binder.BaseQuickBindingAdapter
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.kts.getAttrColor
 
 /**
- * Class: [BaseListFilterHeader]
+ * Class: [FilterHeaderAdapter]
  *
  * @author why
  * @since 11/29/23
  */
-class BaseListFilterHeader(items: List<FilterEntity>, private val singleSelected: Boolean = true) :
-    BaseQuickBindingAdapter<FilterEntity, ViewFilterBinding>(items) {
+class FilterHeaderAdapter(
+    items: List<FilterEntity>,
+    private val singleSelected: Boolean = true,
+    private val flex: Boolean = false,
+) : BaseQuickBindingAdapter<FilterEntity, ViewFilterBinding>(items) {
     var onSelectedChangeListener: (options: List<FilterEntity.OptionItem>) -> Unit = {}
+
+    private val linearLayoutManager
+        get() = AnimeLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+    private val flexboxLayoutManager
+        get() = FlexboxLayoutManager(context, FlexDirection.ROW, FlexWrap.WRAP)
 
     override fun BaseQuickBindingHolder<ViewFilterBinding>.converted(item: FilterEntity) {
         binding.tvOptionTitle.text = item.id
@@ -44,6 +58,11 @@ class BaseListFilterHeader(items: List<FilterEntity>, private val singleSelected
         viewType: Int,
     ): BaseQuickBindingHolder<ViewFilterBinding> {
         val viewHolder = super.onCreateViewHolder(context, parent, viewType)
+        if (flex) {
+            viewHolder.binding.rvItems.layoutManager = flexboxLayoutManager
+        } else {
+            viewHolder.binding.rvItems.layoutManager = linearLayoutManager
+        }
         viewHolder.binding.rvItems.hasFixedSize()
         viewHolder.binding.rvItems.itemAnimator = null
         viewHolder.binding.rvItems.adapter = ItemAdapter().apply {

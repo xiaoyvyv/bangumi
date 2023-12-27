@@ -136,7 +136,8 @@ interface BgmWebApi {
         @Path("mediaType", encoded = true) @MediaType mediaType: String,
         @Path("userId", encoded = true) userId: String,
         @Path("listType", encoded = true) listType: String,
-        @Query("sort") @BrowserSortType sortType: String? = null,
+        @Query("orderby") @BrowserSortType sortType: String? = null,
+        @Query("tag") tag: String? = null,
         @Query("page") page: Int = 1,
     ): Document
 

@@ -19,6 +19,7 @@ import com.xiaoyv.common.api.parser.impl.parserReportForm
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.databinding.ViewReportBinding
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.onStartConfig
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
@@ -124,15 +125,7 @@ class AnimeReportDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val dialog = dialog ?: return
-        val window = dialog.window ?: return
-
-        window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
-        window.updateWindowParams {
-            width = ScreenUtils.getScreenWidth() - 32.dpi
-            gravity = Gravity.CENTER
-        }
+        onStartConfig()
     }
 
     companion object {

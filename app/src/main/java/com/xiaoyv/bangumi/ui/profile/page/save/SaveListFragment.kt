@@ -1,11 +1,13 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.xiaoyv.bangumi.ui.profile.page.save
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.updateLayoutParams
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -14,10 +16,12 @@ import com.xiaoyv.common.api.parser.entity.BrowserEntity
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.InterestCollectType
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.bean.FilterEntity
 import com.xiaoyv.common.databinding.ViewSaveListFilterBinding
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.widget.dialog.filter.FilterOptionDialog
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
@@ -28,8 +32,6 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
  * @since 11/24/23
  */
 class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>() {
-    private val mediaTypes get() = GlobalConfig.mediaTypes
-
     private lateinit var filter: ViewSaveListFilterBinding
 
     override val isOnlyOnePage: Boolean
@@ -77,28 +79,13 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
 
         // 类别切换
         filter.chipMediaType.setOnFastLimitClickListener {
-            val item = mediaTypes.map { it.title }.toTypedArray()
-            MaterialAlertDialogBuilder(hostActivity)
-                .setItems(item) { _, position ->
-                    val mediaType = mediaTypes[position].type
-                    filter.chipMediaType.text = mediaTypes[position].title
-
-                    // 设置文案
-                    filter.typeWish.text = InterestType.string(InterestType.TYPE_WISH, mediaType)
-                    filter.typeCollect.text =
-                        InterestType.string(InterestType.TYPE_COLLECT, mediaType)
-                    filter.typeDo.text = InterestType.string(InterestType.TYPE_DO, mediaType)
-                    filter.typeOnHold.text =
-                        InterestType.string(InterestType.TYPE_ON_HOLD, mediaType)
-                    filter.typeDropped.text =
-                        InterestType.string(InterestType.TYPE_DROPPED, mediaType)
-
-                    // 刷新
-                    viewModel.mediaType = mediaType
-                    viewModel.refresh()
+            FilterOptionDialog.show(
+                fragmentManager = childFragmentManager,
+                options = viewModel.createFilterOptions(),
+                onSelectedChangeListener = {
+                    refreshSortAndType(it)
                 }
-                .create()
-                .show()
+            )
         }
     }
 
@@ -120,6 +107,54 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
         } else {
             super.autoInitData()
         }
+    }
+
+    /**
+     * 筛选结果
+     */
+    @SuppressLint("WrongConstant")
+    private fun refreshSortAndType(items: List<FilterEntity.OptionItem>) {
+        // 排序
+        val orderByItem = items.find { item -> item.field == viewModel.filterFieldOrderBy }
+        if (orderByItem != null) {
+            viewModel.sortType = orderByItem.id
+        }
+
+        // TAG
+        val tagItem = items.find { item -> item.field == viewModel.filterFieldTag }
+        if (tagItem != null) {
+            viewModel.selectTag = tagItem.id
+        } else {
+            viewModel.selectTag = null
+        }
+
+        // 媒体类型
+        val mediaTypeItem = items.find { item -> item.field == viewModel.filterFieldMediaType }
+        if (mediaTypeItem != null) {
+            val mediaType = mediaTypeItem.id
+            filter.chipMediaType.text = GlobalConfig.mediaTypeName(mediaType)
+
+            // 设置文案
+            filter.typeWish.text =
+                InterestType.string(InterestType.TYPE_WISH, mediaType)
+            filter.typeCollect.text =
+                InterestType.string(InterestType.TYPE_COLLECT, mediaType)
+            filter.typeDo.text = InterestType.string(InterestType.TYPE_DO, mediaType)
+            filter.typeOnHold.text =
+                InterestType.string(InterestType.TYPE_ON_HOLD, mediaType)
+            filter.typeDropped.text =
+                InterestType.string(InterestType.TYPE_DROPPED, mediaType)
+
+            viewModel.mediaType = mediaType
+
+            // 切换了媒体类型清空 TAG
+            if (mediaType != viewModel.mediaType) {
+                viewModel.selectTag = null
+            }
+        }
+
+        // 刷新
+        viewModel.refresh()
     }
 
     companion object {

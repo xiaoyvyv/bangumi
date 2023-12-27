@@ -14,7 +14,10 @@ import kotlinx.parcelize.Parcelize
  */
 @Keep
 @Parcelize
-data class BrowserEntity(var items: List<Item> = emptyList()) : Parcelable {
+data class BrowserEntity(
+    var items: List<Item> = emptyList(),
+    var tags: List<MediaDetailEntity.MediaTag> = emptyList(),
+) : Parcelable {
 
     @Keep
     @Parcelize

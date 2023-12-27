@@ -17,6 +17,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MagiQuestionEntity
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.onStartConfig
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
@@ -71,15 +72,7 @@ class MagiQuestionDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val dialog = dialog ?: return
-        val window = dialog.window ?: return
-
-        window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(ConfigHelper.DIALOG_DIM_AMOUNT)
-        window.updateWindowParams {
-            width = ScreenUtils.getScreenWidth() - 32.dpi
-            gravity = Gravity.CENTER
-        }
+        onStartConfig()
     }
 
     companion object {

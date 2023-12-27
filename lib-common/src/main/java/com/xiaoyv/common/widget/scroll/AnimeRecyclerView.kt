@@ -15,7 +15,7 @@ import com.xiaoyv.widget.kts.isDestroyed
  * @since 11/23/23
  */
 open class AnimeRecyclerView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null,
 ) : RecyclerView(context, attrs) {
     private var scrolling = false
     private var itemViewCacheSize = 20
@@ -38,6 +38,14 @@ open class AnimeRecyclerView @JvmOverloads constructor(
                 }
             }
         })
+    }
+
+    final override fun setItemViewCacheSize(size: Int) {
+        super.setItemViewCacheSize(size)
+    }
+
+    final override fun addOnScrollListener(listener: OnScrollListener) {
+        super.addOnScrollListener(listener)
     }
 
     override fun setLayoutManager(layout: LayoutManager?) {
