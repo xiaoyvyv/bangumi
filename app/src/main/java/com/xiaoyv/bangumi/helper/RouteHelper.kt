@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.os.bundleOf
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.Utils
+import com.xiaoyv.bangumi.special.detect.anime.ImageDetectAnimeActivity
+import com.xiaoyv.bangumi.special.detect.character.ImageDetectCharacterActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.picture.gallery.AnimeGalleryActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
@@ -475,5 +477,13 @@ object RouteHelper {
                 NavKey.KEY_STRING_SECOND to userId
             )
         )
+    }
+
+    fun jumpDetectAnime() {
+        ImageDetectAnimeActivity::class.open()
+    }
+
+    fun jumpDetectCharacter() {
+        ImageDetectCharacterActivity::class.open()
     }
 }

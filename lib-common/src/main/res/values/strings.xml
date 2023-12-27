@@ -60,4 +60,27 @@
     <string name="anime_gallery_action_wallpaper">设置为壁纸</string>
 
     <string name="magi_title">Magi 问答</string>
+
+    <string name="anime_search_title">番剧截图搜索出处</string>
+    <string name="anime_search_desc">选取番剧原始比例截图搜索来源，仅支持番剧完整截图</string>
+    <string name="anime_search_subtitle">上传番剧截取图片</string>
+    <string name="anime_search_upload_image">上传番剧截图</string>
+    <string name="anime_search_upload_limit">文件大小限制为 25MB</string>
+    <string name="anime_search_upload_btn">点击上传</string>
+    <string name="anime_search_result_title">番剧来源搜索结果</string>
+
+    <string name="anime_character_title">动漫图片人物识别</string>
+    <string name="anime_character_subtitle">上传动漫人物图片，以人物正脸最佳</string>
+    <string name="anime_character_desc">选取有人物正脸的图片识别效果最佳</string>
+    <string name="anime_character_upload_image">上传动漫人物图片</string>
+    <string name="anime_character_upload_limit">文件大小限制为 5MB</string>
+    <string name="anime_character_upload_btn">点击上传</string>
+
+    <string name="anime_character_result_title">动漫人物识别结果</string>
+    <string name="anime_character_result_from">来自：%s</string>
+    <string name="anime_character_result_copy">复制结果</string>
+    <string name="anime_character_result_bing">Bing 搜索</string>
+
+    <string name="anime_search_engine">搜索引擎来自于：%s</string>
+    <string name="detect_failed">识别失败，请选择其它图片重试!</string>
 </resources>

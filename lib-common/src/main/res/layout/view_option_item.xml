@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/ui_size_0"
+    android:paddingEnd="@dimen/ui_size_12">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_option_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Streaming On" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_option_value"
+        android:layout_width="@dimen/ui_size_180"
+        android:layout_height="@dimen/ui_size_44"
+        android:layout_marginTop="@dimen/ui_size_12"
+        android:background="@drawable/selector_btn_advance"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorSecondary"
+        android:textStyle="bold"
+        app:drawableEndCompat="@drawable/ic_arrow_down"
+        app:drawableTint="?attr/colorSecondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_option_title"
+        tools:text="Any" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

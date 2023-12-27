@@ -287,7 +287,22 @@
             android:name="com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
-
+        <activity
+            android:name="com.xiaoyv.bangumi.special.detect.character.result.CharacterDetectResultActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.detect.character.ImageDetectCharacterActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.detect.anime.ImageDetectAnimeActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.detect.anime.result.AnimeDetectResultActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -6,7 +6,9 @@ import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
+import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
 import com.xiaoyv.common.api.response.anime.AnimeTourEntity
+import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
 import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
@@ -18,6 +20,7 @@ import com.xiaoyv.common.api.response.douban.DouBanSuggestEntity
 import com.xiaoyv.common.config.annotation.EpApiType
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.kts.randId
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.jsoup.nodes.Document
 import retrofit2.Response
@@ -25,10 +28,13 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 /**
  * Class: [BgmJsonApi]
@@ -44,6 +50,26 @@ interface BgmJsonApi {
 
     @GET("https://api.github.com/repos/xiaoyvyv/Bangumi-for-Android/releases/latest")
     suspend fun queryGithubLatest(): GithubLatestEntity
+
+    @Multipart
+    @POST("https://api.trace.moe/search")
+    suspend fun queryAnimeByImage(@Part file: MultipartBody.Part): AnimeSourceEntity
+
+    /**
+     * 识别动漫图片人物
+     *
+     * @param model 模型
+     * @param forceOne 是否仅识别单个，0：仅识别单个人物；1：识别多个人物
+     * @param aiDetect 是否识别 AI-GC
+     */
+    @Multipart
+    @POST("https://aiapiv2.animedb.cn/ai/api/detect")
+    suspend fun queryAnimeCharacter(
+        @Query("model") model: String,
+        @Query("force_one") forceOne: Int,
+        @Query("ai_detect") aiDetect: Int,
+        @Part file: MultipartBody.Part
+    ): BaseListResponse<DetectCharacterEntity>
 
 
     @GET("${BgmApiManager.URL_BASE_WEB}/timeline")

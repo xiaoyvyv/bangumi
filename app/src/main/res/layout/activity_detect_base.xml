@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="@string/anime_search_title" />
+
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_upload_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
+            android:paddingVertical="@dimen/ui_size_6"
+            android:text="@string/anime_search_subtitle"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.075" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_upload_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
+            android:paddingVertical="@dimen/ui_size_6"
+            android:text="@string/anime_search_desc"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            app:layout_constraintTop_toBottomOf="@+id/tv_upload_title" />
+
+        <com.xiaoyv.common.widget.setting.SearchOptionView
+            android:id="@+id/option_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_size_24"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/tv_upload_desc"
+            tools:listitem="@layout/view_option_item" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_size_24"
+            android:background="@drawable/ui_shape_rectangle_corner_6"
+            android:backgroundTint="?attr/colorOnSurfaceInverse"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/ui_size_24"
+            app:layout_constraintTop_toBottomOf="@+id/option_view">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/ui_size_40"
+                android:layout_height="@dimen/ui_size_40"
+                app:srcCompat="@drawable/ic_format_image" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_upload_card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/ui_size_6"
+                android:text="@string/anime_search_upload_image"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_upload_card_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/anime_search_upload_limit" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_upload_card_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/ui_size_12"
+                android:text="@string/anime_search_upload_btn"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_engine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/ui_size_12"
+            android:paddingVertical="@dimen/ui_layout_margin"
+            android:text="@string/anime_search_engine"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

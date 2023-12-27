@@ -76,6 +76,16 @@ class HomeViewModel : BaseViewModel() {
                                 icon = CommonDrawable.ic_email_normal
                             ),
                             HomeIndexFeature(
+                                id = HomeFeatureType.TYPE_DETECT_ANIME,
+                                title = "以图搜番",
+                                icon = CommonDrawable.ic_image_search
+                            ),
+                            HomeIndexFeature(
+                                id = HomeFeatureType.TYPE_DETECT_CHARACTER,
+                                title = "以图识人",
+                                icon = CommonDrawable.ic_person_search
+                            ),
+                            HomeIndexFeature(
                                 id = HomeFeatureType.TYPE_DOLLARS,
                                 title = "Dollars",
                                 icon = CommonDrawable.ic_dollars

@@ -44,6 +44,8 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     HomeFeatureType.TYPE_ALMANAC -> RouteHelper.jumpAlmanac()
                     HomeFeatureType.TYPE_PROCESS -> RouteHelper.jumpFragmentPage(GlobalConfig.PAGE_PROCESS)
                     HomeFeatureType.TYPE_RANK -> RouteHelper.jumpFragmentPage(GlobalConfig.PAGE_RANK)
+                    HomeFeatureType.TYPE_DETECT_ANIME -> RouteHelper.jumpDetectAnime()
+                    HomeFeatureType.TYPE_DETECT_CHARACTER -> RouteHelper.jumpDetectCharacter()
                     HomeFeatureType.TYPE_DOLLARS -> {
                         RouteHelper.jumpWeb(
                             url = BgmApiManager.URL_BASE_WEB + "/dollars",

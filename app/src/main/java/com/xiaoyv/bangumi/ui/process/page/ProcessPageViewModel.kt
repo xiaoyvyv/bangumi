@@ -22,9 +22,10 @@ class ProcessPageViewModel : BaseListViewModel<MediaDetailEntity>() {
     @MediaType
     var mediaType: String = MediaType.TYPE_UNKNOWN
 
-
     override suspend fun onRequestCacheImpl(): List<MediaDetailEntity> {
-        return CacheHelper.cacheProcess
+        return CacheHelper.cacheProcess.let {
+            if (mediaType == MediaType.TYPE_UNKNOWN) it else it.filter { entity -> entity.mediaType == mediaType }
+        }
     }
 
     override suspend fun onRequestListImpl(): List<MediaDetailEntity> {
