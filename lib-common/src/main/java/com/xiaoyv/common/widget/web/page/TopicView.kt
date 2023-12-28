@@ -3,10 +3,10 @@ package com.xiaoyv.common.widget.web.page
 import android.annotation.SuppressLint
 import android.webkit.JavascriptInterface
 import androidx.annotation.Keep
+import com.blankj.utilcode.util.ThreadUtils
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
-import com.xiaoyv.common.helper.CommentPaginationHelper
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.widget.web.WebBase
 import com.xiaoyv.widget.webview.UiWebView
@@ -43,13 +43,17 @@ class TopicView(override val webView: UiWebView) : WebBase(webView) {
     fun onReplyUser(replyJs: String, json: String) {
         val formEntity = json.fromJson<CommentTreeEntity>()
         if (formEntity != null) {
-            onReplyUserListener(replyJs, formEntity)
+            ThreadUtils.runOnUiThread {
+                onReplyUserListener(replyJs, formEntity)
+            }
         }
     }
 
     @Keep
     @JavascriptInterface
     fun onReplyNew() {
-        onReplyNewListener()
+        ThreadUtils.runOnUiThread {
+            onReplyNewListener()
+        }
     }
 }

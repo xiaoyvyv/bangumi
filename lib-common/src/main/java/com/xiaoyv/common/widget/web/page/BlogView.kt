@@ -2,6 +2,7 @@ package com.xiaoyv.common.widget.web.page
 
 import android.annotation.SuppressLint
 import android.webkit.JavascriptInterface
+import com.blankj.utilcode.util.ThreadUtils
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.BlogDetailEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
@@ -42,12 +43,12 @@ class BlogView(override val webView: UiWebView) : WebBase(webView) {
     fun onReplyUser(replyJs: String, json: String) {
         val formEntity = json.fromJson<CommentTreeEntity>()
         if (formEntity != null) {
-            onReplyUserListener(replyJs, formEntity)
+            ThreadUtils.runOnUiThread { onReplyUserListener(replyJs, formEntity) }
         }
     }
 
     @JavascriptInterface
     fun onReplyNew() {
-        onReplyNewListener()
+        ThreadUtils.runOnUiThread { onReplyNewListener() }
     }
 }

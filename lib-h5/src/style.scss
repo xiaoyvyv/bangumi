@@ -104,8 +104,10 @@ pre {
 // 表情
 img[smileid] {
   vertical-align: text-bottom !important;
-  width: auto !important;
-  min-width: unset !important;
+  width: 24px !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  max-height: 24px !important;
   border-radius: 0 !important;
   display: inline-block !important;
   object-fit: contain !important;
@@ -114,6 +116,7 @@ img[smileid] {
   margin-left: 4px;
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+  flex-shrink: 0;
 }
 
 // 图片

@@ -66,10 +66,9 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
 
         blogWeb.onReplyUserListener = { replyJs, formEntity ->
             if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
-
             val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity) {
+                ReplyDialog.show(requireActivity, replyForm, replyJs, formEntity) {
                     launchUI { blogWeb.addComment(it) }
                 }
             }
@@ -77,10 +76,9 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
 
         blogWeb.onReplyNewListener = {
             if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
-
             val replyForm = viewModel.onBlogDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(supportFragmentManager, replyForm, null, null) {
+                ReplyDialog.show(requireActivity, replyForm, null, null) {
                     launchUI { blogWeb.addComment(it) }
                 }
             }

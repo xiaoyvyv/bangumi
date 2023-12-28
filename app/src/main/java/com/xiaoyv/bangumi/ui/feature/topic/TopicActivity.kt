@@ -16,6 +16,7 @@ import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
+import com.xiaoyv.common.widget.reply.FeedCommentDialog
 import com.xiaoyv.common.widget.reply.ReplyDialog
 import com.xiaoyv.common.widget.web.page.TopicView
 import com.xiaoyv.widget.dialog.UiDialog
@@ -61,10 +62,9 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
 
         topicView.onReplyUserListener = { replyJs, formEntity ->
             if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
-
             val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(supportFragmentManager, replyForm, replyJs, formEntity) {
+                ReplyDialog.show(requireActivity, replyForm, replyJs, formEntity) {
                     launchUI { topicView.addComment(it) }
                 }
             }
@@ -75,7 +75,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
 
             val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
             if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(supportFragmentManager, replyForm, null, null) {
+                ReplyDialog.show(requireActivity, replyForm, null, null) {
                     launchUI { topicView.addComment(it) }
                 }
             }

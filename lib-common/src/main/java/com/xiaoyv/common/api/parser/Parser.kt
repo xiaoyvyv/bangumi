@@ -137,10 +137,6 @@ fun String.parserTime(): String {
 fun String?.preHandleHtml(): String {
     return orEmpty()
         .replace("src=\"//", "src=\"https://")
-        .replace(
-            "src=\"/img/smiles/(.*?)\"".toRegex(),
-            "src=\"${BgmApiManager.URL_BASE_WEB}/img/smiles/\$1\""
-        )
 }
 
 /**

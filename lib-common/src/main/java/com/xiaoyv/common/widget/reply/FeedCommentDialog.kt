@@ -1,21 +1,14 @@
-@file:Suppress("DEPRECATION")
-
 package com.xiaoyv.common.widget.reply
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import com.blankj.utilcode.util.KeyboardUtils
-import com.blankj.utilcode.util.ScreenUtils
-import com.xiaoyv.blueprint.constant.NavKey
+import com.effective.android.panel.PanelSwitchHelper
+import com.effective.android.panel.view.panel.PanelView
+import com.effective.android.panel.window.PanelDialog
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.R
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
@@ -24,38 +17,41 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.databinding.ViewReplyDialogBinding
 import com.xiaoyv.common.helper.BBCode
+import com.xiaoyv.common.widget.emoji.grid.UiFacePanel
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.errorMsg
-import com.xiaoyv.widget.kts.getParcelObj
 import com.xiaoyv.widget.kts.toast
-import com.xiaoyv.widget.kts.updateWindowParams
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 
-/**
- * Class: [ReplyDialog]
- *
- * @author why
- * @since 12/1/23
- */
-class ReplyDialog : DialogFragment() {
-    var onReplySuccess: (ReplyResultEntity) -> Unit = {}
+class FeedCommentDialog(private val activity: FragmentActivity) : PanelDialog(activity) {
+    private var switchHelper: PanelSwitchHelper? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ViewReplyDialogBinding.inflate(inflater, container, false).root
+    /**
+     * 参数
+     */
+    var onReplySuccess: (ReplyResultEntity) -> Unit = {}
+    var replyForm: CommentFormEntity? = null
+    var targetComment: CommentTreeEntity? = null
+    var replyJs: String = ""
+
+    private val binding by lazy {
+        ViewReplyDialogBinding.bind(rootView)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = ViewReplyDialogBinding.bind(view)
-        val replyForm = arguments?.getParcelObj<CommentFormEntity>(NavKey.KEY_PARCELABLE)
-        val commentEntity = arguments?.getParcelObj<CommentTreeEntity>(NavKey.KEY_PARCELABLE_SECOND)
-        val replyJs = arguments?.getString(NavKey.KEY_STRING).orEmpty()
+    override fun getDialogLayout(): Int {
+        return R.layout.view_reply_dialog
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        if (switchHelper == null) {
+            switchHelper = PanelSwitchHelper.Builder(activity.window, rootView)
+                .configHelper()
+                .logTrack(false)
+                .build(true)
+        }
+
         val replyParam = replyJs.parserReplyParam()
 
         // 添加新主评论
@@ -65,14 +61,14 @@ class ReplyDialog : DialogFragment() {
         // 回复评论
         else {
             // 显示回复的目标评论部分内容
-            val replyContent = commentEntity?.replyContent.orEmpty().parseHtml().toString()
+            val replyContent = targetComment?.replyContent.orEmpty().parseHtml().toString()
             val summaryHint = if (replyContent.length > 20) {
                 replyContent.substring(0, 20) + "..."
             } else {
                 replyContent
             }
             binding.edReply.hint =
-                String.format("回复 %s：%s", commentEntity?.userName.orEmpty(), summaryHint)
+                String.format("回复 %s：%s", targetComment?.userName.orEmpty(), summaryHint)
         }
 
         binding.edReply.doAfterTextChanged {
@@ -125,10 +121,11 @@ class ReplyDialog : DialogFragment() {
 
         binding.btnSend.setOnFastLimitClickListener {
             val input = binding.edReply.text.toString().trim()
+            val replyForm = replyForm
             if (input.isBlank() || replyForm == null) return@setOnFastLimitClickListener
 
             // 拼接引用回复
-            val replyQuote = commentEntity?.replyQuote.orEmpty()
+            val replyQuote = targetComment?.replyQuote.orEmpty()
             val targetContent = replyQuote + input
 
             sendReply(binding, targetContent, replyForm, replyParam)
@@ -141,13 +138,13 @@ class ReplyDialog : DialogFragment() {
         replyForm: CommentFormEntity,
         replyParam: CommentFormEntity.CommentParam,
     ) {
-        launchUI(
+        activity.launchUI(
             error = {
                 hideLoading(binding)
 
                 it.printStackTrace()
 
-                toast(it.errorMsg)
+                activity.toast(it.errorMsg)
             },
             block = {
                 showLoading(binding)
@@ -173,10 +170,9 @@ class ReplyDialog : DialogFragment() {
                 }
 
                 hideLoading(binding)
-
                 onReplySuccess(replyResult)
 
-                dismissAllowingStateLoss()
+                dismiss()
             }
         )
     }
@@ -191,52 +187,42 @@ class ReplyDialog : DialogFragment() {
 //        binding.pbProgress.hide()
     }
 
-    override fun onStart() {
-        super.onStart()
-        val dialog = dialog ?: return
-        val window = dialog.window ?: return
 
-        window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.setDimAmount(0f)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-        window.updateWindowParams {
-            width = ScreenUtils.getScreenWidth()
-            gravity = Gravity.BOTTOM
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val binding = ViewReplyDialogBinding.bind(requireView())
-        launchUI {
-            delay(100)
-            KeyboardUtils.showSoftInput(binding.edReply)
-        }
-    }
-
-    companion object {
-
-        /**
-         * 下面两个参数为空时，表示添加新的主评论
-         *
-         * @param replyJs 回复的js
-         * @param targetComment 回复的评论
-         */
-        fun show(
-            activity: FragmentActivity,
-            replyForm: CommentFormEntity,
-            replyJs: String? = null,
-            targetComment: CommentTreeEntity?,
-            onReplyListener: (ReplyResultEntity) -> Unit = {},
-        ) {
-            FeedCommentDialog(activity)
-                .also {
-                    it.onReplySuccess = onReplyListener
-                    it.replyJs = replyJs.orEmpty()
-                    it.replyForm = replyForm
-                    it.targetComment = targetComment
+    /**
+     * 配置面板
+     */
+    private fun PanelSwitchHelper.Builder.configHelper(): PanelSwitchHelper.Builder {
+        return addPanelChangeListener {
+            onNone {
+                binding.menuEmoji.setSelected(false)
+            }
+            onKeyboard {
+                binding.menuEmoji.setSelected(false)
+            }
+            onPanel {
+                if (it is PanelView) {
+                    binding.menuEmoji.setSelected(it.id == R.id.panel_emoji)
                 }
-                .show()
+            }
+            onPanelSizeChange { panelView, _, _, _, _, _ ->
+                if (panelView is PanelView) {
+                    when (panelView.id) {
+                        // 表情面板
+                        R.id.panel_emoji -> {
+                            bindEmojiGridView(panelView.findViewById(R.id.view_emotion))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 表情面板
+     */
+    private fun bindEmojiGridView(facePanel: UiFacePanel) {
+        facePanel.fillEmojis(activity) { adapter, _, position ->
+            binding.edReply.append(adapter.getItem(position)?.title.orEmpty())
         }
     }
 }

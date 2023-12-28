@@ -49,7 +49,6 @@ dependencies {
 
     api(libs.android.lottie)
     api(libs.androidx.swiperefreshlayout)
-    api(libs.touch.image.view)
 
     api(libs.androidx.core.ktx)
     api(libs.androidx.appcompat)
@@ -64,7 +63,7 @@ dependencies {
     api(libs.speed.dial)
 
     api(libs.jsoup)
-    api("com.qcloud.cos:avif:1.1.0")
+    api(libs.avif)
     ksp(libs.glide.ksp)
     annotationProcessor(libs.glide.compiler)
 

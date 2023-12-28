@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.0-alpha16"
+avif = "1.1.0"
 blueprint = "1.1.43"
 fragmentKtx = "1.6.2"
 jsoup = "1.16.2"
@@ -18,12 +19,9 @@ persistentcookiejar = "v1.0.1"
 speedDial = "3.3.0"
 subsamplingScaleImageViewAndroidx = "3.10.0"
 swiperefreshlayout = "1.1.0"
-touchimageview = "3.2.1"
 ksp = "1.9.0-1.0.11"
 lifecycleLivedataKtx = "2.6.2"
 lifecycleViewmodelKtx = "2.6.2"
-navigationFragmentKtx = "2.7.6"
-navigationUiKtx = "2.7.6"
 jetbrainsKotlinJvm = "1.9.0"
 workRuntimeKtx = "2.9.0"
 
@@ -33,6 +31,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+avif = { module = "com.qcloud.cos:avif", version.ref = "avif" }
 blueprint = { module = "io.github.xiaoyvyv:blueprint", version.ref = "blueprint" }
 blueprint-floater = { module = "io.github.xiaoyvyv:floater", version.ref = "blueprint" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "kspVersion" }
@@ -48,11 +47,8 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 persistent-cookie-jar = { module = "com.github.franmontiel:PersistentCookieJar", version.ref = "persistentcookiejar" }
 speed-dial = { module = "com.leinardi.android:speed-dial", version.ref = "speedDial" }
 subsampling-scale-image-view-androidx = { module = "com.davemorrissey.labs:subsampling-scale-image-view-androidx", version.ref = "subsamplingScaleImageViewAndroidx" }
-touch-image-view = { module = "com.github.MikeOrtiz:TouchImageView", version.ref = "touchimageview" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
-androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
-androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
