@@ -19,10 +19,10 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("$rootDir/keystore/why.keystore")
-            storePassword = "why981229"
-            keyAlias = "whykey"
-            keyPassword = "why981229"
+            storeFile = file("$rootDir/keystore/bangumi.keystore")
+            storePassword = "bangumi"
+            keyAlias = "bangumi"
+            keyPassword = "bangumi"
         }
     }
 
