@@ -103,8 +103,14 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
             it ?: return@observe
             debugLog { "UserInfo: " + it.toJson(true) }
             binding.toolbarLayout.title = it.nickname + "@" + it.id
-            binding.ivBanner.loadImageBlur(it.avatar)
             binding.ivAvatar.loadImageAnimate(it.avatar)
+
+            // 空间背景
+            if (it.signPic.isNotBlank()) {
+                binding.ivBanner.loadImageAnimate(it.signPic)
+            } else {
+                binding.ivBanner.loadImageBlur(it.avatar)
+            }
 
             binding.tvJoin.text = it.createTime
             binding.tvSync.text = it.userSynchronize.rate.ifBlank { "同步率 -%" }

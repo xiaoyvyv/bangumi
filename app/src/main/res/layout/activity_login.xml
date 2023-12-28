@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -24,7 +25,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/ui_size_50"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <com.xiaoyv.common.widget.image.AnimeImageView
@@ -45,6 +45,7 @@
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_size_50"
             android:layout_marginTop="@dimen/ui_size_24"
             android:autofillHints="username"
             android:background="@drawable/ui_shape_rectangle_corner_6"
@@ -64,6 +65,7 @@
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_size_50"
             android:layout_marginTop="@dimen/ui_size_24"
             android:autofillHints="password"
             android:background="@drawable/ui_shape_rectangle_corner_6"
@@ -83,6 +85,7 @@
             android:id="@+id/iv_verify"
             android:layout_width="@dimen/ui_size_120"
             android:layout_height="@dimen/ui_size_0"
+            android:layout_marginStart="@dimen/ui_size_50"
             app:layout_constraintBottom_toBottomOf="@+id/input_verify"
             app:layout_constraintEnd_toStartOf="@+id/input_verify"
             app:layout_constraintStart_toStartOf="parent"
@@ -95,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/ui_size_24"
             android:layout_marginTop="@dimen/ui_size_24"
+            android:layout_marginEnd="@dimen/ui_size_50"
             android:background="@drawable/ui_shape_rectangle_corner_6"
             android:backgroundTint="?attr/colorSurfaceContainer"
             android:ellipsize="end"
@@ -113,6 +117,7 @@
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_size_50"
             android:layout_marginTop="@dimen/ui_size_32"
             android:gravity="center"
             android:paddingVertical="@dimen/ui_size_12"
@@ -122,5 +127,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_verify"
             app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/check_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/ui_layout_margin"
+            android:checked="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_privacy"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/ui_size_3"
+            android:text="我已阅读并同意《隐私政策保护》"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintBottom_toBottomOf="@+id/check_privacy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/check_privacy"
+            app:layout_constraintTop_toTopOf="@+id/check_privacy"
+            tools:ignore="HardcodedText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

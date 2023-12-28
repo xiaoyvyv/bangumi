@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parserFormHash
+import com.xiaoyv.common.api.parser.parserSignBackground
 import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
@@ -43,6 +44,7 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
 
     select("#user_home").apply {
         entity.sign = select("blockquote .bio").html().preHandleHtml()
+        entity.signPic = entity.sign.parserSignBackground()
         entity.networkService = select(".network_service > li").map { item ->
             val service = UserDetailEntity.NetworkService()
             service.title = item.select(".service").text()

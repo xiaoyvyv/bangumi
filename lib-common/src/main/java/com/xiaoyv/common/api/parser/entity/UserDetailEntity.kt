@@ -12,6 +12,7 @@ data class UserDetailEntity(
     var nickname: String = "",
     var avatar: String = "",
     var sign: String = "",
+    var signPic: String = "",
     var lastOnlineTime: String = "",
     var createTime: String = "",
     var isFriend: Boolean = false,
