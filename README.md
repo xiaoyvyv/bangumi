@@ -13,18 +13,20 @@
 
 这款APP不仅完美呈现了 BGM.TV 的所有功能，更为用户提供了更便捷、更流畅的使用体验。
 
+<a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi">
+  <img alt="Get it on Google Play" height="80" src="/lib-doc/images/playstore_badge.png">
+</a>
+
 ### Bangumi
 [https://bgm.tv](https://bgm.tv)
 
 [https://bangumi.tv](https://bangumi.tv)
 
-### 下载地址
-谷歌商店：<a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi"><img alt="Get it on Google Play" height="80" src="/lib-doc/images/playstore_badge.png"></a>
+### 项目地址
 
-Github-Release：[Github-Release](https://github.com/xiaoyvyv/Bangumi-for-Android/releases)
+Source Code: [https://github.com/xiaoyvyv/Bangumi-for-Android](https://github.com/xiaoyvyv/Bangumi-for-Android)
 
-### 项目更新地址
-https://github.com/xiaoyvyv/Bangumi-for-Android
+Github Release: [Github-Release](https://github.com/xiaoyvyv/Bangumi-for-Android/releases)
 
 ### 功能介绍
 
