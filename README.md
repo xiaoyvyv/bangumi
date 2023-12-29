@@ -6,7 +6,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/fork)
 [![GitHub issues](https://img.shields.io/github/issues/xiaoyvyv/Bangumi-for-Android)](https://github.com/xiaoyvyv/Bangumi-for-Android/issues)
 
-[![GitHub license](https://img.shields.io/pypi/l/pywxdump)](https://github.com/xiaoyvyv/Bangumi-for-Android/blob/master/LICENSE)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/xiaoyvyv/Bangumi-for-Android/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
 
 大家好，各位阿宅、二次元迷们，我是一位热爱动漫文化的安卓开发者，很高兴向大家宣布，我为 https://bgm.tv 这个网站打造了一款全新的 安卓原生客户端！
