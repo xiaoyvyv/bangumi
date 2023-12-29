@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="73c3bf48">
+        <description>Created after removal of "隐私政策" from Bangumi for Android</description>
+        <accepts>privacy.html</accepts>
+    </rule>
+</rules>
