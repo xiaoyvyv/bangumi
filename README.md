@@ -18,11 +18,13 @@
 
 [https://bangumi.tv](https://bangumi.tv)
 
+### 下载地址
+谷歌商店：<a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi"><img alt="Get it on Google Play" height="80" src="/lib-doc/images/playstore_badge.png"></a>
+
+Github-Release：[Github-Release](https://github.com/xiaoyvyv/Bangumi-for-Android/releases)
+
 ### 项目更新地址
 https://github.com/xiaoyvyv/Bangumi-for-Android
-
-### 下载地址 Github-Release
-下载地址：[Github-Release](https://github.com/xiaoyvyv/Bangumi-for-Android/releases)
 
 ### 功能介绍
 
