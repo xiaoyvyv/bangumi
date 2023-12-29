@@ -5,6 +5,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android)
 [![GitHub forks](https://img.shields.io/github/forks/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/fork)
 [![GitHub issues](https://img.shields.io/github/issues/xiaoyvyv/Bangumi-for-Android)](https://github.com/xiaoyvyv/Bangumi-for-Android/issues)
+[![Views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxiaoyvyv%2FBangumi-for-Android&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23AA3535&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/xiaoyvyv/Bangumi-for-Android/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
