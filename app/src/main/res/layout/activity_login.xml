@@ -144,7 +144,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/ui_size_3"
-            android:text="我已阅读并同意《隐私政策保护》"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="?attr/colorOnSurface"
             app:layout_constraintBottom_toBottomOf="@+id/check_privacy"

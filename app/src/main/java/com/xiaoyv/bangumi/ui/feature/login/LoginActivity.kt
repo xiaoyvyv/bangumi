@@ -4,6 +4,7 @@ import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.KeyboardUtils
+import com.blankj.utilcode.util.SpanUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.bangumi.databinding.ActivityLoginBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -12,11 +13,13 @@ import com.xiaoyv.blueprint.kts.activity
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.showToastCompat
 
 /**
@@ -40,7 +43,7 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
     override fun initListener() {
         binding.btnLogin.setOnFastLimitClickListener {
             if (!binding.checkPrivacy.isChecked) {
-                showToastCompat("您必须阅读并同意用户协议和隐私政策")
+                showToastCompat("您必须阅读并同意《用户协议》和《隐私政策》")
                 return@setOnFastLimitClickListener
             }
 
@@ -65,9 +68,26 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
             }
         }
 
-        binding.tvPrivacy.setOnFastLimitClickListener {
-            RouteHelper.jumpWeb(GlobalConfig.docPrivacy, fitToolbar = true, smallToolbar = true)
-        }
+        SpanUtils.with(binding.tvPrivacy)
+            .append("我已阅读并同意")
+            .append("《用户协议》")
+            .setClickSpan(getAttrColor(GoogleAttr.colorPrimary), false) {
+                RouteHelper.jumpWeb(
+                    GlobalConfig.docArgument,
+                    fitToolbar = true,
+                    smallToolbar = true
+                )
+            }
+            .append("和")
+            .append("《隐私政策》")
+            .setClickSpan(getAttrColor(GoogleAttr.colorPrimary), false) {
+                RouteHelper.jumpWeb(
+                    GlobalConfig.docPrivacy,
+                    fitToolbar = true,
+                    smallToolbar = true
+                )
+            }
+            .create()
 
         binding.ivVerify.setOnFastLimitClickListener {
             binding.inputVerify.text = null

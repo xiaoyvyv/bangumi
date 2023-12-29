@@ -24,6 +24,9 @@ object GlobalConfig {
     val docPrivacy: String
         get() = "$DOC_ROOT/starter.html?_=" + System.currentTimeMillis()
 
+    val docArgument: String
+        get() = "$DOC_ROOT/argument.html?_=" + System.currentTimeMillis()
+
     val docAuthor: String
         get() = "$DOC_ROOT/author.html?_=" + System.currentTimeMillis()
 

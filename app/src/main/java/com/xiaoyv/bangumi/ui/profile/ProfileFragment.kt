@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.ui.profile
 
 import android.annotation.SuppressLint
 import android.view.MenuItem
-import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ColorUtils
 import com.google.android.material.badge.BadgeDrawable
@@ -123,6 +122,8 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                 debugLog { "未登录！" }
                 binding.toolbarLayout.title = "访客身份"
                 binding.tvEmail.text = "点击去登录"
+                binding.ivAvatar.setImageResource(0)
+                binding.ivBanner.setImageResource(0)
             }
         }
 
