@@ -22,7 +22,7 @@ class MediaReviewViewModel : BaseListViewModel<MediaReviewBlogEntity>() {
         require(mediaId.isNotBlank()) { "媒体ID不存在" }
         return BgmApiManager.bgmWebApi.queryMediaDetail(
             mediaId = mediaId,
-            type = MediaDetailType.TYPE_REVIEW,
+            type = MediaDetailType.TYPE_BLOG,
             page = current
         ).parserMediaBlog()
     }

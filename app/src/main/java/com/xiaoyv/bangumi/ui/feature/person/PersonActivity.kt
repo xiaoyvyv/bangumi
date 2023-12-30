@@ -14,6 +14,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.addCommonMenu
@@ -126,6 +127,17 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
                 showConfirmDialog(message = tip) {
                     viewModel.actionCollection(isCollected.not())
                 }
+                true
+            }
+
+        menu.add("评论")
+            .setIcon(CommonDrawable.ic_review)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                RouteHelper.jumpTopicDetail(
+                    viewModel.personId,
+                    topicType = if (viewModel.isVirtual) TopicType.TYPE_CRT else TopicType.TYPE_PERSON
+                )
                 true
             }
 

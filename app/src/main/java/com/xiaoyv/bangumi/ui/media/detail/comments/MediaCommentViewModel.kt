@@ -22,7 +22,7 @@ class MediaCommentViewModel : BaseListViewModel<MediaCommentEntity>() {
         require(mediaId.isNotBlank()) { "媒体ID不存在" }
         return BgmApiManager.bgmWebApi.queryMediaDetail(
             mediaId = mediaId,
-            type = MediaDetailType.TYPE_COMMENTS,
+            type = MediaDetailType.TYPE_RATING,
             page = current
         ).parserMediaComments()
     }

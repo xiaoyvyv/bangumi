@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.discover.index.detail.page
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
@@ -14,6 +15,7 @@ import com.xiaoyv.common.config.annotation.IndexTabCatType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
+import com.xiaoyv.widget.kts.dpi
 
 /**
  * Class: [IndexAttachFragment]
@@ -35,6 +37,8 @@ class IndexAttachFragment : BaseListFragment<IndexAttachEntity, IndexAttachViewM
     override fun initView() {
         viewModel.activityViewModel = activityViewModel
         super.initView()
+
+        binding.rvContent.updatePadding(top = 8.dpi, bottom = 8.dpi)
     }
 
     override fun initListener() {

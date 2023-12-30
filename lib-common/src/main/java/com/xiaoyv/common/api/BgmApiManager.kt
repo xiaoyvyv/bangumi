@@ -173,6 +173,9 @@ class BgmApiManager {
          * 话题 Url
          */
         fun buildTopicUrl(topicId: String, @TopicType topicType: String): String {
+            if (topicType == TopicType.TYPE_INDEX) {
+                return buildReferer(BgmPathType.TYPE_INDEX, topicId)
+            }
             return "$URL_BASE_WEB/rakuen/topic/$topicType/$topicId"
         }
 

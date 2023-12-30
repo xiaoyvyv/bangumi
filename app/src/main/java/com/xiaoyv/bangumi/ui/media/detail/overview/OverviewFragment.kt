@@ -145,7 +145,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                 }
 
                 OverviewAdapter.TYPE_COMMENT -> {
-                    activityViewModel.vpCurrentItemType.value = MediaDetailType.TYPE_COMMENTS
+                    activityViewModel.vpCurrentItemType.value = MediaDetailType.TYPE_RATING
                 }
 
                 OverviewAdapter.TYPE_RATING -> {

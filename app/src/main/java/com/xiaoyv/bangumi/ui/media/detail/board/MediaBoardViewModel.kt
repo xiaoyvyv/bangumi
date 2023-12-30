@@ -22,7 +22,7 @@ class MediaBoardViewModel : BaseListViewModel<MediaBoardEntity>() {
         require(mediaId.isNotBlank()) { "媒体ID不存在" }
         return BgmApiManager.bgmWebApi.queryMediaDetail(
             mediaId = mediaId,
-            type = MediaDetailType.TYPE_BOARD,
+            type = MediaDetailType.TYPE_TOPIC,
             page = current
         ).parserMediaBoards()
     }

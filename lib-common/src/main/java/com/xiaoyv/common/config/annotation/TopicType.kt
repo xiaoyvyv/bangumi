@@ -14,7 +14,8 @@ import androidx.annotation.StringDef
     TopicType.TYPE_GROUP,
     TopicType.TYPE_PERSON,
     TopicType.TYPE_CRT,
-    TopicType.TYPE_SUBJECT
+    TopicType.TYPE_SUBJECT,
+    TopicType.TYPE_INDEX
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class TopicType {
@@ -25,5 +26,6 @@ annotation class TopicType {
         const val TYPE_PERSON = "prsn"
         const val TYPE_CRT = "crt"
         const val TYPE_SUBJECT = "subject"
+        const val TYPE_INDEX = "index"
     }
 }

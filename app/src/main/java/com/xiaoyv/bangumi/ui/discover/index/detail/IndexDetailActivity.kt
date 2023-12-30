@@ -15,6 +15,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.IndexDetailEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.CommonDrawable
@@ -169,6 +170,17 @@ class IndexDetailActivity :
                     true
                 }
         }
+
+        menu.add("评论")
+            .setIcon(CommonDrawable.ic_review)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                RouteHelper.jumpTopicDetail(
+                    viewModel.indexId,
+                    topicType = TopicType.TYPE_INDEX
+                )
+                true
+            }
 
         // 公共菜单
         menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_INDEX, viewModel.indexId))

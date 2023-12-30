@@ -655,6 +655,9 @@ interface BgmWebApi {
         @Query("page") page: Int,
     ): Document
 
+    @GET("/index/{indexId}/comments")
+    suspend fun queryIndexComment(@Path("indexId") indexId: String): Document
+
     @GET("/user/{userId}/index{collect}")
     suspend fun queryUserIndex(
         @Path("userId", encoded = true) userId: String,

@@ -2,6 +2,7 @@ package com.xiaoyv.common.api.parser.impl
 
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity.Companion.normal
 import com.xiaoyv.common.api.parser.entity.SampleRelatedEntity
@@ -13,6 +14,7 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.api.parser.requireNoError
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Element
@@ -131,6 +133,34 @@ fun Element.parserTopicEp(topicId: String): TopicDetailEntity {
         related.items.add(relatedItem)
         related
     }
+
+    fillCommonData(entity)
+
+    return entity
+}
+
+/**
+ * 将 Index 的评论区也按照 Topic 处理解析
+ */
+fun Element.parserTopicIndex(indexId: String): TopicDetailEntity {
+    requireNoError()
+
+    val entity = TopicDetailEntity(id = indexId)
+    val main = select("#main")
+    val infoBox = main.select(".grp_box")
+
+    entity.title = main.select("#header").text()
+    entity.time = infoBox.select(".tip_j .tip").firstOrNull()?.text().orEmpty()
+    entity.content = infoBox.select(".line_detail .tip").html()
+
+    val related = SampleRelatedEntity(title = "关联的目录")
+    val relatedItem = SampleRelatedEntity.Item()
+    relatedItem.image = infoBox.select("img.avatar").attr("src").optImageUrl()
+    relatedItem.title = entity.title
+    relatedItem.imageLink = BgmApiManager.buildReferer(BgmPathType.TYPE_INDEX, indexId)
+    relatedItem.titleLink = BgmApiManager.buildReferer(BgmPathType.TYPE_INDEX, indexId)
+    related.items.add(relatedItem)
+    entity.related = related
 
     fillCommonData(entity)
 

@@ -18,7 +18,7 @@ class MediaReviewAdapter : BaseQuickDiffBindingAdapter<MediaReviewBlogEntity,
 
     override fun BaseQuickBindingHolder<FragmentMediaReviewItemBinding>.converted(item: MediaReviewBlogEntity) {
         binding.ivAvatar.loadImageAnimate(item.avatar)
-        binding.tvTitle.text = String.format("日志：%s", item.title)
+        binding.tvTitle.text = item.title
         binding.tvContent.text = item.comment
         binding.tvTime.text = item.time
     }
@@ -26,14 +26,14 @@ class MediaReviewAdapter : BaseQuickDiffBindingAdapter<MediaReviewBlogEntity,
     private object ItemDiffItemCallback : DiffUtil.ItemCallback<MediaReviewBlogEntity>() {
         override fun areItemsTheSame(
             oldItem: MediaReviewBlogEntity,
-            newItem: MediaReviewBlogEntity
+            newItem: MediaReviewBlogEntity,
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
             oldItem: MediaReviewBlogEntity,
-            newItem: MediaReviewBlogEntity
+            newItem: MediaReviewBlogEntity,
         ): Boolean {
             return oldItem == newItem
         }

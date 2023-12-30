@@ -29,9 +29,9 @@ class RakuenPageAdapter : BaseQuickDiffBindingAdapter<SuperTopicEntity,
         binding.tvAttach.text = item.attachTitle
         binding.tvTime.text = item.time
         binding.ivAction.isVisible = item.canShowActionMenu
+        binding.tvHot.isVisible = item.timeType.contains(TopicTimeType.TYPE_HOT)
         binding.tvTitle.text = item.title
 
-        binding.tvHot.isVisible = item.timeType.contains(TopicTimeType.TYPE_HOT)
 //        binding.tvComment.text = String.format("评论：%s", item.commentCount)
 
         when {

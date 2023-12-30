@@ -31,9 +31,9 @@ class MediaDetailAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
         MediaDetailTab("章节", MediaDetailType.TYPE_CHAPTER),
         MediaDetailTab("角色", MediaDetailType.TYPE_CHARACTER),
         MediaDetailTab("制作人员", MediaDetailType.TYPE_MAKER),
-        MediaDetailTab("吐槽", MediaDetailType.TYPE_COMMENTS),
-        MediaDetailTab("评论", MediaDetailType.TYPE_REVIEW),
-        MediaDetailTab("讨论版", MediaDetailType.TYPE_BOARD),
+        MediaDetailTab("吐槽", MediaDetailType.TYPE_RATING),
+        MediaDetailTab("日志", MediaDetailType.TYPE_BLOG),
+        MediaDetailTab("讨论版", MediaDetailType.TYPE_TOPIC),
         MediaDetailTab("透视", MediaDetailType.TYPE_STATS)
     )
 
@@ -45,9 +45,9 @@ class MediaDetailAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
             MediaDetailType.TYPE_CHAPTER -> MediaChapterFragment.newInstance(mediaId)
             MediaDetailType.TYPE_CHARACTER -> MediaCharacterFragment.newInstance(mediaId)
             MediaDetailType.TYPE_MAKER -> MediaMakerFragment.newInstance(mediaId)
-            MediaDetailType.TYPE_COMMENTS -> MediaCommentFragment.newInstance(mediaId)
-            MediaDetailType.TYPE_REVIEW -> MediaReviewFragment.newInstance(mediaId)
-            MediaDetailType.TYPE_BOARD -> MediaBoardFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_RATING -> MediaCommentFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_BLOG -> MediaReviewFragment.newInstance(mediaId)
+            MediaDetailType.TYPE_TOPIC -> MediaBoardFragment.newInstance(mediaId)
             MediaDetailType.TYPE_STATS -> EmptyFragment.newInstance()
             else -> EmptyFragment.newInstance()
         }

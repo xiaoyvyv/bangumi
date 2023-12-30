@@ -13,9 +13,9 @@ import androidx.annotation.StringDef
     MediaDetailType.TYPE_CHAPTER,
     MediaDetailType.TYPE_CHARACTER,
     MediaDetailType.TYPE_MAKER,
-    MediaDetailType.TYPE_COMMENTS,
-    MediaDetailType.TYPE_REVIEW,
-    MediaDetailType.TYPE_BOARD,
+    MediaDetailType.TYPE_RATING,
+    MediaDetailType.TYPE_BLOG,
+    MediaDetailType.TYPE_TOPIC,
     MediaDetailType.TYPE_STATS,
 )
 @Retention(AnnotationRetention.SOURCE)
@@ -25,9 +25,9 @@ annotation class MediaDetailType {
         const val TYPE_CHAPTER = "/ep"
         const val TYPE_CHARACTER = "/characters"
         const val TYPE_MAKER = "/persons"
-        const val TYPE_COMMENTS = "/comments"
-        const val TYPE_REVIEW = "/reviews"
-        const val TYPE_BOARD = "/board"
+        const val TYPE_RATING = "/comments"
+        const val TYPE_BLOG = "/reviews"
+        const val TYPE_TOPIC = "/board"
         const val TYPE_STATS = "/stats"
     }
 }

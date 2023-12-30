@@ -8,6 +8,7 @@ import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserTopic
 import com.xiaoyv.common.api.parser.impl.parserTopicEp
+import com.xiaoyv.common.api.parser.impl.parserTopicIndex
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.UserHelper
@@ -26,7 +27,7 @@ class TopicViewModel : BaseViewModel() {
     internal var topicId: String = ""
 
     @TopicType
-    internal var topicType: String = TopicType.TYPE_EP
+    internal var topicType: String = TopicType.TYPE_UNKNOWN
 
     internal val onTopicDetailLiveData = MutableLiveData<TopicDetailEntity?>()
     internal val onDeleteResult = MutableLiveData<Boolean>()
@@ -55,6 +56,9 @@ class TopicViewModel : BaseViewModel() {
             block = {
                 val list = withContext(Dispatchers.IO) {
                     when (topicType) {
+                        // 目录单独cli
+                        TopicType.TYPE_INDEX -> BgmApiManager.bgmWebApi.queryIndexComment(topicId)
+                            .parserTopicIndex(topicId)
                         // 章节类型话题
                         TopicType.TYPE_EP -> BgmApiManager.bgmWebApi.queryEpDetail(topicId)
                             .parserTopicEp(topicId)
