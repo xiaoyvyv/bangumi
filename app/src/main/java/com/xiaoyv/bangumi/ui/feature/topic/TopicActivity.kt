@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.databinding.ActivityTopicBinding
+import com.xiaoyv.bangumi.helper.CommentHelper
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
@@ -16,9 +17,8 @@ import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
-import com.xiaoyv.common.widget.reply.FeedCommentDialog
-import com.xiaoyv.common.widget.reply.ReplyDialog
 import com.xiaoyv.common.widget.web.page.TopicView
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
 
@@ -48,11 +48,17 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
     }
 
     override fun initListener() {
-        binding.webView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+        binding.webView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY > 60.dpi) {
                 binding.toolbar.title = viewModel.onTopicDetailLiveData.value?.title
             } else {
                 binding.toolbar.title = null
+            }
+
+            if (scrollY - oldScrollY > 0) {
+                binding.fabComment.hide()
+            } else {
+                binding.fabComment.show()
             }
         }
 
@@ -60,25 +66,26 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
             RouteHelper.jumpPreviewImage(imageUrl, imageUrls)
         }
 
-        topicView.onReplyUserListener = { replyJs, formEntity ->
-            if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
-            val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
-            if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(requireActivity, replyForm, replyJs, formEntity) {
-                    launchUI { topicView.addComment(it) }
-                }
-            }
+        topicView.onReplyUserListener = { replyJs, targetComment ->
+            CommentHelper.showCommentDialog(
+                activity = requireActivity,
+                replyForm = viewModel.replyForm,
+                replyJs = replyJs,
+                targetComment = targetComment,
+                onReplyListener = { topicView.addComment(it) }
+            )
         }
 
         topicView.onReplyNewListener = {
-            if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
+            CommentHelper.showCommentDialog(
+                activity = requireActivity,
+                replyForm = viewModel.replyForm,
+                onReplyListener = { topicView.addComment(it) }
+            )
+        }
 
-            val replyForm = viewModel.onTopicDetailLiveData.value?.replyForm
-            if (replyForm != null && replyForm.isEmpty.not()) {
-                ReplyDialog.show(requireActivity, replyForm, null, null) {
-                    launchUI { topicView.addComment(it) }
-                }
-            }
+        binding.fabComment.setOnFastLimitClickListener {
+            topicView.onReplyNewListener.invoke()
         }
 
         topicView.onNeedLoginListener = {

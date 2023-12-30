@@ -95,11 +95,17 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
         }
 
         binding.fabComment.setOnFastLimitClickListener {
-            requireActivity().showInputDialog(title = "吐个槽", maxInput = 380, onInput = {
-                if (it.isNotBlank()) {
-                    viewModel.addTimelineComment(it)
+            requireActivity().showInputDialog(
+                title = "吐槽",
+                inputHint = "吐个槽",
+                maxInput = 380,
+                minLines = 4,
+                onInput = {
+                    if (it.isNotBlank()) {
+                        viewModel.addTimelineComment(it)
+                    }
                 }
-            })
+            )
         }
     }
 

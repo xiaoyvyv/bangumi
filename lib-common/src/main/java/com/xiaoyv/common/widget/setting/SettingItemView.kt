@@ -4,14 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
-import com.blankj.utilcode.util.StringUtils
 import com.xiaoyv.common.R
 import com.xiaoyv.common.databinding.ViewSettingItemBinding
-import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import java.io.Serializable
 import kotlin.reflect.KMutableProperty0
 
 /**
@@ -79,11 +78,11 @@ class SettingItemView @JvmOverloads constructor(
         refreshBoolean(property)
     }
 
-    fun bindInt(
+    fun <T : Serializable> bindSerializable(
         activity: FragmentActivity,
-        property: KMutableProperty0<Int>,
+        property: KMutableProperty0<T>,
         names: List<String>,
-        values: List<Int>,
+        values: List<T>,
         bindTitle: String? = null,
     ) {
         if (bindTitle != null) title = bindTitle
@@ -93,21 +92,22 @@ class SettingItemView @JvmOverloads constructor(
                 items = names,
                 onItemClick = { _, which ->
                     property.set(values[which])
-                    refreshInt(names, values, property)
+                    refreshSerializable(names, values, property)
                 }
             )
         }
-        refreshInt(names, values, property)
+        refreshSerializable(names, values, property)
     }
+
 
     fun refreshBoolean(property: KMutableProperty0<Boolean>) {
         desc = if (property.get()) "开启" else "关闭"
     }
 
-    private fun refreshInt(
+    private fun <T : Serializable> refreshSerializable(
         keys: List<String>,
-        values: List<Int>,
-        property: KMutableProperty0<Int>,
+        values: List<T>,
+        property: KMutableProperty0<T>,
     ) {
         val valueIndex = values.indexOfFirst { it == property.get() }
         val name = keys.getOrNull(valueIndex).orEmpty().ifBlank { property.get().toString() }

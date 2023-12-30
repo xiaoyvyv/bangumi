@@ -133,6 +133,8 @@ class IndexDetailActivity :
                 .setOnMenuItemClickListener {
                     showInputLine2Dialog(
                         title = "修改目录",
+                        inputHint1 = "标题",
+                        inputHint2 = "描述",
                         default1 = entity.title,
                         default2 = entity.content,
                     )

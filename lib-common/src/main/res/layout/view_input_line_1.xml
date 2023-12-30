@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/input_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/ui_size_22"
-    android:paddingTop="@dimen/ui_size_16">
+    android:paddingHorizontal="@dimen/dialog_padding"
+    android:paddingTop="@dimen/dialog_padding">
 
     <com.xiaoyv.common.widget.text.AnimeEditTextView
         android:id="@+id/et_line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/ui_size_12" />
-</androidx.appcompat.widget.LinearLayoutCompat>
+        android:gravity="start|top"
+        android:lineSpacingMultiplier="1.25" />
+</com.google.android.material.textfield.TextInputLayout>

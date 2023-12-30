@@ -2,6 +2,7 @@ package com.xiaoyv.common.helper
 
 import android.text.SpannableStringBuilder
 import android.widget.EditText
+import com.xiaoyv.common.widget.text.AnimeEditTextView
 
 /**
  * Class: [BBCode]
@@ -56,5 +57,12 @@ object BBCode {
                 setSelection(startIndex, endIndex)
             }
         }
+    }
+
+    /**
+     * 插入图片链接
+     */
+    fun insertImage(edReply: AnimeEditTextView, imageUrl: String) {
+        edReply.append("[img]$imageUrl[/img]")
     }
 }

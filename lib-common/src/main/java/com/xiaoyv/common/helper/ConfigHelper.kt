@@ -29,6 +29,7 @@ object ConfigHelper {
     private const val KEY_CENTER_TYPE = "center-tab-type"
     private const val KEY_SMOOTH_FONT = "smooth-font"
     private const val KEY_USER_BG = "user-bg"
+    private const val KEY_DEFAULT_COMMENT_SORT = "default-comment-sort"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -159,4 +160,11 @@ object ConfigHelper {
     var userBackground: String
         get() = SPStaticUtils.getString(KEY_USER_BG, "")
         set(value) = SPStaticUtils.put(KEY_USER_BG, value)
+
+    /**
+     * 默认评论排序
+     */
+    var commentDefaultSort: String
+        get() = SPStaticUtils.getString(KEY_DEFAULT_COMMENT_SORT, "desc")
+        set(value) = SPStaticUtils.put(KEY_DEFAULT_COMMENT_SORT, value)
 }

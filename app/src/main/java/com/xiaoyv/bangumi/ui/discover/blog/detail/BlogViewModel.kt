@@ -5,6 +5,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.BlogDetailEntity
+import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.impl.parserBlogDetail
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.UserHelper
@@ -33,6 +34,12 @@ class BlogViewModel : BaseViewModel() {
      */
     internal val isMine: Boolean
         get() = requireBlogUserId.isNotBlank() && requireBlogUserId == UserHelper.currentUser.id
+
+    /**
+     * 评论回复的表单
+     */
+    internal val replyForm: CommentFormEntity?
+        get() = onBlogDetailLiveData.value?.replyForm
 
     fun queryBlogDetail() {
         launchUI(

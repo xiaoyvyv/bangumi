@@ -36,14 +36,22 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingSmoothFont.bindBoolean(this, ConfigHelper::isSmoothFont, onChange = {
             currentApplication.recreateAllActivity()
         })
-        binding.settingFirstTab.bindInt(
+
+        binding.settingCommentSort.bindSerializable(
+            activity = this,
+            property = ConfigHelper::commentDefaultSort,
+            names = listOf("时间", "最新", "最热"),
+            values = listOf("asc", "desc", "hot")
+        )
+
+        binding.settingFirstTab.bindSerializable(
             activity = this,
             property = ConfigHelper::homeDefaultTab,
             names = listOf("第1个", "第2个", "第3个", "第4个", "第5个"),
             values = listOf(0, 1, 2, 3, 4)
         )
 
-        binding.settingCenterTab.bindInt(
+        binding.settingCenterTab.bindSerializable(
             activity = this,
             property = ConfigHelper::centerTabType,
             names = listOf("排行榜", "追番进度"),

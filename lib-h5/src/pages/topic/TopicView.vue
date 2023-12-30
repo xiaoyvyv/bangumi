@@ -19,7 +19,7 @@ const topicContentRef = ref<HTMLDivElement>();
 const loadingIdentifier = ref(new Date().getDate());
 const commentPageSize = 10;
 const commentPage = ref(1);
-const commentSort = ref("desc");
+const commentSort = ref("default");
 const comments = reactive<CommentTreeEntity[]>([]);
 const robotSay = ref("哼！Bangumi老娘我是有底线的人");
 
@@ -39,8 +39,11 @@ const topicHandler = {
  * @param $state
  */
 const loadComments = async ($state: any) => {
-  const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, commentSort.value);
+  const pageCommentSort = window.android.onCommentSort(commentSort.value);
+  const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, pageCommentSort);
   const pageComments = JSON.parse(pageCommentJson);
+
+  commentSort.value = pageCommentSort;
 
   if (pageComments.length == 0) {
     $state.complete();

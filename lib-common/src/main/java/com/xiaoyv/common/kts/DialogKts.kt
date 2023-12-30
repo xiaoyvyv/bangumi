@@ -91,15 +91,20 @@ inline fun Context.showInputDialog(
     title: String = StringUtils.getString(CommonString.common_tip),
     inputHint: String = "输入内容...",
     maxInput: Int = 1000,
+    minLines: Int = 1,
+    maxLines: Int = Int.MAX_VALUE,
     default: String = "",
     crossinline onInput: (String) -> Unit = { _ -> },
 ) {
     val binding = ViewInputLine1Binding.inflate(inflater)
-    binding.etLine1.hint = inputHint
+    binding.inputLayout.hint = inputHint
 
     if (maxInput > 0) {
         binding.etLine1.filters = arrayOf(LengthFilter(maxInput))
     }
+
+    binding.etLine1.minLines = minLines
+    binding.etLine1.maxLines = maxLines
 
     if (default.isNotBlank()) {
         binding.etLine1.setText(default)
@@ -136,8 +141,8 @@ inline fun Context.showInputLine2Dialog(
     crossinline onInput: (String, String) -> Unit = { _, _ -> },
 ) {
     val binding = ViewInputLine2Binding.inflate(inflater)
-    binding.etLine1.hint = inputHint1
-    binding.etLine2.hint = inputHint2
+    binding.inputLayout1.hint = inputHint1
+    binding.inputLayout2.hint = inputHint2
 
     if (default1.isNotBlank()) {
         binding.etLine1.setText(default1)

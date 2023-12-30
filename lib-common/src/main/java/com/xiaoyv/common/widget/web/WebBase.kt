@@ -28,6 +28,7 @@ import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.databinding.ViewEmojiBinding
 import com.xiaoyv.common.helper.CommentPaginationHelper
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.GoogleStyle
@@ -152,6 +153,18 @@ abstract class WebBase(open val webView: UiWebView) {
     @JavascriptInterface
     fun onLoadComments(page: Int, size: Int = 10, sort: String): String {
         return commentPagination.loadComments(page, size, sort).toJson()
+    }
+
+    /**
+     * 判断是否为默认排序，加载配置的默认排序
+     */
+    @Keep
+    @JavascriptInterface
+    fun onCommentSort(sort: String): String {
+        if (sort.isBlank() || sort == "default") {
+            return ConfigHelper.commentDefaultSort
+        }
+        return sort
     }
 
     @Keep

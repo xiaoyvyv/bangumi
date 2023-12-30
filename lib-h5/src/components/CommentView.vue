@@ -42,8 +42,11 @@ const sortName = (sort: string) => {
     case "hot": {
       return "最热";
     }
-    default: {
+    case"asc": {
       return "时间"
+    }
+    default: {
+      return "默认"
     }
   }
 }

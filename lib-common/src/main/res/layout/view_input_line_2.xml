@@ -2,20 +2,35 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingHorizontal="@dimen/ui_size_22"
-    android:paddingTop="@dimen/ui_size_16">
+    android:orientation="vertical">
 
-    <com.xiaoyv.common.widget.text.AnimeEditTextView
-        android:id="@+id/et_line1"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/ui_size_12" />
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/dialog_padding"
+        android:paddingTop="@dimen/dialog_padding">
 
-    <com.xiaoyv.common.widget.text.AnimeEditTextView
-        android:id="@+id/et_line2"
+        <com.xiaoyv.common.widget.text.AnimeEditTextView
+            android:id="@+id/et_line1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.25" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_size_16"
-        android:paddingVertical="@dimen/ui_size_12" />
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/dialog_padding"
+        android:paddingTop="@dimen/dialog_padding">
+
+        <com.xiaoyv.common.widget.text.AnimeEditTextView
+            android:id="@+id/et_line2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.25" />
+    </com.google.android.material.textfield.TextInputLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

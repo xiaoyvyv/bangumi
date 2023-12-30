@@ -27,6 +27,7 @@ declare interface Android {
     onClickRelated: any;
     onClickCommentSort: any;
     onClickCommentAction: (comment: string, x: number, y: number) => void;
+    onCommentSort: (sort: string) => string;
     onLoadComments: (page: number, size: number, sort: string) => string;
     onToggleSmile: any;
 }

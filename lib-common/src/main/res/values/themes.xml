@@ -4,6 +4,11 @@
 
     </style>
 
+    <style name="Theme.Bangumi.Fix">
+        <item name="colorControlNormal">?attr/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
+    </style>
+
     <style name="Theme.Bangumi" parent="Base.Theme.Bangumi">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">true</item>

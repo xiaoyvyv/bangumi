@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.TopicDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserTopic
 import com.xiaoyv.common.api.parser.impl.parserTopicEp
@@ -38,6 +39,12 @@ class TopicViewModel : BaseViewModel() {
      */
     internal val isMine: Boolean
         get() = requireTopicUserId.isNotBlank() && requireTopicUserId == UserHelper.currentUser.id
+
+    /**
+     * 评论回复的表单
+     */
+    internal val replyForm: CommentFormEntity?
+        get() = onTopicDetailLiveData.value?.replyForm
 
     fun queryTopicDetail() {
         launchUI(

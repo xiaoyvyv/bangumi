@@ -11,5 +11,5 @@ import com.google.android.material.textfield.TextInputEditText
  * @since 11/25/23
  */
 open class AnimeEditTextView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null,
 ) : TextInputEditText(context, attrs)
