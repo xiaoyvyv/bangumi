@@ -125,6 +125,15 @@
                 android:text="平滑字体" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_topic_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="日志或小组帖热、新、旧、坟标记" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_filter_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

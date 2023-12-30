@@ -32,6 +32,7 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingBreakUp.bindBoolean(ConfigHelper::isFilterBreakUpComment)
         binding.settingEpSplit.bindBoolean(ConfigHelper::isSplitEpList)
         binding.settingSmoothFont.bindBoolean(ConfigHelper::isSmoothFont)
+        binding.settingTopicTag.bindBoolean(ConfigHelper::isTopicTimeFlag)
 
         binding.settingCommentSort.bindSerializable(
             activity = this,
