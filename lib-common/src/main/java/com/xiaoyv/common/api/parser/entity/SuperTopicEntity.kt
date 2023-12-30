@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.TopicTimeType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
@@ -28,7 +29,9 @@ data class SuperTopicEntity(
     @TopicType
     var topicType: String = TopicType.TYPE_UNKNOWN,
     @BgmPathType
-    var pathType: String = BgmPathType.TYPE_UNKNOWN
+    var pathType: String = BgmPathType.TYPE_UNKNOWN,
+    @TopicTimeType
+    var timeType: MutableList<String> = mutableListOf(),
 ) : IdEntity, Parcelable {
     val canShowActionMenu: Boolean
         get() = pathType == BgmPathType.TYPE_BLOG

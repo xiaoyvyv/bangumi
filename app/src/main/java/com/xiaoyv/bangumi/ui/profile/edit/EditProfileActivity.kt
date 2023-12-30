@@ -9,15 +9,14 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityEditProfileBinding
-import com.xiaoyv.bangumi.databinding.ActivityEditProfileDialogBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.activity
 import com.xiaoyv.common.config.annotation.FormInputType
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.GoogleAttr
-import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
+import com.xiaoyv.common.kts.showInputDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getAttrColor
@@ -69,19 +68,14 @@ class EditProfileActivity :
                 }
 
                 FormInputType.TYPE_INPUT -> {
-                    val dialogBinding = ActivityEditProfileDialogBinding.inflate(inflater)
-                    dialogBinding.etInput.setText(it.value)
-                    MaterialAlertDialogBuilder(activity)
-                        .setTitle(it.title)
-                        .setView(dialogBinding.root)
-                        .setNegativeButton("取消", null)
-                        .setPositiveButton("确定") { _, _ ->
-                            val input = dialogBinding.etInput.text.toString().trim()
+                    showInputDialog(
+                        title = it.title,
+                        default = it.value,
+                        onInput = { input ->
                             it.value = input
                             viewModel.refreshOptionItem(it)
                         }
-                        .create()
-                        .show()
+                    )
                 }
 
                 FormInputType.TYPE_SELECT -> {

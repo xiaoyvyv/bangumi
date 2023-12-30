@@ -62,6 +62,15 @@
                 android:text="首页中间Tab页面" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_comment_sort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="评论默认排序" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_image_animation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,15 +123,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="平滑字体" />
-
-            <com.xiaoyv.common.widget.setting.SettingItemView
-                android:id="@+id/setting_comment_sort"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="评论默认排序" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_filter_delete"

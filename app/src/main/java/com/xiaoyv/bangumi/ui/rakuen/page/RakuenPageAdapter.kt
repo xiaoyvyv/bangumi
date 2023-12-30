@@ -5,16 +5,15 @@ package com.xiaoyv.bangumi.ui.rakuen.page
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
-import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.FragmentSuperPageItemBinding
 import com.xiaoyv.common.api.parser.entity.SuperTopicEntity
+import com.xiaoyv.common.config.annotation.TopicTimeType
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.loadImageAnimate
+import com.xiaoyv.common.kts.tint
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
-import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
-import com.xiaoyv.widget.kts.spi
 
 /**
  * Class: [RakuenPageAdapter]
@@ -30,14 +29,33 @@ class RakuenPageAdapter : BaseQuickDiffBindingAdapter<SuperTopicEntity,
         binding.tvAttach.text = item.attachTitle
         binding.tvTime.text = item.time
         binding.ivAction.isVisible = item.canShowActionMenu
+        binding.tvTitle.text = item.title
 
-        SpanUtils.with(binding.tvTitle)
-            .append(item.title)
-            .appendSpace(4.dpi)
-            .append(String.format("+%s", item.commentCount))
-            .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))
-            .setFontSize(12.spi)
-            .create()
+        binding.tvHot.isVisible = item.timeType.contains(TopicTimeType.TYPE_HOT)
+//        binding.tvComment.text = String.format("评论：%s", item.commentCount)
+
+        when {
+            item.timeType.contains(TopicTimeType.TYPE_OLD) || item.timeType.contains(TopicTimeType.TYPE_OLDEST) -> {
+                binding.tvTag.isVisible = true
+                binding.tvTag.text =
+                    if (item.timeType.contains(TopicTimeType.TYPE_OLD)) "旧贴" else "坟贴"
+                binding.tvTag.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorOnSurface).tint
+                binding.tvTag.setTextColor(context.getAttrColor(GoogleAttr.colorSurface))
+            }
+
+            item.timeType.contains(TopicTimeType.TYPE_NEW) -> {
+                binding.tvTag.isVisible = true
+                binding.tvTag.text = "新贴"
+                binding.tvTag.backgroundTintList =
+                    context.getAttrColor(GoogleAttr.colorPrimary).tint
+                binding.tvTag.setTextColor(context.getAttrColor(GoogleAttr.colorOnPrimary))
+            }
+
+            else -> {
+                binding.tvTag.isVisible = false
+            }
+        }
     }
 
     object SuperTopicDiffCallback : DiffUtil.ItemCallback<SuperTopicEntity>() {

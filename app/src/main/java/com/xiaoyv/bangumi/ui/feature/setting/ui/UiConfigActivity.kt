@@ -5,11 +5,11 @@ import android.view.MenuItem
 import com.xiaoyv.bangumi.databinding.ActivitySettingUiBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
 import com.xiaoyv.common.config.GlobalConfig
-import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
-import com.xiaoyv.widget.kts.toast
 
 /**
  * Class: [UiConfigActivity]
@@ -24,18 +24,14 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
     }
 
     override fun initData() {
-        binding.settingImageAnimation.bindBoolean(this, ConfigHelper::isImageAnimation)
-        binding.settingImageCompress.bindBoolean(this, ConfigHelper::isImageCompress)
-        binding.settingGridAnimation.bindBoolean(this, ConfigHelper::isAdapterAnimation)
-        binding.settingDynamicTheme.bindBoolean(this, ConfigHelper::isDynamicTheme, onChange = {
-            toast("重启后生效")
-        })
-        binding.settingFilterDelete.bindBoolean(this, ConfigHelper::isFilterDeleteComment)
-        binding.settingBreakUp.bindBoolean(this, ConfigHelper::isFilterBreakUpComment)
-        binding.settingEpSplit.bindBoolean(this, ConfigHelper::isSplitEpList)
-        binding.settingSmoothFont.bindBoolean(this, ConfigHelper::isSmoothFont, onChange = {
-            currentApplication.recreateAllActivity()
-        })
+        binding.settingImageAnimation.bindBoolean(ConfigHelper::isImageAnimation)
+        binding.settingImageCompress.bindBoolean(ConfigHelper::isImageCompress)
+        binding.settingGridAnimation.bindBoolean(ConfigHelper::isAdapterAnimation)
+        binding.settingDynamicTheme.bindBoolean(ConfigHelper::isDynamicTheme)
+        binding.settingFilterDelete.bindBoolean(ConfigHelper::isFilterDeleteComment)
+        binding.settingBreakUp.bindBoolean(ConfigHelper::isFilterBreakUpComment)
+        binding.settingEpSplit.bindBoolean(ConfigHelper::isSplitEpList)
+        binding.settingSmoothFont.bindBoolean(ConfigHelper::isSmoothFont)
 
         binding.settingCommentSort.bindSerializable(
             activity = this,
@@ -57,6 +53,8 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
             names = listOf("排行榜", "追番进度"),
             values = listOf(GlobalConfig.PAGE_RANK, GlobalConfig.PAGE_PROCESS)
         )
+
+        debugLog { "Init Data ${ConfigHelper.isSmoothFont}" }
     }
 
     override fun initListener() {
@@ -65,6 +63,8 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add("提示")
+            .setIcon(CommonDrawable.ic_help)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 showConfirmDialog(message = "部分设置需要重启后生效", cancelText = null)
                 true

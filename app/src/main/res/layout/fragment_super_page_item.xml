@@ -54,30 +54,80 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_action_menu" />
+    <!--
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ui_shape_rectangle_corner_6"
+            android:backgroundTint="?attr/colorPrimary"
+            android:padding="@dimen/ui_size_4"
+            android:text="评论：200"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintStart_toStartOf="@+id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+    -->
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_size_3"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorPrimary"
+        android:padding="@dimen/ui_size_4"
+        android:text="新帖"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_hot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_size_6"
+        android:layout_marginTop="@dimen/ui_size_3"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorPrimary"
+        android:padding="@dimen/ui_size_4"
+        android:text="热门"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintStart_toEndOf="@+id/tv_tag"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_goneMarginStart="@dimen/ui_size_0" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tv_tag,tv_hot" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_attach"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
-        android:maxLines="2"
+        android:maxLines="1"
         android:paddingTop="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toStartOf="@+id/tv_time"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        tools:text="@tools:sample/lorem/random" />
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
+        tools:text="茶话会" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/ui_size_16"
-        android:paddingTop="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceLabelMedium"
         android:textColor="?attr/colorOnSurfaceVariant"

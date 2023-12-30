@@ -25,6 +25,7 @@ object ConfigHelper {
     private const val KEY_FILTER_DELETE_COMMENT = "filter-delete-comment"
     private const val KEY_FILTER_BREAK_UP_COMMENT = "filter-break-up-comment"
     private const val KEY_SPLIT_EP_LIST = "split-ep-list"
+    private const val KEY_TOPIC_TIME_TAG = "topic-time-tag"
     private const val KEY_HOME_DEFAULT_TAB = "home-default-tab"
     private const val KEY_CENTER_TYPE = "center-tab-type"
     private const val KEY_SMOOTH_FONT = "smooth-font"
@@ -146,6 +147,13 @@ object ConfigHelper {
     var isSplitEpList: Boolean
         get() = SPStaticUtils.getBoolean(KEY_SPLIT_EP_LIST, true)
         set(value) = SPStaticUtils.put(KEY_SPLIT_EP_LIST, value)
+
+    /**
+     * 帖子时间标记
+     */
+    var isTopicTimeFlag: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_TOPIC_TIME_TAG, true)
+        set(value) = SPStaticUtils.put(KEY_TOPIC_TIME_TAG, value)
 
     /**
      * 中心 TAB 的类型

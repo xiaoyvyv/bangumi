@@ -3,11 +3,11 @@ package com.xiaoyv.common.widget.setting
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import com.xiaoyv.common.R
 import com.xiaoyv.common.databinding.ViewSettingItemBinding
 import com.xiaoyv.common.kts.inflater
-import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import java.io.Serializable
@@ -22,7 +22,7 @@ import kotlin.reflect.KMutableProperty0
 class SettingItemView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null,
 ) : ConstraintLayout(context, attrs) {
-    private val binding = ViewSettingItemBinding.inflate(context.inflater, this)
+    val binding = ViewSettingItemBinding.inflate(context.inflater, this)
 
     var title: String = ""
         set(value) {
@@ -46,36 +46,21 @@ class SettingItemView @JvmOverloads constructor(
     /**
      * 绑定 Boolean 类型开关
      */
-    inline fun bindBoolean(
-        activity: FragmentActivity,
+    fun bindBoolean(
         property: KMutableProperty0<Boolean>,
         bindTitle: String? = null,
-        crossinline dialogTip: (Boolean) -> String? = { null },
-        crossinline onChange: (Boolean) -> Unit = {},
     ) {
         if (bindTitle != null) title = bindTitle
-        setOnFastLimitClickListener {
-            val tip = dialogTip(property.get())
-            if (tip == null) {
-                val value = property.get().not()
-                property.set(value)
-                refreshBoolean(property)
-                onChange(value)
-            } else {
-                activity.showConfirmDialog(
-                    title = title,
-                    message = tip,
-                    onConfirmClick = {
-                        val value = property.get().not()
-                        property.set(value)
-                        refreshBoolean(property)
-                        onChange(value)
-                    }
-                )
-            }
+        refreshBoolean(property)
+
+        binding.btnSwitch.setOnCheckedChangeListener { _, isChecked ->
+            property.set(isChecked)
+            refreshBoolean(property)
         }
 
-        refreshBoolean(property)
+        setOnFastLimitClickListener {
+            binding.btnSwitch.toggle()
+        }
     }
 
     fun <T : Serializable> bindSerializable(
@@ -99,9 +84,10 @@ class SettingItemView @JvmOverloads constructor(
         refreshSerializable(names, values, property)
     }
 
-
-    fun refreshBoolean(property: KMutableProperty0<Boolean>) {
-        desc = if (property.get()) "开启" else "关闭"
+    private fun refreshBoolean(property: KMutableProperty0<Boolean>) {
+        binding.btnSwitch.isChecked = property.get()
+        binding.btnSwitch.isVisible = true
+        binding.gpText.isVisible = false
     }
 
     private fun <T : Serializable> refreshSerializable(
@@ -111,6 +97,10 @@ class SettingItemView @JvmOverloads constructor(
     ) {
         val valueIndex = values.indexOfFirst { it == property.get() }
         val name = keys.getOrNull(valueIndex).orEmpty().ifBlank { property.get().toString() }
+
+        binding.btnSwitch.isVisible = false
+        binding.gpText.isVisible = true
+
         desc = name
     }
 }

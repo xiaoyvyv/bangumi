@@ -12,6 +12,7 @@ import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.UserTokenHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.randId
+import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.sendValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -71,7 +72,11 @@ class LoginViewModel : BaseViewModel() {
             state = loadingDialogState(cancelable = false),
             error = {
                 it.printStackTrace()
-                onLoginResultLiveData.value = null
+
+                onLoginResultLiveData.value = LoginResultEntity(
+                    success = false,
+                    error = it.errorMsg
+                )
             },
             block = {
                 val loginResult = withContext(Dispatchers.IO) {
@@ -88,7 +93,7 @@ class LoginViewModel : BaseViewModel() {
                 UserHelper.cacheEmailAndPassword(email, password)
 
                 // JsonApi 授权
-                UserTokenHelper.fetchAuthToken()
+                runCatching { UserTokenHelper.fetchAuthToken() }
 
                 onLoginResultLiveData.value = loginResult
             }
