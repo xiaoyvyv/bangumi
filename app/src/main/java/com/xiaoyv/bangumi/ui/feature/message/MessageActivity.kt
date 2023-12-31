@@ -38,7 +38,7 @@ class MessageActivity : BaseListActivity<MessageEntity, MessageViewModel>() {
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_notify) {
             val indexOfFirst = contentAdapter.itemIndexOfFirst(it)
             if (indexOfFirst != -1) {
-                it.isRead = true
+                it.isUnRead = false
                 contentAdapter.notifyItemChanged(indexOfFirst)
             }
 

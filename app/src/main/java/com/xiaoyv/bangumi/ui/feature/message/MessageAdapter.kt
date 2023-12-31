@@ -25,9 +25,9 @@ class MessageAdapter :
         binding.ivAvatar.loadImageAnimate(item.fromAvatar)
         binding.tvTitle.text = item.fromName
         binding.tvTime.text = item.time
-        binding.ivBadge.isVisible = item.boxType == MessageBoxType.TYPE_INBOX && item.isRead
+        binding.ivBadge.isVisible = item.boxType == MessageBoxType.TYPE_INBOX && item.isUnRead
 
-        if (item.boxType == MessageBoxType.TYPE_OUTBOX && item.isRead) {
+        if (item.boxType == MessageBoxType.TYPE_OUTBOX && item.isUnRead) {
             SpanUtils.with(binding.tvContent)
                 .append("[对方未读] ")
                 .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))

@@ -34,7 +34,7 @@ fun Element.parserMessageList(boxType: String): Pair<String, List<MessageEntity>
             entity.fromName = item.select(".sub_title a").text()
             entity.time = item.select("small.grey").text()
             entity.summary = item.select(".tip").html().parseHtml()
-            entity.isRead = item.select(".pm_new").isNotEmpty()
+            entity.isUnRead = item.select(".pm_new").isNotEmpty()
             entity
         }
 }
