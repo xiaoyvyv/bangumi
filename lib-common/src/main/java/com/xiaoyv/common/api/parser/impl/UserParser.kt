@@ -117,7 +117,10 @@ fun Elements.parserUserSaveOverview(@MediaType mediaType: String): UserDetailEnt
     val horizontalOptions = select(".horizontalOptions li")
     if (horizontalOptions.isEmpty()) return overview
     overview.isEmpty = false
-    overview.title = horizontalOptions.select("li.title").remove().text()
+    overview.title = horizontalOptions.select("li.title").remove().text().let {
+        val typeName = it.substringAfterLast("的")
+        if (it.startsWith("我的")) it else "Ta 的$typeName"
+    }
     overview.count = horizontalOptions.map { it.text() }.toMutableList().apply { removeAt(0) }
     useNotNull(select("div.clearit .coversSmall").getOrNull(0)?.select("ul > li a")) {
         overview.doing = map { item ->

@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.text.method.LinkMovementMethodCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.xiaoyv.common.databinding.ViewSummaryBinding
 import com.xiaoyv.common.kts.inflater
@@ -16,7 +15,7 @@ import com.xiaoyv.common.kts.inflater
  * @since 12/6/23
  */
 class AnimeSummaryView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null,
 ) : ConstraintLayout(context, attrs) {
     private val binding = ViewSummaryBinding.inflate(context.inflater, this)
 
@@ -50,7 +49,7 @@ class AnimeSummaryView @JvmOverloads constructor(
 
     companion object {
         @JvmStatic
-        fun createHolder(context: Context, parent: ViewGroup): Holder {
+        fun createHolder(context: Context): Holder {
             return Holder(AnimeSummaryView(context).apply {
                 layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

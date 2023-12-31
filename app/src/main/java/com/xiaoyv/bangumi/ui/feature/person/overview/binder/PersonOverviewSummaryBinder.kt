@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.ui.feature.person.overview.binder
 import android.content.Context
 import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseMultiItemAdapter
-import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.kts.forceCast
@@ -39,5 +38,5 @@ class PersonOverviewSummaryBinder(private val isSummary: Boolean) :
         context: Context,
         parent: ViewGroup,
         viewType: Int
-    ) = AnimeSummaryView.createHolder(context, parent)
+    ) = AnimeSummaryView.createHolder(context)
 }

@@ -40,6 +40,9 @@ class UserViewModel : BaseViewModel() {
     private val requireGh
         get() = onUserInfoLiveData.value?.gh.orEmpty()
 
+    internal val requireSummary: String
+        get() = onUserInfoLiveData.value?.sign.orEmpty().trim()
+
     override fun onViewCreated() {
         queryUserInfo()
     }
@@ -73,9 +76,17 @@ class UserViewModel : BaseViewModel() {
                 withContext(Dispatchers.IO) {
                     val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
                     if (addFriend) {
-                        BgmApiManager.bgmWebApi.connectFriend(referer, requireUserNumberId, requireGh)
+                        BgmApiManager.bgmWebApi.connectFriend(
+                            referer,
+                            requireUserNumberId,
+                            requireGh
+                        )
                     } else {
-                        BgmApiManager.bgmWebApi.disconnectFriend(referer, requireUserNumberId, requireGh)
+                        BgmApiManager.bgmWebApi.disconnectFriend(
+                            referer,
+                            requireUserNumberId,
+                            requireGh
+                        )
                     }
                 }
                 onActionResult.value = true

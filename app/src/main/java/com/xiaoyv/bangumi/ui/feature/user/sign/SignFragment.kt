@@ -3,9 +3,11 @@ package com.xiaoyv.bangumi.ui.feature.user.sign
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.databinding.FragmentUserSignBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.feature.user.UserViewModel
 import com.xiaoyv.blueprint.base.binding.BaseBindingFragment
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 /**
  * Class: [SignFragment]
@@ -24,9 +26,18 @@ class SignFragment : BaseBindingFragment<FragmentUserSignBinding>() {
 
     }
 
+    override fun initListener() {
+        binding.tvSummary.setOnFastLimitClickListener {
+            val summary = activityViewModel.requireSummary
+            if (summary.isNotBlank()) {
+                RouteHelper.jumpSummaryDetail(summary)
+            }
+        }
+    }
+
     override fun LifecycleOwner.initViewObserver() {
         activityViewModel.onUserInfoLiveData.observe(this) {
-            val summary = it?.sign.orEmpty().trim()
+            val summary = activityViewModel.requireSummary
             if (summary.isBlank()) {
                 binding.stateView.showTip(message = "这个人很懒，还没有介绍内容呢")
                 return@observe
