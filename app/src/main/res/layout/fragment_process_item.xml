@@ -21,6 +21,20 @@
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_week"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:gravity="start|bottom"
+        android:padding="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        android:textColor="?attr/colorOnPrimarySurface"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cover"
+        app:layout_constraintStart_toStartOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover"
+        tools:text="周一" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_time"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"

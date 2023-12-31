@@ -33,10 +33,12 @@ class ProcessPageViewModel : BaseListViewModel<MediaDetailEntity>() {
 
         return BgmApiManager.bgmWebApi.queryHomePage().parserHomePageProcess()
             .let {
-                if (mediaType == MediaType.TYPE_UNKNOWN) it else it.filter { entity -> entity.mediaType == mediaType }
-            }
-            .apply {
-                CacheHelper.cacheProcess = this
+                CacheHelper.cacheProcess = it
+
+                // 过滤类型
+                if (mediaType == MediaType.TYPE_UNKNOWN) it else {
+                    it.filter { entity -> entity.mediaType == mediaType }
+                }
             }
     }
 

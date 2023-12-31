@@ -35,6 +35,7 @@ class ProcessPageAdapter(
             append(MediaType.action(mediaType))
         }
         binding.tvTitle.text = item.titleCn.ifBlank { item.titleNative }
+        binding.tvWeek.text = item.chineseWeek
 
         // 总进度绑定
         binding.pb1.bind(item, true, clickAddEpProgress)

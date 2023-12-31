@@ -152,6 +152,14 @@ fun Element.parserHomePageProcess(): List<MediaDetailEntity> {
                 }
             }
         }
+
+        // 取出播放星期
+        val ofOrNull = entity.epList.orEmpty()
+            .groupBy { it.episode?.infoState?.chineseWeek }
+            .maxByOrNull { it.value.size }
+
+        entity.chineseWeek = ofOrNull?.key.orEmpty()
+
         entity
     }
 }

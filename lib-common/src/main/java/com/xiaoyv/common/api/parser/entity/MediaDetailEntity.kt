@@ -45,6 +45,7 @@ data class MediaDetailEntity(
     @SerializedName("progressMax") var progressMax: Int = 0,
     @SerializedName("progressSecond") var progressSecond: Int = 0,
     @SerializedName("progressSecondMax") var progressSecondMax: Int = 0,
+    @SerializedName("chineseWeek") var chineseWeek: String = "",
     @SerializedName("epList") var epList: List<ApiUserEpEntity>? = null,
     @SerializedName("subjectSummary") var subjectSummary: String = "",
     @SerializedName("tags") var tags: List<MediaTag> = emptyList(),

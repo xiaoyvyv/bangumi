@@ -39,7 +39,7 @@ data class ApiEpisodeEntity(
     var subjectId: Long = 0,
     @SerializedName("type")
     @EpApiType var type: Int = 0,
-
+    @SerializedName("infoState")
     var infoState: InfoState = InfoState(),
 ) : Parcelable {
 
@@ -59,20 +59,35 @@ data class ApiEpisodeEntity(
 
         info.collectStateText = InterestType.string(insType, mediaType)
 
-        // 解析放送状态
-        val millis = TimeUtils.string2Millis(airdate.orEmpty(), "yyyy-MM-dd")
+        // 放送时间
+        val millis = airDateTimestamp()
+        info.chineseWeek = if (millis == Long.MAX_VALUE) "" else TimeUtils.getChineseWeek(millis)
+
+        // 解析放送状态，是否放映中
         if (TimeUtils.isToday(millis)) {
             info.isAiring = true
             info.isAired = false
             info.airedStateText = "放送中"
-            infoState = info
-            return this
+        } else {
+            info.isAiring = false
+            info.isAired = System.currentTimeMillis() > millis
+            info.airedStateText = if (info.isAired) "已放送" else "未放送"
         }
-        info.isAiring = false
-        info.isAired = System.currentTimeMillis() > millis
-        info.airedStateText = if (info.isAired) "已放送" else "未放送"
+
         infoState = info
         return this
+    }
+
+    /**
+     * 放映时间
+     */
+    private fun airDateTimestamp(): Long {
+        return when (airdate.orEmpty().length) {
+            4 -> TimeUtils.string2Millis(airdate.orEmpty(), "yyyy")
+            7 -> TimeUtils.string2Millis(airdate.orEmpty(), "yyyy-MM")
+            10 -> TimeUtils.string2Millis(airdate.orEmpty(), "yyyy-MM-dd")
+            else -> Long.MAX_VALUE
+        }
     }
 
     @Keep
@@ -82,5 +97,6 @@ data class ApiEpisodeEntity(
         var isAired: Boolean = false,
         var isAiring: Boolean = false,
         var collectStateText: String = "",
+        var chineseWeek: String = "",
     ) : Parcelable
 }
