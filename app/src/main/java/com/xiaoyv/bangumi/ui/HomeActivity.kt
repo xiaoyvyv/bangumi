@@ -14,6 +14,7 @@ import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UpdateHelper
@@ -135,12 +136,15 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
         }
 
         currentApplication.globalNotify.observe(this) {
-            val badge = binding.navView.getOrCreateBadge(R.id.bottom_menu_profile)
-            if (it != 0) {
-                badge.number = it
-                badge.badgeGravity = BadgeDrawable.TOP_END
-            } else {
-                binding.navView.removeBadge(R.id.bottom_menu_profile)
+            val profileTab = viewModel.mainTabs.find { tab -> tab.type == FeatureType.TYPE_PROFILE }
+            if (profileTab != null) {
+                val badge = binding.navView.getOrCreateBadge(profileTab.id)
+                if (it != 0) {
+                    badge.number = it
+                    badge.badgeGravity = BadgeDrawable.TOP_END
+                } else {
+                    binding.navView.removeBadge(profileTab.id)
+                }
             }
         }
 

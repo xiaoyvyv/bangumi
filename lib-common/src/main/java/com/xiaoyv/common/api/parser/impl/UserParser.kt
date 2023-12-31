@@ -29,9 +29,9 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
     entity.gh = parserFormHash()
 
     // 解析 Int 类型好友ID
-    entity.numberUid = select(".actions a.chiiBtn").attr("href").let {
-        "(\\d{6,})".toRegex().groupValueOne(it)
-    }
+    entity.numberUid = select(".actions a.chiiBtn")
+        .joinToString(" ") { it.attr("href") }
+        .let { "(\\d{3,})".toRegex().groupValueOne(it) }
 
     selectLegal("#headerProfile").apply {
         entity.avatar = select(".headerAvatar span").attr("style")

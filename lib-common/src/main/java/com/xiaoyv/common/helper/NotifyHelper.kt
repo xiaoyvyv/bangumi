@@ -4,6 +4,7 @@ import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.widget.kts.sendValue
 import kotlinx.coroutines.Dispatchers
 
 /**
@@ -35,6 +36,7 @@ object NotifyHelper {
     fun markAllRead() {
         launchProcess(Dispatchers.IO) {
             require(UserHelper.isLogin) { "未登录，不刷新通知" }
+            currentApplication.globalNotify.sendValue(0)
             BgmApiManager.bgmWebApi.markNotifyRead(formHash = UserHelper.formHash)
             refreshNotify()
         }
