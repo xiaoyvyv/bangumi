@@ -1,37 +1,27 @@
 package com.xiaoyv.bangumi.ui.feature.user.bg
 
-import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
+import com.blankj.utilcode.util.SnackbarUtils
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityUserBgBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
-import com.xiaoyv.common.config.glide.ProgressTarget
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.GoogleAttr
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showInputDialog
-import com.xiaoyv.common.widget.image.AnimeImageView
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.getAttrColor
-import java.io.File
-import kotlin.math.roundToInt
 
 /**
  * Class: [ConfigBgActivity]
@@ -58,6 +48,7 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
     override fun initData() {
         binding.rvImage.hasFixedSize()
         binding.rvImage.adapter = configBgAdapter
+        binding.rvImage.removeImageScrollLoadController()
 
         binding.srlRefresh.initRefresh { true }
         binding.srlRefresh.setColorSchemeColors(getAttrColor(GoogleAttr.colorPrimary))
@@ -65,10 +56,16 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
 
     override fun initListener() {
         binding.fabRandom.setOnFastLimitClickListener {
+            binding.appBar.setExpanded(true, true)
+
             viewModel.randomImage()
         }
 
         configBgAdapter.setOnDebouncedChildClickListener(R.id.item_image) {
+            // 加载图片
+            binding.appBar.setExpanded(true, true)
+
+            // 配置大图
             viewModel.cacheImageLink.value = it.largeImageUrl
         }
 
@@ -84,6 +81,10 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
 
         viewModel.cacheImageLink.observe(this) {
             binding.ivBanner.loadImageAnimate(it)
+        }
+
+        viewModel.onSaveBgResultLiveData.observe(this) {
+            SnackbarUtils.with(binding.root).setMessage(it.orEmpty()).show()
         }
 
         UserHelper.observeUserInfo(this) {
@@ -102,31 +103,11 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
      * 加载背景
      */
     private fun loadUserBg() {
-        val background = ConfigHelper.userBackground
-        if (background.isNotBlank()) {
-            val target = ImageProgressTarget(
-                background, this,
-                object : CustomViewTarget<AnimeImageView, File>(binding.ivBanner) {
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-
-                    }
-
-                    override fun onResourceCleared(placeholder: Drawable?) {
-
-                    }
-
-                    override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-//                        view.setImage(ImageSource.uri(Uri.fromFile(resource)))
-                    }
-                }
-            )
-
-            Glide.with(this)
-                .asFile()
-                .load(background)
-                .into(target)
-        } else {
+        val signBg = UserHelper.currentUser.roomPic
+        if (signBg.isNullOrBlank()) {
             binding.ivBanner.loadImageBlur(UserHelper.currentUser.avatar?.large)
+        } else {
+            binding.ivBanner.loadImageAnimate(signBg)
         }
     }
 
@@ -135,9 +116,15 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
             .setIcon(CommonDrawable.ic_save)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
-                if (viewModel.cacheImageLink.value.isNullOrBlank().not()) {
-                    ConfigHelper.userBackground = viewModel.cacheImageLink.value.orEmpty()
-                    finish()
+                val link = viewModel.cacheImageLink.value.orEmpty()
+                if (link.isNotBlank()) {
+                    showConfirmDialog(
+                        title = "空间背景",
+                        message = "是否保存设置空间背景？\n\n提示：\n若为本地图片则为私密，否则为公开背景，此配置将会以0字体大小储存在你的个人简介末尾，不会影响网页端的个人简介希显示。",
+                        onConfirmClick = {
+                            viewModel.saveSingBg(link)
+                        }
+                    )
                 }
                 true
             }
@@ -174,37 +161,12 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onCreateLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(this)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         item.initNavBack(this)
         return super.onOptionsItemSelected(item)
-    }
-
-    inner class ImageProgressTarget<Z>(model: String?, context: Context, target: Target<Z>) :
-        ProgressTarget<String, Z>(model, context, target) {
-
-        override fun onConnecting() {
-            binding.pbMedia.progress = 0
-            binding.pbMedia.isVisible = true
-            debugLog { "ImageProgressTarget: onConnecting" }
-        }
-
-        override fun onDownloading(bytesRead: Long, expectedLength: Long) {
-            if (expectedLength != 0L) {
-                val progress = ((bytesRead / expectedLength.toDouble()) * 100).roundToInt()
-                binding.pbMedia.progress = progress
-            }
-            debugLog { "ImageProgressTarget: bytesRead: $bytesRead / expectedLength: $$expectedLength" }
-        }
-
-        override fun onDownloaded() {
-            debugLog { "ImageProgressTarget: onDownloaded" }
-        }
-
-        override fun onDelivered() {
-            debugLog { "ImageProgressTarget: onDelivered" }
-            binding.pbMedia.progress = 100
-            binding.pbMedia.isVisible = false
-        }
     }
 }

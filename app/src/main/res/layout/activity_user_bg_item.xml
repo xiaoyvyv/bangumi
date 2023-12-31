@@ -14,7 +14,7 @@
         android:foreground="@drawable/shape_cover_mask"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintDimensionRatio="3:2"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 </androidx.constraintlayout.widget.ConstraintLayout>

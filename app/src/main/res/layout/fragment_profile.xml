@@ -69,6 +69,19 @@
                     app:strokeWidth="@dimen/ui_size_2"
                     tools:src="@tools:sample/avatars" />
 
+                <com.xiaoyv.common.widget.image.AnimeImageView
+                    android:id="@+id/iv_edit"
+                    android:layout_width="@dimen/ui_size_20"
+                    android:layout_height="@dimen/ui_size_20"
+                    android:layout_marginEnd="@dimen/ui_size_4"
+                    android:layout_marginBottom="@dimen/ui_size_4"
+                    app:contentPadding="@dimen/ui_size_4"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_avatar"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                    app:srcCompat="@drawable/ic_edit"
+                    app:tint="?attr/colorOnSurface" />
+
                 <com.xiaoyv.common.widget.text.AnimeTextView
                     android:id="@+id/tv_email"
                     android:layout_width="wrap_content"

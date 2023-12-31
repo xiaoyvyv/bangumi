@@ -11,7 +11,6 @@ import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.currentApplication
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
@@ -174,8 +173,8 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
      * 加载背景
      */
     private fun loadUserBg() {
-        if (ConfigHelper.userBackground.isNotBlank()) {
-            binding.ivBanner.loadImageAnimate(ConfigHelper.userBackground)
+        if (UserHelper.currentUser.roomPic.isNullOrBlank().not()) {
+            binding.ivBanner.loadImageAnimate(UserHelper.currentUser.roomPic)
         } else {
             binding.ivBanner.loadImageBlur(UserHelper.currentUser.avatar?.large)
         }

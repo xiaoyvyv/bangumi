@@ -21,23 +21,29 @@ open class AnimeRecyclerView @JvmOverloads constructor(
     private var itemViewCacheSize = 20
     private var maxRecycledViews = 10
 
+    private val loadListener = object : OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            if (newState == SCROLL_STATE_SETTLING || newState == SCROLL_STATE_DRAGGING) {
+                if (!scrolling) {
+                    if (!context.isDestroyed()) Glide.with(context).pauseRequests()
+                }
+                scrolling = true
+            } else if (newState == SCROLL_STATE_IDLE) {
+                if (!context.isDestroyed()) Glide.with(context).resumeRequests()
+                scrolling = false
+            }
+        }
+    }
+
     init {
         FixHelper.fuckMiuiOverScroller(this)
         setItemViewCacheSize(itemViewCacheSize)
         setMaxRecycledViews(0, maxRecycledViews)
-        addOnScrollListener(object : OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == SCROLL_STATE_SETTLING || newState == SCROLL_STATE_DRAGGING) {
-                    if (!scrolling) {
-                        if (!context.isDestroyed()) Glide.with(context).pauseRequests()
-                    }
-                    scrolling = true
-                } else if (newState == SCROLL_STATE_IDLE) {
-                    if (!context.isDestroyed()) Glide.with(context).resumeRequests()
-                    scrolling = false
-                }
-            }
-        })
+        addOnScrollListener(loadListener)
+    }
+
+    fun removeImageScrollLoadController() {
+        removeOnScrollListener(loadListener)
     }
 
     final override fun setItemViewCacheSize(size: Int) {

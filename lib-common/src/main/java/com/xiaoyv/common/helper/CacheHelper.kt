@@ -7,6 +7,7 @@ import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.GalleryEntity
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.parcelableCreator
@@ -22,6 +23,7 @@ object CacheHelper {
     private const val KEY_CACHE_HISTORY = "cache-history"
     private const val KEY_CACHE_HOME = "cache-home"
     private const val KEY_CACHE_PROCESS = "cache-process"
+    private const val KEY_CACHE_BG_IMAGE = "cache-bg-image"
 
     /**
      * 保存搜索历史
@@ -61,6 +63,14 @@ object CacheHelper {
     fun readTranslate(cacheKey: String): String {
         return CacheDiskUtils.getInstance().getString(cacheKey).orEmpty()
     }
+
+    /**
+     * 空间背景数据图片列表缓存
+     */
+    var cacheBgImageList: List<GalleryEntity>
+        set(value) = CacheDiskUtils.getInstance().put(KEY_CACHE_BG_IMAGE, value.toJson())
+        get() = CacheDiskUtils.getInstance().getString(KEY_CACHE_BG_IMAGE).orEmpty()
+            .fromJson<List<GalleryEntity>>().orEmpty()
 
     /**
      * 首页缓存

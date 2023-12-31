@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.special.picture.gallery
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.GalleryEntity
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.widget.kts.orEmpty
 
 /**
@@ -52,7 +53,10 @@ class AnimeGalleryViewModel : BaseListViewModel<GalleryEntity>() {
 
             else -> {
                 BgmApiManager.bgmJsonApi
-                    .queryAnimePicture(page = (current - 1).coerceAtLeast(0))
+                    .queryAnimePicture(
+                        deniedTags = ConfigHelper.animePicDeniedTags,
+                        page = (current - 1).coerceAtLeast(0)
+                    )
                     .posts.orEmpty()
                     .map {
                         GalleryEntity(

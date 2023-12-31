@@ -31,8 +31,8 @@ object ConfigHelper {
     private const val KEY_HOME_DEFAULT_TAB = "home-tab-default"
     private const val KEY_HOME_TAB = "home-tab"
     private const val KEY_SMOOTH_FONT = "smooth-font"
-    private const val KEY_USER_BG = "user-bg"
     private const val KEY_DEFAULT_COMMENT_SORT = "default-comment-sort"
+    private const val KEY_ANIME_DENIED_TAGS = "anime-denied-tags"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -197,18 +197,20 @@ object ConfigHelper {
         get() = SPStaticUtils.getBoolean(KEY_TOPIC_TIME_TAG, true)
         set(value) = SPStaticUtils.put(KEY_TOPIC_TIME_TAG, value)
 
-
-    /**
-     * 用户自定义背景
-     */
-    var userBackground: String
-        get() = SPStaticUtils.getString(KEY_USER_BG, "")
-        set(value) = SPStaticUtils.put(KEY_USER_BG, value)
-
     /**
      * 默认评论排序
      */
     var commentDefaultSort: String
         get() = SPStaticUtils.getString(KEY_DEFAULT_COMMENT_SORT, "desc")
         set(value) = SPStaticUtils.put(KEY_DEFAULT_COMMENT_SORT, value)
+
+    /**
+     * Anime-Pictures 默认禁用标签
+     */
+    var animePicDeniedTags: String
+        get() = SPStaticUtils.getString(
+            KEY_ANIME_DENIED_TAGS,
+            "breasts||erotic||light erotic||hard erotic||bare shoulders||empty eyes||black background||spoilers"
+        )
+        set(value) = SPStaticUtils.put(KEY_ANIME_DENIED_TAGS, value)
 }

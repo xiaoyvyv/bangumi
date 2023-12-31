@@ -1,7 +1,6 @@
-@file:ExperimentalBadgeUtils
-
 package com.xiaoyv.common.kts
 
+import android.annotation.SuppressLint
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.annotation.IntRange
@@ -10,7 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import com.blankj.utilcode.util.ColorUtils
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
-import com.google.android.material.badge.ExperimentalBadgeUtils
 
 /**
  * ToolbarKt
@@ -36,6 +34,7 @@ fun MenuItem.initNavBack(activity: AppCompatActivity) {
 /**
  * 设置通知数目红点
  */
+@SuppressLint("UnsafeOptInUsageError")
 fun Toolbar.setBadgeNumber(
     @IdRes menuItemId: Int,
     @IntRange(from = 0) count: Int,

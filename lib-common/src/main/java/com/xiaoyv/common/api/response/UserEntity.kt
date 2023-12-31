@@ -23,6 +23,10 @@ data class UserEntity(
     var nickname: String? = null,
     @SerializedName("sign")
     var sign: String? = null,
+    @SerializedName("roomPic")
+    var roomPic: String? = null,
+    @SerializedName("summary")
+    var summary: String? = null,
     @SerializedName("user_group")
     var userGroup: Int = 0,
     @SerializedName("username")
@@ -33,7 +37,7 @@ data class UserEntity(
     @SerializedName("online")
     var online: String? = null,
     @SerializedName("isEmpty")
-    var isEmpty: Boolean = false
+    var isEmpty: Boolean = false,
 ) : Parcelable {
 
     @Keep
@@ -44,6 +48,6 @@ data class UserEntity(
         @SerializedName("medium")
         var medium: String? = null,
         @SerializedName("small")
-        var small: String? = null
+        var small: String? = null,
     ) : Parcelable
 }

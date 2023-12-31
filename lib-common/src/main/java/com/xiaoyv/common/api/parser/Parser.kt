@@ -9,7 +9,6 @@ import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.view.View
-import android.webkit.URLUtil
 import androidx.core.text.parseAsHtml
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
@@ -187,14 +186,12 @@ fun String?.preHandleHtml(): String {
  *
  * ```
  * [bg]https://i0.hdslb.com/bfs/article/dfe0c56f33f338f2a335fdc8fa22f4f1c1ea9964.gif[/bg]
+ * 我是小玉。
+ * [size=0][bg]/sdcard/.transforms/synthetic/picker/0/com.android.providers.media.photopicker/media/1000001761.jpg[/bg][/size]
  * ```
  */
 fun String?.parserSignBackground(): String {
-    val url = "\\[bg]\\s*(.*?)\\s*\\[/bg]".toRegex().groupValueOne(orEmpty()).trim()
-    if (URLUtil.isNetworkUrl(url)) {
-        return url
-    }
-    return ""
+    return "\\[bg]\\s*(.*?)\\s*\\[/bg]".toRegex().groupValueOne(orEmpty()).trim()
 }
 
 /**

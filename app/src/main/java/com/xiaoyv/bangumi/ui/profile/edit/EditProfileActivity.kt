@@ -50,7 +50,6 @@ class EditProfileActivity :
     }
 
     override fun initData() {
-
     }
 
     override fun initListener() {

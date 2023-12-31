@@ -18,6 +18,7 @@ import com.xiaoyv.common.api.parser.impl.parserSettingUpdateResult
 import com.xiaoyv.common.config.annotation.FormInputType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.copyOf
+import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.sendValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -73,21 +74,19 @@ class EditProfileViewModel : BaseViewModel() {
             state = loadingDialogState(cancelable = false),
             error = {
                 it.printStackTrace()
-                onActionResultLiveData.value = it.message
+
+                onActionResultLiveData.value = it.errorMsg
             },
             block = {
                 onActionResultLiveData.value = withContext(Dispatchers.IO) {
-                    val options = onEditOptionLiveData.value.orEmpty()
                     val multipartBody = MultipartBody.Builder()
                         .setType("multipart/form-data".toMediaType())
-                        .addForms(options)
+                        .addSettingForms(onEditOptionLiveData.value.orEmpty())
                         .build()
 
-                    val updateResult =
-                        BgmApiManager.bgmWebApi.updateSettings(multipartBody)
-                            .parserSettingUpdateResult()
-
-                    updateResult
+                    BgmApiManager.bgmWebApi
+                        .updateSettings(multipartBody)
+                        .parserSettingUpdateResult()
                 }
             }
         )
@@ -135,35 +134,6 @@ class EditProfileViewModel : BaseViewModel() {
     }
 
     /**
-     * 添加参数
-     */
-    private fun MultipartBody.Builder.addForms(options: List<SettingBaseEntity>): MultipartBody.Builder {
-        options.forEach {
-            val type = it.type
-            val field = it.field
-            val value = it.value
-
-            when (type) {
-                FormInputType.TYPE_FILE -> {
-                    val mediaType = "image/png".toMediaType()
-                    val avatarFile = FileUtils.getFileByPath(value)
-                    if (FileUtils.isFileExists(avatarFile)) {
-                        val fileBody = avatarFile.asRequestBody(mediaType)
-                        addFormDataPart(field, avatarFile.name, fileBody)
-                    } else {
-                        addFormDataPart(field, "", "".toRequestBody(mediaType))
-                    }
-                }
-
-                else -> {
-                    addFormDataPart(field, value)
-                }
-            }
-        }
-        return this
-    }
-
-    /**
      * 刷新某选项
      */
     fun refreshOptionItem(newItem: SettingBaseEntity) {
@@ -183,6 +153,38 @@ class EditProfileViewModel : BaseViewModel() {
             }
 
         return entities
+    }
+
+    companion object {
+
+        /**
+         * 添加参数
+         */
+        fun MultipartBody.Builder.addSettingForms(options: List<SettingBaseEntity>): MultipartBody.Builder {
+            options.forEach {
+                val type = it.type
+                val field = it.field
+                val value = it.value
+
+                when (type) {
+                    FormInputType.TYPE_FILE -> {
+                        val mediaType = "image/png".toMediaType()
+                        val avatarFile = FileUtils.getFileByPath(value)
+                        if (FileUtils.isFileExists(avatarFile)) {
+                            val fileBody = avatarFile.asRequestBody(mediaType)
+                            addFormDataPart(field, avatarFile.name, fileBody)
+                        } else {
+                            addFormDataPart(field, "", "".toRequestBody(mediaType))
+                        }
+                    }
+
+                    else -> {
+                        addFormDataPart(field, value)
+                    }
+                }
+            }
+            return this
+        }
     }
 }
 

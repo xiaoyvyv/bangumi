@@ -15,6 +15,7 @@ import com.xiaoyv.common.api.parser.impl.LoginParser.parserCheckIsLogin
 import com.xiaoyv.common.api.parser.impl.parserBlockUser
 import com.xiaoyv.common.api.parser.impl.parserSettingInfo
 import com.xiaoyv.common.api.parser.parserFormHash
+import com.xiaoyv.common.api.parser.parserSignBackground
 import com.xiaoyv.common.api.response.UserEntity
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
@@ -79,6 +80,7 @@ class UserHelper private constructor() {
     private fun checkCookie() {
         launchProcess(Dispatchers.IO) {
             debugLog { "校验缓存用户：${currentUser.toJson(true)}" }
+            refresh()
 
             // 检测缓存的用户信息是否有效
             val isLogin = BgmApiManager.bgmWebApi.queryLoginPage().parserCheckIsLogin()
@@ -147,8 +149,12 @@ class UserHelper private constructor() {
                 "picfile" -> newInfo.avatar = UserEntity.Avatar(item.value, item.value, item.value)
                 "sign_input" -> newInfo.sign = item.value
                 "username" -> newInfo.username = item.value
+                "newbio" -> newInfo.summary = item.value
             }
         }
+
+        // 背景
+        newInfo.roomPic = newInfo.summary.parserSignBackground()
 
         // 更新
         onUserInfoLiveData.sendValue(newInfo)

@@ -51,6 +51,9 @@ class AnimeGalleryActivity : BaseListActivity<GalleryEntity, AnimeGalleryViewMod
     override fun initData() {
         super.initData()
         contentAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
+
+        // 移除滑动停止加载图片
+        binding.rvContent.removeImageScrollLoadController()
     }
 
     override fun initListener() {

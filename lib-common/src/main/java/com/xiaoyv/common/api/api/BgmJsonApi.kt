@@ -34,7 +34,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.Url
 
 /**
  * Class: [BgmJsonApi]
@@ -68,7 +67,7 @@ interface BgmJsonApi {
         @Query("model") model: String,
         @Query("force_one") forceOne: Int,
         @Query("ai_detect") aiDetect: Int,
-        @Part file: MultipartBody.Part
+        @Part file: MultipartBody.Part,
     ): BaseListResponse<DetectCharacterEntity>
 
 
@@ -115,8 +114,12 @@ interface BgmJsonApi {
         @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
     ): DouBanPhotoEntity
 
+    /**
+     * Anime-Pictures
+     */
     @GET("https://api.anime-pictures.net/api/v3/posts")
     suspend fun queryAnimePicture(
+        @Query("denied_tags") deniedTags: String,
         @Query("lang") lang: String = "zh_CN",
         @Query("ldate") lDate: String = "0",
         @Query("order_by") orderBy: String = "date",
