@@ -19,7 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title="BBCode 正文预览" />
+            app:title="BBCode 预览" />
 
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 

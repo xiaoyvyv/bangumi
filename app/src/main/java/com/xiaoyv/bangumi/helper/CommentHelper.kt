@@ -28,9 +28,18 @@ object CommentHelper {
     ) {
         if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
         if (replyForm != null && replyForm.isEmpty.not()) {
-            ReplyCommentDialog.show(activity, replyForm, replyJs, targetComment) {
-                activity.launchUI { onReplyListener(it) }
-            }
+            ReplyCommentDialog.show(
+                activity,
+                replyForm,
+                replyJs,
+                targetComment,
+                onPreviewCodeListener = {
+                    RouteHelper.jumpPreviewBBCode(it)
+                },
+                onReplyListener = {
+                    activity.launchUI { onReplyListener(it) }
+                }
+            )
         }
     }
 }

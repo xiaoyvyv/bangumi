@@ -47,6 +47,7 @@ class ReplyCommentDialog : DialogFragment() {
      * 参数
      */
     private var onReplySuccess: (ReplyResultEntity) -> Unit = {}
+    private var onPreviewCode: (String) -> Unit = {}
 
     /**
      * 选取图片
@@ -99,51 +100,6 @@ class ReplyCommentDialog : DialogFragment() {
             viewModel.comment = input
             binding.btnSend.isEnabled = input.isNotBlank()
         }
-        /*
-                binding.menuBold.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuBold)
-                }
-
-                binding.menuItalic.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuItalic)
-                }
-
-                binding.menuUnderline.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuUnderline)
-                }
-
-                binding.menuStrikethrough.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuStrikethrough)
-                }
-
-                binding.menuSize.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuFontSize)
-                }
-
-                binding.menuMask.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuMask)
-                }
-
-                binding.menuColor.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuFontColor)
-                }
-
-                binding.menuLink.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuUrl)
-                }
-
-                binding.menuImage.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuImage)
-                }
-
-                binding.menuQuote.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuQuote)
-                }
-
-                binding.menuCode.setOnFastLimitClickListener {
-                    BBCode.insert(binding.edReply, BBCode.menuCode)
-                }
-        */
 
         // 发送
         binding.btnSend.setOnFastLimitClickListener {
@@ -164,6 +120,11 @@ class ReplyCommentDialog : DialogFragment() {
             switchHelper?.resetState()
 
             selectLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        // 预览
+        binding.menuPreview.setOnFastLimitClickListener {
+            onPreviewCode(binding.edReply.text.toString().trim())
         }
 
         binding.vTmp.setOnClickListener {
@@ -310,9 +271,13 @@ class ReplyCommentDialog : DialogFragment() {
             replyJs: String? = null,
             targetComment: CommentTreeEntity?,
             onReplyListener: (ReplyResultEntity) -> Unit = {},
+            onPreviewCodeListener: (String) -> Unit = {},
         ) {
             ReplyCommentDialog()
-                .apply { onReplySuccess = onReplyListener }
+                .apply {
+                    onReplySuccess = onReplyListener
+                    onPreviewCode = onPreviewCodeListener
+                }
                 .params(
                     NavKey.KEY_STRING to replyJs,
                     NavKey.KEY_PARCELABLE to replyForm,

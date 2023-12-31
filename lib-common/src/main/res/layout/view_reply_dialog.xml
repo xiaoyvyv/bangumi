@@ -109,6 +109,22 @@
                 app:srcCompat="@drawable/selector_add"
                 app:tint="?attr/colorOnSurfaceVariant" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_preview"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:cropToPadding="false"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:contentPadding="@dimen/ui_size_0"
+                app:layout_constraintBottom_toBottomOf="@+id/menu_emoji"
+                app:layout_constraintStart_toEndOf="@+id/menu_more"
+                app:layout_constraintTop_toTopOf="@+id/menu_emoji"
+                app:srcCompat="@drawable/ic_preview"
+                app:tint="?attr/colorOnSurfaceVariant" />
+
             <com.xiaoyv.common.widget.button.AnimeButton
                 android:id="@+id/btn_send"
                 android:layout_width="@dimen/ui_size_50"

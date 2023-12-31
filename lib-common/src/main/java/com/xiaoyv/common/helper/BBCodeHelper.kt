@@ -119,7 +119,7 @@ object BBCodeHelper {
                 default2 = bbCode.holderText,
                 onInput = { input1, input2 ->
                     activity.launchUI {
-                        delay(300)
+                        delay(200)
                         onBeforeInsert()
                         delay(100)
                         val startText = String.format(bbCode.tagStart, input1)

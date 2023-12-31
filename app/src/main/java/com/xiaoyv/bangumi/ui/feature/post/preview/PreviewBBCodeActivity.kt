@@ -38,7 +38,7 @@ class PreviewBBCodeActivity :
 
     override fun initData() {
         launchUI(stateView = viewModel.loadingViewState) {
-            previewWeb.setCode(viewModel.code)
+            previewWeb.setCode(viewModel.code.replace("\n", "<br>"))
         }
     }
 
