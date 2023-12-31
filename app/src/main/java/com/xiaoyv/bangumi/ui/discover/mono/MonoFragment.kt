@@ -13,6 +13,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.bean.SampleImageEntity
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.GoogleAttr
@@ -27,7 +28,11 @@ import com.xiaoyv.widget.kts.getAttrColor
  * @since 12/19/23
  */
 class MonoFragment : BaseViewModelFragment<FragmentListBinding, MonoViewModel>() {
-    private val contentAdapter by lazy { MonoAdapter() }
+    private val contentAdapter by lazy {
+        MonoAdapter().apply {
+            ConfigHelper.configAdapterAnimation(this, binding.rvContent)
+        }
+    }
 
     /**
      * 宫格数目

@@ -17,6 +17,11 @@
         android:title="@string/title_media" />
 
     <item
+        android:id="@+id/bottom_menu_process"
+        android:icon="@drawable/ic_bottom_rank"
+        android:title="@string/title_process" />
+
+    <item
         android:id="@+id/bottom_menu_discover"
         android:icon="@drawable/ic_bottom_group"
         android:title="@string/title_super" />

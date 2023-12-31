@@ -20,8 +20,6 @@ class MonoAdapter : BaseMultiItemAdapter<AdapterTypeItem>() {
             .onItemViewType { position, list ->
                 list[position].type
             }
-
-        ConfigHelper.configAdapterAnimation(this)
     }
 
     companion object {

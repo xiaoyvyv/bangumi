@@ -2,6 +2,8 @@ package com.xiaoyv.common.api.parser
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.style.ClickableSpan
@@ -11,14 +13,50 @@ import android.webkit.URLUtil
 import androidx.core.text.parseAsHtml
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.EncodeUtils
+import com.blankj.utilcode.util.ResourceUtils
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EmojiParam
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.groupValue
 import com.xiaoyv.common.kts.groupValueOne
+import com.xiaoyv.emoji.BgmEmoji
+import com.xiaoyv.widget.kts.spi
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
+/**
+ * 图片表情
+ */
+private val emojiImageGetter = object : Html.ImageGetter {
+    override fun getDrawable(source: String?): Drawable? {
+        val url = source.orEmpty()
+        val index = url.parseCount() - 1
+        if (index == -1) return null
+
+        when {
+            url.contains("tv", true) -> {
+                val resId = BgmEmoji.tvEmoji.values.toList().getOrNull(index) ?: return null
+                return ResourceUtils.getDrawable(resId).apply {
+                    setBounds(0, 0, 20.spi, 20.spi)
+                }
+            }
+
+            url.contains("bgm", true) -> {
+                val resId = BgmEmoji.bgmEmoji.values.toList().getOrNull(index) ?: return null
+                return ResourceUtils.getDrawable(resId).apply {
+                    setBounds(0, 0, 20.spi, 20.spi)
+                }
+            }
+
+            else -> {
+                val resId = BgmEmoji.normalEmoji.values.toList().getOrNull(index) ?: return null
+                return ResourceUtils.getDrawable(resId).apply {
+                    setBounds(0, 0, 20.spi, 20.spi)
+                }
+            }
+        }
+    }
+}
 
 /**
  * Parse background-image background-image:url('//lain.bgm.tv/r/100x100/pic/cover/l/eb/e9/397808_m3g00.jpg');
@@ -101,8 +139,12 @@ class GlobalChickHandler(private val span: URLSpan) : ClickableSpan() {
 /**
  * 解析 Html 并添加链接
  */
-fun String.parseHtml(handleLink: Boolean = false): CharSequence {
-    val spanned = parseAsHtml()
+fun String.parseHtml(
+    handleLink: Boolean = false,
+    imageGetter: Html.ImageGetter? = emojiImageGetter,
+    tagHandler: Html.TagHandler? = null,
+): CharSequence {
+    val spanned = parseAsHtml(imageGetter = imageGetter, tagHandler = tagHandler)
     if (!handleLink) return spanned
 
     val builder = SpannableStringBuilder(spanned)

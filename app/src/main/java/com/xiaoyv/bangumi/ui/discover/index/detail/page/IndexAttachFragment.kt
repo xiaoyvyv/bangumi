@@ -52,6 +52,10 @@ class IndexAttachFragment : BaseListFragment<IndexAttachEntity, IndexAttachViewM
                 BgmPathType.TYPE_EP -> RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
             }
         }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.tv_comment) {
+            RouteHelper.jumpSummaryDetail(it.comment)
+        }
     }
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<IndexAttachEntity, *> {

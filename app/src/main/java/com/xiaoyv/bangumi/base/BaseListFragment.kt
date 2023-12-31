@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.xiaoyv.bangumi.databinding.FragmentListBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
@@ -37,7 +38,9 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     open val scrollTopWhenRefresh: Boolean = true
 
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
-        onCreateContentAdapter()
+        onCreateContentAdapter().apply {
+            ConfigHelper.configAdapterAnimation(this, binding.rvContent)
+        }
     }
 
     private val adapterHelper by lazy {

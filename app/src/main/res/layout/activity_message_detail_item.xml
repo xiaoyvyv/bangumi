@@ -83,6 +83,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/tv_content"
         app:layout_constraintEnd_toEndOf="@id/tv_content"
         app:layout_constraintTop_toTopOf="@+id/tv_content"
-        app:trackThickness="@dimen/ui_size_2"/>
+        app:trackThickness="@dimen/ui_size_2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

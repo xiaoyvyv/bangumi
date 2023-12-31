@@ -35,7 +35,7 @@ class MediaChapterAdapter : BaseQuickDiffBindingAdapter<ApiUserEpEntity,
 
         binding.titleCn.text = episode.nameCn
         binding.titleCn.isGone = episode.nameCn.isNullOrBlank()
-        binding.tvTime.text = episode.airdate
+        binding.tvTime.text = String.format("首播：%s", episode.airdate)
         binding.tvComment.text = String.format("讨论：%d", episode.comment)
 
         when {

@@ -2,7 +2,7 @@ package com.xiaoyv.common.config.bean
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.xiaoyv.common.config.annotation.HomeFeatureType
+import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
@@ -15,7 +15,7 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class HomeIndexFeature(
-    @HomeFeatureType
+    @FeatureType
     override var id: String,
     var title: String,
     var icon: Int,

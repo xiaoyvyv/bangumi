@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.ui.discover.index.detail.page
 
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.xiaoyv.bangumi.databinding.FragmentIndexAttachItemBinding
 import com.xiaoyv.common.api.parser.entity.IndexAttachEntity
@@ -20,7 +21,7 @@ class IndexAttachAdapter : BaseQuickDiffBindingAdapter<IndexAttachEntity,
         FragmentIndexAttachItemBinding>(IdDiffItemCallback()) {
 
     override fun BaseQuickBindingHolder<FragmentIndexAttachItemBinding>.converted(item: IndexAttachEntity) {
-        binding.ivCover.loadImageAnimate(item.coverImage)
+        binding.ivCover.loadImageAnimate(item.coverImage, cropType = ImageView.ScaleType.FIT_START)
         binding.tvTitle.text = item.title
         binding.tvInfo.text = item.desc
         binding.tvComment.text = item.comment

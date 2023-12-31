@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.profile
 
 import android.annotation.SuppressLint
 import android.view.MenuItem
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ColorUtils
 import com.google.android.material.badge.BadgeDrawable
@@ -21,6 +22,8 @@ import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.kts.dpi
+import kotlin.math.abs
 
 
 /**
@@ -47,6 +50,9 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
         binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
 
         tabLayoutMediator.attach()
+
+        binding.toolbar.setNavigationIcon(CommonDrawable.ic_menu)
+
     }
 
     override fun initData() {
@@ -55,6 +61,22 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
 
     override fun initListener() {
+        binding.toolbar.setNavigationOnClickListener {
+            PopupMenu(requireActivity(), it)
+                .apply {
+                    menu.add("我的空间")
+                        .setOnMenuItemClickListener {
+                            if (UserHelper.isLogin) {
+                                RouteHelper.jumpUserDetail(UserHelper.currentUser.id.toString())
+                            } else {
+                                RouteHelper.jumpLogin()
+                            }
+                            true
+                        }
+                }
+                .show()
+        }
+
         binding.toolbar.menu.apply {
             add(0, CommonId.profile_notify, 0, "Notify")
                 .setIcon(CommonDrawable.ic_notifications)
@@ -79,6 +101,14 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                     RouteHelper.jumpSetting()
                     true
                 }
+        }
+
+        binding.appBar.addOnOffsetChangedListener { appBarLayout, i ->
+            if (abs(i) >= appBarLayout.totalScrollRange - 50.dpi) {
+                binding.toolbar.navigationIcon = null
+            } else {
+                binding.toolbar.setNavigationIcon(CommonDrawable.ic_menu)
+            }
         }
 
         binding.ivBanner.setOnFastLimitClickListener {

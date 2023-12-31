@@ -6,7 +6,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.HomeIndexEntity
 import com.xiaoyv.common.api.parser.impl.parserHomePageWithoutLogin
-import com.xiaoyv.common.config.annotation.HomeFeatureType
+import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.bean.HomeIndexFeature
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.kts.CommonDrawable
@@ -41,57 +41,57 @@ class HomeViewModel : BaseViewModel() {
                     BgmApiManager.bgmJsonApi.queryMainPage().parserHomePageWithoutLogin().apply {
                         banner.features = listOf(
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_MAGI,
+                                id = FeatureType.TYPE_MAGI,
                                 title = "MAGI 问答",
                                 icon = CommonDrawable.ic_magi
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_ANIME_PICTURES,
+                                id = FeatureType.TYPE_ANIME_PICTURES,
                                 title = "A-P 图站",
                                 icon = CommonDrawable.ic_format_image
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_SEARCH,
+                                id = FeatureType.TYPE_SEARCH,
                                 title = "搜索",
                                 icon = CommonDrawable.ic_search
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_RANK,
+                                id = FeatureType.TYPE_RANK,
                                 title = "排行榜",
                                 icon = CommonDrawable.ic_bottom_rank
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_PROCESS,
+                                id = FeatureType.TYPE_PROCESS,
                                 title = "进度管理",
                                 icon = CommonDrawable.ic_process
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_ALMANAC,
+                                id = FeatureType.TYPE_ALMANAC,
                                 title = "年鉴",
                                 icon = CommonDrawable.ic_calendar
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_EMAIL,
+                                id = FeatureType.TYPE_EMAIL,
                                 title = "短信",
                                 icon = CommonDrawable.ic_email_normal
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_DETECT_ANIME,
+                                id = FeatureType.TYPE_DETECT_ANIME,
                                 title = "以图搜番",
                                 icon = CommonDrawable.ic_image_search
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_DETECT_CHARACTER,
+                                id = FeatureType.TYPE_DETECT_CHARACTER,
                                 title = "以图识人",
                                 icon = CommonDrawable.ic_person_search
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_DOLLARS,
+                                id = FeatureType.TYPE_DOLLARS,
                                 title = "Dollars",
                                 icon = CommonDrawable.ic_dollars
                             ),
                             HomeIndexFeature(
-                                id = HomeFeatureType.TYPE_WIKI,
+                                id = FeatureType.TYPE_WIKI,
                                 title = "WIKI",
                                 icon = CommonDrawable.ic_wiki
                             ),

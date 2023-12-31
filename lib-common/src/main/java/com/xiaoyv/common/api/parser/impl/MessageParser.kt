@@ -1,13 +1,19 @@
 package com.xiaoyv.common.api.parser.impl
 
+import android.graphics.drawable.Drawable
+import androidx.core.text.parseAsHtml
+import com.blankj.utilcode.util.ResourceUtils
 import com.xiaoyv.common.api.parser.entity.MessageEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
+import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.emoji.BgmEmoji
+import com.xiaoyv.widget.kts.spi
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Element
 
@@ -77,7 +83,6 @@ fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
         entity.summary = textPm.html()
             .trim().removePrefix(":")
             .trim().parseHtml()
-
         entity
     }
 }

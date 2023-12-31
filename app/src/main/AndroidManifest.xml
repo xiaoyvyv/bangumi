@@ -281,6 +281,10 @@
             android:name="com.xiaoyv.bangumi.ui.feature.user.bg.ConfigBgActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.setting.tab.TabConfigActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

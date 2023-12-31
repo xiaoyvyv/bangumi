@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.ui.process.ProcessFragment
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.LazyUtils.loadRootFragment
-import com.xiaoyv.common.config.GlobalConfig
+import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.kts.initNavBack
 
 /**
@@ -19,10 +19,10 @@ import com.xiaoyv.common.kts.initNavBack
  * @since 12/24/23
  */
 class FragmentContainerActivity : BaseBindingActivity<ActivityEmptyContainerBinding>() {
-    private var page = GlobalConfig.PAGE_RANK
+    private var page = ""
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
-        page = bundle.getInt(NavKey.KEY_INTEGER)
+        page = bundle.getString(NavKey.KEY_STRING).orEmpty()
     }
 
     override fun initView() {
@@ -31,11 +31,11 @@ class FragmentContainerActivity : BaseBindingActivity<ActivityEmptyContainerBind
 
     override fun initData() {
         when (page) {
-            GlobalConfig.PAGE_RANK -> {
+            FeatureType.TYPE_RANK -> {
                 loadRootFragment(binding.flContainer.id, MediaFragment.newInstance())
             }
 
-            GlobalConfig.PAGE_PROCESS -> {
+            FeatureType.TYPE_PROCESS -> {
                 loadRootFragment(binding.flContainer.id, ProcessFragment.newInstance())
             }
         }

@@ -1,9 +1,11 @@
 package com.xiaoyv.common.helper
 
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.SPStaticUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.xiaoyv.common.config.GlobalConfig
+import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.annotation.TimelinePageType
 
 /**
@@ -26,8 +28,8 @@ object ConfigHelper {
     private const val KEY_FILTER_BREAK_UP_COMMENT = "filter-break-up-comment"
     private const val KEY_SPLIT_EP_LIST = "split-ep-list"
     private const val KEY_TOPIC_TIME_TAG = "topic-time-tag"
-    private const val KEY_HOME_DEFAULT_TAB = "home-default-tab"
-    private const val KEY_CENTER_TYPE = "center-tab-type"
+    private const val KEY_HOME_DEFAULT_TAB = "home-tab-default"
+    private const val KEY_HOME_TAB = "home-tab"
     private const val KEY_SMOOTH_FONT = "smooth-font"
     private const val KEY_USER_BG = "user-bg"
     private const val KEY_DEFAULT_COMMENT_SORT = "default-comment-sort"
@@ -57,11 +59,51 @@ object ConfigHelper {
         set(value) = SPStaticUtils.put(KEY_HOME_DEFAULT_TAB, value)
 
     /**
+     * 首页 Tab-1 配置
+     */
+    var homeTab1: String
+        get() = SPStaticUtils.getString(KEY_HOME_TAB + "_1", FeatureType.TYPE_DISCOVER)
+        set(value) = SPStaticUtils.put(KEY_HOME_TAB + "_1", value)
+
+    /**
+     * 首页 Tab-2 配置
+     */
+    var homeTab2: String
+        get() = SPStaticUtils.getString(KEY_HOME_TAB + "_2", FeatureType.TYPE_TIMELINE)
+        set(value) = SPStaticUtils.put(KEY_HOME_TAB + "_2", value)
+
+    /**
+     * 首页 Tab-3 配置
+     */
+    var homeTab3: String
+        get() = SPStaticUtils.getString(KEY_HOME_TAB + "_3", FeatureType.TYPE_RANK)
+        set(value) = SPStaticUtils.put(KEY_HOME_TAB + "_3", value)
+
+    /**
+     * 首页 Tab-4 配置
+     */
+    var homeTab4: String
+        get() = SPStaticUtils.getString(KEY_HOME_TAB + "_4", FeatureType.TYPE_RAKUEN)
+        set(value) = SPStaticUtils.put(KEY_HOME_TAB + "_4", value)
+
+    /**
+     * 首页 Tab-5 配置
+     */
+    var homeTab5: String
+        get() = SPStaticUtils.getString(KEY_HOME_TAB + "_5", FeatureType.TYPE_PROFILE)
+        set(value) = SPStaticUtils.put(KEY_HOME_TAB + "_5", value)
+
+    /**
      * 配置条目加载动画
      */
-    fun configAdapterAnimation(adapter: BaseQuickAdapter<*, *>) {
+    fun configAdapterAnimation(
+        adapter: BaseQuickAdapter<*, *>,
+        recyclerView: RecyclerView,
+    ) {
         if (isAdapterAnimation.not()) return
-        adapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
+        if (recyclerView.layoutManager is GridLayoutManager) {
+            adapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
+        }
     }
 
     /**
@@ -155,12 +197,6 @@ object ConfigHelper {
         get() = SPStaticUtils.getBoolean(KEY_TOPIC_TIME_TAG, true)
         set(value) = SPStaticUtils.put(KEY_TOPIC_TIME_TAG, value)
 
-    /**
-     * 中心 TAB 的类型
-     */
-    var centerTabType: Int
-        get() = SPStaticUtils.getInt(KEY_CENTER_TYPE, GlobalConfig.PAGE_RANK)
-        set(value) = SPStaticUtils.put(KEY_CENTER_TYPE, value)
 
     /**
      * 用户自定义背景

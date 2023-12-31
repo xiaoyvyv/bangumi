@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.StringUtils
 import com.chad.library.adapter.base.BaseDifferAdapter
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.xiaoyv.bangumi.databinding.ActivityListBinding
@@ -40,7 +39,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
 
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
         onCreateContentAdapter().apply {
-            ConfigHelper.configAdapterAnimation(this)
+            ConfigHelper.configAdapterAnimation(this, binding.rvContent)
         }
     }
 

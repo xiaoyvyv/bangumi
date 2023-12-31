@@ -42,6 +42,7 @@ class MessageDetailAdapter :
         } else {
             binding.tvContent.text = item.summary
         }
+
         binding.tvContent.updateLayoutParams<ConstraintLayout.LayoutParams> {
             horizontalBias = if (item.isMine) 1f else 0f
         }

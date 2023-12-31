@@ -9,8 +9,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.discover.DiscoverFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.config.GlobalConfig
-import com.xiaoyv.common.config.annotation.HomeFeatureType
+import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.kts.useNotNull
@@ -37,16 +36,16 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
             touchedListener = touchedListener,
             onClickFeature = {
                 when (it.id) {
-                    HomeFeatureType.TYPE_SEARCH -> RouteHelper.jumpSearch()
-                    HomeFeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
-                    HomeFeatureType.TYPE_MAGI -> RouteHelper.jumpMagi()
-                    HomeFeatureType.TYPE_ANIME_PICTURES -> RouteHelper.jumpAnimePictures()
-                    HomeFeatureType.TYPE_ALMANAC -> RouteHelper.jumpAlmanac()
-                    HomeFeatureType.TYPE_PROCESS -> RouteHelper.jumpFragmentPage(GlobalConfig.PAGE_PROCESS)
-                    HomeFeatureType.TYPE_RANK -> RouteHelper.jumpFragmentPage(GlobalConfig.PAGE_RANK)
-                    HomeFeatureType.TYPE_DETECT_ANIME -> RouteHelper.jumpDetectAnime()
-                    HomeFeatureType.TYPE_DETECT_CHARACTER -> RouteHelper.jumpDetectCharacter()
-                    HomeFeatureType.TYPE_DOLLARS -> {
+                    FeatureType.TYPE_SEARCH -> RouteHelper.jumpSearch()
+                    FeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
+                    FeatureType.TYPE_MAGI -> RouteHelper.jumpMagi()
+                    FeatureType.TYPE_ANIME_PICTURES -> RouteHelper.jumpAnimePictures()
+                    FeatureType.TYPE_ALMANAC -> RouteHelper.jumpAlmanac()
+                    FeatureType.TYPE_PROCESS -> RouteHelper.jumpFragmentPage(FeatureType.TYPE_PROCESS)
+                    FeatureType.TYPE_RANK -> RouteHelper.jumpFragmentPage(FeatureType.TYPE_RANK)
+                    FeatureType.TYPE_DETECT_ANIME -> RouteHelper.jumpDetectAnime()
+                    FeatureType.TYPE_DETECT_CHARACTER -> RouteHelper.jumpDetectCharacter()
+                    FeatureType.TYPE_DOLLARS -> {
                         RouteHelper.jumpWeb(
                             url = BgmApiManager.URL_BASE_WEB + "/dollars",
                             injectJs = ResourceUtils.readAssets2String("js/dollars.js"),

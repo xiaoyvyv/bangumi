@@ -38,6 +38,7 @@ import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
 import com.xiaoyv.bangumi.ui.feature.setting.block.BlockActivity
 import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
 import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
+import com.xiaoyv.bangumi.ui.feature.setting.tab.TabConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.translate.TranslateConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.ui.UiConfigActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
@@ -55,6 +56,7 @@ import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.MonoOrderByType
 import com.xiaoyv.common.config.annotation.TopicType
@@ -361,6 +363,10 @@ object RouteHelper {
         ActivityUtils.startActivity(SettingActivity::class.java)
     }
 
+    fun jumpTabConfig() {
+        TabConfigActivity::class.open()
+    }
+
     /**
      * @param forSelectMedia 是否为选取媒体条目
      */
@@ -454,8 +460,8 @@ object RouteHelper {
         UiConfigActivity::class.open()
     }
 
-    fun jumpFragmentPage(page: Int) {
-        FragmentContainerActivity::class.open(bundleOf(NavKey.KEY_INTEGER to page))
+    fun jumpFragmentPage(@FeatureType feature: String) {
+        FragmentContainerActivity::class.open(bundleOf(NavKey.KEY_STRING to feature))
     }
 
     fun jumpAnimePictures() {

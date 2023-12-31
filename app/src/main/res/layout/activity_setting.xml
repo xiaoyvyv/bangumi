@@ -106,6 +106,16 @@
                 tools:ignore="HardcodedText" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="底栏配置"
+                tools:ignore="HardcodedText" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_translate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

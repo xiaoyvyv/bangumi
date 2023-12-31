@@ -41,20 +41,6 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
             values = listOf("asc", "desc", "hot")
         )
 
-        binding.settingFirstTab.bindSerializable(
-            activity = this,
-            property = ConfigHelper::homeDefaultTab,
-            names = listOf("第1个", "第2个", "第3个", "第4个", "第5个"),
-            values = listOf(0, 1, 2, 3, 4)
-        )
-
-        binding.settingCenterTab.bindSerializable(
-            activity = this,
-            property = ConfigHelper::centerTabType,
-            names = listOf("排行榜", "追番进度"),
-            values = listOf(GlobalConfig.PAGE_RANK, GlobalConfig.PAGE_PROCESS)
-        )
-
         debugLog { "Init Data ${ConfigHelper.isSmoothFont}" }
     }
 
