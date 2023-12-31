@@ -37,7 +37,7 @@ class MessageActivity : BaseListActivity<MessageEntity, MessageViewModel>() {
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_notify) {
             val indexOfFirst = contentAdapter.itemIndexOfFirst(it)
-            if (indexOfFirst != -1) {
+            if (indexOfFirst != -1 && it.boxType == MessageBoxType.TYPE_INBOX) {
                 it.isUnRead = false
                 contentAdapter.notifyItemChanged(indexOfFirst)
             }

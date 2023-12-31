@@ -6,12 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.PathUtils
-import com.blankj.utilcode.util.UriUtils
 import com.xiaoyv.bangumi.special.detect.ImageDetectViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
 import com.xiaoyv.common.api.response.anime.ListParcelableWrapEntity
+import com.xiaoyv.common.helper.ImageHelper
 import com.xiaoyv.common.helper.ImageProcessor
 import com.xiaoyv.common.widget.setting.SearchOptionView
 import kotlinx.coroutines.Dispatchers
@@ -77,7 +77,7 @@ class ImageDetectCharacterViewModel : ImageDetectViewModel() {
                         ?: throw IllegalArgumentException("Please select a model firstly!")
 
                 onDetectCharacterLiveData.value = withContext(Dispatchers.IO) {
-                    val targetFile = UriUtils.uri2File(imageUri)
+                    val targetFile = FileUtils.getFileByPath(ImageHelper.compressImage(imageUri))
                     val requestBody = targetFile.asRequestBody("image/*".toMediaType())
                     val body = MultipartBody.Part.createFormData("image", "image.jpg", requestBody)
                     val entities = BgmApiManager.bgmJsonApi.queryAnimeCharacter(

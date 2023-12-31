@@ -16,6 +16,7 @@ import com.xiaoyv.common.api.parser.entity.CreatePostEntity
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.ImageHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
@@ -75,19 +76,8 @@ open class BasePostViewModel : BaseViewModel() {
 
                     if (ConfigHelper.isImageCompress) {
                         debugLog { "压缩图片：$file" }
-
-                        // 压缩图片
-                        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                        val tmpDir = PathUtils.getCachePathExternalFirst() + "/image"
-                        val tmp = tmpDir + "/${System.currentTimeMillis()}.png"
-                        val quality =
-                            ImageUtils.compressByQuality(bitmap, MemoryConstants.KB * 500L, true)
-
-                        FileUtils.deleteAllInDir(tmpDir)
-                        FileIOUtils.writeFileFromBytesByStream(tmp, quality)
-
-                        // 开始上传
-                        uploadImage(tmp)
+                        // 压缩图片、开始上传
+                        uploadImage(ImageHelper.compressImage(file))
                     } else {
                         debugLog { "跳过压缩：$file" }
 

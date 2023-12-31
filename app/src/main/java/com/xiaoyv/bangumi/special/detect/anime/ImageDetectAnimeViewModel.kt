@@ -2,11 +2,12 @@ package com.xiaoyv.bangumi.special.detect.anime
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import com.blankj.utilcode.util.UriUtils
+import com.blankj.utilcode.util.FileUtils
 import com.xiaoyv.bangumi.special.detect.ImageDetectViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
+import com.xiaoyv.common.helper.ImageHelper
 import com.xiaoyv.common.widget.setting.SearchOptionView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,7 +34,7 @@ class ImageDetectAnimeViewModel : ImageDetectViewModel() {
             },
             block = {
                 onAnimeSourceLiveData.value = withContext(Dispatchers.IO) {
-                    val targetFile = UriUtils.uri2File(imageUri)
+                    val targetFile = FileUtils.getFileByPath(ImageHelper.compressImage(imageUri))
                     val requestBody = targetFile.asRequestBody("multipart/form-data".toMediaType())
                     val body = MultipartBody.Part.createFormData("file", "image.jpg", requestBody)
                     BgmApiManager.bgmJsonApi.queryAnimeByImage(body)
