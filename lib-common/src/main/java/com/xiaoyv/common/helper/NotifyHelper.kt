@@ -60,4 +60,14 @@ object NotifyHelper {
             refreshNotify()
         }
     }
+
+    /**
+     * 短信通知数目刷新直接重新拉取即可
+     */
+    fun markMessageRead() {
+        launchProcess(Dispatchers.IO) {
+            require(UserHelper.isLogin) { "未登录，不刷新通知" }
+            refreshNotify()
+        }
+    }
 }

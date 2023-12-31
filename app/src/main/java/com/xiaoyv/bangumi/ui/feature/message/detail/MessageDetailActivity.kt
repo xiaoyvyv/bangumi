@@ -19,6 +19,7 @@ import com.xiaoyv.bangumi.databinding.ActivityMessageDetailInputBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MessageEntity
+import com.xiaoyv.common.helper.NotifyHelper
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
@@ -125,6 +126,9 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
             }
             inputBinding.etMessage.isEnabled = true
         }
+
+        // 刷新短信数目
+        NotifyHelper.markMessageRead()
     }
 
     override fun onListDataError() {
