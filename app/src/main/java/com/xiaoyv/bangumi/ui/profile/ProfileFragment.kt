@@ -165,7 +165,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
             // 短信提醒
             messageBadge = binding.toolbar.setBadgeNumber(
-                CommonId.profile_message, it.first, messageBadge
+                CommonId.profile_message, it.second, messageBadge
             )
         }
     }

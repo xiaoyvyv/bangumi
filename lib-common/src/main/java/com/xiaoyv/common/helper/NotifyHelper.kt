@@ -38,12 +38,12 @@ object NotifyHelper {
                     }
                 )
             }
-            val notify = data1 as NotifyEntity
+
+            val notifyCount = requireNotNull((data1 as NotifyEntity).count) { "未登录" }
             val messageCount = (data2 as MessageCountEntity).unRead
-            val notifyCount = requireNotNull(notify.count) { "未登录" }
 
             currentApplication.globalNotify.postValue(notifyCount to messageCount)
-            debugLog { "定时任务：执行结果 -> $notify" }
+            debugLog { "定时任务：执行结果 -> notifyCount: $notifyCount, messageCount: $messageCount" }
         }.onFailure {
             debugLog { "定时任务：失败 -> ${it.message}" }
             it.printStackTrace()

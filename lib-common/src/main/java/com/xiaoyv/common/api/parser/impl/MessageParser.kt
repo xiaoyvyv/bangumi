@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Element
 
@@ -42,10 +43,10 @@ fun Element.parserMessageList(boxType: String): Pair<String, List<MessageEntity>
  * 解析：<div id="pm_sidebar">未读: 1<br>收件箱: 2<br>发件箱: 3</div>
  */
 fun Element.parserCountInfo(): MessageCountEntity {
-    val sidebar = select("#pm_sidebar").text().split("\\s+".toRegex())
-    val unRead = sidebar.find { it.contains("未读") }.orEmpty().parseCount()
-    val receiveCount = sidebar.find { it.contains("收件箱") }.orEmpty().parseCount()
-    val sendCount = sidebar.find { it.contains("发件箱") }.orEmpty().parseCount()
+    val sidebar = select("#pm_sidebar").text().trim()
+    val unRead = "未读:\\s*(\\d+)".toRegex().groupValueOne(sidebar).parseCount()
+    val receiveCount = "收件箱:\\s*(\\d+)".toRegex().groupValueOne(sidebar).parseCount()
+    val sendCount = "发件箱:\\s*(\\d+)".toRegex().groupValueOne(sidebar).parseCount()
     return MessageCountEntity(unRead, receiveCount, sendCount)
 }
 
