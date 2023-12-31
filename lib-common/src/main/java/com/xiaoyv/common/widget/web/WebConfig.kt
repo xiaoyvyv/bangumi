@@ -17,7 +17,7 @@ object WebConfig {
     private const val DEBUG = false
 
     private val baseH5Url
-        get() = if (DEBUG) "http://192.168.6.70:5173/#/" else "file:///android_asset/h5/index.html#"
+        get() = if (DEBUG) "http://192.168.0.103:5173/#/" else "file:///android_asset/h5/index.html#"
 
     /**
      * 获取当前是否开启深色模式

@@ -176,20 +176,23 @@ img {
 .text_mask {
   color: var(--on-surface-variant-color) !important;
   background: var(--on-surface-variant-color) !important;
-  margin-bottom: 4px;
-  padding: 2px 4px 2px 4px;
+  padding: 2px 6px 4px 6px !important;
+  margin: 0 4px 0 4px !important;
   flex-shrink: 0;
   display: inline-block;
   border-radius: 6px !important;
   overflow: hidden;
   text-decoration: none;
-  vertical-align: middle;
+  vertical-align: text-top;
+  line-height: 1;
+  font-size: 95% !important;
   -webkit-tap-highlight-color: transparent;
   transition: color ease .2s;
 
   * {
     color: var(--on-surface-variant-color) !important;
     background: var(--on-surface-variant-color) !important;
+    opacity: 0;
   }
 }
 
@@ -198,6 +201,7 @@ img {
 
   * {
     color: var(--surface-color) !important;
+    opacity: 1;
   }
 
   a {
@@ -207,19 +211,21 @@ img {
 }
 
 a {
+  box-sizing: border-box;
   outline: none;
   color: var(--primary-color) !important;
-  margin-bottom: 4px;
-  margin-top: 4px;
   background: var(--surface-container-color) !important;
-  padding: 2px 6px 4px 6px;
+  padding: 2px 6px 4px 6px !important;
+  margin: 0 4px 0 4px !important;
   flex-shrink: 0;
   display: inline-block;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
   overflow: hidden;
   text-decoration: none;
-  vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
+  vertical-align: text-top;
+  line-height: 1;
+  font-size: 95%;
 }
 
 // 分割线
