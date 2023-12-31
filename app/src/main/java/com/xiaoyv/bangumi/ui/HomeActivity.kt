@@ -135,12 +135,13 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
             viewModel.addRobotSayQueue(it.trim())
         }
 
+        // 电波和短信提醒
         currentApplication.globalNotify.observe(this) {
             val profileTab = viewModel.mainTabs.find { tab -> tab.type == FeatureType.TYPE_PROFILE }
             if (profileTab != null) {
                 val badge = binding.navView.getOrCreateBadge(profileTab.id)
-                if (it != 0) {
-                    badge.number = it
+                if ((it.first + it.second) != 0) {
+                    badge.number = it.first + it.second
                     badge.badgeGravity = BadgeDrawable.TOP_END
                 } else {
                     binding.navView.removeBadge(profileTab.id)
@@ -148,6 +149,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
             }
         }
 
+        // 春菜说话
         viewModel.onRobotSay.observe(this) {
             robot.onSay(it)
         }

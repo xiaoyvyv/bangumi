@@ -23,6 +23,6 @@ class NotifyViewModel : BaseListViewModel<NotifyEntity>() {
     }
 
     private fun markAllRead() {
-        NotifyHelper.markAllRead()
+        NotifyHelper.markNotifyRead()
     }
 }

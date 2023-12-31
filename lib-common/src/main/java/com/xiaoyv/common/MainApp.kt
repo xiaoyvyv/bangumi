@@ -39,9 +39,11 @@ class MainApp : Application() {
 
     /**
      * 全局通知
+     *
+     * - first: 电波提醒
+     * - second: 短信
      */
-    val globalNotify = MutableLiveData<Int>()
-
+    val globalNotify = MutableLiveData<Pair<Int, Int>>()
 
     override fun onCreate() {
         super.onCreate()

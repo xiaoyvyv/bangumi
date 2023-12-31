@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.view.MenuItem
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.LifecycleOwner
-import com.blankj.utilcode.util.ColorUtils
 import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
@@ -15,12 +13,12 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
+import com.xiaoyv.common.kts.setBadgeNumber
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpi
 import kotlin.math.abs
@@ -34,6 +32,7 @@ import kotlin.math.abs
  */
 class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileViewModel>() {
     private var notifyBadge: BadgeDrawable? = null
+    private var messageBadge: BadgeDrawable? = null
 
     private val vpAdapter by lazy {
         ProfileAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
@@ -159,26 +158,15 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
 
         // 消息提醒
         currentApplication.globalNotify.observe(this) {
-            if (it > 0) {
-                val badgeDrawable = BadgeDrawable.create(requireActivity())
-                    .apply {
-                        isVisible = true
-                        backgroundColor = ColorUtils.getColor(CommonColor.save_dropped)
-                        number = it
-                    }
-                BadgeUtils.attachBadgeDrawable(
-                    badgeDrawable,
-                    binding.toolbar,
-                    CommonId.profile_notify
-                )
-                notifyBadge = badgeDrawable
-            } else {
-                BadgeUtils.detachBadgeDrawable(
-                    notifyBadge,
-                    binding.toolbar,
-                    CommonId.profile_notify
-                )
-            }
+            // 消息提醒
+            notifyBadge = binding.toolbar.setBadgeNumber(
+                CommonId.profile_notify, it.first, notifyBadge
+            )
+
+            // 短信提醒
+            messageBadge = binding.toolbar.setBadgeNumber(
+                CommonId.profile_message, it.first, messageBadge
+            )
         }
     }
 

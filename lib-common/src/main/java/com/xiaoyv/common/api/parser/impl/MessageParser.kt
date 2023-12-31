@@ -1,8 +1,6 @@
 package com.xiaoyv.common.api.parser.impl
 
-import android.graphics.drawable.Drawable
-import androidx.core.text.parseAsHtml
-import com.blankj.utilcode.util.ResourceUtils
+import com.xiaoyv.common.api.parser.entity.MessageCountEntity
 import com.xiaoyv.common.api.parser.entity.MessageEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
@@ -12,8 +10,6 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.emoji.BgmEmoji
-import com.xiaoyv.widget.kts.spi
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Element
 
@@ -40,6 +36,17 @@ fun Element.parserMessageList(boxType: String): Pair<String, List<MessageEntity>
             entity.isRead = item.select(".pm_new").isNotEmpty()
             entity
         }
+}
+
+/**
+ * 解析：<div id="pm_sidebar">未读: 1<br>收件箱: 2<br>发件箱: 3</div>
+ */
+fun Element.parserCountInfo(): MessageCountEntity {
+    val sidebar = select("#pm_sidebar").text().split("\\s+".toRegex())
+    val unRead = sidebar.find { it.contains("未读") }.orEmpty().parseCount()
+    val receiveCount = sidebar.find { it.contains("收件箱") }.orEmpty().parseCount()
+    val sendCount = sidebar.find { it.contains("发件箱") }.orEmpty().parseCount()
+    return MessageCountEntity(unRead, receiveCount, sendCount)
 }
 
 /**
