@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.ui.feature.user.overview
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
@@ -15,6 +14,7 @@ import com.xiaoyv.common.kts.clear
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
+import com.xiaoyv.widget.kts.dpi
 
 /**
  * Class: [UserOverviewAdapter]
@@ -45,8 +45,10 @@ class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
             position: Int,
             item: Any?,
         ) {
-            val overview = item as? UserDetailEntity.SaveOverview
-            holder.binding.tvTitle.text = overview?.title
+            val overview = item as? UserDetailEntity.SaveOverview ?: return
+            holder.binding.tvSection.title = overview.title
+            holder.binding.tvSection.more = null
+            holder.binding.tvDesc.text = overview.count.joinToString("、")
         }
 
         override fun onCreate(
@@ -54,9 +56,9 @@ class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
             parent: ViewGroup,
             viewType: Int,
         ): BaseQuickBindingHolder<FragmentUserOverviewTitleBinding> {
-            return BaseQuickBindingHolder(
-                FragmentUserOverviewTitleBinding.inflate(context.inflater, parent, false)
-            )
+            val binding = FragmentUserOverviewTitleBinding.inflate(context.inflater, parent, false)
+            binding.tvSection.leftPadding = 8.dpi
+            return BaseQuickBindingHolder(binding)
         }
 
         override fun isFullSpanItem(itemType: Int): Boolean {

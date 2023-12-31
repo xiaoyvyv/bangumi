@@ -58,12 +58,15 @@ class UserOverviewFragment : BaseBindingFragment<FragmentUserOverviewBinding>() 
                     .filter { overview ->
                         overview.isEmpty.not()
                     }
-                    .flatMap { overview ->
+                    .flatMap { overview: UserDetailEntity.SaveOverview ->
                         val itemArr = arrayListOf<Any>()
+                        // 标题
                         itemArr.add(overview)
+                        // 在看格子
                         if (overview.doing.isNotEmpty()) {
                             itemArr.addAll(overview.doing.limitOrFill(6))
                         }
+                        // 看过格子
                         if (overview.collect.isNotEmpty()) {
                             itemArr.addAll(overview.collect.limitOrFill(6))
                         }

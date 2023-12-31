@@ -113,12 +113,12 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
 
 
 fun Elements.parserUserSaveOverview(@MediaType mediaType: String): UserDetailEntity.SaveOverview {
-    val overview = UserDetailEntity.SaveOverview()
+    val overview = UserDetailEntity.SaveOverview(isEmpty = true)
     val horizontalOptions = select(".horizontalOptions li")
     if (horizontalOptions.isEmpty()) return overview
     overview.isEmpty = false
     overview.title = horizontalOptions.select("li.title").remove().text()
-    overview.count = horizontalOptions.map { it.text() }
+    overview.count = horizontalOptions.map { it.text() }.toMutableList().apply { removeAt(0) }
     useNotNull(select("div.clearit .coversSmall").getOrNull(0)?.select("ul > li a")) {
         overview.doing = map { item ->
             val relative = MediaDetailEntity.MediaRelative()

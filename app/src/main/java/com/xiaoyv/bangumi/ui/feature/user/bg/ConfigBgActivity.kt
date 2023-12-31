@@ -120,7 +120,7 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
                 if (link.isNotBlank()) {
                     showConfirmDialog(
                         title = "空间背景",
-                        message = "是否保存设置空间背景？\n\n提示：\n若为本地图片则为私密，否则为公开背景，此配置将会以0字体大小储存在你的个人简介末尾，不会影响网页端的个人简介希显示。",
+                        message = "是否保存设置空间背景？\n\n配置说明：\n若为本地图片则为私密，否则为公开背景，此配置将会以0字体大小储存在你的个人简介末尾，不会影响网页端的个人简介希显示。",
                         onConfirmClick = {
                             viewModel.saveSingBg(link)
                         }
