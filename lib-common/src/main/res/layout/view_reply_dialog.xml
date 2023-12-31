@@ -93,6 +93,22 @@
                 app:srcCompat="@drawable/ic_format_image"
                 app:tint="?attr/colorOnSurfaceVariant" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/menu_more"
+                android:layout_width="@dimen/format_menu"
+                android:layout_height="@dimen/format_menu"
+                android:background="@drawable/selector_format_menu"
+                android:clickable="true"
+                android:cropToPadding="false"
+                android:focusable="true"
+                android:padding="@dimen/ui_size_10"
+                app:contentPadding="@dimen/ui_size_0"
+                app:layout_constraintBottom_toBottomOf="@+id/menu_emoji"
+                app:layout_constraintStart_toEndOf="@+id/menu_image"
+                app:layout_constraintTop_toTopOf="@+id/menu_emoji"
+                app:srcCompat="@drawable/selector_add"
+                app:tint="?attr/colorOnSurfaceVariant" />
+
             <com.xiaoyv.common.widget.button.AnimeButton
                 android:id="@+id/btn_send"
                 android:layout_width="@dimen/ui_size_50"
@@ -138,5 +154,14 @@
             app:panel_layout="@layout/view_panel_emotion"
             app:panel_toggle="true"
             app:panel_trigger="@id/menu_emoji" />
+
+        <!-- 更多面板 -->
+        <com.effective.android.panel.view.panel.PanelView
+            android:id="@+id/panel_more"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:panel_layout="@layout/view_panel_more"
+            app:panel_toggle="true"
+            app:panel_trigger="@id/menu_more" />
     </com.effective.android.panel.view.panel.PanelContainer>
 </com.effective.android.panel.view.PanelSwitchLayout>

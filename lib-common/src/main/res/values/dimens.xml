@@ -5,6 +5,7 @@
     <dimen name="text_label">10sp</dimen>
     <dimen name="text_label_big">12sp</dimen>
     <dimen name="format_menu">44dp</dimen>
+    <dimen name="format_menu_panel">50dp</dimen>
     <dimen name="track_thickness">20dp</dimen>
     <dimen name="avatar_size">48dp</dimen>
     <dimen name="avatar_size_small">40dp</dimen>

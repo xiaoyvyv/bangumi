@@ -43,6 +43,9 @@ class UserViewModel : BaseViewModel() {
     internal val requireSummary: String
         get() = onUserInfoLiveData.value?.sign.orEmpty().trim()
 
+    internal val requireIsMine
+        get() = onUserInfoLiveData.value?.id == UserHelper.currentUser.id.orEmpty()
+
     override fun onViewCreated() {
         queryUserInfo()
     }

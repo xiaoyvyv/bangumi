@@ -5,6 +5,7 @@ package com.xiaoyv.bangumi.ui.rakuen.page
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
+import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.FragmentSuperPageItemBinding
 import com.xiaoyv.common.api.parser.entity.SuperTopicEntity
 import com.xiaoyv.common.config.annotation.TopicTimeType
@@ -13,7 +14,9 @@ import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.tint
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
+import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
+import com.xiaoyv.widget.kts.spi
 
 /**
  * Class: [RakuenPageAdapter]
@@ -30,9 +33,18 @@ class RakuenPageAdapter : BaseQuickDiffBindingAdapter<SuperTopicEntity,
         binding.tvTime.text = item.time
         binding.ivAction.isVisible = item.canShowActionMenu
         binding.tvHot.isVisible = item.timeType.contains(TopicTimeType.TYPE_HOT)
-        binding.tvTitle.text = item.title
 
-//        binding.tvComment.text = String.format("评论：%s", item.commentCount)
+        SpanUtils.with(binding.tvTitle)
+            .append(item.title)
+            .apply {
+                if (item.commentCount > 0) {
+                    this.appendSpace(4.dpi)
+                        .append(String.format("+%s", item.commentCount))
+                        .setForegroundColor(context.getAttrColor(GoogleAttr.colorPrimary))
+                        .setFontSize(12.spi)
+                }
+            }
+            .create()
 
         when {
             item.timeType.contains(TopicTimeType.TYPE_OLD) || item.timeType.contains(TopicTimeType.TYPE_OLDEST) -> {

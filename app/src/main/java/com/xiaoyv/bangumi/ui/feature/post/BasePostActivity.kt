@@ -26,7 +26,7 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.config.bean.SearchItem
-import com.xiaoyv.common.helper.BBCode
+import com.xiaoyv.common.helper.BBCodeHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonDrawable
@@ -206,7 +206,11 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
         viewModel.onUploadImageResult.observe(this) {
             KeyboardUtils.showSoftInput(binding.etContent)
 
-            BBCode.insert(binding.etContent, Triple("[img]", "$it[/img]", it.orEmpty().length))
+//            BBCodeHelper.insert(
+//                requireActivity(),
+//                binding.etContent,
+//                Triple("[img]", "$it[/img]", it.orEmpty().length)
+//            )
         }
 
         // 填充编辑数据

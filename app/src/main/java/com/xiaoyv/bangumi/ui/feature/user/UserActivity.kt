@@ -161,7 +161,7 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
             }
 
             else -> {
-                menu.add("加为好友")
+                if (viewModel.requireIsMine.not()) menu.add("加为好友")
                     .setIcon(CommonDrawable.ic_add_friend)
                     .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                     .setOnMenuItemClickListener {
@@ -173,7 +173,8 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
                         )
                         true
                     }
-                menu.add("屏蔽TA")
+
+                if (viewModel.requireIsMine.not()) menu.add("屏蔽TA")
                     .setOnMenuItemClickListener {
                         showConfirmDialog(
                             message = "是否彻底屏蔽${viewModel.requireUserName}？",
@@ -186,7 +187,7 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
             }
         }
 
-        menu.add("举报")
+        if (viewModel.requireIsMine.not()) menu.add("举报")
             .setOnMenuItemClickListener {
                 AnimeReportDialog.show(viewModel.requireUserNumberId, ReportType.TYPE_USER)
                 true

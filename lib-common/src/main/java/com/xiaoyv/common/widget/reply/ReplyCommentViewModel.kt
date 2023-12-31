@@ -68,13 +68,16 @@ class ReplyCommentViewModel : BaseViewModel() {
      */
     fun handleImagePicture(uri: Uri) {
         launchUI(
-            stateView = loadingViewState,
             error = {
                 it.printStackTrace()
 
                 showToastCompat(it.errorMsg)
+
+                loadingViewState.showContent()
             },
             block = {
+                loadingViewState.showLoading()
+
                 onUploadImageResult.value = withContext(Dispatchers.IO) {
                     val file = UriUtils.uri2File(uri)
                     if (file.length() > MemoryConstants.MB * 5) {
@@ -103,6 +106,8 @@ class ReplyCommentViewModel : BaseViewModel() {
                         uploadImage(file.absolutePath)
                     }
                 }
+
+                loadingViewState.showContent()
             }
         )
     }

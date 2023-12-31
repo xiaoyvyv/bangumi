@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.effective.android.panel.PanelSwitchHelper
 import com.effective.android.panel.view.panel.PanelView
 import com.xiaoyv.blueprint.constant.NavKey
@@ -26,10 +27,12 @@ import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.databinding.ViewReplyDialogBinding
-import com.xiaoyv.common.helper.BBCode
+import com.xiaoyv.common.helper.BBCodeHelper
 import com.xiaoyv.common.kts.hideSnackBar
 import com.xiaoyv.common.kts.showSnackBar
+import com.xiaoyv.common.widget.emoji.format.FormatGridView
 import com.xiaoyv.common.widget.emoji.grid.UiFacePanel
+import com.xiaoyv.common.widget.text.AnimeEditTextView
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.getParcelObj
 import com.xiaoyv.widget.kts.updateWindowParams
@@ -180,7 +183,7 @@ class ReplyCommentDialog : DialogFragment() {
 
         // 图片
         viewModel.onUploadImageResult.observe(this) {
-            BBCode.insertImage(binding.edReply, it.orEmpty())
+            BBCodeHelper.insertImage(binding.edReply, it.orEmpty())
 
             // 打开键盘
             switchHelper?.toKeyboardState(true)
@@ -238,13 +241,16 @@ class ReplyCommentDialog : DialogFragment() {
         return addPanelChangeListener {
             onNone {
                 binding.menuEmoji.setSelected(false)
+                binding.menuMore.setSelected(false)
             }
             onKeyboard {
                 binding.menuEmoji.setSelected(false)
+                binding.menuMore.setSelected(false)
             }
             onPanel {
                 if (it is PanelView) {
                     binding.menuEmoji.setSelected(it.id == R.id.panel_emoji)
+                    binding.menuMore.setSelected(it.id == R.id.panel_more)
                 }
             }
             onPanelSizeChange { panelView, _, _, _, _, _ ->
@@ -257,8 +263,26 @@ class ReplyCommentDialog : DialogFragment() {
                                 panelView.findViewById(R.id.view_emotion)
                             )
                         }
+                        // 更多面板
+                        R.id.panel_more -> {
+                            bindMorePanel(
+                                binding.edReply,
+                                panelView.findViewById(R.id.view_more)
+                            )
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * 更多面板
+     */
+    private fun bindMorePanel(edReply: AnimeEditTextView, gridView: FormatGridView) {
+        gridView.listener = BaseQuickAdapter.OnItemChildClickListener { adapter, _, position ->
+            BBCodeHelper.insert(requireActivity(), edReply, adapter.getItem(position)) {
+                switchHelper?.toKeyboardState(false)
             }
         }
     }
