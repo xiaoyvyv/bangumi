@@ -28,7 +28,6 @@ import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import kotlinx.coroutines.delay
 
-
 /**
  * Class: [HomeActivity]
  *

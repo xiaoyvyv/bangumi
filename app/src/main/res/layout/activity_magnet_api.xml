@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="@dimen/ui_size_24"
+        android:text="完善搜索节点"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_input"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+        <com.xiaoyv.common.widget.text.AnimeEditTextView
+            android:id="@+id/et_api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_full_corner"
+            android:backgroundTint="?attr/colorSurfaceContainer"
+            android:hint="填入搜索节点"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/ui_size_24"
+            android:paddingEnd="@dimen/ui_size_24"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            tools:ignore="HardcodedText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:lineSpacingMultiplier="1.25"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:text="Q：为什么需要搜索节点？\nA：Bangumi for Android不提供任何番剧资源的搜索服务，如果需要相关功能，请通过节点从第三方服务获取搜索内容\n\nQ：如何获取第三方资源搜索服务节点？\nA：Bangumi for Android 不提供节点，请自行从网络上搜索相关节点"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintTop_toBottomOf="@+id/til_input" />
+
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_node"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.25"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:paddingVertical="@dimen/ui_layout_margin"
+        android:text="查找第三方资源搜索服务节点"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:text="取消"
+        android:textColor="?attr/colorOnSurface"
+        app:backgroundTint="?attr/colorSurfaceContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_done"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_node" />
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_done"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:text="确定"
+        android:textColor="?attr/colorOnPrimary"
+        app:backgroundTint="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/tv_node" />
+</androidx.constraintlayout.widget.ConstraintLayout>

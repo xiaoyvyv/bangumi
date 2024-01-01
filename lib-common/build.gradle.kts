@@ -65,7 +65,6 @@ dependencies {
     api(libs.jsoup)
     api(libs.avif)
     ksp(libs.glide.ksp)
-    annotationProcessor(libs.glide.compiler)
 
     compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 

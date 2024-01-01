@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.base
 
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +37,11 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     BaseViewModelActivity<ActivityListBinding, VM>() {
 
     abstract val isOnlyOnePage: Boolean
+
+    /**
+     * 加载进度提示垂直偏移
+     */
+    open val loadingBias: Float = 0.5f
 
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
         onCreateContentAdapter().apply {
@@ -84,7 +90,10 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         binding.rvContent.setHasFixedSize(hasFixedSize)
         binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(getAttrColor(GoogleAttr.colorPrimary))
+
+        injectFilter(binding.flContainer)
     }
+
 
     @CallSuper
     override fun initData() {
@@ -133,6 +142,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     override fun LifecycleOwner.initViewObserver() {
         binding.stateView.initObserver(
             lifecycleOwner = this,
+            loadingBias = loadingBias,
             loadingViewState = viewModel.loadingViewState,
             canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing && canShowStateLoading() },
             canShowTip = { viewModel.isRefresh }
@@ -183,6 +193,10 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     }
 
     open fun onListDataError() {
+
+    }
+
+    open fun injectFilter(container: FrameLayout) {
 
     }
 

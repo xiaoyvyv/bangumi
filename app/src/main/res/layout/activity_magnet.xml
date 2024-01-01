@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/ui_layout_margin">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_input"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/rv_options"
+        app:layout_constraintEnd_toStartOf="@+id/iv_advance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginBottom="@dimen/ui_size_8"
+        app:startIconDrawable="@drawable/ic_search">
+
+        <com.xiaoyv.common.widget.text.AnimeEditTextView
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_44"
+            android:background="@drawable/ui_shape_rectangle_corner_6"
+            android:backgroundTint="?attr/colorSurfaceContainer"
+            android:hint="搜索番剧资源"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingVertical="@dimen/ui_size_0"
+            android:paddingStart="@dimen/ui_size_44"
+            android:paddingEnd="@dimen/ui_size_16"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            tools:ignore="HardcodedText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_advance"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_gravity="end|center_vertical"
+        android:background="@drawable/selector_btn_advance"
+        android:clickable="true"
+        android:focusable="true"
+        app:contentPadding="@dimen/ui_size_12"
+        app:layout_constraintBottom_toBottomOf="@+id/til_input"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/til_input"
+        app:srcCompat="@drawable/ic_setting"
+        app:tint="?attr/colorSecondary" />
+
+    <com.xiaoyv.common.widget.setting.SearchOptionView
+        android:id="@+id/rv_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/ui_size_16"
+        android:paddingBottom="@dimen/ui_size_8"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_input"
+        tools:itemCount="4"
+        tools:listitem="@layout/view_option_item"
+        tools:visibility="visible" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,6 +33,7 @@ object ConfigHelper {
     private const val KEY_SMOOTH_FONT = "smooth-font"
     private const val KEY_DEFAULT_COMMENT_SORT = "default-comment-sort"
     private const val KEY_ANIME_DENIED_TAGS = "anime-denied-tags"
+    private const val KEY_ANIME_MAGNET_API = "anime-magnet-api"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -203,6 +204,13 @@ object ConfigHelper {
     var commentDefaultSort: String
         get() = SPStaticUtils.getString(KEY_DEFAULT_COMMENT_SORT, "desc")
         set(value) = SPStaticUtils.put(KEY_DEFAULT_COMMENT_SORT, value)
+
+    /**
+     * 磁力搜索 API
+     */
+    var magnetSearchApi: String
+        get() = SPStaticUtils.getString(KEY_ANIME_MAGNET_API)
+        set(value) = SPStaticUtils.put(KEY_ANIME_MAGNET_API, value)
 
     /**
      * Anime-Pictures 默认禁用标签

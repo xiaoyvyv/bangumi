@@ -26,6 +26,7 @@ import androidx.annotation.StringDef
     FeatureType.TYPE_PROFILE,
     FeatureType.TYPE_TIMELINE,
     FeatureType.TYPE_RAKUEN,
+    FeatureType.TYPE_MAGNET,
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class FeatureType {
@@ -47,6 +48,7 @@ annotation class FeatureType {
         const val TYPE_PROFILE = "profile"
         const val TYPE_TIMELINE = "timeline"
         const val TYPE_RAKUEN = "rakuen"
+        const val TYPE_MAGNET = "magnet"
 
         fun name(@FeatureType type: String): String {
             return when (type) {
@@ -66,6 +68,7 @@ annotation class FeatureType {
                 TYPE_PROFILE -> "我的"
                 TYPE_TIMELINE -> "时间胶囊"
                 TYPE_RAKUEN -> "超展开"
+                TYPE_MAGNET -> "搜番资源"
                 else -> "添加"
             }
         }

@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.Utils
 import com.xiaoyv.bangumi.special.detect.anime.ImageDetectAnimeActivity
 import com.xiaoyv.bangumi.special.detect.character.ImageDetectCharacterActivity
+import com.xiaoyv.bangumi.special.magnet.MagnetActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.picture.gallery.AnimeGalleryActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
@@ -433,6 +434,10 @@ object RouteHelper {
 
     fun jumpTimeline(timelineId: String) {
         TimelineDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to timelineId))
+    }
+
+    fun jumpAnimeMagnet(keyword: String? = null) {
+        MagnetActivity::class.open(bundleOf(NavKey.KEY_STRING to keyword))
     }
 
     fun jumpAlmanac() {

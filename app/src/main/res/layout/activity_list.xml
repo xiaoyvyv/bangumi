@@ -21,6 +21,10 @@
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
             app:title="@string/app_name" />
 
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

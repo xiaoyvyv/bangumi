@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_magnet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+    android:layout_marginVertical="@dimen/ui_size_8"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurfaceContainer"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:longClickable="true"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.25"
+        android:maxLines="4"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingTop="@dimen/ui_size_12"
+        android:paddingBottom="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lineSpacingMultiplier="1.5"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingTop="@dimen/ui_size_6"
+        android:paddingBottom="@dimen/ui_size_12"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:fontFamily="monospace"
+        tools:text="@tools:sample/lorem/random" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

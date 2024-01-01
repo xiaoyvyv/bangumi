@@ -86,6 +86,11 @@ class HomeViewModel : BaseViewModel() {
                                 icon = CommonDrawable.ic_person_search
                             ),
                             HomeIndexFeature(
+                                id = FeatureType.TYPE_MAGNET,
+                                title = "搜资源",
+                                icon = CommonDrawable.ic_manage_search
+                            ),
+                            HomeIndexFeature(
                                 id = FeatureType.TYPE_DOLLARS,
                                 title = "Dollars",
                                 icon = CommonDrawable.ic_dollars

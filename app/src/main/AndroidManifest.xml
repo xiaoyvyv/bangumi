@@ -289,6 +289,10 @@
             android:name="com.xiaoyv.bangumi.ui.timeline.detail.TimelineDetailActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.magnet.MagnetActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

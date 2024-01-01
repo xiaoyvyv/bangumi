@@ -6,6 +6,8 @@ import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
+import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
+import com.xiaoyv.common.api.response.anime.AnimeMagnetTypeEntity
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
 import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
@@ -126,6 +128,25 @@ interface BgmJsonApi {
         @Query("order_by") orderBy: String = "date",
         @Query("page") page: Int = 0,
     ): ImageGalleryEntity
+
+    @GET("{magnetApi}/subgroup")
+    suspend fun queryAnimeMagnetSubGroup(
+        @Path("magnetApi", encoded = true) magnetApi: String,
+    ): AnimeMagnetTypeEntity
+
+    @GET("{magnetApi}/type")
+    suspend fun queryAnimeMagnetType(
+        @Path("magnetApi", encoded = true) magnetApi: String,
+    ): AnimeMagnetTypeEntity
+
+    @GET("{magnetApi}/list")
+    suspend fun queryAnimeMagnetList(
+        @Path("magnetApi", encoded = true) magnetApi: String,
+        @Query("keyword") keyword: String,
+        @Query("subgroup") subgroup: String? = null,
+        @Query("type") type: String? = null,
+        @Query("r") r: Long = System.currentTimeMillis(),
+    ): AnimeMagnetEntity
 
     /**
      * 获取 Token

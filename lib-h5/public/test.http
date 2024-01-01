@@ -145,23 +145,7 @@ TE: trailers
 
 
 ###
-DELETE https://next.bgm.tv/demo/access-tokens HTTP/2
-Host: next.bgm.tv
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0
-Accept: */*
-Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
-Accept-Encoding: gzip, deflate, br
-Referer: https://next.bgm.tv/demo/access-token
-Content-Type: application/json
-Content-Length: 14
-Origin: https://next.bgm.tv
-Connection: keep-alive
-Cookie: chii_sec_id=ldBwUU5O8UaJb6z9a8ELlL40nCqgKy%2F0mmMD6g; _ga_1109JLGMHN=GS1.1.1704080666.36.1.1704080672.0.0.0; _ga=GA1.1.856405988.1702737965; chii_cookietime=2592000;  chii_searchDateLine=0; chii_sid=W0Mw57; chii_auth=q2KML36KRM9mAHJAJo5ETb7cmxU%2FRU%2BwjYLKH%2BMwlV3sgJQI7IiDfFQ%2BLHqstN%2Bd6O6PhkaXtuKihJ99ggcFmD%2Bj7lXsdyjoMPoH
-Sec-Fetch-Dest: empty
-Sec-Fetch-Mode: cors
-Sec-Fetch-Site: same-origin
-Pragma: no-cache
-Cache-Control: no-cache
-TE: trailers
+GET https://whatslink.info/api/v1/link?url=magnet:?xt=urn:btih:3CJ2E3BNC6U2I3JJEDYUK2I5JP5UZZCI
 
-{"id":1680691}
+###
+ https://m2t.lolicon.app/m/66522e025c46c7f5c1ffba7133d702bdf02bb963
