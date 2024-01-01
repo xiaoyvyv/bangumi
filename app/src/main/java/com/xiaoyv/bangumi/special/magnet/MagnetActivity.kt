@@ -44,6 +44,7 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
     override fun injectFilter(container: FrameLayout) {
         filterBinding = ActivityMagnetBinding.inflate(layoutInflater, container, true)
 
+        filterBinding.etName.setText(viewModel.keyword)
         filterBinding.etName.setOnEditorActionListener { _, _, _ ->
             KeyboardUtils.hideSoftInput(this)
             viewModel.keyword = filterBinding.etName.text.toString().trim()

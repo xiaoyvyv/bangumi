@@ -74,13 +74,14 @@ class MediaChapterFragment : BaseListFragment<ApiUserEpEntity, MediaChapterViewM
         }
 
         // 搜索资源
-        contentAdapter.addOnItemChildLongClickListener(R.id.tv_comment) { adapter, _, position ->
+        contentAdapter.addOnItemChildLongClickListener(R.id.item_ep) { adapter, _, position ->
             val entity = adapter.getItem(position) ?: return@addOnItemChildLongClickListener true
             val episode = entity.episode ?: return@addOnItemChildLongClickListener true
-            val name = episode.nameCn.orEmpty().ifBlank { episode.name.orEmpty() }
             val ep = episode.ep.let { if (it.length == 1) "0$it" else it }
+            val mediaName = activityViewModel.requireMediaName.split("\\s+".toRegex())
+                .firstOrNull().orEmpty()
 
-            RouteHelper.jumpAnimeMagnet("$name $ep")
+            RouteHelper.jumpAnimeMagnet("$mediaName $ep")
             true
         }
     }
