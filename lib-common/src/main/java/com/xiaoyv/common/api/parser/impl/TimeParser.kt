@@ -175,7 +175,8 @@ fun parserTimelineText(item: Element, entity: TimelineEntity) {
  */
 private fun Elements.fetchTimeAndPlatform(entity: TimelineEntity) {
     val actions = select(".post_actions")
-    val commentA = select("a[class=tml_comment]").remove()
+    val commentA = select("a.tml_comment")
+    val a = select("a").remove()
     val timeInfo = actions.text().split("·").filter { it.isNotBlank() }
     val time = timeInfo.getOrNull(0).orEmpty().trim()
     val platform = timeInfo.getOrNull(1).orEmpty().trim()
@@ -184,7 +185,7 @@ private fun Elements.fetchTimeAndPlatform(entity: TimelineEntity) {
     entity.platform = platform
     entity.isSpitOut = commentA.isNotEmpty()
     entity.commentCount = commentA.text().parseCount()
-    entity.commentUserId = "user/(.*?)/timeline".toRegex().groupValueOne(commentA.attr("href"))
+    entity.commentUserId = "user/(.*?)/timeline".toRegex().groupValueOne(a.attr("href"))
 
     if (entity.userId.isBlank()) {
         entity.userId = entity.commentUserId
