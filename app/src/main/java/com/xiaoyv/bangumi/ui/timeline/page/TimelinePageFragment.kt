@@ -68,6 +68,10 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
     override fun initListener() {
         super.initListener()
 
+        contentAdapter.setOnDebouncedChildClickListener(R.id.tv_content) {
+            RouteHelper.jumpSummaryDetail(it.content.toString())
+        }
+
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_timeline) {
             when (it.adapterType) {
                 TimelineAdapterType.TYPE_MEDIA -> {
