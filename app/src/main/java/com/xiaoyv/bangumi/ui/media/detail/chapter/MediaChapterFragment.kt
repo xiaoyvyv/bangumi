@@ -72,6 +72,17 @@ class MediaChapterFragment : BaseListFragment<ApiUserEpEntity, MediaChapterViewM
         contentAdapter.setOnDebouncedChildClickListener(R.id.tv_comment) {
             RouteHelper.jumpTopicDetail(it.id, TopicType.TYPE_EP)
         }
+
+        // 搜索资源
+        contentAdapter.addOnItemChildLongClickListener(R.id.tv_comment) { adapter, _, position ->
+            val entity = adapter.getItem(position) ?: return@addOnItemChildLongClickListener true
+            val episode = entity.episode ?: return@addOnItemChildLongClickListener true
+            val name = episode.nameCn.orEmpty().ifBlank { episode.name.orEmpty() }
+            val ep = episode.ep.let { if (it.length == 1) "0$it" else it }
+
+            RouteHelper.jumpAnimeMagnet("$name $ep")
+            true
+        }
     }
 
     override fun LifecycleOwner.initViewObserverExt() {

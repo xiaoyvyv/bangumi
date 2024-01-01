@@ -59,6 +59,7 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
         filterBinding.ivAdvance.setOnFastLimitClickListener {
             MagnetApiDialog.show(supportFragmentManager) {
                 viewModel.queryTypes()
+                viewModel.refresh()
             }
         }
     }
