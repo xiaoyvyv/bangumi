@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListActivity
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.TimelineReplyEntity
 import com.xiaoyv.common.helper.UserHelper
@@ -45,6 +46,10 @@ class TimelineDetailActivity : BaseListActivity<TimelineReplyEntity, TimelineDet
 
         timelineHeader.setOnDebouncedChildClickListener(R.id.layout_timeline) {
             showSubReply(it.detail.name, "")
+        }
+
+        timelineHeader.setOnDebouncedChildClickListener(R.id.iv_avatar) {
+            RouteHelper.jumpUserDetail(it.detail.userId)
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_comment) {

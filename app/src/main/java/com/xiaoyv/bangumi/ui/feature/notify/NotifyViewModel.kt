@@ -5,7 +5,9 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.NotifyEntity
 import com.xiaoyv.common.api.parser.impl.parserNotify
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.NotifyHelper
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -43,8 +45,19 @@ class NotifyViewModel : BaseListViewModel<NotifyEntity>() {
             },
             block = {
                 withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmJsonApi.queryUserInfo(userId)
+                    val userUid = BgmApiManager.bgmJsonApi.queryUserInfo(userId).id
+                    val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
+
+                    require(userUid != 0L) { "用户不存在" }
+
+                    BgmApiManager.bgmWebApi.connectFriend(
+                        referer,
+                        userUid.toString(),
+                        UserHelper.formHash
+                    )
                 }
+
+                showToastCompat("添加成功")
             }
         )
     }

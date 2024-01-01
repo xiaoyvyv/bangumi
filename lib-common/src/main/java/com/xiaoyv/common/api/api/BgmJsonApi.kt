@@ -6,13 +6,13 @@ import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
-import com.xiaoyv.common.api.response.UserEntity
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
 import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
 import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
+import com.xiaoyv.common.api.response.api.ApiUserEntity
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.base.BaseListResponse
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
@@ -192,5 +192,5 @@ interface BgmJsonApi {
      * @param userId 为用户名，不是数字ID
      */
     @GET("/v0/users/{userId}")
-    suspend fun queryUserInfo(userId: String): UserEntity
+    suspend fun queryUserInfo(@Path("userId") userId: String): ApiUserEntity
 }
