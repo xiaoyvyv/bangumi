@@ -23,3 +23,13 @@ fun copyText(text: String) {
     ClipboardUtils.copyText(text)
     showToastCompat("复制成功")
 }
+
+/**
+ * 获取磁力链接 hash
+ */
+fun String.magnetHash(): String {
+    return "magnet:\\?xt=urn:btih:(\\w+)"
+        .toRegex(RegexOption.IGNORE_CASE)
+        .groupValueOne(this)
+        .uppercase()
+}
