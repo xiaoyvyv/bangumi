@@ -175,7 +175,7 @@ fun parserTimelineText(item: Element, entity: TimelineEntity) {
  */
 private fun Elements.fetchTimeAndPlatform(entity: TimelineEntity) {
     val actions = select(".post_actions")
-    val commentA = select("a").remove()
+    val commentA = select("a[class=tml_comment]").remove()
     val timeInfo = actions.text().split("·").filter { it.isNotBlank() }
     val time = timeInfo.getOrNull(0).orEmpty().trim()
     val platform = timeInfo.getOrNull(1).orEmpty().trim()

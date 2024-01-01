@@ -68,49 +68,18 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
     override fun initListener() {
         super.initListener()
 
+        // 文字内容部分点击
         contentAdapter.setOnDebouncedChildClickListener(R.id.tv_content) {
-            RouteHelper.jumpSummaryDetail(it.content.toString())
+            if (it.adapterType == TimelineAdapterType.TYPE_MEDIA) {
+                RouteHelper.jumpSummaryDetail(it.content.toString())
+            } else {
+                onClickTimelineItem(it)
+            }
         }
 
+        // 条目点击
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_timeline) {
-            when (it.adapterType) {
-                TimelineAdapterType.TYPE_MEDIA -> {
-                    // 跳转媒体详情
-                    RouteHelper.jumpMediaDetail(it.mediaCard.id)
-                }
-
-                TimelineAdapterType.TYPE_GRID -> {
-                    it.gridCard.firstOrNull()
-                }
-
-                TimelineAdapterType.TYPE_TEXT -> {
-                    // 是否为吐槽时间线
-                    if (it.isSpitOut) {
-                        RouteHelper.jumpTimeline(it.id)
-                        return@setOnDebouncedChildClickListener
-                    }
-
-                    // 跳转 Title Id 对应的页面
-                    if (it.titleId.isNotBlank()) when (it.titleType) {
-                        // 跳转用户详情
-                        BgmPathType.TYPE_USER -> {
-                            RouteHelper.jumpIndexDetail(it.userId)
-                        }
-                        // 跳转日志详情
-                        BgmPathType.TYPE_BLOG -> {
-                            RouteHelper.jumpBlogDetail(it.titleId)
-                        }
-                        // 跳转目录详情
-                        BgmPathType.TYPE_INDEX -> {
-                            RouteHelper.jumpIndexDetail(it.titleId)
-                        }
-                        // 跳转小组详情
-                        BgmPathType.TYPE_GROUP -> {
-                            RouteHelper.jumpGroupDetail(it.titleId)
-                        }
-                    }
-                }
-            }
+            onClickTimelineItem(it)
         }
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_avatar) {
@@ -145,6 +114,47 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
 
                 // 刷新数据
                 viewModel.refresh()
+            }
+        }
+    }
+
+    private fun onClickTimelineItem(it: TimelineEntity) {
+        when (it.adapterType) {
+            TimelineAdapterType.TYPE_MEDIA -> {
+                // 跳转媒体详情
+                RouteHelper.jumpMediaDetail(it.mediaCard.id)
+            }
+
+            TimelineAdapterType.TYPE_GRID -> {
+                it.gridCard.firstOrNull()
+            }
+
+            TimelineAdapterType.TYPE_TEXT -> {
+                // 是否为吐槽时间线
+                if (it.isSpitOut) {
+                    RouteHelper.jumpTimeline(it.id)
+                    return
+                }
+
+                // 跳转 Title Id 对应的页面
+                if (it.titleId.isNotBlank()) when (it.titleType) {
+                    // 跳转用户详情
+                    BgmPathType.TYPE_USER -> {
+                        RouteHelper.jumpIndexDetail(it.userId)
+                    }
+                    // 跳转日志详情
+                    BgmPathType.TYPE_BLOG -> {
+                        RouteHelper.jumpBlogDetail(it.titleId)
+                    }
+                    // 跳转目录详情
+                    BgmPathType.TYPE_INDEX -> {
+                        RouteHelper.jumpIndexDetail(it.titleId)
+                    }
+                    // 跳转小组详情
+                    BgmPathType.TYPE_GROUP -> {
+                        RouteHelper.jumpGroupDetail(it.titleId)
+                    }
+                }
             }
         }
     }
