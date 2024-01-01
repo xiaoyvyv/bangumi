@@ -40,11 +40,29 @@ object UserTokenHelper {
 
             // 刷新 Token
             if (authToken.isExpire) {
-                debugLog { "Token 授权过期或不存在，重新拉取授权" }
+                debugLog { "Token 授权过期或不存在" }
+
+                // 判断是否可以刷新 Token
+                val refreshToken = authToken.refreshToken.orEmpty()
+                if (refreshToken.isNotBlank()) {
+                    debugLog { "Token refresh start..." }
+
+                    val refreshSuccess = refreshAuthToken(refreshToken)
+                    if (refreshSuccess) {
+                        debugLog { "Token refresh success" }
+                        return@launchProcess
+                    }
+
+                    debugLog { "Token refresh fail!" }
+                }
+
+                debugLog { "Token re-fetch!" }
+
+                // 重新拉取
+                authToken = empty
                 fetchAuthToken()
             } else {
-                debugLog { "Token 授权未过期，依然刷新一次" }
-                refreshAuthToken(authToken.refreshToken.orEmpty())
+                debugLog { "Token 授权未过期！" }
             }
         }
     }
