@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog
+import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog.Companion.watched
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
@@ -50,7 +51,12 @@ class ProcessPageFragment : BaseListFragment<MediaDetailEntity, ProcessPageViewM
         return ProcessPageAdapter(viewModel.mediaType,
             clickItemListener = { adapter, _, position ->
                 val epEntity = adapter.getItem(position) ?: return@ProcessPageAdapter
-                MediaEpActionDialog.show(childFragmentManager, epEntity, viewModel.mediaType)
+                MediaEpActionDialog.show(
+                    fragmentManager = childFragmentManager,
+                    epEntity = epEntity,
+                    watchedIds = adapter.items.watched(epEntity),
+                    mediaType = viewModel.mediaType
+                )
             },
             clickAddEpProgress = { entity, isAddEp ->
                 autoIncreaseProgress(entity, isAddEp)

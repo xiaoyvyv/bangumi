@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog
+import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog.Companion.watched
 import com.xiaoyv.bangumi.ui.media.action.MediaSaveActionDialog
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
@@ -268,6 +269,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
         MediaEpActionDialog.show(
             fragmentManager = childFragmentManager,
             epEntity = chapterEntity,
+            watchedIds = viewModel.requireEpList.watched(chapterEntity),
             mediaType = activityViewModel.requireMediaType
         )
     }

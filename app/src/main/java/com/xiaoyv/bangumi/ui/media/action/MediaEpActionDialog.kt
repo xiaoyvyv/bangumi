@@ -30,6 +30,7 @@ import com.xiaoyv.common.kts.showSnackBar
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getParcelObj
+import com.xiaoyv.widget.kts.getSerialObj
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -50,13 +51,15 @@ class MediaEpActionDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val entity = arguments?.getParcelObj<ApiUserEpEntity>(NavKey.KEY_PARCELABLE) ?: return
         val mediaType = arguments?.getString(NavKey.KEY_STRING).orEmpty()
-        initView(FragmentMediaActionEpBinding.bind(view), entity, mediaType)
+        val watchedIds = arguments?.getSerialObj<ArrayList<String>>(NavKey.KEY_SERIALIZABLE)
+        initView(FragmentMediaActionEpBinding.bind(view), entity, mediaType, watchedIds.orEmpty())
     }
 
     private fun initView(
         binding: FragmentMediaActionEpBinding,
         userEp: ApiUserEpEntity,
         mediaType: String,
+        watchedIds: List<String>,
     ) {
         val episode = userEp.episode ?: ApiEpisodeEntity()
         binding.tvTitle.text = episode.name.orEmpty().ifBlank { episode.nameCn }
@@ -80,7 +83,7 @@ class MediaEpActionDialog : DialogFragment() {
             append("中文名：")
             append(episode.nameCn)
         }
-        binding.tvDesc.text = episode.airdate
+        binding.tvDesc.text = String.format("首播：%s", episode.airdate)
         binding.tvComment.text = String.format("讨论：%d，点击查看", episode.comment)
 
         binding.tvComment.setOnFastLimitClickListener {
@@ -100,25 +103,52 @@ class MediaEpActionDialog : DialogFragment() {
                 return@addOnButtonCheckedListener
             }
 
+            var saveTypeEps: List<String>
             when (i) {
                 // 想看
-                R.id.btn_wish -> userEp.type = EpCollectType.TYPE_WISH
+                R.id.btn_wish -> {
+                    saveTypeEps = listOf(userEp.id)
+                    userEp.type = EpCollectType.TYPE_WISH
+                }
                 // 抛弃
-                R.id.btn_dropped -> userEp.type = EpCollectType.TYPE_DROPPED
+                R.id.btn_dropped -> {
+                    saveTypeEps = listOf(userEp.id)
+                    userEp.type = EpCollectType.TYPE_DROPPED
+                }
                 // 看过
-                R.id.btn_collect -> userEp.type = EpCollectType.TYPE_COLLECT
+                R.id.btn_collect -> {
+                    saveTypeEps = listOf(userEp.id)
+                    userEp.type = EpCollectType.TYPE_COLLECT
+                }
+                // 看到
+                R.id.btn_collect_to -> {
+                    saveTypeEps = watchedIds
+                    userEp.type = EpCollectType.TYPE_COLLECT
+                }
                 // 撤销
-                else -> userEp.type = EpCollectType.TYPE_NONE
+                else -> {
+                    saveTypeEps = listOf(userEp.id)
+                    userEp.type = EpCollectType.TYPE_NONE
+                }
             }
 
-            saveEpCollectStatus(userEp)
+            // 保存
+            saveEpCollectStatus(
+                saveTypeEps,
+                subjectId = userEp.episode?.subjectId.toString(),
+                type = userEp.type
+            )
         }
     }
 
     /**
      * 刷新章节进度
      */
-    private fun saveEpCollectStatus(userEp: ApiUserEpEntity) {
+    private fun saveEpCollectStatus(
+        watchedIds: List<String>,
+        subjectId: String,
+        @EpCollectType type: Int,
+    ) {
         launchUI(
             error = {
                 it.printStackTrace()
@@ -133,9 +163,24 @@ class MediaEpActionDialog : DialogFragment() {
 
                 // 保存进度
                 withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmJsonApi
-                        .putEpState(userEp.id, EpCollectParam(userEp.type))
-                        .apply { require(isSuccessful) { message() } }
+                    if (watchedIds.size == 1) {
+                        BgmApiManager.bgmJsonApi
+                            .putEpState(
+                                episodeId = watchedIds.first(),
+                                param = EpCollectParam(type = type)
+                            )
+                            .apply { require(isSuccessful) { message() } }
+                    } else {
+                        BgmApiManager.bgmJsonApi
+                            .putEpStateBatch(
+                                subjectId = subjectId,
+                                param = EpCollectParam(
+                                    type = type,
+                                    episodeId = watchedIds.mapNotNull { it.toLongOrNull() }
+                                )
+                            )
+                            .apply { require(isSuccessful) { message() } }
+                    }
                 }
 
                 UserHelper.notifyActionChange(BgmPathType.TYPE_EP)
@@ -163,14 +208,32 @@ class MediaEpActionDialog : DialogFragment() {
         fun show(
             fragmentManager: FragmentManager,
             epEntity: ApiUserEpEntity,
+            watchedIds: ArrayList<String>,
             @MediaType mediaType: String,
         ) {
             MediaEpActionDialog().apply {
                 arguments = bundleOf(
                     NavKey.KEY_PARCELABLE to epEntity,
+                    NavKey.KEY_SERIALIZABLE to watchedIds,
                     NavKey.KEY_STRING to mediaType
                 )
             }.show(fragmentManager, "MediaEpCollectDialog")
+        }
+
+        /**
+         * 获取以 [it] 为基准的看到数据集合
+         */
+        fun List<ApiUserEpEntity>.watched(it: ApiUserEpEntity): ArrayList<String> {
+            val id = it.id
+            val ids = arrayListOf<String>()
+            for (i in indices) {
+                ids.add(this[i].id)
+
+                if (this[i].id == id) {
+                    break
+                }
+            }
+            return ids
         }
     }
 }

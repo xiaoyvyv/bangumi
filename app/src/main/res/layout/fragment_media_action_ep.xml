@@ -86,6 +86,17 @@
             android:padding="@dimen/ui_size_0"
             android:text="看过"
             android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_collect_to"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/ui_size_0"
+            android:text="看到"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
         <com.xiaoyv.common.widget.button.AnimeButton
             android:id="@+id/btn_dropped"
             style="@style/Widget.Material3.Button.OutlinedButton"

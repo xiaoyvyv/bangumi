@@ -78,6 +78,12 @@ class OverviewViewModel : BaseViewModel() {
     internal val canChangeEpProgress: Boolean
         get() = MediaType.canEditEpProgress(requireMediaType) && requireMediaCollectType != InterestType.TYPE_UNKNOWN
 
+    /**
+     * 章节数据
+     */
+    internal val requireEpList: List<ApiUserEpEntity>
+        get() = mediaDetailLiveData.value?.epList.orEmpty()
+
     private val defaultImage by lazy {
         DouBanPhotoEntity.Photo(
             image = DouBanPhotoEntity.Image(large = DouBanImageEntity(url = "https://bgm.tv/pic/wallpaper/02.png"))

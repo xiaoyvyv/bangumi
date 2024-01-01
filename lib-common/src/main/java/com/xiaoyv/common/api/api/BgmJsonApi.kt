@@ -32,6 +32,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
@@ -204,6 +205,15 @@ interface BgmJsonApi {
     @PUT("/v0/users/-/collections/-/episodes/{episode_id}")
     suspend fun putEpState(
         @Path("episode_id") episodeId: String,
+        @Body param: EpCollectParam,
+    ): Response<ResponseBody>
+
+    /**
+     * 更新章节收藏状态
+     */
+    @PATCH("/v0/users/-/collections/{subject_id}/episodes")
+    suspend fun putEpStateBatch(
+        @Path("subject_id") subjectId: String,
         @Body param: EpCollectParam,
     ): Response<ResponseBody>
 

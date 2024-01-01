@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog
+import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog.Companion.watched
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailViewModel
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
@@ -58,10 +59,12 @@ class MediaChapterFragment : BaseListFragment<ApiUserEpEntity, MediaChapterViewM
                 return@setOnDebouncedChildClickListener
             }
 
+
             // 弹窗
             MediaEpActionDialog.show(
                 fragmentManager = childFragmentManager,
                 epEntity = it,
+                watchedIds = contentAdapter.items.watched(it),
                 mediaType = activityViewModel.requireMediaType
             )
         }
