@@ -65,7 +65,7 @@ class MessageDetailViewModel : BaseListViewModel<MessageEntity>() {
     fun sendMessage(input: String) {
         val sendMessage = MessageEntity(
             id = randId(),
-            mineAvatar = UserHelper.currentUser.avatar?.large.orEmpty(),
+            mineAvatar = UserHelper.currentUser.avatar,
             summary = input,
             time = TimeUtils.getNowString(),
             isSending = true

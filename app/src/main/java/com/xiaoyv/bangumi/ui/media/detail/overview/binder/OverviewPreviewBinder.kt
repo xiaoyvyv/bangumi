@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewPreviewBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewPreviewItemBinding
-import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback

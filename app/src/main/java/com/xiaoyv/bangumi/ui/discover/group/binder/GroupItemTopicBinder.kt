@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentGroupTopicBinding
 import com.xiaoyv.bangumi.databinding.FragmentGroupTopicItemBinding
-import com.xiaoyv.bangumi.ui.discover.group.GroupAdapter
 import com.xiaoyv.common.api.parser.entity.TopicSampleEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback

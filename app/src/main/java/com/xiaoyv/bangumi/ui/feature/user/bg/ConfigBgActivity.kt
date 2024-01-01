@@ -90,7 +90,7 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
         UserHelper.observeUserInfo(this) {
             loadUserBg()
 
-            binding.ivAvatar.loadImageAnimate(it.avatar?.large)
+            binding.ivAvatar.loadImageAnimate(it.avatar)
             binding.tvEmail.text = buildString {
                 append(it.nickname)
                 append("@")
@@ -105,7 +105,7 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
     private fun loadUserBg() {
         val signBg = UserHelper.currentUser.roomPic
         if (signBg.isNullOrBlank()) {
-            binding.ivBanner.loadImageBlur(UserHelper.currentUser.avatar?.large)
+            binding.ivBanner.loadImageBlur(UserHelper.currentUser.avatar)
         } else {
             binding.ivBanner.loadImageAnimate(signBg)
         }

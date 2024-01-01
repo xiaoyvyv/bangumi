@@ -85,7 +85,7 @@ object LoginParser {
         val formHash = parserFormHash()
 
         return UserEntity(
-            avatar = UserEntity.Avatar(avatarUrl, avatarUrl, avatarUrl),
+            avatar = avatarUrl,
             nickname = userName,
             username = userName,
             id = userId,

@@ -48,12 +48,15 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     internal open val hasFixedSize = false
     internal open val toolbarTitle = " "
 
-    internal open val layoutManager: LinearLayoutManager?
+    internal open val linearLayoutManager: LinearLayoutManager?
         get() = binding.rvContent.layoutManager as? LinearLayoutManager
 
-
     internal val adapterHelper by lazy {
-        QuickAdapterHelper.Builder(contentAdapter)
+        onCreateContentAdapterHelper()
+    }
+
+    open fun onCreateContentAdapterHelper(): QuickAdapterHelper {
+        return QuickAdapterHelper.Builder(contentAdapter)
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
                 override fun isAllowLoading(): Boolean {
                     return binding.srlRefresh.isRefreshing.not() && isOnlyOnePage.not()
@@ -86,12 +89,19 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     @CallSuper
     override fun initData() {
         binding.rvContent.layoutManager = onCreateLayoutManager()
+        initAdapter()
+        viewModel.refresh()
+    }
+
+    /**
+     * 适配器
+     */
+    open fun initAdapter() {
         if (isOnlyOnePage) {
             binding.rvContent.adapter = contentAdapter
         } else {
             binding.rvContent.adapter = adapterHelper.adapter
         }
-        viewModel.refresh()
     }
 
     open fun onCreateLayoutManager(): LinearLayoutManager {
@@ -144,14 +154,14 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
 
             contentAdapter.submitList(it) {
                 if (viewModel.isRefresh && needResetPositionWhenRefresh) {
-                    layoutManager?.scrollToPositionWithOffset(0, 0)
+                    linearLayoutManager?.scrollToPositionWithOffset(0, 0)
                 }
 
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
 
                 onListDataFinish(it)
 
-                if (viewModel.isRefresh && it.isEmpty()) {
+                if (viewModel.isRefresh && it.isEmpty() && viewModel.emptyCheck) {
                     binding.stateView.showTip(message = StringUtils.getString(CommonString.common_empty_tip))
                 }
             }

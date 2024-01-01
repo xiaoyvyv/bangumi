@@ -26,7 +26,6 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.config.bean.SearchItem
-import com.xiaoyv.common.helper.BBCodeHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonDrawable
@@ -78,7 +77,7 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
 
     @CallSuper
     override fun initData() {
-        binding.ivAvatar.loadImageAnimate(UserHelper.currentUser.avatar?.medium)
+        binding.ivAvatar.loadImageAnimate(UserHelper.currentUser.avatar)
     }
 
     internal fun showTip() {

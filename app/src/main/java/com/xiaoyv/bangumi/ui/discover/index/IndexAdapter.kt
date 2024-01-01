@@ -2,8 +2,8 @@ package com.xiaoyv.bangumi.ui.discover.index
 
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.ui.discover.index.binder.IndexGridBinder
-import com.xiaoyv.bangumi.ui.discover.index.binder.IndexTitleBinder
 import com.xiaoyv.bangumi.ui.discover.index.binder.IndexItemBinder
+import com.xiaoyv.bangumi.ui.discover.index.binder.IndexTitleBinder
 
 /**
  * Class: [IndexAdapter]

@@ -55,7 +55,7 @@ class UserHelper private constructor() {
         val userEntity = userSp.getString(KEY_USER_INFO).orEmpty().fromJson<UserEntity>() ?: empty
 
         // 无登录历史跳过校验
-        if (userEntity.isEmpty || userEntity.formHash.isNullOrBlank()) {
+        if (userEntity.isEmpty || userEntity.formHash.isBlank()) {
             clearUserInfo()
             debugLog { "校验缓存用户：无 登录历史 或 FormHash" }
             return
@@ -146,7 +146,7 @@ class UserHelper private constructor() {
         userInfo.forEach { item ->
             when (item.field) {
                 "nickname" -> newInfo.nickname = item.value
-                "picfile" -> newInfo.avatar = UserEntity.Avatar(item.value, item.value, item.value)
+                "picfile" -> newInfo.avatar = item.value
                 "sign_input" -> newInfo.sign = item.value
                 "username" -> newInfo.username = item.value
                 "newbio" -> newInfo.summary = item.value
@@ -190,7 +190,7 @@ class UserHelper private constructor() {
     }
 
     companion object {
-        private const val NAME = "user"
+        private const val NAME = "user-sp"
         private const val KEY_USER_INFO = "user-info"
         private const val KEY_BLOCK_USER = "user-block"
         internal const val KEY_USER_TOKEN = "user-token"
@@ -224,7 +224,7 @@ class UserHelper private constructor() {
          * 当前用户的 FromHash
          */
         val formHash: String
-            get() = currentUser.formHash.orEmpty()
+            get() = currentUser.formHash
 
         /**
          * 缓存的邮箱

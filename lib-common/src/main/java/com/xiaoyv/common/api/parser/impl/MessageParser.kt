@@ -65,7 +65,7 @@ fun Element.parserMessageBox(messageId: String): List<MessageEntity> {
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.fromId = item.select("a.avatar").hrefId()
         entity.isMine = item.select(".text_main_odd").isNotEmpty()
-        entity.mineAvatar = UserHelper.currentUser.avatar?.large.orEmpty()
+        entity.mineAvatar = UserHelper.currentUser.avatar
 
         // 内容部分
         val textPm = item.select(".text_pm")

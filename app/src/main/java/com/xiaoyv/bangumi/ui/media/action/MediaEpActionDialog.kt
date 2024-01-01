@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.ui.media.action
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SnackbarUtils
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentMediaActionEpBinding
@@ -25,16 +23,13 @@ import com.xiaoyv.common.config.annotation.EpCollectType
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.TopicType
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.hideSnackBar
 import com.xiaoyv.common.kts.onStartConfig
 import com.xiaoyv.common.kts.showSnackBar
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getParcelObj
-import com.xiaoyv.widget.kts.updateWindowParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -153,7 +153,7 @@ const onClickNewComment = (event: Event) => {
         <emoji-view :emojis="comment.emojis" :comment="comment" style="margin-top: 16px"/>
 
         <!-- 嵌套条目 -->
-        <div class="comment-item" v-for="subComment in (comment.topicSubReply || [])" :key="subComment.id">
+        <div class="comment-item sub" v-for="subComment in (comment.topicSubReply || [])" :key="subComment.id">
           <image-view class="avatar" height="24px" width="24px"
                       :src="subComment.userAvatar"
                       @click.stop="onClickUser(subComment)"/>
@@ -183,13 +183,12 @@ const onClickNewComment = (event: Event) => {
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
-  padding: 12px 16px;
   min-height: 300px;
 
   .comment-title {
     display: flex;
     flex-flow: row nowrap;
-    padding-bottom: 16px;
+    padding: 16px 16px;
     align-items: center;
     font-size: 16px;
 
@@ -213,6 +212,11 @@ const onClickNewComment = (event: Event) => {
   .comment-item {
     display: flex;
     flex-flow: row nowrap;
+    padding: 8px 16px;
+
+    &.sub {
+      padding: 0;
+    }
 
     .avatar {
       margin: 6px 0;
@@ -276,7 +280,7 @@ const onClickNewComment = (event: Event) => {
         max-width: 100%;
         line-height: 1.5;
         word-break: break-all;
-        overflow-x: hidden !important;
+        overflow: hidden !important;
 
         img {
           min-width: 120px;
@@ -290,6 +294,5 @@ const onClickNewComment = (event: Event) => {
       }
     }
   }
-
 }
 </style>

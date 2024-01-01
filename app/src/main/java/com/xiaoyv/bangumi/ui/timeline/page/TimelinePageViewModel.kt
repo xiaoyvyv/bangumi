@@ -71,17 +71,17 @@ class TimelinePageViewModel : BaseListViewModel<TimelineEntity>() {
             TimelinePageType.TYPE_MINE -> {
                 require(UserHelper.isLogin) { "你还没有登录呢" }
                 BgmApiManager.bgmWebApi.queryUserTimeline(
-                    userId = UserHelper.currentUser.id.orEmpty(),
+                    userId = UserHelper.currentUser.id,
                     type = timelineType,
                     page = current,
                     ajax = 0
-                ).parserTimelineForms(UserHelper.currentUser.id.orEmpty())
+                ).parserTimelineForms(UserHelper.currentUser.id)
             }
             // 全部时间线
             else -> BgmApiManager.bgmJsonApi.queryWholeTimeline(
                 type = timelineType,
                 page = current
-            ).parserTimelineForms(isTotalTimeline = true)
+            ).parserTimelineForms()
         }
     }
 

@@ -65,7 +65,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                     menu.add("我的空间")
                         .setOnMenuItemClickListener {
                             if (UserHelper.isLogin) {
-                                RouteHelper.jumpUserDetail(UserHelper.currentUser.id.toString())
+                                RouteHelper.jumpUserDetail(UserHelper.currentUser.id)
                             } else {
                                 RouteHelper.jumpLogin()
                             }
@@ -142,10 +142,10 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
         UserHelper.observeUserInfo(this) {
             if (!it.isEmpty) {
                 loadUserBg()
-                binding.ivAvatar.loadImageAnimate(it.avatar?.large)
+                binding.ivAvatar.loadImageAnimate(it.avatar)
                 binding.tvEmail.text = UserHelper.cacheEmail
 
-                binding.toolbarLayout.title = it.username.orEmpty().ifBlank { it.nickname }
+                binding.toolbarLayout.title = it.username.ifBlank { it.nickname }
             } else {
                 debugLog { "未登录！" }
                 binding.toolbarLayout.title = "访客身份"
@@ -173,10 +173,10 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
      * 加载背景
      */
     private fun loadUserBg() {
-        if (UserHelper.currentUser.roomPic.isNullOrBlank().not()) {
+        if (UserHelper.currentUser.roomPic.isBlank().not()) {
             binding.ivBanner.loadImageAnimate(UserHelper.currentUser.roomPic)
         } else {
-            binding.ivBanner.loadImageBlur(UserHelper.currentUser.avatar?.large)
+            binding.ivBanner.loadImageBlur(UserHelper.currentUser.avatar)
         }
     }
 

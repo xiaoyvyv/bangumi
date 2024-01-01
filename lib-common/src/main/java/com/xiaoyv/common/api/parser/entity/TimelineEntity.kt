@@ -27,14 +27,13 @@ data class TimelineEntity(
     @BgmPathType
     var titleType: String = BgmPathType.TYPE_UNKNOWN,
     var titleLink: String = "",
-    var content: String = "",
+    var content: CharSequence = "",
     var time: String = "",
     var platform: String = "",
     var adapterType: Int = TimelineAdapterType.TYPE_TEXT,
     var commentUserId: String = "",
-    var commentAble: Boolean = false,
+    var isSpitOut: Boolean = false,
     var commentCount: Int = 0,
-    var isTotalTimeline: Boolean = false,
 
     var mediaCard: MediaTimeline = MediaTimeline(),
     var gridCard: List<GridTimeline> = emptyList(),

@@ -2,9 +2,13 @@
 
 package com.xiaoyv.common.api.parser.impl
 
+import com.xiaoyv.common.api.parser.entity.TimelineDetailEntity
 import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.entity.TimelineReplyEntity
+import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.hrefId
+import com.xiaoyv.common.api.parser.lastTextNode
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parseHtml
@@ -22,10 +26,7 @@ import org.jsoup.select.Elements
 /**
  * @param isTotalTimeline 是否为网站全部时间线，禁止回复
  */
-fun Document.parserTimelineForms(
-    userId: String = "",
-    isTotalTimeline: Boolean = false,
-): List<TimelineEntity> {
+fun Document.parserTimelineForms(userId: String = ""): List<TimelineEntity> {
     requireNoError()
     return select("#timeline ul > li").map { item ->
         val entity = TimelineEntity()
@@ -35,7 +36,6 @@ fun Document.parserTimelineForms(
             entity.name = select(".nameSingle .name").text()
             entity.avatar = select(".headerAvatar a.avatar > span").styleBackground()
         }
-        entity.isTotalTimeline = isTotalTimeline
         entity
     }
 }
@@ -66,7 +66,7 @@ private fun Element.handleItem(entity: TimelineEntity, userId: String) {
 
         // 如果为自己的时间线，填充头像
         if (userId == UserHelper.currentUser.id) {
-            entity.avatar = UserHelper.currentUser.avatar?.medium.orEmpty()
+            entity.avatar = UserHelper.currentUser.avatar
         }
     }
 
@@ -182,7 +182,7 @@ private fun Elements.fetchTimeAndPlatform(entity: TimelineEntity) {
 
     entity.time = time
     entity.platform = platform
-    entity.commentAble = commentA.isNotEmpty()
+    entity.isSpitOut = commentA.isNotEmpty()
     entity.commentCount = commentA.text().parseCount()
     entity.commentUserId = "user/(.*?)/timeline".toRegex().groupValueOne(commentA.attr("href"))
 
@@ -236,10 +236,32 @@ private fun Element?.fetchLinkIdAndType(): Triple<String, String, String> {
 }
 
 /**
- * 解析时间线回复
+ * 解析时间线吐槽回复
  */
-fun Element.parserTimelineSayReply(): List<TimelineReplyEntity> {
-    return select(".subReply > li[data-item-user]").map { item ->
+fun Element.parserTimelineDetail(): TimelineDetailEntity {
+    requireNoError()
+
+    val entity = TimelineDetailEntity()
+    val columnsApp = select(".columnsApp")
+
+    columnsApp.select(".statusHeader").apply {
+        entity.detail.userId = select("a.avatar").hrefId()
+        entity.detail.avatar = select("a.avatar span").attr("style")
+            .fetchStyleBackgroundUrl().optImageUrl()
+        entity.detail.name = select(".inner h3").text()
+        entity.detail.title = entity.detail.name
+        entity.detail.isSpitOut = true
+    }
+
+    columnsApp.select(".statusContent").apply {
+        val date = select(".statusContent > p.date")
+
+        entity.detail.content = select(".statusContent > p.text").html().parseHtml()
+        entity.detail.time = date.firsTextNode().trim()
+        entity.detail.platform = select(".tip_i").text().trim() + " · " + date.lastTextNode().trim()
+    }
+
+    entity.replies = columnsApp.select(".subReply > li[data-item-user]").map { item ->
         item.select(".cmt_reply").remove()
         val html = item.html()
         val userName = item.select("a").firstOrNull()?.text().orEmpty()
@@ -251,4 +273,7 @@ fun Element.parserTimelineSayReply(): List<TimelineReplyEntity> {
             content = html.parseHtml(true),
         )
     }
+
+    entity.detail.commentCount = entity.replies.size
+    return entity
 }

@@ -7,7 +7,6 @@ import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.common.api.parser.entity.PrivacyEntity
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
-import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showOptionsDialog
 
 /**

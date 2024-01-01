@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.feature.person.PersonViewModel
-import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener

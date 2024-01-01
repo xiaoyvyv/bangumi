@@ -22,4 +22,5 @@ data class NotifyEntity(
     var titleLink: String = "",
     var targetId: String = "",
     var replyContent: CharSequence = "",
+    var isAddFriend: Boolean = false,
 ) : IdEntity, Parcelable

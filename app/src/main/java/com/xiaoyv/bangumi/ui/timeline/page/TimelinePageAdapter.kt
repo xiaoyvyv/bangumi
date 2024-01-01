@@ -129,7 +129,7 @@ class TimelinePageAdapter(
             binding.tvContent.text = item.content
             binding.tvContent.isVisible = item.content.isNotBlank()
             binding.tvTime.text = item.time
-            binding.tvReply.isVisible = item.commentAble
+            binding.tvReply.isVisible = item.isSpitOut
 
             binding.tvReply.text = if (item.commentCount == 0) "回复"
             else String.format("回复：%d", item.commentCount)

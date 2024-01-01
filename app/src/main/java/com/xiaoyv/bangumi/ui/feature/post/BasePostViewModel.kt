@@ -1,13 +1,9 @@
 package com.xiaoyv.bangumi.ui.feature.post
 
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.constant.MemoryConstants
-import com.blankj.utilcode.util.FileIOUtils
 import com.blankj.utilcode.util.FileUtils
-import com.blankj.utilcode.util.ImageUtils
-import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.UriUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI

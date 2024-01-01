@@ -5,6 +5,7 @@ import com.xiaoyv.common.api.parser.entity.CommentFormEntity
 import com.xiaoyv.common.api.parser.entity.CommentTreeEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
+import com.xiaoyv.common.api.parser.lastTextNode
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parserLikeParam
@@ -85,8 +86,9 @@ private fun Elements.mapCommentItems(
         entity.floor = item.select(".post_actions a.floor-anchor").text()
         entity.replyJs = item.select(".post_actions .action > a.icon").attr("onclick")
         entity.time = item.select(".post_actions small")
-            .firstOrNull()?.lastChild()?.toString().orEmpty().trim()
+            .lastTextNode().trim()
             .removePrefix("-").trim()
+
         entity.replyContent = item.select(".reply_content > .message")
             .ifEmpty { item.select(".inner > .cmt_sub_content") }
             .html().preHandleHtml()

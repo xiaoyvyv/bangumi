@@ -7,7 +7,6 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewRelativeBinding
 import com.xiaoyv.bangumi.databinding.FragmentOverviewRelativeItemBinding
-import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewAdapter
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener

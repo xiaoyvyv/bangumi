@@ -176,18 +176,19 @@ img {
 .text_mask {
   color: var(--on-surface-variant-color) !important;
   background: var(--on-surface-variant-color) !important;
-  padding: 2px 6px 4px 6px !important;
-  margin: 0 4px 0 4px !important;
+  padding: 2px 4px 4px 4px !important;
+  margin: 0 0 !important;
   flex-shrink: 0;
   display: inline-block;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
   overflow: hidden;
   text-decoration: none;
-  vertical-align: text-top;
-  line-height: 1;
+  vertical-align: text-bottom;
+  line-height: 1.25 !important;
   font-size: 95% !important;
   -webkit-tap-highlight-color: transparent;
   transition: color ease .2s;
+  transform: translateY(4px);
 
   * {
     color: var(--on-surface-variant-color) !important;
@@ -215,17 +216,19 @@ a {
   outline: none;
   color: var(--primary-color) !important;
   background: var(--surface-container-color) !important;
-  padding: 2px 6px 4px 6px !important;
-  margin: 0 4px 0 4px !important;
+  padding: 2px 4px 4px 4px !important;
+  margin: 0 0 !important;
   flex-shrink: 0;
-  display: inline-block;
+  display: inline-block !important;
+  word-break: break-all !important;
   border-radius: 4px !important;
   overflow: hidden;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  vertical-align: text-top;
-  line-height: 1;
+  vertical-align: middle;
+  line-height: 1.25;
   font-size: 95%;
+  transform: translateY(-2px);
 }
 
 // 分割线
@@ -259,7 +262,6 @@ a {
 
 // 点击评论定位闪动
 .blinking {
-  border-radius: 6px;
   animation: blinkAnimation 1s forwards;
 }
 

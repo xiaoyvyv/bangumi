@@ -4,7 +4,6 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.ui.discover.mono.binder.MonoGridBinder
 import com.xiaoyv.bangumi.ui.discover.mono.binder.MonoHeaderBinder
 import com.xiaoyv.common.config.bean.AdapterTypeItem
-import com.xiaoyv.common.helper.ConfigHelper
 
 /**
  * Class: [MonoAdapter]

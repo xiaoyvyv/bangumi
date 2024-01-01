@@ -9,7 +9,6 @@ import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
-import com.xiaoyv.bangumi.ui.feature.person.collect.PersonCollectViewModel
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener

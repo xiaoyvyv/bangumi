@@ -1,15 +1,12 @@
 package com.xiaoyv.bangumi.ui.media.action
 
-import android.R
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SnackbarUtils
 import com.xiaoyv.bangumi.databinding.FragmentMediaActionIndexBinding
 import com.xiaoyv.bangumi.ui.profile.page.index.UserIndexFragment
@@ -20,7 +17,6 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.IndexItemEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.IndexAttachCatType
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.hideSnackBar
 import com.xiaoyv.common.kts.onStartConfig
@@ -28,12 +24,9 @@ import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showInputLine2Dialog
 import com.xiaoyv.common.kts.showSnackBar
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
-import com.xiaoyv.widget.kts.updateWindowParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.math.roundToInt
 
 /**
  * Class: [MediaIndexActionDialog]
@@ -58,7 +51,7 @@ class MediaIndexActionDialog : DialogFragment() {
         loadRootFragment(
             binding.flContainer.id,
             UserIndexFragment.newInstance(
-                userId = UserHelper.currentUser.id.orEmpty(),
+                userId = UserHelper.currentUser.id,
                 selectedMode = true,
                 onSelectedListener = {
                     requireActivity().showConfirmDialog(

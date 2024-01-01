@@ -30,7 +30,6 @@
         android:layout_height="@dimen/ui_size_44"
         android:layout_marginTop="@dimen/ui_size_4"
         android:background="@color/ui_transparent"
-        android:visibility="gone"
         app:contentPadding="@dimen/ui_size_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

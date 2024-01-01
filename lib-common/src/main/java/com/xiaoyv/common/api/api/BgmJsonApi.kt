@@ -6,6 +6,7 @@ import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.GithubLatestEntity
+import com.xiaoyv.common.api.response.UserEntity
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
 import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
@@ -185,5 +186,11 @@ interface BgmJsonApi {
         @Body param: EpCollectParam,
     ): Response<ResponseBody>
 
-
+    /**
+     * 根据用户名查询用户信息
+     *
+     * @param userId 为用户名，不是数字ID
+     */
+    @GET("/v0/users/{userId}")
+    suspend fun queryUserInfo(userId: String): UserEntity
 }

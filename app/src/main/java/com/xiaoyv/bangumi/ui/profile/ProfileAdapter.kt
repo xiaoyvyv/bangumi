@@ -37,7 +37,7 @@ class ProfileAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     override fun createFragment(position: Int): Fragment {
         val profileTab = tabs[position]
         val type = profileTab.type
-        val myId = UserHelper.currentUser.id.orEmpty()
+        val myId = UserHelper.currentUser.id
 
         return when (type) {
             // 收藏

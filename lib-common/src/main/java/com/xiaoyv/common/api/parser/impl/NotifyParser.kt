@@ -1,8 +1,8 @@
 package com.xiaoyv.common.api.parser.impl
 
-import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.entity.NotifyEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
+import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.requireNoError
@@ -21,11 +21,13 @@ fun Element.parserNotify(): List<NotifyEntity> {
         entity.userAvatar = item.select("a.avatar > span").attr("style")
             .fetchStyleBackgroundUrl().optImageUrl()
         entity.userName = item.select(".inner strong a").text()
+
         item.select(".inner .reply_content").apply {
             entity.replyContent = html().parseHtml()
             entity.title = text()
             entity.titleLink = select("a").attr("href")
         }
+        entity.isAddFriend = entity.title.contains("请求与你成为好友")
         entity
     }
 }

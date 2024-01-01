@@ -7,7 +7,6 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListBinding
 import com.xiaoyv.bangumi.databinding.FragmentPersonOverviewListOpusBinding
-import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewAdapter
 import com.xiaoyv.common.api.parser.entity.PersonEntity
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.bean.AdapterTypeItem

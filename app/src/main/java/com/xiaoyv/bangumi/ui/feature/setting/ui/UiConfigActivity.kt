@@ -4,7 +4,6 @@ import android.view.Menu
 import android.view.MenuItem
 import com.xiaoyv.bangumi.databinding.ActivitySettingUiBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
-import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.debugLog

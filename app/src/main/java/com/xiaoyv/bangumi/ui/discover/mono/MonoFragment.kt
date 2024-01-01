@@ -93,7 +93,7 @@ class MonoFragment : BaseViewModelFragment<FragmentListBinding, MonoViewModel>()
         if (viewModel.requireLogin) {
             // 登录状态变化，刷新
             UserHelper.observeUserInfo(this) {
-                viewModel.userId = it.id.orEmpty()
+                viewModel.userId = it.id
                 viewModel.queryMono()
             }
 

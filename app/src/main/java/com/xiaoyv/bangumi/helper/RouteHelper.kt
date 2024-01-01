@@ -51,6 +51,7 @@ import com.xiaoyv.bangumi.ui.feature.user.mono.UserMonoActivity
 import com.xiaoyv.bangumi.ui.feature.web.WebActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
+import com.xiaoyv.bangumi.ui.timeline.detail.TimelineDetailActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.parseCount
@@ -148,7 +149,16 @@ object RouteHelper {
             }
             // 用户
             titleLink.contains(BgmPathType.TYPE_USER) -> {
-                jumpUserDetail(id)
+                when {
+                    // 用户的时间线吐槽等
+                    titleLink.contains(BgmPathType.TYPE_TIMELINE) -> {
+                        jumpTimeline(id)
+                    }
+                    // 其它
+                    else -> {
+                        jumpUserDetail(id)
+                    }
+                }
                 return true
             }
             // 条目
@@ -419,6 +429,10 @@ object RouteHelper {
                 NavKey.KEY_BOOLEAN_SECOND to smallToolbar
             )
         )
+    }
+
+    fun jumpTimeline(timelineId: String) {
+        TimelineDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to timelineId))
     }
 
     fun jumpAlmanac() {

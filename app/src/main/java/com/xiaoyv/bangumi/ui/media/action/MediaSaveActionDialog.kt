@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.ui.media.action
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
-import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentMediaActionBinding
@@ -26,16 +24,13 @@ import com.xiaoyv.common.api.parser.impl.parserMediaDetail
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.ScoreStarType
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.common.kts.onStartConfig
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
 import com.xiaoyv.widget.kts.toast
-import com.xiaoyv.widget.kts.updateWindowParams
 import com.xiaoyv.widget.kts.useNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

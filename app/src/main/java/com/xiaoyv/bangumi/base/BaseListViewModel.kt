@@ -45,6 +45,9 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
     var isOnlyOnePage: Boolean = false
 
+    open val emptyCheck: Boolean
+        get() = true
+
     fun refresh() {
         current = 1
         loadListData()
@@ -88,7 +91,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
 
                 val responseList = withContext(Dispatchers.IO) {
                     onRequestListImpl().apply {
-                        if (isRefresh) {
+                        if (isRefresh && emptyCheck) {
                             require(isNotEmpty()) { emptyTip }
                         }
                     }

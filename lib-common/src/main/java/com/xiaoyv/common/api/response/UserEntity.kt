@@ -16,38 +16,23 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class UserEntity(
     @SerializedName("avatar")
-    var avatar: Avatar? = null,
-    @SerializedName("id")
-    var id: String? = null,
+    var avatar: String = "",
+    @SerializedName("userId")
+    var id: String = "",
     @SerializedName("nickname")
-    var nickname: String? = null,
+    var nickname: String = "",
     @SerializedName("sign")
-    var sign: String? = null,
+    var sign: String = "",
     @SerializedName("roomPic")
-    var roomPic: String? = null,
+    var roomPic: String = "",
     @SerializedName("summary")
-    var summary: String? = null,
-    @SerializedName("user_group")
-    var userGroup: Int = 0,
+    var summary: String = "",
     @SerializedName("username")
-    var username: String? = null,
-
+    var username: String = "",
     @SerializedName("formHash")
-    var formHash: String? = null,
+    var formHash: String = "",
     @SerializedName("online")
-    var online: String? = null,
+    var online: String = "",
     @SerializedName("isEmpty")
     var isEmpty: Boolean = false,
-) : Parcelable {
-
-    @Keep
-    @Parcelize
-    data class Avatar(
-        @SerializedName("large")
-        var large: String? = null,
-        @SerializedName("medium")
-        var medium: String? = null,
-        @SerializedName("small")
-        var small: String? = null,
-    ) : Parcelable
-}
+) : Parcelable

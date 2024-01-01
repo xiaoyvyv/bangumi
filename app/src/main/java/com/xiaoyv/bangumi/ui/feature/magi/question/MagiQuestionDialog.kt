@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.ui.feature.magi.question
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,19 +8,15 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.FragmentMagiQuestionLastBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MagiQuestionEntity
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.onStartConfig
-import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.getParcelObj
-import com.xiaoyv.widget.kts.updateWindowParams
 
 /**
  * Class: [MagiQuestionDialog]

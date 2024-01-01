@@ -106,7 +106,7 @@ class ConfigBgViewModel : BaseViewModel() {
             },
             block = {
                 onSaveBgResultLiveData.value = withContext(Dispatchers.IO) {
-                    val nickName = UserHelper.currentUser.nickname.orEmpty()
+                    val nickName = UserHelper.currentUser.nickname
                     val summary = buildSummaryWithRoomPic(link)
                     val params = listOf(
                         SettingBaseEntity(field = "formhash", value = UserHelper.formHash),
@@ -140,7 +140,7 @@ class ConfigBgViewModel : BaseViewModel() {
      */
     private fun buildSummaryWithRoomPic(link: String): String {
         val regex = "\\[size=0]\\[bg]\\s*(.*?)\\s*\\[/bg]\\s*\\[/size]".toRegex()
-        val summary = UserHelper.currentUser.summary.orEmpty()
+        val summary = UserHelper.currentUser.summary
         val roomBgCode = "[size=0][bg]${link.trim()}[/bg][/size]"
         val targetSummary = if (summary.contains(regex)) {
             summary.replace(regex, roomBgCode)

@@ -37,6 +37,7 @@
         app:layout_constraintTop_toTopOf="@id/iv_avatar"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
 
+
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_title"
         android:layout_width="@dimen/ui_size_0"
@@ -46,7 +47,6 @@
         android:ellipsize="end"
         android:linksClickable="true"
         android:maxLines="1"
-        android:paddingBottom="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
@@ -76,15 +76,47 @@
         android:lineSpacingMultiplier="1.25"
         android:linksClickable="true"
         android:maxLines="3"
-        android:paddingTop="@dimen/ui_size_6"
-        android:paddingBottom="@dimen/ui_size_12"
+        android:paddingVertical="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        tools:text="@tools:sample/lorem/random" />
+        tools:text="请求成为你的好友" />
 
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_ignore"
+        android:layout_width="@dimen/ui_size_50"
+        android:layout_height="@dimen/ui_size_35"
+        android:layout_marginEnd="@dimen/ui_size_12"
+        android:enabled="true"
+        android:padding="@dimen/ui_size_0"
+        android:text="拒绝"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:visibility="gone"
+        app:backgroundTint="?attr/colorOnSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_content"
+        app:layout_constraintEnd_toStartOf="@+id/btn_action"
+        app:layout_constraintTop_toTopOf="@+id/tv_content"
+        tools:ignore="HardcodedText"
+        tools:visibility="visible" />
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_action"
+        android:layout_width="@dimen/ui_size_50"
+        android:layout_height="@dimen/ui_size_35"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:enabled="true"
+        android:padding="@dimen/ui_size_0"
+        android:text="同意"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_content"
+        tools:ignore="HardcodedText"
+        tools:visibility="visible" />
 
     <View
         style="@style/Theme.Bangumi.Divider"
