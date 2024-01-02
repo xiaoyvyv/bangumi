@@ -161,7 +161,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     entity.locked = headerSubject.select(".tipIntro").isNotEmpty()
 
     val interestPanel = select("#panelInterestWrapper")
-    val subjectDetail = select("#subject_detail")
+    val subjectDetail = select("#columnSubjectHomeB")
     val infoBox = select("#infobox > li")
     val infoBoxText = infoBox.text()
     val coverUrl = select("img.cover").attr("src")
