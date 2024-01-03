@@ -1,6 +1,7 @@
 package com.xiaoyv.common
 
 import android.app.Application
+import android.view.Window
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.ExistingWorkPolicy
@@ -12,6 +13,8 @@ import com.blankj.utilcode.util.LogUtils
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 import com.xiaoyv.blueprint.BluePrint
+import com.xiaoyv.blueprint.base.BaseActivity
+import com.xiaoyv.blueprint.base.BaseConfig
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -47,10 +50,10 @@ class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        currentApplication = this
         registerActivityLifecycleCallbacks(themeActivityLifecycleCallback)
         initTheme()
-
-        currentApplication = this
+        initBaseConfig()
         BluePrint.init(this, false)
         H5PreLoadHelper.preloadWebView(this)
         UserHelper.initLoad()
@@ -58,6 +61,12 @@ class MainApp : Application() {
         startIdleWork()
 
         LogUtils.getConfig().isLogSwitch = AppUtils.isAppDebug()
+    }
+
+    private fun initBaseConfig() {
+        BaseConfig.config.globalConfig = object : BaseConfig.OnConfigActivity {
+
+        }
     }
 
     private fun startIdleWork() {

@@ -72,6 +72,12 @@ class ProcessPageFragment : BaseListFragment<MediaDetailEntity, ProcessPageViewM
         }
     }
 
+    override fun autoInitData() {
+        UserHelper.observeUserInfo(this) {
+            super.autoInitData()
+        }
+    }
+
     private fun autoIncreaseProgress(entity: MediaDetailEntity, addEp: Boolean) {
         if (addEp) {
             viewModel.progressIncrease(entity, entity.progress + 1, entity.progressSecond)

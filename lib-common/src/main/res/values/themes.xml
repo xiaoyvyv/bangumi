@@ -1,7 +1,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Bangumi" parent="Theme.Material3.DynamicColors.DayNight">
-
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.Bangumi.Fix">

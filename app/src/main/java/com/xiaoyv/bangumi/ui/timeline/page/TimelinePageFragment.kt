@@ -118,6 +118,12 @@ class TimelinePageFragment : BaseListFragment<TimelineEntity, TimelinePageViewMo
         }
     }
 
+    override fun autoInitData() {
+        UserHelper.observeUserInfo(this) {
+            super.autoInitData()
+        }
+    }
+
     private fun onClickTimelineItem(it: TimelineEntity) {
         when (it.adapterType) {
             TimelineAdapterType.TYPE_MEDIA -> {
