@@ -22,6 +22,7 @@ import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 /**
  * Class: [CollectionHelper]
@@ -126,7 +127,12 @@ object CollectionHelper {
             state = state,
             error = {
                 it.printStackTrace()
-
+                if (it is HttpException) {
+                    if (it.response()?.code() == 401) {
+                        if (toast) showToastCompat("Token 无效或过期，请重新配置")
+                        return@launchProcess
+                    }
+                }
                 if (toast) showToastCompat(it.errorMsg)
             },
             block = {

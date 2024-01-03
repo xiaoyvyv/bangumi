@@ -185,6 +185,20 @@ Authorization: Bearer github_pat_11AG55THQ0woluSsrm39VI_xLOUk4nPnFmMgsdo9eTAC8Rf
 X-GitHub-Api-Version: 2022-11-28
 
 ###
-
-
+GET https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json h2
+Authorization: Bearer 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
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: 2022-11-28
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: cross-site
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+User-Agent: Mozilla/5.0 (Linux; U; Android 14; 23116PN5BC Build/UKQ1.230804.001)
+Referer: https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json
+Host: api.github.com
+Connection: Keep-Alive
+Accept-Encoding: gzip
 

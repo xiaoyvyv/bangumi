@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
         android:id="@+id/rv_banner"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_size_180"
+        android:layout_height="@dimen/ui_size_0"
         android:layout_marginTop="@dimen/ui_layout_margin"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/ui_size_8"
         app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
+        app:layout_constraintDimensionRatio="5:2"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/fragment_home_banner_image" />
 
     <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
@@ -29,6 +30,7 @@
         android:paddingHorizontal="@dimen/ui_size_8"
         android:paddingBottom="@dimen/ui_layout_margin"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/rv_banner"
         app:spanCount="5"
         tools:listitem="@layout/fragment_home_banner_feature" />
-</androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

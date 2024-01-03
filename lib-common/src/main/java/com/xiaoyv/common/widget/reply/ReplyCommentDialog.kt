@@ -19,6 +19,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.effective.android.panel.PanelSwitchHelper
 import com.effective.android.panel.view.panel.PanelView
+import com.gyf.immersionbar.BarHide
+import com.gyf.immersionbar.ImmersionBar
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.entity.LoadingState
 import com.xiaoyv.blueprint.kts.params
@@ -33,6 +35,7 @@ import com.xiaoyv.common.kts.showSnackBar
 import com.xiaoyv.common.widget.emoji.format.FormatGridView
 import com.xiaoyv.common.widget.emoji.grid.UiFacePanel
 import com.xiaoyv.common.widget.text.AnimeEditTextView
+import com.xiaoyv.common.widget.web.WebConfig
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.getParcelObj
 import com.xiaoyv.widget.kts.updateWindowParams
@@ -177,6 +180,12 @@ class ReplyCommentDialog : DialogFragment() {
         super.onStart()
         val dialog = dialog ?: return
         val window = dialog.window ?: return
+
+        ImmersionBar.with(this)
+            .transparentBar()
+            .statusBarDarkFont(!WebConfig.nightMode)
+            .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+            .init()
 
         window.setGravity(Gravity.BOTTOM)
         window.setSoftInputMode(16)

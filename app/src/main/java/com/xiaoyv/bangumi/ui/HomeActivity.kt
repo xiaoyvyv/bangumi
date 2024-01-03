@@ -20,6 +20,7 @@ import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.helper.VolumeButtonHelper
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.customApplyWindowInsets
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -68,6 +69,8 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
 
         // 导入底栏
         binding.navView.menu.clear()
+        binding.navView.customApplyWindowInsets()
+
         viewModel.mainTabs.forEachIndexed { index, tab ->
             binding.navView.menu
                 .add(0, tab.id, index, tab.title)

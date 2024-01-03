@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-        android:id="@+id/overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true" />
-
     <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -31,12 +25,13 @@
                 android:id="@+id/iv_banner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_gravity="top"
                 android:background="?attr/colorOnSurfaceVariant"
                 android:fitsSystemWindows="true"
                 android:foreground="@drawable/shape_bottom_edge"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.2"
                 app:srcCompat="@color/ui_black_60" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -162,6 +157,12 @@
 
         </com.xiaoyv.common.widget.appbar.AnimeCollapsingToolbarLayout>
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
