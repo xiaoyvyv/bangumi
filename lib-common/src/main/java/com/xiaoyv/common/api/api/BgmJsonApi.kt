@@ -2,10 +2,13 @@ package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EpCollectParam
+import com.xiaoyv.common.api.request.GithubUpdateParam
 import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
+import com.xiaoyv.common.api.response.GithubContent
 import com.xiaoyv.common.api.response.GithubLatestEntity
+import com.xiaoyv.common.api.response.GithubPutEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetTypeEntity
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
@@ -31,6 +34,7 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -53,6 +57,27 @@ interface BgmJsonApi {
 
     @GET("https://api.github.com/repos/xiaoyvyv/Bangumi-for-Android/releases/latest")
     suspend fun queryGithubLatest(): GithubLatestEntity
+
+    @GET("https://api.github.com/repos/{user}/{repo}/contents/{path}")
+    suspend fun queryGithubFileContent(
+        @Path("user", encoded = true) user: String,
+        @Path("repo", encoded = true) repo: String,
+        @Path("path", encoded = true) path: String,
+        @Header("Authorization") authorization: String,
+        @Header("Accept") accept: String = "application/vnd.github+json",
+        @Header("X-GitHub-Api-Version") version: String = "2022-11-28",
+    ): GithubContent
+
+    @PUT("https://api.github.com/repos/{user}/{repo}/contents/{path}")
+    suspend fun putGithubFileContent(
+        @Path("user", encoded = true) user: String,
+        @Path("repo", encoded = true) repo: String,
+        @Path("path", encoded = true) path: String,
+        @Body param: GithubUpdateParam,
+        @Header("Authorization") authorization: String,
+        @Header("Accept") accept: String = "application/vnd.github+json",
+        @Header("X-GitHub-Api-Version") version: String = "2022-11-28",
+    ): GithubPutEntity
 
     @Multipart
     @POST("https://api.trace.moe/search")

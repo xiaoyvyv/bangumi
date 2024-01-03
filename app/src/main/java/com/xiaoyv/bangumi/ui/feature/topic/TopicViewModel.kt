@@ -10,7 +10,9 @@ import com.xiaoyv.common.api.parser.impl.parserTopic
 import com.xiaoyv.common.api.parser.impl.parserTopicEp
 import com.xiaoyv.common.api.parser.impl.parserTopicIndex
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.CollectionType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.helper.CollectionHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
@@ -31,6 +33,7 @@ class TopicViewModel : BaseViewModel() {
 
     internal val onTopicDetailLiveData = MutableLiveData<TopicDetailEntity?>()
     internal val onDeleteResult = MutableLiveData<Boolean>()
+    internal var isCollected = MutableLiveData(false)
 
     private val requireTopicUserId: String
         get() = onTopicDetailLiveData.value?.userId.orEmpty()
@@ -67,6 +70,8 @@ class TopicViewModel : BaseViewModel() {
                             .parserTopic(topicId)
                     }
                 }
+                isCollected.value = CollectionHelper.isCollected(topicId, CollectionType.TYPE_TOPIC)
+
                 onTopicDetailLiveData.value = list
             }
         )
@@ -99,5 +104,21 @@ class TopicViewModel : BaseViewModel() {
                 UserHelper.notifyActionChange(BgmPathType.TYPE_TOPIC)
             }
         )
+    }
+
+    /**
+     * 开关收藏
+     */
+    fun toggleCollection() {
+        val topicEntity = onTopicDetailLiveData.value ?: return
+        launchUI {
+            if (isCollected.value == true) {
+                CollectionHelper.deleteCollect(topicId, CollectionType.TYPE_TOPIC)
+                isCollected.value = false
+            } else {
+                CollectionHelper.saveTopic(topicEntity, topicType)
+                isCollected.value = true
+            }
+        }
     }
 }

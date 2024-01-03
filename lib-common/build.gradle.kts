@@ -62,6 +62,10 @@ dependencies {
     api(libs.subsampling.scale.image.view.androidx)
     api(libs.speed.dial)
 
+    api(libs.androidx.room.runtime)
+    api(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
     api(libs.jsoup)
     api(libs.avif)
     ksp(libs.glide.ksp)

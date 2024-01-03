@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.os.bundleOf
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.Utils
+import com.xiaoyv.bangumi.special.collection.CollectionActivity
 import com.xiaoyv.bangumi.special.detect.anime.ImageDetectAnimeActivity
 import com.xiaoyv.bangumi.special.detect.character.ImageDetectCharacterActivity
 import com.xiaoyv.bangumi.special.magnet.MagnetActivity
@@ -37,6 +38,7 @@ import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
 import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
 import com.xiaoyv.bangumi.ui.feature.setting.block.BlockActivity
+import com.xiaoyv.bangumi.ui.feature.setting.github.GithubConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
 import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.tab.TabConfigActivity
@@ -58,6 +60,7 @@ import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.CollectionType
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.MonoOrderByType
@@ -515,5 +518,13 @@ object RouteHelper {
 
     fun jumpDetectCharacter() {
         ImageDetectCharacterActivity::class.open()
+    }
+
+    fun jumpCollection(@CollectionType type: Int) {
+        CollectionActivity::class.open(bundleOf(NavKey.KEY_INTEGER to type))
+    }
+
+    fun jumpConfigSync() {
+        GithubConfigActivity::class.open()
     }
 }

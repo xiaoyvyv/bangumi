@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
  * @author why
  * @since 12/6/23
  */
-interface IdEntity {
-    var id: String
+interface IdEntity : DiffEntity<String>
+
+interface DiffEntity<T> {
+    var id: T
 }
 
-class IdDiffItemCallback<T : IdEntity> : DiffUtil.ItemCallback<T>() {
+class IdDiffItemCallback<I, T : DiffEntity<I>> : DiffUtil.ItemCallback<T>() {
     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
         return oldItem.id == newItem.id
     }

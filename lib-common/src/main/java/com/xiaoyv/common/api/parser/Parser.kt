@@ -23,6 +23,8 @@ import com.xiaoyv.widget.kts.spi
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
+val emptyImageGetter = Html.ImageGetter { null }
+
 /**
  * 图片表情
  */
@@ -294,6 +296,17 @@ fun Element.parserFormHash(): String {
 
     debugLog { "页面 FormHash: $formHash" }
     return formHash
+}
+
+/**
+ * 提取图片链接
+ */
+fun String.parserImage(): String {
+    return "//(.*?)\\.(jpg|jpeg|png|webp|gif)".toRegex(RegexOption.IGNORE_CASE)
+        .find(this)?.value.orEmpty().trim()
+        .let {
+            if (it.isNotBlank()) "https:$it" else it
+        }
 }
 
 

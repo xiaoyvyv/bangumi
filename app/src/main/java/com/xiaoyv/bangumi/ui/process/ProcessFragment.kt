@@ -1,12 +1,15 @@
 package com.xiaoyv.bangumi.ui.process
 
+import android.view.MenuItem
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProcessBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.widget.kts.getAttrDrawable
 
@@ -47,6 +50,18 @@ class ProcessFragment : BaseViewModelFragment<FragmentProcessBinding, ProcessVie
 
     override fun initData() {
 
+    }
+
+    override fun initListener() {
+        super.initListener()
+
+        binding.toolbar.menu.add("搜索")
+            .setIcon(CommonDrawable.ic_search)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                RouteHelper.jumpSearch()
+                true
+            }
     }
 
     override fun LifecycleOwner.initViewObserver() {

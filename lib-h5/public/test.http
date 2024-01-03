@@ -65,7 +65,8 @@ Referer: https://bgm.tv
 
 
 ###
-GET https://frodo.douban.com/api/v2/search/suggestion?q=%E6%B5%B7%E8%B4%BC%E7%8E%8B&apikey=0dad551ec0f84ed02907ff5c42e8ec70&_sig=YIaBWngsMazLHzYtVn50BAbHTkc%3D&_ts=1703084439&count=10
+GET https://frodo.douban.com/api/v2/search/suggestion?q=%E6%B5%B7%E8%B4%BC%E7%8E%8B&
+    apikey=0dad551ec0f84ed02907ff5c42e8ec70&_sig=YIaBWngsMazLHzYtVn50BAbHTkc%3D&_ts=1703084439&count=10
 Sec-Fetch-Dest: empty
 Sec-Fetch-Mode: cors
 Sec-Fetch-Site: cross-site
@@ -100,7 +101,8 @@ Cache-Control: no-cache
 
 ###
 # @no-redirect
-POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&client_id=bgm285565606da641d78
+POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&
+    client_id=bgm285565606da641d78
 Host: bgm.tv
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
@@ -114,7 +116,9 @@ Pragma: no-cache
 Cache-Control: no-cache
 TE: trailers
 
-formhash=275b091c&submit=%E6%8E%88%E6%9D%83&client_id=bgm285565606da641d78
+formhash = 275b091c &
+submit = %E6%8E%88%E6%9D%83 &
+client_id = bgm285565606da641d78
 
 ###
 POST https://bgm.tv/oauth/access_token
@@ -124,11 +128,12 @@ Content-Type: application/x-www-form-urlencoded
 POST https://bgm.tv/oauth/token_status
 Content-Type: application/x-www-form-urlencoded
 
-access_token=0df589bbce14321dd835f6b8fe343b49a5052ad2
+access_token = 0df589bbce14321dd835f6b8fe343b49a5052ad2
 
 ###
 # @no-redirect
-POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&client_id=bgm285565606da641d78
+POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&
+    client_id=bgm285565606da641d78
 Host: bgm.tv
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
@@ -147,3 +152,39 @@ TE: trailers
 ###
 # @no-redirect
 GET https://bgm.tv/group/topic/391984
+
+
+###
+GET https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+X-GitHub-Api-Version: 2022-11-28
+
+
+###
+PUT https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+X-GitHub-Api-Version: 2022-11-28
+Content-Type: application/json
+
+{
+  "message": "更新收藏",
+  "committer": {
+    "name": "Monalisa Octocat",
+    "email": "octocat@github.com"
+  },
+  "content": "5pu05paw5pS26JeP5pu05paw5pS26JeP",
+  "sha": "5b631fb1cd75c9c67ef891b7e3bb4ddb13391eca"
+}
+
+###
+GET https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/Application.musicdb
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+X-GitHub-Api-Version: 2022-11-28
+
+###
+
+
+

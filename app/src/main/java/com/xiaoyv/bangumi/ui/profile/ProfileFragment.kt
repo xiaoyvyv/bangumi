@@ -10,6 +10,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.config.annotation.CollectionType
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
@@ -66,6 +67,28 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                         .setOnMenuItemClickListener {
                             if (UserHelper.isLogin) {
                                 RouteHelper.jumpUserDetail(UserHelper.currentUser.id)
+                            } else {
+                                RouteHelper.jumpLogin()
+                            }
+                            true
+                        }
+
+                    menu.add("我收藏的话题")
+                        .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                        .setOnMenuItemClickListener {
+                            if (UserHelper.isLogin) {
+                                RouteHelper.jumpCollection(CollectionType.TYPE_TOPIC)
+                            } else {
+                                RouteHelper.jumpLogin()
+                            }
+                            true
+                        }
+
+                    menu.add("我收藏的日志")
+                        .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                        .setOnMenuItemClickListener {
+                            if (UserHelper.isLogin) {
+                                RouteHelper.jumpCollection(CollectionType.TYPE_BLOG)
                             } else {
                                 RouteHelper.jumpLogin()
                             }

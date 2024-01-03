@@ -14,6 +14,7 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.addCommonMenu
+import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -117,6 +118,10 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
             invalidateMenu()
         }
 
+        viewModel.isCollected.observe(this) {
+            invalidateMenu()
+        }
+
         viewModel.onDeleteResult.observe(this) {
             finish()
         }
@@ -145,6 +150,15 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
                     true
                 }
         }
+
+        // 收藏菜单
+        if (viewModel.onTopicDetailLiveData.value != null) menu.add("收藏")
+            .setIcon(if (viewModel.isCollected.value == true) CommonDrawable.ic_star else CommonDrawable.ic_star_empty)
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            .setOnMenuItemClickListener {
+                viewModel.toggleCollection()
+                true
+            }
 
         // 公共菜单
         menu.addCommonMenu(BgmApiManager.buildTopicUrl(viewModel.topicId, viewModel.topicType))

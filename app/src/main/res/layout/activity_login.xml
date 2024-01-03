@@ -56,7 +56,7 @@
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="username"
+                android:autofillHints="emailAddress"
                 android:background="@drawable/ui_shape_rectangle_corner_6"
                 android:backgroundTint="?attr/colorSurfaceContainer"
                 android:ellipsize="end"

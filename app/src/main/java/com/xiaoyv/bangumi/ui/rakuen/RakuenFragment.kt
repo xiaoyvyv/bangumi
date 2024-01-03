@@ -8,6 +8,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentSuperBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.config.annotation.CollectionType
 import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.SimpleTabSelectedListener
@@ -70,12 +71,16 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
             title = "切换小组类型",
             items = listOf("全部小组", "我加入的小组"),
             onItemClick = { _, index ->
-                if (index == 0) {
-                    binding.tabLayout.getTabAt(1)?.setText(buildIconTab("小组"))
-                    viewModel.rakuenGroupType.value = SuperType.TYPE_GROUP
-                } else {
-                    binding.tabLayout.getTabAt(1)?.setText(buildIconTab("加入的小组"))
-                    viewModel.rakuenGroupType.value = SuperType.TYPE_MY_GROUP
+                when (index) {
+                    0 -> {
+                        binding.tabLayout.getTabAt(1)?.setText(buildIconTab("小组"))
+                        viewModel.rakuenGroupType.value = SuperType.TYPE_GROUP
+                    }
+
+                    1 -> {
+                        binding.tabLayout.getTabAt(1)?.setText(buildIconTab("加入的小组"))
+                        viewModel.rakuenGroupType.value = SuperType.TYPE_MY_GROUP
+                    }
                 }
             }
         )
@@ -114,6 +119,17 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
                         return@setOnMenuItemClickListener true
                     }
                     RouteHelper.jumpMyTopics(false)
+                    true
+                }
+
+            add("我收藏的话题")
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                .setOnMenuItemClickListener {
+                    if (UserHelper.isLogin.not()) {
+                        RouteHelper.jumpLogin()
+                        return@setOnMenuItemClickListener true
+                    }
+                    RouteHelper.jumpCollection(CollectionType.TYPE_TOPIC)
                     true
                 }
         }

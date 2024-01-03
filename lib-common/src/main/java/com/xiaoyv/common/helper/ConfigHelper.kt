@@ -34,6 +34,9 @@ object ConfigHelper {
     private const val KEY_DEFAULT_COMMENT_SORT = "default-comment-sort"
     private const val KEY_ANIME_DENIED_TAGS = "anime-denied-tags"
     private const val KEY_ANIME_MAGNET_API = "anime-magnet-api"
+    private const val KEY_GITHUB_USER = "github-user"
+    private const val KEY_GITHUB_REPO = "github-repo"
+    private const val KEY_GITHUB_TOKEN = "github-token"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -221,4 +224,26 @@ object ConfigHelper {
             "breasts||erotic||light erotic||hard erotic||bare shoulders||empty eyes||black background||spoilers"
         )
         set(value) = SPStaticUtils.put(KEY_ANIME_DENIED_TAGS, value)
+
+
+    /**
+     * Github User
+     */
+    var githubUser: String
+        get() = UserHelper.userSp.getString(KEY_GITHUB_USER)
+        set(value) = UserHelper.userSp.put(KEY_GITHUB_USER, value.trim())
+
+    /**
+     * Github Repo
+     */
+    var githubRepo: String
+        get() = UserHelper.userSp.getString(KEY_GITHUB_REPO)
+        set(value) = UserHelper.userSp.put(KEY_GITHUB_REPO, value.trim())
+
+    /**
+     * Github Token
+     */
+    var githubToken: String
+        get() = UserHelper.userSp.getString(KEY_GITHUB_TOKEN)
+        set(value) = UserHelper.userSp.put(KEY_GITHUB_TOKEN, value.trim())
 }

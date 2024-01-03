@@ -27,5 +27,17 @@ annotation class TopicType {
         const val TYPE_CRT = "crt"
         const val TYPE_SUBJECT = "subject"
         const val TYPE_INDEX = "index"
+
+        fun string(@TopicType type: String): String {
+            return when (type) {
+                TYPE_EP -> "条目章节"
+                TYPE_GROUP -> "小组话题"
+                TYPE_PERSON -> "现实人物"
+                TYPE_CRT -> "虚拟人物"
+                TYPE_SUBJECT -> "条目话题"
+                TYPE_INDEX -> "目录"
+                else -> "未知"
+            }
+        }
     }
 }

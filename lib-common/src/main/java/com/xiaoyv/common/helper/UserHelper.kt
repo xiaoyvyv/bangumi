@@ -162,6 +162,9 @@ class UserHelper private constructor() {
 
         // 刷新绝交用户
         cacheBreakUserIds()
+
+        // 刷新收藏数据
+        CollectionHelper.syncCollection(overrideRemote = false, toast = false)
     }
 
     /**
@@ -177,6 +180,9 @@ class UserHelper private constructor() {
 
         // 是否清空账户和密码
         if (clearEmailAndPassword) userSp.clear()
+
+        // 清空收藏数据
+        CollectionHelper.clearAll()
 
         onUserInfoLiveData.sendValue(empty)
     }
