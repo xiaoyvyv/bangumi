@@ -8,11 +8,13 @@ import com.xiaoyv.bangumi.databinding.FragmentDiscoverBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.MainViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
 /**
  * Class: [DiscoverFragment]
@@ -42,8 +44,9 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
     }
 
     override fun initData() {
-        binding.vpContent.adapter = vpAdapter
         binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
+        binding.vpContent.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
+        binding.vpContent.adapter = vpAdapter
         tabLayoutMediator.attach()
     }
 

@@ -10,11 +10,13 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.CollectionType
 import com.xiaoyv.common.config.annotation.SuperType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.SimpleTabSelectedListener
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.showOptionsDialog
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
 /**
  * Class: [RakuenFragment]
@@ -38,8 +40,9 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
     }
 
     override fun initView() {
-        binding.vp2.adapter = vpAdapter
+        binding.vp2.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vp2.offscreenPageLimit = vpAdapter.itemCount
+        binding.vp2.adapter = vpAdapter
 
         tabLayoutMediator.attach()
 

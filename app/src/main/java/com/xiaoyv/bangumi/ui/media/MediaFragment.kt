@@ -15,9 +15,11 @@ import com.xiaoyv.bangumi.ui.media.option.MediaOptionFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.bean.MediaOptionConfig
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.getAttrDrawable
 import kotlinx.coroutines.delay
 
@@ -77,8 +79,9 @@ class MediaFragment : BaseViewModelFragment<FragmentMediaBinding, MediaViewModel
     }
 
     override fun initData() {
-        binding.vp2.adapter = vpAdapter
+        binding.vp2.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vp2.offscreenPageLimit = vpAdapter.itemCount
+        binding.vp2.adapter = vpAdapter
 
         binding.flOptions.isUserInputEnabled = false
         binding.flOptions.adapter = optionAdapter

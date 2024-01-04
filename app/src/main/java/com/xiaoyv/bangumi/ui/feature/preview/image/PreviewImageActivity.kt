@@ -9,7 +9,9 @@ import com.xiaoyv.bangumi.databinding.ActivityPreviewBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.activity
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
 /**
  * Class: [PreviewImageActivity]
@@ -43,7 +45,9 @@ class PreviewImageActivity :
                 viewModel.totalImageUrls.size
             )
 
+            binding.vpImage.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
             binding.vpImage.adapter = PreviewImageAdapter(activity, it.second)
+
             if (position != -1 && position < it.second.size) {
                 binding.vpImage.setCurrentItem(position, false)
             }

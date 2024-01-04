@@ -16,6 +16,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.IndexDetailEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.CommonDrawable
@@ -27,6 +28,7 @@ import com.xiaoyv.common.kts.showInputLine2Dialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import kotlinx.coroutines.delay
 
 /**
@@ -113,6 +115,7 @@ class IndexDetailActivity :
 
         // 分类等页面
         binding.vpContent.adapter = vpAdapter
+        binding.vpContent.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
 
         // 绑定 Tabs

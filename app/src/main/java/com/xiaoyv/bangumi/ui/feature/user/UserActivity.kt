@@ -14,6 +14,7 @@ import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.ReportType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.CommonDrawable
@@ -29,6 +30,7 @@ import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.common.widget.dialog.AnimeReportDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
 
 /**
@@ -78,8 +80,9 @@ class UserActivity : BaseViewModelActivity<ActivityUserBinding, UserViewModel>()
     override fun initData() {
         vpAdapter.userId = viewModel.userId
 
-        binding.vpContent.adapter = vpAdapter
+        binding.vpContent.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
+        binding.vpContent.adapter = vpAdapter
 
         tabLayoutMediator.attach()
     }

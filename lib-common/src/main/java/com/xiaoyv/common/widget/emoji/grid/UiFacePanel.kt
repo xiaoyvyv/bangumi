@@ -16,8 +16,10 @@ import com.xiaoyv.blueprint.base.binding.BaseBindingFragment
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.databinding.ViewEmotionBinding
 import com.xiaoyv.common.databinding.ViewEmotionPageBinding
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.inflater
 import com.xiaoyv.emoji.BgmEmoji
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.getSerialObj
 
 /**
@@ -46,8 +48,9 @@ class UiFacePanel @JvmOverloads constructor(
         this.block = block
         pageAdapter = EmojiPageAdapter(activity.supportFragmentManager, activity.lifecycle)
 
-        binding.vpEmoji.adapter = pageAdapter
+        binding.vpEmoji.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vpEmoji.offscreenPageLimit = 3
+        binding.vpEmoji.adapter = pageAdapter
 
         tabLayoutMediator?.detach()
         tabLayoutMediator = TabLayoutMediator(binding.tabLayout, binding.vpEmoji) { tab, position ->

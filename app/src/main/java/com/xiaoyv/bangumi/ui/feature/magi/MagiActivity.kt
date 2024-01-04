@@ -4,7 +4,9 @@ import android.view.MenuItem
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityMagiBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.initNavBack
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
 
 /**
@@ -27,8 +29,9 @@ class MagiActivity : BaseViewModelActivity<ActivityMagiBinding, MagiViewModel>()
 
     override fun initView() {
         binding.toolbar.initNavBack(this)
-        binding.vp2.adapter = vpAdapter
         binding.vp2.offscreenPageLimit = vpAdapter.itemCount
+        binding.vp2.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
+        binding.vp2.adapter = vpAdapter
 
         tabLayoutMediator.attach()
     }

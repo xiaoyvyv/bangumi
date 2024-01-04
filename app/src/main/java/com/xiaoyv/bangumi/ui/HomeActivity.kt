@@ -25,6 +25,7 @@ import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import kotlinx.coroutines.delay
@@ -63,6 +64,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     }
 
     override fun initView() {
+        binding.vpView.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vpView.isUserInputEnabled = false
         binding.vpView.offscreenPageLimit = vpAdapter.itemCount.coerceAtLeast(1)
         binding.vpView.adapter = vpAdapter

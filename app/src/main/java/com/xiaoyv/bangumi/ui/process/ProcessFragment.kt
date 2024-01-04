@@ -8,9 +8,11 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.getAttrDrawable
 
 /**
@@ -31,8 +33,9 @@ class ProcessFragment : BaseViewModelFragment<FragmentProcessBinding, ProcessVie
     }
 
     override fun initView() {
-        binding.vp2.adapter = vpAdapter
         binding.vp2.offscreenPageLimit = 5
+        binding.vp2.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
+        binding.vp2.adapter = vpAdapter
 
         tabLayoutMediator.attach()
 

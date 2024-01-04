@@ -43,7 +43,6 @@
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="?attr/colorOnSurfaceVariant" />
 
-
             <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_comment_sort"
                 android:layout_width="match_parent"
@@ -52,6 +51,15 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="评论默认排序" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_vp_slop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="Pager 阻尼系数" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_image_animation"

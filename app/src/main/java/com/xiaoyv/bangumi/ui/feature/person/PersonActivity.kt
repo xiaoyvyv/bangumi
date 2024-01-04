@@ -15,6 +15,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.FixHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.addCommonMenu
@@ -28,6 +29,7 @@ import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.dpi
 
 /**
@@ -63,8 +65,9 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
         vpAdapter.isVirtual = viewModel.isVirtual
         vpAdapter.personId = viewModel.personId
 
-        binding.vpContent.adapter = vpAdapter
+        binding.vpContent.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
+        binding.vpContent.adapter = vpAdapter
 
         tabLayoutMediator.attach()
     }

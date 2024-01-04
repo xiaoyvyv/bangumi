@@ -50,6 +50,6 @@ class BgmDns : Dns {
     }
 
     companion object {
-        const val DEFAULT_HOSTS = "172.67.98.15 share.dmhy.org\n"
+        const val DEFAULT_HOSTS = "172.67.98.15 share.dmhy.org\n172.67.152.186 bangumi.moe\n"
     }
 }

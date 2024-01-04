@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.CollectionType
 import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
@@ -20,6 +21,7 @@ import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.setBadgeNumber
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.dpi
 import kotlin.math.abs
 
@@ -45,8 +47,9 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
     }
 
     override fun initView() {
-        binding.vpContent.adapter = vpAdapter
+        binding.vpContent.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
+        binding.vpContent.adapter = vpAdapter
 
         tabLayoutMediator.attach()
 

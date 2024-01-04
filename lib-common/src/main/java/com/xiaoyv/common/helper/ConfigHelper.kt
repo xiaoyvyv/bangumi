@@ -39,6 +39,7 @@ object ConfigHelper {
     private const val KEY_GITHUB_REPO = "github-repo"
     private const val KEY_GITHUB_TOKEN = "github-token"
     private const val KEY_NETWORK_HOSTS = "network-hosts"
+    private const val KEY_VP_SLOP = "vp-slop"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -255,4 +256,11 @@ object ConfigHelper {
     var netHosts: String
         get() = SPStaticUtils.getString(KEY_NETWORK_HOSTS, BgmDns.DEFAULT_HOSTS)
         set(value) = SPStaticUtils.put(KEY_NETWORK_HOSTS, value.trim())
+
+    /**
+     * VP 滚动斜率阈值倍数，SDK 默认值为 2，越大越不容易左右滑动误触发
+     */
+    var vpTouchSlop: Int
+        get() = SPStaticUtils.getInt(KEY_VP_SLOP, 2)
+        set(value) = SPStaticUtils.put(KEY_VP_SLOP, value)
 }

@@ -15,6 +15,7 @@ import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.showInputDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
 /**
  * Class: [TimelineFragment]
@@ -35,8 +36,9 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
     }
 
     override fun initView() {
-        binding.vp2.adapter = vpAdapter
+        binding.vp2.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vp2.offscreenPageLimit = 5
+        binding.vp2.adapter = vpAdapter
 
         tabLayoutMediator.attach()
 
