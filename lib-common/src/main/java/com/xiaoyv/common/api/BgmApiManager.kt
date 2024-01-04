@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.api.BgmJsonApi
 import com.xiaoyv.common.api.api.BgmWebApi
 import com.xiaoyv.common.api.converter.WebDocumentConverter
 import com.xiaoyv.common.api.converter.WebHtmlConverter
+import com.xiaoyv.common.api.dns.BgmDns
 import com.xiaoyv.common.api.interceptor.CommonInterceptor
 import com.xiaoyv.common.api.interceptor.CookieInterceptor
 import com.xiaoyv.common.api.interceptor.DouBanInterceptor
@@ -39,11 +40,14 @@ class BgmApiManager {
     private val douBanInterceptor by lazy { DouBanInterceptor() }
     private val cookieInterceptor by lazy { CookieInterceptor() }
 
+    private val bgmDns by lazy { BgmDns() }
+
     private val httpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(commonInterceptor)
             .addInterceptor(douBanInterceptor)
             .addNetworkInterceptor(cookieInterceptor)
+            .dns(bgmDns)
             .apply {
                 if (AppUtils.isAppDebug()) {
                     addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

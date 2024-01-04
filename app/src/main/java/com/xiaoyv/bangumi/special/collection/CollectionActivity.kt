@@ -88,7 +88,7 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 if (!CollectionHelper.isEnable) {
-                    RouteHelper.jumpConfigSync()
+                    RouteHelper.jumpConfigNetwork()
                     return@setOnMenuItemClickListener true
                 }
                 CollectionHelper.syncCollection(
@@ -103,7 +103,7 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 if (!CollectionHelper.isEnable) {
-                    RouteHelper.jumpConfigSync()
+                    RouteHelper.jumpConfigNetwork()
                     return@setOnMenuItemClickListener true
                 }
                 CollectionHelper.syncCollection(
@@ -134,7 +134,7 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
         menu.add("配置")
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
-                RouteHelper.jumpConfigSync()
+                RouteHelper.jumpConfigNetwork()
                 true
             }
         return super.onCreateOptionsMenu(menu)

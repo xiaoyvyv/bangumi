@@ -790,6 +790,9 @@ interface BgmWebApi {
         @Field("client_id") fieldClientId: String = BgmApiManager.APP_ID,
         @Field("submit") submit: String = "授权",
     ): Response<ResponseBody>
+
+    @GET("{url}")
+    suspend fun test(@Path("url", encoded = true) url: String): Response<ResponseBody>
 }
 
 

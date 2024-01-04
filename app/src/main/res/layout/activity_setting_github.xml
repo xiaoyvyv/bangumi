@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title="Github 收藏同步仓库配置" />
+            app:title="网络配置" />
 
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
@@ -35,7 +35,7 @@
             android:layout_marginTop="@dimen/ui_layout_margin"
             android:paddingHorizontal="@dimen/ui_layout_margin"
             android:paddingVertical="@dimen/ui_size_6"
-            android:text="Github 仓库收藏配置"
+            android:text="Github 收藏同步仓库配置"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -65,5 +65,33 @@
             android:clickable="true"
             android:focusable="true"
             android:text="个人 Token" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_layout_margin"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
+            android:paddingVertical="@dimen/ui_size_6"
+            android:text="自定义 Hosts 解析"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        <com.xiaoyv.common.widget.setting.SettingItemView
+            android:id="@+id/setting_host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Hosts" />
+
+        <com.xiaoyv.common.widget.setting.SettingItemView
+            android:id="@+id/setting_host_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Hosts 解析测试" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

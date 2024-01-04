@@ -298,7 +298,7 @@
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
         <activity
-            android:name="com.xiaoyv.bangumi.ui.feature.setting.github.GithubConfigActivity"
+            android:name="com.xiaoyv.bangumi.ui.feature.setting.network.NetworkConfigActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
     </application>

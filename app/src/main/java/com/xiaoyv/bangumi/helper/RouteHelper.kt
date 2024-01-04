@@ -38,7 +38,7 @@ import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
 import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
 import com.xiaoyv.bangumi.ui.feature.setting.block.BlockActivity
-import com.xiaoyv.bangumi.ui.feature.setting.github.GithubConfigActivity
+import com.xiaoyv.bangumi.ui.feature.setting.network.NetworkConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
 import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.tab.TabConfigActivity
@@ -524,7 +524,7 @@ object RouteHelper {
         CollectionActivity::class.open(bundleOf(NavKey.KEY_INTEGER to type))
     }
 
-    fun jumpConfigSync() {
-        GithubConfigActivity::class.open()
+    fun jumpConfigNetwork() {
+        NetworkConfigActivity::class.open()
     }
 }

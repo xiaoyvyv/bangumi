@@ -31,7 +31,9 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/ui_size_40">
 
             <com.xiaoyv.common.widget.text.AnimeTextView
                 android:layout_width="match_parent"
@@ -113,6 +115,16 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="底栏配置"
+                tools:ignore="HardcodedText" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_network"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="网络配置"
                 tools:ignore="HardcodedText" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView

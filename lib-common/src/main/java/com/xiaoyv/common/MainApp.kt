@@ -65,7 +65,9 @@ class MainApp : Application() {
 
     private fun initBaseConfig() {
         BaseConfig.config.globalConfig = object : BaseConfig.OnConfigActivity {
-
+            override fun initBarConfig(activity: BaseActivity, nightMode: Boolean) {
+                super.initBarConfig(activity, nightMode)
+            }
         }
     }
 

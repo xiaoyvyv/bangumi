@@ -99,6 +99,10 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
             )
         }
 
+        binding.settingNetwork.setOnFastLimitClickListener {
+            RouteHelper.jumpConfigNetwork()
+        }
+
         binding.settingUi.setOnFastLimitClickListener {
             RouteHelper.jumpUiConfig()
         }

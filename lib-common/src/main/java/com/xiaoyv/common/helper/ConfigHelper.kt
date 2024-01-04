@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.SPStaticUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.xiaoyv.common.api.dns.BgmDns
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.annotation.TimelinePageType
 
@@ -37,6 +38,7 @@ object ConfigHelper {
     private const val KEY_GITHUB_USER = "github-user"
     private const val KEY_GITHUB_REPO = "github-repo"
     private const val KEY_GITHUB_TOKEN = "github-token"
+    private const val KEY_NETWORK_HOSTS = "network-hosts"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -246,4 +248,11 @@ object ConfigHelper {
     var githubToken: String
         get() = UserHelper.userSp.getString(KEY_GITHUB_TOKEN)
         set(value) = UserHelper.userSp.put(KEY_GITHUB_TOKEN, value.trim())
+
+    /**
+     * Network hosts
+     */
+    var netHosts: String
+        get() = SPStaticUtils.getString(KEY_NETWORK_HOSTS, BgmDns.DEFAULT_HOSTS)
+        set(value) = SPStaticUtils.put(KEY_NETWORK_HOSTS, value.trim())
 }
