@@ -148,6 +148,7 @@ class DollarsActivity : BaseListActivity<DollarsEntity, DollarsViewModel>() {
         }
 
         if (viewModel.needSmoothScrollToBottom) {
+            viewModel.needSmoothScrollToBottom = false
             smoothScrollToBottom()
         }
     }
