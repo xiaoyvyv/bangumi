@@ -3,6 +3,7 @@
 package com.xiaoyv.common.api.api
 
 import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.api.parser.entity.DollarsEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.request.CreateTokenParam
 import com.xiaoyv.common.api.response.BgmStatusEntity
@@ -581,6 +582,13 @@ interface BgmWebApi {
     suspend fun postMessage(@FieldMap map: Map<String, String>): Document
 
     @FormUrlEncoded
+    @POST("/dollars")
+    suspend fun postDollars(
+        @Field("message") message: String,
+        @Query("ajax") ajax: Int = 1,
+    ): Document
+
+    @FormUrlEncoded
     @POST("/pm/erase/batch")
     suspend fun postClearMessageBox(
         @Field("folder") @MessageBoxType folder: String,
@@ -793,6 +801,9 @@ interface BgmWebApi {
 
     @GET("{url}")
     suspend fun test(@Path("url", encoded = true) url: String): Response<ResponseBody>
+
+    @GET("/dollars?since_id=")
+    suspend fun queryDollars(@Query("since_id") sinceId: String = ""): List<DollarsEntity>
 }
 
 

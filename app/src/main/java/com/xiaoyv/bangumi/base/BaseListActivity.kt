@@ -50,6 +50,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
     }
 
     internal open val needResetPositionWhenRefresh = true
+    internal open val hideInputBoardWhenTouchItem = true
     internal open val debugLog = false
     internal open val hasFixedSize = false
     internal open val toolbarTitle = " "
@@ -124,18 +125,20 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         }
 
         // 隐藏软键盘
-        binding.rvContent.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                KeyboardUtils.hideSoftInput(this@BaseListActivity)
-                return false
-            }
+        if (hideInputBoardWhenTouchItem) {
+            binding.rvContent.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                    KeyboardUtils.hideSoftInput(this@BaseListActivity)
+                    return false
+                }
 
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-            }
+                override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+                }
 
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-            }
-        })
+                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+                }
+            })
+        }
     }
 
     @CallSuper
@@ -200,6 +203,12 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
 
     }
 
+    fun scrollToTop() {
+        useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
+            scrollToPositionWithOffset(0, 0)
+        }
+    }
+
     fun scrollToBottom() {
         useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
             val position = (contentAdapter.itemCount - 1).coerceAtLeast(0)
@@ -211,6 +220,12 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
             val position = (contentAdapter.itemCount - 1).coerceAtLeast(0)
             smoothScrollToPosition(binding.rvContent, RecyclerView.State(), position)
+        }
+    }
+
+    fun smoothScrollToTop() {
+        useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
+            smoothScrollToPosition(binding.rvContent, RecyclerView.State(), 0)
         }
     }
 

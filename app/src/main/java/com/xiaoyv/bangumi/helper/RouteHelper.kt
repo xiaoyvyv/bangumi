@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.special.picture.gallery.AnimeGalleryActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
+import com.xiaoyv.bangumi.ui.discover.dollars.DollarsActivity
 import com.xiaoyv.bangumi.ui.discover.group.detail.GroupDetailActivity
 import com.xiaoyv.bangumi.ui.discover.group.list.GroupListActivity
 import com.xiaoyv.bangumi.ui.discover.group.topic.GroupTopicsActivity
@@ -68,6 +69,7 @@ import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
+import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.widget.kts.showToastCompat
@@ -526,5 +528,13 @@ object RouteHelper {
 
     fun jumpConfigNetwork() {
         NetworkConfigActivity::class.open()
+    }
+
+    fun jumpDollars() {
+        if (UserHelper.isLogin.not()) {
+            jumpLogin()
+        } else {
+            DollarsActivity::class.open()
+        }
     }
 }

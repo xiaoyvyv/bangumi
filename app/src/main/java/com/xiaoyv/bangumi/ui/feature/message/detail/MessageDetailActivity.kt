@@ -50,8 +50,7 @@ class MessageDetailActivity : BaseListActivity<MessageEntity, MessageDetailViewM
         viewModel.fromName = bundle.getString(NavKey.KEY_STRING_SECOND).orEmpty()
     }
 
-    override fun initView() {
-        super.initView()
+    override fun injectFilter(container: FrameLayout) {
         inputBinding = ActivityMessageDetailInputBinding.inflate(layoutInflater)
         inputBinding.etMessage.hint = buildString {
             append("回复：")
