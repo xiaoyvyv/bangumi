@@ -21,7 +21,7 @@ class CommonInterceptor : Interceptor {
      * Dalvik/2.1.0 Mozilla (Linux; U; Android 13; Pixel 4 XL Build/TP1A.221005.002)
      *
      * Bgm 推荐的 UA
-     * - "xiaoyvyv/Bangumi-for-Android/${AppUtils.getAppVersionName()} (Android) (https://github.com/xiaoyvyv/Bangumi-for-Android)"
+     * - "xiaoyvyv/bangumi/${AppUtils.getAppVersionName()} (Android) (https://github.com/xiaoyvyv/bangumi)"
      * - 部分图片服务商禁止 Dalvik，这里替换一下
      */
     private val userAgent: String by lazy {

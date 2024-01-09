@@ -62,7 +62,7 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
         }
 
         binding.bgm.setOnFastLimitClickListener {
-            openInBrowser("https://github.com/xiaoyvyv/Bangumi-for-Android")
+            openInBrowser("https://github.com/xiaoyvyv/bangumi")
         }
     }
 

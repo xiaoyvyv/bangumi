@@ -22,8 +22,8 @@ class RakuenAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     internal val tabs = listOf(
         SuperTopicTab("全部", SuperType.TYPE_ALL),
         SuperTopicTab("小组", SuperType.TYPE_GROUP),
-        SuperTopicTab("章节", SuperType.TYPE_SUBJECT),
-        SuperTopicTab("条目", SuperType.TYPE_EP),
+        SuperTopicTab("章节", SuperType.TYPE_EP),
+        SuperTopicTab("条目", SuperType.TYPE_SUBJECT),
         SuperTopicTab("人物", SuperType.TYPE_MONO),
     )
 

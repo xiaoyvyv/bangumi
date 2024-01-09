@@ -6,7 +6,7 @@
 - 生效日期：2023年12月29日
 
 Github 个人开发者 [xiaoyvyv](https://github.com/xiaoyvyv)
-及该开源项目 [Bangumi for Android](https://github.com/xiaoyvyv/Bangumi-for-Android) 的贡献者（以下称“我们”）作为 Bangumi
+及该开源项目 [Bangumi for Android](https://github.com/xiaoyvyv/bangumi) 的贡献者（以下称“我们”）作为 Bangumi
 for Android 的安卓客户端的开发和运营者，将依据相关法律法规和技术规范收集和使用您的个人信息，以帮助我们向您提供更优质的服务。
 
 请您务必在点击同意本政策之前，审慎阅读、充分理解各条款内容，特别是免除或者限制责任的条款、法律适用和争议解决条款。如果您有任何疑问，邮件至
@@ -15,7 +15,7 @@ for Android 的安卓客户端的开发和运营者，将依据相关法律法�
 ### 一、关于我们
 
 1. Bangumi for Android 由 Github 个人开发者 [xiaoyvyv](https://github.com/xiaoyvyv)
-   及该开源项目 [Bangumi for Android](https://github.com/xiaoyvyv/Bangumi-for-Android) 的贡献者开发和服务的一款ACG交流开源安卓客户端。
+   及该开源项目 [Bangumi for Android](https://github.com/xiaoyvyv/bangumi) 的贡献者开发和服务的一款ACG交流开源安卓客户端。
 2. Bangumi for Android 基于 GPL 3.0 开源协议。
 3. Bangumi for Android 的内容服务基于 Bgm.TV | Bangumi.TV 开发。
 

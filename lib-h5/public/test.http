@@ -202,3 +202,21 @@ Host: api.github.com
 Connection: Keep-Alive
 Accept-Encoding: gzip
 
+###
+GET /settings/privacy HTTP/2
+Host: bgm.tv
+User-Agent: 2222
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Referer: https://bgm.tv/settings
+Connection: keep-alive
+Cookie: chii_sid=y66HH9; chii_sec_id=ozHfe3vQEphzAiBKJohTAsKomWtDWgiLiPaLZco; chii_theme=light; _ga_1109JLGMHN=GS1.1.1704791600.1.1.1704792373.0.0.0; _ga=GA1.1.1779898869.1704791601; __utma=1.1779898869.1704791601.1704791601.1704791601.1; __utmb=1.10.10.1704791601; __utmc=1; __utmz=1.1704791601.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); chii_cookietime=0; chii_auth=q2KML36KRM9mAHJAJo5ETb7cmxU%2FRU%2BwjYLKH%2BMwlV3sgJQI7IiDfFQ%2BLHqstN%2Bd6O6PhkaXtuKihJ99ggcFmD%2Bj7lXsdyjoMPoH; __utmt=1
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers

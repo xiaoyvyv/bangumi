@@ -91,7 +91,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
                 items = listOf("Github Issues", "班固米小组"),
                 onItemClick = { _, position ->
                     if (position == 0) {
-                        openInBrowser("https://github.com/xiaoyvyv/Bangumi-for-Android/issues")
+                        openInBrowser("https://github.com/xiaoyvyv/bangumi/issues")
                     } else {
                         RouteHelper.jumpGroupDetail("android_client")
                     }
@@ -122,7 +122,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingGithub.setOnFastLimitClickListener {
-            openInBrowser("https://github.com/xiaoyvyv/Bangumi-for-Android")
+            openInBrowser("https://github.com/xiaoyvyv/bangumi")
         }
 
         binding.settingAgreement.setOnFastLimitClickListener {

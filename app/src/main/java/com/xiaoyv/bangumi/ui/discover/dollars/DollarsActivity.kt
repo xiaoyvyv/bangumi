@@ -55,7 +55,7 @@ class DollarsActivity : BaseListActivity<DollarsEntity, DollarsViewModel>() {
     override fun initView() {
         super.initView()
 
-        binding.root.setBackgroundColor(getAttrColor(GoogleAttr.colorSurfaceVariant))
+        binding.root.setBackgroundColor(getAttrColor(GoogleAttr.colorSurfaceContainer))
         binding.rvContent.updatePadding(bottom = 40.dpi)
     }
 

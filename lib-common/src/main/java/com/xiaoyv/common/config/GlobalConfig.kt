@@ -10,7 +10,7 @@ import com.xiaoyv.common.config.bean.MediaTab
  * @since 11/28/23
  */
 object GlobalConfig {
-    private const val DOC_ROOT = "https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build"
+    private const val DOC_ROOT = "https://xiaoyvyv.github.io/bangumi/lib-doc/build"
 
     const val GROUP_MY_REPLY_TOPIC = "my_reply"
     const val GROUP_MY_SEND_TOPIC = "my_topic"

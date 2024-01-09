@@ -1,14 +1,14 @@
-# Bangumi-for-Android
+# bangumi
 
-[![GitHub code size in bytes](https://img.shields.io/github/repo-size/xiaoyvyv/Bangumi-for-Android)](https://github.com/xiaoyvyv/Bangumi-for-Android)
-[![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/Bangumi-for-Android/total)](https://github.com/xiaoyvyv/Bangumi-for-Android)
-[![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android)
-[![GitHub forks](https://img.shields.io/github/forks/xiaoyvyv/Bangumi-for-Android.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/fork)
-[![GitHub issues](https://img.shields.io/github/issues/xiaoyvyv/Bangumi-for-Android)](https://github.com/xiaoyvyv/Bangumi-for-Android/issues)
-[![Views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxiaoyvyv%2FBangumi-for-Android&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23AA3535&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+[![GitHub code size in bytes](https://img.shields.io/github/repo-size/xiaoyvyv/bangumi)](https://github.com/xiaoyvyv/bangumi)
+[![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total)](https://github.com/xiaoyvyv/bangumi)
+[![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/bangumi.svg)](https://github.com/xiaoyvyv/bangumi)
+[![GitHub forks](https://img.shields.io/github/forks/xiaoyvyv/bangumi.svg)](https://github.com/xiaoyvyv/bangumi/fork)
+[![GitHub issues](https://img.shields.io/github/issues/xiaoyvyv/bangumi)](https://github.com/xiaoyvyv/bangumi/issues)
+[![Views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxiaoyvyv%2Fbangumi&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23AA3535&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://github.com/xiaoyvyv/Bangumi-for-Android/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/Bangumi-for-Android/actions)
+[![Build Status](https://github.com/xiaoyvyv/bangumi/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/bangumi/actions)
 
 大家好，各位阿宅、二次元迷们，我是一位热爱动漫文化的安卓开发者，很高兴向大家宣布，我为 https://bgm.tv 这个网站打造了一款全新的 安卓原生客户端！
 
@@ -25,9 +25,9 @@
 
 ### 项目地址
 
-Source Code: [https://github.com/xiaoyvyv/Bangumi-for-Android](https://github.com/xiaoyvyv/Bangumi-for-Android)
+Source Code: [https://github.com/xiaoyvyv/bangumi](https://github.com/xiaoyvyv/bangumi)
 
-Github Release: [Github-Release](https://github.com/xiaoyvyv/Bangumi-for-Android/releases)
+Github Release: [Github-Release](https://github.com/xiaoyvyv/bangumi/releases)
 
 ### 功能介绍
 

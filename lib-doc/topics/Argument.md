@@ -8,7 +8,7 @@
 ### 签约主体
 
 1. **Bangumi for Android** 由 Github 个人开发者 [xiaoyvyv](https://github.com/xiaoyvyv)
-   及该开源项目 [Bangumi for Android](https://github.com/xiaoyvyv/Bangumi-for-Android) 的贡献者开发，由 **Bgm.TV |
+   及该开源项目 [Bangumi for Android](https://github.com/xiaoyvyv/bangumi) 的贡献者开发，由 **Bgm.TV |
    Bangumi.TV** 提供服务。
 
 2. 您已确认，在您开始使用/登录程序使用服务前，您应当具备中华人民共和国法律规定的与您行为相适应的民事行为能力。
@@ -18,7 +18,7 @@
    提供的相关服务所订立的协议。本协议对您与 Bangumi for Android 经营者均具有合同效力。
 
 4. 本协议可由 Bangumi for Android
-   随时更新，更新后的协议条款一旦公布立即自动生效即代替原来的协议条款，不再另行个别通知。您可访问网站 [ Bangumi for Android 用户协议](https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/argument.html)
+   随时更新，更新后的协议条款一旦公布立即自动生效即代替原来的协议条款，不再另行个别通知。您可访问网站 [ Bangumi for Android 用户协议](https://xiaoyvyv.github.io/bangumi/lib-doc/build/argument.html)
    查阅最新版协议条款。在 Bangumi for Android 修改协议条款后，登录或继续使用“服务”将表示用户接受经修订的协议。
 
 ### 特别提示
@@ -128,7 +128,7 @@ Bangumi for Android 可能为不同的终端设备开发了不同的应用程序
    Bangumi for Android 服务与 Bangumi for Android 分离的行为，均不属于本协议中约定的 Bangumi for Android 服务。
    由此引起的一切法律后果由行为人负责， Bangumi for Android 将依法追究行为人的法律责任。
 
-4. [Bangumi for Android 的开源仓库](https://github.com/xiaoyvyv/Bangumi-for-Android) 公布的方式为登录、登录、下载、使用
+4. [Bangumi for Android 的开源仓库](https://github.com/xiaoyvyv/bangumi) 公布的方式为登录、登录、下载、使用
    Bangumi for Android 服务的唯一合法方式，您通过其他任何渠道、任何途径、任何方式获取的 Bangumi for Android
    服务（包括但不限于账号、道具、下载等）均为非法取得，
    Bangumi for Android 概不承认其效力，且一经发现 Bangumi for Android 有权立即做出删除、取消、清零、封号等处理，任何因此导致的一切不利后果均由您自行承担，
@@ -263,20 +263,20 @@ Bangumi for Android 可能为不同的终端设备开发了不同的应用程序
 
 1. 保护用户隐私是 Bangumi for Android 的一项基本政策， Bangumi for Android 注重保护用户的个人信息及个人隐私，
    在您下载、安装、启动、浏览、登录、登录、使用 Bangumi for Android 时，Bangumi for Android 将按照平台
-   公布的《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/starter.html)
+   公布的《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/bangumi/lib-doc/build/starter.html)
    》保护与处理您的个人隐私，
-   希望您可阅读理解《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/starter.html)
+   希望您可阅读理解《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/bangumi/lib-doc/build/starter.html)
    》来做出您的选择。
 
 2. 在您阅读并理解
-   《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/starter.html)
+   《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/bangumi/lib-doc/build/starter.html)
    》后，如您不同意该政策的内容，
    可能会导致您无法正常使用“Bangumi for Android”的部分功能，如您使用“Bangumi for Android”，都代表您充分同意和理解
-   《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/starter.html)
+   《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/bangumi/lib-doc/build/starter.html)
    》的全部内容。
 
 3. 如您对
-   《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/Bangumi-for-Android/lib-doc/build/starter.html)
+   《[Bangumi for Android 隐私及个人信息保护政策](https://xiaoyvyv.github.io/bangumi/lib-doc/build/starter.html)
    》中的内容有问题，可通过 Bangumi for Android 的邮箱联系我们。
 
 ### 免责声明

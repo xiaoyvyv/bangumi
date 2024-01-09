@@ -55,7 +55,7 @@ interface BgmJsonApi {
     suspend fun queryMainPage(): Document
 
 
-    @GET("https://api.github.com/repos/xiaoyvyv/Bangumi-for-Android/releases/latest")
+    @GET("https://api.github.com/repos/xiaoyvyv/bangumi/releases/latest")
     suspend fun queryGithubLatest(): GithubLatestEntity
 
     @GET("https://api.github.com/repos/{user}/{repo}/contents/{path}")
