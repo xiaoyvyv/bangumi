@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.response.GithubLatestEntity
 import com.xiaoyv.common.api.response.GithubPutEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetTypeEntity
+import com.xiaoyv.common.api.response.anime.AnimeMalSearchEntity
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
 import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
@@ -82,6 +83,16 @@ interface BgmJsonApi {
     @Multipart
     @POST("https://api.trace.moe/search")
     suspend fun queryAnimeByImage(@Part file: MultipartBody.Part): AnimeSourceEntity
+
+    /**
+     * MAL 条目搜索
+     */
+    @GET("https://myanimelist.net/search/prefix.json")
+    suspend fun queryMalItems(
+        @Query("keyword") keyword: String,
+        @Query("type") type: String = "anime",
+        @Query("v") v: Int = 1,
+    ): AnimeMalSearchEntity
 
     /**
      * 识别动漫图片人物

@@ -10,7 +10,6 @@ import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.kts.groupValue
 import com.xiaoyv.common.kts.groupValueOne
 import org.jsoup.nodes.Element
@@ -41,15 +40,30 @@ object BrowserParser {
             entity.rank = item.select(".rank").text().replace("Rank\\s+".toRegex(), "No.")
             entity.infoTip = parserInfoTip(item.select(".info.tip").text())
 
+            // 正常的排行榜或浏览全部页面解析
             val rateInfo = item.select(".rateInfo")
-            entity.rating = rateInfo.parseStar()
-            entity.ratingScore = rateInfo.select(".fade").text()
-            entity.ratingCount = rateInfo.select(".tip_j").text()
-            entity.collectTime = item.select(".collectInfo .tip_j").text()
-            entity.tags = item.select(".collectInfo .tip").text()
+            if (rateInfo.isNotEmpty()) {
+                entity.rating = rateInfo.parseStar()
+                entity.ratingScore = rateInfo.select(".fade").text()
+                entity.ratingCount = rateInfo.select(".tip_j").text()
+            }
 
+            // 正常的排行榜或浏览全部页面解析，是否收藏
             val collectBlock = item.select(".collectBlock")
-            entity.isCollection = collectBlock.select(".collectModify").isNotEmpty()
+            if (collectBlock.isNotEmpty()) {
+                entity.isCollection = collectBlock.select(".collectModify").isNotEmpty()
+            }
+
+            // 收藏页面复用解析
+            val collectInfo = item.select(".collectInfo")
+            if (collectInfo.isNotEmpty()) {
+                entity.isCollection = true
+                entity.rating = collectInfo.parseStar()
+                entity.collectTime = collectInfo.select(".tip_j").text()
+                entity.collectTags = collectInfo.select(".tip").text()
+                entity.collectComment = item.select("#comment_box .text").text()
+            }
+
             entity.mediaType = mediaType.orEmpty()
             entity.mediaTypeName = GlobalConfig.mediaTypeName(entity.mediaType)
             entity

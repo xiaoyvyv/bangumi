@@ -31,12 +31,14 @@ data class BrowserEntity(
         var rating: Float = 0f,
         var infoTip: InfoTip = InfoTip(),
         var rank: String = "",
-        var tags: String = "",
         var coverImage: String = "",
         @MediaType
         var mediaType: String = MediaType.TYPE_ANIME,
         var mediaTypeName: String = "",
+
         var collectTime: String = "",
+        var collectComment: String = "",
+        var collectTags: String = "",
     ) : Parcelable, IdEntity
 
     @Keep

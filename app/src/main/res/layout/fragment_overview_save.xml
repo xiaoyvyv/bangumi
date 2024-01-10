@@ -20,8 +20,8 @@
         android:gravity="center"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_size_12"
-        android:text="我想看这部动画"
-        app:layout_constraintTop_toBottomOf="@+id/section_save" />
+        app:layout_constraintTop_toBottomOf="@+id/section_save"
+        tools:text="我想看这部动画" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_save_summary"

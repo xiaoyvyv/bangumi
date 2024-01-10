@@ -28,6 +28,10 @@ class SaveListAdapter : BaseQuickDiffBindingAdapter<BrowserEntity.Item,
         binding.tvTime.text = item.collectTime
         binding.tvEp.text = item.infoTip.eps
         binding.tvEp.isVisible = item.infoTip.eps.isNotBlank()
+        binding.ivStar.rating = item.rating / 2f
+        binding.ivStar.isVisible = item.rating != 0f
+        binding.tvComment.text = item.collectComment
+        binding.tvComment.isVisible = item.collectComment.isNotBlank()
 
         binding.tvSource.isVisible = false
     }

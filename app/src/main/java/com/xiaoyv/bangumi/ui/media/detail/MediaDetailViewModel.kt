@@ -3,9 +3,16 @@ package com.xiaoyv.bangumi.ui.media.detail
 import androidx.lifecycle.MutableLiveData
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
+import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
+import com.xiaoyv.common.api.response.anime.AnimeMalSearchEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.showToastCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Class: [MediaDetailViewModel]
@@ -14,6 +21,7 @@ import com.xiaoyv.common.config.annotation.MediaType
  * @since 11/24/23
  */
 class MediaDetailViewModel : BaseViewModel() {
+    internal val onMalItemLiveData = MutableLiveData<AnimeMalSearchEntity.Item?>()
 
     /**
      * 媒体ID
@@ -46,8 +54,8 @@ class MediaDetailViewModel : BaseViewModel() {
     /**
      * 当前用户对该媒体收藏类型
      */
+    @InterestType
     internal val requireMediaCollectType: String
-        @InterestType
         get() = onMediaDetailLiveData.value?.collectState?.interest ?: InterestType.TYPE_UNKNOWN
 
     internal val onMediaDetailLiveData = MutableLiveData<MediaDetailEntity?>()
@@ -60,4 +68,27 @@ class MediaDetailViewModel : BaseViewModel() {
 
     }
 
+    /**
+     * 查询 MAL 网站
+     */
+    fun queryMalInfo() {
+        launchUI(
+            error = {
+                it.printStackTrace()
+                showToastCompat(it.errorMsg)
+            },
+            block = {
+                // Mal 对应的数据
+                onMalItemLiveData.value = withContext(Dispatchers.IO) {
+                    val mediaName = onMediaDetailLiveData.value?.titleNative.orEmpty()
+                    val searchItem =
+                        BgmApiManager.bgmJsonApi.queryMalItems(mediaName).categories.orEmpty()
+                            .find { it.type == "anime" }?.items.orEmpty()
+                            .firstOrNull()
+
+                    requireNotNull(searchItem) { "未查询到 MAL 对应的条目：$mediaName" }
+                }
+            }
+        )
+    }
 }

@@ -9,17 +9,19 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:paddingHorizontal="@dimen/ui_layout_margin"
-    android:paddingVertical="@dimen/ui_size_8"
     tools:showIn="@layout/activity_search_detail">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_cover"
-        android:layout_width="@dimen/ui_size_120"
+        android:layout_width="@dimen/ui_size_100"
         android:layout_height="@dimen/ui_size_0"
+        android:layout_marginVertical="@dimen/ui_size_8"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -61,10 +63,10 @@
         android:id="@+id/tv_title"
         android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_size_12"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.25"
         android:maxLines="2"
-        android:paddingHorizontal="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
@@ -80,7 +82,6 @@
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.25"
         android:maxLines="2"
-        android:paddingHorizontal="@dimen/ui_size_12"
         android:paddingVertical="@dimen/ui_size_6"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnSurfaceVariant"
@@ -96,45 +97,40 @@
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.25"
         android:maxLines="3"
-        android:paddingHorizontal="@dimen/ui_size_12"
-        android:paddingVertical="@dimen/ui_size_6"
+        android:paddingTop="@dimen/ui_size_6"
+        android:paddingBottom="@dimen/ui_size_12"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_cn"
-        tools:text="2004年4月3日 / 奥脇雅晴 / 槙ようこ / 須藤昌朋、山中純子" />
+        tools:text="2004年4月3日 / 奥脇雅晴 / 槙ようこ / 須藤昌朋、山中純子槙ようこ / 須藤昌朋、山中純子槙ようこ / 須藤昌朋、山中純子槙ようこ / 須藤昌朋、山中純子" />
 
     <androidx.appcompat.widget.AppCompatRatingBar
         android:id="@+id/iv_star"
         style="?attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/ui_size_12"
-        android:layout_marginEnd="@dimen/ui_layout_margin"
-        android:layout_marginBottom="@dimen/ui_size_4"
         android:numStars="5"
         android:progressTint="@color/ui_pink"
         android:rating="2"
         android:stepSize="0.5"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_comment_count"
         app:layout_constraintStart_toEndOf="@+id/iv_cover"
-        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
-        app:layout_constraintTop_toTopOf="@+id/tv_title"
-        app:layout_constraintVertical_bias="1" />
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_comment_count" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_comment_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/ui_size_6"
-        android:paddingVertical="@dimen/ui_size_6"
+        android:layout_marginBottom="@dimen/ui_size_8"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
-        app:layout_constraintStart_toEndOf="@+id/iv_star"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_desc"
-        app:layout_constraintVertical_bias="1"
-        app:layout_goneMarginStart="@dimen/ui_size_6"
         tools:text="讨论：23" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

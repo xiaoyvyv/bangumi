@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:ignore="HardcodedText">
 
     <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
         android:id="@+id/app_bar"
@@ -54,6 +55,25 @@
                     app:layout_constraintVertical_bias="1"
                     app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ui_size_12"
+                    android:alpha="0.9"
+                    android:background="@drawable/shape_rank_start"
+                    android:elevation="@dimen/ui_size_1"
+                    android:maxLines="1"
+                    android:paddingHorizontal="@dimen/ui_size_6"
+                    android:paddingVertical="@dimen/ui_size_4"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="@+id/iv_cover"
+                    app:layout_constraintTop_toTopOf="@+id/iv_cover"
+                    tools:text="No.1099"
+                    tools:visibility="visible" />
+
                 <com.xiaoyv.common.widget.text.AnimeTextView
                     android:id="@+id/tv_locked"
                     android:layout_width="@dimen/ui_size_0"
@@ -73,7 +93,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
                     app:layout_constraintEnd_toEndOf="@+id/iv_cover"
                     app:layout_constraintStart_toStartOf="@+id/iv_cover"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText"
+                    tools:visibility="visible" />
 
                 <com.xiaoyv.common.widget.text.AnimeTextView
                     android:id="@+id/tv_title"
@@ -126,9 +147,10 @@
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:textColor="?attr/colorPrimary"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
-                    tools:ignore="HardcodedText" />
+                    tools:visibility="visible" />
 
                 <com.xiaoyv.common.widget.text.AnimeTextView
                     android:id="@+id/tv_score_tip"
@@ -139,12 +161,51 @@
                     android:backgroundTint="?attr/colorPrimary"
                     android:padding="@dimen/ui_size_4"
                     android:text="\u3000\u3000"
-                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
                     android:textColor="?attr/colorOnPrimary"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_score"
                     app:layout_constraintStart_toEndOf="@+id/tv_score"
+                    app:layout_constraintTop_toTopOf="@+id/tv_score"
                     tools:ignore="HardcodedText"
-                    tools:text="No.1" />
+                    tools:text="不推荐"
+                    tools:visibility="visible" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_score_friend_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ui_size_12"
+                    android:background="@drawable/ui_shape_rectangle_corner_6"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:padding="@dimen/ui_size_4"
+                    android:text="好友：8.9"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_score"
+                    app:layout_constraintStart_toEndOf="@+id/tv_score_tip"
+                    app:layout_constraintTop_toTopOf="@+id/tv_score"
+                    tools:ignore="HardcodedText"
+                    tools:visibility="visible" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_score_mal_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ui_size_12"
+                    android:background="@drawable/ui_shape_rectangle_corner_6"
+                    android:backgroundTint="?attr/colorTertiary"
+                    android:padding="@dimen/ui_size_4"
+                    android:text="Mal：8.9"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_score"
+                    app:layout_constraintStart_toEndOf="@+id/tv_score_friend_tip"
+                    app:layout_constraintTop_toTopOf="@+id/tv_score"
+                    tools:ignore="HardcodedText"
+                    tools:visibility="visible" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.xiaoyv.common.widget.appbar.AnimeToolbar

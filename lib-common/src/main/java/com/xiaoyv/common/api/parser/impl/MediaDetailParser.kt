@@ -386,7 +386,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     // 好友评分
     entity.friendRating = interestPanel.select(".frdScore").let { item ->
         val rating = MediaDetailEntity.FriendRating()
-        rating.score = item.select(".num").text().toDoubleOrNull() ?: 0.0
+        rating.score = item.select(".num").text().toFloatOrNull() ?: 0f
         rating.desc = item.select(".desc").text()
         rating.count = item.select("a.l").text().parseCount()
         rating

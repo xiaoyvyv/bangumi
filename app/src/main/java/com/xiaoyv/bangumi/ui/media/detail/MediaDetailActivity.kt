@@ -172,9 +172,8 @@ class MediaDetailActivity :
 
     override fun LifecycleOwner.initViewObserver() {
         viewModel.onMediaDetailLiveData.observe(this) {
-            if (it == null) {
-                return@observe
-            }
+            if (it == null) return@observe
+            viewModel.queryMalInfo()
 
             binding.ivCover.loadImageAnimate(it.cover)
             binding.ivBanner.loadImageBlur(it.cover)
@@ -182,9 +181,23 @@ class MediaDetailActivity :
             binding.toolbar.title = it.titleCn.ifBlank { it.titleNative }
             binding.tvTitle.text = it.titleCn.ifBlank { it.titleNative }
             binding.tvSubtitle.text = it.titleNative
-            binding.tvScore.text = String.format("%.1f", it.rating.globalRating)
-            binding.tvScoreTip.text = it.rating.description
+
+            // 是否锁定了
             binding.tvLocked.isVisible = it.locked
+
+            // 全站评分
+            binding.tvScore.isVisible = it.rating.globalRating != 0f
+            binding.tvScore.text = String.format("%.1f", it.rating.globalRating)
+            binding.tvScoreTip.isVisible = it.rating.description.isNotBlank()
+            binding.tvScoreTip.text = it.rating.description
+
+            // 排行榜
+            binding.tvRank.text = String.format("No. %d", it.rating.globalRank)
+            binding.tvRank.isVisible = it.rating.globalRank != 0
+
+            // 好友评分
+            binding.tvScoreFriendTip.isVisible = it.friendRating.score != 0f
+            binding.tvScoreFriendTip.text = String.format("好友：%.1f", it.friendRating.score)
 
             if (it.subtype.isNotBlank()) {
                 binding.tvTime.text = String.format("(%s - %s)", it.time, it.subtype)
@@ -193,6 +206,15 @@ class MediaDetailActivity :
             }
 
             invalidateOptionsMenu()
+        }
+
+        // MAL 评分
+        viewModel.onMalItemLiveData.observe(this) {
+            it ?: return@observe
+            val score = it.payload?.score?.toFloatOrNull() ?: 0f
+
+            binding.tvScoreMalTip.isVisible = score != 0f
+            binding.tvScoreMalTip.text = String.format("MAL：%.1f", score)
         }
 
         viewModel.vpEnableLiveData.observe(this) {
@@ -208,17 +230,26 @@ class MediaDetailActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (viewModel.requireNotLocked) menu.add("添加目录")
-            .setIcon(CommonDrawable.ic_add_index)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            .setOnMenuItemClickListener {
-                MediaIndexActionDialog.show(
-                    supportFragmentManager,
-                    viewModel.mediaId,
-                    viewModel.requireMediaName
-                )
-                true
-            }
+        if (viewModel.requireNotLocked) {
+            menu.add("添加目录")
+                .setIcon(CommonDrawable.ic_add_index)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setOnMenuItemClickListener {
+                    MediaIndexActionDialog.show(
+                        supportFragmentManager,
+                        viewModel.mediaId,
+                        viewModel.requireMediaName
+                    )
+                    true
+                }
+
+            menu.add("MAL 详情")
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                .setOnMenuItemClickListener {
+                    viewModel.queryMalInfo()
+                    true
+                }
+        }
         menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_SUBJECT, viewModel.mediaId))
         return super.onCreateOptionsMenu(menu)
     }

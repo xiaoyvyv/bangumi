@@ -63,7 +63,7 @@ data class MediaDetailEntity(
     @Parcelize
     @Keep
     data class FriendRating(
-        var score: Double = 0.0,
+        var score: Float = 0f,
         var count: Int = 0,
         var desc: String = "",
     ) : Parcelable

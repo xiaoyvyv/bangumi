@@ -10,6 +10,7 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.annotation.ScoreStarType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.CommonString
@@ -51,11 +52,23 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, I
                 countDropped
             )
 
+            // 收藏文案
             holder.binding.tvSave.text = StringUtils.getString(
                 CommonString.media_save_tip,
                 InterestType.string(collectState.interest, mediaType),
-                GlobalConfig.mediaTypeName(mediaType)
+                GlobalConfig.mediaTypeName(mediaType),
             )
+
+            // 我的评分
+            if (collectState.score != 0) {
+                holder.binding.tvSave.append(buildString {
+                    append("\u3000\u3000")
+                    append(ScoreStarType.string(collectState.score))
+                    append("\u3000")
+                    append(generateRatingStars(collectState.score))
+                })
+            }
+
             holder.binding.tvSave.setOnFastLimitClickListener {
                 onSaveBtnClickListener(item, position)
             }
@@ -115,4 +128,24 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, I
     ) = BaseQuickBindingHolder(
         FragmentOverviewSaveBinding.inflate(context.inflater, parent, false)
     )
+
+    /**
+     * 计算星星的数量
+     */
+    private fun generateRatingStars(score: Int, starMax: Int = 5, scoreMax: Int = 10): String {
+        // 计算星星的数量
+        val stars = (score * starMax / scoreMax.toFloat()).toInt()
+
+        // 构建星星字符串
+        val ratingStars = buildString {
+            for (i in 1..starMax) {
+                if (i <= stars) {
+                    append("★")  // 添加星星
+                } else {
+                    append("☆")  // 添加空星
+                }
+            }
+        }
+        return ratingStars
+    }
 }

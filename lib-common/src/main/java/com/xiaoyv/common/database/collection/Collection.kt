@@ -10,6 +10,9 @@ import com.xiaoyv.common.database.BgmDatabase
 import com.xiaoyv.common.helper.callback.DiffEntity
 import kotlinx.parcelize.Parcelize
 
+/**
+ * 日志和博客收藏的本地储存库
+ */
 @Keep
 @Parcelize
 @Entity(tableName = BgmDatabase.TABLE_NAME_COLLECT)
@@ -26,5 +29,5 @@ data class Collection(
     @ColumnInfo(name = "t_name") val tName: String = "",
     @ColumnInfo(name = "t_avatar") val tAvatar: String = "",
     @ColumnInfo(name = "t_image") val tImage: String = "",
-    @ColumnInfo(name = "t_url") val tUrl: String = ""
+    @ColumnInfo(name = "t_url") val tUrl: String = "",
 ) : Parcelable, DiffEntity<Long>
