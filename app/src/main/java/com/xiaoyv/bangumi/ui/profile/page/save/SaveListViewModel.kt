@@ -13,6 +13,7 @@ import com.xiaoyv.common.config.annotation.InterestCollectType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.FilterEntity
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.lazyLiveSp
 
 /**
  * Class: [SaveListViewModel]
@@ -21,18 +22,26 @@ import com.xiaoyv.common.helper.UserHelper
  * @since 11/24/23
  */
 class SaveListViewModel : BaseListViewModel<BrowserEntity.Item>() {
-
-    @InterestCollectType
-    internal var listType = InterestCollectType.TYPE_DO
-
     internal var userId = ""
     internal var requireLogin = false
 
-    @BrowserSortType
-    internal var sortType: String = BrowserSortType.TYPE_DEFAULT
+    /**
+     * 默认的类型
+     */
+    @InterestCollectType
+    internal val listType by lazyLiveSp(InterestCollectType.TYPE_DO) { "collect-list-type-$userId" }
 
+    /**
+     * 默认的排序
+     */
+    @BrowserSortType
+    internal val sortType by lazyLiveSp(BrowserSortType.TYPE_DEFAULT) { "collect-sort-type-$userId" }
+
+    /**
+     * 默认的媒体类型
+     */
     @MediaType
-    internal var mediaType: String = MediaType.TYPE_ANIME
+    internal val mediaType by lazyLiveSp(MediaType.TYPE_ANIME) { "collect-media-type-$userId" }
 
     internal var selectTag: String? = null
 
@@ -51,13 +60,13 @@ class SaveListViewModel : BaseListViewModel<BrowserEntity.Item>() {
     override suspend fun onRequestListImpl(): List<BrowserEntity.Item> {
         if (requireLogin) require(UserHelper.isLogin) { "你还没有登录呢" }
         val browserPage = BgmApiManager.bgmWebApi.queryUserCollect(
-            mediaType = mediaType,
+            mediaType = mediaType.value,
             userId = userId,
-            listType = listType,
-            sortType = sortType,
+            listType = listType.value,
+            sortType = sortType.value,
             tag = selectTag,
             page = current
-        ).parserBrowserPage(mediaType = mediaType)
+        ).parserBrowserPage(mediaType = mediaType.value)
         mediaTags = browserPage.tags
         return browserPage.items
     }
@@ -74,31 +83,31 @@ class SaveListViewModel : BaseListViewModel<BrowserEntity.Item>() {
                         title = GlobalConfig.mediaTypeName(MediaType.TYPE_ANIME),
                         field = filterFieldMediaType,
                         id = MediaType.TYPE_ANIME,
-                        selected = mediaType == MediaType.TYPE_ANIME,
+                        selected = mediaType.value == MediaType.TYPE_ANIME,
                     ),
                     FilterEntity.OptionItem(
                         title = GlobalConfig.mediaTypeName(MediaType.TYPE_BOOK),
                         field = filterFieldMediaType,
                         id = MediaType.TYPE_BOOK,
-                        selected = mediaType == MediaType.TYPE_BOOK,
+                        selected = mediaType.value == MediaType.TYPE_BOOK,
                     ),
                     FilterEntity.OptionItem(
                         title = GlobalConfig.mediaTypeName(MediaType.TYPE_MUSIC),
                         field = filterFieldMediaType,
                         id = MediaType.TYPE_MUSIC,
-                        selected = mediaType == MediaType.TYPE_MUSIC,
+                        selected = mediaType.value == MediaType.TYPE_MUSIC,
                     ),
                     FilterEntity.OptionItem(
                         title = GlobalConfig.mediaTypeName(MediaType.TYPE_GAME),
                         field = filterFieldMediaType,
                         id = MediaType.TYPE_GAME,
-                        selected = mediaType == MediaType.TYPE_GAME,
+                        selected = mediaType.value == MediaType.TYPE_GAME,
                     ),
                     FilterEntity.OptionItem(
                         title = GlobalConfig.mediaTypeName(MediaType.TYPE_REAL),
                         field = filterFieldMediaType,
                         id = MediaType.TYPE_REAL,
-                        selected = mediaType == MediaType.TYPE_REAL,
+                        selected = mediaType.value == MediaType.TYPE_REAL,
                     ),
                 )
             ),
@@ -109,25 +118,25 @@ class SaveListViewModel : BaseListViewModel<BrowserEntity.Item>() {
                         title = "收藏时间",
                         field = filterFieldOrderBy,
                         id = BrowserSortType.TYPE_DEFAULT,
-                        selected = sortType == BrowserSortType.TYPE_DEFAULT
+                        selected = sortType.value == BrowserSortType.TYPE_DEFAULT
                     ),
                     FilterEntity.OptionItem(
                         title = "评价",
                         field = filterFieldOrderBy,
                         id = BrowserSortType.TYPE_RATE,
-                        selected = sortType == BrowserSortType.TYPE_RATE
+                        selected = sortType.value == BrowserSortType.TYPE_RATE
                     ),
                     FilterEntity.OptionItem(
                         title = "发售日",
                         field = filterFieldOrderBy,
                         id = BrowserSortType.TYPE_DATE,
-                        selected = sortType == BrowserSortType.TYPE_DATE
+                        selected = sortType.value == BrowserSortType.TYPE_DATE
                     ),
                     FilterEntity.OptionItem(
                         title = "名称",
                         field = filterFieldOrderBy,
                         id = BrowserSortType.TYPE_TITLE,
-                        selected = sortType == BrowserSortType.TYPE_TITLE
+                        selected = sortType.value == BrowserSortType.TYPE_TITLE
                     ),
                 )
             )

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -32,7 +33,7 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
  * @since 11/24/23
  */
 class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>() {
-    private lateinit var filter: ViewSaveListFilterBinding
+    private lateinit var filterBinding: ViewSaveListFilterBinding
 
     override val isOnlyOnePage: Boolean
         get() = false
@@ -53,15 +54,15 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
         super.initView()
 
         // 过滤菜单
-        filter = ViewSaveListFilterBinding.inflate(layoutInflater, binding.flContainer, true)
-        filter.root.doOnPreDraw {
+        filterBinding = ViewSaveListFilterBinding.inflate(layoutInflater, binding.flContainer, true)
+        filterBinding.root.doOnPreDraw {
             binding.rvContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = filter.root.height
+                topMargin = filterBinding.root.height
             }
         }
 
         // 切换
-        filter.listType.setOnCheckedStateChangeListener { _, ints ->
+        filterBinding.listType.setOnCheckedStateChangeListener { _, ints ->
             val type = when (ints.firstOrNull()) {
                 CommonId.type_wish -> InterestCollectType.TYPE_WISH
                 CommonId.type_collect -> InterestCollectType.TYPE_COLLECT
@@ -71,15 +72,16 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
                 else -> null
             }
 
+            // 刷新类型
             if (type != null) {
-                viewModel.listType = type
+                viewModel.listType.value = type
                 viewModel.selectTag = null
                 viewModel.refresh()
             }
         }
 
         // 类别切换
-        filter.chipMediaType.setOnFastLimitClickListener {
+        filterBinding.chipMediaType.setOnFastLimitClickListener {
             FilterOptionDialog.show(
                 fragmentManager = childFragmentManager,
                 options = viewModel.createFilterOptions(),
@@ -98,6 +100,20 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
         }
     }
 
+    override fun LifecycleOwner.initViewObserverExt() {
+        viewModel.listType.observe(this) {
+            refreshFilter()
+        }
+
+        viewModel.sortType.observe(this) {
+            refreshFilter()
+        }
+
+        viewModel.mediaType.observe(this) {
+            refreshFilter()
+        }
+    }
+
     override fun autoInitData() {
         // 嵌套在 Profile 页面的情况
         if (viewModel.requireLogin) {
@@ -111,6 +127,22 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
     }
 
     /**
+     * 刷新筛选 UI
+     */
+    private fun refreshFilter() {
+        when (viewModel.listType.value) {
+            InterestCollectType.TYPE_WISH -> filterBinding.listType.check(CommonId.type_wish)
+            InterestCollectType.TYPE_COLLECT -> filterBinding.listType.check(CommonId.type_collect)
+            InterestCollectType.TYPE_DO -> filterBinding.listType.check(CommonId.type_do)
+            InterestCollectType.TYPE_ON_HOLD -> filterBinding.listType.check(CommonId.type_on_hold)
+            InterestCollectType.TYPE_DROPPED -> filterBinding.listType.check(CommonId.type_dropped)
+        }
+
+        // 媒体类型刷新
+        refreshMediaType(viewModel.mediaType.value)
+    }
+
+    /**
      * 筛选结果
      */
     @SuppressLint("WrongConstant")
@@ -118,7 +150,7 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
         // 排序
         val orderByItem = items.find { item -> item.field == viewModel.filterFieldOrderBy }
         if (orderByItem != null) {
-            viewModel.sortType = orderByItem.id
+            viewModel.sortType.value = orderByItem.id
         }
 
         // TAG
@@ -132,30 +164,31 @@ class SaveListFragment : BaseListFragment<BrowserEntity.Item, SaveListViewModel>
         // 媒体类型
         val mediaTypeItem = items.find { item -> item.field == viewModel.filterFieldMediaType }
         if (mediaTypeItem != null) {
-            val mediaType = mediaTypeItem.id
-            filter.chipMediaType.text = GlobalConfig.mediaTypeName(mediaType)
-
-            // 设置文案
-            filter.typeWish.text =
-                InterestType.string(InterestType.TYPE_WISH, mediaType)
-            filter.typeCollect.text =
-                InterestType.string(InterestType.TYPE_COLLECT, mediaType)
-            filter.typeDo.text = InterestType.string(InterestType.TYPE_DO, mediaType)
-            filter.typeOnHold.text =
-                InterestType.string(InterestType.TYPE_ON_HOLD, mediaType)
-            filter.typeDropped.text =
-                InterestType.string(InterestType.TYPE_DROPPED, mediaType)
-
-            viewModel.mediaType = mediaType
-
-            // 切换了媒体类型清空 TAG
-            if (mediaType != viewModel.mediaType) {
-                viewModel.selectTag = null
-            }
+            viewModel.mediaType.value = mediaTypeItem.id
         }
 
         // 刷新
         viewModel.refresh()
+    }
+
+    private fun refreshMediaType(mediaType: String) {
+        filterBinding.chipMediaType.text = GlobalConfig.mediaTypeName(mediaType)
+
+        // 设置文案
+        filterBinding.typeWish.text =
+            InterestType.string(InterestType.TYPE_WISH, mediaType)
+        filterBinding.typeCollect.text =
+            InterestType.string(InterestType.TYPE_COLLECT, mediaType)
+        filterBinding.typeDo.text = InterestType.string(InterestType.TYPE_DO, mediaType)
+        filterBinding.typeOnHold.text =
+            InterestType.string(InterestType.TYPE_ON_HOLD, mediaType)
+        filterBinding.typeDropped.text =
+            InterestType.string(InterestType.TYPE_DROPPED, mediaType)
+
+        // 切换了媒体类型清空 TAG
+        if (mediaType != viewModel.mediaType.value) {
+            viewModel.selectTag = null
+        }
     }
 
     companion object {
