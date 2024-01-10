@@ -16,6 +16,7 @@ import com.xiaoyv.common.api.interceptor.DouBanInterceptor
 import com.xiaoyv.common.api.interceptor.JsonAuthInterceptor
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicType
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.timeout
 import okhttp3.Cookie
 import okhttp3.CookieJar
@@ -126,9 +127,17 @@ class BgmApiManager {
         const val APP_ID = "bgm285565606da641d78"
         const val APP_SECRET = "2f6af7bc16f05f70537ec24076164d5c"
         const val APP_CALLBACK = "http://localhost/callback"
-
-        const val URL_BASE_WEB = "https://bangumi.tv"
         const val URL_BASE_API = "https://api.bgm.tv"
+
+        val URL_BASE_WEB: String
+            get() = ConfigHelper.bgmBaseUrl
+
+        /**
+         * 默认的域名
+         */
+        val baseUrlArray by lazy {
+            listOf("https://bgm.tv", "https://bangumi.tv", "https://chii.in")
+        }
 
         private val instance by lazy { BgmApiManager() }
 

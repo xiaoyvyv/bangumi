@@ -246,7 +246,10 @@ class MediaDetailActivity :
             menu.add("MAL 详情")
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                 .setOnMenuItemClickListener {
-                    viewModel.queryMalInfo()
+                    val malUrl = viewModel.onMalItemLiveData.value?.url.orEmpty()
+                    if (malUrl.isNotBlank()) {
+                        RouteHelper.jumpWeb(malUrl, fitToolbar = true)
+                    }
                     true
                 }
         }

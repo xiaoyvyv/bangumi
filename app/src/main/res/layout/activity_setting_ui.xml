@@ -62,6 +62,16 @@
                 android:text="Pager 阻尼系数" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_dynamic_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="主题"
+                app:subtitle="默认主题" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_image_animation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,15 +106,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="章节格子分割另起一行" />
-
-            <com.xiaoyv.common.widget.setting.SettingItemView
-                android:id="@+id/setting_dynamic_theme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="动态主题" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_smooth_font"

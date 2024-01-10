@@ -71,7 +71,6 @@ class TopicViewModel : BaseViewModel() {
                     }
                 }
                 isCollected.value = CollectionHelper.isCollected(topicId, CollectionType.TYPE_TOPIC)
-
                 onTopicDetailLiveData.value = list
             }
         )

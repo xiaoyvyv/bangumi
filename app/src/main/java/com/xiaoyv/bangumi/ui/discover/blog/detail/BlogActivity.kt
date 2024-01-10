@@ -23,6 +23,8 @@ import com.xiaoyv.common.widget.web.page.BlogView
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.toast
 
 /**
  * Class: [BlogActivity]
@@ -115,7 +117,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         )
 
         viewModel.onBlogDetailLiveData.observe(this) {
-            launchUI {
+            launchUI(error = { toast(it.errorMsg) }) {
                 blogWeb.loadBlogDetail(it)
                 binding.stateView.showContent()
             }

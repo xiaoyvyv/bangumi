@@ -319,6 +319,8 @@ abstract class WebBase(open val webView: UiWebView) {
         waitMounted()
         return suspendCancellableCoroutine { emit ->
             webView.evaluateJavascript(js) {
+                require(emit.isActive)
+
                 emit.resumeWith(Result.success(it))
             }
         }
@@ -333,11 +335,15 @@ abstract class WebBase(open val webView: UiWebView) {
     }
 
     private suspend fun isMounted(): Boolean {
-        return suspendCancellableCoroutine { emit ->
-            webView.evaluateJavascript("window.mounted") {
-                emit.resumeWith(Result.success(it.toBoolean()))
+        return runCatching {
+            suspendCancellableCoroutine { emit ->
+                webView.evaluateJavascript("window.mounted") {
+                    require(emit.isActive)
+
+                    emit.resumeWith(Result.success(it.toBoolean()))
+                }
             }
-        }
+        }.getOrDefault(true)
     }
 
     private fun openUrl(url: String) {

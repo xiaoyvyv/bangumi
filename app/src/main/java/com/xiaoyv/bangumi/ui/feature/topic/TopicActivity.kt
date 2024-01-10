@@ -22,6 +22,8 @@ import com.xiaoyv.common.widget.web.page.TopicView
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.toast
 
 /**
  * Class: [TopicActivity]
@@ -110,7 +112,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         )
 
         viewModel.onTopicDetailLiveData.observe(this) {
-            launchUI {
+            launchUI(error = { toast(it.errorMsg) }) {
                 topicView.loadTopicDetail(it)
                 binding.stateView.showContent()
             }

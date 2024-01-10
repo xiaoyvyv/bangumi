@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.SPStaticUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.dns.BgmDns
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.annotation.TimelinePageType
+import com.xiaoyv.common.helper.theme.ThemeType
 
 /**
  * Class: [ConfigHelper]
@@ -24,7 +26,7 @@ object ConfigHelper {
     private const val KEY_IMAGE_COMPRESS = "image-compress"
     private const val KEY_GRID_ANIMATION = "grid-animation"
     private const val KEY_TIMELINE_TYPE = "timeline"
-    private const val KEY_DYNAMIC_THEME = "dynamic-theme"
+    private const val KEY_APP_THEME = "app-theme"
     private const val KEY_FILTER_DELETE_COMMENT = "filter-delete-comment"
     private const val KEY_FILTER_BREAK_UP_COMMENT = "filter-break-up-comment"
     private const val KEY_SPLIT_EP_LIST = "split-ep-list"
@@ -40,6 +42,7 @@ object ConfigHelper {
     private const val KEY_GITHUB_TOKEN = "github-token"
     private const val KEY_NETWORK_HOSTS = "network-hosts"
     private const val KEY_VP_SLOP = "vp-slop"
+    private const val KEY_BGM_URL = "bgm-url"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -163,11 +166,12 @@ object ConfigHelper {
         set(value) = SPStaticUtils.put(KEY_VERSION_TIP, value)
 
     /**
-     * 是否动态主题
+     * App 主题
      */
-    var isDynamicTheme: Boolean
-        get() = SPStaticUtils.getBoolean(KEY_DYNAMIC_THEME, false)
-        set(value) = SPStaticUtils.put(KEY_DYNAMIC_THEME, value)
+    @ThemeType
+    var appTheme: Int
+        get() = SPStaticUtils.getInt(KEY_APP_THEME, ThemeType.TYPE_SYSTEM)
+        set(value) = SPStaticUtils.put(KEY_APP_THEME, value)
 
     /**
      * 是否过滤删除的回复
@@ -256,6 +260,13 @@ object ConfigHelper {
     var netHosts: String
         get() = SPStaticUtils.getString(KEY_NETWORK_HOSTS, BgmDns.DEFAULT_HOSTS)
         set(value) = SPStaticUtils.put(KEY_NETWORK_HOSTS, value.trim())
+
+    /**
+     * 默认的域名
+     */
+    var bgmBaseUrl: String
+        get() = SPStaticUtils.getString(KEY_BGM_URL, BgmApiManager.baseUrlArray.first())
+        set(value) = SPStaticUtils.put(KEY_BGM_URL, value.trim())
 
     /**
      * VP 滚动斜率阈值倍数，SDK 默认值为 2，越大越不容易左右滑动误触发

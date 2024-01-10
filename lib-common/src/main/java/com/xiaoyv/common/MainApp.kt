@@ -1,7 +1,6 @@
 package com.xiaoyv.common
 
 import android.app.Application
-import android.view.Window
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.ExistingWorkPolicy
@@ -10,17 +9,13 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
-import com.google.android.material.color.DynamicColors
-import com.google.android.material.color.DynamicColorsOptions
 import com.xiaoyv.blueprint.BluePrint
 import com.xiaoyv.blueprint.base.BaseActivity
 import com.xiaoyv.blueprint.base.BaseConfig
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.helper.callback.ThemeActivityLifecycleCallback
+import com.xiaoyv.common.helper.theme.ThemeHelper
 import com.xiaoyv.common.helper.work.IdleWorker
-import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.widget.emoji.UiFaceManager
 import java.util.concurrent.TimeUnit
 
@@ -33,7 +28,6 @@ lateinit var currentApplication: MainApp
  * @since 11/24/23
  */
 class MainApp : Application() {
-    private val themeActivityLifecycleCallback by lazy { ThemeActivityLifecycleCallback() }
 
     /**
      * 春菜全局说话
@@ -51,8 +45,9 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
         currentApplication = this
-        registerActivityLifecycleCallbacks(themeActivityLifecycleCallback)
-        initTheme()
+
+        ThemeHelper.instance.initTheme(this)
+
         initBaseConfig()
         BluePrint.init(this, false)
         H5PreLoadHelper.preloadWebView(this)
@@ -91,27 +86,5 @@ class MainApp : Application() {
                     startIdleWork()
                 }
             }
-    }
-
-    /**
-     * 重构全部页面
-     */
-    fun recreateAllActivity() {
-        themeActivityLifecycleCallback.recreateAll()
-    }
-
-    private fun initTheme() {
-        // 跟随壁纸主题
-        if (ConfigHelper.isDynamicTheme) {
-            DynamicColors.applyToActivitiesIfAvailable(this)
-        }
-        // 固定主题色
-        else {
-            DynamicColors.applyToActivitiesIfAvailable(
-                this, DynamicColorsOptions.Builder()
-                    .setContentBasedSource(getColor(CommonColor.seed))
-                    .build()
-            )
-        }
     }
 }

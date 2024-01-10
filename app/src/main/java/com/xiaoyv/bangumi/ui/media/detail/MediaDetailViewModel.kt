@@ -9,8 +9,6 @@ import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.response.anime.AnimeMalSearchEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.widget.kts.errorMsg
-import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -75,9 +73,10 @@ class MediaDetailViewModel : BaseViewModel() {
         launchUI(
             error = {
                 it.printStackTrace()
-                showToastCompat(it.errorMsg)
             },
             block = {
+                require(requireMediaType == MediaType.TYPE_ANIME) { "仅动画支持查询MAL评分" }
+
                 // Mal 对应的数据
                 onMalItemLiveData.value = withContext(Dispatchers.IO) {
                     val mediaName = onMediaDetailLiveData.value?.titleNative.orEmpty()

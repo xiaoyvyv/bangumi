@@ -77,7 +77,7 @@
             android:layout_width="@dimen/ui_size_60"
             android:layout_height="@dimen/ui_size_80"
             android:layout_margin="@dimen/ui_size_12"
-            android:backgroundTint="?attr/colorSurfaceContainerLow"
+            android:backgroundTint="?attr/colorSurface"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

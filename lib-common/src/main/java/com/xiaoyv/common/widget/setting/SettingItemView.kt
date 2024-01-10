@@ -69,6 +69,7 @@ class SettingItemView @JvmOverloads constructor(
         names: List<String>,
         values: List<T>,
         bindTitle: String? = null,
+        confirm: (() -> Unit)? = null,
     ) {
         if (bindTitle != null) title = bindTitle
         setOnFastLimitClickListener {
@@ -78,6 +79,7 @@ class SettingItemView @JvmOverloads constructor(
                 onItemClick = { _, which ->
                     property.set(values[which])
                     refreshSerializable(names, values, property)
+                    confirm?.invoke()
                 }
             )
         }

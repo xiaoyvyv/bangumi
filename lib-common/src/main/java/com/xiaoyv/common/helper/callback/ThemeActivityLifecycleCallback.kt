@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.collection.ArraySet
+import com.google.android.material.color.DynamicColorsOptions
 import com.google.android.material.color.ThemeUtils
 import com.xiaoyv.common.R
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.theme.ThemeHelper
+import com.xiaoyv.common.helper.theme.ThemeType
 import java.lang.ref.WeakReference
 
 /**
@@ -24,6 +28,27 @@ open class ThemeActivityLifecycleCallback : ActivityLifecycleCallbacks {
     override fun onActivityPreCreated(activity: Activity, savedInstanceState: Bundle?) {
         if (ConfigHelper.isSmoothFont) {
             ThemeUtils.applyThemeOverlay(activity, R.style.Theme_Bangumi_Font)
+        }
+
+        when (ConfigHelper.appTheme) {
+            ThemeType.TYPE_LIGHT -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+
+            ThemeType.TYPE_DARK -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+
+            ThemeType.TYPE_SYSTEM -> {
+
+            }
+
+            ThemeType.TYPE_WALLPAPER -> {
+                ThemeHelper.instance.applyToActivityIfAvailable(
+                    activity,
+                    DynamicColorsOptions.Builder().build()
+                )
+            }
         }
     }
 

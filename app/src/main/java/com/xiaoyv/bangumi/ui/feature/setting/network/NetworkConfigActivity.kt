@@ -5,6 +5,7 @@ import android.view.MenuItem
 import android.webkit.URLUtil
 import com.xiaoyv.bangumi.databinding.ActivitySettingGithubBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
@@ -13,7 +14,6 @@ import com.xiaoyv.common.kts.showInputDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
-import com.xiaoyv.widget.kts.toast
 
 /**
  * Class: [NetworkConfigActivity]
@@ -92,6 +92,13 @@ class NetworkConfigActivity :
                 }
             )
         }
+
+        binding.settingBgmUrl.bindSerializable(
+            activity = this,
+            property = ConfigHelper::bgmBaseUrl,
+            names = BgmApiManager.baseUrlArray,
+            values = BgmApiManager.baseUrlArray
+        )
 
         refresh()
     }

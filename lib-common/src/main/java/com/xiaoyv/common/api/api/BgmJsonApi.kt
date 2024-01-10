@@ -52,9 +52,10 @@ import retrofit2.http.Query
  */
 interface BgmJsonApi {
 
-    @GET(BgmApiManager.URL_BASE_WEB)
-    suspend fun queryMainPage(): Document
-
+    @GET("{bgmUrl}")
+    suspend fun queryMainPage(
+        @Path("bgmUrl", encoded = true) bgmUrl: String = BgmApiManager.URL_BASE_WEB,
+    ): Document
 
     @GET("https://api.github.com/repos/xiaoyvyv/bangumi/releases/latest")
     suspend fun queryGithubLatest(): GithubLatestEntity
@@ -111,8 +112,9 @@ interface BgmJsonApi {
     ): BaseListResponse<DetectCharacterEntity>
 
 
-    @GET("${BgmApiManager.URL_BASE_WEB}/timeline")
+    @GET("{bgmUrl}/timeline")
     suspend fun queryWholeTimeline(
+        @Path("bgmUrl", encoded = true) bgmUrl: String = BgmApiManager.URL_BASE_WEB,
         @Query("type") @TimelineType type: String,
         @Query("page") page: Int? = null,
         @Query("ajax") ajax: Long = 1,
@@ -189,8 +191,9 @@ interface BgmJsonApi {
      * 获取 Token
      */
     @FormUrlEncoded
-    @POST("${BgmApiManager.URL_BASE_WEB}/oauth/access_token")
+    @POST("{bgmUrl}/oauth/access_token")
     suspend fun authToken(
+        @Path("bgmUrl", encoded = true) bgmUrl: String = BgmApiManager.URL_BASE_WEB,
         @Field("code") code: String? = null,
         @Field("grant_type") grantType: String,
         @Field("refresh_token") refreshToken: String? = null,
@@ -204,8 +207,11 @@ interface BgmJsonApi {
      * Token 状态
      */
     @FormUrlEncoded
-    @POST("${BgmApiManager.URL_BASE_WEB}/oauth/token_status")
-    suspend fun authStatus(@Field("access_token") accessToken: String): AuthStatusEntity
+    @POST("{bgmUrl}/oauth/token_status")
+    suspend fun authStatus(
+        @Path("bgmUrl", encoded = true) bgmUrl: String = BgmApiManager.URL_BASE_WEB,
+        @Field("access_token") accessToken: String,
+    ): AuthStatusEntity
 
     /**
      * 每日放送

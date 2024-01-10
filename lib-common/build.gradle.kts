@@ -66,8 +66,6 @@ dependencies {
     api(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    api("com.github.Dhaval2404:ColorPicker:2.3")
-
     api(libs.jsoup)
     api(libs.avif)
     ksp(libs.glide.ksp)
