@@ -244,9 +244,9 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     // 统计数据
     select("#subjectPanelCollect .tip_i > a").apply {
         entity.countWish = getOrNull(0)?.text().parseCount()
-        entity.countDoing = getOrNull(1)?.text().parseCount()
-        entity.countOnHold = getOrNull(2)?.text().parseCount()
-        entity.countCollect = getOrNull(3)?.text().parseCount()
+        entity.countCollect = getOrNull(1)?.text().parseCount()
+        entity.countDoing = getOrNull(2)?.text().parseCount()
+        entity.countOnHold = getOrNull(3)?.text().parseCount()
         entity.countDropped = getOrNull(4)?.text().parseCount()
     }
 
