@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.ui.timeline
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentTimelineBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -11,11 +12,13 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TimelinePageType
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.helper.callback.SimpleTabSelectedListener
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.showInputDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
+import com.xiaoyv.widget.kts.orEmpty
 
 /**
  * Class: [TimelineFragment]
@@ -50,6 +53,18 @@ class TimelineFragment : BaseViewModelFragment<FragmentTimelineBinding, Timeline
     }
 
     override fun initListener() {
+        viewModel.defaultTab.observe(this) {
+            if (binding.vp2.currentItem != it) {
+                binding.vp2.setCurrentItem(it.orEmpty(), true)
+            }
+        }
+
+        binding.tabLayout.addOnTabSelectedListener(object : SimpleTabSelectedListener {
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                viewModel.defaultTab.value = p0?.position ?: return
+            }
+        })
+
         binding.toolbar.menu.apply {
             add(getString(CommonString.common_search))
                 .setIcon(CommonDrawable.ic_search)

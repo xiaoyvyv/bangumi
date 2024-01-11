@@ -43,9 +43,12 @@ object ConfigHelper {
     private const val KEY_NETWORK_HOSTS = "network-hosts"
     private const val KEY_VP_SLOP = "vp-slop"
     private const val KEY_BGM_URL = "bgm-url"
+    private const val KEY_RAKUEN_TAB_REMEMBER = "rakuen-tab-remember"
+    private const val KEY_TIMELINE_TAB_REMEMBER = "timeline-tab-remember"
 
     const val KEY_RAKUEN_DEFAULT_TAB = "rakuen-default-tab"
     const val KEY_RAKUEN_DEFAULT_GROUP = "rakuen-default-group"
+    const val KEY_TIMELINE_DEFAULT_TAB = "timeline-default-tab"
 
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
@@ -210,6 +213,20 @@ object ConfigHelper {
     var isTopicTimeFlag: Boolean
         get() = SPStaticUtils.getBoolean(KEY_TOPIC_TIME_TAG, true)
         set(value) = SPStaticUtils.put(KEY_TOPIC_TIME_TAG, value)
+
+    /**
+     * 是否记住超展开 Tab 状态
+     */
+    var isRememberRakuenTab: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_RAKUEN_TAB_REMEMBER, false)
+        set(value) = SPStaticUtils.put(KEY_RAKUEN_TAB_REMEMBER, value)
+
+    /**
+     * 是否记住超展开 Tab 状态
+     */
+    var isRememberTimelineTab: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_TIMELINE_TAB_REMEMBER, false)
+        set(value) = SPStaticUtils.put(KEY_TIMELINE_TAB_REMEMBER, value)
 
     /**
      * 默认评论排序

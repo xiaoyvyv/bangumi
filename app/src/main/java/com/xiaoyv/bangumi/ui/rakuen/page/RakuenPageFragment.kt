@@ -45,13 +45,18 @@ class RakuenPageFragment :
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh()
+        binding.srlRefresh.initRefresh { true }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
     }
 
     override fun initData() {
         binding.rvContent.adapter = contentAdapter
-        binding.srlRefresh.isRefreshing = true
+
+        // 懒加载
+        // 小组条目初始化监听父级的 rakuenGroupType 会自动刷新，这里非小组类型初始化时才加载
+        if (viewModel.isGroupType.not()) {
+            viewModel.queryTimeline()
+        }
     }
 
     override fun initListener() {
@@ -128,8 +133,6 @@ class RakuenPageFragment :
                 viewModel.topicTab?.type = it
                 viewModel.queryTimeline()
             }
-        } else {
-            viewModel.queryTimeline()
         }
     }
 

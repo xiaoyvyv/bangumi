@@ -68,8 +68,7 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
             }
 
             override fun onTabSelected(p0: TabLayout.Tab?) {
-                p0 ?: return
-                viewModel.defaultTab.value = p0.position
+                viewModel.defaultTab.value = p0?.position ?: return
             }
         })
     }
@@ -77,7 +76,7 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
     override fun LifecycleOwner.initViewObserver() {
         viewModel.defaultTab.observe(this) {
             if (binding.vp2.currentItem != it) {
-                binding.vp2.setCurrentItem(it.orEmpty(), false)
+                binding.vp2.setCurrentItem(it.orEmpty(), true)
             }
         }
 

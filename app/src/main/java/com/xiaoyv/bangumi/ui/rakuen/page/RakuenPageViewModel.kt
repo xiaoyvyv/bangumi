@@ -40,6 +40,7 @@ class RakuenPageViewModel : BaseViewModel() {
             stateView = loadingViewState,
             error = {
                 it.printStackTrace()
+
                 onSuperTopicLiveData.value = null
             },
             block = {

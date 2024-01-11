@@ -12,7 +12,6 @@ import com.xiaoyv.common.helper.lazyLiveSp
  * @since 11/24/23
  */
 class RakuenViewModel : BaseViewModel() {
-
     /**
      * 默认 小组类型
      */
@@ -24,7 +23,10 @@ class RakuenViewModel : BaseViewModel() {
     /**
      * 默认 TAB
      */
-    internal val defaultTab by lazyLiveSp<Int>(0) {
+    internal val defaultTab by lazyLiveSp<Int>(
+        defaultValue = 0,
+        enable = ConfigHelper.isRememberRakuenTab
+    ) {
         ConfigHelper.KEY_RAKUEN_DEFAULT_TAB
     }
 }

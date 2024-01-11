@@ -10,20 +10,31 @@ import com.xiaoyv.common.kts.SynchronizedLazyImpl
 
 inline fun <reified T> lazyLiveSp(
     defaultValue: T,
+    enable: Boolean = true,
     noinline key: () -> String,
 ) = SynchronizedLazyImpl(initializer = {
-    SpLiveData(
-        defaultValue = defaultValue,
-        typeToken = object : TypeToken<WrapData<T>>() {},
-        key = key
-    )
+    if (enable) {
+        SpLiveData(
+            defaultValue = defaultValue,
+            typeToken = object : TypeToken<WrapData<T>>() {},
+            key = key
+        )
+    } else {
+        SafeMutableLiveData(defaultValue)
+    }
 })
+
+open class SafeMutableLiveData<T>(private val defaultValue: T) : MutableLiveData<T>(defaultValue) {
+    override fun getValue(): T {
+        return super.getValue() ?: defaultValue
+    }
+}
 
 class SpLiveData<T>(
     private val defaultValue: T,
     private val typeToken: TypeToken<WrapData<T>>,
     private val key: () -> String,
-) : MutableLiveData<T>() {
+) : SafeMutableLiveData<T>(defaultValue) {
 
     private val sharedPreferences get() = UserHelper.userSp
 
