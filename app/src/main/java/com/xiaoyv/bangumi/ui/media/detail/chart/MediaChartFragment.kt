@@ -96,6 +96,9 @@ class MediaChartFragment : BaseViewModelFragment<FragmentMediaChartBinding, Medi
     }
 
     override fun initListener() {
+        binding.srlRefresh.setOnRefreshListener {
+            viewModel.queryStats()
+        }
 
         // 全站用户评价 / 按收藏类型
         binding.ctInterest.onTipChangeListener = {
