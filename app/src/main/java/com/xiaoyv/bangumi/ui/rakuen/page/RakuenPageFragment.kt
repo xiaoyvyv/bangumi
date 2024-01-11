@@ -52,8 +52,6 @@ class RakuenPageFragment :
     override fun initData() {
         binding.rvContent.adapter = contentAdapter
         binding.srlRefresh.isRefreshing = true
-
-        viewModel.queryTimeline()
     }
 
     override fun initListener() {
@@ -130,6 +128,8 @@ class RakuenPageFragment :
                 viewModel.topicTab?.type = it
                 viewModel.queryTimeline()
             }
+        } else {
+            viewModel.queryTimeline()
         }
     }
 

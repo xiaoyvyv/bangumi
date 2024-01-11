@@ -2,6 +2,7 @@
 agp = "8.4.0-alpha03"
 avif = "1.1.0"
 blueprint = "1.1.48"
+coreSplashscreen = "1.0.1"
 fragmentKtx = "1.6.2"
 jsoup = "1.16.2"
 kotlin = "1.9.10"
@@ -29,6 +30,7 @@ workRuntimeKtx = "2.9.0"
 [libraries]
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

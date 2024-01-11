@@ -3,6 +3,7 @@
 package com.xiaoyv.bangumi.ui.rakuen
 
 import android.view.MenuItem
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentSuperBinding
@@ -17,6 +18,7 @@ import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
+import com.xiaoyv.widget.kts.orEmpty
 
 /**
  * Class: [RakuenFragment]
@@ -25,6 +27,7 @@ import com.xiaoyv.widget.kts.adjustScrollSensitivity
  * @since 11/24/23
  */
 class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewModel>() {
+
     private val vpAdapter by lazy {
         RakuenAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
     }
@@ -63,7 +66,33 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
                     changeGroupType()
                 }
             }
+
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                p0 ?: return
+                viewModel.defaultTab.value = p0.position
+            }
         })
+    }
+
+    override fun LifecycleOwner.initViewObserver() {
+        viewModel.defaultTab.observe(this) {
+            if (binding.vp2.currentItem != it) {
+                binding.vp2.setCurrentItem(it.orEmpty(), false)
+            }
+        }
+
+        viewModel.rakuenGroupType.observe(this) {
+            when (it) {
+                // 小组
+                SuperType.TYPE_GROUP -> {
+                    binding.tabLayout.getTabAt(1)?.setText(buildIconTab("小组"))
+                }
+                // 加入的小组
+                SuperType.TYPE_MY_GROUP -> {
+                    binding.tabLayout.getTabAt(1)?.setText(buildIconTab("加入的小组"))
+                }
+            }
+        }
     }
 
     /**
@@ -75,15 +104,8 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
             items = listOf("全部小组", "我加入的小组"),
             onItemClick = { _, index ->
                 when (index) {
-                    0 -> {
-                        binding.tabLayout.getTabAt(1)?.setText(buildIconTab("小组"))
-                        viewModel.rakuenGroupType.value = SuperType.TYPE_GROUP
-                    }
-
-                    1 -> {
-                        binding.tabLayout.getTabAt(1)?.setText(buildIconTab("加入的小组"))
-                        viewModel.rakuenGroupType.value = SuperType.TYPE_MY_GROUP
-                    }
+                    0 -> viewModel.rakuenGroupType.value = SuperType.TYPE_GROUP
+                    1 -> viewModel.rakuenGroupType.value = SuperType.TYPE_MY_GROUP
                 }
             }
         )

@@ -1,10 +1,9 @@
-@file:Suppress("SpellCheckingInspection")
-
 package com.xiaoyv.bangumi.ui.rakuen
 
-import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.common.config.annotation.SuperType
+import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.lazyLiveSp
 
 /**
  * Class: [RakuenViewModel]
@@ -14,5 +13,18 @@ import com.xiaoyv.common.config.annotation.SuperType
  */
 class RakuenViewModel : BaseViewModel() {
 
-    internal val rakuenGroupType = UnPeekLiveData(SuperType.TYPE_GROUP)
+    /**
+     * 默认 小组类型
+     */
+    @SuperType
+    internal val rakuenGroupType by lazyLiveSp(SuperType.TYPE_GROUP) {
+        ConfigHelper.KEY_RAKUEN_DEFAULT_GROUP
+    }
+
+    /**
+     * 默认 TAB
+     */
+    internal val defaultTab by lazyLiveSp<Int>(0) {
+        ConfigHelper.KEY_RAKUEN_DEFAULT_TAB
+    }
 }

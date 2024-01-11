@@ -44,6 +44,9 @@ object ConfigHelper {
     private const val KEY_VP_SLOP = "vp-slop"
     private const val KEY_BGM_URL = "bgm-url"
 
+    const val KEY_RAKUEN_DEFAULT_TAB = "rakuen-default-tab"
+    const val KEY_RAKUEN_DEFAULT_GROUP = "rakuen-default-group"
+
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
     const val DIALOG_DIM_AMOUNT = 0.5f

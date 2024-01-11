@@ -1,14 +1,9 @@
 package com.xiaoyv.bangumi
 
+import android.app.Activity
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.blankj.utilcode.util.ActivityUtils
-import com.xiaoyv.bangumi.databinding.ActivityMainBinding
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.xiaoyv.bangumi.helper.RouteHelper
-import com.xiaoyv.bangumi.ui.HomeActivity
-import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 
 /**
  * Class: [StartActivity]
@@ -16,36 +11,14 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
  * @author why
  * @since 11/24/23
  */
-class StartActivity : AppCompatActivity() {
+class StartActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        // Keep the splash screen visible for this Activity
+        splashScreen.setKeepOnScreenCondition { true }
         RouteHelper.jumpHome()
-
-        // debug()
         finish()
-    }
-
-    private fun debug() {
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-        binding.root.setOnFastLimitClickListener {
-            ActivityUtils.startActivity(HomeActivity::class.java)
-        }
-
-        binding.login.setOnFastLimitClickListener {
-            RouteHelper.jumpLogin()
-        }
-
-        binding.calendar.setOnFastLimitClickListener {
-        }
-
-        binding.robot.setOnFastLimitClickListener {
-            RouteHelper.jumpRobot()
-        }
     }
 }

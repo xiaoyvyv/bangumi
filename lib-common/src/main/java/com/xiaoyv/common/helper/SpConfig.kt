@@ -5,15 +5,23 @@ import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.GsonUtils
 import com.google.gson.reflect.TypeToken
 import com.xiaoyv.blueprint.kts.toJson
+import com.xiaoyv.common.config.bean.WrapData
 import com.xiaoyv.common.kts.SynchronizedLazyImpl
 
-fun <T> lazyLiveSp(
+inline fun <reified T> lazyLiveSp(
     defaultValue: T,
-    key: () -> String,
-) = SynchronizedLazyImpl(initializer = { SpLiveData(defaultValue, key) })
+    noinline key: () -> String,
+) = SynchronizedLazyImpl(initializer = {
+    SpLiveData(
+        defaultValue = defaultValue,
+        typeToken = object : TypeToken<WrapData<T>>() {},
+        key = key
+    )
+})
 
 class SpLiveData<T>(
     private val defaultValue: T,
+    private val typeToken: TypeToken<WrapData<T>>,
     private val key: () -> String,
 ) : MutableLiveData<T>() {
 
@@ -46,14 +54,15 @@ class SpLiveData<T>(
     private fun readSpValue(): T {
         val jsonString = sharedPreferences.getString(requireKey, null)
         return if (jsonString != null) {
-            GsonUtils.getGson().fromJson(jsonString, object : TypeToken<T>() {}.type)
+            GsonUtils.getGson().fromJson(jsonString, typeToken)?.data ?: defaultValue
         } else {
             defaultValue
         }
     }
 
     private fun saveSpValue(value: T) {
-        sharedPreferences.put(requireKey, value.toJson())
+        val toJson = WrapData(value).toJson()
+        sharedPreferences.put(requireKey, toJson)
     }
 }
 
