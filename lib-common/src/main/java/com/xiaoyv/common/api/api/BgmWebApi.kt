@@ -804,6 +804,9 @@ interface BgmWebApi {
 
     @GET("/dollars?since_id=")
     suspend fun queryDollars(@Query("since_id") sinceId: String = ""): List<DollarsEntity>
+
+    @GET("/subject/{mediaId}/stats")
+    suspend fun queryMediaStats(@Path("mediaId", encoded = true) mediaId: String): Document
 }
 
 

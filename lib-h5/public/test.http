@@ -226,3 +226,6 @@ GET https://myanimelist.net/anime.php?cat=anime&q=Sousou+no+Frieren
 
 ###
 GET https://myanimelist.net/anime/52991/hover
+
+###
+GET https://bgm.tv/subject/411427/stats

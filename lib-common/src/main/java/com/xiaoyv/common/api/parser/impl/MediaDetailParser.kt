@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.parser.entity.MediaCommentEntity
 import com.xiaoyv.common.api.parser.entity.MediaDetailEntity
 import com.xiaoyv.common.api.parser.entity.MediaMakerEntity
 import com.xiaoyv.common.api.parser.entity.MediaReviewBlogEntity
+import com.xiaoyv.common.api.parser.entity.MediaStatsEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.firsTextNode
 import com.xiaoyv.common.api.parser.hrefId
@@ -20,6 +21,7 @@ import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.groupValueOne
 import com.xiaoyv.widget.kts.subListLimit
 import com.xiaoyv.widget.kts.useNotNull
@@ -74,6 +76,19 @@ fun Element.parserMediaBlog(): List<MediaReviewBlogEntity> {
         }
         entity
     }
+}
+
+/**
+ * 解析媒体透视内容
+ */
+fun Document.parserMediaStats(): MediaStatsEntity {
+    val json = "CHART_SETS\\s*=\\s*([\\s\\S]+?);".toRegex().groupValueOne(html())
+    return json.fromJson<MediaStatsEntity>()?.apply {
+        val linkMap = linkedMapOf<String, String>()
+        linkMap["想看"] = "1"
+        linkMap.putAll(interestType?.seriesSet.orEmpty())
+        interestType?.seriesSet = linkMap
+    } ?: MediaStatsEntity()
 }
 
 /**

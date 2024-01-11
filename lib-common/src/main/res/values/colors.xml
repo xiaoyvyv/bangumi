@@ -22,6 +22,14 @@
     <color name="state_na">#e0e0e0</color>
     <color name="state_na_text">#909090</color>
 
+    <color name="chart_c1">#67B7DC</color>
+    <color name="chart_c2">#6794DC</color>
+    <color name="chart_c3">#6771DC</color>
+    <color name="chart_c4">#8067DC</color>
+    <color name="chart_c5">#A267DC</color>
+    <color name="chart_c6">#C767DC</color>
+    <color name="chart_c7">#DC67CE</color>
+
     <color name="rank_bar_1">#4CAF50</color>
     <color name="rank_bar_1_alpha">#3F4CAF50</color>
     <color name="rank_bar_2">#999999</color>

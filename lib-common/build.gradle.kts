@@ -68,6 +68,9 @@ dependencies {
     api(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    api(libs.vico.core)
+    api(libs.vico.views)
+
     api(libs.jsoup)
     api(libs.avif)
     ksp(libs.glide.ksp)

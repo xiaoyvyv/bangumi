@@ -15,14 +15,13 @@
         android:maxLines="10"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="人物介绍"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tv_more"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem" />
+        tools:text="@tools:sample/full_names" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_more"
@@ -35,5 +34,6 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_item_title" />
+        app:layout_constraintTop_toTopOf="@+id/tv_item_title"
+        tools:ignore="HardcodedText" />
 </merge>

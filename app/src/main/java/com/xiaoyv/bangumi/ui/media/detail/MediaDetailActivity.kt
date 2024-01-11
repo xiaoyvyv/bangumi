@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
@@ -168,6 +169,12 @@ class MediaDetailActivity :
             copyText(binding.tvSubtitle.text.toString())
             true
         }
+
+        binding.vpContent.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                viewModel.vpEnableLiveData.value = position != vpAdapter.itemCount - 1
+            }
+        })
     }
 
     override fun LifecycleOwner.initViewObserver() {

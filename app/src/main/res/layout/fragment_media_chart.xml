@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/srl_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface"
+            android:fillViewport="true">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.xiaoyv.common.widget.menu.AnimeSectionView
+                    android:id="@+id/section_interest"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.patrykandpatrick.vico.views.chart.CartesianChartView
+                    android:id="@+id/chart_interest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                    app:axisStyle="@style/Theme.Bangumi.ChartAxisStyle"
+                    app:columnLayerStyle="@style/Theme.Bangumi.ChartColumnLayerStyle"
+                    app:horizontalLayout="segmented"
+                    app:layers="column"
+                    app:previewColumnSeriesCount="5"
+                    app:showBottomAxis="true"
+                    app:showStartAxis="true" />
+
+                <com.xiaoyv.common.widget.state.AnimeChartTipView
+                    android:id="@+id/ct_interest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end" />
+
+                <com.xiaoyv.common.widget.menu.AnimeSectionView
+                    android:id="@+id/section_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.patrykandpatrick.vico.views.chart.CartesianChartView
+                    android:id="@+id/chart_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                    app:axisStyle="@style/Theme.Bangumi.ChartAxisStyle"
+                    app:columnLayerStyle="@style/Theme.Bangumi.ChartColumnLayerStyle"
+                    app:horizontalLayout="segmented"
+                    app:layers="column"
+                    app:previewColumnSeriesCount="3"
+                    app:showBottomAxis="true"
+                    app:showStartAxis="true" />
+
+                <com.xiaoyv.common.widget.state.AnimeChartTipView
+                    android:id="@+id/ct_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end" />
+
+                <com.xiaoyv.common.widget.menu.AnimeSectionView
+                    android:id="@+id/section_reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.patrykandpatrick.vico.views.chart.CartesianChartView
+                    android:id="@+id/chart_reg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                    app:axisStyle="@style/Theme.Bangumi.ChartAxisStyle"
+                    app:columnLayerStyle="@style/Theme.Bangumi.ChartColumnLayerStyle"
+                    app:horizontalLayout="segmented"
+                    app:layers="column"
+                    app:previewColumnSeriesCount="3"
+                    app:showBottomAxis="true"
+                    app:showStartAxis="true" />
+
+                <com.xiaoyv.common.widget.state.AnimeChartTipView
+                    android:id="@+id/ct_reg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end" />
+
+                <com.xiaoyv.common.widget.menu.AnimeSectionView
+                    android:id="@+id/section_vib"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.patrykandpatrick.vico.views.chart.CartesianChartView
+                    android:id="@+id/chart_vib"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                    app:axisStyle="@style/Theme.Bangumi.ChartAxisStyle"
+                    app:columnLayerStyle="@style/Theme.Bangumi.ChartColumnLayerStyle"
+                    app:horizontalLayout="segmented"
+                    app:layers="column"
+                    app:previewColumnSeriesCount="3"
+                    app:showBottomAxis="true"
+                    app:showStartAxis="true" />
+
+                <com.xiaoyv.common.widget.state.AnimeChartTipView
+                    android:id="@+id/ct_vib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="@dimen/ui_layout_margin" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
+
+        <com.xiaoyv.common.widget.state.AnimeStateView
+            android:id="@+id/state_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

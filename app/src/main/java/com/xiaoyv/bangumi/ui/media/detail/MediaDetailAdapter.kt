@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.ui.feature.empty.EmptyFragment
 import com.xiaoyv.bangumi.ui.media.detail.board.MediaBoardFragment
 import com.xiaoyv.bangumi.ui.media.detail.chapter.MediaChapterFragment
 import com.xiaoyv.bangumi.ui.media.detail.character.MediaCharacterFragment
+import com.xiaoyv.bangumi.ui.media.detail.chart.MediaChartFragment
 import com.xiaoyv.bangumi.ui.media.detail.comments.MediaCommentFragment
 import com.xiaoyv.bangumi.ui.media.detail.maker.MediaMakerFragment
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewFragment
@@ -48,7 +49,7 @@ class MediaDetailAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
             MediaDetailType.TYPE_RATING -> MediaCommentFragment.newInstance(mediaId)
             MediaDetailType.TYPE_BLOG -> MediaReviewFragment.newInstance(mediaId)
             MediaDetailType.TYPE_TOPIC -> MediaBoardFragment.newInstance(mediaId)
-            MediaDetailType.TYPE_STATS -> EmptyFragment.newInstance()
+            MediaDetailType.TYPE_STATS -> MediaChartFragment.newInstance(mediaId)
             else -> EmptyFragment.newInstance()
         }
     }

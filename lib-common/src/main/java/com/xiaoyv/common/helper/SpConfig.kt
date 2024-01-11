@@ -64,11 +64,12 @@ class SpLiveData<T>(
 
     private fun readSpValue(): T {
         val jsonString = sharedPreferences.getString(requireKey, null)
-        return if (jsonString != null) {
-            GsonUtils.getGson().fromJson(jsonString, typeToken)?.data ?: defaultValue
-        } else {
-            defaultValue
+        runCatching {
+            return requireNotNull(
+                GsonUtils.getGson().fromJson(jsonString.orEmpty(), typeToken)?.data
+            )
         }
+        return defaultValue
     }
 
     private fun saveSpValue(value: T) {

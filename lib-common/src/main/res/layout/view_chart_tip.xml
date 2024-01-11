@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_chart_tip"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/ui_size_40">
+
+    <View
+        android:id="@+id/v_tip"
+        android:layout_width="@dimen/ui_size_16"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginHorizontal="@dimen/ui_size_6"
+        android:layout_marginTop="@dimen/ui_size_6"
+        android:background="@drawable/ui_shape_rectangle_corner_6"
+        android:backgroundTint="?attr/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/tv_tip"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ui_size_6"
+        android:layout_marginTop="@dimen/ui_size_6"
+        android:layout_marginBottom="@dimen/ui_size_6"
+        android:textAppearance="?attr/textAppearanceLabelSmall"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_tip"
+        tools:text="1000" />
+</androidx.constraintlayout.widget.ConstraintLayout>

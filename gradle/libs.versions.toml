@@ -26,6 +26,7 @@ lifecycleLivedataKtx = "2.6.2"
 lifecycleViewmodelKtx = "2.6.2"
 jetbrainsKotlinJvm = "1.9.0"
 workRuntimeKtx = "2.9.0"
+vico = "2.0.0-alpha.5"
 
 [libraries]
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
@@ -54,6 +55,8 @@ speed-dial = { module = "com.leinardi.android:speed-dial", version.ref = "speedD
 subsampling-scale-image-view-androidx = { module = "com.davemorrissey.labs:subsampling-scale-image-view-androidx", version.ref = "subsamplingScaleImageViewAndroidx" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
+vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
