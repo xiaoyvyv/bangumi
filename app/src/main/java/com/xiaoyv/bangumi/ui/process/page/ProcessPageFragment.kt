@@ -36,7 +36,12 @@ class ProcessPageFragment : BaseListFragment<MediaDetailEntity, ProcessPageViewM
 
     override fun initListener() {
         super.initListener()
+
         contentAdapter.setOnDebouncedChildClickListener(R.id.iv_cover) {
+            RouteHelper.jumpMediaDetail(it.id)
+        }
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.tv_title) {
             RouteHelper.jumpMediaDetail(it.id)
         }
     }
