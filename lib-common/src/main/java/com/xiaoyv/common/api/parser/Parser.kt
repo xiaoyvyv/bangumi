@@ -309,6 +309,13 @@ fun String.parserImage(): String {
         }
 }
 
+fun Elements.parserUserCollectTitle(): String {
+    return text().replace("/", "").trim().let {
+        val typeName = it.substringAfterLast("的")
+        if (it.contains("我的")) it else "Ta 的$typeName"
+    }
+}
+
 
 
 

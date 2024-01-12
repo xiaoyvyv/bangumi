@@ -81,12 +81,21 @@ class UserOverviewAdapter : BaseMultiItemAdapter<Any>() {
                 holder.binding.tvTip.isInvisible = true
                 holder.binding.ivCover.isInvisible = true
                 holder.binding.ivCover.clear()
+                holder.binding.tvName.isVisible = false
             } else {
                 holder.binding.tvTip.isVisible = true
                 holder.binding.ivCover.isVisible = true
-                holder.binding.ivCover.loadImageAnimate(relative.cover)
+
+                if (relative.cover.isBlank()) {
+                    holder.binding.ivCover.clear()
+                    holder.binding.tvName.isVisible = true
+                } else {
+                    holder.binding.ivCover.loadImageAnimate(relative.cover)
+                    holder.binding.tvName.isVisible = false
+                }
             }
 
+            holder.binding.tvName.text = item.titleNative
             holder.binding.tvTip.text = InterestType.string(relative.collectType, relative.type)
         }
 

@@ -8,6 +8,7 @@ import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.parserFormHash
 import com.xiaoyv.common.api.parser.parserSignBackground
+import com.xiaoyv.common.api.parser.parserUserCollectTitle
 import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.parser.selectLegal
@@ -61,7 +62,10 @@ fun Document.parserUserInfo(userId: String): UserDetailEntity {
             synchronize.rate = item.select(".percent_text").text()
             synchronize
         }
+    }
 
+    // columns
+    select(".columns").apply {
         entity.anime = select("#anime").parserUserSaveOverview(MediaType.TYPE_ANIME)
         entity.book = select("#book").parserUserSaveOverview(MediaType.TYPE_BOOK)
         entity.music = select("#music").parserUserSaveOverview(MediaType.TYPE_MUSIC)
@@ -116,37 +120,90 @@ fun Elements.parserUserSaveOverview(@MediaType mediaType: String): UserDetailEnt
     val overview = UserDetailEntity.SaveOverview(isEmpty = true)
     val horizontalOptions = select(".horizontalOptions li")
     if (horizontalOptions.isEmpty()) return overview
+
     overview.isEmpty = false
-    overview.title = horizontalOptions.select("li.title").remove().text().let {
-        val typeName = it.substringAfterLast("的")
-        if (it.startsWith("我的")) it else "Ta 的$typeName"
-    }
-    overview.count = horizontalOptions.map { it.text() }.toMutableList().apply { removeAt(0) }
-    useNotNull(select("div.clearit .coversSmall").getOrNull(0)?.select("ul > li a")) {
-        overview.doing = map { item ->
-            val relative = MediaDetailEntity.MediaRelative()
-            relative.titleCn = item.select(".name").text()
-            relative.titleNative = item.select(".name").text()
-            relative.id = item.hrefId()
-            relative.cover = item.select("img").attr("src").optImageUrl(false)
-            relative.collectType = InterestType.TYPE_DO
-            relative.type = mediaType
-            relative
+
+    // 标题
+    overview.title = horizontalOptions.select("li.title")
+        .ifEmpty { select("h2") }
+        .parserUserCollectTitle()
+
+    // 统计
+    overview.count = horizontalOptions.filter { it -> !it.hasClass("title") }.map { it.text() }
+
+    // 位于左侧的数据源
+    val leftColumns = select("div.clearit").filter { it -> !it.hasClass("horizontalOptions") }
+    if (leftColumns.isNotEmpty()) {
+        // 在xxx
+        val doing = leftColumns.find { it.select(".substatus").text().contains("在") }
+        if (doing != null) {
+            overview.doing = doing.select("ul > li a")
+                .parserUserCoversSmall(mediaType, InterestType.TYPE_DO)
+        }
+
+        // xxx过
+        val collect = leftColumns.find { it.select(".substatus").text().contains("过") }
+        if (collect != null) {
+            overview.collect = collect.select("ul > li a")
+                .parserUserCoversSmall(mediaType, InterestType.TYPE_COLLECT)
         }
     }
-    useNotNull(select("div.clearit .coversSmall").getOrNull(1)?.select("ul > li a")) {
-        overview.collect = map { item ->
-            val relative = MediaDetailEntity.MediaRelative()
-            relative.titleCn = item.select(".name").text()
-            relative.titleNative = item.select(".name").text()
-            relative.id = item.hrefId()
-            relative.cover = item.select("img").attr("src").optImageUrl(false)
-            relative.collectType = InterestType.TYPE_COLLECT
-            relative.type = mediaType
-            relative
+    // 右侧的数据源
+    else {
+        val doing = arrayListOf<MediaDetailEntity.MediaRelative>()
+        val collect = arrayListOf<MediaDetailEntity.MediaRelative>()
+
+        var lastTag = ""
+        select("ul.collect > li").forEach { item ->
+            if (item.hasClass("cat")) {
+                lastTag = item.text()
+                return@forEach
+            }
+            when {
+                lastTag.contains("在") -> {
+                    val relative = MediaDetailEntity.MediaRelative()
+                    relative.titleCn = item.text()
+                    relative.titleNative = item.text()
+                    relative.id = item.select("a").hrefId()
+                    relative.cover = ""
+                    relative.collectType = InterestType.TYPE_DO
+                    relative.type = mediaType
+                    doing.add(relative)
+                }
+
+                lastTag.contains("过") -> {
+                    val relative = MediaDetailEntity.MediaRelative()
+                    relative.titleCn = item.text()
+                    relative.titleNative = item.text()
+                    relative.id = item.select("a").hrefId()
+                    relative.cover = ""
+                    relative.collectType = InterestType.TYPE_COLLECT
+                    relative.type = mediaType
+                    collect.add(relative)
+                }
+            }
         }
+
+        overview.doing = doing
+        overview.collect = collect
     }
     return overview
+}
+
+private fun Elements.parserUserCoversSmall(
+    @MediaType mediaType: String,
+    @InterestType collectType: String,
+): List<MediaDetailEntity.MediaRelative> {
+    return map { item ->
+        val relative = MediaDetailEntity.MediaRelative()
+        relative.titleCn = item.select(".name").text()
+        relative.titleNative = item.select(".name").text()
+        relative.id = item.hrefId()
+        relative.cover = item.select("img").attr("src").optImageUrl(false)
+        relative.collectType = collectType
+        relative.type = mediaType
+        relative
+    }
 }
 
 

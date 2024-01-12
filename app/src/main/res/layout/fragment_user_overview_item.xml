@@ -20,6 +20,22 @@
         app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_name"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:ellipsize="end"
+        android:gravity="top|start"
+        android:maxLines="3"
+        android:padding="@dimen/ui_size_4"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/ui_font_8"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cover"
+        app:layout_constraintStart_toStartOf="@+id/iv_cover"
+        app:layout_constraintTop_toTopOf="@+id/iv_cover"
+        tools:text="@tools:sample/full_names" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

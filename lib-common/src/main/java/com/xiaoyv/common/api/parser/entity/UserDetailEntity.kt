@@ -30,7 +30,7 @@ data class UserDetailEntity(
     data class SaveOverview(
         var isEmpty: Boolean = true,
         var title: String = "",
-        var count: MutableList<String> = mutableListOf(),
+        var count: List<String> = emptyList(),
         var doing: List<MediaDetailEntity.MediaRelative> = emptyList(),
         var collect: List<MediaDetailEntity.MediaRelative> = emptyList(),
     )
