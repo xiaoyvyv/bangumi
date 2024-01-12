@@ -54,6 +54,7 @@ import com.xiaoyv.bangumi.ui.feature.user.blog.UserBlogActivity
 import com.xiaoyv.bangumi.ui.feature.user.mono.UserMonoActivity
 import com.xiaoyv.bangumi.ui.feature.web.WebActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
+import com.xiaoyv.bangumi.ui.media.detail.preview.MediaPreviewActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.bangumi.ui.timeline.detail.TimelineDetailActivity
 import com.xiaoyv.blueprint.constant.NavKey
@@ -503,7 +504,7 @@ object RouteHelper {
     }
 
     fun jumpMediaPreview(photoId: String) {
-        AnimeGalleryActivity::class.open(bundleOf(NavKey.KEY_STRING to photoId))
+        MediaPreviewActivity::class.open(bundleOf(NavKey.KEY_STRING to photoId))
     }
 
     fun jumpMonoList(

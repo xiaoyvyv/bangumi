@@ -161,7 +161,8 @@ interface BgmJsonApi {
      */
     @GET("https://api.anime-pictures.net/api/v3/posts")
     suspend fun queryAnimePicture(
-        @Query("denied_tags") deniedTags: String,
+        @Query("search_tag") searchTags: String? = null,
+        @Query("denied_tags") deniedTags: String? = null,
         @Query("lang") lang: String = "zh_CN",
         @Query("ldate") lDate: String = "0",
         @Query("order_by") orderBy: String = "date",
