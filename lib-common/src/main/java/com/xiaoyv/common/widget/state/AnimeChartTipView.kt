@@ -6,7 +6,6 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.xiaoyv.common.R
 import com.xiaoyv.common.databinding.ViewChartTipBinding
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback

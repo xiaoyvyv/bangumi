@@ -259,6 +259,16 @@ class MediaDetailActivity :
                     }
                     true
                 }
+
+            menu.add("Netabare 趋势")
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+                .setOnMenuItemClickListener {
+                    RouteHelper.jumpWeb(
+                        url = "https://netaba.re/subject/${viewModel.mediaId}",
+                        forceBrowser = true
+                    )
+                    true
+                }
         }
         menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_SUBJECT, viewModel.mediaId))
         return super.onCreateOptionsMenu(menu)

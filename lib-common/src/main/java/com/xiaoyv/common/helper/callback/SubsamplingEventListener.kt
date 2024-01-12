@@ -1,7 +1,6 @@
 package com.xiaoyv.common.helper.callback
 
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import java.lang.Exception
 
 /**
  * Class: [SubsamplingEventListener]

@@ -12,7 +12,6 @@ import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
-import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
@@ -62,7 +61,7 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
         }
 
         binding.bgm.setOnFastLimitClickListener {
-            openInBrowser("https://github.com/xiaoyvyv/bangumi")
+            RouteHelper.jumpWeb(url = "https://github.com/xiaoyvyv/bangumi", forceBrowser = true)
         }
     }
 

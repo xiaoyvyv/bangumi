@@ -3,10 +3,10 @@ package com.xiaoyv.bangumi.ui.feature.setting.translate
 import android.view.Menu
 import android.view.MenuItem
 import com.xiaoyv.bangumi.databinding.ActivitySettingTranslateBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.initNavBack
-import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showInputDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
@@ -77,7 +77,10 @@ class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBind
                     message = "可以去百度开放平台注册，个人每月5万字免费额度",
                     confirmText = "去申请",
                     onConfirmClick = {
-                        openInBrowser("http://api.fanyi.baidu.com/api/trans/product/desktop")
+                        RouteHelper.jumpWeb(
+                            url = "http://api.fanyi.baidu.com/api/trans/product/desktop",
+                            forceBrowser = true
+                        )
                     }
                 )
                 true

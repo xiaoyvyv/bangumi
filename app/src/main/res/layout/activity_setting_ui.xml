@@ -99,6 +99,15 @@
                 android:text="宫格条目动画" />
 
             <com.xiaoyv.common.widget.setting.SettingItemView
+                android:id="@+id/setting_force_browser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="强制使用浏览器打开链接" />
+
+            <com.xiaoyv.common.widget.setting.SettingItemView
                 android:id="@+id/setting_ep_split"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

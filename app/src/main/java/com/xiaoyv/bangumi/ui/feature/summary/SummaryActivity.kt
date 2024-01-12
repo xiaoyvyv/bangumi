@@ -12,7 +12,6 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
-import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
@@ -68,7 +67,10 @@ class SummaryActivity : BaseViewModelActivity<ActivitySummaryBinding, SummaryVie
                     RouteHelper.jumpTranslateConfig()
                 },
                 onNeutralClick = {
-                    openInBrowser("http://api.fanyi.baidu.com/api/trans/product/desktop")
+                    RouteHelper.jumpWeb(
+                        url = "http://api.fanyi.baidu.com/api/trans/product/desktop",
+                        forceBrowser = true
+                    )
                 }
             )
         }

@@ -8,8 +8,8 @@ import android.webkit.URLUtil
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xiaoyv.bangumi.databinding.ActivityMagnetApiBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.common.helper.ConfigHelper
-import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.toast
 
@@ -33,7 +33,10 @@ class MagnetApiDialog : BottomSheetDialogFragment() {
 
         binding.etApi.setText(ConfigHelper.magnetSearchApi)
         binding.tvNode.setOnFastLimitClickListener {
-            openInBrowser("https://github.com/kansaer/dandanplay-apiNode")
+            RouteHelper.jumpWeb(
+                url = "https://github.com/kansaer/dandanplay-apiNode",
+                forceBrowser = true
+            )
         }
 
         binding.btnCancel.setOnClickListener { dismissAllowingStateLoss() }

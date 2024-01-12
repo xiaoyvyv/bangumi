@@ -43,6 +43,7 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingTopicTag.bindBoolean(ConfigHelper::isTopicTimeFlag)
         binding.settingRakuenTab.bindBoolean(ConfigHelper::isRememberRakuenTab)
         binding.settingTimelineTab.bindBoolean(ConfigHelper::isRememberTimelineTab)
+        binding.settingForceBrowser.bindBoolean(ConfigHelper::isForceBrowser)
 
         binding.settingDynamicTheme.bindSerializable(
             activity = this,

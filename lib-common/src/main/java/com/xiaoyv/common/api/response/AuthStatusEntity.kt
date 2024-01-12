@@ -1,11 +1,9 @@
 package com.xiaoyv.common.api.response
+
 import android.os.Parcelable
-
-import kotlinx.parcelize.Parcelize
-
 import androidx.annotation.Keep
-
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 
 /**

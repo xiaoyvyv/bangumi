@@ -1,7 +1,6 @@
 package com.xiaoyv.common.database.collection
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.xiaoyv.common.config.annotation.CollectionType

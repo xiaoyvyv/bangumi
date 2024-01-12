@@ -2,13 +2,11 @@ package com.xiaoyv.bangumi.ui.discover.home
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.ResourceUtils
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentHomeBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.discover.DiscoverFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager

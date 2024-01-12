@@ -15,7 +15,6 @@ import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.initNavBack
-import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -91,7 +90,10 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
                 items = listOf("Github Issues", "班固米小组"),
                 onItemClick = { _, position ->
                     if (position == 0) {
-                        openInBrowser("https://github.com/xiaoyvyv/bangumi/issues")
+                        RouteHelper.jumpWeb(
+                            url = "https://github.com/xiaoyvyv/bangumi/issues",
+                            forceBrowser = true
+                        )
                     } else {
                         RouteHelper.jumpGroupDetail("android_client")
                     }
@@ -118,11 +120,11 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingGroup.setOnFastLimitClickListener {
-            openInBrowser("https://qm.qq.com/q/YomiSMeyUs")
+            RouteHelper.jumpWeb("https://qm.qq.com/q/YomiSMeyUs", forceBrowser = true)
         }
 
         binding.settingGithub.setOnFastLimitClickListener {
-            openInBrowser("https://github.com/xiaoyvyv/bangumi")
+            RouteHelper.jumpWeb("https://github.com/xiaoyvyv/bangumi", forceBrowser = true)
         }
 
         binding.settingAgreement.setOnFastLimitClickListener {

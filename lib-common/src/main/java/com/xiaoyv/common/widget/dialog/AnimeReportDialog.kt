@@ -1,7 +1,6 @@
 package com.xiaoyv.common.widget.dialog
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.ActivityUtils
-import com.blankj.utilcode.util.ScreenUtils
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.R
@@ -18,13 +16,10 @@ import com.xiaoyv.common.api.parser.entity.ReportEntity
 import com.xiaoyv.common.api.parser.impl.parserReportForm
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.databinding.ViewReportBinding
-import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.onStartConfig
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.toast
-import com.xiaoyv.widget.kts.updateWindowParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

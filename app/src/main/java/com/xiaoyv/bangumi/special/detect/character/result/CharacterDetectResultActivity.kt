@@ -6,12 +6,12 @@ import android.view.MenuItem
 import com.blankj.utilcode.util.ClipboardUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xiaoyv.bangumi.databinding.ActivityDetectCharacterResultBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.activity
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.initNavBack
-import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.kts.getParcelObj
 
 /**
@@ -49,7 +49,7 @@ class CharacterDetectResultActivity :
                     when (which) {
                         0 -> ClipboardUtils.copyText(name)
                         1 -> ClipboardUtils.copyText(from)
-                        2 -> openInBrowser("https://www.bing.com/images/search?q=${name}")
+                        2 -> RouteHelper.jumpWeb("https://www.bing.com/images/search?q=${name}")
                     }
                 }
                 .create()

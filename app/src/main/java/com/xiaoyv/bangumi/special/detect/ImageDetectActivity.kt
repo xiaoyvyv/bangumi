@@ -5,11 +5,11 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.blankj.utilcode.util.ScreenUtils
 import com.xiaoyv.bangumi.databinding.ActivityDetectBaseBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.initNavBack
-import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.dialog.UiDialog
@@ -53,7 +53,7 @@ abstract class ImageDetectActivity<ViewModel : ImageDetectViewModel> :
         }
 
         binding.tvEngine.setOnFastLimitClickListener {
-            openInBrowser(searchEngineUrl)
+            RouteHelper.jumpWeb(searchEngineUrl)
         }
     }
 

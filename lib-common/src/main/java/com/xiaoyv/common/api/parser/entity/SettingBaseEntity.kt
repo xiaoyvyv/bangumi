@@ -3,7 +3,6 @@ package com.xiaoyv.common.api.parser.entity
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.xiaoyv.common.config.annotation.FormInputType
-import java.io.File
 
 /**
  * Class: [SettingBaseEntity]

@@ -1,9 +1,7 @@
 package com.xiaoyv.common.config.bean
 
 import android.os.Parcelable
-import com.xiaoyv.common.config.annotation.DiscoverType
 import com.xiaoyv.common.config.annotation.MediaDetailType
-import com.xiaoyv.common.config.annotation.ProfileType
 import kotlinx.parcelize.Parcelize
 
 /**

@@ -69,9 +69,11 @@ import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.kts.showToastCompat
 
 /**
@@ -425,8 +427,15 @@ object RouteHelper {
         url: String,
         fitToolbar: Boolean = true,
         smallToolbar: Boolean = false,
+        forceBrowser: Boolean = false,
         injectJs: String = "",
     ) {
+        if (handleUrl(url)) return
+        if (forceBrowser || ConfigHelper.isForceBrowser) {
+            openInBrowser(url)
+            return
+        }
+
         WebActivity::class.open(
             bundleOf(
                 NavKey.KEY_STRING to url,
