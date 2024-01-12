@@ -14,4 +14,5 @@
     <dimen name="emoji_size">44dp</dimen>
     <dimen name="emoji_padding_size">10dp</dimen>
     <dimen name="dialog_padding">22dp</dimen>
+    <dimen name="chart_height">250dp</dimen>
 </resources>

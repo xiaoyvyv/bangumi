@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_grid_state"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/ui_size_8"
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="@color/chart_statistics_collect"
+    android:orientation="vertical"
+    android:padding="@dimen/ui_size_8"
+    app:layout_constraintEnd_toStartOf="@+id/ll_2"
+    app:layout_constraintHorizontal_weight="1"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/ui_size_6"
+        android:text="0"
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textStyle="bold" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_value1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="收藏"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:textColor="?attr/colorOnPrimarySurface"
+        android:textStyle="bold" />
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.ConvertUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.xiaoyv.blueprint.kts.toJson
@@ -49,6 +50,12 @@ fun Any.toJsonMap(): Map<String, Any> {
 inline fun <reified T> Any.forceCast(): T {
     return this as T
 }
+
+inline val Int.ofDp: Float
+    get() = ConvertUtils.px2dp(toFloat()).toFloat()
+
+inline val Float.ofDp: Float
+    get() = ConvertUtils.px2dp(this).toFloat()
 
 @Keep
 @Suppress("UNCHECKED_CAST")

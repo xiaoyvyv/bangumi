@@ -31,19 +31,14 @@ class AnimeChartTipView @JvmOverloads constructor(
 ) : AnimeRecyclerView(context, attrs) {
     private val itemAdapter by lazy { ItemAdapter() }
 
-    var listener: BaseQuickAdapter.OnItemChildClickListener<ChartTipItem>? = null
-        set(value) {
-            field = value
-            if (value != null) {
-            }
-        }
-
     /**
      * 数据标记开关
      */
     var onTipChangeListener: (List<ChartTipItem>) -> Unit = {}
 
     init {
+        isNestedScrollingEnabled = false
+        overScrollMode = OVER_SCROLL_NEVER
         itemAnimator = null
         layoutManager = AnimeLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = itemAdapter

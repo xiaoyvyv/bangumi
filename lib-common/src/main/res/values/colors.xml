@@ -35,6 +35,13 @@
     <color name="rank_bar_2">#999999</color>
     <color name="rank_bar_2_alpha">#3F999999</color>
 
+    <color name="chart_statistics_collect">#F09199</color>
+    <color name="chart_statistics_finish">#70B941</color>
+    <color name="chart_statistics_finish_rate">#6BAAE8</color>
+    <color name="chart_statistics_average">#E68E46</color>
+    <color name="chart_statistics_stander">#9065ED</color>
+    <color name="chart_statistics_comments">#369CF8</color>
+
     <color name="question_right">#55CC55</color>
     <color name="question_error">#CC5555</color>
 </resources>

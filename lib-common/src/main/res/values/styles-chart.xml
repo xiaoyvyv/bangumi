@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Bangumi.ChartAxisStyle">
         <item name="labelRotationDegrees">0</item>
     </style>
@@ -9,24 +10,4 @@
         <item name="showDataLabels">false</item>
         <item name="columnOuterSpacing">@dimen/ui_size_6</item>
     </style>
-
-
-    <style name="Chart5Column1ShapeStyle">
-        <item name="topStartCornerSize">0dp</item>
-        <item name="topEndCornerSize">0dp</item>
-        <item name="bottomEndCornerSize">40%</item>
-        <item name="bottomStartCornerSize">40%</item>
-    </style>
-
-    <style name="Chart5Column2ShapeStyle">
-        <item name="cornerSize">0dp</item>
-    </style>
-
-    <style name="Chart5Column3ShapeStyle">
-        <item name="topStartCornerSize">40%</item>
-        <item name="topEndCornerSize">40%</item>
-        <item name="bottomEndCornerSize">0dp</item>
-        <item name="bottomStartCornerSize">0dp</item>
-    </style>
-
 </resources>

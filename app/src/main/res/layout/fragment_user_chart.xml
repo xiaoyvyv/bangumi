@@ -19,7 +19,7 @@
             android:layout_marginStart="@dimen/ui_layout_margin"
             android:layout_marginEnd="@dimen/ui_size_8"
             android:background="@drawable/ui_shape_rectangle_corner_6"
-            android:backgroundTint="#F09199"
+            android:backgroundTint="@color/chart_statistics_collect"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_12"
@@ -55,7 +55,7 @@
             android:layout_marginStart="@dimen/ui_size_8"
             android:layout_marginEnd="@dimen/ui_size_8"
             android:background="@drawable/ui_shape_rectangle_corner_6"
-            android:backgroundTint="#70B941"
+            android:backgroundTint="@color/chart_statistics_finish"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_12"
@@ -91,7 +91,7 @@
             android:layout_marginStart="@dimen/ui_size_8"
             android:layout_marginEnd="@dimen/ui_layout_margin"
             android:background="@drawable/ui_shape_rectangle_corner_6"
-            android:backgroundTint="#6BAAE8"
+            android:backgroundTint="@color/chart_statistics_finish_rate"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_12"
@@ -128,7 +128,7 @@
             android:layout_marginTop="@dimen/ui_layout_margin"
             android:layout_marginEnd="@dimen/ui_size_8"
             android:background="@drawable/ui_shape_rectangle_corner_6"
-            android:backgroundTint="#E68E46"
+            android:backgroundTint="@color/chart_statistics_average"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_12"
@@ -163,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/ui_size_8"
             android:background="@drawable/ui_shape_rectangle_corner_6"
-            android:backgroundTint="#9065ED"
+            android:backgroundTint="@color/chart_statistics_stander"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_12"
@@ -199,7 +199,7 @@
             android:layout_marginStart="@dimen/ui_size_8"
             android:layout_marginEnd="@dimen/ui_layout_margin"
             android:background="@drawable/ui_shape_rectangle_corner_6"
-            android:backgroundTint="#369CF8"
+            android:backgroundTint="@color/chart_statistics_comments"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/ui_size_12"
             android:paddingVertical="@dimen/ui_size_12"
@@ -227,7 +227,6 @@
                 android:textColor="?attr/colorOnPrimarySurface"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-
 
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:id="@+id/tv_line_chart"

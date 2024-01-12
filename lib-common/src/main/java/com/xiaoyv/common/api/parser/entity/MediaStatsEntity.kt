@@ -1,8 +1,10 @@
 package com.xiaoyv.common.api.parser.entity
 
+import android.graphics.Color
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
 
 
@@ -23,7 +25,18 @@ data class MediaStatsEntity(
     var totalCollects: TypeData? = null,
     @SerializedName("vib")
     var vib: TypeData? = null,
+    var interestGridState: List<GridState>? = null,
+    var vibGridState: List<GridState>? = null,
 ) : Parcelable {
+
+    @Keep
+    @Parcelize
+    data class GridState(
+        override var id: String = "",
+        var title: String = "",
+        var desc: String = "",
+        var color: Int = Color.GRAY,
+    ) : Parcelable, IdEntity
 
     @Keep
     @Parcelize

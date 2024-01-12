@@ -2,6 +2,7 @@
 
 package com.xiaoyv.common.api.parser.impl
 
+import com.blankj.utilcode.util.ColorUtils
 import com.xiaoyv.common.api.parser.entity.MediaBoardEntity
 import com.xiaoyv.common.api.parser.entity.MediaCharacterEntity
 import com.xiaoyv.common.api.parser.entity.MediaCollectForm
@@ -20,14 +21,26 @@ import com.xiaoyv.common.api.parser.parseStar
 import com.xiaoyv.common.api.parser.parserTime
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.kts.CommonColor
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.groupValueOne
+import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.subListLimit
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
+private val colors by lazy {
+    mapOf(
+        "default" to CommonColor.chart_statistics_collect,
+        "green" to CommonColor.chart_statistics_finish,
+        "blue" to CommonColor.chart_statistics_finish_rate,
+        "orange" to CommonColor.chart_statistics_average,
+        "purple" to CommonColor.chart_statistics_stander,
+        "sky" to CommonColor.chart_statistics_comments,
+    )
+}
 
 /**
  * 解析媒体底部吐槽评论
@@ -82,13 +95,33 @@ fun Element.parserMediaBlog(): List<MediaReviewBlogEntity> {
  * 解析媒体透视内容
  */
 fun Document.parserMediaStats(): MediaStatsEntity {
-    val json = "CHART_SETS\\s*=\\s*([\\s\\S]+?);".toRegex().groupValueOne(html())
-    return json.fromJson<MediaStatsEntity>()?.apply {
+    requireNoError()
+
+    val mainWrapper = select(".mainWrapper")
+    val columnInSubjectA = mainWrapper.select("#columnInSubjectA")
+    val json = "CHART_SETS\\s*=\\s*([\\s\\S]+?);".toRegex().groupValueOne(mainWrapper.html())
+
+    // Entity
+    val statsEntity = json.fromJson<MediaStatsEntity>()?.apply {
         val linkMap = linkedMapOf<String, String>()
         linkMap["想看"] = "1"
         linkMap.putAll(interestType?.seriesSet.orEmpty())
         interestType?.seriesSet = linkMap
     } ?: MediaStatsEntity()
+
+    val gridStats = columnInSubjectA.select(".gridStats")
+    val mapItem = { item: Element ->
+        val colorText = item.className().replace("item", "").trim().ifBlank { "default" }
+        MediaStatsEntity.GridState(
+            id = randId(),
+            title = item.select(".num").text(),
+            desc = item.select(".desc").text(),
+            color = ColorUtils.getColor(colors.getOrDefault(colorText, 0))
+        )
+    }
+    statsEntity.interestGridState = gridStats.firstOrNull()?.select(".item")?.map(mapItem)
+    statsEntity.vibGridState = gridStats.lastOrNull()?.select(".item")?.map(mapItem)
+    return statsEntity
 }
 
 /**

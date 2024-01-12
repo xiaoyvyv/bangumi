@@ -39,18 +39,6 @@ class MediaChartViewModel : BaseViewModel() {
         )
     }
 
-    internal val columnStyles by lazy {
-        listOf(
-            lineComponent(color = ColorUtils.getColor(CommonColor.chart_c1)),
-            lineComponent(color = ColorUtils.getColor(CommonColor.chart_c2)),
-            lineComponent(color = ColorUtils.getColor(CommonColor.chart_c3)),
-            lineComponent(color = ColorUtils.getColor(CommonColor.chart_c4)),
-            lineComponent(color = ColorUtils.getColor(CommonColor.chart_c5)),
-            lineComponent(color = ColorUtils.getColor(CommonColor.chart_c6)),
-            lineComponent(color = ColorUtils.getColor(CommonColor.chart_c7)),
-        )
-    }
-
     private inline fun lineComponent(
         color: Int,
         block: LineComponent.() -> Unit = {},
@@ -85,12 +73,10 @@ class MediaChartViewModel : BaseViewModel() {
         return ColumnCartesianLayerModel.partial {
             if (seriesSet.isNotEmpty()) {
                 seriesSet.forEach {
-                    val xValueList = typeDataListMap.map { map ->
+                    val y = typeDataListMap.map { map ->
                         map[it.id]?.toString()?.toDoubleOrNull() ?: 0.0
                     }
-                    val xList = xValueList.indices.toList()
-
-                    series(xList, xValueList)
+                    series(y)
                 }
             } else {
                 val xValueList = buildList { repeat(10) { add(0) } }
@@ -98,6 +84,35 @@ class MediaChartViewModel : BaseViewModel() {
                 series(xList, xValueList)
             }
         }
+
+    }
+
+    /**
+     * 计算平均值
+     */
+    fun computeAverage(
+        which: KMutableProperty1<MediaStatsEntity, MediaStatsEntity.TypeData?>,
+        seriesSet: List<AnimeChartTipView.ChartTipItem>,
+    ): Pair<Int, Double> {
+        val empty = (0 to 0.0)
+        val typeData = which.invoke(mediaStatsEntity.value ?: return empty) ?: return empty
+        val typeDataListMap = typeData.dataMap.orEmpty()
+
+        // 分数-人数 对应的 Map
+        val scoreMap = mutableMapOf<Int, MutableList<Int>>()
+
+        seriesSet.forEach {
+            typeDataListMap.mapIndexed { index, map ->
+                val itemCountY = (map[it.id]?.toString()?.toDoubleOrNull() ?: 0.0).toInt()
+                val score = 10 - index
+                scoreMap.getOrPut(score) { arrayListOf() }.add(itemCountY)
+            }
+        }
+
+        val averageMap = scoreMap.entries.associate { it.key to it.value.sum() }
+        val totalCount = averageMap.values.sum()
+        val totalScore = averageMap.entries.sumOf { it.key * it.value }
+        return if (totalCount == 0) empty else totalCount to totalScore / totalCount.toDouble()
     }
 
     /**
@@ -108,4 +123,6 @@ class MediaChartViewModel : BaseViewModel() {
             lineComponent(color = it.color)
         }
     }
+
+
 }
