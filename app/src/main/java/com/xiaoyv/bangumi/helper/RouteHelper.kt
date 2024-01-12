@@ -95,7 +95,7 @@ object RouteHelper {
         debugLog { "Handle Url: $titleLink" }
 
         if (URLUtil.isNetworkUrl(titleLink) && !titleLink.contains("bgm") && !titleLink.contains("bangumi")) {
-            jumpWeb(titleLink, fitToolbar = true)
+            jumpWeb(titleLink, fitToolbar = true, disableHandUrl = true)
             return true
         }
 
@@ -428,9 +428,10 @@ object RouteHelper {
         fitToolbar: Boolean = true,
         smallToolbar: Boolean = false,
         forceBrowser: Boolean = false,
+        disableHandUrl: Boolean = false,
         injectJs: String = "",
     ) {
-        if (handleUrl(url)) return
+        if (disableHandUrl.not() && handleUrl(url)) return
         if (forceBrowser || ConfigHelper.isForceBrowser) {
             openInBrowser(url)
             return

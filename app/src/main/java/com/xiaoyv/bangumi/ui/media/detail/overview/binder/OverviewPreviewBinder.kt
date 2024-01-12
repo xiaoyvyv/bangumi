@@ -25,7 +25,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  */
 class OverviewPreviewBinder(
     private val touchedListener: RecyclerItemTouchedListener,
-    private val clickItemListener: (DouBanPhotoEntity.Photo) -> Unit
+    private val clickItemListener: (DouBanPhotoEntity.Photo) -> Unit,
 ) : BaseMultiItemAdapter.OnMultiItemAdapterListener<AdapterTypeItem, BaseQuickBindingHolder<FragmentOverviewPreviewBinding>> {
 
     private val itemAdapter by lazy {
@@ -37,11 +37,13 @@ class OverviewPreviewBinder(
     override fun onBind(
         holder: BaseQuickBindingHolder<FragmentOverviewPreviewBinding>,
         position: Int,
-        item: AdapterTypeItem?
+        item: AdapterTypeItem?,
     ) {
         item ?: return
         holder.binding.tvSectionPreview.title = item.title
         item.entity.forceCast<List<DouBanPhotoEntity.Photo>>().apply {
+            holder.binding.tvSectionPreview.more = if (size < 2) null else "更多 >>"
+
             itemAdapter.submitList(this)
         }
     }
@@ -49,7 +51,7 @@ class OverviewPreviewBinder(
     override fun onCreate(
         context: Context,
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): BaseQuickBindingHolder<FragmentOverviewPreviewBinding> {
         val binding = FragmentOverviewPreviewBinding.inflate(context.inflater, parent, false)
         binding.rvPreview.adapter = itemAdapter
