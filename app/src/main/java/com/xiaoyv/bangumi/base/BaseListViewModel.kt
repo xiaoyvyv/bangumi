@@ -74,6 +74,7 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
                 } else {
                     loadingMoreState = LoadState.Error(it)
                     current--
+                    onListLiveData.value = onListLiveData.value
                 }
             },
             block = {

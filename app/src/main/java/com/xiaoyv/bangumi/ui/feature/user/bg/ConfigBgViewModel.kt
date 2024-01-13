@@ -60,7 +60,7 @@ class ConfigBgViewModel : BaseViewModel() {
 
                 BgmApiManager.bgmJsonApi
                     .queryAnimePicture(
-                        deniedTags = ConfigHelper.animePicDeniedTags,
+                        deniedTags = ConfigHelper.searchImagePicDeniedTags,
                         page = Random.nextInt(0, 3000)
                     )
                     .posts.orEmpty()

@@ -46,6 +46,7 @@ object ConfigHelper {
     private const val KEY_RAKUEN_TAB_REMEMBER = "rakuen-tab-remember"
     private const val KEY_TIMELINE_TAB_REMEMBER = "timeline-tab-remember"
     private const val KEY_FORCE_BROWSER = "force-browser"
+    private const val KEY_IMAGE_SEARCH_AP = "image-search-ap"
 
     const val KEY_RAKUEN_DEFAULT_TAB = "rakuen-default-tab"
     const val KEY_RAKUEN_DEFAULT_GROUP = "rakuen-default-group"
@@ -159,6 +160,23 @@ object ConfigHelper {
         set(value) = SPStaticUtils.put(KEY_IMAGE_COMPRESS, value)
 
     /**
+     * 图片搜索引擎地址是否使用 Anime-Picture
+     */
+    var isImageSearchAP: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_IMAGE_SEARCH_AP, true)
+        set(value) = SPStaticUtils.put(KEY_IMAGE_SEARCH_AP, value)
+
+    /**
+     * Anime-Pictures 默认禁用标签
+     */
+    var searchImagePicDeniedTags: String
+        set(value) = SPStaticUtils.put(KEY_ANIME_DENIED_TAGS, value)
+        get() = SPStaticUtils.getString(
+            KEY_ANIME_DENIED_TAGS,
+            "breasts||erotic||light erotic||hard erotic||bare shoulders||empty eyes||black background||spoilers"
+        )
+
+    /**
      * 时间线默认展示好友还是全部
      */
     var timelinePageType: Int
@@ -249,16 +267,6 @@ object ConfigHelper {
     var magnetSearchApi: String
         get() = SPStaticUtils.getString(KEY_ANIME_MAGNET_API)
         set(value) = SPStaticUtils.put(KEY_ANIME_MAGNET_API, value)
-
-    /**
-     * Anime-Pictures 默认禁用标签
-     */
-    var animePicDeniedTags: String
-        get() = SPStaticUtils.getString(
-            KEY_ANIME_DENIED_TAGS,
-            "breasts||erotic||light erotic||hard erotic||bare shoulders||empty eyes||black background||spoilers"
-        )
-        set(value) = SPStaticUtils.put(KEY_ANIME_DENIED_TAGS, value)
 
 
     /**

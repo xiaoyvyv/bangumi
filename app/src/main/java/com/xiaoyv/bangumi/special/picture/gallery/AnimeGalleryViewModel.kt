@@ -54,7 +54,7 @@ class AnimeGalleryViewModel : BaseListViewModel<GalleryEntity>() {
             else -> {
                 BgmApiManager.bgmJsonApi
                     .queryAnimePicture(
-                        deniedTags = ConfigHelper.animePicDeniedTags,
+                        deniedTags = ConfigHelper.searchImagePicDeniedTags,
                         page = (current - 1).coerceAtLeast(0)
                     )
                     .posts.orEmpty()

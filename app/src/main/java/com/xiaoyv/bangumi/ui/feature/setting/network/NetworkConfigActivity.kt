@@ -100,6 +100,21 @@ class NetworkConfigActivity :
             values = BgmApiManager.baseUrlArray
         )
 
+        binding.settingDeniedTags.setOnFastLimitClickListener {
+            showInputDialog(
+                title = "图片搜索禁用 Tags",
+                inputHint = "禁用 Tags",
+                default = ConfigHelper.searchImagePicDeniedTags,
+                minLines = 8,
+                onInput = {
+                    ConfigHelper.searchImagePicDeniedTags = it.trim()
+                    refresh()
+                }
+            )
+        }
+
+        binding.settingSearchAp.bindBoolean(ConfigHelper::isImageSearchAP)
+
         refresh()
     }
 
@@ -108,6 +123,7 @@ class NetworkConfigActivity :
         binding.settingRepo.desc = ConfigHelper.githubRepo
         binding.settingToken.desc = ConfigHelper.githubToken
         binding.settingHost.desc = ConfigHelper.netHosts
+        binding.settingDeniedTags.desc = ConfigHelper.searchImagePicDeniedTags
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

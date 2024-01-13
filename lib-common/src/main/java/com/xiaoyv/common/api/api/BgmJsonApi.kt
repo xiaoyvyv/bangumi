@@ -15,6 +15,7 @@ import com.xiaoyv.common.api.response.anime.AnimeMalSearchEntity
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
 import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
+import com.xiaoyv.common.api.response.anime.ImageBooruEntity
 import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.api.response.api.ApiCharacterEntity
@@ -169,6 +170,12 @@ interface BgmJsonApi {
         @Query("order_by") orderBy: String = "date",
         @Query("page") page: Int = 0,
     ): ImageGalleryEntity
+
+    @GET("https://safebooru.donmai.us/posts.json")
+    suspend fun queryAnimePicture(
+        @Query("tags") tags: String? = null,
+        @Query("page") page: Int = 1,
+    ): ImageBooruEntity
 
     @GET("{magnetApi}/subgroup")
     suspend fun queryAnimeMagnetSubGroup(
