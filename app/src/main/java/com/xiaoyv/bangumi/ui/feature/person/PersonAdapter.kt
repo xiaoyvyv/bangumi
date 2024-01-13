@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.ui.feature.person.collect.PersonCollectFragment
 import com.xiaoyv.bangumi.ui.feature.person.cooperate.PersonCooperateFragment
 import com.xiaoyv.bangumi.ui.feature.person.opus.PersonOpusFragment
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewFragment
+import com.xiaoyv.bangumi.ui.feature.person.picture.PersonPictureFragment
 import com.xiaoyv.common.config.annotation.PersonTabType
 import com.xiaoyv.common.config.bean.PersonTab
 
@@ -35,7 +36,8 @@ class PersonAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
 
     private val virtualTabs = listOf(
         PersonTab("概览", PersonTabType.TYPE_OVERVIEW),
-        PersonTab("收藏", PersonTabType.TYPE_SAVE)
+        PersonTab("收藏", PersonTabType.TYPE_SAVE),
+        PersonTab("图片", PersonTabType.TYPE_PICTURE)
     )
 
     internal val tabs get() = if (isVirtual) virtualTabs else personTabs
@@ -49,6 +51,7 @@ class PersonAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             PersonTabType.TYPE_OPUS -> PersonOpusFragment.newInstance(personId, isVirtual)
             PersonTabType.TYPE_COOPERATE -> PersonCooperateFragment.newInstance(personId, isVirtual)
             PersonTabType.TYPE_SAVE -> PersonCollectFragment.newInstance(personId, isVirtual)
+            PersonTabType.TYPE_PICTURE -> PersonPictureFragment.newInstance(personId)
             else -> EmptyFragment.newInstance()
         }
     }

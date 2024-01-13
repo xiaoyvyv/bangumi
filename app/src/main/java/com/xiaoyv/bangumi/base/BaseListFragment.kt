@@ -4,6 +4,7 @@ import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.chad.library.adapter.base.BaseDifferAdapter
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
@@ -100,7 +101,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
         }
     }
 
-    open fun onCreateLayoutManager(): LinearLayoutManager {
+    open fun onCreateLayoutManager(): LayoutManager {
         return AnimeLinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 

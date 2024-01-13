@@ -11,7 +11,6 @@ import com.xiaoyv.bangumi.special.detect.anime.ImageDetectAnimeActivity
 import com.xiaoyv.bangumi.special.detect.character.ImageDetectCharacterActivity
 import com.xiaoyv.bangumi.special.magnet.MagnetActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
-import com.xiaoyv.bangumi.special.picture.gallery.AnimeGalleryActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity

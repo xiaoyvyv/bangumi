@@ -38,7 +38,6 @@ class MediaPreviewActivity : BaseListActivity<GalleryEntity, MediaPreviewViewMod
 
     override fun initData() {
         super.initData()
-        contentAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
 
         // 移除滑动停止加载图片
         binding.rvContent.removeImageScrollLoadController()

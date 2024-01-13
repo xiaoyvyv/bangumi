@@ -17,6 +17,7 @@ import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
 import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
+import com.xiaoyv.common.api.response.api.ApiCharacterEntity
 import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
 import com.xiaoyv.common.api.response.api.ApiUserEntity
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
@@ -267,4 +268,7 @@ interface BgmJsonApi {
      */
     @GET("/v0/users/{userId}")
     suspend fun queryUserInfo(@Path("userId") userId: String): ApiUserEntity
+
+    @GET("/v0/characters/{personId}")
+    suspend fun queryCharacter(@Path("personId") personId: String): ApiCharacterEntity
 }

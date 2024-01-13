@@ -13,7 +13,8 @@ import androidx.annotation.IntDef
     PersonTabType.TYPE_CHARACTER,
     PersonTabType.TYPE_OPUS,
     PersonTabType.TYPE_COOPERATE,
-    PersonTabType.TYPE_SAVE
+    PersonTabType.TYPE_SAVE,
+    PersonTabType.TYPE_PICTURE,
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class PersonTabType {
@@ -23,5 +24,6 @@ annotation class PersonTabType {
         const val TYPE_OPUS = 2
         const val TYPE_COOPERATE = 3
         const val TYPE_SAVE = 4
+        const val TYPE_PICTURE = 5
     }
 }
