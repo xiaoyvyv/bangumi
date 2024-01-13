@@ -45,11 +45,11 @@ class HomeViewModel : BaseViewModel() {
                                 title = "MAGI 问答",
                                 icon = CommonDrawable.ic_magi
                             ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_ANIME_PICTURES,
-                                title = "A-P 图站",
-                                icon = CommonDrawable.ic_format_image
-                            ),
+//                            HomeIndexFeature(
+//                                id = FeatureType.TYPE_ANIME_PICTURES,
+//                                title = "A-P 图站",
+//                                icon = CommonDrawable.ic_format_image
+//                            ),
                             HomeIndexFeature(
                                 id = FeatureType.TYPE_SEARCH,
                                 title = "搜索",
