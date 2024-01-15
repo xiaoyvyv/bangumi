@@ -50,11 +50,11 @@ class HomeViewModel : BaseViewModel() {
 //                                title = "A-P 图站",
 //                                icon = CommonDrawable.ic_format_image
 //                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_SEARCH,
-                                title = "搜索",
-                                icon = CommonDrawable.ic_search
-                            ),
+//                            HomeIndexFeature(
+//                                id = FeatureType.TYPE_SEARCH,
+//                                title = "搜索",
+//                                icon = CommonDrawable.ic_search
+//                            ),
                             HomeIndexFeature(
                                 id = FeatureType.TYPE_RANK,
                                 title = "排行榜",

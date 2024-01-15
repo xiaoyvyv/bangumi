@@ -4,7 +4,7 @@ avif = "1.1.0"
 blueprint = "1.1.48"
 coreSplashscreen = "1.0.1"
 fragmentKtx = "1.6.2"
-jsoup = "1.16.2"
+jsoup = "1.17.2"
 kotlin = "1.9.10"
 coreKtx = "1.12.0"
 junit = "4.13.2"
@@ -19,6 +19,7 @@ activity = "1.8.2"
 persistentcookiejar = "v1.0.1"
 room = "2.6.1"
 speedDial = "3.3.0"
+sqliteJdbc = "3.44.1.0"
 subsamplingScaleImageViewAndroidx = "3.10.0"
 swiperefreshlayout = "1.1.0"
 ksp = "1.9.10-1.0.13"
@@ -27,6 +28,8 @@ lifecycleViewmodelKtx = "2.6.2"
 jetbrainsKotlinJvm = "1.9.0"
 workRuntimeKtx = "2.9.0"
 vico = "2.0.0-alpha.5"
+slf4j-simple = "2.0.9"
+log4j-core = "2.20.0"
 
 [libraries]
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
@@ -52,11 +55,14 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 persistent-cookie-jar = { module = "com.github.franmontiel:PersistentCookieJar", version.ref = "persistentcookiejar" }
 speed-dial = { module = "com.leinardi.android:speed-dial", version.ref = "speedDial" }
+sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqliteJdbc" }
 subsampling-scale-image-view-androidx = { module = "com.davemorrissey.labs:subsampling-scale-image-view-androidx", version.ref = "subsamplingScaleImageViewAndroidx" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = "vico" }
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j-core" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-simple" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

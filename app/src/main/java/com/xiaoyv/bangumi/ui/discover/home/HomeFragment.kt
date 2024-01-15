@@ -10,6 +10,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
+import com.xiaoyv.widget.kts.toast
 import com.xiaoyv.widget.kts.useNotNull
 
 /**
@@ -45,6 +46,9 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     FeatureType.TYPE_DETECT_CHARACTER -> RouteHelper.jumpDetectCharacter()
                     FeatureType.TYPE_MAGNET -> RouteHelper.jumpAnimeMagnet()
                     FeatureType.TYPE_DOLLARS -> RouteHelper.jumpDollars()
+                    FeatureType.TYPE_WIKI -> {
+                        toast("暂未开放")
+                    }
                 }
             },
             onClickMedia = {

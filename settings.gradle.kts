@@ -41,5 +41,7 @@ include(":app")
 include(":lib-common")
 include(":lib-live2d")
 include(":lib-emoji")
+include(":lib-script")
+
 
 

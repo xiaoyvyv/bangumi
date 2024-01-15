@@ -13,11 +13,11 @@
             <option value="$PROJECT_DIR$/lib-common" />
             <option value="$PROJECT_DIR$/lib-emoji" />
             <option value="$PROJECT_DIR$/lib-live2d" />
+            <option value="$PROJECT_DIR$/lib-script" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
-    <option name="offlineMode" value="true" />
   </component>
 </project>
