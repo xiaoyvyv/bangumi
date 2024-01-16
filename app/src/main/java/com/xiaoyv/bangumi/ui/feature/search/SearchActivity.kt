@@ -23,6 +23,7 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
     private val subjectItemAdapter by lazy { SearchAdapter(false) }
     private val personItemAdapter by lazy { SearchAdapter(false) }
     private val tagItemAdapter by lazy { SearchAdapter(false) }
+    private val otherItemAdapter by lazy { SearchAdapter(false) }
     private val recentlyItemAdapter by lazy { SearchAdapter(true) }
 
     private val viewPool by lazy { RecycledViewPool() }
@@ -30,10 +31,16 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
     override fun initView() {
         binding.rvSubject.hasFixedSize()
         binding.rvSubject.setRecycledViewPool(viewPool)
+
         binding.rvPerson.hasFixedSize()
         binding.rvPerson.setRecycledViewPool(viewPool)
+
         binding.rvTag.hasFixedSize()
         binding.rvTag.setRecycledViewPool(viewPool)
+
+        binding.rvOther.hasFixedSize()
+        binding.rvOther.setRecycledViewPool(viewPool)
+
         binding.rvRecently.hasFixedSize()
         binding.rvRecently.setRecycledViewPool(viewPool)
     }
@@ -42,6 +49,7 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
         binding.rvSubject.adapter = subjectItemAdapter
         binding.rvPerson.adapter = personItemAdapter
         binding.rvTag.adapter = tagItemAdapter
+        binding.rvOther.adapter = otherItemAdapter
         binding.rvRecently.adapter = recentlyItemAdapter
     }
 
@@ -63,18 +71,23 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
         }
 
         subjectItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
-            viewModel.switchSearchType(subjectItemAdapter.getItem(position))
             KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
+            viewModel.switchSearchType(subjectItemAdapter.getItem(position))
         }
 
         personItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
-            viewModel.switchSearchType(personItemAdapter.getItem(position))
             KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
+            viewModel.switchSearchType(personItemAdapter.getItem(position))
         }
 
         tagItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
-            viewModel.switchSearchType(tagItemAdapter.getItem(position))
             KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
+            viewModel.switchSearchType(tagItemAdapter.getItem(position))
+        }
+
+        otherItemAdapter.addOnItemChildClickListener(R.id.item_search) { _, _, position ->
+            KeyboardUtils.showSoftInput(binding.searchBar.etKeyword)
+            viewModel.switchSearchType(otherItemAdapter.getItem(position))
         }
 
         recentlyItemAdapter.setOnDebouncedChildClickListener(R.id.item_search) {
@@ -95,6 +108,10 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
 
         viewModel.onSearchTagLiveData.observe(this) {
             tagItemAdapter.submitList(it)
+        }
+
+        viewModel.onSearchOtherLiveData.observe(this) {
+            otherItemAdapter.submitList(it)
         }
 
         viewModel.onSearchRecentlyLiveData.observe(this) {

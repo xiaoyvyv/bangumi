@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 /**
  * Class: [SearchResultEntity]
@@ -29,4 +30,9 @@ data class SearchResultEntity(
     @MediaType
     var searchMediaType: String = MediaType.TYPE_UNKNOWN,
     var searchTip: String = "",
+
+    /**
+     * API 搜索结果数据载体
+     */
+    var payload: @RawValue Any? = null,
 ) : IdEntity, Parcelable

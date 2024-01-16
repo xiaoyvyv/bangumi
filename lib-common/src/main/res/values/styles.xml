@@ -4,6 +4,7 @@
     <!-- Widget AppBarLayout -->
     <style name="Theme.Bangumi.AppBarTheme" parent="@style/Widget.Material3.AppBarLayout">
         <item name="liftOnScroll">false</item>
+        <item name="liftOnScrollColor">?attr/colorSurfaceContainer</item>
         <item name="elevation">@dimen/ui_layout_elevation</item>
     </style>
 

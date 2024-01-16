@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_search"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
@@ -17,6 +17,7 @@
         android:layout_marginTop="@dimen/ui_size_4"
         android:background="@android:color/transparent"
         android:tint="?attr/colorOnSurfaceVariant"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_item"
         app:layout_constraintHorizontal_bias="0"
@@ -29,11 +30,10 @@
         android:id="@+id/tv_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_layout_margin"
         android:ellipsize="end"
         android:maxLines="1"
-        android:paddingHorizontal="@dimen/ui_size_6"
         android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="三次元"
         android:textAppearance="?attr/textAppearanceLabelLarge"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constrainedWidth="true"
@@ -41,5 +41,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem/random" />
+        app:layout_goneMarginStart="@dimen/ui_size_0"
+        tools:text="三次元" />
 </androidx.constraintlayout.widget.ConstraintLayout>

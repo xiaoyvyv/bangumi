@@ -5,6 +5,7 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.config.annotation.SearchApiType
 import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.helper.CacheHelper
@@ -23,6 +24,7 @@ class SearchViewModel : BaseViewModel() {
     internal val onSearchSubjectLiveData = MutableLiveData<List<SearchItem>>()
     internal val onSearchPersonLiveData = MutableLiveData<List<SearchItem>>()
     internal val onSearchTagLiveData = MutableLiveData<List<SearchItem>>()
+    internal val onSearchOtherLiveData = MutableLiveData<List<SearchItem>>()
     internal val onSearchRecentlyLiveData = MutableLiveData<List<SearchItem>?>()
 
     override fun onViewCreated() {
@@ -107,6 +109,19 @@ class SearchViewModel : BaseViewModel() {
                     label = "现实人物",
                     pathType = BgmPathType.TYPE_SEARCH_MONO,
                     id = SearchCatType.TYPE_PERSON,
+                )
+            )
+
+            onSearchOtherLiveData.value = listOf(
+                SearchItem(
+                    label = "小组话题",
+                    pathType = BgmPathType.TYPE_TOPIC,
+                    id = SearchApiType.TYPE_GROUP_TOPIC,
+                ),
+                SearchItem(
+                    label = "目录",
+                    pathType = BgmPathType.TYPE_INDEX,
+                    id = SearchApiType.TYPE_INDEX,
                 )
             )
 

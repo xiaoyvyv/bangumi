@@ -12,11 +12,15 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivitySearchDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchDetailItemAdapter
+import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchDetailTagAdapter
+import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchTopicAdapter
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.SearchCatType
+import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -34,20 +38,24 @@ import com.xiaoyv.widget.kts.useNotNull
  */
 class SearchDetailActivity :
     BaseViewModelActivity<ActivitySearchDetailBinding, SearchDetailViewModel>() {
-    private val contentItemAdapter by lazy {
-        SearchDetailItemAdapter()
-    }
 
-    private val contentTagAdapter by lazy {
-        SearchDetailTagAdapter()
-    }
+    /**
+     * Adapter
+     */
+    private val contentItemAdapter by lazy { SearchDetailItemAdapter() }
+    private val contentTagAdapter by lazy { SearchDetailTagAdapter() }
+    private val contentTopicAdapter by lazy { SearchTopicAdapter() }
 
     /**
      * 适配器
      */
     private val contentAdapter
-        get() = if (viewModel.isSearchTag) contentTagAdapter else contentItemAdapter
-
+        get() = when (viewModel.searchBgmType) {
+            BgmPathType.TYPE_SEARCH_TAG -> contentTagAdapter
+            BgmPathType.TYPE_INDEX -> contentTagAdapter
+            BgmPathType.TYPE_TOPIC -> contentTopicAdapter
+            else -> contentItemAdapter
+        }
 
     private val adapterHelper by lazy {
         QuickAdapterHelper.Builder(contentAdapter)
@@ -77,13 +85,18 @@ class SearchDetailActivity :
     }
 
     override fun initData() {
-        if (viewModel.isSearchTag) {
-            binding.rvContent.layoutManager = FlexboxLayoutManager(this, FlexDirection.ROW)
-            binding.rvContent.adapter = contentAdapter
-        } else {
-            binding.rvContent.layoutManager =
-                AnimeLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            binding.rvContent.adapter = adapterHelper.adapter
+        when (viewModel.searchBgmType) {
+            // 搜索标签
+            BgmPathType.TYPE_SEARCH_TAG -> {
+                binding.rvContent.layoutManager = FlexboxLayoutManager(this, FlexDirection.ROW)
+                binding.rvContent.adapter = contentAdapter
+            }
+
+            else -> {
+                binding.rvContent.layoutManager =
+                    AnimeLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                binding.rvContent.adapter = adapterHelper.adapter
+            }
         }
 
         viewModel.refresh()
@@ -126,7 +139,7 @@ class SearchDetailActivity :
                     )
                     finish()
                 }
-                // 正常搜索
+                // 正常搜索模式
                 else {
                     if (pathType == BgmPathType.TYPE_SEARCH_SUBJECT) {
                         RouteHelper.jumpMediaDetail(it.id)
@@ -144,6 +157,11 @@ class SearchDetailActivity :
                 val tagName = entity.id
                 RouteHelper.jumpTagDetail(tagMediaType, tagName)
             }
+        }
+
+        // 小组话题帖子搜索
+        contentTopicAdapter.setOnDebouncedChildClickListener(R.id.item_collection) { entity ->
+            RouteHelper.jumpTopicDetail(entity.id, TopicType.TYPE_GROUP)
         }
     }
 
@@ -166,7 +184,6 @@ class SearchDetailActivity :
             }
         }
 
-
         viewModel.onListLiveData.observe(this) {
             if (it == null) {
                 return@observe
@@ -174,15 +191,22 @@ class SearchDetailActivity :
 
             contentAdapter.submitList(it) {
                 if (viewModel.isRefresh) {
-                    if (viewModel.isSearchTag) {
-                        (binding.rvContent.layoutManager as? FlexboxLayoutManager)
-                            ?.scrollToPosition(0)
-                    } else {
-                        (binding.rvContent.layoutManager as? LinearLayoutManager)
-                            ?.scrollToPositionWithOffset(0, 0)
-                    }
+                    scrollTop()
                 }
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
+            }
+        }
+    }
+
+    private fun scrollTop() {
+        when (viewModel.searchBgmType) {
+            // 搜索标签
+            BgmPathType.TYPE_SEARCH_TAG -> useNotNull(binding.rvContent.layoutManager as? FlexboxLayoutManager) {
+                scrollToPosition(0)
+            }
+            // 其它
+            else -> useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
+                scrollToPositionWithOffset(0, 0)
             }
         }
     }

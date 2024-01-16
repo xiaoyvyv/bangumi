@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.search.detail
+package com.xiaoyv.bangumi.ui.feature.search.detail.adapter
 
 import com.xiaoyv.bangumi.databinding.ActivitySearchDetailTagBinding
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity

@@ -9,6 +9,8 @@ import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.GithubContent
 import com.xiaoyv.common.api.response.GithubLatestEntity
 import com.xiaoyv.common.api.response.GithubPutEntity
+import com.xiaoyv.common.api.response.SearchApiIndexEntity
+import com.xiaoyv.common.api.response.SearchApiTopicEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetTypeEntity
 import com.xiaoyv.common.api.response.anime.AnimeMalSearchEntity
@@ -23,6 +25,8 @@ import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
 import com.xiaoyv.common.api.response.api.ApiUserEntity
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.base.BaseListResponse
+import com.xiaoyv.common.api.response.base.BasePage
+import com.xiaoyv.common.api.response.base.BaseResponse
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
 import com.xiaoyv.common.api.response.douban.DouBanSuggestEntity
@@ -96,6 +100,20 @@ interface BgmJsonApi {
         @Query("type") type: String = "anime",
         @Query("v") v: Int = 1,
     ): AnimeMalSearchEntity
+
+    @GET("https://main.xiaoyv.com.cn/api/bgm/rakuen/search")
+    suspend fun querySearchTopic(
+        @Query("keyword") keyword: String,
+        @Query("exact") exact: Boolean,
+        @Query("current") current: Int = 1,
+    ): BaseResponse<BasePage<SearchApiTopicEntity>>
+
+    @GET("https://main.xiaoyv.com.cn/api/bgm/index/search")
+    suspend fun querySearchIndex(
+        @Query("keyword") keyword: String,
+        @Query("exact") exact: Boolean,
+        @Query("current") current: Int = 1,
+    ): BaseResponse<BasePage<SearchApiIndexEntity>>
 
     /**
      * 识别动漫图片人物
@@ -278,4 +296,5 @@ interface BgmJsonApi {
 
     @GET("/v0/characters/{personId}")
     suspend fun queryCharacter(@Path("personId") personId: String): ApiCharacterEntity
+
 }

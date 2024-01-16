@@ -17,7 +17,6 @@ import androidx.annotation.StringDef
     SearchCatType.TYPE_REAL,
     SearchCatType.TYPE_CHARACTER,
     SearchCatType.TYPE_PERSON,
-    SearchCatType.TYPE_KEYWORD
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class SearchCatType {
@@ -30,10 +29,5 @@ annotation class SearchCatType {
         const val TYPE_REAL = "6"
         const val TYPE_CHARACTER = "crt"
         const val TYPE_PERSON = "prsn"
-
-        /**
-         * 用户输入关键字
-         */
-        const val TYPE_KEYWORD = "keyword"
     }
 }

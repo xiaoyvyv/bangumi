@@ -20,7 +20,7 @@
             android:id="@+id/tv_title_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
             android:paddingVertical="@dimen/ui_layout_margin"
             android:text="搜索条目"
             android:textAppearance="?attr/textAppearanceLabelSmall"
@@ -37,46 +37,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="6"
-            tools:listitem="@layout/activity_search_item" />
-
-        <com.xiaoyv.common.widget.text.AnimeTextView
-            android:id="@+id/tv_title_tag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/ui_layout_margin"
-            android:paddingVertical="@dimen/ui_layout_margin"
-            android:text="搜索标签"
-            android:textAppearance="?attr/textAppearanceLabelSmall"
-            android:textColor="?attr/colorOnSurfaceVariant" />
-
-        <View
-            style="@style/Theme.Bangumi.Divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_size_0.5"
-            android:layout_marginHorizontal="@dimen/ui_layout_margin" />
-
-        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-            android:id="@+id/rv_tag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
-            tools:itemCount="1"
             tools:listitem="@layout/activity_search_item" />
 
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:id="@+id/tv_title_person"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
             android:paddingVertical="@dimen/ui_layout_margin"
             android:text="搜索人物"
             android:textAppearance="?attr/textAppearanceLabelSmall"
@@ -93,18 +64,72 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
-            tools:itemCount="3"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="6"
+            tools:listitem="@layout/activity_search_item" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_title_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
+            android:paddingVertical="@dimen/ui_layout_margin"
+            android:text="搜索标签"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        <View
+            style="@style/Theme.Bangumi.Divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_0.5"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin" />
+
+        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+            android:id="@+id/rv_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="6"
+            tools:listitem="@layout/activity_search_item" />
+
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_title_other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
+            android:paddingVertical="@dimen/ui_layout_margin"
+            android:text="搜索其它"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        <View
+            style="@style/Theme.Bangumi.Divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_0.5"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin" />
+
+        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
+            android:id="@+id/rv_other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="6"
             tools:listitem="@layout/activity_search_item" />
 
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:id="@+id/tv_title_recently"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:paddingHorizontal="@dimen/ui_layout_margin"
             android:paddingVertical="@dimen/ui_layout_margin"
             android:text="最近在搜"
             android:textAppearance="?attr/textAppearanceLabelSmall"

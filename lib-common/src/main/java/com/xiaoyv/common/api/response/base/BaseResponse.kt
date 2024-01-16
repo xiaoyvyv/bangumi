@@ -14,7 +14,7 @@ import kotlinx.parcelize.RawValue
 @Keep
 @Parcelize
 open class BaseResponse<T>(
-    val code: Int = 0,
-    val msg: String? = "",
-    val data: @RawValue T? = null
+    open val code: Int = 0,
+    open val msg: String? = "",
+    open val data: @RawValue T? = null
 ) : Parcelable

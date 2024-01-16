@@ -34,10 +34,10 @@ class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
     internal val isLegacy = MutableLiveData(1)
 
     /**
-     * 是否搜索标签
+     * 搜索类型
      */
-    internal val isSearchTag
-        get() = currentSearchItem.value?.pathType == BgmPathType.TYPE_SEARCH_TAG
+    internal val searchBgmType: String
+        get() = currentSearchItem.value?.pathType.orEmpty()
 
     override suspend fun onRequestListImpl(): List<SearchResultEntity> {
         val searchItem = requireNotNull(currentSearchItem.value)
@@ -70,7 +70,26 @@ class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
                     }
                 }
             }
-
+            // 小组话题帖子搜索
+            BgmPathType.TYPE_TOPIC -> {
+                return BgmApiManager.bgmJsonApi.querySearchTopic(
+                    keyword = searchItem.keyword,
+                    exact = isLegacy.value == 0,
+                    current = current
+                ).data?.records.orEmpty().map {
+                    SearchResultEntity(id = it.id.toString(), payload = it)
+                }
+            }
+            // 小组话题目录搜索
+            BgmPathType.TYPE_INDEX -> {
+                return BgmApiManager.bgmJsonApi.querySearchIndex(
+                    keyword = searchItem.keyword,
+                    exact = isLegacy.value == 0,
+                    current = current
+                ).data?.records.orEmpty().map {
+                    SearchResultEntity(id = it.id.toString(), payload = it)
+                }
+            }
             // 标签搜索
             BgmPathType.TYPE_SEARCH_TAG -> {
                 return BgmApiManager.bgmWebApi.querySearchTag(

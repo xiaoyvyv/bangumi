@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.search.detail
+package com.xiaoyv.bangumi.ui.feature.search.detail.adapter
 
 import androidx.core.view.isVisible
 import com.xiaoyv.bangumi.databinding.ActivitySearchDetailItemBinding
