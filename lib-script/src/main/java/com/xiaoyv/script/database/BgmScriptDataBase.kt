@@ -2,6 +2,7 @@ package com.xiaoyv.script.database
 
 import com.xiaoyv.script.database.dao.IndexDao
 import com.xiaoyv.script.database.dao.RakuenDao
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.sql.Connection
@@ -17,10 +18,16 @@ import java.sql.DriverManager
 class BgmScriptDataBase private constructor() {
     private val rootDir = System.getProperty("user.dir")
     private val dataDir = "$rootDir/lib-script/bgm"
-    private val localUrl = "jdbc:sqlite:$dataDir/GroupTopic.db"
     private var _database: Connection? = null
 
-    val database: Connection
+    private val localUrl: String
+        get() {
+            val db = "$rootDir/GroupTopic.db"
+            return if (File(db).exists()) "jdbc:sqlite:$db"
+            else "jdbc:sqlite:$dataDir/GroupTopic.db"
+        }
+
+    private val database: Connection
         get() = instance.getOrCreateDatabase()
 
     private fun getOrCreateDatabase(): Connection {
@@ -44,18 +51,6 @@ class BgmScriptDataBase private constructor() {
                 .use { statement ->
                     statement.executeQuery().use { set ->
                         set.getInt("id_exists") != 0
-                    }
-                }
-        }
-    }
-
-
-    fun queryMaxTopicId(): Int {
-        return synchronized(this) {
-            database.prepareStatement("SELECT max(id) as max FROM bgm_rakuen;")
-                .use { statement ->
-                    statement.executeQuery().use { set ->
-                        set.getInt("max")
                     }
                 }
         }

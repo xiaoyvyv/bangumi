@@ -7,7 +7,6 @@ import java.net.Proxy
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
-import kotlin.system.exitProcess
 
 object BgmScript {
     private var total = AtomicInteger(0)
@@ -16,7 +15,7 @@ object BgmScript {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        println("Bgm 小组帖子同步脚本！")
+        println("Bgm 数据同步脚本！")
 
         // 查询最新的 ID
         val newTopicId = queryBgmNewTopicId()
@@ -32,8 +31,8 @@ object BgmScript {
         }
 
         if (idList.size == 0) {
-            println("当前数据库已经同步到了最新")
-            exitProcess(0)
+            println("当前超展开数据库已经同步到了最新")
+            return
         }
 
 
@@ -41,26 +40,12 @@ object BgmScript {
 
         println("本次待更新数据：$total 条")
         val itemCount = idList.size / 25
-        idList.chunked(if (itemCount == 0) idList.size else itemCount)
-            .forEachIndexed { index, longs ->
-/*                val proxy = if (index < 5) {
-                    Proxy.NO_PROXY
-                } else if (index < 10) {
-                    Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1080))
-                } else if (index < 15) {
-                    Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1081))
-                } else if (index < 20) {
-                    Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 1082))
-                } else {
-                    Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", 7890))
-                }*/
-
-                thread { startTask(longs, Proxy.NO_PROXY) }
-            }
+        idList.chunked(if (itemCount == 0) idList.size else itemCount).forEachIndexed { _, longs ->
+            thread { startTask(longs, Proxy.NO_PROXY) }
+        }
 
         thread {
-            while (true) {
-                if (total.get() == 0) exitProcess(0)
+            while (total.get() != 0) {
                 val lastTotal = lastTotal.get()
                 val speed = lastTotal - total.get()
                 if (speed != 0) {

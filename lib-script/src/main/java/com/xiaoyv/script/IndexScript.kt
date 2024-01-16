@@ -8,7 +8,6 @@ import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
-import kotlin.system.exitProcess
 
 /**
  * Class: [IndexScript]
@@ -34,8 +33,8 @@ object IndexScript {
         }
 
         if (idList.size == 0) {
-            println("当前数据库已经同步到了最新")
-            exitProcess(0)
+            println("当前目录数据库已经同步到了最新")
+            return
         }
 
         total.set(idList.size)
