@@ -44,7 +44,11 @@ class SearchDetailActivity :
      */
     private val contentItemAdapter by lazy { SearchDetailItemAdapter() }
     private val contentTagAdapter by lazy { SearchDetailTagAdapter() }
-    private val contentTopicAdapter by lazy { SearchTopicAdapter() }
+    private val contentTopicAdapter by lazy {
+        SearchTopicAdapter {
+            viewModel.keywords
+        }
+    }
 
     /**
      * 适配器
@@ -114,7 +118,7 @@ class SearchDetailActivity :
         binding.searchBar.etKeyword.setOnEditorActionListener { _, _, _ ->
             val keyword = binding.searchBar.etKeyword.text.toString().trim()
             if (keyword.isNotBlank()) {
-                viewModel.currentSearchItem.value?.keyword = keyword
+                viewModel.refreshKeyword(keyword)
                 viewModel.refresh()
 
                 KeyboardUtils.hideSoftInput(this)

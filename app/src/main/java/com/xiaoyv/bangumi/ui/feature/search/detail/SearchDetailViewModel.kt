@@ -5,13 +5,20 @@ package com.xiaoyv.bangumi.ui.feature.search.detail
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.constant.TimeConstants
 import com.blankj.utilcode.util.StringUtils
+import com.huaban.analysis.jieba.JiebaSegmenter
 import com.xiaoyv.bangumi.base.BaseListViewModel
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
 import com.xiaoyv.common.api.parser.impl.parserSearchResult
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.bean.SearchItem
 import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.debugLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
 import okhttp3.Cookie
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import kotlin.random.Random
@@ -24,6 +31,7 @@ import kotlin.random.Random
  */
 class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
     internal val currentSearchItem = MutableLiveData<SearchItem?>()
+    private val wordSegment by lazy { JiebaSegmenter() }
 
     /**
      * 是否为媒体搜索选取模式
@@ -38,6 +46,11 @@ class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
      */
     internal val searchBgmType: String
         get() = currentSearchItem.value?.pathType.orEmpty()
+
+    /**
+     * 关键词
+     */
+    internal val keywords: MutableList<String> = mutableListOf()
 
     override suspend fun onRequestListImpl(): List<SearchResultEntity> {
         val searchItem = requireNotNull(currentSearchItem.value)
@@ -72,6 +85,7 @@ class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
             }
             // 小组话题帖子搜索
             BgmPathType.TYPE_TOPIC -> {
+                segmentWords(searchItem.keyword)
                 return BgmApiManager.bgmJsonApi.querySearchTopic(
                     keyword = searchItem.keyword,
                     exact = isLegacy.value == 0,
@@ -82,6 +96,7 @@ class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
             }
             // 小组话题目录搜索
             BgmPathType.TYPE_INDEX -> {
+                segmentWords(searchItem.keyword)
                 return BgmApiManager.bgmJsonApi.querySearchIndex(
                     keyword = searchItem.keyword,
                     exact = isLegacy.value == 0,
@@ -104,5 +119,21 @@ class SearchDetailViewModel : BaseListViewModel<SearchResultEntity>() {
 
             else -> throw IllegalArgumentException("不支持的搜索类型：${searchItem.pathType}")
         }
+    }
+
+    private suspend fun segmentWords(keyword: String) {
+        return withContext(Dispatchers.IO) {
+            val time = System.currentTimeMillis()
+            val segmentWords = wordSegment.process(keyword, JiebaSegmenter.SegMode.INDEX)
+                .map { it.word.orEmpty() }
+
+            keywords.clear()
+            keywords.addAll(segmentWords)
+            debugLog { "耗时：${System.currentTimeMillis() - time}" }
+        }
+    }
+
+    fun refreshKeyword(keyword: String) {
+        currentSearchItem.value?.keyword = keyword
     }
 }

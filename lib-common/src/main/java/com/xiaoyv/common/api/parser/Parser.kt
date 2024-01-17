@@ -181,6 +181,7 @@ fun String.parserTime(): String {
 fun String?.preHandleHtml(): String {
     return orEmpty()
         .replace("src=\"//", "src=\"https://")
+        .replace("group/topic/350677", "group/topic/391651")
 }
 
 /**

@@ -75,85 +75,102 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_score_tip" />
 
-    <com.xiaoyv.common.widget.text.AnimeEditTextView
-        android:id="@+id/et_tag"
+    <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
+        android:id="@+id/cl_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_size_24"
-        android:background="@drawable/ui_shape_rectangle_corner_6"
-        android:backgroundTint="?attr/colorSurfaceContainer"
-        android:hint="标签（多个空格分割）"
-        android:paddingHorizontal="@dimen/ui_size_12"
-        android:paddingVertical="@dimen/ui_size_12"
-        android:textAppearance="?textAppearanceBodyLarge"
-        app:layout_constraintTop_toBottomOf="@+id/iv_star" />
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_size_12"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/gp_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/iv_star">
 
-    <com.xiaoyv.common.widget.text.AnimeTextView
-        android:id="@+id/tv_tag_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_size_12"
-        android:gravity="center"
-        android:paddingVertical="@dimen/ui_size_12"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:textColor="?attr/colorPrimary"
-        android:textColorHighlight="?attr/colorSurface"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_tag"
-        tools:text="常用 | 我的" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/flex_tag_normal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:alignItems="stretch"
-        app:flexDirection="row"
-        app:flexWrap="wrap"
-        app:justifyContent="flex_start"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tag_switch" />
+            <com.xiaoyv.common.widget.text.AnimeEditTextView
+                android:id="@+id/et_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ui_shape_rectangle_corner_6"
+                android:backgroundTint="?attr/colorSurfaceContainer"
+                android:hint="标签（多个空格分割）"
+                android:paddingHorizontal="@dimen/ui_size_12"
+                android:paddingVertical="@dimen/ui_size_12"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/flex_tag_my"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:alignItems="stretch"
-        app:flexDirection="row"
-        app:flexWrap="wrap"
-        app:justifyContent="flex_start"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tag_switch" />
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_tag_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_size_12"
+                android:gravity="center"
+                android:paddingVertical="@dimen/ui_size_12"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorPrimary"
+                android:textColorHighlight="?attr/colorSurface"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_tag"
+                tools:text="常用 | 我的" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="flex_tag_my,flex_tag_normal" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flex_tag_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:alignItems="stretch"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tag_switch" />
 
-    <com.xiaoyv.common.widget.text.AnimeEditTextView
-        android:id="@+id/et_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_size_12"
-        android:background="@drawable/ui_shape_rectangle_corner_6"
-        android:backgroundTint="?attr/colorSurfaceContainer"
-        android:gravity="top"
-        android:hint="吐槽：公开情况下该内容会显示在详情页面最下方"
-        android:minLines="4"
-        android:paddingHorizontal="@dimen/ui_size_12"
-        android:paddingVertical="@dimen/ui_size_12"
-        android:textAppearance="?textAppearanceBodyLarge"
-        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flex_tag_my"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:alignItems="stretch"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tag_switch" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="flex_tag_my,flex_tag_normal" />
+
+            <com.xiaoyv.common.widget.text.AnimeEditTextView
+                android:id="@+id/et_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_size_12"
+                android:background="@drawable/ui_shape_rectangle_corner_6"
+                android:backgroundTint="?attr/colorSurfaceContainer"
+                android:gravity="top"
+                android:hint="吐槽：公开情况下该内容会显示在详情页面最下方"
+                android:minLines="4"
+                android:paddingHorizontal="@dimen/ui_size_12"
+                android:paddingVertical="@dimen/ui_size_12"
+                android:textAppearance="?textAppearanceBodyLarge"
+                app:layout_constraintTop_toBottomOf="@+id/barrier"
+                tools:text="@tools:sample/lorem/random" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/gp_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_size_24"
+        android:layout_marginBottom="@dimen/ui_size_12"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/et_comment"
+        app:layout_constraintBottom_toTopOf="@+id/btn_submit"
         app:selectionRequired="true"
         app:singleSelection="true">
 
@@ -219,8 +236,7 @@
         android:text="更新"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_public"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gp_buttons" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.xiaoyv.common.widget.button.AnimeButton
         android:id="@+id/btn_public"

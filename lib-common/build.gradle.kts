@@ -75,6 +75,8 @@ dependencies {
     api(libs.avif)
     ksp(libs.glide.ksp)
 
+    api("com.huaban:jieba-analysis:1.0.2")
+
     compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 
     testImplementation(libs.junit)

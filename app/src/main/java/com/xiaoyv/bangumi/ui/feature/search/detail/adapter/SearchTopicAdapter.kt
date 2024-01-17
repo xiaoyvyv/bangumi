@@ -1,10 +1,13 @@
 package com.xiaoyv.bangumi.ui.feature.search.detail.adapter
 
+import android.graphics.Color
 import androidx.core.view.isVisible
 import com.xiaoyv.bangumi.databinding.ActivityCollectionItemBinding
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
 import com.xiaoyv.common.api.response.SearchApiTopicEntity
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
+import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.highlightText
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
@@ -15,8 +18,9 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * @author why
  * @since 1/3/24
  */
-class SearchTopicAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
-        ActivityCollectionItemBinding>(IdDiffItemCallback()) {
+class SearchTopicAdapter(val keyword: () -> List<String>) :
+    BaseQuickDiffBindingAdapter<SearchResultEntity,
+            ActivityCollectionItemBinding>(IdDiffItemCallback()) {
 
     override fun BaseQuickBindingHolder<ActivityCollectionItemBinding>.converted(item: SearchResultEntity) {
         (item.payload as SearchApiTopicEntity).let { entity ->
@@ -29,6 +33,10 @@ class SearchTopicAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
             binding.tvTime.text = entity.time
 
             binding.tvEp.text = "话题"
+
+            // 高亮
+            binding.tvTitle.highlightText(keyword(), Color.GREEN)
+            binding.tvDesc.highlightText(keyword(), Color.GREEN)
         }
     }
 }
