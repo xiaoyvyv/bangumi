@@ -30,6 +30,7 @@ data class SearchResultEntity(
     @MediaType
     var searchMediaType: String = MediaType.TYPE_UNKNOWN,
     var searchTip: String = "",
+    var isVirtual: Boolean = false,
 
     /**
      * API 搜索结果数据载体

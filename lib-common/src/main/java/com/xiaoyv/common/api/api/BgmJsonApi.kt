@@ -105,6 +105,7 @@ interface BgmJsonApi {
     suspend fun querySearchTopic(
         @Query("keyword") keyword: String,
         @Query("exact") exact: Boolean,
+        @Query("order") order: String? = null,
         @Query("current") current: Int = 1,
     ): BaseResponse<BasePage<SearchApiTopicEntity>>
 
@@ -112,6 +113,7 @@ interface BgmJsonApi {
     suspend fun querySearchIndex(
         @Query("keyword") keyword: String,
         @Query("exact") exact: Boolean,
+        @Query("order") order: String? = null,
         @Query("current") current: Int = 1,
     ): BaseResponse<BasePage<SearchApiIndexEntity>>
 

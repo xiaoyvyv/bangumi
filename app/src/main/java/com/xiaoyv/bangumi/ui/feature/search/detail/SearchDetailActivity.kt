@@ -2,34 +2,16 @@ package com.xiaoyv.bangumi.ui.feature.search.detail
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.widget.doAfterTextChanged
 import com.blankj.utilcode.util.KeyboardUtils
-import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.xiaoyv.bangumi.R
+import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivitySearchDetailBinding
-import com.xiaoyv.bangumi.helper.RouteHelper
-import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchDetailItemAdapter
-import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchDetailTagAdapter
-import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchIndexAdapter
-import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchTopicAdapter
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.config.GlobalConfig
-import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.SearchCatType
-import com.xiaoyv.common.config.annotation.TopicType
-import com.xiaoyv.common.config.bean.PostAttach
-import com.xiaoyv.common.kts.GoogleAttr
-import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
-import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
-import com.xiaoyv.widget.kts.getAttrColor
+import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.getParcelObj
-import com.xiaoyv.widget.kts.useNotNull
 
 /**
  * Class: [SearchDetailActivity]
@@ -40,45 +22,14 @@ import com.xiaoyv.widget.kts.useNotNull
 class SearchDetailActivity :
     BaseViewModelActivity<ActivitySearchDetailBinding, SearchDetailViewModel>() {
 
-    /**
-     * Adapter
-     */
-    private val contentItemAdapter by lazy { SearchDetailItemAdapter() }
-    private val contentTagAdapter by lazy { SearchDetailTagAdapter() }
-    private val contentTopicAdapter by lazy {
-        SearchTopicAdapter { viewModel.keywords }
-    }
-    private val contentIndexAdapter by lazy {
-        SearchIndexAdapter { viewModel.keywords }
+    private val vpAdapter by lazy {
+        SearchDetailAdapter(supportFragmentManager, lifecycle)
     }
 
-    /**
-     * 适配器
-     */
-    private val contentAdapter
-        get() = when (viewModel.searchBgmType) {
-            BgmPathType.TYPE_SEARCH_TAG -> contentTagAdapter
-            BgmPathType.TYPE_INDEX -> contentIndexAdapter
-            BgmPathType.TYPE_TOPIC -> contentTopicAdapter
-            else -> contentItemAdapter
+    private val tabLayoutMediator by lazy {
+        TabLayoutMediator(binding.tabLayout, binding.vpContent) { tab, position ->
+            tab.text = vpAdapter.tabs[position].title
         }
-
-    private val adapterHelper by lazy {
-        QuickAdapterHelper.Builder(contentAdapter)
-            .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
-                override fun isAllowLoading(): Boolean {
-                    return binding.srlRefresh.isRefreshing.not()
-                }
-
-                override fun onFailRetry() {
-                    viewModel.loadMore()
-                }
-
-                override fun onLoad() {
-                    viewModel.loadMore()
-                }
-            })
-            .build()
     }
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
@@ -86,26 +37,17 @@ class SearchDetailActivity :
     }
 
     override fun initView() {
-        binding.srlRefresh.initRefresh { false }
-        binding.srlRefresh.setColorSchemeColors(getAttrColor(GoogleAttr.colorPrimary))
+        binding.vpContent.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
+        binding.vpContent.offscreenPageLimit = vpAdapter.itemCount
+        binding.vpContent.adapter = vpAdapter
+
+        tabLayoutMediator.attach()
     }
 
     override fun initData() {
-        when (viewModel.searchBgmType) {
-            // 搜索标签
-            BgmPathType.TYPE_SEARCH_TAG -> {
-                binding.rvContent.layoutManager = FlexboxLayoutManager(this, FlexDirection.ROW)
-                binding.rvContent.adapter = contentAdapter
-            }
-
-            else -> {
-                binding.rvContent.layoutManager =
-                    AnimeLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                binding.rvContent.adapter = adapterHelper.adapter
-            }
-        }
-
-        viewModel.refresh()
+        val keyword = viewModel.currentSearchItem.value?.keyword.orEmpty()
+        viewModel.onKeyword.value = keyword
+        binding.searchBar.etKeyword.setText(keyword)
     }
 
     override fun initListener() {
@@ -113,109 +55,18 @@ class SearchDetailActivity :
             finish()
         }
 
-        binding.srlRefresh.setOnRefreshListener {
-            viewModel.refresh()
-        }
-
         binding.searchBar.etKeyword.setOnEditorActionListener { _, _, _ ->
+            // 搜索
             val keyword = binding.searchBar.etKeyword.text.toString().trim()
             if (keyword.isNotBlank()) {
-                viewModel.refreshKeyword(keyword)
-                viewModel.refresh()
-
+                viewModel.onKeyword.value = keyword
                 KeyboardUtils.hideSoftInput(this)
             }
             true
         }
 
-        contentItemAdapter.setOnDebouncedChildClickListener(R.id.item_search) {
-            useNotNull(viewModel.currentSearchItem.value) {
-                // 选取模式
-                if (viewModel.forSelectedMedia) {
-                    setResult(
-                        RESULT_OK,
-                        Intent().putExtra(
-                            NavKey.KEY_PARCELABLE, PostAttach(
-                                id = it.id,
-                                title = it.title,
-                                image = it.coverImage,
-                                type = GlobalConfig.mediaTypeName(it.searchMediaType)
-                            )
-                        )
-                    )
-                    finish()
-                }
-                // 正常搜索模式
-                else {
-                    if (pathType == BgmPathType.TYPE_SEARCH_SUBJECT) {
-                        RouteHelper.jumpMediaDetail(it.id)
-                    } else {
-                        RouteHelper.jumpPerson(it.id, id == SearchCatType.TYPE_CHARACTER)
-                    }
-                }
-            }
-        }
-
-        // 标签搜索
-        contentTagAdapter.setOnDebouncedChildClickListener(R.id.item_tag) { entity ->
-            useNotNull(viewModel.currentSearchItem.value) {
-                // 针对标签的搜索结果，SearchItem 的 id 在 SearchViewModel 填充为 MediaType
-                val tagMediaType = this.id
-                val tagName = entity.id
-                RouteHelper.jumpTagDetail(tagMediaType, tagName)
-            }
-        }
-
-        // 小组话题帖子搜索
-        contentTopicAdapter.setOnDebouncedChildClickListener(R.id.item_collection) { entity ->
-            RouteHelper.jumpTopicDetail(entity.id, TopicType.TYPE_GROUP)
-        }
-
-        // 目录搜索
-        contentIndexAdapter.setOnDebouncedChildClickListener(R.id.item_index) { entity ->
-            RouteHelper.jumpIndexDetail(entity.id)
-        }
-    }
-
-    override fun LifecycleOwner.initViewObserver() {
-        binding.stateView.initObserver(
-            lifecycleOwner = this,
-            loadingViewState = viewModel.loadingViewState,
-            canShowLoading = { viewModel.isRefresh && !binding.srlRefresh.isRefreshing },
-            canShowTip = { viewModel.isRefresh }
-        )
-
-        viewModel.currentSearchItem.observe(this) {
-            val searchItem = it ?: return@observe
-            binding.searchBar.etKeyword.setText(searchItem.keyword)
-            binding.searchBar.etKeyword.hint = buildString {
-                append("搜索：")
-                append(BgmPathType.string(it.pathType))
-                append(" - ")
-                append(it.label)
-            }
-        }
-
-        viewModel.onListLiveData.observe(this) {
-            if (it == null) return@observe
-
-            contentAdapter.submitList(it) {
-                if (viewModel.isRefresh) scrollTop()
-                adapterHelper.trailingLoadState = viewModel.loadingMoreState
-            }
-        }
-    }
-
-    private fun scrollTop() {
-        when (viewModel.searchBgmType) {
-            // 搜索标签
-            BgmPathType.TYPE_SEARCH_TAG -> useNotNull(binding.rvContent.layoutManager as? FlexboxLayoutManager) {
-                scrollToPosition(0)
-            }
-            // 其它
-            else -> useNotNull(binding.rvContent.layoutManager as? LinearLayoutManager) {
-                scrollToPositionWithOffset(0, 0)
-            }
+        binding.searchBar.etKeyword.doAfterTextChanged {
+            viewModel.onKeywordChange.value = it.toString().trim()
         }
     }
 }

@@ -58,6 +58,11 @@ abstract class BaseListViewModel<T> : BaseViewModel() {
         loadListData()
     }
 
+    fun clearList() {
+        current = 1
+        onListLiveData.value = emptyList()
+    }
+
     private fun loadListData() {
         loadJob?.cancel()
         loadJob = launchUI(

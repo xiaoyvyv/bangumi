@@ -1,12 +1,12 @@
-package com.xiaoyv.bangumi.ui.feature.search.detail.adapter
+package com.xiaoyv.bangumi.ui.feature.search.detail.page.topic
 
 import android.graphics.Color
 import androidx.core.view.isVisible
 import com.xiaoyv.bangumi.databinding.ActivityCollectionItemBinding
+import com.xiaoyv.bangumi.databinding.ActivitySearchDetailItemBinding
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
 import com.xiaoyv.common.api.response.SearchApiTopicEntity
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.highlightText
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.widget.binder.BaseQuickBindingHolder
@@ -16,7 +16,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * Class: [SearchTopicAdapter]
  *
  * @author why
- * @since 1/3/24
+ * @since 12/8/23
  */
 class SearchTopicAdapter(val keyword: () -> List<String>) :
     BaseQuickDiffBindingAdapter<SearchResultEntity,

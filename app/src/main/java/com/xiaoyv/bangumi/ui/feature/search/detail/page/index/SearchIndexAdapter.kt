@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.search.detail.adapter
+package com.xiaoyv.bangumi.ui.feature.search.detail.page.index
 
 import android.graphics.Color
 import com.blankj.utilcode.util.TimeUtils
@@ -14,7 +14,7 @@ import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
  * Class: [SearchIndexAdapter]
  *
  * @author why
- * @since 12/12/23
+ * @since 12/8/23
  */
 class SearchIndexAdapter(val keyword: () -> List<String>) :
     BaseQuickDiffBindingAdapter<SearchResultEntity, FragmentIndexItemBinding>(IdDiffItemCallback()) {

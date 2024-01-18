@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.helper.RouteHelper
-import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchDetailItemAdapter
+import com.xiaoyv.bangumi.ui.feature.search.detail.page.media.SearchMediaAdapter
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
 import com.xiaoyv.common.config.GlobalConfig
@@ -46,6 +46,6 @@ class TagDetailActivity : BaseListActivity<SearchResultEntity, TagDetailViewMode
     }
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<SearchResultEntity, *> {
-        return SearchDetailItemAdapter()
+        return SearchMediaAdapter()
     }
 }

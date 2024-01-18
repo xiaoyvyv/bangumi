@@ -44,7 +44,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
         }
     }
 
-    private val adapterHelper by lazy {
+    internal val adapterHelper by lazy {
         QuickAdapterHelper.Builder(contentAdapter)
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
                 override fun isAllowLoading(): Boolean {
@@ -82,6 +82,9 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
     override fun initData() {
         binding.rvContent.layoutManager = onCreateLayoutManager()
         refreshAdapter()
+    }
+
+    override fun initFinish() {
         autoInitData()
     }
 

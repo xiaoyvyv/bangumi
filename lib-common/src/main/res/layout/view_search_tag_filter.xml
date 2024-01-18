@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="HardcodedText">
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/list_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        app:layout_constraintTop_toTopOf="parent"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_wish"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="想看"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_collect"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="看过"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_do"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="在看"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_on_hold"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搁置"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_dropped"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="抛弃"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_media_type"
+        style="@style/Widget.Material3.Chip.Assist.Elevated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_size_12"
+        android:text="动画"
+        android:textSize="@dimen/text_label"
+        app:chipIcon="@drawable/ic_filter"
+        app:chipIconSize="@dimen/ui_size_16"
+        app:chipMinHeight="@dimen/ui_size_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:textEndPadding="@dimen/ui_size_4"
+        app:textStartPadding="@dimen/ui_size_4" />
+</androidx.constraintlayout.widget.ConstraintLayout>

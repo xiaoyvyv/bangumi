@@ -66,6 +66,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                     entity.coverImage = item.select("a.avatar img").attr("src").optImageUrl()
                     entity.count = "讨论：" + item.select(".rr small").text()
                     item.select("h2 a.l").apply {
+                        entity.isVirtual = attr("href").contains("character")
                         entity.subtitle = select(".tip").remove().text().trim().trim('/')
                         entity.title = text().trim().trim('/')
                     }

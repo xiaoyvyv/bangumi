@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/ui_layout_margin"
+    android:paddingVertical="@dimen/ui_size_6"
+    tools:ignore="HardcodedText">
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/list_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:chipSpacingVertical="@dimen/ui_size_0"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/type_mode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:selectionRequired="true"
+        app:singleLine="false"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_0"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="动画"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:chipMinTouchTargetSize="@dimen/ui_size_36"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_1"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="书籍"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:chipMinTouchTargetSize="@dimen/ui_size_36"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_2"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="音乐"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:chipMinTouchTargetSize="@dimen/ui_size_36"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_3"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="游戏"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:chipMinTouchTargetSize="@dimen/ui_size_36"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/type_4"
+            style="@style/Widget.Material3.Chip.Suggestion.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="三次元"
+            android:textSize="@dimen/text_label"
+            app:chipMinHeight="@dimen/ui_size_24"
+            app:chipMinTouchTargetSize="@dimen/ui_size_36"
+            app:textEndPadding="@dimen/ui_size_4"
+            app:textStartPadding="@dimen/ui_size_4" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/type_mode"
+        style="@style/Widget.Material3.Chip.Assist.Elevated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="模糊匹配"
+        android:textSize="@dimen/text_label"
+        app:chipIcon="@drawable/ic_filter"
+        app:chipIconSize="@dimen/ui_size_16"
+        app:chipMinHeight="@dimen/ui_size_24"
+        app:chipMinTouchTargetSize="@dimen/ui_size_36"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:textEndPadding="@dimen/ui_size_4"
+        app:textStartPadding="@dimen/ui_size_4" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
-package com.xiaoyv.bangumi.ui.feature.search.detail.adapter
+package com.xiaoyv.bangumi.ui.feature.search.detail.page.media
 
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.xiaoyv.bangumi.databinding.ActivitySearchDetailItemBinding
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
@@ -9,16 +10,16 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
- * Class: [SearchDetailItemAdapter]
+ * Class: [SearchMediaAdapter]
  *
  * @author why
  * @since 12/8/23
  */
-class SearchDetailItemAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
+class SearchMediaAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
         ActivitySearchDetailItemBinding>(IdDiffItemCallback()) {
 
     override fun BaseQuickBindingHolder<ActivitySearchDetailItemBinding>.converted(item: SearchResultEntity) {
-        binding.ivCover.loadImageAnimate(item.coverImage)
+        binding.ivCover.loadImageAnimate(item.coverImage, cropType = ImageView.ScaleType.FIT_START)
         binding.tvTitle.text = item.title
         binding.tvTitleCn.text = item.subtitle
         binding.tvDesc.text = item.infoTip.toString()

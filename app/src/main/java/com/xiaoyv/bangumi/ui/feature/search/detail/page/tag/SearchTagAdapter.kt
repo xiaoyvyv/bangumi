@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.search.detail.adapter
+package com.xiaoyv.bangumi.ui.feature.search.detail.page.tag
 
 import com.xiaoyv.bangumi.databinding.ActivitySearchDetailTagBinding
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
@@ -7,12 +7,12 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
- * Class: [SearchDetailTagAdapter]
+ * Class: [SearchTagAdapter]
  *
  * @author why
  * @since 12/8/23
  */
-class SearchDetailTagAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
+class SearchTagAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
         ActivitySearchDetailTagBinding>(IdDiffItemCallback()) {
 
     override fun BaseQuickBindingHolder<ActivitySearchDetailTagBinding>.converted(item: SearchResultEntity) {
