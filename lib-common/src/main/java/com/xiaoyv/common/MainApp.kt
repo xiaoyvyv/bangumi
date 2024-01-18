@@ -13,6 +13,7 @@ import com.xiaoyv.blueprint.BluePrint
 import com.xiaoyv.blueprint.base.BaseActivity
 import com.xiaoyv.blueprint.base.BaseConfig
 import com.xiaoyv.common.helper.H5PreLoadHelper
+import com.xiaoyv.common.helper.SegmentHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.theme.ThemeHelper
 import com.xiaoyv.common.helper.work.IdleWorker
@@ -54,7 +55,7 @@ class MainApp : Application() {
         UserHelper.initLoad()
         UiFaceManager.manager.initEmojiMap()
         startIdleWork()
-
+        SegmentHelper.preload()
         LogUtils.getConfig().isLogSwitch = AppUtils.isAppDebug()
     }
 

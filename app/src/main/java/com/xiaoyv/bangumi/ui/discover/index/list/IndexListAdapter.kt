@@ -8,7 +8,7 @@ import com.xiaoyv.widget.binder.BaseQuickBindingHolder
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
 /**
- * Class: [GroupListAdapter]
+ * Class: [IndexListAdapter]
  *
  * @author why
  * @since 12/12/23

@@ -14,6 +14,7 @@ import com.xiaoyv.bangumi.databinding.ActivitySearchDetailBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchDetailItemAdapter
 import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchDetailTagAdapter
+import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchIndexAdapter
 import com.xiaoyv.bangumi.ui.feature.search.detail.adapter.SearchTopicAdapter
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
@@ -45,9 +46,10 @@ class SearchDetailActivity :
     private val contentItemAdapter by lazy { SearchDetailItemAdapter() }
     private val contentTagAdapter by lazy { SearchDetailTagAdapter() }
     private val contentTopicAdapter by lazy {
-        SearchTopicAdapter {
-            viewModel.keywords
-        }
+        SearchTopicAdapter { viewModel.keywords }
+    }
+    private val contentIndexAdapter by lazy {
+        SearchIndexAdapter { viewModel.keywords }
     }
 
     /**
@@ -56,7 +58,7 @@ class SearchDetailActivity :
     private val contentAdapter
         get() = when (viewModel.searchBgmType) {
             BgmPathType.TYPE_SEARCH_TAG -> contentTagAdapter
-            BgmPathType.TYPE_INDEX -> contentTagAdapter
+            BgmPathType.TYPE_INDEX -> contentIndexAdapter
             BgmPathType.TYPE_TOPIC -> contentTopicAdapter
             else -> contentItemAdapter
         }
@@ -154,6 +156,7 @@ class SearchDetailActivity :
             }
         }
 
+        // 标签搜索
         contentTagAdapter.setOnDebouncedChildClickListener(R.id.item_tag) { entity ->
             useNotNull(viewModel.currentSearchItem.value) {
                 // 针对标签的搜索结果，SearchItem 的 id 在 SearchViewModel 填充为 MediaType
@@ -166,6 +169,11 @@ class SearchDetailActivity :
         // 小组话题帖子搜索
         contentTopicAdapter.setOnDebouncedChildClickListener(R.id.item_collection) { entity ->
             RouteHelper.jumpTopicDetail(entity.id, TopicType.TYPE_GROUP)
+        }
+
+        // 目录搜索
+        contentIndexAdapter.setOnDebouncedChildClickListener(R.id.item_index) { entity ->
+            RouteHelper.jumpIndexDetail(entity.id)
         }
     }
 
@@ -189,14 +197,10 @@ class SearchDetailActivity :
         }
 
         viewModel.onListLiveData.observe(this) {
-            if (it == null) {
-                return@observe
-            }
+            if (it == null) return@observe
 
             contentAdapter.submitList(it) {
-                if (viewModel.isRefresh) {
-                    scrollTop()
-                }
+                if (viewModel.isRefresh) scrollTop()
                 adapterHelper.trailingLoadState = viewModel.loadingMoreState
             }
         }

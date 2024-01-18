@@ -40,6 +40,7 @@ class OverviewCharacterBinder(private val clickItemListener: (MediaDetailEntity.
     ) {
         item ?: return
         holder.binding.rvCharacter.adapter = itemAdapter
+        holder.binding.tvTitleCharacter.title = "角色"
         itemAdapter.submitList(item.entity.forceCast())
     }
 

@@ -42,29 +42,42 @@ object UserTokenHelper {
             if (authToken.isExpire) {
                 debugLog { "Token 授权过期或不存在" }
 
-                // 判断是否可以刷新 Token
-                val refreshToken = authToken.refreshToken.orEmpty()
-                if (refreshToken.isNotBlank()) {
-                    debugLog { "Token refresh start..." }
-
-                    val refreshSuccess = refreshAuthToken(refreshToken)
-                    if (refreshSuccess) {
-                        debugLog { "Token refresh success" }
-                        return@launchProcess
-                    }
-
-                    debugLog { "Token refresh fail!" }
-                }
-
-                debugLog { "Token re-fetch!" }
-
-                // 重新拉取
-                authToken = empty
-                fetchAuthToken()
+                retryToken()
             } else {
-                debugLog { "Token 授权未过期！" }
+                debugLog { "Token 初步校验授权未过期！" }
+
+                val result =
+                    runCatching { BgmApiManager.bgmJsonApi.queryUserInfo(UserHelper.currentUser.id) }
+                if (result.isFailure) {
+                    debugLog { "Token 最终校验授权过期，重新拉取 Token" }
+                    retryToken()
+                } else {
+                    debugLog { "Token 最终校验授权未过期！" }
+                }
             }
         }
+    }
+
+    private suspend fun retryToken() {
+        // 判断是否可以刷新 Token
+        val refreshToken = authToken.refreshToken.orEmpty()
+        if (refreshToken.isNotBlank()) {
+            debugLog { "Token refresh start..." }
+
+            val refreshSuccess = refreshAuthToken(refreshToken)
+            if (refreshSuccess) {
+                debugLog { "Token refresh success" }
+                return
+            }
+
+            debugLog { "Token refresh fail!" }
+        }
+
+        debugLog { "Token re-fetch!" }
+
+        // 重新拉取
+        authToken = empty
+        fetchAuthToken()
     }
 
     /**
