@@ -384,6 +384,18 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         mediaCharacter
     }
 
+    // 书籍发行的单行本
+    entity.separateEditions = subjectDetail.select("ul.browserCoverSmall > li").map { item ->
+        val relative = MediaDetailEntity.MediaRelative()
+        val a = item.select("a")
+        relative.titleNative = a.attr("title")
+        relative.titleCn = a.attr("title").parseCount().toString()
+        relative.id = a.hrefId()
+        relative.cover = a.select("span").attr("style").fetchStyleBackgroundUrl().optImageUrl()
+        relative.type = MediaType.TYPE_BOOK
+        relative
+    }
+
     // 关联的条目
     entity.relativeMedia = subjectDetail.select(".browserCoverMedium > li").map { item ->
         val mediaRelative = MediaDetailEntity.MediaRelative()

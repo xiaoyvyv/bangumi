@@ -186,6 +186,14 @@ interface BgmWebApi {
         @Query("page") page: Int? = null,
     ): Document
 
+    @GET("/subject/{mediaId}/{collectType}")
+    suspend fun queryMediaScore(
+        @Path("mediaId", encoded = true) mediaId: String,
+        @Path("collectType", encoded = true) collectType: String,
+        @Query("filter") filter: String? = null,
+        @Query("page") page: Int? = null,
+    ): Document
+
     @FormUrlEncoded
     @POST("/subject/ep/{epId}/status/{epCollectType}")
     suspend fun postEpCollect(

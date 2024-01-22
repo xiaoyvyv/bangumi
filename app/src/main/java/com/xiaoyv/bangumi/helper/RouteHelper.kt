@@ -54,6 +54,7 @@ import com.xiaoyv.bangumi.ui.feature.user.mono.UserMonoActivity
 import com.xiaoyv.bangumi.ui.feature.web.WebActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.media.detail.preview.MediaPreviewActivity
+import com.xiaoyv.bangumi.ui.media.detail.score.MediaScoreActivity
 import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.bangumi.ui.timeline.detail.TimelineDetailActivity
 import com.xiaoyv.blueprint.constant.NavKey
@@ -419,9 +420,6 @@ object RouteHelper {
         )
     }
 
-    fun jumpRatingDetail() {
-
-    }
 
     fun jumpWeb(
         url: String,
@@ -546,5 +544,15 @@ object RouteHelper {
         } else {
             DollarsActivity::class.open()
         }
+    }
+
+    fun jumpMediaScore(mediaId: String, @MediaType mediaType: String, friend: Boolean) {
+        MediaScoreActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to mediaId,
+                NavKey.KEY_STRING_SECOND to mediaType,
+                NavKey.KEY_BOOLEAN to friend,
+            )
+        )
     }
 }

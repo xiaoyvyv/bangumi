@@ -310,6 +310,10 @@
             android:name="com.xiaoyv.bangumi.ui.media.detail.preview.MediaPreviewActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.media.detail.score.MediaScoreActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -228,7 +228,7 @@ fun Elements.styleBackground(default: Boolean = true): String {
 }
 
 fun Element.parseStar(): Float {
-    return select(".starstop-s > span").attr("class").let { starClass ->
+    return select(".starstop-s > span, .starstop > span").attr("class").let { starClass ->
         starClass.orEmpty()
             .split(" ")
             .find { it.startsWith("stars") }.orEmpty()

@@ -51,6 +51,7 @@ data class MediaDetailEntity(
     @SerializedName("tags") var tags: List<MediaTag> = emptyList(),
     @SerializedName("characters") var characters: List<MediaCharacter> = emptyList(),
     @SerializedName("relativeMedia") var relativeMedia: List<MediaRelative> = emptyList(),
+    @SerializedName("separateEditions") var separateEditions: List<MediaRelative> = emptyList(),
     @SerializedName("sameLikes") var sameLikes: List<MediaRelative> = emptyList(),
     @SerializedName("reviews") var reviews: List<MediaReviewBlogEntity> = emptyList(),
     @SerializedName("boards") var boards: List<MediaBoardEntity> = emptyList(),
@@ -110,14 +111,14 @@ data class MediaDetailEntity(
     @Parcelize
     @Keep
     data class MediaRelative(
+        @SerializedName("id") override var id: String = "",
         @SerializedName("cover") var cover: String = "",
-        @SerializedName("id") var id: String = "",
         @SerializedName("titleCn") var titleCn: String = "",
         @SerializedName("titleNative") var titleNative: String = "",
         @SerializedName("type") @MediaType var type: String = MediaType.TYPE_UNKNOWN,
         @SerializedName("collectType") @InterestType var collectType: String = InterestType.TYPE_UNKNOWN,
         @SerializedName("characterJobs") var characterJobs: List<String> = emptyList(),
-    ) : Parcelable
+    ) : Parcelable, IdEntity
 
     @Parcelize
     @Keep

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_grid"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/ui_size_60"
+        android:layout_height="@dimen/ui_size_60"
+        android:layout_margin="@dimen/ui_size_8"
+        android:foreground="@drawable/shape_cover_mask"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:id="@+id/tv_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/ui_size_8"
+        android:background="@drawable/shape_no"
+        android:paddingHorizontal="@dimen/ui_size_6"
+        android:paddingVertical="@dimen/ui_size_3"
+        android:textColor="?attr/colorOnPrimarySurface"
+        tools:text="1" />
+</FrameLayout>

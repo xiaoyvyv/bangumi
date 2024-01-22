@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.ui.media.detail.overview
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.chad.library.adapter.base.BaseMultiItemAdapter.OnItemViewTypeListener
+import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewBookBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewCharacterBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewCommentBinder
 import com.xiaoyv.bangumi.ui.media.detail.overview.binder.OverviewEpBinder
@@ -42,6 +43,7 @@ class OverviewAdapter(
     onClickPreview: (DouBanPhotoEntity.Photo) -> Unit,
     onClickTour: (AnimeTourEntity.LitePoint) -> Unit,
     onClickCommentItem: (MediaCommentEntity) -> Unit,
+    onClickBookItem: (MediaDetailEntity.MediaRelative) -> Unit,
     onClickCommentUser: (MediaCommentEntity) -> Unit,
 ) : BaseMultiItemAdapter<AdapterTypeItem>() {
 
@@ -70,6 +72,7 @@ class OverviewAdapter(
                 TYPE_COMMENT,
                 OverviewCommentBinder(touchedListener, onClickCommentItem, onClickCommentUser)
             )
+            .addItemType(TYPE_BOOK, OverviewBookBinder(touchedListener, onClickBookItem))
             .onItemViewType(OnItemViewTypeListener { position, list ->
                 return@OnItemViewTypeListener list[position].type
             })
@@ -149,5 +152,6 @@ class OverviewAdapter(
         const val TYPE_INDEX = 11
         const val TYPE_COMMENT = 12
         const val TYPE_TOUR = 13
+        const val TYPE_BOOK = 14
     }
 }

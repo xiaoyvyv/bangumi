@@ -5,6 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.FragmentOverviewBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.media.action.MediaEpActionDialog
@@ -22,6 +23,7 @@ import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.AdapterTypeItem
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
+import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.forceCast
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog
@@ -102,6 +104,9 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             onClickCommentItem = {
                 RouteHelper.jumpUserDetail(it.userId)
             },
+            onClickBookItem = {
+                RouteHelper.jumpMediaDetail(it.id)
+            },
             onClickCommentUser = {
                 RouteHelper.jumpUserDetail(it.userId)
             }
@@ -126,7 +131,15 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
     }
 
     override fun initListener() {
-        overviewAdapter.setOnDebouncedChildClickListener(com.xiaoyv.common.R.id.tv_more) {
+        overviewAdapter.setOnDebouncedChildClickListener(R.id.tv_friend_rating) {
+            RouteHelper.jumpMediaScore(
+                mediaId = viewModel.mediaId,
+                mediaType = viewModel.requireMediaType,
+                friend = true
+            )
+        }
+
+        overviewAdapter.setOnDebouncedChildClickListener(CommonId.tv_more) {
             when (it.type) {
                 OverviewAdapter.TYPE_COLLECT -> {
                     requireActivity().showConfirmDialog(
@@ -150,7 +163,11 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
                 }
 
                 OverviewAdapter.TYPE_RATING -> {
-                    RouteHelper.jumpRatingDetail()
+                    RouteHelper.jumpMediaScore(
+                        mediaId = viewModel.mediaId,
+                        mediaType = viewModel.requireMediaType,
+                        friend = false
+                    )
                 }
 
                 OverviewAdapter.TYPE_SUMMARY -> {

@@ -62,7 +62,7 @@ class OverviewViewModel : BaseViewModel() {
     /**
      * 媒体类型
      */
-    private val requireMediaType: String
+    internal val requireMediaType: String
         get() = mediaDetailLiveData.value?.mediaType ?: MediaType.TYPE_UNKNOWN
 
     /**
@@ -157,6 +157,16 @@ class OverviewViewModel : BaseViewModel() {
                     entity.characters,
                     OverviewAdapter.TYPE_CHARACTER,
                     "角色介绍"
+                )
+            )
+        }
+
+        if (entity.separateEditions.isNotEmpty()) {
+            items.add(
+                AdapterTypeItem(
+                    entity.separateEditions,
+                    OverviewAdapter.TYPE_BOOK,
+                    "单行本"
                 )
             )
         }
