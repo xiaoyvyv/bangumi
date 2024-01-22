@@ -2,14 +2,14 @@ package com.xiaoyv.bangumi.ui.media.detail.score.page
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseDifferAdapter
-import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
+import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MediaScoreEntity
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 
 /**
  * Class: [MediaScorePageFragment]
@@ -29,6 +29,14 @@ class MediaScorePageFragment : BaseListFragment<MediaScoreEntity, MediaScorePage
 
     override fun onCreateContentAdapter(): BaseDifferAdapter<MediaScoreEntity, *> {
         return MediaScorePageAdapter()
+    }
+
+    override fun initListener() {
+        super.initListener()
+
+        contentAdapter.setOnDebouncedChildClickListener(R.id.item_score) {
+            RouteHelper.jumpUserDetail(it.id)
+        }
     }
 
     companion object {

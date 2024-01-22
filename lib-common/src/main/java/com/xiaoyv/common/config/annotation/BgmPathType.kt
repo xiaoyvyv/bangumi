@@ -24,7 +24,8 @@ import androidx.annotation.StringDef
     BgmPathType.TYPE_INDEX,
     BgmPathType.TYPE_EP,
     BgmPathType.TYPE_TIMELINE,
-    BgmPathType.TYPE_FRIEND
+    BgmPathType.TYPE_FRIEND,
+    BgmPathType.TYPE_SCORE
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class BgmPathType {
@@ -35,6 +36,7 @@ annotation class BgmPathType {
         const val TYPE_PERSON = "person"
         const val TYPE_USER = "user"
         const val TYPE_BLOG = "blog"
+        const val TYPE_SCORE = "score"
         const val TYPE_TOPIC = "topic"
         const val TYPE_SUBJECT = "subject"
         const val TYPE_MESSAGE_BOX = "pm"

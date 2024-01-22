@@ -178,6 +178,7 @@ class BgmApiManager {
                 BgmPathType.TYPE_EP -> "$URL_BASE_WEB/subject/$id/ep"
                 BgmPathType.TYPE_USER -> "$URL_BASE_WEB/user/$id"
                 BgmPathType.TYPE_BLOG -> "$URL_BASE_WEB/blog/$id"
+                BgmPathType.TYPE_SCORE -> "$URL_BASE_WEB/subject/$id/collections"
                 else -> URL_BASE_WEB
             }
         }

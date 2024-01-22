@@ -139,6 +139,10 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
             )
         }
 
+        overviewAdapter.setOnDebouncedChildClickListener(R.id.cl_line) {
+            activityViewModel.vpCurrentItemType.value = MediaDetailType.TYPE_STATS
+        }
+
         overviewAdapter.setOnDebouncedChildClickListener(CommonId.tv_more) {
             when (it.type) {
                 OverviewAdapter.TYPE_COLLECT -> {

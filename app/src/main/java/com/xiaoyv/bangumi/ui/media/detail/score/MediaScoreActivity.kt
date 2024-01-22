@@ -2,12 +2,16 @@ package com.xiaoyv.bangumi.ui.media.detail.score
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.ActivityMediaScoreBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
+import com.xiaoyv.common.api.BgmApiManager
+import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
@@ -58,6 +62,11 @@ class MediaScoreActivity : BaseViewModelActivity<ActivityMediaScoreBinding, Medi
 
     override fun onCreateLoadingDialog(): UiDialog {
         return AnimeLoadingDialog(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_SCORE, viewModel.mediaId))
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
