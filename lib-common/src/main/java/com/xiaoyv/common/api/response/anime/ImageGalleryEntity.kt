@@ -79,7 +79,7 @@ data class ImageGalleryEntity(
         private val realExt get() = if (haveAlpha) ".png" else ".jpg"
         private val dir get() = if (md5.orEmpty().length > 3) md5.orEmpty().substring(0, 3) else ""
 
-        val url get() = "https://cpreview.anime-pictures.net/$dir/${md5}_bp$realExt.avif"
-        val largeUrl get() = "https://cimages.anime-pictures.net/$dir/$md5$ext"
+        val url get() = "https://opreviews.anime-pictures.net/$dir/${md5}_bp$realExt.avif"
+        val largeUrl get() = "https://oimages.anime-pictures.net/$dir/$md5$ext"
     }
 }

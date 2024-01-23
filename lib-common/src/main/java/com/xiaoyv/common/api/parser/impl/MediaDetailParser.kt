@@ -389,7 +389,11 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
         val relative = MediaDetailEntity.MediaRelative()
         val a = item.select("a")
         relative.titleNative = a.attr("title")
-        relative.titleCn = a.attr("title").parseCount().toString()
+        relative.titleCn = a.attr("title").let {
+            if (it.endsWith("上")) "上"
+            else if (it.endsWith("下")) "下"
+            else it.parseCount().toString()
+        }
         relative.id = a.hrefId()
         relative.cover = a.select("span").attr("style").fetchStyleBackgroundUrl().optImageUrl()
         relative.type = MediaType.TYPE_BOOK

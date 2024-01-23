@@ -72,10 +72,10 @@ dependencies {
     api(libs.vico.views)
 
     api(libs.jsoup)
-    api(libs.avif)
+    api(libs.avif.integration)
     ksp(libs.glide.ksp)
 
-    api("com.huaban:jieba-analysis:1.0.2")
+    api(libs.jieba.analysis)
 
     compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 

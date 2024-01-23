@@ -1,7 +1,6 @@
 package com.xiaoyv.common.config.glide
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
 import com.bumptech.glide.Glide
@@ -11,11 +10,6 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
-import com.tencent.libavif.AvifSequenceDrawable
-import com.tencent.qcloud.image.avif.glide.avif.ByteBufferAvifDecoder
-import com.tencent.qcloud.image.avif.glide.avif.ByteBufferAvifSequenceDecoder
-import com.tencent.qcloud.image.avif.glide.avif.StreamAvifDecoder
-import com.tencent.qcloud.image.avif.glide.avif.StreamAvifSequenceDecoder
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.kts.timeout
 import okhttp3.HttpUrl
@@ -30,7 +24,6 @@ import okio.Source
 import okio.buffer
 import java.io.IOException
 import java.io.InputStream
-import java.nio.ByteBuffer
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -54,25 +47,6 @@ class OkHttpProgressGlideModule : AppGlideModule() {
                     .addNetworkInterceptor(createInterceptor(DispatchingProgressListener()))
                     .build()
             )
-        )
-        registry.prepend(
-            Registry.BUCKET_BITMAP,
-            InputStream::class.java,
-            Bitmap::class.java, StreamAvifDecoder(glide.bitmapPool, glide.arrayPool)
-        )
-        registry.prepend(
-            Registry.BUCKET_BITMAP,
-            ByteBuffer::class.java,
-            Bitmap::class.java, ByteBufferAvifDecoder(glide.bitmapPool)
-        )
-        registry.prepend(
-            InputStream::class.java,
-            AvifSequenceDrawable::class.java,
-            StreamAvifSequenceDecoder(glide.bitmapPool, glide.arrayPool)
-        )
-        registry.prepend(
-            ByteBuffer::class.java,
-            AvifSequenceDrawable::class.java, ByteBufferAvifSequenceDecoder(glide.bitmapPool)
         )
     }
 
