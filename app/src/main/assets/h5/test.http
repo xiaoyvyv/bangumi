@@ -65,7 +65,8 @@ Referer: https://bgm.tv
 
 
 ###
-GET https://frodo.douban.com/api/v2/search/suggestion?q=%E6%B5%B7%E8%B4%BC%E7%8E%8B&apikey=0dad551ec0f84ed02907ff5c42e8ec70&_sig=YIaBWngsMazLHzYtVn50BAbHTkc%3D&_ts=1703084439&count=10
+GET https://frodo.douban.com/api/v2/search/suggestion?q=%E6%B5%B7%E8%B4%BC%E7%8E%8B&
+    apikey=0dad551ec0f84ed02907ff5c42e8ec70&_sig=YIaBWngsMazLHzYtVn50BAbHTkc%3D&_ts=1703084439&count=10
 Sec-Fetch-Dest: empty
 Sec-Fetch-Mode: cors
 Sec-Fetch-Site: cross-site
@@ -100,7 +101,8 @@ Cache-Control: no-cache
 
 ###
 # @no-redirect
-POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&client_id=bgm285565606da641d78
+POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&
+    client_id=bgm285565606da641d78
 Host: bgm.tv
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
@@ -114,7 +116,9 @@ Pragma: no-cache
 Cache-Control: no-cache
 TE: trailers
 
-formhash=275b091c&submit=%E6%8E%88%E6%9D%83&client_id=bgm285565606da641d78
+formhash = 275b091c &
+submit = %E6%8E%88%E6%9D%83 &
+client_id = bgm285565606da641d78
 
 ###
 POST https://bgm.tv/oauth/access_token
@@ -124,11 +128,12 @@ Content-Type: application/x-www-form-urlencoded
 POST https://bgm.tv/oauth/token_status
 Content-Type: application/x-www-form-urlencoded
 
-access_token=0df589bbce14321dd835f6b8fe343b49a5052ad2
+access_token = 0df589bbce14321dd835f6b8fe343b49a5052ad2
 
 ###
 # @no-redirect
-POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&client_id=bgm285565606da641d78
+POST https://bangumi.tv/oauth/authorize?response_type=code&redirect_uri=http://localhost/callback&
+    client_id=bgm285565606da641d78
 Host: bgm.tv
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
@@ -145,23 +150,82 @@ TE: trailers
 
 
 ###
-DELETE https://next.bgm.tv/demo/access-tokens HTTP/2
-Host: next.bgm.tv
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0
-Accept: */*
-Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
-Accept-Encoding: gzip, deflate, br
-Referer: https://next.bgm.tv/demo/access-token
+# @no-redirect
+GET https://bgm.tv/group/topic/391984
+
+
+###
+GET https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+X-GitHub-Api-Version: 2022-11-28
+
+
+###
+PUT https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+X-GitHub-Api-Version: 2022-11-28
 Content-Type: application/json
-Content-Length: 14
-Origin: https://next.bgm.tv
-Connection: keep-alive
-Cookie: chii_sec_id=ldBwUU5O8UaJb6z9a8ELlL40nCqgKy%2F0mmMD6g; _ga_1109JLGMHN=GS1.1.1704080666.36.1.1704080672.0.0.0; _ga=GA1.1.856405988.1702737965; chii_cookietime=2592000;  chii_searchDateLine=0; chii_sid=W0Mw57; chii_auth=q2KML36KRM9mAHJAJo5ETb7cmxU%2FRU%2BwjYLKH%2BMwlV3sgJQI7IiDfFQ%2BLHqstN%2Bd6O6PhkaXtuKihJ99ggcFmD%2Bj7lXsdyjoMPoH
+
+{
+  "message": "更新收藏",
+  "committer": {
+    "name": "Monalisa Octocat",
+    "email": "octocat@github.com"
+  },
+  "content": "5pu05paw5pS26JeP5pu05paw5pS26JeP",
+  "sha": "5b631fb1cd75c9c67ef891b7e3bb4ddb13391eca"
+}
+
+###
+GET https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/Application.musicdb
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+X-GitHub-Api-Version: 2022-11-28
+
+###
+GET https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json h2
+Authorization: Bearer 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
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: 2022-11-28
 Sec-Fetch-Dest: empty
 Sec-Fetch-Mode: cors
+Sec-Fetch-Site: cross-site
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+User-Agent: Mozilla/5.0 (Linux; U; Android 14; 23116PN5BC Build/UKQ1.230804.001)
+Referer: https://api.github.com/repos/xiaoyvyv/Bangumi-Data/contents/data/collection.json
+Host: api.github.com
+Connection: Keep-Alive
+Accept-Encoding: gzip
+
+###
+GET /settings/privacy HTTP/2
+Host: bgm.tv
+User-Agent: 2222
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Referer: https://bgm.tv/settings
+Connection: keep-alive
+Cookie: chii_sid=y66HH9; chii_sec_id=ozHfe3vQEphzAiBKJohTAsKomWtDWgiLiPaLZco; chii_theme=light; _ga_1109JLGMHN=GS1.1.1704791600.1.1.1704792373.0.0.0; _ga=GA1.1.1779898869.1704791601; __utma=1.1779898869.1704791601.1704791601.1704791601.1; __utmb=1.10.10.1704791601; __utmc=1; __utmz=1.1704791601.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); chii_cookietime=0; chii_auth=q2KML36KRM9mAHJAJo5ETb7cmxU%2FRU%2BwjYLKH%2BMwlV3sgJQI7IiDfFQ%2BLHqstN%2Bd6O6PhkaXtuKihJ99ggcFmD%2Bj7lXsdyjoMPoH; __utmt=1
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
 Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
 Pragma: no-cache
 Cache-Control: no-cache
 TE: trailers
 
-{"id":1680691}
+###
+GET https://myanimelist.net/anime.php?cat=anime&q=Sousou+no+Frieren
+
+###
+GET https://myanimelist.net/anime/52991/hover
+
+###
+GET https://bgm.tv/subject/411427/stats

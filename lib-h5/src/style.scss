@@ -176,19 +176,18 @@ img {
 .text_mask {
   color: var(--on-surface-variant-color) !important;
   background: var(--on-surface-variant-color) !important;
-  padding: 2px 4px 4px 4px !important;
+  padding: 2px 4px 2px 4px !important;
   margin: 0 0 !important;
   flex-shrink: 0;
   display: inline-block;
   border-radius: 4px !important;
   overflow: hidden;
   text-decoration: none;
-  vertical-align: text-bottom;
+  vertical-align: middle;
   line-height: 1.25 !important;
-  font-size: 95% !important;
   -webkit-tap-highlight-color: transparent;
   transition: color ease .2s;
-  transform: translateY(4px);
+  transform: translateY(-2px);
 
   * {
     color: var(--on-surface-variant-color) !important;
@@ -216,7 +215,7 @@ a {
   outline: none;
   color: var(--primary-color) !important;
   background: var(--surface-container-color) !important;
-  padding: 2px 4px 4px 4px !important;
+  padding: 2px 4px 2px 4px !important;
   margin: 0 0 !important;
   flex-shrink: 0;
   display: inline-block !important;
@@ -227,7 +226,7 @@ a {
   -webkit-tap-highlight-color: transparent;
   vertical-align: middle;
   line-height: 1.25;
-  font-size: 95%;
+  font-size: 14px !important;
   transform: translateY(-2px);
 }
 

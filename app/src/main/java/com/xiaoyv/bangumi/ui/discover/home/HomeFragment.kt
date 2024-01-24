@@ -35,7 +35,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
             touchedListener = touchedListener,
             onClickFeature = {
                 when (it.id) {
-                    FeatureType.TYPE_SEARCH -> RouteHelper.jumpSearch()
+                    FeatureType.TYPE_SYNCER -> RouteHelper.jumpSyncer()
                     FeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
                     FeatureType.TYPE_MAGI -> RouteHelper.jumpMagi()
                     FeatureType.TYPE_ANIME_PICTURES -> RouteHelper.jumpAnimePictures()

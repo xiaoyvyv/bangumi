@@ -130,7 +130,6 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
         )
     }
 
-
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<AnimeMagnetEntity.Resource, *> {
         return MagnetAdapter { viewModel.keyword }
     }

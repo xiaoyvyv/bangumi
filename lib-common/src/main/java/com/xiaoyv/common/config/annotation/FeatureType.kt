@@ -13,7 +13,7 @@ import androidx.annotation.StringDef
     FeatureType.TYPE_DEFAULT,
     FeatureType.TYPE_DOLLARS,
     FeatureType.TYPE_MAGI,
-    FeatureType.TYPE_SEARCH,
+    FeatureType.TYPE_SYNCER,
     FeatureType.TYPE_ANIME_PICTURES,
     FeatureType.TYPE_EMAIL,
     FeatureType.TYPE_ALMANAC,
@@ -36,7 +36,7 @@ annotation class FeatureType {
         const val TYPE_DOLLARS = "dollars"
         const val TYPE_MAGI = "magi"
         const val TYPE_ANIME_PICTURES = "anime-pictures"
-        const val TYPE_SEARCH = "search"
+        const val TYPE_SYNCER = "syncer"
         const val TYPE_RANK = "rank"
         const val TYPE_PROCESS = "process"
         const val TYPE_EMAIL = "email"
@@ -55,7 +55,7 @@ annotation class FeatureType {
                 TYPE_UNSET -> "未设置"
                 TYPE_DOLLARS -> "Dollars"
                 TYPE_MAGI -> "Magi"
-                TYPE_SEARCH -> "搜索"
+                TYPE_SYNCER -> "豆哔同步"
                 TYPE_ANIME_PICTURES -> "图片"
                 TYPE_EMAIL -> "邮箱"
                 TYPE_ALMANAC -> "年鉴"

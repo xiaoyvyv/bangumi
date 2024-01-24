@@ -77,6 +77,13 @@ dependencies {
 
     api(libs.jieba.analysis)
 
+    //noinspection UseTomlInstead
+    api(platform("com.google.firebase:firebase-bom:32.7.1"))
+    //noinspection UseTomlInstead
+    api("com.google.firebase:firebase-crashlytics-ktx")
+    api("com.google.firebase:firebase-analytics-ktx")
+
+
     compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 
     testImplementation(libs.junit)

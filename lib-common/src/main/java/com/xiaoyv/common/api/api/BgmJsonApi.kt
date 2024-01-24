@@ -11,6 +11,7 @@ import com.xiaoyv.common.api.response.GithubLatestEntity
 import com.xiaoyv.common.api.response.GithubPutEntity
 import com.xiaoyv.common.api.response.SearchApiIndexEntity
 import com.xiaoyv.common.api.response.SearchApiTopicEntity
+import com.xiaoyv.common.api.response.anime.AnimeBilibiliEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetTypeEntity
 import com.xiaoyv.common.api.response.anime.AnimeMalSearchEntity
@@ -144,6 +145,16 @@ interface BgmJsonApi {
 
     @GET("https://api.anitabi.cn/bangumi/{mediaId}/lite")
     suspend fun queryMediaTour(@Path("mediaId") mediaId: String): AnimeTourEntity
+
+    @GET("https://api.bilibili.com/x/space/bangumi/follow/list")
+    suspend fun queryBilibiliUserAnime(
+        @Query("vmid") uid: String,
+        @Query("type") type: Int = 1,
+        @Query("follow_status") followStatus: Int = 0,
+        @Query("pn") pageNumber: Int = 1,
+        @Query("ps") pageSize: Int = 30,
+        @Query("ts") ts: Long = System.currentTimeMillis(),
+    ): AnimeBilibiliEntity
 
     @FormUrlEncoded
     @POST("http://api.fanyi.baidu.com/api/trans/vip/translate")

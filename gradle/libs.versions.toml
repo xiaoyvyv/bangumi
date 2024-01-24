@@ -2,6 +2,7 @@
 agp = "8.4.0-alpha03"
 blueprint = "1.1.48"
 coreSplashscreen = "1.0.1"
+firebaseCrashlyticsGradle = "2.9.9"
 fragmentKtx = "1.6.2"
 jiebaAnalysis = "1.0.2"
 jsoup = "1.17.2"
@@ -44,6 +45,7 @@ androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version
 avif-integration = { module = "com.github.bumptech.glide:avif-integration", version.ref = "glideVersion" }
 blueprint = { module = "io.github.xiaoyvyv:blueprint", version.ref = "blueprint" }
 blueprint-floater = { module = "io.github.xiaoyvyv:floater", version.ref = "blueprint" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glideVersion" }
 jieba-analysis = { module = "com.huaban:jieba-analysis", version.ref = "jiebaAnalysis" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }

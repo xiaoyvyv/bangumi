@@ -146,7 +146,7 @@ onMounted(() => {
 
     <div class="divider" v-if="topic.content"/>
 
-    <comment-view target="#topic" :comments="comments" :sort="commentSort"/>
+    <comment-view target="#topic" :comments="comments" :sort="commentSort" :master-id="topic.userId"/>
 
     <infinite-loading class="loading"
                       target="#topic"

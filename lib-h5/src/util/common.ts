@@ -152,12 +152,8 @@ const optReplyContent = (userName: string, replyContent: string): string => {
  * @param text
  */
 const optText = (text: string | null | undefined) => {
-    const content = (text || '').trim()
-    const space = "\u3000\u3000";
-    return space + content
+    return (text || '').trim()
         .replace(/&nbsp;/g, " ").trim()
-    // .replace(/(\r\n|\n|\r)\s+/g, "$1")
-    // .replace(/(\r\n|\n|\r)/g, `$1${space}`);
 }
 
 async function delay(ms: number): Promise<void> {

@@ -27,10 +27,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.xiaoyv.bangumi" />
+                  <option name="mobileSdkAppId" value="1:1004152641711:android:2fbd8bce599a3425bddc5a" />
+                  <option name="projectId" value="bangumi-android" />
+                  <option name="projectNumber" value="1004152641711" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

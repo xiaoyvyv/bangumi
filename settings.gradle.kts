@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-
 pluginManagement {
     repositories {
         google {
@@ -19,6 +18,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
+        google()
         maven { url = uri("https://jitpack.io") }
         maven { url = uri("https://maven.aliyun.com/repository/public") }
         maven { url = uri("https://maven.aliyun.com/repository/google") }
@@ -29,7 +29,6 @@ dependencyResolutionManagement {
             }
             url = uri("https://packages.aliyun.com/maven/repository/2090598-release-Z0kMEw")
         }
-        google()
         maven {
             url = uri("https://s01.oss.sonatype.org/content/repositories/releases")
         }

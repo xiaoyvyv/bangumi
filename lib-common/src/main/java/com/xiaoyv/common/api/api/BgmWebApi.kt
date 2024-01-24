@@ -49,6 +49,8 @@ import retrofit2.http.QueryMap
  * @since 11/24/23
  */
 interface BgmWebApi {
+    @GET("{url}")
+    suspend fun qeuryUrl(@Path("url", encoded = true) url: String): Response<ResponseBody>
 
     @GET("/login")
     suspend fun queryLoginPage(): Document

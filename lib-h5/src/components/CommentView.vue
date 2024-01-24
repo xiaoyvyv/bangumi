@@ -22,6 +22,11 @@ const props = defineProps({
     type: String,
     required: true
   },
+  masterId: {
+    type: String,
+    required: false,
+    default: ""
+  },
 });
 
 /**
@@ -138,7 +143,7 @@ const onClickNewComment = (event: Event) => {
                   @click.stop="onClickUser(comment)"/>
       <div class="comment-content">
         <div class="info" @click.stop="onClickReplyComment($event, comment, null)">
-          <div class="user-name" @click.stop="onClickUser(comment)">
+          <div class="user-name" :class="{'master': masterId === comment.userId}" @click.stop="onClickUser(comment)">
             {{ (comment as CommentTreeEntity).userName }}
           </div>
           <div class="time">{{ comment.time }}<span class="floor">{{ comment.floor }}</span></div>
@@ -159,7 +164,7 @@ const onClickNewComment = (event: Event) => {
                       @click.stop="onClickUser(subComment)"/>
           <div class="comment-content" @click.stop="onClickReplyComment($event, comment, subComment)">
             <div class="info">
-              <div class="user-name sub" @click.stop="onClickUser(subComment)">
+              <div class="user-name sub" :class="{'master': masterId === subComment.userId}" @click.stop="onClickUser(subComment)">
                 {{ (subComment as CommentTreeEntity).userName }}
               </div>
               <div class="time">{{ subComment.time }}<span class="floor">{{ subComment.floor }}</span></div>
@@ -248,6 +253,11 @@ const onClickNewComment = (event: Event) => {
 
           &.sub {
             max-width: 35%;
+          }
+
+          &.master {
+            color: var(--primary-color);
+            font-weight: bold;
           }
         }
 

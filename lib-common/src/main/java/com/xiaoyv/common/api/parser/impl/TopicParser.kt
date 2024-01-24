@@ -54,9 +54,10 @@ fun Element.parserTopic(topicId: String): TopicDetailEntity {
     }
 
     select(".postTopic").apply {
-        entity.time = select(".re_info small")
-            .firstOrNull()?.textNodes()?.firstOrNull()?.text()
-            .orEmpty().trim()
+        // #1 - 2024-1-24 12:10
+        entity.time = select(".re_info .action")
+            .firstOrNull()?.text().orEmpty()
+            .substringAfter("-").trim()
 
         entity.userId = select("a.avatar").hrefId()
         entity.userAvatar = select("a.avatar > span").attr("style")
