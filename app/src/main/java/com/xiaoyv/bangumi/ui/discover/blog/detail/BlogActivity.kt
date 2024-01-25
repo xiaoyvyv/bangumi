@@ -39,6 +39,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.blogId = bundle.getString(NavKey.KEY_STRING).orEmpty()
+        viewModel.anchorCommentId = bundle.getString(NavKey.KEY_STRING_SECOND)
 
         // NewIntent 时刷新
         if (isNewIntent) {

@@ -14,7 +14,6 @@ import com.xiaoyv.common.api.exception.NeedConfigException
 import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.helper.ConfigHelper
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
@@ -60,45 +59,6 @@ class SummaryViewModel : BaseViewModel() {
                 summary.map { it.parseHtml(true) }
             }
         }
-    }
-
-    fun doTranslate() {
-        // Create an English-German translator:
-        val options = TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.JAPANESE)
-            .setTargetLanguage(TranslateLanguage.CHINESE)
-            .build()
-        val englishGermanTranslator = Translation.getClient(options)
-
-        var conditions = DownloadConditions.Builder()
-            .requireWifi()
-            .build()
-        englishGermanTranslator.downloadModelIfNeeded(conditions)
-            .addOnSuccessListener {
-                debugLog { "模型下载完成" }
-            }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
-            }
-        englishGermanTranslator.translate(
-            "日本各地に、突如として謎の門が出現。\n" +
-                    "その先の異空間『魔都』には女性にのみ食べた者に特異な能力をもたらす桃が存在し、『醜鬼』と呼ばれる怪物を退治するため、女性兵による戦闘集団『魔防隊』が組織された。\n" +
-                    "\n" +
-                    "活躍できる場所を求めていた男子高校生・和倉優希はある日、魔都へと迷い込むと醜鬼に襲われてしまう。\n" +
-                    "そこへ駆けつけたのは魔防隊七番組の美しき組長・羽前京香。\n" +
-                    "京香の能力で奴隷（スレイブ）と化した優希は力を開花させ、醜鬼を見事打ち倒し、奴隷 兼 魔防隊の管理人として醜鬼と戦うことに。\n" +
-                    "\n" +
-                    "“飼われる少年”のバトルファンタジー、ここに開幕！"
-        )
-            .addOnSuccessListener { translatedText ->
-                debugLog { translatedText }
-                // Translation successful.
-            }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
-                // Error.
-                // ...
-            }
     }
 
     fun showTranslate() {

@@ -9,6 +9,7 @@ export interface BlogDetailEntity {
     userName: string;
     userId: string;
     content: string;
+    anchorCommentId: string;
     related: SampleRelateEntity;
     tags: MediaTag[];
     comments: CommentTreeEntity[];

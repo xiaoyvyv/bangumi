@@ -30,6 +30,7 @@ class TopicViewModel : BaseViewModel() {
 
     @TopicType
     internal var topicType: String = TopicType.TYPE_UNKNOWN
+    internal var anchorCommentId: String? = null
 
     internal val onTopicDetailLiveData = MutableLiveData<TopicDetailEntity?>()
     internal val onDeleteResult = MutableLiveData<Boolean>()
@@ -57,21 +58,22 @@ class TopicViewModel : BaseViewModel() {
                 it.printStackTrace()
             },
             block = {
-                val list = withContext(Dispatchers.IO) {
+                val entity = withContext(Dispatchers.IO) {
                     when (topicType) {
-                        // 目录单独cli
+                        // 目录单独处理
                         TopicType.TYPE_INDEX -> BgmApiManager.bgmWebApi.queryIndexComment(topicId)
-                            .parserTopicIndex(topicId)
+                            .parserTopicIndex(topicId).anchoredComment()
                         // 章节类型话题
                         TopicType.TYPE_EP -> BgmApiManager.bgmWebApi.queryEpDetail(topicId)
-                            .parserTopicEp(topicId)
+                            .parserTopicEp(topicId).anchoredComment()
                         // 其它类型话题
                         else -> BgmApiManager.bgmWebApi.queryTopicDetail(topicId, topicType)
-                            .parserTopic(topicId)
+                            .parserTopic(topicId).anchoredComment()
                     }
                 }
+                entity.anchorCommentId = anchorCommentId.orEmpty()
                 isCollected.value = CollectionHelper.isCollected(topicId, CollectionType.TYPE_TOPIC)
-                onTopicDetailLiveData.value = list
+                onTopicDetailLiveData.value = entity
             }
         )
     }
@@ -119,5 +121,25 @@ class TopicViewModel : BaseViewModel() {
                 isCollected.value = true
             }
         }
+    }
+
+    private fun TopicDetailEntity.anchoredComment(): TopicDetailEntity {
+        if (anchorCommentId.isNullOrBlank()) return this
+        for (i in comments.indices) {
+            val comment = comments[i]
+            if (comment.id == anchorCommentId) {
+                comment.anchored = true
+                break
+            }
+
+            for (j in comment.topicSubReply.indices) {
+                val subComment = comment.topicSubReply[j]
+                if (subComment.id == anchorCommentId) {
+                    subComment.anchored = true
+                    break
+                }
+            }
+        }
+        return this
     }
 }

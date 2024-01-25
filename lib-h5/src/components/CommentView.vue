@@ -27,6 +27,11 @@ const props = defineProps({
     required: false,
     default: ""
   },
+  anchorId: {
+    type: String,
+    required: false,
+    default: ""
+  },
 });
 
 /**
@@ -136,15 +141,17 @@ const onClickNewComment = (event: Event) => {
       <div class="write" @click.stop="onClickNewComment($event)">写留言</div>
     </div>
 
-    <div class="comment-item" v-for="comment in comments" :key="comment.id">
+    <div class="comment-item" v-for="comment in comments" :key="comment.id"
+         :id="'post_' + comment.id">
       <image-view class="avatar"
                   width="36px" height="36px"
                   :src="comment.userAvatar"
                   @click.stop="onClickUser(comment)"/>
       <div class="comment-content">
         <div class="info" @click.stop="onClickReplyComment($event, comment, null)">
-          <div class="user-name" :class="{'master': masterId === comment.userId}" @click.stop="onClickUser(comment)">
-            {{ (comment as CommentTreeEntity).userName }}
+          <div class="user-name" @click.stop="onClickUser(comment)">
+            <span>{{ (comment as CommentTreeEntity).userName }}</span>
+            <span v-if="masterId === comment.userId" class="master">楼主</span>
           </div>
           <div class="time">{{ comment.time }}<span class="floor">{{ comment.floor }}</span></div>
           <div style="flex: 1"/>
@@ -153,19 +160,28 @@ const onClickNewComment = (event: Event) => {
                alt="action"
                @click.stop="onClickCommentAction($event,comment)">
         </div>
-        <div class="topic-html" v-html="comment.replyContent" @click.stop="onClickReplyComment($event, comment, null)"/>
+
+        <div class="topic-html-wrap">
+          <div class="topic-html" v-html="comment.replyContent"
+               @click.stop="onClickReplyComment($event, comment, null)"/>
+          <div class="anchor" v-if="comment.id === anchorId"/>
+        </div>
 
         <emoji-view :emojis="comment.emojis" :comment="comment" style="margin-top: 16px"/>
 
         <!-- 嵌套条目 -->
-        <div class="comment-item sub" v-for="subComment in (comment.topicSubReply || [])" :key="subComment.id">
+        <div class="comment-item sub" v-for="subComment in (comment.topicSubReply || [])" :key="subComment.id"
+             :class="{'anchor': subComment.id === anchorId}"
+             :id="'post_' + subComment.id">
           <image-view class="avatar" height="24px" width="24px"
                       :src="subComment.userAvatar"
                       @click.stop="onClickUser(subComment)"/>
           <div class="comment-content" @click.stop="onClickReplyComment($event, comment, subComment)">
             <div class="info">
-              <div class="user-name sub" :class="{'master': masterId === subComment.userId}" @click.stop="onClickUser(subComment)">
-                {{ (subComment as CommentTreeEntity).userName }}
+              <div class="user-name sub"
+                   @click.stop="onClickUser(subComment)">
+                <span>{{ (subComment as CommentTreeEntity).userName }}</span>
+                <span v-if="masterId === subComment.userId" class="master">楼主</span>
               </div>
               <div class="time">{{ subComment.time }}<span class="floor">{{ subComment.floor }}</span></div>
               <div style="flex: 1"/>
@@ -174,7 +190,10 @@ const onClickNewComment = (event: Event) => {
                    alt="action"
                    @click.stop="onClickCommentAction($event,subComment)">
             </div>
-            <div class="topic-html" v-html="subComment.replyContent"/>
+            <div class="topic-html-wrap">
+              <div class="topic-html" v-html="subComment.replyContent"/>
+              <div class="anchor" v-if="subComment.id === anchorId"/>
+            </div>
             <emoji-view :emojis="subComment.emojis" :comment="comment" style="margin-top: 16px"/>
           </div>
         </div>
@@ -250,14 +269,23 @@ const onClickNewComment = (event: Event) => {
           overflow: hidden;
           text-overflow: ellipsis;
           max-width: 50%;
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: center;
+          align-items: center;
 
           &.sub {
             max-width: 35%;
           }
 
-          &.master {
-            color: var(--primary-color);
+          .master {
+            color: var(--on-primary-color);
+            border-radius: 6px;
+            background: var(--primary-color);
             font-weight: bold;
+            font-size: 8px;
+            padding: 2px 4px;
+            margin-left: 4px;
           }
         }
 
@@ -285,15 +313,31 @@ const onClickNewComment = (event: Event) => {
         }
       }
 
-      .topic-html {
+      .topic-html-wrap {
         width: 100%;
-        max-width: 100%;
-        line-height: 1.5;
-        word-break: break-all;
-        overflow: hidden !important;
+        position: relative;
 
-        img {
-          min-width: 120px;
+        .topic-html {
+          width: 100%;
+          max-width: 100%;
+          line-height: 1.5;
+          word-break: break-all;
+          overflow: hidden !important;
+
+          img {
+            min-width: 120px;
+          }
+        }
+
+        .anchor {
+          position: absolute;
+          top: -3px;
+          left: -6px;
+          right: -6px;
+          bottom: -3px;
+          background: var(--primary-color);
+          opacity: 0.1;
+          border-radius: 6px;
         }
       }
 

@@ -317,6 +317,19 @@ const replyCommentToTreeComment = (
     return target;
 };
 
+/**
+ * 滑动到指定评论处
+ *
+ * @param targetId
+ */
+const scrollToTargetComment = (targetId: string) => {
+    if (targetId.length === 0) return;
+    const element = document.querySelector("#post_" + targetId);
+    if (element != null) {
+        element.scrollIntoView();
+    }
+};
+
 
 export default {
     optContentJs: optContentJs,
@@ -325,5 +338,6 @@ export default {
     optReplyContent: optReplyContent,
     scrollIntoView: scrollIntoView,
     delay: delay,
-    initComment: initComment
+    initComment: initComment,
+    scrollToTargetComment: scrollToTargetComment,
 }

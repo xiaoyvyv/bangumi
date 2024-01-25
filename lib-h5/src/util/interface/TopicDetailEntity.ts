@@ -13,6 +13,7 @@ export interface TopicDetailEntity {
     userId: string;
     userSign: string;
     content: string;
+    anchorCommentId: string;
     related: SampleRelateEntity;
     comments: CommentTreeEntity[];
     replyForm: CommentFormEntity;

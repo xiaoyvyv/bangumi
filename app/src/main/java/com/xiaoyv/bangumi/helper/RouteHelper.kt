@@ -76,7 +76,6 @@ import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
-import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.kts.showToastCompat
 
@@ -96,6 +95,8 @@ object RouteHelper {
             .substringBefore("#")
             .substringBefore("?")
 
+        val targetComment = titleLink.substringAfterLast("#").parseCount().toString()
+
         debugLog { "Handle Url: $titleLink" }
 
         if (URLUtil.isNetworkUrl(titleLink) && !titleLink.contains("bgm") && !titleLink.contains("bangumi")) {
@@ -109,34 +110,34 @@ object RouteHelper {
                 when {
                     // 虚拟人物
                     titleLink.contains(TopicType.TYPE_CRT) -> {
-                        jumpTopicDetail(id, TopicType.TYPE_CRT)
+                        jumpTopicDetail(id, TopicType.TYPE_CRT, targetComment)
                         return true
                     }
                     // 章节
                     titleLink.contains(TopicType.TYPE_EP) -> {
-                        jumpTopicDetail(id, TopicType.TYPE_EP)
+                        jumpTopicDetail(id, TopicType.TYPE_EP, targetComment)
                         return true
                     }
                     // 小组
                     titleLink.contains(TopicType.TYPE_GROUP) -> {
-                        jumpTopicDetail(id, TopicType.TYPE_GROUP)
+                        jumpTopicDetail(id, TopicType.TYPE_GROUP, targetComment)
                         return true
                     }
                     // 现实人物
                     titleLink.contains(TopicType.TYPE_PERSON) -> {
-                        jumpTopicDetail(id, TopicType.TYPE_PERSON)
+                        jumpTopicDetail(id, TopicType.TYPE_PERSON, targetComment)
                         return true
                     }
                     // 条目
                     titleLink.contains(TopicType.TYPE_SUBJECT) -> {
-                        jumpTopicDetail(id, TopicType.TYPE_SUBJECT)
+                        jumpTopicDetail(id, TopicType.TYPE_SUBJECT, targetComment)
                         return true
                     }
                 }
             }
             // 日志
             titleLink.contains(BgmPathType.TYPE_BLOG) -> {
-                jumpBlogDetail(id)
+                jumpBlogDetail(id, targetComment)
                 return true
             }
             // 标签
@@ -220,8 +221,13 @@ object RouteHelper {
         MediaDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to mediaId))
     }
 
-    fun jumpBlogDetail(blogId: String) {
-        BlogActivity::class.open(bundleOf(NavKey.KEY_STRING to blogId))
+    fun jumpBlogDetail(blogId: String, anchorComment: String? = null) {
+        BlogActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to blogId,
+                NavKey.KEY_STRING_SECOND to anchorComment
+            )
+        )
     }
 
     fun jumpPreviewImage(showImage: String, totalImage: List<String> = emptyList()) {
@@ -289,11 +295,16 @@ object RouteHelper {
         )
     }
 
-    fun jumpTopicDetail(topicId: String, @TopicType topicType: String) {
+    fun jumpTopicDetail(
+        topicId: String,
+        @TopicType topicType: String,
+        anchorComment: String? = null,
+    ) {
         TopicActivity::class.open(
             bundleOf(
                 NavKey.KEY_STRING to topicId,
-                NavKey.KEY_STRING_SECOND to topicType
+                NavKey.KEY_STRING_SECOND to topicType,
+                NavKey.KEY_STRING_THIRD to anchorComment
             )
         )
     }

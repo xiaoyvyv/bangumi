@@ -30,6 +30,9 @@ class TopicView(override val webView: UiWebView) : WebBase(webView) {
         webView.addJavascriptInterface(this, "android")
     }
 
+    /**
+     * 加载话题详情
+     */
     suspend fun loadTopicDetail(detailEntity: TopicDetailEntity?) {
         val entity = detailEntity ?: return
         commentPagination.refreshComments(entity.comments)

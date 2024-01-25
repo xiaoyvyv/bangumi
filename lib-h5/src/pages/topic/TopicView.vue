@@ -17,7 +17,7 @@ const topicContentRef = ref<HTMLDivElement>();
 
 // 评论相关
 const loadingIdentifier = ref(new Date().getDate());
-const commentPageSize = 10;
+let commentPageSize = 10;
 const commentPage = ref(1);
 const commentSort = ref("default");
 const comments = reactive<CommentTreeEntity[]>([]);
@@ -27,9 +27,16 @@ const topicHandler = {
   loadTopicDetail: async (obj: TopicDetailEntity) => {
     topic.value = obj;
 
+    // 有标记评论情况下，一次性加载全部
+    if (obj.anchorCommentId.length > 0) {
+      commentPageSize = 10000;
+      await loadComments(null);
+    }
+
     // Html 交互处理
     await nextTick();
     common.optContentJs(topicContentRef.value);
+    common.scrollToTargetComment(obj.anchorCommentId);
   }
 }
 
@@ -38,7 +45,7 @@ const topicHandler = {
  *
  * @param $state
  */
-const loadComments = async ($state: any) => {
+const loadComments = async ($state: any | null) => {
   const pageCommentSort = window.android.onCommentSort(commentSort.value);
   const pageCommentJson = window.android.onLoadComments(commentPage.value, commentPageSize, pageCommentSort);
   const pageComments = JSON.parse(pageCommentJson);
@@ -46,16 +53,15 @@ const loadComments = async ($state: any) => {
   commentSort.value = pageCommentSort;
 
   if (pageComments.length == 0) {
-    $state.complete();
+    $state?.complete();
   } else {
-    await common.delay(200);
     comments.push(...pageComments);
     commentPage.value++;
     await nextTick();
     if (pageComments.length < commentPageSize) {
-      $state.complete();
+      $state?.complete();
     } else {
-      $state.loaded();
+      $state?.loaded();
     }
   }
 }
@@ -146,7 +152,11 @@ onMounted(() => {
 
     <div class="divider" v-if="topic.content"/>
 
-    <comment-view target="#topic" :comments="comments" :sort="commentSort" :master-id="topic.userId"/>
+    <comment-view target="#topic"
+                  :comments="comments"
+                  :sort="commentSort"
+                  :master-id="topic.userId"
+                  :anchor-id="topic.anchorCommentId"/>
 
     <infinite-loading class="loading"
                       target="#topic"

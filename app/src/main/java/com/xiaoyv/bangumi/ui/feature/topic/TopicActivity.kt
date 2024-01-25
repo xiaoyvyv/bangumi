@@ -39,6 +39,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.topicId = bundle.getString(NavKey.KEY_STRING).orEmpty()
         viewModel.topicType = bundle.getString(NavKey.KEY_STRING_SECOND).orEmpty()
+        viewModel.anchorCommentId = bundle.getString(NavKey.KEY_STRING_THIRD)
     }
 
     override fun initView() {

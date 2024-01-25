@@ -215,7 +215,7 @@ a {
   outline: none;
   color: var(--primary-color) !important;
   background: var(--surface-container-color) !important;
-  padding: 2px 4px 2px 4px !important;
+  padding: 3px 4px !important;
   margin: 0 0 !important;
   flex-shrink: 0;
   display: inline-block !important;
@@ -226,7 +226,6 @@ a {
   -webkit-tap-highlight-color: transparent;
   vertical-align: middle;
   line-height: 1.25;
-  font-size: 14px !important;
   transform: translateY(-2px);
 }
 

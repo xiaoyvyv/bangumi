@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
  */
 class BlogViewModel : BaseViewModel() {
     internal var blogId: String = ""
+    internal var anchorCommentId: String? = null
 
     internal val onBlogDetailLiveData = MutableLiveData<BlogDetailEntity?>()
     internal val onDeleteResult = MutableLiveData<Boolean>()
@@ -55,7 +56,9 @@ class BlogViewModel : BaseViewModel() {
                 isCollected.value = CollectionHelper.isCollected(blogId, CollectionType.TYPE_BLOG)
 
                 onBlogDetailLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmWebApi.queryBlogDetail(blogId).parserBlogDetail(blogId)
+                    BgmApiManager.bgmWebApi.queryBlogDetail(blogId)
+                        .parserBlogDetail(blogId)
+                        .also { it.anchorCommentId = anchorCommentId.orEmpty() }
                 }
             }
         )

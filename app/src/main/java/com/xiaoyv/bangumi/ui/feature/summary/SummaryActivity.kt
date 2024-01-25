@@ -37,6 +37,10 @@ class SummaryActivity : BaseViewModelActivity<ActivitySummaryBinding, SummaryVie
         viewModel.showOriginal()
     }
 
+    override fun initListener() {
+
+    }
+
     override fun LifecycleOwner.initViewObserver() {
         binding.stateView.initObserver(this, viewModel.loadingViewState)
 
@@ -74,10 +78,6 @@ class SummaryActivity : BaseViewModelActivity<ActivitySummaryBinding, SummaryVie
                 }
             )
         }
-    }
-
-    override fun initListener() {
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -26,6 +26,7 @@ data class TopicDetailEntity(
     @SerializedName("mineId") var mineId: String = "",
     @SerializedName("userSign") var userSign: String = "",
     @SerializedName("content") var content: String = "",
+    @SerializedName("anchorCommentId") var anchorCommentId: String = "",
     @SerializedName("related") var related: SampleRelatedEntity = SampleRelatedEntity(),
     @SerializedName("comments") var comments: List<CommentTreeEntity> = emptyList(),
     @SerializedName("replyForm") var replyForm: CommentFormEntity = CommentFormEntity(),

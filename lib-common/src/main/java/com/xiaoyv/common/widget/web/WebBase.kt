@@ -316,6 +316,10 @@ abstract class WebBase(open val webView: UiWebView) {
     }
 
     suspend fun callJs(js: String): String {
+        if (WebConfig.DEBUG) {
+            debugLog { js }
+        }
+
         waitMounted()
         return suspendCancellableCoroutine { emit ->
             webView.evaluateJavascript(js) {
