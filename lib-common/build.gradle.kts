@@ -83,6 +83,7 @@ dependencies {
     api("com.google.firebase:firebase-crashlytics-ktx")
     api("com.google.firebase:firebase-analytics-ktx")
 
+    api("com.google.mlkit:translate:17.0.2")
 
     compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 

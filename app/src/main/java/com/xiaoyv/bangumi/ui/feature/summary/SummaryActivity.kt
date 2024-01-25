@@ -86,7 +86,7 @@ class SummaryActivity : BaseViewModelActivity<ActivitySummaryBinding, SummaryVie
                 .setIcon(CommonDrawable.ic_translate)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
-                    viewModel.shoTranslate()
+                    viewModel.showTranslate()
                     true
                 }
         } else {

@@ -44,6 +44,7 @@ import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
 import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.tab.TabConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.translate.TranslateConfigActivity
+import com.xiaoyv.bangumi.ui.feature.setting.translate.model.TranslateModelActivity
 import com.xiaoyv.bangumi.ui.feature.setting.ui.UiConfigActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
@@ -75,6 +76,7 @@ import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.kts.showToastCompat
 
@@ -559,5 +561,9 @@ object RouteHelper {
 
     fun jumpSyncer() {
         SyncerActivity::class.open()
+    }
+
+    fun jumpTranslateModel() {
+        TranslateModelActivity::class.open()
     }
 }

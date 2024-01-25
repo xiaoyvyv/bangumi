@@ -47,6 +47,7 @@ object ConfigHelper {
     private const val KEY_TIMELINE_TAB_REMEMBER = "timeline-tab-remember"
     private const val KEY_FORCE_BROWSER = "force-browser"
     private const val KEY_IMAGE_SEARCH_AP = "image-search-ap"
+    private const val KEY_TRANSLATE = "translate"
 
     const val KEY_RAKUEN_DEFAULT_TAB = "rakuen-default-tab"
     const val KEY_RAKUEN_DEFAULT_GROUP = "rakuen-default-group"
@@ -68,6 +69,13 @@ object ConfigHelper {
         return SPStaticUtils.getString(KEY_BAIDU_TRANSLATE_APP_ID).orEmpty() to
                 SPStaticUtils.getString(KEY_BAIDU_TRANSLATE_APP_SECRET).orEmpty()
     }
+
+    /**
+     * 强制百度翻译
+     */
+    var translateType: Int
+        get() = SPStaticUtils.getInt(KEY_TRANSLATE, 0)
+        set(value) = SPStaticUtils.put(KEY_TRANSLATE, value)
 
     /**
      * 首页默认TAB

@@ -189,6 +189,12 @@ interface BgmJsonApi {
         @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
     ): DouBanPhotoEntity
 
+    @GET("https://frodo.douban.com/api/v2/user/{userId}/interests")
+    suspend fun queryDouBanUserInterest(
+        @Path("userId") userId: String,
+        @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
+    ): Response<ResponseBody>
+
     /**
      * Anime-Pictures
      */
