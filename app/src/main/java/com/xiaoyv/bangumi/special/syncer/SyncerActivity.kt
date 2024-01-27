@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.ActivitySyncerBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -63,6 +64,7 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
 
         binding.btnStart.setOnFastLimitClickListener {
             viewModel.handleId(binding.etB.text.toString().trim())
+            KeyboardUtils.hideSoftInput(this)
         }
     }
 
@@ -155,7 +157,7 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "链接不支持短链，若只有短链请在浏览器打开短链后，复制原始带ID的链接。\n\nB站追番同步，请在APP设置内暂时公开追番隐私权限。\n\n权限配置路径：设置->安全隐私->空间隐私设置->公开我的追番",
+                    message = "查看短链ID，请在浏览器打开短链后，复制链接中的原始ID。\n\nB站追番同步，请在APP设置内暂时公开追番隐私权限。\n\n哔哩哔哩权限配置路径：设置->安全隐私->空间隐私设置->公开我的追番",
                     cancelText = null
                 )
                 true
