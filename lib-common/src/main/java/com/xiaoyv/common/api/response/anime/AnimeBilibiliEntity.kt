@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.response.anime
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.config.annotation.BilibiliInterestType
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -44,7 +45,8 @@ data class AnimeBilibiliEntity(
         @SerializedName("first_ep")
         var firstEp: Int = 0,
         @SerializedName("follow_status")
-        var followStatus: Int = 0,
+        @BilibiliInterestType
+        var followStatus: Int = BilibiliInterestType.TYPE_ALL,
         @SerializedName("formal_ep_count")
         var formalEpCount: Int = 0,
         @SerializedName("horizontal_cover_16_10")

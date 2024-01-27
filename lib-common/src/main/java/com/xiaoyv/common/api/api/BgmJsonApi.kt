@@ -3,6 +3,8 @@ package com.xiaoyv.common.api.api
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EpCollectParam
 import com.xiaoyv.common.api.request.GithubUpdateParam
+import com.xiaoyv.common.api.request.SubjectCollectParam
+import com.xiaoyv.common.api.request.SyncNameParam
 import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
@@ -16,21 +18,28 @@ import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
 import com.xiaoyv.common.api.response.anime.AnimeMagnetTypeEntity
 import com.xiaoyv.common.api.response.anime.AnimeMalSearchEntity
 import com.xiaoyv.common.api.response.anime.AnimeSourceEntity
+import com.xiaoyv.common.api.response.anime.AnimeSyncEntity
 import com.xiaoyv.common.api.response.anime.AnimeTourEntity
 import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
 import com.xiaoyv.common.api.response.anime.ImageBooruEntity
 import com.xiaoyv.common.api.response.anime.ImageGalleryEntity
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.api.response.api.ApiCharacterEntity
+import com.xiaoyv.common.api.response.api.ApiCollectionEntity
 import com.xiaoyv.common.api.response.api.ApiEpisodeEntity
 import com.xiaoyv.common.api.response.api.ApiUserEntity
 import com.xiaoyv.common.api.response.api.ApiUserEpEntity
 import com.xiaoyv.common.api.response.base.BaseListResponse
 import com.xiaoyv.common.api.response.base.BasePage
 import com.xiaoyv.common.api.response.base.BaseResponse
+import com.xiaoyv.common.api.response.douban.DouBanInterestEntity
 import com.xiaoyv.common.api.response.douban.DouBanPhotoEntity
 import com.xiaoyv.common.api.response.douban.DouBanSearchEntity
 import com.xiaoyv.common.api.response.douban.DouBanSuggestEntity
+import com.xiaoyv.common.config.annotation.BilibiliInterestType
+import com.xiaoyv.common.config.annotation.BilibiliMediaType
+import com.xiaoyv.common.config.annotation.DouBanInterestType
+import com.xiaoyv.common.config.annotation.DouBanMediaType
 import com.xiaoyv.common.config.annotation.EpApiType
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.kts.randId
@@ -118,6 +127,12 @@ interface BgmJsonApi {
         @Query("current") current: Int = 1,
     ): BaseResponse<BasePage<SearchApiIndexEntity>>
 
+
+    @POST("https://main.xiaoyv.com.cn/api/bgm/subject")
+    suspend fun filterBgmItems(
+        @Body data: List<SyncNameParam>,
+    ): BaseListResponse<AnimeSyncEntity>
+
     /**
      * 识别动漫图片人物
      *
@@ -149,12 +164,12 @@ interface BgmJsonApi {
     @GET("https://api.bilibili.com/x/space/bangumi/follow/list")
     suspend fun queryBilibiliUserAnime(
         @Query("vmid") uid: String,
-        @Query("type") type: Int = 1,
-        @Query("follow_status") followStatus: Int = 0,
+        @Query("type") @BilibiliMediaType type: String,
+        @Query("follow_status") @BilibiliInterestType followStatus: Int? = null,
         @Query("pn") pageNumber: Int = 1,
         @Query("ps") pageSize: Int = 30,
         @Query("ts") ts: Long = System.currentTimeMillis(),
-    ): AnimeBilibiliEntity
+    ): BaseResponse<AnimeBilibiliEntity>
 
     @FormUrlEncoded
     @POST("http://api.fanyi.baidu.com/api/trans/vip/translate")
@@ -189,11 +204,22 @@ interface BgmJsonApi {
         @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
     ): DouBanPhotoEntity
 
+    /**
+     * 豆瓣收藏接口
+     *
+     * @param type movie|book|music|game|drama
+     * @param status (在看: doing)|(看过: done)|(想看:mark)
+     */
     @GET("https://frodo.douban.com/api/v2/user/{userId}/interests")
     suspend fun queryDouBanUserInterest(
         @Path("userId") userId: String,
+        @Query("type") @DouBanMediaType type: String?,
+        @Query("status") @DouBanInterestType status: String?,
+        @Query("common_interest") commonInterest: Int? = null,
+        @Query("start") start: Int = 0,
+        @Query("count") count: Int = 10,
         @Query("apikey") apikey: String = "0dad551ec0f84ed02907ff5c42e8ec70",
-    ): Response<ResponseBody>
+    ): DouBanInterestEntity
 
     /**
      * Anime-Pictures
@@ -316,4 +342,16 @@ interface BgmJsonApi {
     @GET("/v0/characters/{personId}")
     suspend fun queryCharacter(@Path("personId") personId: String): ApiCharacterEntity
 
+    @GET("/v0/users/{userId}/collections")
+    suspend fun queryUserCollect(
+        @Path("userId") userId: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+    ): ApiCollectionEntity
+
+    @POST("/v0/users/-/collections/{mediaId}")
+    suspend fun postSubjectCollection(
+        @Path("mediaId") mediaId: String,
+        @Body param: SubjectCollectParam,
+    ): Response<ResponseBody>
 }

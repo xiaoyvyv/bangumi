@@ -22,19 +22,6 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBinding>() {
     override fun initView() {
         binding.toolbar.initNavBack(this)
-
-
-        val modelManager = RemoteModelManager.getInstance()
-
-// Get translation models stored on the device.
-        modelManager.getDownloadedModels(TranslateRemoteModel::class.java)
-            .addOnSuccessListener { models: MutableSet<TranslateRemoteModel> ->
-                // ...
-            }
-            .addOnFailureListener {
-                // Error.
-            }
-
     }
 
     override fun initData() {
@@ -102,7 +89,8 @@ class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBind
                     onConfirmClick = {
                         RouteHelper.jumpWeb(
                             url = "http://api.fanyi.baidu.com/api/trans/product/desktop",
-                            forceBrowser = true
+                            forceBrowser = true,
+                            disableHandUrl = true
                         )
                     }
                 )

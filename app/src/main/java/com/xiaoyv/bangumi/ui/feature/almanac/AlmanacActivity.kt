@@ -1,6 +1,8 @@
 package com.xiaoyv.bangumi.ui.feature.almanac
 
 import androidx.core.view.updatePadding
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.helper.RouteHelper
@@ -27,8 +29,11 @@ class AlmanacActivity : BaseListActivity<AlmanacEntity, AlmanacViewModel>() {
 
     override fun initView() {
         super.initView()
-        binding.rvContent.setBackgroundColor(getAttrColor(GoogleAttr.colorSurfaceContainer))
-        binding.rvContent.updatePadding(top = 8.dpi, bottom = 8.dpi)
+        binding.rvContent.updatePadding(8.dpi)
+    }
+
+    override fun onCreateLayoutManager(): LinearLayoutManager {
+        return QuickGridLayoutManager(this, 2)
     }
 
     override fun initListener() {

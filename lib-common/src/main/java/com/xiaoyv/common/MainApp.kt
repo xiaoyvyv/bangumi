@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.LogUtils
 import com.xiaoyv.blueprint.BluePrint
 import com.xiaoyv.blueprint.base.BaseActivity
 import com.xiaoyv.blueprint.base.BaseConfig
+import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.SegmentHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -50,6 +51,7 @@ class MainApp : Application() {
         ThemeHelper.instance.initTheme(this)
 
         initBaseConfig()
+        BgmDatabaseManager.installAssetDb()
         BluePrint.init(this, false)
         H5PreLoadHelper.preloadWebView(this)
         UserHelper.initLoad()

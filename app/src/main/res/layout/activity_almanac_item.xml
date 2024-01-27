@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_year"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/ui_layout_margin"
+    android:layout_marginHorizontal="@dimen/ui_size_8"
     android:layout_marginVertical="@dimen/ui_size_8"
-    app:cardBackgroundColor="?attr/colorSurface"
-    app:cardCornerRadius="@dimen/ui_layout_radius"
-    app:strokeColor="@color/ui_transparent"
-    app:strokeWidth="@dimen/ui_size_0">
+    android:background="@drawable/ui_shape_rectangle_corner_6"
+    android:backgroundTint="?attr/colorSurfaceContainer">
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_year"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_size_160"
+        android:layout_height="@dimen/ui_size_0"
         android:background="@color/ui_transparent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="2:1"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_year"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ui_size_0"
         android:layout_gravity="center"
         android:gravity="center"
         android:includeFontPadding="true"
         android:maxLines="1"
-        android:textAppearance="?attr/textAppearanceDisplayLarge"
+        android:textAppearance="?attr/textAppearanceDisplayMedium"
         android:textColor="?attr/colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_year"
+        app:layout_constraintTop_toTopOf="@+id/iv_year"
         tools:text="2022" />
-</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.view.MenuItem
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleOwner
 import com.xiaoyv.bangumi.databinding.ActivitySyncerBinding
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
@@ -21,12 +22,15 @@ import com.xiaoyv.widget.dialog.UiDialog
  */
 class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewModel>() {
 
+    private val platformName
+        get() = if (viewModel.isBilibili.value == true) "哔哩" else "豆瓣"
+
     override fun initView() {
         binding.toolbar.initNavBack(this)
     }
 
     override fun initData() {
-
+        viewModel.queryLocalBgmCollection()
     }
 
     override fun initListener() {
@@ -38,12 +42,12 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
         }
 
         binding.etB.doAfterTextChanged {
-            binding.btnStart.isEnabled = it.toString().isNotBlank()
+            binding.btnStart.isEnabled =
+                it.toString().isNotBlank() && viewModel.isDoing.value == false
         }
 
         binding.btnStart.setOnFastLimitClickListener {
-            val b = binding.etB.text.toString().trim()
-            viewModel.handleId(b)
+            viewModel.handleId(binding.etB.text.toString().trim())
         }
     }
 
@@ -51,18 +55,58 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
         viewModel.isBilibili.observe(this) {
             if (it) {
                 binding.tvB.text = "哔哩哔哩同步"
-                binding.tlB.hint = "哔哩哔哩空间链接或ID"
+                binding.etB.hint = "请输入哔哩哔哩 ID"
             } else {
                 binding.tvB.text = "豆瓣同步"
-                binding.tlB.hint = "豆瓣空间链接或ID"
+                binding.etB.hint = "请输入豆瓣 ID"
             }
         }
 
-        viewModel.idLiveData.observe(this) {
-            if (it != null) {
-
-
+        // 正在导入数据中，禁止重复点击
+        viewModel.isDoing.observe(this) {
+            binding.btnStart.isEnabled = binding.etB.text.toString().isNotBlank() && !it
+            if (it) {
+                binding.btnStart.text = "正在载入收藏，请勿退出该页面！"
+            } else {
+                binding.btnStart.text = "同步，启动！"
             }
+        }
+
+        // 显示收藏载入结果，解析同步操作
+        viewModel.onShowSyncListLiveData.observe(this) {
+            RouteHelper.jumpSyncerList()
+            finish()
+        }
+
+        // 进度
+        viewModel.onBgmCollectProgress.observe(this) {
+            binding.pbBgmCollect.max = it.second
+            binding.pbBgmCollect.setProgress(it.first, true)
+            binding.tvBgm.text = String.format("获取你班收藏：%d/%d", it.first, it.second)
+        }
+
+        // 想看数目
+        viewModel.onPlatformWishCollectProgress.observe(this) {
+            binding.pbPlatformWishCollect.max = it.second
+            binding.pbPlatformWishCollect.setProgress(it.first, true)
+            binding.tvPlatformWish.text =
+                String.format("%s想看条目：%d/%d", platformName, it.first, it.second)
+        }
+
+        // 在看数目
+        viewModel.onPlatformDoingCollectProgress.observe(this) {
+            binding.pbPlatformDoingCollect.max = it.second
+            binding.pbPlatformDoingCollect.setProgress(it.first, true)
+            binding.tvPlatformDoing.text =
+                String.format("%s在看条目：%d/%d", platformName, it.first, it.second)
+        }
+
+        // 看过数目
+        viewModel.onPlatformDoneCollectProgress.observe(this) {
+            binding.pbPlatformDoneCollect.max = it.second
+            binding.pbPlatformDoneCollect.setProgress(it.first, true)
+            binding.tvPlatformDone.text =
+                String.format("%s看过条目：%d/%d", platformName, it.first, it.second)
         }
     }
 

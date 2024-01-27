@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.special.detect.character.ImageDetectCharacterActivity
 import com.xiaoyv.bangumi.special.magnet.MagnetActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.syncer.SyncerActivity
+import com.xiaoyv.bangumi.special.syncer.list.SyncerListActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
@@ -443,11 +444,12 @@ object RouteHelper {
         disableHandUrl: Boolean = false,
         injectJs: String = "",
     ) {
-        if (disableHandUrl.not() && handleUrl(url)) return
         if (forceBrowser || ConfigHelper.isForceBrowser) {
             openInBrowser(url)
             return
         }
+
+        if (disableHandUrl.not() && handleUrl(url)) return
 
         WebActivity::class.open(
             bundleOf(
@@ -576,5 +578,9 @@ object RouteHelper {
 
     fun jumpTranslateModel() {
         TranslateModelActivity::class.open()
+    }
+
+    fun jumpSyncerList() {
+        SyncerListActivity::class.open()
     }
 }

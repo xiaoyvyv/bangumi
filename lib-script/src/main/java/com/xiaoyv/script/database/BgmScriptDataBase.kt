@@ -2,6 +2,7 @@ package com.xiaoyv.script.database
 
 import com.xiaoyv.script.database.dao.IndexDao
 import com.xiaoyv.script.database.dao.RakuenDao
+import com.xiaoyv.script.database.dao.SubjectDao
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -53,6 +54,43 @@ class BgmScriptDataBase private constructor() {
                         set.getInt("id_exists") != 0
                     }
                 }
+        }
+    }
+
+    fun saveSubject(entity: SubjectDao) {
+        synchronized(this) {
+            val id = SubjectDao::id
+            val name = SubjectDao::name
+            val name_cn = SubjectDao::name_cn
+            val nsfw = SubjectDao::nsfw
+            val type = SubjectDao::type
+
+            val fields = mapOf(
+                id to entity.id,
+                name to entity.name,
+                name_cn to entity.name_cn,
+                nsfw to entity.nsfw,
+                type to entity.type
+            )
+
+            val insertSQL = buildString {
+                append("INSERT INTO bgm_subject (")
+                append(fields.keys.joinToString(", ") { it.name })
+                append(") VALUES (")
+                append(fields.keys.joinToString(", ") { "?" })
+                append(")")
+            }
+            database.prepareStatement(insertSQL).apply {
+                fields.keys.forEachIndexed { index, it ->
+                    when (val get = it.get(entity)) {
+                        is String? -> setString(index + 1, get)
+                        is Long -> setLong(index + 1, get)
+                        is Int -> setInt(index + 1, get)
+                        is Boolean -> setBoolean(index + 1, get)
+                        else -> setString(index + 1, get.toString())
+                    }
+                }
+            }.executeUpdate()
         }
     }
 

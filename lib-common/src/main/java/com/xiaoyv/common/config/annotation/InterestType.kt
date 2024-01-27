@@ -36,5 +36,16 @@ annotation class InterestType {
                 else -> ""
             }
         }
+
+        fun toIntType(@InterestType type: String): Int {
+            return when (type) {
+                TYPE_WISH -> SubjectCollectType.TYPE_WISH
+                TYPE_COLLECT -> SubjectCollectType.TYPE_COLLECT
+                TYPE_DO -> SubjectCollectType.TYPE_DOING
+                TYPE_ON_HOLD -> SubjectCollectType.TYPE_ON_HOLD
+                TYPE_DROPPED -> SubjectCollectType.TYPE_DOING
+                else -> SubjectCollectType.TYPE_NONE
+            }
+        }
     }
 }

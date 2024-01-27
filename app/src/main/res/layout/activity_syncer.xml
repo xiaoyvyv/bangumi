@@ -27,76 +27,188 @@
             android:layout_height="wrap_content" />
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/srl_refresh"
+    <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:fillViewport="true"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.xiaoyv.common.widget.text.AnimeTextView
-            android:id="@+id/tv_b"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/ui_size_12"
-            android:textAppearance="?attr/textAppearanceTitleLarge"
-            android:textColor="?attr/colorOnSurface"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="哔哩哔哩同步" />
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/ui_layout_margin">
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/gp_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:checkedButton="@+id/btn_b"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_b"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_b"
-            app:singleSelection="true">
-
-            <com.xiaoyv.common.widget.button.AnimeButton
-                android:id="@+id/btn_b"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="哔哩" />
-
-            <com.xiaoyv.common.widget.button.AnimeButton
-                android:id="@+id/btn_d"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="豆瓣" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tl_b"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ui_layout_margin"
-            app:layout_constraintTop_toBottomOf="@+id/tv_b">
-
-            <com.xiaoyv.common.widget.text.AnimeEditTextView
-                android:id="@+id/et_b"
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="top"
-                android:lines="6"
-                tools:hint="哔哩哔哩空间链接或ID" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:paddingVertical="@dimen/ui_size_12"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="哔哩哔哩同步" />
 
-        <com.xiaoyv.common.widget.button.AnimeButton
-            android:id="@+id/btn_start"
-            android:layout_width="@dimen/ui_size_0"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ui_size_48"
-            android:enabled="false"
-            android:gravity="center"
-            android:paddingVertical="@dimen/ui_size_12"
-            android:text="同步，启动！"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tl_b" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/gp_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:checkedButton="@+id/btn_b"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_b"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_b"
+                app:singleSelection="true">
+
+                <com.xiaoyv.common.widget.button.AnimeButton
+                    android:id="@+id/btn_b"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="哔哩" />
+
+                <com.xiaoyv.common.widget.button.AnimeButton
+                    android:id="@+id/btn_d"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="豆瓣" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tl_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@+id/tv_b">
+
+                <!-- 187360602 -->
+                <!-- 188360604 -->
+                <!-- 44131435 -->
+                <com.xiaoyv.common.widget.text.AnimeEditTextView
+                    android:id="@+id/et_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_full_corner"
+                    android:backgroundTint="?attr/colorSurfaceContainer"
+                    android:gravity="top"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingVertical="@dimen/ui_size_12"
+                    android:paddingStart="@dimen/ui_size_24"
+                    android:paddingEnd="@dimen/ui_size_24"
+                    android:text="44131435"
+                    tools:hint="哔哩哔哩ID" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:lineSpacingMultiplier="1.25"
+                android:text="此功能可以快速将你在豆瓣或哔哩的收藏同步到BGM，包括在看状态以及评分等内容，并且会过滤掉你已经收藏过的条目，由于收录原因，部分条目在BGM内不存在的将不会同步！\n\n哔哩同步时，请开启公开访问追番。"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintTop_toBottomOf="@+id/tl_b" />
+
+            <com.xiaoyv.common.widget.button.AnimeButton
+                android:id="@+id/btn_start"
+                android:layout_width="@dimen/ui_size_0"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_size_48"
+                android:enabled="false"
+                android:gravity="center"
+                android:paddingVertical="@dimen/ui_size_12"
+                android:text="同步，启动！"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tip" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_bgm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:text="获取你班收藏"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_start" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pb_bgm_collect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_size_6"
+                android:max="100"
+                app:layout_constraintTop_toBottomOf="@+id/tv_bgm"
+                app:trackCornerRadius="@dimen/ui_size_6"
+                app:trackThickness="@dimen/ui_size_12" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_platform_wish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:text="加载平台收藏"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pb_bgm_collect" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pb_platform_wish_collect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_size_6"
+                android:max="100"
+                app:layout_constraintTop_toBottomOf="@+id/tv_platform_wish"
+                app:trackCornerRadius="@dimen/ui_size_6"
+                app:trackThickness="@dimen/ui_size_12" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_platform_doing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:text="加载平台收藏"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pb_platform_wish_collect" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pb_platform_doing_collect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_size_6"
+                android:max="100"
+                app:layout_constraintTop_toBottomOf="@+id/tv_platform_doing"
+                app:trackCornerRadius="@dimen/ui_size_6"
+                app:trackThickness="@dimen/ui_size_12" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_platform_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_layout_margin"
+                android:text="加载平台收藏"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pb_platform_doing_collect" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pb_platform_done_collect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_size_6"
+                android:max="100"
+                app:layout_constraintTop_toBottomOf="@+id/tv_platform_done"
+                app:trackCornerRadius="@dimen/ui_size_6"
+                app:trackThickness="@dimen/ui_size_12" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
