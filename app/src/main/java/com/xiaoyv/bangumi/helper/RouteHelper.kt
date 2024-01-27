@@ -573,7 +573,11 @@ object RouteHelper {
     }
 
     fun jumpSyncer() {
-        SyncerActivity::class.open()
+        if (UserHelper.isLogin) {
+            SyncerActivity::class.open()
+        } else {
+            jumpLogin()
+        }
     }
 
     fun jumpTranslateModel() {
