@@ -1,11 +1,11 @@
 package com.xiaoyv.common.database
 
+import android.net.Uri
 import androidx.room.Room
+import com.blankj.utilcode.util.FileIOUtils
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.PathUtils
-import com.blankj.utilcode.util.ResourceUtils
 import com.blankj.utilcode.util.ZipUtils
-import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.kts.debugLog
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ class BgmDatabaseManager private constructor() {
 
     companion object {
         private val remoteDbPath by lazy {
-            PathUtils.getInternalAppFilesPath() + "/database/subject.db"
+            PathUtils.getFilesPathExternalFirst() + "/database/subject.db"
         }
 
         private val remoteDbZipPath by lazy {
@@ -44,7 +44,7 @@ class BgmDatabaseManager private constructor() {
         }
 
         private val remoteDbDir by lazy {
-            PathUtils.getInternalAppFilesPath() + "/database"
+            PathUtils.getFilesPathExternalFirst() + "/database"
         }
 
         private val manager by lazy {
@@ -52,17 +52,28 @@ class BgmDatabaseManager private constructor() {
         }
 
         /**
+         * 题目数据库是否安装
+         */
+        fun isSubjectInstalled(): Boolean {
+            return FileUtils.isFileExists(remoteDbPath)
+        }
+
+        /**
          * 安装数据库
          */
-        fun installAssetDb() {
-            launchProcess {
-                withContext(Dispatchers.IO) {
-                    if (FileUtils.isFileExists(remoteDbPath) && FileUtils.getLength(remoteDbPath) > 0) return@withContext
-                    ResourceUtils.copyFileFromAssets(
-                        "config/subject/subject.db.zip",
-                        remoteDbZipPath
-                    )
-                    ZipUtils.unzipFile(remoteDbZipPath, remoteDbDir)
+        suspend fun installAssetDb(uri: Uri) {
+            withContext(Dispatchers.IO) {
+                FileUtils.createOrExistsDir(remoteDbDir)
+                FileUtils.deleteAllInDir(remoteDbDir)
+
+                currentApplication.contentResolver.openInputStream(uri).use {
+                    FileIOUtils.writeFileFromIS(remoteDbZipPath, it)
+                }
+                ZipUtils.unzipFile(remoteDbZipPath, remoteDbDir)
+
+                if (!isSubjectInstalled()) {
+                    FileUtils.deleteAllInDir(remoteDbDir)
+                    throw IllegalArgumentException("数据库文件不合法")
                 }
 
                 debugLog { "数据库安装完成！" }

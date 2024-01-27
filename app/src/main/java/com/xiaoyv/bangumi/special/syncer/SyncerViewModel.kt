@@ -1,10 +1,10 @@
 package com.xiaoyv.bangumi.special.syncer
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.anime.AnimeBilibiliEntity
 import com.xiaoyv.common.api.response.anime.AnimeSyncEntity
@@ -13,9 +13,9 @@ import com.xiaoyv.common.api.response.douban.DouBanInterestEntity
 import com.xiaoyv.common.config.annotation.BilibiliInterestType
 import com.xiaoyv.common.config.annotation.BilibiliMediaType
 import com.xiaoyv.common.config.annotation.DouBanInterestType
+import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.helper.SyncerHelper
 import com.xiaoyv.common.helper.UserHelper
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.orEmpty
 import com.xiaoyv.widget.kts.sendValue
@@ -37,6 +37,8 @@ class SyncerViewModel : BaseViewModel() {
     internal val isBilibili = MutableLiveData(true)
     internal val isDoing = MutableLiveData(false)
     private var isBgmDataLoaded = AtomicBoolean(false)
+
+    internal val onDatabaseInstall = MutableLiveData<Boolean>()
 
     /**
      * 页数大小
@@ -264,6 +266,22 @@ class SyncerViewModel : BaseViewModel() {
             summary = evaluate.orEmpty(),
             interestType = BilibiliInterestType.toInterest(followStatus),
             interestText = BilibiliInterestType.string(followStatus)
+        )
+    }
+
+    fun installDatabase(data: Uri) {
+        launchUI(
+            error = {
+                it.printStackTrace()
+                showToastCompat(it.errorMsg)
+
+                onDatabaseInstall.value = false
+            },
+            block = {
+                BgmDatabaseManager.installAssetDb(data)
+
+                onDatabaseInstall.value = true
+            }
         )
     }
 }

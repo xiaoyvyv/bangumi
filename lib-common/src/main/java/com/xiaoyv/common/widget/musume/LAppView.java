@@ -80,51 +80,8 @@ public class LAppView {
         int windowWidth = LAppDelegate.getInstance().getWindowWidth();
         int windowHeight = LAppDelegate.getInstance().getWindowHeight();
 
-        LAppTextureManager textureManager = LAppDelegate.getInstance().getTextureManager();
-
-        // 加载背景图像
-        LAppTextureManager.TextureInfo backgroundTexture = textureManager.createTextureFromPngFile(LAppDefine.ResourcePath.ROOT.getPath() + LAppDefine.ResourcePath.BACK_IMAGE.getPath());
-
-        // x，y 是图像的中心坐标
-        float x = windowWidth * 0.5f;
-        float y = windowHeight * 0.5f;
-        float fWidth = backgroundTexture.width * 2.0f;
-        float fHeight = windowHeight * 0.95f;
-
-        if (backSprite == null) {
-            backSprite = new LAppSprite(x, y, fWidth, fHeight, backgroundTexture.id, programId);
-        } else {
-            backSprite.resize(x, y, fWidth, fHeight);
-        }
-
-        // 歯車画像の読み込み
-        LAppTextureManager.TextureInfo gearTexture = textureManager.createTextureFromPngFile(LAppDefine.ResourcePath.ROOT.getPath() + LAppDefine.ResourcePath.GEAR_IMAGE.getPath());
-
-
-        x = windowWidth - gearTexture.width * 0.5f - 96.f;
-        y = windowHeight - gearTexture.height * 0.5f;
-        fWidth = (float) gearTexture.width;
-        fHeight = (float) gearTexture.height;
-
-        if (gearSprite == null) {
-            gearSprite = new LAppSprite(x, y, fWidth, fHeight, gearTexture.id, programId);
-        } else {
-            gearSprite.resize(x, y, fWidth, fHeight);
-        }
-
-        // 電源画像の読み込み
-        LAppTextureManager.TextureInfo powerTexture = textureManager.createTextureFromPngFile(LAppDefine.ResourcePath.ROOT.getPath() + LAppDefine.ResourcePath.POWER_IMAGE.getPath());
-
-        x = windowWidth - powerTexture.width * 0.5f - 96.0f;
-        y = powerTexture.height * 0.5f;
-        fWidth = (float) powerTexture.width;
-        fHeight = (float) powerTexture.height;
-
-        if (powerSprite == null) {
-            powerSprite = new LAppSprite(x, y, fWidth, fHeight, powerTexture.id, programId);
-        } else {
-            powerSprite.resize(x, y, fWidth, fHeight);
-        }
+        float x;
+        float y;
 
         // 画面全体を覆うサイズ
         x = windowWidth * 0.5f;
@@ -139,11 +96,6 @@ public class LAppView {
 
     // 描画する
     public void render() {
-        // UIと背景の描画
-        //backSprite.render();
-        //gearSprite.render();
-       // powerSprite.render();
-
         if (isChangedModel) {
             isChangedModel = false;
             LAppLive2DManager.getInstance().nextScene();
@@ -294,18 +246,6 @@ public class LAppView {
         }
 
         live2DManager.onTap(x, y);
-
-        // 歯車ボタンにタップしたか
-        if (gearSprite.isHit(pointX, pointY)) {
-            isChangedModel = true;
-        }
-
-        // 電源ボタンにタップしたか
-        if (powerSprite.isHit(pointX, pointY)) {
-            // アプリを終了する
-            LAppDelegate.getInstance().deactivateApp();
-        }
-
     }
 
     /**
@@ -413,9 +353,6 @@ public class LAppView {
 
     private final CubismOffscreenSurfaceAndroid renderingBuffer = new CubismOffscreenSurfaceAndroid();
 
-    private LAppSprite backSprite;
-    private LAppSprite gearSprite;
-    private LAppSprite powerSprite;
     private LAppSprite renderingSprite;
 
     /**

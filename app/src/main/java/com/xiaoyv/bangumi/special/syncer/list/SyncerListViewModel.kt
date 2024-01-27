@@ -30,17 +30,21 @@ class SyncerListViewModel : BaseListViewModel<AnimeSyncEntity>() {
     internal val onSyncSubject = MutableLiveData<String>()
     internal val onSyncFinish = UnPeekLiveData<Boolean>()
 
-    private val useLocal = true
-
     override suspend fun onRequestListImpl(): List<AnimeSyncEntity> {
         val fetchData = SyncerHelper.instance.fetchData()
-        return if (useLocal) filterByLocal(fetchData) else filterByRemote(fetchData)
+        return if (BgmDatabaseManager.isSubjectInstalled()) filterByLocal(fetchData)
+        else filterByRemote(fetchData)
     }
 
     private suspend fun filterByRemote(fetchData: List<AnimeSyncEntity>): List<AnimeSyncEntity> {
-        return BgmApiManager.bgmJsonApi.filterBgmItems(fetchData.map {
+        val params = fetchData.map {
             SyncNameParam(id = it.id, name = it.name)
-        }).data.orEmpty()
+        }
+        return BgmApiManager.bgmJsonApi.filterBgmItems(params).data.orEmpty().mapNotNull { item ->
+            val target = fetchData.find { it.id == item.id }
+            target?.subject = item.subject
+            target
+        }
     }
 
     private suspend fun filterByLocal(fetchData: List<AnimeSyncEntity>): List<AnimeSyncEntity> {

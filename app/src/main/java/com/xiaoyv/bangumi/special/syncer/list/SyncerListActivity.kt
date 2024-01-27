@@ -82,6 +82,27 @@ class SyncerListActivity : BaseListActivity<AnimeSyncEntity, SyncerListViewModel
                 }
                 true
             }
+
+        menu.add("没有内容？")
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+            .setOnMenuItemClickListener {
+                showConfirmDialog(
+                    message = "如果当前页面显示为空，可能是以下情况：\n\n1、当前你的 BGM 收藏已经包含全部条目。\n2、你在其它平台收藏的条目，BGM 未收录。",
+                    cancelText = null
+                )
+                true
+            }
+
+        menu.add("速度优化")
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+            .setOnMenuItemClickListener {
+                showConfirmDialog(
+                    message = "如果你在该页面长时间处于加载状态，请返回前一页，在右上角菜单下载并导入索引数据库",
+                    cancelText = null
+                )
+                true
+            }
+
         return super.onCreateOptionsMenu(menu)
     }
 }

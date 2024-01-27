@@ -51,7 +51,6 @@ class MainApp : Application() {
         ThemeHelper.instance.initTheme(this)
 
         initBaseConfig()
-        BgmDatabaseManager.installAssetDb()
         BluePrint.init(this, false)
         H5PreLoadHelper.preloadWebView(this)
         UserHelper.initLoad()

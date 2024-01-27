@@ -1,12 +1,17 @@
 package com.xiaoyv.bangumi.special.syncer
 
+import android.content.Intent
+import android.graphics.Color
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.SpanUtils
 import com.xiaoyv.bangumi.databinding.ActivitySyncerBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
+import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
@@ -22,11 +27,21 @@ import com.xiaoyv.widget.dialog.UiDialog
  */
 class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewModel>() {
 
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val data = it.data?.data
+            if (it.resultCode == RESULT_OK && data != null) {
+                viewModel.installDatabase(data)
+            }
+        }
+
     private val platformName
         get() = if (viewModel.isBilibili.value == true) "哔哩" else "豆瓣"
 
     override fun initView() {
         binding.toolbar.initNavBack(this)
+
+        refreshSubjectDatabase()
     }
 
     override fun initData() {
@@ -108,6 +123,26 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
             binding.tvPlatformDone.text =
                 String.format("%s看过条目：%d/%d", platformName, it.first, it.second)
         }
+
+        viewModel.onDatabaseInstall.observe(this) {
+            refreshSubjectDatabase()
+        }
+    }
+
+    private fun refreshSubjectDatabase() {
+        if (BgmDatabaseManager.isSubjectInstalled()) {
+            SpanUtils.with(binding.tvDatabase)
+                .append("索引数据库：")
+                .append("已安装")
+                .setForegroundColor(Color.GREEN)
+                .create()
+        } else {
+            SpanUtils.with(binding.tvDatabase)
+                .append("索引数据库：")
+                .append("未安装")
+                .setForegroundColor(Color.RED)
+                .create()
+        }
     }
 
     override fun onCreateLoadingDialog(): UiDialog {
@@ -122,6 +157,26 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
                 showConfirmDialog(
                     message = "链接不支持短链，若只有短链请在浏览器打开短链后，复制原始带ID的链接。\n\nB站追番同步，请在APP设置内暂时公开追番隐私权限。\n\n权限配置路径：设置->安全隐私->空间隐私设置->公开我的追番",
                     cancelText = null
+                )
+                true
+            }
+
+        menu.add("安装索引数据库")
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+            .setOnMenuItemClickListener {
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.setType("application/zip")
+                launcher.launch(intent)
+                true
+            }
+
+        menu.add("下载索引数据库")
+            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
+            .setOnMenuItemClickListener {
+                RouteHelper.jumpWeb(
+                    url = "https://github.com/xiaoyvyv/Bangumi-Data/raw/main/subject/subject.db.zip",
+                    forceBrowser = true
                 )
                 true
             }

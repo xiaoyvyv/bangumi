@@ -97,7 +97,7 @@
                     android:paddingVertical="@dimen/ui_size_12"
                     android:paddingStart="@dimen/ui_size_24"
                     android:paddingEnd="@dimen/ui_size_24"
-                    android:text="44131435"
+                    android:text="187360602"
                     tools:hint="哔哩哔哩ID" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,15 +126,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_tip" />
 
             <com.xiaoyv.common.widget.text.AnimeTextView
-                android:id="@+id/tv_bgm"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_database"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ui_layout_margin"
-                android:text="获取你班收藏"
+                android:paddingTop="@dimen/ui_size_24"
+                android:paddingBottom="@dimen/ui_layout_margin"
+                android:text="索引数据库：未安装"
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_start" />
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_bgm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取你班收藏"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_database" />
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/pb_bgm_collect"

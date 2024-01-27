@@ -147,19 +147,7 @@ public class LAppDefine {
         /**
          * Relative path of the material directory
          */
-        ROOT(""),
-        /**
-         * Background image file
-         */
-        BACK_IMAGE("back_class_normal.png"),
-        /**
-         * Gear image file
-         */
-        GEAR_IMAGE("icon_gear.png"),
-        /**
-         * Power button image file
-         */
-        POWER_IMAGE("close.png");
+        ROOT("");
 
         private final String path;
 
