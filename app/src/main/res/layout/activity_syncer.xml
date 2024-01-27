@@ -97,7 +97,6 @@
                     android:paddingVertical="@dimen/ui_size_12"
                     android:paddingStart="@dimen/ui_size_24"
                     android:paddingEnd="@dimen/ui_size_24"
-                    android:text="187360602"
                     tools:hint="哔哩哔哩ID" />
             </com.google.android.material.textfield.TextInputLayout>
 
