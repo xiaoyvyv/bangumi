@@ -2,8 +2,6 @@ package com.xiaoyv.bangumi.ui.feature.setting.translate
 
 import android.view.Menu
 import android.view.MenuItem
-import com.google.mlkit.common.model.RemoteModelManager
-import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.xiaoyv.bangumi.databinding.ActivitySettingTranslateBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
@@ -32,13 +30,9 @@ class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBind
         binding.settingTranslate.bindSerializable(
             activity = this,
             property = ConfigHelper::translateType,
-            names = listOf("AI 离线翻译", "百度翻译"),
-            values = listOf(0, 1)
+            names = listOf("百度翻译"),
+            values = listOf(0)
         )
-
-        binding.settingModuleManager.setOnFastLimitClickListener {
-            RouteHelper.jumpTranslateModel()
-        }
 
         binding.settingAppId.setOnFastLimitClickListener {
             val (id, _) = ConfigHelper.readBaiduTranslateConfig()

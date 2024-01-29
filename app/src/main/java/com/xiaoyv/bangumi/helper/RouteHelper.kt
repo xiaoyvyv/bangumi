@@ -45,7 +45,6 @@ import com.xiaoyv.bangumi.ui.feature.setting.privacy.PrivacyActivity
 import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.tab.TabConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.translate.TranslateConfigActivity
-import com.xiaoyv.bangumi.ui.feature.setting.translate.model.TranslateModelActivity
 import com.xiaoyv.bangumi.ui.feature.setting.ui.UiConfigActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
@@ -585,10 +584,6 @@ object RouteHelper {
         } else {
             jumpLogin()
         }
-    }
-
-    fun jumpTranslateModel() {
-        TranslateModelActivity::class.open()
     }
 
     fun jumpSyncerList() {

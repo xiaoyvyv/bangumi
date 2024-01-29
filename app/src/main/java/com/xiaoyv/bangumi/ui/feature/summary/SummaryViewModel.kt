@@ -2,10 +2,6 @@ package com.xiaoyv.bangumi.ui.feature.summary
 
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.EncryptUtils
-import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.nl.translate.TranslateLanguage
-import com.google.mlkit.nl.translate.Translation
-import com.google.mlkit.nl.translate.TranslatorOptions
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
@@ -18,7 +14,6 @@ import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 
 /**
@@ -45,9 +40,6 @@ class SummaryViewModel : BaseViewModel() {
 
     private val cacheKey: String
         get() = EncryptUtils.encryptMD5ToString(needTranslateText)
-
-    private val conditions = DownloadConditions.Builder()
-        .build()
 
     /**
      * 直接刷新
@@ -85,9 +77,8 @@ class SummaryViewModel : BaseViewModel() {
 
                 // 翻译
                 val translateResult = when (ConfigHelper.translateType) {
-                    0 -> doTranslateWithAiModel()
-                    1 -> doTranslateWithBaidu()
-                    else -> doTranslateWithAiModel()
+                    0 -> doTranslateWithBaidu()
+                    else -> doTranslateWithBaidu()
                 }
 
                 // 缓存结果
@@ -96,42 +87,6 @@ class SummaryViewModel : BaseViewModel() {
                 summaryTranslate.value = translateResult
             }
         )
-    }
-
-    /**
-     * AI 模型翻译
-     */
-    private suspend fun doTranslateWithAiModel(): String {
-        return withContext(Dispatchers.IO) {
-            val options = TranslatorOptions.Builder()
-                .setSourceLanguage(TranslateLanguage.JAPANESE)
-                .setTargetLanguage(TranslateLanguage.CHINESE)
-                .build()
-
-            Translation.getClient(options).use { translator ->
-                // 按需下载
-                suspendCancellableCoroutine { emit ->
-                    translator.downloadModelIfNeeded(conditions)
-                        .addOnSuccessListener {
-                            emit.resumeWith(Result.success(true))
-                        }
-                        .addOnFailureListener { exception ->
-                            emit.resumeWith(Result.failure(exception))
-                        }
-                }
-
-                // 翻译
-                suspendCancellableCoroutine { emit ->
-                    translator.translate(needTranslateText)
-                        .addOnSuccessListener {
-                            emit.resumeWith(Result.success(it))
-                        }
-                        .addOnFailureListener { exception ->
-                            emit.resumeWith(Result.failure(exception))
-                        }
-                }
-            }
-        }
     }
 
     /**

@@ -75,24 +75,5 @@
             android:focusable="true"
             android:text="百度翻译 AppSecret" />
 
-        <com.xiaoyv.common.widget.text.AnimeTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ui_layout_margin"
-            android:paddingHorizontal="@dimen/ui_layout_margin"
-            android:paddingVertical="@dimen/ui_size_6"
-            android:text="离线AI模型翻译"
-            android:textAppearance="?attr/textAppearanceBodySmall"
-            android:textColor="?attr/colorOnSurfaceVariant" />
-
-        <com.xiaoyv.common.widget.setting.SettingItemView
-            android:id="@+id/setting_module_manager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="模型管理" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
