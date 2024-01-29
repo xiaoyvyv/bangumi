@@ -30,8 +30,8 @@ class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBind
         binding.settingTranslate.bindSerializable(
             activity = this,
             property = ConfigHelper::translateType,
-            names = listOf("百度翻译"),
-            values = listOf(0)
+            names = listOf("微软翻译", "百度翻译"),
+            values = listOf(0, 1)
         )
 
         binding.settingAppId.setOnFastLimitClickListener {
@@ -75,10 +75,10 @@ class TranslateConfigActivity : BaseBindingActivity<ActivitySettingTranslateBind
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("如何获取")
+        menu.add("百度翻译？")
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "可以去百度开放平台注册，个人每月5万字免费额度",
+                    message = "百度翻译可以去百度开放平台注册，个人每月5万字免费额度",
                     confirmText = "去申请",
                     onConfirmClick = {
                         RouteHelper.jumpWeb(

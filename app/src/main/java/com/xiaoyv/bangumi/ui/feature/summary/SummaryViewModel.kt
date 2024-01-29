@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.ui.feature.summary
 
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.EncodeUtils
 import com.blankj.utilcode.util.EncryptUtils
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
@@ -8,13 +9,18 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.exception.NeedConfigException
 import com.xiaoyv.common.api.parser.parseHtml
+import com.xiaoyv.common.api.request.MicrosoftTranslateParam
+import com.xiaoyv.common.api.response.MicrosoftJwtPayload
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.orEmpty
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 /**
  * Class: [SummaryViewModel]
@@ -61,10 +67,20 @@ class SummaryViewModel : BaseViewModel() {
             error = {
                 it.printStackTrace()
 
-                if (it is NeedConfigException) {
-                    onNeedConfig.value = Unit
-                } else {
-                    showToastCompat(it.errorMsg)
+                when (it) {
+                    is NeedConfigException -> {
+                        onNeedConfig.value = Unit
+                    }
+
+                    is HttpException -> {
+                        if (it.code() == 401) {
+                            ConfigHelper.edgeAuthToken = ""
+                        }
+                    }
+
+                    else -> {
+                        showToastCompat(it.errorMsg)
+                    }
                 }
             },
             block = {
@@ -77,7 +93,8 @@ class SummaryViewModel : BaseViewModel() {
 
                 // 翻译
                 val translateResult = when (ConfigHelper.translateType) {
-                    0 -> doTranslateWithBaidu()
+                    0 -> doTranslateWithMicrosoft()
+                    1 -> doTranslateWithBaidu()
                     else -> doTranslateWithBaidu()
                 }
 
@@ -87,6 +104,26 @@ class SummaryViewModel : BaseViewModel() {
                 summaryTranslate.value = translateResult
             }
         )
+    }
+
+    /**
+     * 微软翻译
+     */
+    private suspend fun doTranslateWithMicrosoft(): String {
+        return withContext(Dispatchers.IO) {
+            val translateText = needTranslateText
+            val microsoftToken = queryMicrosoftToken()
+            val translate = BgmApiManager.bgmJsonApi.postMicrosoftTranslate(
+                authentication = "Bearer $microsoftToken",
+                param = listOf(MicrosoftTranslateParam(text = translateText))
+            )
+
+            translate.joinToString("\n") {
+                it.translations.orEmpty().joinToString(", ") { translation ->
+                    translation.text.orEmpty()
+                }
+            }
+        }
     }
 
     /**
@@ -115,6 +152,25 @@ class SummaryViewModel : BaseViewModel() {
 
             result.transResult.orEmpty()
                 .joinToString("\n") { it.dst.orEmpty() }
+        }
+    }
+
+    private suspend fun queryMicrosoftToken(): String {
+        return withContext(Dispatchers.IO) {
+            val edgeAuthToken = ConfigHelper.edgeAuthToken
+            if (edgeAuthToken.isNotBlank()) {
+                val orEmpty = edgeAuthToken.split(".").getOrNull(1).orEmpty()
+                val jwtJson = EncodeUtils.base64Decode(orEmpty).decodeToString()
+                val payload = jwtJson.fromJson<MicrosoftJwtPayload>()
+                val expirationTime = payload?.expirationTime.orEmpty() * 1000L
+                if (expirationTime > System.currentTimeMillis()) {
+                    return@withContext edgeAuthToken
+                }
+            }
+
+            requireNotNull(BgmApiManager.bgmJsonApi.queryEdgeAuthToken().body()).string().apply {
+                ConfigHelper.edgeAuthToken = this
+            }
         }
     }
 

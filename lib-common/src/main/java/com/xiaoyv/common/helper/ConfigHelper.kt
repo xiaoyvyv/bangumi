@@ -48,6 +48,7 @@ object ConfigHelper {
     private const val KEY_FORCE_BROWSER = "force-browser"
     private const val KEY_IMAGE_SEARCH_AP = "image-search-ap"
     private const val KEY_TRANSLATE = "translate"
+    private const val KEY_EDGE_AUTH_TOKEN = "edge_auth_token"
 
     const val KEY_RAKUEN_DEFAULT_TAB = "rakuen-default-tab"
     const val KEY_RAKUEN_DEFAULT_GROUP = "rakuen-default-group"
@@ -318,4 +319,12 @@ object ConfigHelper {
     var vpTouchSlop: Int
         get() = SPStaticUtils.getInt(KEY_VP_SLOP, 2)
         set(value) = SPStaticUtils.put(KEY_VP_SLOP, value)
+
+
+    /**
+     * Edge Auth Token
+     */
+    var edgeAuthToken: String
+        get() = SPStaticUtils.getString(KEY_EDGE_AUTH_TOKEN, "")
+        set(value) = SPStaticUtils.put(KEY_EDGE_AUTH_TOKEN, value.trim())
 }

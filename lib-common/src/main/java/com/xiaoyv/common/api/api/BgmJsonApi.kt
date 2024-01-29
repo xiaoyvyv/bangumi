@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.api
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EpCollectParam
 import com.xiaoyv.common.api.request.GithubUpdateParam
+import com.xiaoyv.common.api.request.MicrosoftTranslateParam
 import com.xiaoyv.common.api.request.SubjectCollectParam
 import com.xiaoyv.common.api.request.SyncNameParam
 import com.xiaoyv.common.api.response.AuthStatusEntity
@@ -11,6 +12,7 @@ import com.xiaoyv.common.api.response.BaiduTranslateEntity
 import com.xiaoyv.common.api.response.GithubContent
 import com.xiaoyv.common.api.response.GithubLatestEntity
 import com.xiaoyv.common.api.response.GithubPutEntity
+import com.xiaoyv.common.api.response.MicrosoftTranslateEntity
 import com.xiaoyv.common.api.response.SearchApiIndexEntity
 import com.xiaoyv.common.api.response.SearchApiTopicEntity
 import com.xiaoyv.common.api.response.anime.AnimeBilibiliEntity
@@ -182,6 +184,18 @@ interface BgmJsonApi {
         @Field("from") from: String = "auto",
         @Field("to") to: String = "zh",
     ): BaiduTranslateEntity
+
+    @GET("https://edge.microsoft.com/translate/auth")
+    suspend fun queryEdgeAuthToken(): Response<ResponseBody>
+
+    @POST("https://api.cognitive.microsofttranslator.com/translate")
+    suspend fun postMicrosoftTranslate(
+        @Header("Authorization") authentication: String,
+        @Query("api-version") apiVersion: String = "3.0",
+        @Query("to") to: String = "zh-Hans",
+        @Query("textType") textType: String = "plain",
+        @Body param: List<MicrosoftTranslateParam>,
+    ): MicrosoftTranslateEntity
 
     @GET("https://frodo.douban.com/api/v2/search/subjects")
     suspend fun queryDouBanSearchHint(
