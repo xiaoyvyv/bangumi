@@ -19,12 +19,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk {
-            abiFilters.add("arm64-v8a")
-            abiFilters.add("armeabi-v7a")
-            abiFilters.add("x86")
-            abiFilters.add("x86_64")
-        }
+//        ndk {
+//            abiFilters.add("arm64-v8a")
+//            abiFilters.add("armeabi-v7a")
+//            abiFilters.add("x86")
+//            abiFilters.add("x86_64")
+//        }
     }
 
     signingConfigs {
@@ -33,6 +33,15 @@ android {
             storePassword = "why981229"
             keyAlias = "whykey"
             keyPassword = "why981229"
+        }
+    }
+
+    splits {
+        abi {
+            isEnable = true
+            isUniversalApk = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
         }
     }
 
