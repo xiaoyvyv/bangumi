@@ -2,16 +2,24 @@ package com.xiaoyv.bangumi.ui
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.ClipboardUtils
+import com.blankj.utilcode.util.SPStaticUtils
+import com.kunminx.architecture.ui.callback.UnPeekLiveData
+import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.HomeRobot.Companion.SHOW_DURATION
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchIO
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.bean.HomeBottomTab
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.widget.kts.sendValue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.util.concurrent.LinkedBlockingQueue
 
 /**
@@ -22,6 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue
  */
 class MainViewModel : BaseViewModel() {
     internal val onDiscoverPageIndex = MutableLiveData<Int>()
+    internal val onClipboardLiveData = UnPeekLiveData<String>()
 
     internal val onRobotSay = MutableLiveData<String>()
 
@@ -41,6 +50,13 @@ class MainViewModel : BaseViewModel() {
         val tab5 = fetchTab(ConfigHelper.homeTab5, FeatureType.TYPE_PROFILE)
         listOf(tab1, tab2, tab3, tab4, tab5).filter { it.type != FeatureType.TYPE_UNSET }
     }
+
+    /**
+     * Cache Clipboard Url
+     */
+    private var cacheClipboardUrl: String
+        get() = SPStaticUtils.getString("ClipboardUrl")
+        set(value) = SPStaticUtils.put("ClipboardUrl", value.trim())
 
     /**
      * 队列轮询
@@ -101,5 +117,28 @@ class MainViewModel : BaseViewModel() {
         }
         val tabIndex = mainTabs.indexOfFirst { it.type == defaultTab }
         return if (tabIndex != -1) tabIndex else 0
+    }
+
+    fun handleClipboardText() {
+        launchUI {
+            val text = withContext(Dispatchers.IO) {
+                delay(1000)
+
+                // 匹配链接
+                "https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%\\p{L}]+".toRegex()
+                    .findAll(ClipboardUtils.getText())
+                    .filter { RouteHelper.handleHost.contains(it.value.toHttpUrlOrNull()?.host) }
+                    .map { it.value }
+                    .toList()
+            }
+
+            if (text.isNotEmpty()) {
+                val url = text.first().toString()
+                if (url != cacheClipboardUrl) {
+                    onClipboardLiveData.value = url
+                    cacheClipboardUrl = url
+                }
+            }
+        }
     }
 }

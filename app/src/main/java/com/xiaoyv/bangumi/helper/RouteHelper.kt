@@ -79,6 +79,7 @@ import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.kts.showToastCompat
+import okhttp3.HttpUrl.Companion.toHttpUrl
 
 /**
  * Class: [RouteHelper]
@@ -87,6 +88,8 @@ import com.xiaoyv.widget.kts.showToastCompat
  * @since 11/25/23
  */
 object RouteHelper {
+    val handleHost = listOf("bgm.tv", "bangumi.tv", "chii.in")
+
     /**
      * - https://bangumi.tv/group/topic/390252#post_2535628
      * - /person/57315
@@ -96,14 +99,18 @@ object RouteHelper {
             .substringBefore("#")
             .substringBefore("?")
 
-        val targetComment = titleLink.substringAfterLast("#").parseCount().toString()
+        val targetComment = titleLink.substringAfterLast("#")
+            .parseCount()
+            .toString()
 
         debugLog { "Handle Url: $titleLink" }
 
-        if (URLUtil.isNetworkUrl(titleLink) && !titleLink.contains("bgm") && !titleLink.contains("bangumi")) {
+        // 无法处理的 URL 直接跳转内置浏览器
+        if (URLUtil.isNetworkUrl(titleLink) && !handleHost.contains(titleLink.toHttpUrl().host)) {
             jumpWeb(titleLink, fitToolbar = true, disableHandUrl = true)
             return true
         }
+        // 这是一段包含链接的文本，比如：http://example.com!！ 和 https://www.example.org 还有一些其他的文字
 
         when {
             // 话题

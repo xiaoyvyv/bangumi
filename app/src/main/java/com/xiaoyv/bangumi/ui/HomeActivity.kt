@@ -6,8 +6,6 @@ import android.view.MotionEvent
 import android.view.Window
 import android.view.WindowManager
 import androidx.lifecycle.LifecycleOwner
-import com.blankj.utilcode.util.FileUtils
-import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.google.android.material.badge.BadgeDrawable
@@ -15,9 +13,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
-import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
@@ -32,9 +28,7 @@ import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import java.io.FileOutputStream
 
 /**
  * Class: [HomeActivity]
@@ -117,6 +111,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
         UpdateHelper.checkUpdate(this, false)
 
         showTip()
+
     }
 
     override fun initListener() {
@@ -163,7 +158,18 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
         viewModel.onRobotSay.observe(this) {
             robot.onSay(it)
         }
+
+        // 剪切板链接处理
+        viewModel.onClipboardLiveData.observe(this) {
+            showConfirmDialog(
+                message = "检测到你复制了BGM的链接，是否打开？",
+                onConfirmClick = {
+                    RouteHelper.handleUrl(it)
+                }
+            )
+        }
     }
+
 
     private fun showTip() {
         if (ConfigHelper.showVersionTip) {
@@ -200,6 +206,7 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     override fun onResume() {
         super.onResume()
         robot.onResume()
+        viewModel.handleClipboardText()
     }
 
     override fun onPause() {
