@@ -194,7 +194,7 @@ const onClickNewComment = (event: Event) => {
               <div class="topic-html" v-html="subComment.replyContent"/>
               <div class="anchor" v-if="subComment.id === anchorId"/>
             </div>
-            <emoji-view :emojis="subComment.emojis" :comment="comment" style="margin-top: 16px"/>
+            <emoji-view :emojis="subComment.emojis" :comment="subComment" style="margin-top: 16px"/>
           </div>
         </div>
       </div>
