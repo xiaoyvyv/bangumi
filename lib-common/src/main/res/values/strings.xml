@@ -84,4 +84,6 @@
 
     <string name="anime_search_engine">搜索引擎来自于：%s</string>
     <string name="detect_failed">识别失败，请选择其它图片重试!</string>
+
+    <string name="app_widget_description">每日放送小组件，每天更新</string>
 </resources>

@@ -93,4 +93,7 @@
         <item name="cornerSizeTopLeft">@dimen/ui_layout_radius</item>
         <item name="cornerSizeBottomLeft">@dimen/ui_layout_radius</item>
     </style>
+
+    <style name="Theme.Bangumi.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault" />
+    <style name="Theme.Bangumi.AppWidgetContainer" parent="Theme.Bangumi.AppWidgetContainerParent" />
 </resources>

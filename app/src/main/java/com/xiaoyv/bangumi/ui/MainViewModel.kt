@@ -1,19 +1,25 @@
 package com.xiaoyv.bangumi.ui
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.ClipboardUtils
 import com.blankj.utilcode.util.SPStaticUtils
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.special.widget.AnimeWidget
+import com.xiaoyv.bangumi.special.widget.AnimeWidgetDataService
 import com.xiaoyv.bangumi.ui.HomeRobot.Companion.SHOW_DURATION
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchIO
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.bean.HomeBottomTab
+import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.widget.kts.sendValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -57,6 +63,10 @@ class MainViewModel : BaseViewModel() {
     private var cacheClipboardUrl: String
         get() = SPStaticUtils.getString("ClipboardUrl")
         set(value) = SPStaticUtils.put("ClipboardUrl", value.trim())
+
+    override fun onViewCreated() {
+        AnimeWidgetDataService.refresh()
+    }
 
     /**
      * 队列轮询

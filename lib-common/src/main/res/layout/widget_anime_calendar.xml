@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#7F000000"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#7F000000"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:paddingVertical="@dimen/ui_size_12"
+        android:text="每日放送"
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textSize="@dimen/ui_font_14"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tv_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_title"
+        android:layout_alignBottom="@+id/tv_title"
+        android:layout_alignParentEnd="true"
+        android:alpha="0.9"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/ui_size_12"
+        android:text="每天更新"
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textSize="@dimen/ui_font_10"
+        tools:ignore="HardcodedText" />
+
+    <ListView
+        android:id="@+id/lv_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_alignParentBottom="true"
+        android:clipToPadding="false"
+        android:paddingVertical="@dimen/ui_size_6"
+        tools:listitem="@layout/widget_anime_calendar_item" />
+</RelativeLayout>
