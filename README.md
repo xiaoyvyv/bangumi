@@ -1,4 +1,5 @@
 # Bangumi for Android
+Bangumi for Android - A full-featured unofficial android native application for the bangumi.tv
 
 [![GitHub code size in bytes](https://img.shields.io/github/repo-size/xiaoyvyv/bangumi)](https://github.com/xiaoyvyv/bangumi)
 [![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total)](https://github.com/xiaoyvyv/bangumi)
