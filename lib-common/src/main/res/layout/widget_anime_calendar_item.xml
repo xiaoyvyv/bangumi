@@ -6,17 +6,17 @@
     android:orientation="horizontal"
     android:paddingHorizontal="@dimen/ui_size_12"
     android:paddingVertical="@dimen/ui_size_6"
-    tools:background="#000000"
+    tools:background="#5555FF"
     tools:ignore="HardcodedText">
 
     <ImageView
         android:id="@+id/iv_cover"
-        android:layout_width="@dimen/ui_size_40"
-        android:layout_height="@dimen/ui_size_55"
+        android:layout_width="@dimen/ui_size_36"
+        android:layout_height="@dimen/ui_size_48"
         android:layout_gravity="center_vertical"
-        android:background="@color/ui_white_60"
+        android:background="@drawable/shape_cover_mask"
         android:contentDescription="cover"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitCenter" />
 
     <LinearLayout
         android:layout_width="match_parent"

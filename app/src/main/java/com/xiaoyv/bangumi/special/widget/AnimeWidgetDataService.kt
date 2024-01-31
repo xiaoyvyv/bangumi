@@ -14,8 +14,10 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.config.annotation.SubjectType
 import com.xiaoyv.common.currentApplication
-import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.centerCropBitmap
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.roundedCorner
+import com.xiaoyv.widget.kts.dpf
 import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 
@@ -61,7 +63,7 @@ class AnimeWidgetDataService : RemoteViewsService() {
             }
 
             override fun onDestroy() {
-
+                items.clear()
             }
 
             override fun getCount(): Int {
@@ -80,10 +82,11 @@ class AnimeWidgetDataService : RemoteViewsService() {
                     Glide.with(context)
                         .asBitmap()
                         .load(item.images?.common.orEmpty())
-                        .error(CommonDrawable.bg_login)
                         .timeout(15000)
                         .submit()
                         .get()
+                        .centerCropBitmap(300, 400)
+                        .roundedCorner(6.dpf)
                 }.getOrNull()
 
                 val itemViews = RemoteViews(

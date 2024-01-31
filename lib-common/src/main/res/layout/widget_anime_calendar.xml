@@ -30,7 +30,7 @@
         android:alpha="0.9"
         android:gravity="center"
         android:paddingHorizontal="@dimen/ui_size_12"
-        android:text="每天更新"
+        android:text="每天更新，点击刷新"
         android:textColor="?android:textColorPrimaryInverse"
         android:textSize="@dimen/ui_font_10"
         tools:ignore="HardcodedText" />

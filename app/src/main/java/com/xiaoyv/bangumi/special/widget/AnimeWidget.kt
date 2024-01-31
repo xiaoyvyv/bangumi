@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.RemoteViews
+import android.widget.Toast
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.R
@@ -20,10 +21,17 @@ import com.xiaoyv.widget.kts.getParcelObj
 class AnimeWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == ACTION_CLICK_LIST_ITEM) {
-            val item: ApiCalendarEntity.CalendarEntityItem.Item? =
-                intent.extras?.getParcelObj(NavKey.KEY_PARCELABLE)
-            RouteHelper.jumpMediaDetail(item?.id.toString())
+        when (intent.action) {
+            ACTION_CLICK_LIST_ITEM -> {
+                val item: ApiCalendarEntity.CalendarEntityItem.Item? =
+                    intent.extras?.getParcelObj(NavKey.KEY_PARCELABLE)
+                RouteHelper.jumpMediaDetail(item?.id.toString())
+            }
+
+            ACTION_CLICK_REFRESH -> {
+                AnimeWidgetDataService.refresh()
+                Toast.makeText(context, "已刷新！", Toast.LENGTH_SHORT).show()
+            }
         }
         super.onReceive(context, intent)
     }
@@ -54,7 +62,7 @@ class AnimeWidget : AppWidgetProvider() {
 
         views.setRemoteAdapter(R.id.lv_item, intent)
 
-        val clickIntent: PendingIntent = Intent(context, AnimeWidget::class.java).run {
+        views.setPendingIntentTemplate(R.id.lv_item, Intent(context, AnimeWidget::class.java).run {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             action = ACTION_CLICK_LIST_ITEM
             data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
@@ -62,8 +70,17 @@ class AnimeWidget : AppWidgetProvider() {
                 context, 0, this,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             )
-        }
-        views.setPendingIntentTemplate(R.id.lv_item, clickIntent)
+        })
+
+        views.setOnClickPendingIntent(R.id.tv_update, Intent(context, AnimeWidget::class.java).run {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            action = ACTION_CLICK_REFRESH
+            data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+            PendingIntent.getBroadcast(
+                context, 0, this,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+        })
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
@@ -89,5 +106,6 @@ class AnimeWidget : AppWidgetProvider() {
 
     companion object {
         const val ACTION_CLICK_LIST_ITEM = "com.android.bangumi.ACTION_CLICK_LIST_ITEM"
+        const val ACTION_CLICK_REFRESH = "com.android.bangumi.ACTION_CLICK_REFRESH"
     }
 }
