@@ -44,8 +44,7 @@ data class ApiEpisodeEntity(
 ) : Parcelable {
 
     val epText: String
-        get() = if (type == EpApiType.TYPE_MAIN) ep
-        else sort.toString().removeSuffix(".0")
+        get() = sort.toString().removeSuffix(".0")
 
     /**
      * 解析放送状态

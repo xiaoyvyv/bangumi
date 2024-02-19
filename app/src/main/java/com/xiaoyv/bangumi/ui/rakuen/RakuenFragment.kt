@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentSuperBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -153,7 +153,7 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
                         RouteHelper.jumpLogin()
                         return@setOnMenuItemClickListener true
                     }
-                    RouteHelper.jumpCollection(CollectionType.TYPE_TOPIC)
+                    RouteHelper.jumpCollection(LocalCollectionType.TYPE_TOPIC)
                     true
                 }
         }

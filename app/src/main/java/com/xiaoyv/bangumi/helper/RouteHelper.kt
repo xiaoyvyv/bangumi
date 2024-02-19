@@ -64,7 +64,7 @@ import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.MonoOrderByType
@@ -552,7 +552,7 @@ object RouteHelper {
         ImageDetectCharacterActivity::class.open()
     }
 
-    fun jumpCollection(@CollectionType type: Int) {
+    fun jumpCollection(@LocalCollectionType type: Int) {
         CollectionActivity::class.open(bundleOf(NavKey.KEY_INTEGER to type))
     }
 

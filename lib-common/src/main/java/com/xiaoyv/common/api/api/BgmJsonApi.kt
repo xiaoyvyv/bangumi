@@ -43,6 +43,8 @@ import com.xiaoyv.common.config.annotation.BilibiliMediaType
 import com.xiaoyv.common.config.annotation.DouBanInterestType
 import com.xiaoyv.common.config.annotation.DouBanMediaType
 import com.xiaoyv.common.config.annotation.EpApiType
+import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.SubjectType
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.kts.randId
 import okhttp3.MultipartBody
@@ -359,6 +361,8 @@ interface BgmJsonApi {
     @GET("/v0/users/{userId}/collections")
     suspend fun queryUserCollect(
         @Path("userId") userId: String,
+        @Query("subject_type") @SubjectType subjectType: Int? = null,
+        @Query("type") @InterestType type: String? = null,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
     ): ApiCollectionEntity

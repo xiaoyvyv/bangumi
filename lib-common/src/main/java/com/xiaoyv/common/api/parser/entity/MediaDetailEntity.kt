@@ -59,6 +59,7 @@ data class MediaDetailEntity(
     @SerializedName("rating") var rating: MediaRating = MediaRating(),
     @SerializedName("friendRating") var friendRating: FriendRating = FriendRating(),
     @SerializedName("photos") var photos: List<DouBanPhotoEntity.Photo> = emptyList(),
+    @SerializedName("sort") var sort: Int = 0,
 ) : Parcelable, IdEntity {
 
     @Parcelize

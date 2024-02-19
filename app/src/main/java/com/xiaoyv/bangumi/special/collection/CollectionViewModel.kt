@@ -9,7 +9,7 @@ import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.blueprint.kts.toJson
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.database.collection.Collection
 import com.xiaoyv.common.helper.CollectionHelper
@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 class CollectionViewModel : BaseListViewModel<Collection>() {
     internal val onExportLivaData = UnPeekLiveData<Uri?>()
 
-    @CollectionType
+    @LocalCollectionType
     internal var type: Int = 0
 
     override suspend fun onRequestListImpl(): List<Collection> {

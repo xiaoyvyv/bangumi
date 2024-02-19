@@ -38,13 +38,18 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
      */
     open val scrollTopWhenRefresh: Boolean = true
 
+    open val hasFixedSize = false
+
+    internal open val layoutManager: LinearLayoutManager?
+        get() = binding.rvContent.layoutManager as? LinearLayoutManager
+
     internal val contentAdapter: BaseDifferAdapter<T, *> by lazy {
         onCreateContentAdapter().apply {
             ConfigHelper.configAdapterAnimation(this, binding.rvContent)
         }
     }
 
-    internal val adapterHelper by lazy {
+    private val adapterHelper by lazy {
         QuickAdapterHelper.Builder(contentAdapter)
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
                 override fun isAllowLoading(): Boolean {
@@ -62,16 +67,10 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
             .build()
     }
 
-    internal open val hasFixedSize = false
-
-    internal open val layoutManager: LinearLayoutManager?
-        get() = binding.rvContent.layoutManager as? LinearLayoutManager
-
     abstract fun onCreateContentAdapter(): BaseDifferAdapter<T, *>
 
     @CallSuper
     override fun initView() {
-        binding.rvContent.setHasFixedSize(hasFixedSize)
         binding.srlRefresh.initRefresh { false }
         binding.srlRefresh.setColorSchemeColors(hostActivity.getAttrColor(GoogleAttr.colorPrimary))
 
@@ -80,6 +79,7 @@ abstract class BaseListFragment<T, VM : BaseListViewModel<T>> :
 
     @CallSuper
     override fun initData() {
+        binding.rvContent.setHasFixedSize(hasFixedSize)
         binding.rvContent.layoutManager = onCreateLayoutManager()
         refreshAdapter()
     }

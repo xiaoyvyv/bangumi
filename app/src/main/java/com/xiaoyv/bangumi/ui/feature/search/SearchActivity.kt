@@ -29,19 +29,10 @@ class SearchActivity : BaseViewModelActivity<ActivitySearchBinding, SearchViewMo
     private val viewPool by lazy { RecycledViewPool() }
 
     override fun initView() {
-        binding.rvSubject.hasFixedSize()
         binding.rvSubject.setRecycledViewPool(viewPool)
-
-        binding.rvPerson.hasFixedSize()
         binding.rvPerson.setRecycledViewPool(viewPool)
-
-        binding.rvTag.hasFixedSize()
         binding.rvTag.setRecycledViewPool(viewPool)
-
-        binding.rvOther.hasFixedSize()
         binding.rvOther.setRecycledViewPool(viewPool)
-
-        binding.rvRecently.hasFixedSize()
         binding.rvRecently.setRecycledViewPool(viewPool)
     }
 

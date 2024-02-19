@@ -39,8 +39,13 @@ inline fun ImageView.loadImageAnimate(
     crossinline onReady: (Drawable) -> Unit = {},
     crossinline onFail: (Any?) -> Unit = {},
 ) {
+    if (model == null) {
+        Glide.with(this).clear(this)
+        return
+    }
+
     Glide.with(this)
-        .load(model ?: return)
+        .load(model)
         .let {
             when (cropType) {
                 ScaleType.CENTER_CROP -> it.centerCrop()

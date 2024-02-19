@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.database.collection.Collection
 import com.xiaoyv.common.helper.CollectionHelper
 import com.xiaoyv.common.kts.CommonDrawable
@@ -42,8 +42,8 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
 
     override val toolbarTitle: String
         get() = when (viewModel.type) {
-            CollectionType.TYPE_BLOG -> "我收藏的日志"
-            CollectionType.TYPE_TOPIC -> "我收藏的话题"
+            LocalCollectionType.TYPE_BLOG -> "我收藏的日志"
+            LocalCollectionType.TYPE_TOPIC -> "我收藏的话题"
             else -> "我的收藏"
         }
 

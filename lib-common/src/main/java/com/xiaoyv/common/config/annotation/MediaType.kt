@@ -39,6 +39,21 @@ annotation class MediaType {
         }
 
         /**
+         * 转为 [SubjectType]
+         */
+        fun toSubjectType(@MediaType mediaType: String): Int {
+            return when (mediaType) {
+                TYPE_UNKNOWN -> SubjectType.TYPE_NONE
+                TYPE_ANIME -> SubjectType.TYPE_ANIME
+                TYPE_BOOK -> SubjectType.TYPE_BOOK
+                TYPE_MUSIC -> SubjectType.TYPE_MUSIC
+                TYPE_GAME -> SubjectType.TYPE_GAME
+                TYPE_REAL -> SubjectType.TYPE_REAL
+                else -> SubjectType.TYPE_NONE
+            }
+        }
+
+        /**
          * 仅动画、三次元、书籍可以修改进度
          */
         fun canEditEpProgress(@MediaType mediaType: String): Boolean {

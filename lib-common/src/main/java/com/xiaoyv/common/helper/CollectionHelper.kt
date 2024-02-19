@@ -13,7 +13,7 @@ import com.xiaoyv.common.api.parser.parseHtml
 import com.xiaoyv.common.api.parser.parserImage
 import com.xiaoyv.common.api.request.GithubUpdateParam
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.database.collection.Collection
@@ -44,7 +44,7 @@ object CollectionHelper {
     val isEnable: Boolean
         get() = authorization.isNotBlank() && user.isNotBlank() && repo.isNotBlank()
 
-    suspend fun isCollected(tid: String, @CollectionType type: Int): Boolean {
+    suspend fun isCollected(tid: String, @LocalCollectionType type: Int): Boolean {
         return withContext(Dispatchers.IO) {
             BgmDatabaseManager.collection.isCollected(tid, type)
         }
@@ -58,7 +58,7 @@ object CollectionHelper {
                     tid = entity.id,
                     title = entity.title,
                     content = entity.content.substringContent(),
-                    type = CollectionType.TYPE_BLOG,
+                    type = LocalCollectionType.TYPE_BLOG,
                     tUid = entity.userId,
                     tName = entity.userName,
                     tAvatar = entity.userAvatar,
@@ -81,7 +81,7 @@ object CollectionHelper {
                     content = entity.content.substringContent().ifBlank {
                         TopicType.string(topicType)
                     },
-                    type = CollectionType.TYPE_TOPIC,
+                    type = LocalCollectionType.TYPE_TOPIC,
                     tUid = entity.userId,
                     tName = entity.userName,
                     tAvatar = entity.userAvatar,
@@ -94,7 +94,7 @@ object CollectionHelper {
         showToastCompat("收藏话题成功")
     }
 
-    suspend fun deleteCollect(tid: String, @CollectionType type: Int) {
+    suspend fun deleteCollect(tid: String, @LocalCollectionType type: Int) {
         withContext(Dispatchers.IO) {
             BgmDatabaseManager.collection.delete(tid, type)
         }

@@ -38,11 +38,9 @@ class EpGridView @JvmOverloads constructor(
     }
 
     init {
-        hasFixedSize()
         itemAnimator = null
-        if (isInEditMode) {
-            layoutManager = verticalManager
-        }
+
+        if (isInEditMode) layoutManager = verticalManager
     }
 
     /**

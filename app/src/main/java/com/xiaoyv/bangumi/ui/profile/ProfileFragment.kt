@@ -10,7 +10,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -80,7 +80,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                         .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                         .setOnMenuItemClickListener {
                             if (UserHelper.isLogin) {
-                                RouteHelper.jumpCollection(CollectionType.TYPE_TOPIC)
+                                RouteHelper.jumpCollection(LocalCollectionType.TYPE_TOPIC)
                             } else {
                                 RouteHelper.jumpLogin()
                             }
@@ -91,7 +91,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                         .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                         .setOnMenuItemClickListener {
                             if (UserHelper.isLogin) {
-                                RouteHelper.jumpCollection(CollectionType.TYPE_BLOG)
+                                RouteHelper.jumpCollection(LocalCollectionType.TYPE_BLOG)
                             } else {
                                 RouteHelper.jumpLogin()
                             }

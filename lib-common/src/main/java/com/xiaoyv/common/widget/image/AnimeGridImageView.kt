@@ -44,7 +44,7 @@ class AnimeGridImageView @JvmOverloads constructor(
         }
 
     init {
-        hasFixedSize()
+        setHasFixedSize(true)
         itemAnimator = null
         overScrollMode = OVER_SCROLL_NEVER
         isNestedScrollingEnabled = false

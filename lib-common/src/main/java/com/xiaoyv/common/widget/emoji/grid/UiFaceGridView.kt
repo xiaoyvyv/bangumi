@@ -30,7 +30,7 @@ class UiFaceGridView @JvmOverloads constructor(
     private val itemAdapter by lazy { ItemAdapter() }
 
     init {
-        hasFixedSize()
+        setHasFixedSize(true)
         layoutManager = GridLayoutManager(context, 8, GridLayoutManager.VERTICAL, false)
         adapter = itemAdapter
         setPadding(getDpx(8f))

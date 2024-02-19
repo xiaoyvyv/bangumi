@@ -36,7 +36,7 @@ class FormatGridView @JvmOverloads constructor(
         }
 
     init {
-        hasFixedSize()
+        setHasFixedSize(true)
         layoutManager = GridLayoutManager(context, 6, GridLayoutManager.VERTICAL, false)
         adapter = itemAdapter
         setPadding(getDpx(8f))

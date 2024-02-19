@@ -30,6 +30,9 @@ class ProcessPageFragment : BaseListFragment<MediaDetailEntity, ProcessPageViewM
     override val isOnlyOnePage: Boolean
         get() = true
 
+    override val scrollTopWhenRefresh: Boolean
+        get() = false
+
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.mediaType = arguments.getString(NavKey.KEY_STRING).orEmpty()
     }

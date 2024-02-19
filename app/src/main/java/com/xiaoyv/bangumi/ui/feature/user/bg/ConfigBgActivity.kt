@@ -46,7 +46,7 @@ class ConfigBgActivity : BaseViewModelActivity<ActivityUserBgBinding, ConfigBgVi
     }
 
     override fun initData() {
-        binding.rvImage.hasFixedSize()
+        binding.rvImage.setHasFixedSize(true)
         binding.rvImage.adapter = configBgAdapter
         binding.rvImage.removeImageScrollLoadController()
 

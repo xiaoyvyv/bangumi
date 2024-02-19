@@ -10,7 +10,7 @@ import com.xiaoyv.common.api.parser.impl.parserTopic
 import com.xiaoyv.common.api.parser.impl.parserTopicEp
 import com.xiaoyv.common.api.parser.impl.parserTopicIndex
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.CollectionHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -72,7 +72,7 @@ class TopicViewModel : BaseViewModel() {
                     }
                 }
                 entity.anchorCommentId = anchorCommentId.orEmpty()
-                isCollected.value = CollectionHelper.isCollected(topicId, CollectionType.TYPE_TOPIC)
+                isCollected.value = CollectionHelper.isCollected(topicId, LocalCollectionType.TYPE_TOPIC)
                 onTopicDetailLiveData.value = entity
             }
         )
@@ -114,7 +114,7 @@ class TopicViewModel : BaseViewModel() {
         val topicEntity = onTopicDetailLiveData.value ?: return
         launchUI {
             if (isCollected.value == true) {
-                CollectionHelper.deleteCollect(topicId, CollectionType.TYPE_TOPIC)
+                CollectionHelper.deleteCollect(topicId, LocalCollectionType.TYPE_TOPIC)
                 isCollected.value = false
             } else {
                 CollectionHelper.saveTopic(topicEntity, topicType)

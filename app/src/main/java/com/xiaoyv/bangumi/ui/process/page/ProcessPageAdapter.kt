@@ -25,8 +25,6 @@ class ProcessPageAdapter(
     private val clickAddEpProgress: (MediaDetailEntity, Boolean) -> Unit,
 ) : BaseQuickDiffBindingAdapter<MediaDetailEntity, FragmentProcessItemBinding>(IdDiffItemCallback()) {
 
-    private val gridViewPool by lazy { RecycledViewPool() }
-
     override fun BaseQuickBindingHolder<FragmentProcessItemBinding>.converted(item: MediaDetailEntity) {
         binding.ivCover.loadImageAnimate(item.cover)
         binding.tvTime.text = buildString {
@@ -41,20 +39,9 @@ class ProcessPageAdapter(
         binding.pb1.bind(item, true, clickAddEpProgress)
         binding.pb2.bind(item, false, clickAddEpProgress)
 
+        binding.epGrid.isVisible = mediaType != MediaType.TYPE_BOOK
         if (mediaType != MediaType.TYPE_BOOK) {
             binding.epGrid.fillProcessChapters(item.epList.orEmpty(), clickItemListener)
-        }
-    }
-
-    override fun onCreateViewHolder(
-        context: Context,
-        parent: ViewGroup,
-        viewType: Int,
-    ): BaseQuickBindingHolder<FragmentProcessItemBinding> {
-        return super.onCreateViewHolder(context, parent, viewType).apply {
-            binding.epGrid.isVisible = mediaType != MediaType.TYPE_BOOK
-            binding.epGrid.hasFixedSize()
-            binding.epGrid.setRecycledViewPool(gridViewPool)
         }
     }
 }

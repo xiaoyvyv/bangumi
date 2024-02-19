@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.special.collection
 import androidx.core.view.isVisible
 import com.blankj.utilcode.util.TimeUtils
 import com.xiaoyv.bangumi.databinding.ActivityCollectionItemBinding
-import com.xiaoyv.common.config.annotation.CollectionType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.database.collection.Collection
 import com.xiaoyv.common.helper.callback.IdDiffItemCallback
 import com.xiaoyv.common.kts.loadImageAnimate
@@ -29,8 +29,8 @@ class CollectionAdapter :
         binding.tvTime.text = TimeUtils.millis2String(item.time, "yyyy-MM-dd")
 
         binding.tvEp.text = when (item.type) {
-            CollectionType.TYPE_TOPIC -> "话题"
-            CollectionType.TYPE_BLOG -> "日志"
+            LocalCollectionType.TYPE_TOPIC -> "话题"
+            LocalCollectionType.TYPE_BLOG -> "日志"
             else -> "未知"
         }
     }

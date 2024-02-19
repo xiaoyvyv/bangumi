@@ -817,6 +817,9 @@ interface BgmWebApi {
 
     @GET("/subject/{mediaId}/stats")
     suspend fun queryMediaStats(@Path("mediaId", encoded = true) mediaId: String): Document
+
+    @GET("/m/prg")
+    suspend fun queryProcess(): Document
 }
 
 

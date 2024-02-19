@@ -63,7 +63,7 @@ class FilterHeaderAdapter(
         } else {
             viewHolder.binding.rvItems.layoutManager = linearLayoutManager
         }
-        viewHolder.binding.rvItems.hasFixedSize()
+        viewHolder.binding.rvItems.setHasFixedSize(true)
         viewHolder.binding.rvItems.itemAnimator = null
         viewHolder.binding.rvItems.adapter = ItemAdapter().apply {
             setOnDebouncedChildClickListener(R.id.tv_option_item) {
