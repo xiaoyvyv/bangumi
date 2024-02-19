@@ -54,8 +54,9 @@ class EpGridView @JvmOverloads constructor(
 
         if (isHorizontalGrid(list.size)) {
             layoutManager = horizontalManager
-            if (adapter !is EpGridHorItemAdapter) adapter = gridHorAdapter
+            adapter = gridHorAdapter
             gridHorAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
+            gridVerAdapter.submitList(null)
             gridHorAdapter.submitList(list) {
                 if (autoScrollWatched) {
                     scrollToWatched()
@@ -66,8 +67,9 @@ class EpGridView @JvmOverloads constructor(
             }
         } else {
             layoutManager = verticalManager
-            if (adapter !is EpGridVerItemAdapter) adapter = gridVerAdapter
+            adapter = gridVerAdapter
             gridVerAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
+            gridVerAdapter.submitList(null)
             gridVerAdapter.submitList(list)
         }
     }
@@ -82,7 +84,8 @@ class EpGridView @JvmOverloads constructor(
         layoutManager = verticalProcessManager
         adapter = gridVerAdapter
         gridVerAdapter.addOnItemChildClickListener(R.id.item_ep, listener)
-        gridVerAdapter.submitList(list)
+        gridVerAdapter.submitList(null)
+        gridVerAdapter.addAll(list)
     }
 
     /**
