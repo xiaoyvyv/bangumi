@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.response.douban.DouBanInterestEntity
 import com.xiaoyv.common.config.annotation.BilibiliInterestType
 import com.xiaoyv.common.config.annotation.BilibiliMediaType
 import com.xiaoyv.common.config.annotation.DouBanInterestType
+import com.xiaoyv.common.config.annotation.DouBanMediaType
 import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.helper.SyncerHelper
 import com.xiaoyv.common.helper.UserHelper
@@ -200,7 +201,7 @@ class SyncerViewModel : BaseViewModel() {
                 pageSize = 30
             ).data
             val interests = data?.list.orEmpty()
-            entities.addAll(interests.map { it.toSyncEntity() })
+            entities.addAll(interests.map { it.toSyncEntity(BilibiliMediaType.TYPE_ANIME) })
             liveData.sendValue(entities.size to data?.total.orEmpty())
             if (interests.isEmpty()) break
             page++
@@ -253,11 +254,12 @@ class SyncerViewModel : BaseViewModel() {
             score = sharingText.orEmpty().count { it == '★' } * 2.0,
             image = subject?.coverUrl.orEmpty(),
             interestType = DouBanInterestType.toInterest(status.orEmpty()),
-            interestText = DouBanInterestType.string(status.orEmpty(), subject?.type.orEmpty())
+            interestText = DouBanInterestType.string(status.orEmpty(), subject?.type.orEmpty()),
+            subjectType = DouBanMediaType.toSubjectType(subject?.type)
         )
     }
 
-    private fun AnimeBilibiliEntity.Item.toSyncEntity(): AnimeSyncEntity {
+    private fun AnimeBilibiliEntity.Item.toSyncEntity(@BilibiliMediaType type: String): AnimeSyncEntity {
         return AnimeSyncEntity(
             id = mediaId.toString(),
             name = title.orEmpty(),
@@ -265,7 +267,8 @@ class SyncerViewModel : BaseViewModel() {
             image = cover.orEmpty(),
             summary = evaluate.orEmpty(),
             interestType = BilibiliInterestType.toInterest(followStatus),
-            interestText = BilibiliInterestType.string(followStatus)
+            interestText = BilibiliInterestType.string(followStatus),
+            subjectType = BilibiliMediaType.toSubjectType(type)
         )
     }
 

@@ -14,4 +14,5 @@ import kotlinx.parcelize.Parcelize
 data class SyncNameParam(
     @SerializedName("id") var id: String = "",
     @SerializedName("name") var name: String? = null,
+    @SerializedName("type") var type: Int? = null,
 ) : Parcelable

@@ -31,6 +31,7 @@ class SyncerListViewModel : BaseListViewModel<AnimeSyncEntity>() {
     internal val onSyncFinish = UnPeekLiveData<Boolean>()
 
     override suspend fun onRequestListImpl(): List<AnimeSyncEntity> {
+        // 过滤出 BGM 包含的条目
         val fetchData = SyncerHelper.instance.fetchData()
         return if (BgmDatabaseManager.isSubjectInstalled()) filterByLocal(fetchData)
         else filterByRemote(fetchData)
@@ -38,7 +39,7 @@ class SyncerListViewModel : BaseListViewModel<AnimeSyncEntity>() {
 
     private suspend fun filterByRemote(fetchData: List<AnimeSyncEntity>): List<AnimeSyncEntity> {
         val params = fetchData.map {
-            SyncNameParam(id = it.id, name = it.name)
+            SyncNameParam(id = it.id, name = it.name, type = it.subjectType)
         }
         return BgmApiManager.bgmJsonApi.filterBgmItems(params).data.orEmpty().mapNotNull { item ->
             val target = fetchData.find { it.id == item.id }
@@ -55,8 +56,9 @@ class SyncerListViewModel : BaseListViewModel<AnimeSyncEntity>() {
                     chunked.forEach { item ->
                         if (item.name.isNotBlank()) {
                             val items = BgmDatabaseManager.subject.getByName(item.name)
-                            if (items.isNotEmpty()) {
-                                item.subject = items
+                            val target = items.find { it.type == item.subjectType }
+                            if (target != null) {
+                                item.subject = listOf(target)
                                 newList.add(item)
                             }
                         }

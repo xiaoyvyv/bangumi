@@ -47,5 +47,16 @@ annotation class DouBanMediaType {
                 else -> ""
             }
         }
+
+        fun toSubjectType(@DouBanMediaType type: String?): Int {
+            return when (type) {
+                TYPE_MOVE -> SubjectType.TYPE_ANIME
+                TYPE_BOOK -> SubjectType.TYPE_BOOK
+                TYPE_MUSIC -> SubjectType.TYPE_MUSIC
+                TYPE_GAME -> SubjectType.TYPE_GAME
+                TYPE_DRAMA -> SubjectType.TYPE_REAL
+                else -> SubjectType.TYPE_NONE
+            }
+        }
     }
 }

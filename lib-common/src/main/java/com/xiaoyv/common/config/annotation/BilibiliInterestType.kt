@@ -39,5 +39,6 @@ annotation class BilibiliInterestType {
                 else -> InterestType.TYPE_UNKNOWN
             }
         }
+
     }
 }

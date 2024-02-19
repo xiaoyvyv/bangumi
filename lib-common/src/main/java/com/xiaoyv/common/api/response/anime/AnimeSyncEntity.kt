@@ -3,6 +3,7 @@ package com.xiaoyv.common.api.response.anime
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.xiaoyv.common.config.annotation.InterestType
+import com.xiaoyv.common.config.annotation.SubjectType
 import com.xiaoyv.common.database.subject.SubjectItem
 import com.xiaoyv.common.helper.callback.IdEntity
 import kotlinx.parcelize.Parcelize
@@ -23,6 +24,8 @@ data class AnimeSyncEntity(
     var summary: String = "",
     var image: String = "",
     var score: Double = 0.0,
+    @SubjectType
+    var subjectType: Int = SubjectType.TYPE_NONE,
     @InterestType
     var interestType: String = InterestType.TYPE_UNKNOWN,
     var interestText: String = "",

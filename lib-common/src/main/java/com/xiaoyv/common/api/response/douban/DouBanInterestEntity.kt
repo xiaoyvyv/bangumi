@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 import androidx.annotation.Keep
 
 import com.google.gson.annotations.SerializedName
+import com.xiaoyv.common.config.annotation.DouBanMediaType
 
 
 /**
@@ -94,6 +95,7 @@ data class DouBanInterestEntity(
         @SerializedName("title")
         var title: String? = null,
         @SerializedName("type")
+        @DouBanMediaType
         var type: String? = null,
         @SerializedName("uri")
         var uri: String? = null,

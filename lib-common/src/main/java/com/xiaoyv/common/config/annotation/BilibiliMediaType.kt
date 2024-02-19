@@ -27,5 +27,13 @@ annotation class BilibiliMediaType {
                 else -> ""
             }
         }
+
+        fun toSubjectType(@BilibiliMediaType type: String?): Int {
+            return when (type) {
+                TYPE_ANIME -> SubjectType.TYPE_ANIME
+                TYPE_REAL -> SubjectType.TYPE_REAL
+                else -> SubjectType.TYPE_NONE
+            }
+        }
     }
 }

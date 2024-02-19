@@ -65,6 +65,9 @@ class SyncerHelper private constructor() {
         }
     }
 
+    /**
+     * 获取第三方平台的条目数据
+     */
     fun fetchData(): List<AnimeSyncEntity> {
         return mutableListOf<AnimeSyncEntity>().apply {
             addAll(bgmNotExistWishCollections)
