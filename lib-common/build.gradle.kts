@@ -82,7 +82,7 @@ dependencies {
     api(libs.jieba.analysis)
 
     //noinspection UseTomlInstead
-    api(platform("com.google.firebase:firebase-bom:32.7.1"))
+    api(platform("com.google.firebase:firebase-bom:32.7.2"))
     //noinspection UseTomlInstead
     api("com.google.firebase:firebase-crashlytics-ktx")
     //noinspection UseTomlInstead
