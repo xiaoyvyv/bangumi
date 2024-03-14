@@ -44,6 +44,13 @@ class OkHttpProgressGlideModule : AppGlideModule() {
                     .newBuilder()
                     .timeout(240)
                     .apply { networkInterceptors().removeIf { it is HttpLoggingInterceptor } }
+                    .addInterceptor {
+                        it.proceed(
+                            it.request().newBuilder()
+                                .addHeader("Cookie", "kira=1")
+                                .build()
+                        )
+                    }
                     .addNetworkInterceptor(createInterceptor(DispatchingProgressListener()))
                     .build()
             )
