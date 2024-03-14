@@ -63,6 +63,7 @@ class CommonInterceptor : Interceptor {
                 .addHeader("TE", "trailers")
                 .addHeader("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
                 .addHeader("User-Agent", userAgent)
+                .addHeader("Cookie", "kira=1")
                 .let {
                     if (request.header("Referer").isNullOrBlank().not() || request.isNotGet) it
                     else it.addHeader("Referer", request.url.toString())

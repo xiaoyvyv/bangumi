@@ -5,10 +5,10 @@
 
     <color name="save_wish">#F09199</color>
     <color name="save_wish_text">@color/ui_white</color>
+    <color name="save_do">#36CA36</color>
     <color name="save_collect">#4897ff</color>
     <color name="save_collect_alpha">#9f4897ff</color>
     <color name="save_collect_text">@color/ui_white</color>
-    <color name="save_do">#4897ff</color>
     <color name="save_do_text">@color/ui_white</color>
     <color name="save_on_hold">#FF9800</color>
     <color name="save_on_hold_text">@color/ui_white</color>

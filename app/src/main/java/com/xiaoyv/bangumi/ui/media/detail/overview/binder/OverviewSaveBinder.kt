@@ -81,16 +81,16 @@ class OverviewSaveBinder(private var onSaveBtnClickListener: (AdapterTypeItem, I
                         holder.binding.tvSave.setTextColor(ColorUtils.getColor(CommonColor.save_wish_text))
                     }
 
-                    InterestType.TYPE_COLLECT -> {
-                        holder.binding.tvSave.backgroundTintList =
-                            ColorUtils.getColor(CommonColor.save_collect).tint
-                        holder.binding.tvSave.setTextColor(ColorUtils.getColor(CommonColor.save_collect_text))
-                    }
-
                     InterestType.TYPE_DO -> {
                         holder.binding.tvSave.backgroundTintList =
                             ColorUtils.getColor(CommonColor.save_do).tint
                         holder.binding.tvSave.setTextColor(ColorUtils.getColor(CommonColor.save_do_text))
+                    }
+
+                    InterestType.TYPE_COLLECT -> {
+                        holder.binding.tvSave.backgroundTintList =
+                            ColorUtils.getColor(CommonColor.save_collect).tint
+                        holder.binding.tvSave.setTextColor(ColorUtils.getColor(CommonColor.save_collect_text))
                     }
 
                     InterestType.TYPE_ON_HOLD -> {
