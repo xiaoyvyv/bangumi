@@ -138,7 +138,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
                 onItemClick = { _, position ->
                     if (position == 0) {
                         RouteHelper.jumpWeb(
-                            GlobalConfig.docAuthor,
+                            url = GlobalConfig.docAuthor,
                             fitToolbar = true,
                             smallToolbar = true
                         )

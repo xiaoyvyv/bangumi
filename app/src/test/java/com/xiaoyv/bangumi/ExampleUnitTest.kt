@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi
 
+import com.xiaoyv.common.config.GlobalConfig
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,6 +12,16 @@ import org.junit.Test
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        jumpWeb(GlobalConfig.docPrivacy, fitToolbar = true, smallToolbar = true)
+    }
+
+    private fun jumpWeb(
+        url: String,
+        fitToolbar: Boolean = true,
+        smallToolbar: Boolean = false,
+        forceBrowser: Boolean = false,
+        disableHandUrl: Boolean = false,
+        injectJs: String = "",
+    ) {
     }
 }

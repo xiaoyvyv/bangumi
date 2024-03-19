@@ -95,7 +95,13 @@ object RouteHelper {
      * - https://bangumi.tv/group/topic/390252#post_2535628
      * - /person/57315
      */
-    fun handleUrl(titleLink: String): Boolean {
+    fun handleUrl(
+        titleLink: String,
+        onOpenUrl: (String) -> Boolean = {
+            jumpWeb(it, fitToolbar = true, disableHandUrl = true)
+            true
+        },
+    ): Boolean {
         val id = titleLink.substringAfterLast("/")
             .substringBefore("#")
             .substringBefore("?")
@@ -108,8 +114,7 @@ object RouteHelper {
 
         // 无法处理的 URL 直接跳转内置浏览器
         if (URLUtil.isNetworkUrl(titleLink) && !handleHost.contains(titleLink.toHttpUrl().host)) {
-            jumpWeb(titleLink, fitToolbar = true, disableHandUrl = true)
-            return true
+            return onOpenUrl(titleLink)
         }
         // 这是一段包含链接的文本，比如：http://example.com!！ 和 https://www.example.org 还有一些其他的文字
 
@@ -589,7 +594,7 @@ object RouteHelper {
             return
         }
 
-        if (disableHandUrl.not() && handleUrl(url)) return
+        if (!disableHandUrl && handleUrl(url) { false }) return
 
         WebActivity::class.open(
             bundleOf(
