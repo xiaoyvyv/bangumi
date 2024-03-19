@@ -8,11 +8,9 @@ import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.bean.AlmanacEntity
-import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.kts.dpi
-import com.xiaoyv.widget.kts.getAttrColor
 
 /**
  * Class: [AlmanacActivity]
@@ -40,7 +38,11 @@ class AlmanacActivity : BaseListActivity<AlmanacEntity, AlmanacViewModel>() {
         super.initListener()
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_year) {
-            RouteHelper.jumpWeb(BgmApiManager.URL_BASE_WEB + "/award/${it.id}", fitToolbar = false)
+            RouteHelper.jumpWeb(
+                url = BgmApiManager.buildAlmanacUrl(it.id),
+                fitToolbar = true,
+                smallToolbar = true
+            )
         }
     }
 

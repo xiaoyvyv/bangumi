@@ -29,7 +29,6 @@ class DiscoverAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         DiscoverTab("日志", DiscoverType.TYPE_BLOG),
         DiscoverTab("目录", DiscoverType.TYPE_INDEX),
         DiscoverTab("小组", DiscoverType.TYPE_GROUP),
-//        DiscoverTab("维基", DiscoverType.TYPE_WIKI)
     )
 
     override fun createFragment(position: Int): Fragment {

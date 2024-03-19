@@ -203,5 +203,19 @@ class BgmApiManager {
                 else -> URL_BASE_WEB
             }
         }
+
+        /**
+         * 按月份查询番剧链接
+         */
+        fun buildMediaTvUrl(mediaType: String, yearMonth: String): String {
+            return "$URL_BASE_WEB/${mediaType}/tv/airtime/$yearMonth"
+        }
+
+        /**
+         * 年鉴 URL
+         */
+        fun buildAlmanacUrl(id: String): String {
+            return "$URL_BASE_WEB/award/$id"
+        }
     }
 }

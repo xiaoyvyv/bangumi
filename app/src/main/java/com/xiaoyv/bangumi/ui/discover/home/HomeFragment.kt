@@ -7,16 +7,11 @@ import com.xiaoyv.bangumi.databinding.FragmentHomeBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.discover.DiscoverFragment
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.blueprint.kts.launchUI
-import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
 import com.xiaoyv.widget.kts.toast
 import com.xiaoyv.widget.kts.useNotNull
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * Class: [HomeFragment]
@@ -43,7 +38,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     FeatureType.TYPE_SYNCER -> RouteHelper.jumpSyncer()
                     FeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
                     FeatureType.TYPE_MAGI -> RouteHelper.jumpMagi()
-                    FeatureType.TYPE_ANIME_PICTURES -> RouteHelper.jumpAnimePictures()
+                    FeatureType.TYPE_ANIME_YUC -> RouteHelper.jumpYuc()
                     FeatureType.TYPE_ALMANAC -> RouteHelper.jumpAlmanac()
                     FeatureType.TYPE_PROCESS -> RouteHelper.jumpFragmentPage(FeatureType.TYPE_PROCESS)
                     FeatureType.TYPE_RANK -> RouteHelper.jumpFragmentPage(FeatureType.TYPE_RANK)

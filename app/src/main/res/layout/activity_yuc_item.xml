@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.xiaoyv.common.widget.menu.AnimeSectionView
+        android:id="@+id/section_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_winter"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:layout_marginEnd="@dimen/ui_size_8"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:alpha="0.8"
+        android:foreground="@drawable/shape_bottom_edge_corner"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/iv_spring"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/section_view"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
+        app:srcCompat="@drawable/bg_new_anime_winter" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_spring"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginStart="@dimen/ui_size_8"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:alpha="0.8"
+        android:foreground="@drawable/shape_bottom_edge_corner"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_winter"
+        app:layout_constraintTop_toTopOf="@+id/iv_winter"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
+        app:srcCompat="@drawable/bg_new_anime_spring" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_summer"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:layout_marginTop="@dimen/ui_layout_margin"
+        android:layout_marginEnd="@dimen/ui_size_8"
+        android:layout_marginBottom="@dimen/ui_layout_margin"
+        android:alpha="0.8"
+        android:foreground="@drawable/shape_bottom_edge_corner"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/iv_autumn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_winter"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
+        app:srcCompat="@drawable/bg_new_anime_summer" />
+
+    <com.xiaoyv.common.widget.image.AnimeImageView
+        android:id="@+id/iv_autumn"
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="@dimen/ui_size_0"
+        android:layout_marginStart="@dimen/ui_size_8"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:alpha="0.8"
+        android:foreground="@drawable/shape_bottom_edge_corner"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_summer"
+        app:layout_constraintTop_toTopOf="@+id/iv_summer"
+        app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall"
+        app:srcCompat="@drawable/bg_new_anime_autumn" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="end|center"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:shadowColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:text="冬"
+        android:textAppearance="?attr/textAppearanceDisplayMedium"
+        android:textColor="#6666E6"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_winter"
+        app:layout_constraintStart_toStartOf="@+id/iv_winter"
+        app:layout_constraintTop_toTopOf="@+id/iv_winter" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="end|center"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:shadowColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:text="春"
+        android:textAppearance="?attr/textAppearanceDisplayMedium"
+        android:textColor="#EC6690"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_spring"
+        app:layout_constraintStart_toStartOf="@+id/iv_spring"
+        app:layout_constraintTop_toTopOf="@+id/iv_spring" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="end|center"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:shadowColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:text="夏"
+        android:textAppearance="?attr/textAppearanceDisplayMedium"
+        android:textColor="#49BA49"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_summer"
+        app:layout_constraintStart_toStartOf="@+id/iv_summer"
+        app:layout_constraintTop_toTopOf="@+id/iv_summer" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="end|center"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        android:shadowColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:text="秋"
+        android:textAppearance="?attr/textAppearanceDisplayMedium"
+        android:textColor="#E49B2E"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_autumn"
+        app:layout_constraintStart_toStartOf="@+id/iv_autumn"
+        app:layout_constraintTop_toTopOf="@+id/iv_autumn" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:padding="@dimen/ui_size_8"
+        android:shadowColor="#EC6690"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="1 月新番"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_winter"
+        app:layout_constraintEnd_toEndOf="@+id/iv_winter"
+        app:layout_constraintStart_toStartOf="@+id/iv_winter" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:padding="@dimen/ui_size_8"
+        android:shadowColor="#49BA49"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="4 月新番"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_spring"
+        app:layout_constraintEnd_toEndOf="@+id/iv_spring"
+        app:layout_constraintStart_toStartOf="@+id/iv_spring" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:padding="@dimen/ui_size_8"
+        android:shadowColor="#E49B2E"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="7 月新番"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_summer"
+        app:layout_constraintEnd_toEndOf="@+id/iv_summer"
+        app:layout_constraintStart_toStartOf="@+id/iv_summer" />
+
+    <com.xiaoyv.common.widget.text.AnimeTextView
+        android:layout_width="@dimen/ui_size_0"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:padding="@dimen/ui_size_8"
+        android:shadowColor="#6666E6"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="10 月新番"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_autumn"
+        app:layout_constraintEnd_toEndOf="@+id/iv_autumn"
+        app:layout_constraintStart_toStartOf="@+id/iv_autumn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

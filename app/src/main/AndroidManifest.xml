@@ -326,6 +326,14 @@
             android:name="com.xiaoyv.bangumi.special.syncer.list.SyncerListActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.yuc.YucActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.yuc.detail.YucDetailActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
 
         <receiver
             android:name="com.xiaoyv.bangumi.special.widget.AnimeWidget"

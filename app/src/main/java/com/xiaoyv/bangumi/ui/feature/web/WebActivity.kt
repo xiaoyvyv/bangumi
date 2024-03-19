@@ -36,17 +36,17 @@ class WebActivity : BaseBindingActivity<ActivityWebBinding>() {
     private var url = ""
     private var injectJs = ""
     private var fitToolbar = false
-    private var hideToolbar = false
+    private var smallToolbar = false
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         url = bundle.getString(NavKey.KEY_STRING).orEmpty()
         injectJs = bundle.getString(NavKey.KEY_STRING_SECOND).orEmpty()
         fitToolbar = bundle.getBoolean(NavKey.KEY_BOOLEAN, false)
-        hideToolbar = bundle.getBoolean(NavKey.KEY_BOOLEAN_SECOND, false)
+        smallToolbar = bundle.getBoolean(NavKey.KEY_BOOLEAN_SECOND, false)
     }
 
     override fun initView() {
-        if (hideToolbar) {
+        if (smallToolbar) {
             binding.toolbar.setTitleTextAppearance(
                 activity,
                 GoogleStyle.TextAppearance_Material3_LabelSmall
@@ -95,7 +95,7 @@ class WebActivity : BaseBindingActivity<ActivityWebBinding>() {
                     return
                 }
 
-                RouteHelper.jumpWeb(url, fitToolbar, hideToolbar)
+                RouteHelper.jumpWeb(url, fitToolbar, smallToolbar)
             }
         }
 

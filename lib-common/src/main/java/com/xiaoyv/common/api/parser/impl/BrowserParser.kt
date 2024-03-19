@@ -83,7 +83,8 @@ object BrowserParser {
         return browserEntity
     }
 
-    private val infoTimeRegex by lazy { "(\\d{4}-\\d{1,2})|((\\d{4})年(\\d{1,2})月)".toRegex() }
+    private val infoYearMonthRegex by lazy { "(\\d{4}-\\d{1,2})|((\\d{4})年(\\d{1,2})月)".toRegex() }
+    private val infoMonthDayRegex by lazy { "(\\d{4}-\\d{1,2}-\\d{1,2})|((\\d{1,2})月(\\d{1,2})日)".toRegex() }
     private val infoEpsRegex by lazy { "(\\d+\\s*话)".toRegex() }
 
     /**
@@ -95,7 +96,8 @@ object BrowserParser {
      *  25话 / 2023年10月1日 / 窪岡俊之 / 硬梨菜・不二涼介（講談社「週刊少年マガジン」連載） / 倉島亜由美
      */
     fun parserInfoTip(infoTip: String): BrowserEntity.InfoTip {
-        val time = infoTimeRegex.groupValue(infoTip, 0)
+        val yearMonth = infoYearMonthRegex.groupValue(infoTip, 0)
+        val monthDay = infoMonthDayRegex.groupValue(infoTip, 0)
         val eps = infoEpsRegex.groupValueOne(infoTip)
         val info = infoTip
             .replace(infoEpsRegex, "")
@@ -103,6 +105,11 @@ object BrowserParser {
             .filter { it.isNotBlank() }
             .joinToString(" / ") { it.trim() }
 
-        return BrowserEntity.InfoTip(time = time, eps = eps, info = info)
+        return BrowserEntity.InfoTip(
+            yearMonth = yearMonth,
+            monthDay = monthDay,
+            eps = eps,
+            info = info
+        )
     }
 }

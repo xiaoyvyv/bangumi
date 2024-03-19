@@ -40,7 +40,7 @@ class MediaPageAdapter(@MediaType private val mediaType: String) :
         binding.tvCollect.isVisible = item.isCollection
 
         item.infoTip.apply {
-            binding.tvTag.text = time.ifBlank { eps }
+            binding.tvTag.text = yearMonth.ifBlank { eps }
         }
     }
 

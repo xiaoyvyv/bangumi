@@ -44,7 +44,8 @@ data class BrowserEntity(
     @Keep
     @Parcelize
     data class InfoTip(
-        var time: String = "",
+        var yearMonth: String = "",
+        var monthDay: String = "",
         var eps: String = "",
         var info: String = "",
     ) : Parcelable {

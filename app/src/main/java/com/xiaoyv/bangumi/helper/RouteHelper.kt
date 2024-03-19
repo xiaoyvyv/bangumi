@@ -13,6 +13,8 @@ import com.xiaoyv.bangumi.special.magnet.MagnetActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.syncer.SyncerActivity
 import com.xiaoyv.bangumi.special.syncer.list.SyncerListActivity
+import com.xiaoyv.bangumi.special.yuc.YucActivity
+import com.xiaoyv.bangumi.special.yuc.detail.YucDetailActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
@@ -64,8 +66,8 @@ import com.xiaoyv.blueprint.kts.open
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
-import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.FeatureType
+import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.annotation.MonoOrderByType
 import com.xiaoyv.common.config.annotation.TopicType
@@ -441,32 +443,6 @@ object RouteHelper {
         )
     }
 
-
-    fun jumpWeb(
-        url: String,
-        fitToolbar: Boolean = true,
-        smallToolbar: Boolean = false,
-        forceBrowser: Boolean = false,
-        disableHandUrl: Boolean = false,
-        injectJs: String = "",
-    ) {
-        if (forceBrowser || ConfigHelper.isForceBrowser) {
-            openInBrowser(url)
-            return
-        }
-
-        if (disableHandUrl.not() && handleUrl(url)) return
-
-        WebActivity::class.open(
-            bundleOf(
-                NavKey.KEY_STRING to url,
-                NavKey.KEY_STRING_SECOND to injectJs,
-                NavKey.KEY_BOOLEAN to fitToolbar,
-                NavKey.KEY_BOOLEAN_SECOND to smallToolbar
-            )
-        )
-    }
-
     fun jumpTimeline(timelineId: String) {
         TimelineDetailActivity::class.open(bundleOf(NavKey.KEY_STRING to timelineId))
     }
@@ -560,6 +536,16 @@ object RouteHelper {
         NetworkConfigActivity::class.open()
     }
 
+    fun jumpYuc() {
+        YucActivity::class.open()
+    }
+
+    fun jumpYucDetail(yearMonth: String) {
+        YucDetailActivity::class.open(
+            bundleOf(NavKey.KEY_STRING to yearMonth)
+        )
+    }
+
     fun jumpDollars() {
         if (UserHelper.isLogin.not()) {
             jumpLogin()
@@ -588,5 +574,30 @@ object RouteHelper {
 
     fun jumpSyncerList() {
         SyncerListActivity::class.open()
+    }
+
+    fun jumpWeb(
+        url: String,
+        fitToolbar: Boolean = true,
+        smallToolbar: Boolean = false,
+        forceBrowser: Boolean = false,
+        disableHandUrl: Boolean = false,
+        injectJs: String = "",
+    ) {
+        if (forceBrowser || ConfigHelper.isForceBrowser) {
+            openInBrowser(url)
+            return
+        }
+
+        if (disableHandUrl.not() && handleUrl(url)) return
+
+        WebActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to url,
+                NavKey.KEY_STRING_SECOND to injectJs,
+                NavKey.KEY_BOOLEAN to fitToolbar,
+                NavKey.KEY_BOOLEAN_SECOND to smallToolbar
+            )
+        )
     }
 }

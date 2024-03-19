@@ -26,7 +26,6 @@ swiperefreshlayout = "1.1.0"
 ksp = "1.9.10-1.0.13"
 lifecycleLivedataKtx = "2.7.0"
 lifecycleViewmodelKtx = "2.7.0"
-jetbrainsKotlinJvm = "1.9.0"
 workRuntimeKtx = "2.9.0"
 vico = "2.0.0-alpha.5"
 slf4j-simple = "2.0.9"
@@ -70,7 +69,7 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-simple"
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 googleKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
