@@ -82,17 +82,6 @@
           <option name="screenY" value="1080" />
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
-          <option name="api" value="28" />
-          <option name="brand" value="samsung" />
-          <option name="codename" value="dreamlte" />
-          <option name="id" value="dreamlte" />
-          <option name="manufacturer" value="Samsung" />
-          <option name="name" value="Galaxy S8" />
-          <option name="screenDensity" value="480" />
-          <option name="screenX" value="2220" />
-          <option name="screenY" value="1080" />
-        </PersistentDeviceSelectionData>
-        <PersistentDeviceSelectionData>
           <option name="api" value="33" />
           <option name="brand" value="google" />
           <option name="codename" value="felix" />

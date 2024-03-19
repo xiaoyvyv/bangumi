@@ -115,11 +115,20 @@ class MediaPageViewModel : BaseViewModel() {
             items.remove(sortOption)
         }
 
+        val monthOption = items.find { it.isMonth }
+        if (monthOption != null) {
+            items.remove(monthOption)
+        }
+
         val path = items
             .filter { it.value.orEmpty().isNotBlank() }
             .map {
                 when {
-                    it.isYear -> "/airtime/" + it.value
+                    it.isYear -> {
+                        if (monthOption != null) "/airtime/" + it.value + "-" + monthOption.value
+                        else "/airtime/" + it.value
+                    }
+
                     else -> it.value
                 }
             }

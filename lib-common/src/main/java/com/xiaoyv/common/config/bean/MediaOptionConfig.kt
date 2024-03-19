@@ -58,6 +58,8 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
                 var value: String? = null,
                 @SerializedName("isYear")
                 var isYear: Boolean = false,
+                @SerializedName("isMonth")
+                var isMonth: Boolean = false,
 
                 /**
                  * 下面的互斥
@@ -92,8 +94,9 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
                 val mediaType = it.mediaType.orEmpty()
                 val option = it.option.orEmpty().toMutableList()
                 option.removeIf { item -> item.generate }
-                option.add(buildTimeOption(mediaType, fromYear, yearCount))
                 option.add(buildSort(mediaType))
+                option.add(buildTimeOption(mediaType, fromYear, yearCount))
+                option.add(buildMonthOption(mediaType))
                 option.add(buildPinYinOption(mediaType))
                 it.option = option
             }
@@ -151,7 +154,7 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
             yearCount: Int,
         ): Config.Option {
             val option = Config.Option()
-            option.title = "时间"
+            option.title = "年份"
             option.pathIndex = 10
             option.generate = true
             option.items = arrayListOf<Config.Option.Item>().apply {
@@ -171,6 +174,31 @@ class MediaOptionConfig : ArrayList<MediaOptionConfig.Config>(), Parcelable {
                 }
                 add(0, Config.Option.Item(title = "来年", value = YEAR_UP))
                 add(yearCount + 1, Config.Option.Item(title = "往年", value = YEAR_DOWN))
+            }
+            return option
+        }
+
+        /**
+         * 构建月份选项
+         */
+        private fun buildMonthOption(mediaType: String): Config.Option {
+            val option = Config.Option()
+            option.title = "月份"
+            option.pathIndex = 11
+            option.generate = true
+            option.items = arrayListOf<Config.Option.Item>().apply {
+                repeat(12) {
+                    add(
+                        Config.Option.Item(
+                            groupTitle = option.title.orEmpty(),
+                            pathIndex = option.pathIndex,
+                            mediaType = mediaType,
+                            title = (it + 1).toString() + "月",
+                            value = (it + 1).toString(),
+                            isMonth = true,
+                        )
+                    )
+                }
             }
             return option
         }

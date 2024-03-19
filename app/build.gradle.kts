@@ -14,7 +14,7 @@ android {
         applicationId = "com.xiaoyv.bangumi"
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
+        versionCode = 7
         versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

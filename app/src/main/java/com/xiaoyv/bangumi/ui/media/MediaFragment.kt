@@ -2,6 +2,8 @@ package com.xiaoyv.bangumi.ui.media
 
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -88,6 +90,12 @@ class MediaFragment : BaseViewModelFragment<FragmentMediaBinding, MediaViewModel
         binding.flOptions.offscreenPageLimit = optionAdapter.itemCount
 
         tabLayoutMediator.attach()
+
+        // 底部空白适配
+        ViewCompat.setOnApplyWindowInsetsListener(binding.flOptions) { _, i ->
+            binding.flOptions.updatePadding(bottom = 0)
+            i
+        }
     }
 
     override fun initListener() {

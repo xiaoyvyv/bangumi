@@ -65,8 +65,22 @@ class MediaOptionFragment :
                     return@setOnDebouncedChildClickListener
                 }
 
+                // 如果没有选择年份时，选了月份则提示
+                if (it.isMonth && optionAdapter.selected.find { item -> item.isYear } == null) {
+                    showToast("请先选择年份后再进行操作")
+                    return@setOnDebouncedChildClickListener
+                }
+
                 if (optionAdapter.isSelected(it)) {
                     optionAdapter.unselectItem(it)
+
+                    // 取消选取年份同时自动取消月份
+                    if (it.isYear) {
+                        val month = optionAdapter.selected.find { item -> item.isMonth }
+                        if (month != null) {
+                            optionAdapter.unselectItem(month)
+                        }
+                    }
                 } else {
                     optionAdapter.selectItem(it)
                 }
