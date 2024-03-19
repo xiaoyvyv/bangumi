@@ -48,6 +48,6 @@
         android:layout_width="@dimen/ui_size_300"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/transparent"
+        android:background="?attr/colorSurface"
         android:fitsSystemWindows="true" />
 </androidx.drawerlayout.widget.DrawerLayout>
