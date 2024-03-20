@@ -10,10 +10,9 @@ import androidx.work.WorkManager
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import com.xiaoyv.blueprint.BluePrint
-import com.xiaoyv.blueprint.base.BaseActivity
 import com.xiaoyv.blueprint.base.BaseConfig
-import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.helper.H5PreLoadHelper
+import com.xiaoyv.common.helper.MiKanHelper
 import com.xiaoyv.common.helper.SegmentHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.theme.ThemeHelper
@@ -48,23 +47,40 @@ class MainApp : Application() {
         super.onCreate()
         currentApplication = this
 
+        // 主题初始化
         ThemeHelper.instance.initTheme(this)
 
+        // Base init
         initBaseConfig()
+
+        // 框架初始化
         BluePrint.init(this, false)
+
+        // H5 预加载
         H5PreLoadHelper.preloadWebView(this)
+
+        // 用户数据
         UserHelper.initLoad()
+
+        // 表情
         UiFaceManager.manager.initEmojiMap()
+
+        // 心跳刷新通知
         startIdleWork()
+
+        // 分词
         SegmentHelper.preload()
+
+        // MiKan ID映射
+        MiKanHelper.preload()
+
+        // Log
         LogUtils.getConfig().isLogSwitch = AppUtils.isAppDebug()
     }
 
     private fun initBaseConfig() {
         BaseConfig.config.globalConfig = object : BaseConfig.OnConfigActivity {
-            override fun initBarConfig(activity: BaseActivity, nightMode: Boolean) {
-                super.initBarConfig(activity, nightMode)
-            }
+
         }
     }
 

@@ -151,6 +151,18 @@ interface BgmWebApi {
     suspend fun createToken(@Body param: CreateTokenParam = CreateTokenParam()): String
 
     /**
+     * 获取蜜柑计划首页信息
+     */
+    @GET("https://mikanime.tv")
+    suspend fun queryMikanHome(): Document
+
+    /**
+     * 获取蜜柑计划媒体详情
+     */
+    @GET("https://mikanime.tv/Home/Bangumi/{mikanId}")
+    suspend fun queryMikanDetail(@Path("mikanId") mikanId: String): Response<ResponseBody>
+
+    /**
      * 查询用户信息
      */
     @GET("/settings")
