@@ -22,6 +22,7 @@ import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.config.bean.PostAttach
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.FixHelper
+import com.xiaoyv.common.helper.MiKanHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.addCommonMenu
 import com.xiaoyv.common.helper.callback.AutoHideTitleListener
@@ -238,6 +239,17 @@ class MediaDetailActivity :
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (viewModel.requireNotLocked) {
+            val mapId = MiKanHelper.getMikanMapId(viewModel.mediaId)
+            if (mapId.isNotBlank()) {
+                menu.add("RSS")
+                    .setIcon(CommonDrawable.ic_rss)
+                    .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                    .setOnMenuItemClickListener {
+                        RouteHelper.jumpWeb("https://mikanime.tv/Home/Bangumi/$mapId")
+                        true
+                    }
+            }
+
             menu.add("添加目录")
                 .setIcon(CommonDrawable.ic_add_index)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)

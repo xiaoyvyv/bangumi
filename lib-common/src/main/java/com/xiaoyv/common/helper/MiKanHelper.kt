@@ -112,4 +112,13 @@ object MiKanHelper {
             debugLog { "Mikan, 同步错误: $id, error -> $it" }
         }
     }
+
+    /**
+     * 根据 bgmId 获取 mikanId
+     */
+    fun getMikanMapId(bgmId: String?): String {
+        bgmId ?: return ""
+        val entry = idMap.entries.find { it.value == bgmId }
+        return entry?.key.orEmpty()
+    }
 }
