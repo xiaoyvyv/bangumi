@@ -23,9 +23,9 @@ class AnimeWidget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             ACTION_CLICK_LIST_ITEM -> {
-                val item: ApiCalendarEntity.CalendarEntityItem.Item? =
+                val item: ApiCalendarEntity.MediaItem? =
                     intent.extras?.getParcelObj(NavKey.KEY_PARCELABLE)
-                RouteHelper.jumpMediaDetail(item?.id.toString())
+                RouteHelper.jumpMediaDetail(item?.id.orEmpty())
             }
 
             ACTION_CLICK_REFRESH -> {

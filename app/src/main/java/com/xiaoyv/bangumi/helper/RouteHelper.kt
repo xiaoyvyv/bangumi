@@ -13,8 +13,6 @@ import com.xiaoyv.bangumi.special.magnet.MagnetActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.syncer.SyncerActivity
 import com.xiaoyv.bangumi.special.syncer.list.SyncerListActivity
-import com.xiaoyv.bangumi.special.yuc.YucActivity
-import com.xiaoyv.bangumi.special.yuc.detail.YucDetailActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
@@ -26,7 +24,6 @@ import com.xiaoyv.bangumi.ui.discover.index.detail.IndexDetailActivity
 import com.xiaoyv.bangumi.ui.discover.index.list.IndexListActivity
 import com.xiaoyv.bangumi.ui.discover.mono.list.MonoListActivity
 import com.xiaoyv.bangumi.ui.feature.almanac.AlmanacActivity
-import com.xiaoyv.bangumi.ui.feature.calendar.CalendarActivity
 import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.magi.MagiActivity
 import com.xiaoyv.bangumi.ui.feature.message.MessageActivity
@@ -38,6 +35,7 @@ import com.xiaoyv.bangumi.ui.feature.post.blog.PostBlogActivity
 import com.xiaoyv.bangumi.ui.feature.post.preview.PreviewBBCodeActivity
 import com.xiaoyv.bangumi.ui.feature.post.topic.PostTopicActivity
 import com.xiaoyv.bangumi.ui.feature.preview.image.PreviewImageActivity
+import com.xiaoyv.bangumi.ui.feature.schedule.ScheduleActivity
 import com.xiaoyv.bangumi.ui.feature.search.SearchActivity
 import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.setting.SettingActivity
@@ -56,6 +54,8 @@ import com.xiaoyv.bangumi.ui.feature.user.bg.ConfigBgActivity
 import com.xiaoyv.bangumi.ui.feature.user.blog.UserBlogActivity
 import com.xiaoyv.bangumi.ui.feature.user.mono.UserMonoActivity
 import com.xiaoyv.bangumi.ui.feature.web.WebActivity
+import com.xiaoyv.bangumi.ui.feature.yuc.YucActivity
+import com.xiaoyv.bangumi.ui.feature.yuc.detail.YucDetailActivity
 import com.xiaoyv.bangumi.ui.media.detail.MediaDetailActivity
 import com.xiaoyv.bangumi.ui.media.detail.preview.MediaPreviewActivity
 import com.xiaoyv.bangumi.ui.media.detail.score.MediaScoreActivity
@@ -208,10 +208,13 @@ object RouteHelper {
         return false
     }
 
-    fun jumpCalendar(isToday: Boolean) {
+    /**
+     * 每日放送
+     */
+    fun jumpSchedule(isToday: Boolean) {
         ActivityUtils.startActivity(
             bundleOf(NavKey.KEY_BOOLEAN to isToday),
-            CalendarActivity::class.java
+            ScheduleActivity::class.java
         )
     }
 

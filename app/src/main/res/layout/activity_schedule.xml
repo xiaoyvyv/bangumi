@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -22,21 +21,30 @@
 
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srl_refresh"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurface"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.xiaoyv.common.widget.scroll.AnimeRecyclerView
-            android:id="@+id/rv_content"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/table_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabMode="scrollable" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/table_layout" />
+
+        <com.xiaoyv.common.widget.state.AnimeStateView
+            android:id="@+id/state_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/ui_size_8"
-            app:layoutManager="com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager"
-            app:spanCount="3"
-            tools:listitem="@layout/activity_calendar_item" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:background="?attr/colorSurface" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

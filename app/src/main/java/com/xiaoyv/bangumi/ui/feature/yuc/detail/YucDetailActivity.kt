@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.special.yuc.detail
+package com.xiaoyv.bangumi.ui.feature.yuc.detail
 
 import android.content.Intent
 import android.os.Bundle

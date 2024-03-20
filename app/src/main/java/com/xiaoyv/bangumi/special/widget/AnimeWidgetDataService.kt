@@ -37,7 +37,7 @@ class AnimeWidgetDataService : RemoteViewsService() {
         }
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
-        val items = mutableListOf<ApiCalendarEntity.CalendarEntityItem.Item>()
+        val items = mutableListOf<ApiCalendarEntity.MediaItem>()
         val appWidgetId = intent.getIntExtra(
             AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
         )

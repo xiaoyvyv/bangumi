@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.special.yuc
+package com.xiaoyv.bangumi.ui.feature.yuc
 
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel

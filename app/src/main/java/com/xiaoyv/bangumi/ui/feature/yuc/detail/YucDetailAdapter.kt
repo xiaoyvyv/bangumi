@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.special.yuc.detail
+package com.xiaoyv.bangumi.ui.feature.yuc.detail
 
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible

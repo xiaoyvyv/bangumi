@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.special.yuc.detail
+package com.xiaoyv.bangumi.ui.feature.yuc.detail
 
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.api.BgmApiManager

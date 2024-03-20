@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.special.yuc
+package com.xiaoyv.bangumi.ui.feature.yuc
 
 import com.xiaoyv.bangumi.databinding.ActivityYucItemBakBinding
 import com.xiaoyv.bangumi.databinding.ActivityYucItemBinding
