@@ -36,7 +36,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
             onClickFeature = {
                 when (it.id) {
                     FeatureType.TYPE_SYNCER -> RouteHelper.jumpSyncer()
-                    FeatureType.TYPE_EMAIL -> RouteHelper.jumpMessage()
+                    FeatureType.TYPE_SCHEDULE -> RouteHelper.jumpSchedule(true)
                     FeatureType.TYPE_MAGI -> RouteHelper.jumpMagi()
                     FeatureType.TYPE_ANIME_YUC -> RouteHelper.jumpYuc()
                     FeatureType.TYPE_ALMANAC -> RouteHelper.jumpAlmanac()
@@ -48,17 +48,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     FeatureType.TYPE_DOLLARS -> RouteHelper.jumpDollars()
                     FeatureType.TYPE_WIKI -> {
                         toast("暂未开放")
-//                        launchUI {
-//                            withContext(Dispatchers.IO) {
-//                                val response =
-//                                    BgmApiManager.bgmJsonApi.queryDouBanUserInterest(
-//                                        userId = "188360604"
-//                                    )
-//
-//                                val string = response.body()?.string()
-//                                debugLog { "XXX:" + string }
-//                            }
-//                        }
                     }
                 }
             },

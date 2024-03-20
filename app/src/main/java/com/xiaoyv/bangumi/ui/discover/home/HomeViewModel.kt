@@ -71,9 +71,9 @@ class HomeViewModel : BaseViewModel() {
                                 icon = CommonDrawable.ic_calendar
                             ),
                             HomeIndexFeature(
-                                id = FeatureType.TYPE_EMAIL,
-                                title = "短信",
-                                icon = CommonDrawable.ic_email_normal
+                                id = FeatureType.TYPE_SCHEDULE,
+                                title = "每日放送",
+                                icon = CommonDrawable.ic_show
                             ),
                             HomeIndexFeature(
                                 id = FeatureType.TYPE_DETECT_ANIME,

@@ -15,7 +15,7 @@ import androidx.annotation.StringDef
     FeatureType.TYPE_MAGI,
     FeatureType.TYPE_SYNCER,
     FeatureType.TYPE_ANIME_YUC,
-    FeatureType.TYPE_EMAIL,
+    FeatureType.TYPE_SCHEDULE,
     FeatureType.TYPE_ALMANAC,
     FeatureType.TYPE_WIKI,
     FeatureType.TYPE_RANK,
@@ -39,7 +39,7 @@ annotation class FeatureType {
         const val TYPE_SYNCER = "syncer"
         const val TYPE_RANK = "rank"
         const val TYPE_PROCESS = "process"
-        const val TYPE_EMAIL = "email"
+        const val TYPE_SCHEDULE = "schedule"
         const val TYPE_ALMANAC = "almanac"
         const val TYPE_WIKI = "wiki"
         const val TYPE_DETECT_CHARACTER = "detect-character"
@@ -57,7 +57,7 @@ annotation class FeatureType {
                 TYPE_MAGI -> "MAGI"
                 TYPE_SYNCER -> "豆哔同步"
                 TYPE_ANIME_YUC -> "新番"
-                TYPE_EMAIL -> "邮箱"
+                TYPE_SCHEDULE -> "每日放送"
                 TYPE_ALMANAC -> "年鉴"
                 TYPE_WIKI -> "WIKI"
                 TYPE_RANK -> "排行榜"
