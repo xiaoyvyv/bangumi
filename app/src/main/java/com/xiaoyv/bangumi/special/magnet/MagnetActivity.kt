@@ -112,7 +112,6 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
                 title = "资源详情",
                 items = listOf(
                     "复制磁链",
-                    "复制完整磁链",
                     "复制发布来源",
                     "打开方式",
                     "磁链资源预览"
@@ -120,9 +119,8 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
                 onItemClick = { _, which ->
                     when (which) {
                         0 -> copyText(resource.magnet.orEmpty())
-                        1 -> copyText(resource.magnet.orEmpty())
-                        2 -> copyText(resource.pageUrl.orEmpty())
-                        3 -> {
+                        1 -> copyText(resource.pageUrl.orEmpty())
+                        2 -> {
                             runCatching {
                                 val intent = Intent(Intent.ACTION_VIEW)
                                 intent.setData(Uri.parse(resource.magnet.orEmpty()))
@@ -137,7 +135,7 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
                             }
                         }
                         // 磁力预览
-                        4 -> {
+                        3 -> {
                             val magnetHash = resource.magnet.orEmpty().magnetHash()
                             RouteHelper.jumpWeb(
                                 url = "https://beta.magnet.pics/m/$magnetHash",
