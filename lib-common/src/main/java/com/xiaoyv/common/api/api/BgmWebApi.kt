@@ -160,7 +160,17 @@ interface BgmWebApi {
      * 获取蜜柑计划媒体详情
      */
     @GET("https://mikanime.tv/Home/Bangumi/{mikanId}")
-    suspend fun queryMikanDetail(@Path("mikanId") mikanId: String): Response<ResponseBody>
+    suspend fun queryMikanDetail(@Path("mikanId") mikanId: String): Document
+
+    /**
+     * 字幕组资源信息
+     */
+    @GET("https://mikanime.tv/Home/ExpandEpisodeTable")
+    suspend fun queryMikanGroupDetail(
+        @Query("bangumiId") bangumiId: String,
+        @Query("subtitleGroupId") subtitleGroupId: String,
+        @Query("take") take: Int = 1000,
+    ): Document
 
     /**
      * 查询用户信息

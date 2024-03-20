@@ -10,6 +10,8 @@ import com.xiaoyv.bangumi.special.collection.CollectionActivity
 import com.xiaoyv.bangumi.special.detect.anime.ImageDetectAnimeActivity
 import com.xiaoyv.bangumi.special.detect.character.ImageDetectCharacterActivity
 import com.xiaoyv.bangumi.special.magnet.MagnetActivity
+import com.xiaoyv.bangumi.special.mikan.MikanActivity
+import com.xiaoyv.bangumi.special.mikan.resource.MikanResourceActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.syncer.SyncerActivity
 import com.xiaoyv.bangumi.special.syncer.list.SyncerListActivity
@@ -399,6 +401,19 @@ object RouteHelper {
         ActivityUtils.startActivity(MessageActivity::class.java)
     }
 
+    fun jumpMikan(mikanId: String) {
+        MikanActivity::class.open(bundleOf(NavKey.KEY_STRING to mikanId))
+    }
+
+    fun jumpMikanGroupResource(mikanId: String, groupId: String, groupName: String) {
+        MikanResourceActivity::class.open(
+            bundleOf(
+                NavKey.KEY_STRING to mikanId,
+                NavKey.KEY_STRING_SECOND to groupId,
+                NavKey.KEY_STRING_THIRD to groupName
+            )
+        )
+    }
 
     fun jumpMessageDetail(messageId: String, fromName: String) {
         MessageDetailActivity::class.open(

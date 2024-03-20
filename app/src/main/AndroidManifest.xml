@@ -334,6 +334,14 @@
             android:name="com.xiaoyv.bangumi.ui.feature.schedule.ScheduleActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.mikan.MikanActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.mikan.resource.MikanResourceActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
 
         <receiver
             android:name="com.xiaoyv.bangumi.special.widget.AnimeWidget"

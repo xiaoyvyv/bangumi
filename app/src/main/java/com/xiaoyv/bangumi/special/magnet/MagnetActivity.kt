@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.KeyboardUtils
@@ -22,6 +23,7 @@ import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.showToastCompat
 
 /**
  * Class: [MagnetActivity]
@@ -95,42 +97,57 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
         }
     }
 
-    /**
-     * 弹窗
-     */
-    private fun onMagnetItemClick(resource: AnimeMagnetEntity.Resource) {
-        showOptionsDialog(
-            title = "资源详情",
-            items = listOf("复制磁链", "复制完整磁链", "复制发布来源", "打开方式", "磁链资源预览"),
-            onItemClick = { _, which ->
-                when (which) {
-                    0 -> copyText(resource.magnet.orEmpty())
-                    1 -> copyText(resource.magnet.orEmpty())
-                    2 -> copyText(resource.pageUrl.orEmpty())
-                    3 -> {
-                        runCatching {
-                            val intent = Intent(Intent.ACTION_VIEW)
-                            intent.setData(Uri.parse(resource.magnet.orEmpty()))
-                            ActivityUtils.startActivity(Intent.createChooser(intent, "打开方式"))
-                        }.onFailure {
-                            showToast(it.errorMsg)
-                        }
-                    }
-                    // 磁力预览
-                    4 -> {
-                        val magnetHash = resource.magnet.orEmpty().magnetHash()
-                        RouteHelper.jumpWeb(
-                            url = "https://beta.magnet.pics/m/$magnetHash",
-                            fitToolbar = true,
-                            smallToolbar = true
-                        )
-                    }
-                }
-            }
-        )
-    }
-
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<AnimeMagnetEntity.Resource, *> {
         return MagnetAdapter { viewModel.keyword }
+    }
+
+    companion object {
+
+        /**
+         * 弹窗
+         */
+        @JvmStatic
+        fun FragmentActivity.onMagnetItemClick(resource: AnimeMagnetEntity.Resource) {
+            showOptionsDialog(
+                title = "资源详情",
+                items = listOf(
+                    "复制磁链",
+                    "复制完整磁链",
+                    "复制发布来源",
+                    "打开方式",
+                    "磁链资源预览"
+                ),
+                onItemClick = { _, which ->
+                    when (which) {
+                        0 -> copyText(resource.magnet.orEmpty())
+                        1 -> copyText(resource.magnet.orEmpty())
+                        2 -> copyText(resource.pageUrl.orEmpty())
+                        3 -> {
+                            runCatching {
+                                val intent = Intent(Intent.ACTION_VIEW)
+                                intent.setData(Uri.parse(resource.magnet.orEmpty()))
+                                ActivityUtils.startActivity(
+                                    Intent.createChooser(
+                                        intent,
+                                        "打开方式"
+                                    )
+                                )
+                            }.onFailure {
+                                showToastCompat(it.errorMsg)
+                            }
+                        }
+                        // 磁力预览
+                        4 -> {
+                            val magnetHash = resource.magnet.orEmpty().magnetHash()
+                            RouteHelper.jumpWeb(
+                                url = "https://beta.magnet.pics/m/$magnetHash",
+                                fitToolbar = true,
+                                smallToolbar = true
+                            )
+                        }
+                    }
+                }
+            )
+        }
     }
 }

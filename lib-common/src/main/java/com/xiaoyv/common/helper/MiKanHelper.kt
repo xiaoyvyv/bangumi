@@ -12,7 +12,6 @@ import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.widget.kts.orEmpty
 import com.xiaoyv.widget.kts.workDirOf
 import kotlinx.coroutines.Dispatchers
-import org.jsoup.Jsoup
 
 /**
  * Class: [MiKanHelper]
@@ -91,11 +90,7 @@ object MiKanHelper {
      */
     private suspend fun syncMiKan(id: Long) {
         runCatching {
-            val response = BgmApiManager.bgmWebApi.queryMikanDetail(id.toString())
-
-            require(response.isSuccessful) { "Mikan 同步错误码: ${response.code()}" }
-
-            val document = Jsoup.parse(response.body()?.string().orEmpty())
+            val document = BgmApiManager.bgmWebApi.queryMikanDetail(id.toString())
             val links = document.select("a.w-other-c")
             val element = links.find { it.text().contains("bgm.tv/subject") }
             requireNotNull(element) { "MiKan: $id, Bgm id is empty!" }

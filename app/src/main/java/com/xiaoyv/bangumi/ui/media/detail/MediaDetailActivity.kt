@@ -245,7 +245,7 @@ class MediaDetailActivity :
                     .setIcon(CommonDrawable.ic_rss)
                     .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                     .setOnMenuItemClickListener {
-                        RouteHelper.jumpWeb("https://mikanime.tv/Home/Bangumi/$mapId")
+                        RouteHelper.jumpMikan(mapId)
                         true
                     }
             }
