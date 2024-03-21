@@ -130,6 +130,27 @@ const onClickNewComment = (event: Event) => {
   // 回调
   window.android && window.android.onReplyNew();
 }
+
+/**
+ * 长按评论复制
+ */
+let longPress = 0
+const onHandleMouseDown = (event: TouchEvent, text: string) => {
+  clearTimeout(longPress);
+  longPress = setTimeout(() => {
+    const x = event.touches[0].clientX;
+    const y = event.touches[0].clientY;
+    window.android && window.android.onLongClickText(text, x, y);
+  }, 500);
+}
+
+const onHandleMouseMove = () => {
+  clearTimeout(longPress);
+}
+
+const onHandleMouseUp = () => {
+  clearTimeout(longPress);
+}
 </script>
 
 <template>
@@ -163,7 +184,10 @@ const onClickNewComment = (event: Event) => {
 
         <div class="topic-html-wrap">
           <div class="topic-html" v-html="comment.replyContent"
-               @click.stop="onClickReplyComment($event, comment, null)"/>
+               @click.stop="onClickReplyComment($event, comment, null)"
+               @touchstart="onHandleMouseDown($event,comment.replyContent)"
+               @touchmove="onHandleMouseMove"
+               @touchend="onHandleMouseUp"/>
           <div class="anchor" v-if="comment.id === anchorId"/>
         </div>
 
@@ -191,7 +215,10 @@ const onClickNewComment = (event: Event) => {
                    @click.stop="onClickCommentAction($event,subComment)">
             </div>
             <div class="topic-html-wrap">
-              <div class="topic-html" v-html="subComment.replyContent"/>
+              <div class="topic-html" v-html="subComment.replyContent"
+                   @touchstart="onHandleMouseDown($event,subComment.replyContent)"
+                   @touchmove="onHandleMouseMove"
+                   @touchend="onHandleMouseUp"/>
               <div class="anchor" v-if="subComment.id === anchorId"/>
             </div>
             <emoji-view :emojis="subComment.emojis" :comment="subComment" style="margin-top: 16px"/>

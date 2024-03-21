@@ -233,17 +233,35 @@ GET https://bgm.tv/subject/411427/stats
 ###
 # @no-redirect
 GET https://movie.douban.com/people/187360602/collect?start=15&sort=time&rating=all&filter=all&mode=grid HTTP/1.1
-Host: movie.douban.com
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
-Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2
-Accept-Encoding: gzip, deflate, br
-Referer: https://movie.douban.com/people/187360602/collect
-Connection: keep-alive
-Upgrade-Insecure-Requests: 1
-Sec-Fetch-Dest: document
-Sec-Fetch-Mode: navigate
-Sec-Fetch-Site: same-origin
-Sec-Fetch-User: ?1
-Pragma: no-cache
-Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "type": 0,
+  "update_f": true,
+  "strategy": "p",
+  "IsTimeFilter": false,
+  "IsTagFilter": false,
+  "startDate": "2024-01-30",
+  "endDate": "2024-01-30",
+  "topk": 10,
+  "popdays": 0,
+  "tags": [
+    "string"
+  ],
+  "collects": [
+    {
+      "id": 9999,
+      "name": "第一次的親密接觸",
+      "name_cn": "第一次的亲密接触",
+      "nsfw": false,
+      "type": 1
+    },
+    {
+      "id": 9999,
+      "name": "第一次的親密接觸",
+      "name_cn": "第一次的亲密接触",
+      "nsfw": false,
+      "type": 2
+    }
+  ]
+}

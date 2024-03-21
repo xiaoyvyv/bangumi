@@ -5,17 +5,24 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
+import android.view.ViewGroup.MarginLayoutParams
 import android.webkit.JavascriptInterface
 import android.widget.PopupWindow
 import androidx.annotation.Keep
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
+import androidx.core.view.updatePadding
+import androidx.core.widget.PopupWindowCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.ClipboardUtils
 import com.blankj.utilcode.util.ColorUtils
 import com.blankj.utilcode.util.EncodeUtils
 import com.blankj.utilcode.util.FileIOUtils
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ScreenUtils
+import com.blankj.utilcode.util.VibrateUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.blueprint.kts.toJson
@@ -35,6 +42,10 @@ import com.xiaoyv.common.kts.GoogleStyle
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.showOptionsDialog
+import com.xiaoyv.common.kts.tint
+import com.xiaoyv.common.widget.text.AnimeTextView
+import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.kts.dpf
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.getAttrColor
@@ -46,6 +57,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
 
 /**
  * Class: [WebBase]
@@ -171,6 +184,44 @@ abstract class WebBase(open val webView: UiWebView) {
     @JavascriptInterface
     fun onPreviewImage(imageUrl: String, imageUrls: Array<String>) {
         onPreviewImageListener(imageUrl, imageUrls.toList())
+    }
+
+    @Keep
+    @JavascriptInterface
+    fun onLongClickText(content: String, x: Int, y: Int) {
+        val textView = AnimeTextView(webView.context).apply {
+            text = "复制内容"
+            textSize = 16f
+            backgroundTintList = webView.context.getAttrColor(GoogleAttr.colorSurface).tint
+            elevation = 3.dpf
+            setTextColor(webView.context.getAttrColor(GoogleAttr.colorOnSurface))
+            setBackgroundResource(com.xiaoyv.blueprint.R.drawable.ui_shape_rectangle_corner_8)
+            updatePadding(12.dpi, 12.dpi, 12.dpi, 12.dpi)
+        }
+        val window = PopupWindow(webView.context).apply {
+            isFocusable = true
+            contentView = textView
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        PopupWindowCompat.showAsDropDown(
+            window,
+            webView,
+            x.dpi - 60.dpi,
+            y.dpi - 80.dpi,
+            Gravity.NO_GRAVITY
+        )
+
+        textView.setOnFastLimitClickListener {
+            ClipboardUtils.copyText(Jsoup.clean(content, Safelist.simpleText()))
+            window.dismiss()
+        }
+
+        textView.updateLayoutParams<MarginLayoutParams> {
+            updateMargins(8.dpi, 8.dpi, 8.dpi, 8.dpi)
+        }
+
+        VibrateUtils.vibrate(50)
     }
 
     @Keep

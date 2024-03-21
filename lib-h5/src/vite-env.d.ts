@@ -30,4 +30,5 @@ declare interface Android {
     onCommentSort: (sort: string) => string;
     onLoadComments: (page: number, size: number, sort: string) => string;
     onToggleSmile: any;
+    onLongClickText: (comment: string, x: number, y: number) => void;
 }
