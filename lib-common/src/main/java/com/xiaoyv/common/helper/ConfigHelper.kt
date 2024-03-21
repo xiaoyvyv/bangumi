@@ -3,6 +3,7 @@ package com.xiaoyv.common.helper
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.AppUtils
+import com.blankj.utilcode.util.RomUtils
 import com.blankj.utilcode.util.SPStaticUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.xiaoyv.common.api.BgmApiManager
@@ -49,6 +50,7 @@ object ConfigHelper {
     private const val KEY_IMAGE_SEARCH_AP = "image-search-ap"
     private const val KEY_TRANSLATE = "translate"
     private const val KEY_EDGE_AUTH_TOKEN = "edge_auth_token"
+    private const val KEY_ADAPT_SCREEN = "adapt_screen"
 
     const val KEY_RAKUEN_DEFAULT_TAB = "rakuen-default-tab"
     const val KEY_RAKUEN_DEFAULT_GROUP = "rakuen-default-group"
@@ -57,6 +59,10 @@ object ConfigHelper {
     private val KEY_VERSION_TIP get() = "version-tip-" + AppUtils.getAppVersionCode()
 
     const val DIALOG_DIM_AMOUNT = 0.5f
+
+    val isOV by lazy {
+        RomUtils.isVivo() || RomUtils.isOppo()
+    }
 
     fun configBaiduTranslateId(appId: String) {
         SPStaticUtils.put(KEY_BAIDU_TRANSLATE_APP_ID, appId)
@@ -327,4 +333,11 @@ object ConfigHelper {
     var edgeAuthToken: String
         get() = SPStaticUtils.getString(KEY_EDGE_AUTH_TOKEN, "")
         set(value) = SPStaticUtils.put(KEY_EDGE_AUTH_TOKEN, value.trim())
+
+    /**
+     * 是否适配分辨率
+     */
+    var isAdaptScreen: Boolean
+        get() = SPStaticUtils.getBoolean(KEY_ADAPT_SCREEN, isOV)
+        set(value) = SPStaticUtils.put(KEY_ADAPT_SCREEN, value)
 }

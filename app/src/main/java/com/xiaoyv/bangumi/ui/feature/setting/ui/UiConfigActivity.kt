@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.ui.feature.setting.ui
 
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import com.google.android.material.color.DynamicColors
 import com.xiaoyv.bangumi.databinding.ActivitySettingUiBinding
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
@@ -18,6 +19,7 @@ import com.xiaoyv.common.kts.showConfirmDialog
  * @since 12/17/23
  */
 class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
+
     private val themeNames by lazy {
         if (DynamicColors.isDynamicColorAvailable()) listOf("明亮", "暗黑", "跟随系统", "跟随壁纸")
         else listOf("明亮", "暗黑", "跟随系统")
@@ -30,6 +32,8 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
 
     override fun initView() {
         binding.toolbar.initNavBack(this)
+
+        binding.settingResolution.isVisible = ConfigHelper.isOV
     }
 
     override fun initData() {
@@ -44,6 +48,7 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingRakuenTab.bindBoolean(ConfigHelper::isRememberRakuenTab)
         binding.settingTimelineTab.bindBoolean(ConfigHelper::isRememberTimelineTab)
         binding.settingForceBrowser.bindBoolean(ConfigHelper::isForceBrowser)
+        binding.settingResolution.bindBoolean(ConfigHelper::isAdaptScreen)
 
         binding.settingDynamicTheme.bindSerializable(
             activity = this,

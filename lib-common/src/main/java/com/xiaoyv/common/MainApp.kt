@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import com.xiaoyv.blueprint.BluePrint
 import com.xiaoyv.blueprint.base.BaseConfig
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.H5PreLoadHelper
 import com.xiaoyv.common.helper.MiKanHelper
 import com.xiaoyv.common.helper.SegmentHelper
@@ -18,6 +19,8 @@ import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.theme.ThemeHelper
 import com.xiaoyv.common.helper.work.IdleWorker
 import com.xiaoyv.common.widget.emoji.UiFaceManager
+import com.xiaoyv.widget.adapt.autoConvertDensity
+import com.xiaoyv.widget.webview.UiWebView
 import java.util.concurrent.TimeUnit
 
 lateinit var currentApplication: MainApp
@@ -43,6 +46,10 @@ class MainApp : Application() {
      */
     val globalNotify = MutableLiveData<Pair<Int, Int>>()
 
+    private val adaptScreen by lazy {
+        ConfigHelper.isAdaptScreen
+    }
+
     override fun onCreate() {
         super.onCreate()
         currentApplication = this
@@ -54,7 +61,12 @@ class MainApp : Application() {
         initBaseConfig()
 
         // 框架初始化
-        BluePrint.init(this, false)
+        BluePrint.init(this, adaptScreen)
+        if (adaptScreen) {
+            UiWebView.getResourcesProxy = {
+                it.autoConvertDensity()
+            }
+        }
 
         // H5 预加载
         H5PreLoadHelper.preloadWebView(this)
