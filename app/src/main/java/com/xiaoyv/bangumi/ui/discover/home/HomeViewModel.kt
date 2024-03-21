@@ -38,72 +38,75 @@ class HomeViewModel : BaseViewModel() {
                     cacheHome
                 }
                 onHomeIndexLiveData.value = withContext(Dispatchers.IO) {
-                    BgmApiManager.bgmJsonApi.queryMainPage().parserHomePageWithoutLogin().apply {
-                        banner.features = listOf(
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_MAGI,
-                                title = "MAGI 问答",
-                                icon = CommonDrawable.ic_magi
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_ANIME_YUC,
-                                title = "新番",
-                                icon = CommonDrawable.ic_new
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_SYNCER,
-                                title = "豆哔同步",
-                                icon = CommonDrawable.ic_sync_cloud
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_RANK,
-                                title = "排行榜",
-                                icon = CommonDrawable.ic_bottom_rank
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_PROCESS,
-                                title = "进度管理",
-                                icon = CommonDrawable.ic_process
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_ALMANAC,
-                                title = "年鉴",
-                                icon = CommonDrawable.ic_calendar
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_SCHEDULE,
-                                title = "每日放送",
-                                icon = CommonDrawable.ic_show
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_DETECT_ANIME,
-                                title = "以图搜番",
-                                icon = CommonDrawable.ic_image_search
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_DETECT_CHARACTER,
-                                title = "以图识人",
-                                icon = CommonDrawable.ic_person_search
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_MAGNET,
-                                title = "搜资源",
-                                icon = CommonDrawable.ic_manage_search
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_DOLLARS,
-                                title = "Dollars",
-                                icon = CommonDrawable.ic_dollars
-                            ),
-                            HomeIndexFeature(
-                                id = FeatureType.TYPE_WIKI,
-                                title = "WIKI",
-                                icon = CommonDrawable.ic_wiki
-                            ),
-                        )
-                    }.apply {
-                        CacheHelper.cacheHome = this
-                    }
+                    BgmApiManager.bgmJsonApi.queryMainPage()
+                        .parserHomePageWithoutLogin()
+                        .apply {
+                            banner.features = listOf(
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_MAGI,
+                                    title = "MAGI 问答",
+                                    icon = CommonDrawable.ic_magi
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_ANIME_YUC,
+                                    title = "新番",
+                                    icon = CommonDrawable.ic_new
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_SYNCER,
+                                    title = "豆哔同步",
+                                    icon = CommonDrawable.ic_sync_cloud
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_RANK,
+                                    title = "排行榜",
+                                    icon = CommonDrawable.ic_bottom_rank
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_PROCESS,
+                                    title = "进度管理",
+                                    icon = CommonDrawable.ic_process
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_ALMANAC,
+                                    title = "年鉴",
+                                    icon = CommonDrawable.ic_calendar
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_SCHEDULE,
+                                    title = "每日放送",
+                                    icon = CommonDrawable.ic_show
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_DETECT_ANIME,
+                                    title = "以图搜番",
+                                    icon = CommonDrawable.ic_image_search
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_DETECT_CHARACTER,
+                                    title = "以图识人",
+                                    icon = CommonDrawable.ic_person_search
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_MAGNET,
+                                    title = "搜资源",
+                                    icon = CommonDrawable.ic_manage_search
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_DOLLARS,
+                                    title = "Dollars",
+                                    icon = CommonDrawable.ic_dollars
+                                ),
+                                HomeIndexFeature(
+                                    id = FeatureType.TYPE_WIKI,
+                                    title = "WIKI",
+                                    icon = CommonDrawable.ic_wiki
+                                ),
+                            )
+
+                            // Cache
+                            CacheHelper.cacheHome = this
+                        }
                 }
             }
         )

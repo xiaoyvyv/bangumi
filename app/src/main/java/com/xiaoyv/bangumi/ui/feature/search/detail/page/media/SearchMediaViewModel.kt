@@ -24,15 +24,6 @@ class SearchMediaViewModel : BaseListViewModel<SearchResultEntity>() {
 
     internal var keyword: String = ""
 
-    /**
-     * 搜索的条目类型
-     */
-    internal val searchItem
-        get() = searchItems[itemIndex.value!!]
-
-    internal val searchItems
-        get() = if (isSearchMedia) mediaItems else monoItems
-
     private val mediaItems by lazy {
         listOf(
             SearchItem(
@@ -77,6 +68,15 @@ class SearchMediaViewModel : BaseListViewModel<SearchResultEntity>() {
             )
         )
     }
+
+    internal val searchItems
+        get() = if (isSearchMedia) mediaItems else monoItems
+
+    /**
+     * 搜索的条目类型
+     */
+    private val searchItem
+        get() = searchItems[requireNotNull(itemIndex.value)]
 
     override suspend fun onRequestListImpl(): List<SearchResultEntity> {
         require(keyword.isNotBlank()) { "请输入搜索内容" }

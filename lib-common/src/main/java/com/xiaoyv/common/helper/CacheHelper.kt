@@ -1,5 +1,6 @@
 package com.xiaoyv.common.helper
 
+import android.os.Parcelable
 import com.blankj.utilcode.util.CacheDiskUtils
 import com.blankj.utilcode.util.EncryptUtils
 import com.blankj.utilcode.util.SPUtils
@@ -24,6 +25,10 @@ object CacheHelper {
     private const val KEY_CACHE_HOME = "cache-home"
     private const val KEY_CACHE_PROCESS = "cache-process"
     private const val KEY_CACHE_BG_IMAGE = "cache-bg-image"
+
+    private val cache by lazy {
+        CacheDiskUtils.getInstance()
+    }
 
     /**
      * 保存搜索历史
@@ -54,36 +59,46 @@ object CacheHelper {
      * 缓存翻译结果
      */
     fun saveTranslate(cacheKey: String, text: String) {
-        CacheDiskUtils.getInstance().put(cacheKey, text)
+        cache.put(cacheKey, text)
     }
 
     /**
      * 读取翻译缓存
      */
     fun readTranslate(cacheKey: String): String {
-        return CacheDiskUtils.getInstance().getString(cacheKey).orEmpty()
+        return cache.getString(cacheKey).orEmpty()
     }
 
     /**
      * 空间背景数据图片列表缓存
      */
     var cacheBgImageList: List<GalleryEntity>
-        set(value) = CacheDiskUtils.getInstance().put(KEY_CACHE_BG_IMAGE, value.toJson())
-        get() = CacheDiskUtils.getInstance().getString(KEY_CACHE_BG_IMAGE).orEmpty()
-            .fromJson<List<GalleryEntity>>().orEmpty()
+        set(value) = cache.put(KEY_CACHE_BG_IMAGE, value.toJson())
+        get() = cache.getString(KEY_CACHE_BG_IMAGE).orEmpty()
+            .fromJson<List<GalleryEntity>>()
+            .orEmpty()
 
     /**
      * 首页缓存
      */
     var cacheHome: HomeIndexEntity?
-        set(value) = CacheDiskUtils.getInstance().put(KEY_CACHE_HOME, value)
-        get() = CacheDiskUtils.getInstance().getParcelable(KEY_CACHE_HOME, parcelableCreator())
+        set(value) = cache.put(KEY_CACHE_HOME, value)
+        get() = read(KEY_CACHE_HOME)
 
     /**
      * 进度缓存
      */
     var cacheProcess: List<MediaDetailEntity>
-        set(value) = CacheDiskUtils.getInstance().put(KEY_CACHE_PROCESS, value.toJson())
-        get() = CacheDiskUtils.getInstance().getString(KEY_CACHE_PROCESS).orEmpty()
-            .fromJson<List<MediaDetailEntity>>().orEmpty()
+        set(value) = cache.put(KEY_CACHE_PROCESS, value.toJson())
+        get() = cache.getString(KEY_CACHE_PROCESS).orEmpty()
+            .fromJson<List<MediaDetailEntity>>()
+            .orEmpty()
+
+    private inline fun <reified T : Parcelable> read(key: String): T? {
+        return runCatching {
+            cache.getParcelable(key, parcelableCreator<T>())
+        }.onFailure {
+            cache.remove(key)
+        }.getOrNull()
+    }
 }

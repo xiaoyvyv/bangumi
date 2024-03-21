@@ -34,7 +34,8 @@ class ProcessPageViewModel : BaseListViewModel<MediaDetailEntity>() {
     override suspend fun onRequestListImpl(): List<MediaDetailEntity> {
         require(UserHelper.isLogin) { "你还没有登录呢" }
 
-        return BgmApiManager.bgmWebApi.queryHomePage().parserHomePageProcess()
+        return BgmApiManager.bgmWebApi.queryHomePage()
+            .parserHomePageProcess()
             .let {
                 CacheHelper.cacheProcess = it
 

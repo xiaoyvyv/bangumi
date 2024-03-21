@@ -140,17 +140,18 @@ abstract class BasePostActivity<VM : BasePostViewModel> :
 
         binding.tvMedia.setOnFastLimitClickListener {
             if (viewModel.onAttachMediaList.value.orEmpty().size >= maxAttachSize) {
-                toast(String.format("最多关联 %d 个条目", maxAttachSize))
+                toast("最多关联 $maxAttachSize 个条目")
                 return@setOnFastLimitClickListener
             }
 
             KeyboardUtils.hideSoftInput(this)
+
             showInputDialog(title = "搜索关联条目", inputHint = "请输入条目名称") {
                 RouteHelper.jumpSearchDetailForSelectMedia(
                     searchMedia, SearchItem(
                         label = "全部",
                         pathType = BgmPathType.TYPE_SEARCH_SUBJECT,
-                        id = SearchCatType.TYPE_ALL,
+                        id = SearchCatType.TYPE_ANIME,
                         keyword = it,
                         forSelectedMedia = true
                     )

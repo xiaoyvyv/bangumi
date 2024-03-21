@@ -9,7 +9,6 @@ import androidx.annotation.StringDef
  * @since 12/10/23
  */
 @StringDef(
-    SearchCatType.TYPE_ALL,
     SearchCatType.TYPE_ANIME,
     SearchCatType.TYPE_BOOK,
     SearchCatType.TYPE_MUSIC,
@@ -21,9 +20,8 @@ import androidx.annotation.StringDef
 @Retention(AnnotationRetention.SOURCE)
 annotation class SearchCatType {
     companion object {
-        const val TYPE_ALL = "all"
-        const val TYPE_ANIME = "2"
         const val TYPE_BOOK = "1"
+        const val TYPE_ANIME = "2"
         const val TYPE_MUSIC = "3"
         const val TYPE_GAME = "4"
         const val TYPE_REAL = "6"

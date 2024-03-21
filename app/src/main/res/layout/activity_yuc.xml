@@ -33,6 +33,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layoutManager="com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager"
-            tools:listitem="@layout/activity_yuc_item" />
+            tools:listitem="@layout/activity_yuc_item_bak" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

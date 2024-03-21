@@ -35,11 +35,6 @@ class SearchViewModel : BaseViewModel() {
         launchUI {
             onSearchSubjectLiveData.value = listOf(
                 SearchItem(
-                    label = "全部",
-                    pathType = BgmPathType.TYPE_SEARCH_SUBJECT,
-                    id = SearchCatType.TYPE_ALL,
-                ),
-                SearchItem(
                     label = "动画",
                     pathType = BgmPathType.TYPE_SEARCH_SUBJECT,
                     id = SearchCatType.TYPE_ANIME,
@@ -95,11 +90,6 @@ class SearchViewModel : BaseViewModel() {
             )
 
             onSearchPersonLiveData.value = listOf(
-                SearchItem(
-                    label = "全部",
-                    pathType = BgmPathType.TYPE_SEARCH_MONO,
-                    id = SearchCatType.TYPE_ALL,
-                ),
                 SearchItem(
                     label = "虚拟角色",
                     pathType = BgmPathType.TYPE_SEARCH_MONO,

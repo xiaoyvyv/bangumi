@@ -64,7 +64,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                     val entity = SearchResultEntity()
                     entity.id = item.select("a.avatar").hrefId()
                     entity.coverImage = item.select("a.avatar img").attr("src").optImageUrl()
-                    entity.count = "讨论：" + item.select(".rr small").text()
+                    entity.count = "讨论：" + item.select(".rr small").text().ifBlank { "0" }
                     item.select("h2 a.l").apply {
                         entity.isVirtual = attr("href").contains("character")
                         entity.subtitle = select(".tip").remove().text().trim().trim('/')

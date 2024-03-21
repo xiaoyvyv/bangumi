@@ -1,6 +1,6 @@
 [versions]
 agp = "8.4.0-alpha13"
-blueprint = "1.1.49"
+blueprint = "1.1.50"
 coreSplashscreen = "1.0.1"
 firebaseCrashlyticsGradle = "2.9.9"
 fragmentKtx = "1.6.2"

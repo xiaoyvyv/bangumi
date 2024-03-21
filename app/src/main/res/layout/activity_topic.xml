@@ -23,7 +23,7 @@
 
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.xiaoyv.widget.adapt.AdaptConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -38,7 +38,7 @@
             android:id="@+id/state_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.xiaoyv.widget.adapt.AdaptConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_comment"

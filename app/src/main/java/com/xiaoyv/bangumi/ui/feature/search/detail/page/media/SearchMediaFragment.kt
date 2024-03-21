@@ -14,9 +14,12 @@ import com.chad.library.adapter.base.BaseDifferAdapter
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.base.BaseListFragment
 import com.xiaoyv.bangumi.helper.RouteHelper
+import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailActivity
 import com.xiaoyv.bangumi.ui.feature.search.detail.SearchDetailViewModel
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.SearchResultEntity
+import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.databinding.ViewSearchMediaFilterBinding
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
@@ -35,6 +38,9 @@ class SearchMediaFragment : BaseListFragment<SearchResultEntity, SearchMediaView
 
     override val isOnlyOnePage: Boolean
         get() = false
+
+    private val inputSearchItem
+        get() = (activity as? SearchDetailActivity)?.viewModel?.currentSearchItem?.value
 
     override fun initArgumentsData(arguments: Bundle) {
         viewModel.isSearchMedia = arguments.getBoolean(NavKey.KEY_BOOLEAN)
@@ -98,7 +104,11 @@ class SearchMediaFragment : BaseListFragment<SearchResultEntity, SearchMediaView
                 }
             )
         }
+
+        // 选择搜索时选择的具体小类别
+        initSearchSubtype()
     }
+
 
     override fun initListener() {
         super.initListener()
@@ -150,10 +160,37 @@ class SearchMediaFragment : BaseListFragment<SearchResultEntity, SearchMediaView
         }
     }
 
+    /**
+     * 初始化选择搜索时选择的具体小类别
+     */
+    private fun initSearchSubtype() {
+        inputSearchItem?.let {
+            when (it.pathType) {
+                // 搜索条目
+                BgmPathType.TYPE_SEARCH_SUBJECT -> {
+                    when (it.id) {
+                        SearchCatType.TYPE_ANIME -> filterBinding.listType.check(CommonId.type_0)
+                        SearchCatType.TYPE_BOOK -> filterBinding.listType.check(CommonId.type_1)
+                        SearchCatType.TYPE_MUSIC -> filterBinding.listType.check(CommonId.type_2)
+                        SearchCatType.TYPE_GAME -> filterBinding.listType.check(CommonId.type_3)
+                        SearchCatType.TYPE_REAL -> filterBinding.listType.check(CommonId.type_4)
+                    }
+                }
+                // 搜索人物
+                BgmPathType.TYPE_SEARCH_MONO -> {
+                    when (it.id) {
+                        SearchCatType.TYPE_CHARACTER -> filterBinding.listType.check(CommonId.type_0)
+                        SearchCatType.TYPE_PERSON -> filterBinding.listType.check(CommonId.type_1)
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
-        fun newInstance(isSearchMedia: Boolean): Fragment {
+        fun newInstance(mediaOrMono: Boolean): Fragment {
             return SearchMediaFragment().apply {
-                arguments = bundleOf(NavKey.KEY_BOOLEAN to isSearchMedia)
+                arguments = bundleOf(NavKey.KEY_BOOLEAN to mediaOrMono)
             }
         }
     }

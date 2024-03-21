@@ -29,14 +29,6 @@ class SearchMediaAdapter : BaseQuickDiffBindingAdapter<SearchResultEntity,
         binding.tvRank.text = item.rank
         binding.tvRank.isVisible = item.rank.isNotBlank()
 
-        if (item.infoTip.yearMonth.isNotBlank()) {
-            binding.tvTime.text = buildString {
-                append(item.searchTip)
-                append(" ")
-                append(item.infoTip.yearMonth)
-            }
-        } else {
-            binding.tvTime.text = item.searchTip
-        }
+        binding.tvTime.text = item.infoTip.yearMonth.ifBlank { item.searchTip }
     }
 }

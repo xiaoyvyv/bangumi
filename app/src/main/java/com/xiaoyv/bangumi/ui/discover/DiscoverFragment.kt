@@ -75,6 +75,16 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
         }
     }
 
+    /**
+     * 更新在线人数
+     */
+    fun updateOnline(count: Int) {
+        binding.tvOnline.text = buildString {
+            append("Online:")
+            append(count)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         tabLayoutMediator.detach()

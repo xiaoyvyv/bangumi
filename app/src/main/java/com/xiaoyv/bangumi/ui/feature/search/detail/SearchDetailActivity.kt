@@ -42,6 +42,9 @@ class SearchDetailActivity :
         binding.vpContent.adapter = vpAdapter
 
         tabLayoutMediator.attach()
+
+        // 初始化的搜索 TAB
+        binding.vpContent.setCurrentItem(viewModel.targetSearchTab, false)
     }
 
     override fun initData() {

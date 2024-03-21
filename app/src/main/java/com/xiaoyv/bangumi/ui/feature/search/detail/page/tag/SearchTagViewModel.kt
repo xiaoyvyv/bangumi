@@ -21,12 +21,6 @@ class SearchTagViewModel : BaseListViewModel<SearchResultEntity>() {
     internal var itemIndex = MutableLiveData(0)
     internal var keyword: String = ""
 
-    /**
-     * 搜索的条目类型
-     */
-    internal val searchItem
-        get() = tagItems[itemIndex.value!!]
-
     private val tagItems by lazy {
         listOf(
             SearchItem(
@@ -56,6 +50,12 @@ class SearchTagViewModel : BaseListViewModel<SearchResultEntity>() {
             )
         )
     }
+
+    /**
+     * 搜索的条目类型
+     */
+    internal val searchItem
+        get() = tagItems[requireNotNull(itemIndex.value)]
 
     override suspend fun onRequestListImpl(): List<SearchResultEntity> {
         require(keyword.isNotBlank()) { "请输入搜索内容" }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
@@ -20,14 +21,33 @@
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
             app:title="@string/ui_common_empty">
 
-            <com.xiaoyv.common.widget.image.AnimeImageView
-                android:layout_width="@dimen/ui_size_135"
-                android:layout_height="@dimen/ui_size_35"
-                android:background="@color/ui_transparent"
-                android:paddingStart="@dimen/ui_size_0"
-                android:paddingEnd="@dimen/ui_size_12"
-                app:srcCompat="@drawable/ic_logo_banner"
-                app:tint="?attr/colorPrimary" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.xiaoyv.common.widget.image.AnimeImageView
+                    android:layout_width="@dimen/ui_size_135"
+                    android:layout_height="@dimen/ui_size_35"
+                    android:background="@color/ui_transparent"
+                    android:paddingStart="@dimen/ui_size_0"
+                    android:paddingEnd="@dimen/ui_size_12"
+                    app:srcCompat="@drawable/ic_logo_banner"
+                    app:tint="?attr/colorPrimary" />
+
+                <com.xiaoyv.common.widget.text.AnimeTextView
+                    android:id="@+id/tv_online"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:alpha="0.5"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:gravity="bottom"
+                    android:includeFontPadding="true"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/ui_font_8"
+                    android:textStyle="italic|bold"
+                    tools:text="Online:124124" />
+            </FrameLayout>
 
             <com.xiaoyv.common.widget.text.AnimeTextView
                 android:id="@+id/bgm"
