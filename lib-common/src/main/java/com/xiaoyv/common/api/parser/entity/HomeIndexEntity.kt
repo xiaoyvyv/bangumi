@@ -13,7 +13,6 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class HomeIndexEntity(
-    var online: Int = 0,
     var banner: HomeIndexBannerEntity = HomeIndexBannerEntity(),
     var images: List<HomeIndexCardEntity> = emptyList(),
     var calendar: HomeIndexCalendarEntity = HomeIndexCalendarEntity(),

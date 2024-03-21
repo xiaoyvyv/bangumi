@@ -9,10 +9,11 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.bangumi.ui.MainViewModel
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.helper.ConfigHelper
-import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
+import com.xiaoyv.widget.dialog.UiDialog
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
 
 /**
@@ -63,6 +64,10 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
         binding.bgm.setOnFastLimitClickListener {
             RouteHelper.jumpWeb(url = "https://github.com/xiaoyvyv/bangumi", forceBrowser = true)
         }
+
+        binding.flBgm.setOnFastLimitClickListener {
+            viewModel.queryOnlineCount(showLoading = true)
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {
@@ -70,19 +75,17 @@ class DiscoverFragment : BaseViewModelFragment<FragmentDiscoverBinding, Discover
             binding.vpContent.setCurrentItem(it, true)
         }
 
-        UserHelper.observeUserInfo(this) {
-
+        // 更新在线人数
+        viewModel.onOnlineCountLiveData.observe(this) {
+            if (it != 0) binding.tvOnline.text = buildString {
+                append("Online:")
+                append(it)
+            }
         }
     }
 
-    /**
-     * 更新在线人数
-     */
-    fun updateOnline(count: Int) {
-        binding.tvOnline.text = buildString {
-            append("Online:")
-            append(count)
-        }
+    override fun createLoadingDialog(): UiDialog {
+        return AnimeLoadingDialog(requireActivity())
     }
 
     override fun onDestroyView() {

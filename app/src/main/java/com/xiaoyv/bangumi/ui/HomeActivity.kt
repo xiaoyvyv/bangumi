@@ -170,7 +170,6 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
         }
     }
 
-
     private fun showTip() {
         if (ConfigHelper.showVersionTip) {
             launchUI {

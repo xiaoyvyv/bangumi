@@ -164,12 +164,15 @@ fun Element.parserHomePageProcess(): List<MediaDetailEntity> {
     }
 }
 
+fun Document.parserOnlineCount(): Int {
+    return select("#header").text().parseCount()
+}
+
 /**
  * 解析未登录的主页
  */
 fun Document.parserHomePageWithoutLogin(): HomeIndexEntity {
     val entity = HomeIndexEntity()
-    entity.online = select("#header").text().parseCount()
     entity.images = select("#featuredItems li").map {
         val imageCardEntity = HomeIndexCardEntity()
 

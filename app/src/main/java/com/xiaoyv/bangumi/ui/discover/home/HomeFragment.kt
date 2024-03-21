@@ -10,7 +10,6 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
 import com.xiaoyv.common.config.annotation.FeatureType
 import com.xiaoyv.common.helper.callback.RecyclerItemTouchedListener
 import com.xiaoyv.common.widget.scroll.AnimeLinearLayoutManager
-import com.xiaoyv.widget.kts.orEmpty
 import com.xiaoyv.widget.kts.toast
 import com.xiaoyv.widget.kts.useNotNull
 
@@ -89,9 +88,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
             }
 
             contentAdapter.submitList(contentItems)
-
-            // 更新在线人数
-            (parentFragment as? DiscoverFragment)?.updateOnline(it?.online.orEmpty())
         }
     }
 
