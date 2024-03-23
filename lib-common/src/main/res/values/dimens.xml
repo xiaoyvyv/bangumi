@@ -1,5 +1,6 @@
 <resources>
     <dimen name="ui_layout_margin">16dp</dimen>
+    <dimen name="ui_layout_margin_compat">8dp</dimen>
     <dimen name="home_card_height">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_label">10sp</dimen>
