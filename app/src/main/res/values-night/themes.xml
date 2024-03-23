@@ -1,0 +1,15 @@
+<resources>
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background, animated icon, and animation duration. -->
+        <item name="windowSplashScreenBackground">?android:colorBackground</item>
+
+        <!-- 用圆形白底的图标来保证在暗色背景上站是正常 -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_0</item>
+        <!-- Required for animated icons -->
+        <item name="windowSplashScreenAnimationDuration">200</item>
+
+        <!-- Set the theme of the Activity that directly follows your splash screen. -->
+        <!-- Required -->
+        <item name="postSplashScreenTheme">@style/Theme.Bangumi</item>
+    </style>
+</resources>
