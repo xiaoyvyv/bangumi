@@ -44,6 +44,8 @@
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="bottom"
                     android:includeFontPadding="true"
+                    android:paddingStart="@dimen/ui_size_0"
+                    android:paddingEnd="@dimen/ui_size_12"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="7sp"
                     android:textStyle="italic|bold"
