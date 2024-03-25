@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.discover.index.detail.page.IndexAttachFragment
-import com.xiaoyv.common.config.bean.IndexDetailAttachTab
+import com.xiaoyv.common.config.bean.tab.IndexDetailAttachTab
 
 /**
  * Class: [IndexDetailAdapter]

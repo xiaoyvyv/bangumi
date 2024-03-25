@@ -47,6 +47,7 @@ android {
 dependencies {
     api(project(":lib-live2d"))
     api(project(":lib-emoji"))
+    api(project(":lib-thunder"))
 
     api(libs.blueprint)
     api(libs.blueprint.floater)
@@ -81,12 +82,9 @@ dependencies {
 
     api(libs.jieba.analysis)
 
-    //noinspection UseTomlInstead
-    api(platform("com.google.firebase:firebase-bom:32.7.2"))
-    //noinspection UseTomlInstead
-    api("com.google.firebase:firebase-crashlytics-ktx")
-    //noinspection UseTomlInstead
-    api("com.google.firebase:firebase-analytics-ktx")
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.analytics.ktx)
+    api(libs.firebase.crashlytics.ktx)
 
     compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 

@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.ui.profile.ProfileFragment
 import com.xiaoyv.bangumi.ui.rakuen.RakuenFragment
 import com.xiaoyv.bangumi.ui.timeline.TimelineFragment
 import com.xiaoyv.common.config.annotation.FeatureType
-import com.xiaoyv.common.config.bean.HomeBottomTab
+import com.xiaoyv.common.config.bean.tab.HomeBottomTab
 
 /**
  * Class: [HomeAdapter]

@@ -1,13 +1,21 @@
 package com.xiaoyv.bangumi.ui
 
 import android.graphics.Typeface
+import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup.OnHierarchyChangeListener
 import android.view.Window
 import android.view.WindowManager
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SpanUtils
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.badge.BadgeDrawable
 import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivityHomeBinding
@@ -20,8 +28,10 @@ import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.helper.VolumeButtonHelper
 import com.xiaoyv.common.kts.GoogleAttr
+import com.xiaoyv.common.kts.clearApplyWindowInsets
 import com.xiaoyv.common.kts.customApplyWindowInsets
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.forceFitStatusBar
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
 import com.xiaoyv.widget.dialog.UiDialog
@@ -29,6 +39,7 @@ import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import kotlinx.coroutines.delay
+
 
 /**
  * Class: [HomeActivity]
@@ -64,10 +75,40 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
     }
 
     override fun initView() {
+        // ViewPager2 + Fragment + AppBarLayout 多页情况下，低版本 OS 沉浸式错误修复
+        // 此处拦截掉，让 Fragment 每页自己处理顶部
+        binding.vpView.clearApplyWindowInsets()
+
+        // 直接通过生命周期回调适配每个 Fragment 的 FitSystemWindow
+        supportFragmentManager.registerFragmentLifecycleCallbacks(object :
+            FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentViewCreated(
+                fm: FragmentManager,
+                f: Fragment,
+                v: View,
+                savedInstanceState: Bundle?
+            ) {
+                v.findViewById<CollapsingToolbarLayout?>(com.xiaoyv.common.R.id.toolbar_layout)
+                    ?.forceFitStatusBar()
+                v.findViewById<AppBarLayout?>(R.id.app_bar)?.forceFitStatusBar()
+            }
+        }, false)
+
+
         binding.vpView.adjustScrollSensitivity(ConfigHelper.vpTouchSlop.toFloat())
         binding.vpView.isUserInputEnabled = false
         binding.vpView.offscreenPageLimit = vpAdapter.itemCount.coerceAtLeast(1)
         binding.vpView.adapter = vpAdapter
+
+        binding.vpView.setOnHierarchyChangeListener(object : OnHierarchyChangeListener {
+            override fun onChildViewAdded(parent: View?, child: View?) {
+                ViewCompat.requestApplyInsets(binding.vpView)
+            }
+
+            override fun onChildViewRemoved(parent: View?, child: View?) {
+
+            }
+        })
 
         // 导入底栏
         binding.navView.menu.clear()
@@ -111,7 +152,6 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
         UpdateHelper.checkUpdate(this, false)
 
         showTip()
-
     }
 
     override fun initListener() {

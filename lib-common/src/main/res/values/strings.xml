@@ -90,4 +90,7 @@
     <string name="yuc_title">新番</string>
 
     <string name="mikan_title">蜜柑计划-RSS</string>
+
+    <string name="download_title">下载中心</string>
+    <string name="download_dialog_title">资源下载</string>
 </resources>

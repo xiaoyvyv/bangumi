@@ -23,10 +23,11 @@ fun Toolbar.initNavBack(activity: AppCompatActivity, back: Boolean = true) {
     }
 }
 
-fun MenuItem.initNavBack(activity: AppCompatActivity) {
+fun MenuItem.initNavBack(activity: AppCompatActivity, beforeFinish: (() -> Unit)? = null) {
     when (itemId) {
         android.R.id.home -> {
-            activity.finish()
+            beforeFinish?.invoke()
+            activity.onBackPressedDispatcher.onBackPressed()
         }
     }
 }

@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.ui.profile.page.save.SaveListFragment
 import com.xiaoyv.bangumi.ui.timeline.page.TimelinePageFragment
 import com.xiaoyv.common.config.annotation.TimelineType
 import com.xiaoyv.common.config.annotation.UserCenterType
-import com.xiaoyv.common.config.bean.UserCenterTab
+import com.xiaoyv.common.config.bean.tab.UserCenterTab
 
 /**
  * Class: [UserAdapter]

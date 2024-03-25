@@ -14,7 +14,7 @@ import com.xiaoyv.bangumi.ui.media.detail.maker.MediaMakerFragment
 import com.xiaoyv.bangumi.ui.media.detail.overview.OverviewFragment
 import com.xiaoyv.bangumi.ui.media.detail.review.MediaReviewFragment
 import com.xiaoyv.common.config.annotation.MediaDetailType
-import com.xiaoyv.common.config.bean.MediaDetailTab
+import com.xiaoyv.common.config.bean.tab.MediaDetailTab
 
 /**
  * Class: [MediaDetailAdapter]

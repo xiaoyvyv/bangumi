@@ -62,6 +62,7 @@ abstract class BaseListActivity<T, VM : BaseListViewModel<T>> :
         onCreateContentAdapterHelper()
     }
 
+
     open fun onCreateContentAdapterHelper(): QuickAdapterHelper {
         return QuickAdapterHelper.Builder(contentAdapter)
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {

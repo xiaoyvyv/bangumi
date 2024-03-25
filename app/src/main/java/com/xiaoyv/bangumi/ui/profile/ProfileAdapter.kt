@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.ui.profile.page.group.UserGroupFragment
 import com.xiaoyv.bangumi.ui.profile.page.index.UserIndexFragment
 import com.xiaoyv.bangumi.ui.profile.page.save.SaveListFragment
 import com.xiaoyv.common.config.annotation.ProfileType
-import com.xiaoyv.common.config.bean.ProfileTab
+import com.xiaoyv.common.config.bean.tab.ProfileTab
 import com.xiaoyv.common.helper.UserHelper
 
 /**

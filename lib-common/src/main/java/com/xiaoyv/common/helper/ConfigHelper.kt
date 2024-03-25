@@ -1,5 +1,6 @@
 package com.xiaoyv.common.helper
 
+import android.os.Build
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.AppUtils
@@ -62,6 +63,13 @@ object ConfigHelper {
 
     val isOV by lazy {
         RomUtils.isVivo() || RomUtils.isOppo()
+    }
+
+    /**
+     * 是否支持 Arm 架构
+     */
+    val isOsSupportArm by lazy {
+        Build.SUPPORTED_ABIS.contains("arm64-v8a") || Build.SUPPORTED_ABIS.contains("armeabi-v7a")
     }
 
     fun configBaiduTranslateId(appId: String) {

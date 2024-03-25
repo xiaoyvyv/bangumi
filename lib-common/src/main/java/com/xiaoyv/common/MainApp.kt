@@ -19,6 +19,10 @@ import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.theme.ThemeHelper
 import com.xiaoyv.common.helper.work.IdleWorker
 import com.xiaoyv.common.widget.emoji.UiFaceManager
+import com.xiaoyv.thunder.Thunder
+import com.xiaoyv.widget.kts.workDirOf
+import com.xunlei.downloadlib.android.XLTool
+import com.xunlei.downloadlib.parameter.InitParam
 import java.util.concurrent.TimeUnit
 
 lateinit var currentApplication: MainApp
@@ -43,6 +47,7 @@ class MainApp : Application() {
      * - second: 短信
      */
     val globalNotify = MutableLiveData<Pair<Int, Int>>()
+
 
     override fun onCreate() {
         super.onCreate()
@@ -75,10 +80,40 @@ class MainApp : Application() {
         // MiKan ID映射
         MiKanHelper.preload()
 
+        // 下载模块
+        initThunder()
+
         // Log
         LogUtils.getConfig().isLogSwitch = AppUtils.isAppDebug()
     }
 
+    /**
+     * 下载模块，仅 ARM 结构支持
+     */
+    private fun initThunder() {
+        if (ConfigHelper.isOsSupportArm) {
+            // 下载引擎配置路径
+            val downloadEngineDir = workDirOf("download/config")
+
+            Thunder.instance.init(
+                context = this,
+                initParam = InitParam(
+                    mAppVersion = AppUtils.getAppVersionName(),
+                    mStatSavePath = downloadEngineDir,
+                    mStatCfgSavePath = downloadEngineDir,
+                    mLogSavePath = downloadEngineDir,
+                    mPermissionLevel = 3,
+                    mGuid = XLTool.fetchGuid,
+                    mPeerId = XLTool.fetchPeerId,
+                    mDebug = AppUtils.isAppDebug()
+                )
+            )
+        }
+    }
+
+    /**
+     * 基础配置
+     */
     private fun initBaseConfig() {
         BaseConfig.config.globalConfig = object : BaseConfig.OnConfigActivity {
 

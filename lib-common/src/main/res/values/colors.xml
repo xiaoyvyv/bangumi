@@ -44,4 +44,13 @@
 
     <color name="question_right">#55CC55</color>
     <color name="question_error">#CC5555</color>
+
+    <color name="file_video">#6161F3</color>
+    <color name="file_audio">#009688</color>
+    <color name="file_image">#FB766C</color>
+    <color name="file_code">#2196F3</color>
+    <color name="file_office">#E64A7F</color>
+    <color name="file_zip">#EDBB24</color>
+    <color name="file_install">#9C27B0</color>
+    <color name="file_txt">#673AB7</color>
 </resources>

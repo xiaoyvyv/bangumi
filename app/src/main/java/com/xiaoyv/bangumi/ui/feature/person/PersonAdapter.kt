@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.ui.feature.person.opus.PersonOpusFragment
 import com.xiaoyv.bangumi.ui.feature.person.overview.PersonOverviewFragment
 import com.xiaoyv.bangumi.ui.feature.person.picture.PersonPictureFragment
 import com.xiaoyv.common.config.annotation.PersonTabType
-import com.xiaoyv.common.config.bean.PersonTab
+import com.xiaoyv.common.config.bean.tab.PersonTab
 
 /**
  * Class: [PersonAdapter]

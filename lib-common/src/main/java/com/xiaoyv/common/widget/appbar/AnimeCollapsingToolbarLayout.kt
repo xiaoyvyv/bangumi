@@ -2,6 +2,11 @@ package com.xiaoyv.common.widget.appbar
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.blankj.utilcode.util.BarUtils
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 
 /**

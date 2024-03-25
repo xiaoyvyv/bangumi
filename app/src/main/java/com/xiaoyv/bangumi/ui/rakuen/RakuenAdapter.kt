@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.rakuen.page.RakuenPageFragment
 import com.xiaoyv.common.config.annotation.SuperType
-import com.xiaoyv.common.config.bean.SuperTopicTab
+import com.xiaoyv.common.config.bean.tab.SuperTopicTab
 
 /**
  * Class: [RakuenAdapter]

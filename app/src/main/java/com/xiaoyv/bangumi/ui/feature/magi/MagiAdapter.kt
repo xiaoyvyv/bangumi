@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.ui.feature.magi.history.MagiHistoryFragment
 import com.xiaoyv.bangumi.ui.feature.magi.question.MagiQuestionFragment
 import com.xiaoyv.bangumi.ui.feature.magi.rank.MagiRankFragment
 import com.xiaoyv.common.config.annotation.MagiTabType
-import com.xiaoyv.common.config.bean.MagiTab
+import com.xiaoyv.common.config.bean.tab.MagiTab
 
 /**
  * Class: [MagiAdapter]

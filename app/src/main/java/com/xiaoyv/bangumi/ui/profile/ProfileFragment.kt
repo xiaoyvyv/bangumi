@@ -1,15 +1,25 @@
 package com.xiaoyv.bangumi.ui.profile
 
 import android.annotation.SuppressLint
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.BarUtils
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentProfileBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.currentApplication
 import com.xiaoyv.common.helper.ConfigHelper
@@ -17,12 +27,15 @@ import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.forceFitStatusBar
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
 import com.xiaoyv.common.kts.setBadgeNumber
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.dpi
+import com.xiaoyv.widget.kts.toast
+import kotlinx.coroutines.delay
 import kotlin.math.abs
 
 
@@ -54,13 +67,11 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
         tabLayoutMediator.attach()
 
         binding.toolbar.setNavigationIcon(CommonDrawable.ic_menu)
-
     }
 
     override fun initData() {
 
     }
-
 
     override fun initListener() {
         binding.toolbar.setNavigationOnClickListener {
@@ -73,6 +84,12 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                             } else {
                                 RouteHelper.jumpLogin()
                             }
+                            true
+                        }
+
+                    menu.add("下载中心")
+                        .setOnMenuItemClickListener {
+                            RouteHelper.jumpThunder()
                             true
                         }
 

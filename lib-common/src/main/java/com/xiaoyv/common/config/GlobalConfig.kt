@@ -1,7 +1,7 @@
 package com.xiaoyv.common.config
 
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.config.bean.MediaTab
+import com.xiaoyv.common.config.bean.tab.MediaTab
 
 /**
  * Class: [GlobalConfig]

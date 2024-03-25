@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.ui.feature.search.detail.page.media.SearchMediaFragmen
 import com.xiaoyv.bangumi.ui.feature.search.detail.page.tag.SearchTagFragment
 import com.xiaoyv.bangumi.ui.feature.search.detail.page.topic.SearchTopicFragment
 import com.xiaoyv.common.config.annotation.SearchType
-import com.xiaoyv.common.config.bean.SearchTab
+import com.xiaoyv.common.config.bean.tab.SearchTab
 
 /**
  * Class: [SearchDetailAdapter]

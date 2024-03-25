@@ -86,7 +86,7 @@ class ScheduleActivity : BaseViewModelActivity<ActivityScheduleBinding, Schedule
         }
         // 滑到明天
         else {
-            binding.vpContent.setCurrentItem(weekDay, false)
+            binding.vpContent.setCurrentItem(weekDay.let { if (it == 7) 0 else it }, false)
         }
     }
 

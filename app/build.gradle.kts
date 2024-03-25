@@ -82,6 +82,7 @@ android {
 
 dependencies {
     implementation(project(":lib-common"))
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)

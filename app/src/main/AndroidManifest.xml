@@ -100,10 +100,44 @@
                     android:scheme="bgm" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.xiaoyv.bangumi.special.thunder.ThunderActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+
+                <data android:mimeType="application/x-bittorrent" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="ftp" />
+                <data android:scheme="thunder" />
+                <data android:scheme="ed2k" />
+                <data android:scheme="magnet" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.HomeActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name="com.xiaoyv.bangumi.ui.feature.login.LoginActivity"
@@ -340,6 +374,11 @@
             android:exported="false" />
         <activity
             android:name="com.xiaoyv.bangumi.special.mikan.resource.MikanResourceActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+
+        <activity
+            android:name="com.xiaoyv.bangumi.special.thunder.torrent.TorrentInfoActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
 

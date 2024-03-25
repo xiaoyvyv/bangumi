@@ -1,9 +1,11 @@
 [versions]
-agp = "8.4.0-alpha13"
+agp = "8.3.0"
 blueprint = "1.1.50"
 coreSplashscreen = "1.0.1"
 firebaseCrashlyticsGradle = "2.9.9"
 fragmentKtx = "1.6.2"
+googleFirebaseBom = "32.8.0"
+gson = "2.10.1"
 jiebaAnalysis = "1.0.2"
 jsoup = "1.17.2"
 kotlin = "1.9.10"
@@ -44,8 +46,12 @@ androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version
 avif-integration = { module = "com.github.bumptech.glide:avif-integration", version.ref = "glideVersion" }
 blueprint = { module = "io.github.xiaoyvyv:blueprint", version.ref = "blueprint" }
 blueprint-floater = { module = "io.github.xiaoyvyv:floater", version.ref = "blueprint" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "googleFirebaseBom" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glideVersion" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 jieba-analysis = { module = "com.huaban:jieba-analysis", version.ref = "jiebaAnalysis" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

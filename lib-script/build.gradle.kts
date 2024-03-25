@@ -22,8 +22,7 @@ dependencies {
     api(libs.log4j.core)
     api(libs.slf4j.simple)
 
-    // api("com.huaban:jieba-analysis:1.0.2")
-    api("com.google.code.gson:gson:2.10.1")
+    api(libs.gson)
 }
 
 /**

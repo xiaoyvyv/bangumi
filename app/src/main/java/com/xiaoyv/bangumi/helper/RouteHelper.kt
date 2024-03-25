@@ -15,6 +15,8 @@ import com.xiaoyv.bangumi.special.mikan.resource.MikanResourceActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
 import com.xiaoyv.bangumi.special.syncer.SyncerActivity
 import com.xiaoyv.bangumi.special.syncer.list.SyncerListActivity
+import com.xiaoyv.bangumi.special.thunder.ThunderActivity
+import com.xiaoyv.bangumi.special.thunder.torrent.TorrentInfoActivity
 import com.xiaoyv.bangumi.ui.HomeActivity
 import com.xiaoyv.bangumi.ui.discover.blog.detail.BlogActivity
 import com.xiaoyv.bangumi.ui.discover.container.FragmentContainerActivity
@@ -82,6 +84,7 @@ import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.decodeUrl
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.widget.kts.showToastCompat
+import com.xunlei.downloadlib.parameter.TorrentInfo
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
 /**
@@ -597,6 +600,16 @@ object RouteHelper {
 
     fun jumpSyncerList() {
         SyncerListActivity::class.open()
+    }
+
+    fun jumpThunder() {
+        ThunderActivity::class.open()
+    }
+
+    fun jumpTorrentInfo(torrentInfo: TorrentInfo) {
+        TorrentInfoActivity::class.open(
+            bundleOf(NavKey.KEY_PARCELABLE to torrentInfo)
+        )
     }
 
     fun jumpWeb(

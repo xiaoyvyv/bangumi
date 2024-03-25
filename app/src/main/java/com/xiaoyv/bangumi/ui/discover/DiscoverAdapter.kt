@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.ui.discover.mono.MonoFragment
 import com.xiaoyv.bangumi.ui.discover.wiki.WikiFragment
 import com.xiaoyv.bangumi.ui.feature.empty.EmptyFragment
 import com.xiaoyv.common.config.annotation.DiscoverType
-import com.xiaoyv.common.config.bean.DiscoverTab
+import com.xiaoyv.common.config.bean.tab.DiscoverTab
 
 /**
  * Class: [DiscoverAdapter]

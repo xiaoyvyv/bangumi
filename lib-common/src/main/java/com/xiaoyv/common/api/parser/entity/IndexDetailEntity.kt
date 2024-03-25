@@ -3,7 +3,7 @@ package com.xiaoyv.common.api.parser.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-import com.xiaoyv.common.config.bean.IndexDetailAttachTab
+import com.xiaoyv.common.config.bean.tab.IndexDetailAttachTab
 import kotlinx.parcelize.Parcelize
 
 /**

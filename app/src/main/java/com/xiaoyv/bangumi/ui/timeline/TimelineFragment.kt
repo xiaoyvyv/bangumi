@@ -2,12 +2,16 @@ package com.xiaoyv.bangumi.ui.timeline
 
 import android.view.MenuItem
 import androidx.core.view.isVisible
+import androidx.core.view.marginTop
+import androidx.core.view.updatePadding
 import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.BarUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentTimelineBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
+import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TimelinePageType
 import com.xiaoyv.common.helper.ConfigHelper
@@ -19,6 +23,7 @@ import com.xiaoyv.common.kts.showInputDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.orEmpty
+import kotlinx.coroutines.delay
 
 /**
  * Class: [TimelineFragment]

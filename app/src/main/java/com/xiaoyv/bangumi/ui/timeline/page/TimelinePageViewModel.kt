@@ -7,7 +7,7 @@ import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.api.parser.impl.parserTimelineForms
 import com.xiaoyv.common.config.annotation.TimelinePageType
 import com.xiaoyv.common.config.annotation.TimelineType
-import com.xiaoyv.common.config.bean.TimelineTab
+import com.xiaoyv.common.config.bean.tab.TimelineTab
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.widget.kts.errorMsg

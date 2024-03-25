@@ -16,7 +16,7 @@ import com.xiaoyv.common.api.parser.styleBackground
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.IndexTabCatType
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.config.bean.IndexDetailAttachTab
+import com.xiaoyv.common.config.bean.tab.IndexDetailAttachTab
 import org.jsoup.nodes.Element
 
 /**

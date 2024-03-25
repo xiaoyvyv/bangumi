@@ -12,7 +12,7 @@ import com.xiaoyv.common.api.parser.entity.TimelineEntity
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TimelineAdapterType
 import com.xiaoyv.common.config.annotation.TimelineType
-import com.xiaoyv.common.config.bean.TimelineTab
+import com.xiaoyv.common.config.bean.tab.TimelineTab
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog

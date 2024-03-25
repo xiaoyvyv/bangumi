@@ -6,7 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.timeline.page.TimelinePageFragment
 import com.xiaoyv.common.config.annotation.TimelineType
-import com.xiaoyv.common.config.bean.TimelineTab
+import com.xiaoyv.common.config.bean.tab.TimelineTab
 
 /**
  * Class: [TimelineAdapter]

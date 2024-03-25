@@ -7,7 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.media.detail.score.page.MediaScorePageFragment
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.config.bean.MediaScoreTab
+import com.xiaoyv.common.config.bean.tab.MediaScoreTab
 
 /**
  * Class: [MediaScoreAdapter]

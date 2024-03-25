@@ -7,7 +7,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.MagiQuestionEntity
 import com.xiaoyv.common.api.parser.impl.parserMagiQuestion
 import com.xiaoyv.common.config.annotation.MagiType
-import com.xiaoyv.common.config.bean.MagiTab
+import com.xiaoyv.common.config.bean.tab.MagiTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -9,7 +9,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.entity.SuperTopicEntity
 import com.xiaoyv.common.api.parser.impl.parserSuperTopic
 import com.xiaoyv.common.config.annotation.SuperType
-import com.xiaoyv.common.config.bean.SuperTopicTab
+import com.xiaoyv.common.config.bean.tab.SuperTopicTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

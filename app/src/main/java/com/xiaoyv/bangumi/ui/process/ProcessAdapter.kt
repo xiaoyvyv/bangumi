@@ -6,7 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.xiaoyv.bangumi.ui.process.page.ProcessPageFragment
 import com.xiaoyv.common.config.annotation.MediaType
-import com.xiaoyv.common.config.bean.ProcessTab
+import com.xiaoyv.common.config.bean.tab.ProcessTab
 
 /**
  * Class: [ProcessAdapter]

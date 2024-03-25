@@ -16,7 +16,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.config.annotation.TopicType
-import com.xiaoyv.common.config.bean.SuperTopicTab
+import com.xiaoyv.common.config.bean.tab.SuperTopicTab
 import com.xiaoyv.common.helper.showActionMenu
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application>
+        <meta-data
+            android:name="com.xunlei.download.APP_KEY"
+            android:value="KNabNjA5MjsxNjk1NjI4OTQyLjA0ODM3OA&amp;&amp;dgeQ==21ae4ca0b02ac^^55115ca7afaeb406d9dbf539f==39A4977CE74329FCDE6^DB4628FBAE88" />
+    </application>
+</manifest>
