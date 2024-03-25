@@ -130,12 +130,13 @@ class ReplyCommentDialog : DialogFragment() {
             onPreviewCode(binding.edReply.text.toString().trim())
         }
 
+        // 空白点击
         binding.vTmp.setOnClickListener {
             if (switchHelper?.isKeyboardState() == true) {
                 switchHelper?.resetState()
-            } else {
-                dismissAllowingStateLoss()
             }
+
+            dismissAllowingStateLoss()
         }
     }
 
@@ -184,11 +185,10 @@ class ReplyCommentDialog : DialogFragment() {
         ImmersionBar.with(this)
             .transparentBar()
             .statusBarDarkFont(!WebConfig.nightMode)
-            .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             .init()
 
         window.setGravity(Gravity.BOTTOM)
-        window.setSoftInputMode(16)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window.setDimAmount(0.0f)
         window.updateWindowParams {
