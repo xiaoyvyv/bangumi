@@ -1,9 +1,13 @@
 package com.xiaoyv.bangumi.ui.media.detail
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
@@ -30,6 +34,7 @@ import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.copyText
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
@@ -41,6 +46,8 @@ import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import kotlinx.coroutines.delay
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /**
  * Class: [MediaDetailActivity]
@@ -176,6 +183,10 @@ class MediaDetailActivity :
                 viewModel.vpEnableLiveData.value = position != vpAdapter.itemCount - 1
             }
         })
+
+        binding.tvScoreMalTip.setOnFastLimitClickListener {
+            jumpMalDetail()
+        }
     }
 
     override fun LifecycleOwner.initViewObserver() {
@@ -223,6 +234,22 @@ class MediaDetailActivity :
 
             binding.tvScoreMalTip.isVisible = score != 0f
             binding.tvScoreMalTip.text = String.format("MAL：%.1f", score)
+
+            // 过长滑动动画提示
+            binding.tvScoreMalTip.post {
+                val range = abs(binding.llTag.width - binding.scrollTag.width)
+                if (range != 0) {
+                    ObjectAnimator.ofInt(0, range, 0)
+                        .apply {
+                            duration = 1000
+                            interpolator = AccelerateDecelerateInterpolator()
+                            addUpdateListener { animator ->
+                                binding.scrollTag.scrollTo(animator.animatedValue as Int, 0)
+                            }
+                        }
+                        .start()
+                }
+            }
         }
 
         viewModel.vpEnableLiveData.observe(this) {
@@ -265,10 +292,7 @@ class MediaDetailActivity :
             menu.add("MAL 详情")
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                 .setOnMenuItemClickListener {
-                    val malUrl = viewModel.onMalItemLiveData.value?.url.orEmpty()
-                    if (malUrl.isNotBlank()) {
-                        RouteHelper.jumpWeb(malUrl, fitToolbar = true)
-                    }
+                    jumpMalDetail()
                     true
                 }
 
@@ -284,6 +308,16 @@ class MediaDetailActivity :
         }
         menu.addCommonMenu(BgmApiManager.buildReferer(BgmPathType.TYPE_SUBJECT, viewModel.mediaId))
         return super.onCreateOptionsMenu(menu)
+    }
+
+    /**
+     * 跳转 MAL 网页
+     */
+    private fun jumpMalDetail() {
+        val malUrl = viewModel.onMalItemLiveData.value?.url.orEmpty()
+        if (malUrl.isNotBlank()) {
+            RouteHelper.jumpWeb(malUrl, fitToolbar = true)
+        }
     }
 
     private fun showLockTip() {
