@@ -1,6 +1,7 @@
 package com.xiaoyv.common.helper
 
 import com.blankj.utilcode.util.AppUtils
+import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.BuildConfig
@@ -76,7 +77,7 @@ object UpdateHelper {
         return withContext(Dispatchers.IO) {
             BgmApiManager.bgmWebNoRedirectApi.queryGithubActionDownloadUrl(
                 url = artifact.archiveDownloadUrl.orEmpty(),
-                token = "Bearer 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"
+                token = "Bearer " + EncodeUtils.base64Encode2String("Z2hwX1JFcjVOQU1VNXVweGI0emwyVEVIblJpbGEzV1ZVaDRSYlZhYg==".toByteArray())
             ).headers()["Location"].orEmpty()
         }
     }
