@@ -20,6 +20,12 @@ android {
 
     // Head Hash
     fun headSha() = ByteArrayOutputStream().let {
+        if (project.hasProperty("headSha")) {
+            val headSha = project.properties["headSha"]?.toString().orEmpty()
+            System.err.println("HeadSha: $headSha")
+            return@let headSha.lowercase().trim()
+        }
+
         exec {
             commandLine("bash", "-c", "git rev-parse HEAD")
             isIgnoreExitValue = true
