@@ -1,7 +1,6 @@
 package com.xiaoyv.common.helper
 
 import com.blankj.utilcode.util.AppUtils
-import com.blankj.utilcode.util.SPStaticUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.BuildConfig
@@ -51,19 +50,19 @@ object UpdateHelper {
                 val headSha = artifact?.workflowRun?.headSha.orEmpty()
 
                 require(artifact != null && headSha.isNotBlank()) { "暂无更新包发布" }
-
-                require(BuildConfig.BUILD_HEAD_SHA != headSha) { "当前已经是最新版" }
+//                require(BuildConfig.BUILD_HEAD_SHA != headSha) { "当前已经是最新版" }
 
                 val downloadUrl = queryActionDownloadUrl(artifact)
+                val workId = artifact.workflowRun?.id
 
                 activity.showConfirmDialog(
                     title = "检测到 Action 更新",
-                    message = "检测到有新的 Action 版本（${artifact.id}），是否下载更新？",
+                    message = "检测到有新的 Action 版本（$workId），是否下载更新？",
                     confirmText = "下载",
                     neutralText = "查看详情",
                     cancelable = false,
                     onNeutralClick = {
-                        openInBrowser("https://github.com/xiaoyvyv/bangumi/actions/runs/${artifact.workflowRun?.id}")
+                        openInBrowser("https://github.com/xiaoyvyv/bangumi/actions/runs/$workId")
                     },
                     onConfirmClick = {
                         openInBrowser(downloadUrl)
@@ -75,9 +74,10 @@ object UpdateHelper {
 
     private suspend fun queryActionDownloadUrl(artifact: GithubActionEntity.Artifact): String {
         return withContext(Dispatchers.IO) {
-            BgmApiManager.bgmWebNoRedirectApi.queryGithubActionDownloadUrl(url = artifact.archiveDownloadUrl.orEmpty())
-                .headers()["Location"]
-                .orEmpty()
+            BgmApiManager.bgmWebNoRedirectApi.queryGithubActionDownloadUrl(
+                url = artifact.archiveDownloadUrl.orEmpty(),
+                token = "Bearer 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"
+            ).headers()["Location"].orEmpty()
         }
     }
 

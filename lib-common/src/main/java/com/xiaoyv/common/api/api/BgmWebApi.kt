@@ -42,6 +42,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
+import retrofit2.http.Url
 
 /**
  * Class: [BgmWebApi]
@@ -53,11 +54,11 @@ interface BgmWebApi {
     @GET("{url}")
     suspend fun qeuryUrl(@Path("url", encoded = true) url: String): Response<ResponseBody>
 
-    @GET("{url}")
+    @GET
     suspend fun queryGithubActionDownloadUrl(
-        @Header("Authorization") token: String = "Bearer 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",
-        @Header("X-GitHub-Api-Version") version: String = "2022-11-28",
-        @Path("url", encoded = true) url: String
+        @Url url: String,
+        @Header("Authorization") token: String ,
+        @Header("X-GitHub-Api-Version") version: String = "2022-11-28"
     ): Response<ResponseBody>
 
     @GET("/login")

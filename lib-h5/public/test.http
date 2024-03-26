@@ -276,7 +276,7 @@ https://api.github.com/repos/xiaoyvyv/bangumi/actions/artifacts/1358851382/zip
 # @no-redirect
 GET https://api.github.com/repos/xiaoyvyv/bangumi/actions/artifacts/1358851382/zip
 Accept: application/vnd.github+json
-Authorization: Bearer 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
+Authorization: Bearer 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
 X-GitHub-Api-Version: 2022-11-28
 
 ###
