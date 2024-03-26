@@ -76,7 +76,7 @@ object UpdateHelper {
         return withContext(Dispatchers.IO) {
             BgmApiManager.bgmWebNoRedirectApi.queryGithubActionDownloadUrl(
                 url = artifact.archiveDownloadUrl.orEmpty(),
-                token = "Bearer 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"
+                token = "Bearer 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"
             ).headers()["Location"].orEmpty()
         }
     }
