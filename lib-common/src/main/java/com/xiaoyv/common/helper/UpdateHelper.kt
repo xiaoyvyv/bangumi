@@ -1,12 +1,13 @@
 package com.xiaoyv.common.helper
 
 import com.blankj.utilcode.util.AppUtils
-import com.blankj.utilcode.util.EncodeUtils
+import com.blankj.utilcode.util.EncryptUtils
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.BuildConfig
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.GithubActionEntity
+import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.widget.kts.errorMsg
@@ -23,6 +24,16 @@ import kotlinx.coroutines.withContext
 object UpdateHelper {
     const val CHANNEL_RELEASE = "Release"
     const val CHANNEL_ACTION = "Action"
+
+    private const val TOKEN =
+        "C1B418AA11A311B388C13DE2DF6C5A2FC0EE3EB9D800294A8762A8F1F3A0452E4BBF664D1DE0F13EFE29F6A8A80428E1"
+
+    private val token by lazy {
+        val key = "0123456789abcdef".toByteArray()
+
+        EncryptUtils.decryptHexStringAES(TOKEN, key, "AES/CBC/PKCS5Padding", key)
+            .decodeToString()
+    }
 
     /**
      * Action 通道
@@ -51,7 +62,7 @@ object UpdateHelper {
                 val headSha = artifact?.workflowRun?.headSha.orEmpty()
 
                 require(artifact != null && headSha.isNotBlank()) { "暂无更新包发布" }
-//                require(BuildConfig.BUILD_HEAD_SHA != headSha) { "当前已经是最新版" }
+                require(BuildConfig.BUILD_HEAD_SHA != headSha) { "当前已经是最新版" }
 
                 val downloadUrl = queryActionDownloadUrl(artifact)
                 val workId = artifact.workflowRun?.id
@@ -75,9 +86,11 @@ object UpdateHelper {
 
     private suspend fun queryActionDownloadUrl(artifact: GithubActionEntity.Artifact): String {
         return withContext(Dispatchers.IO) {
+
+            debugLog { "github:$token" }
             BgmApiManager.bgmWebNoRedirectApi.queryGithubActionDownloadUrl(
                 url = artifact.archiveDownloadUrl.orEmpty(),
-                token = "Bearer " + EncodeUtils.base64Encode2String("Z2hwX1JFcjVOQU1VNXVweGI0emwyVEVIblJpbGEzV1ZVaDRSYlZhYg==".toByteArray())
+                token = "Bearer $token"
             ).headers()["Location"].orEmpty()
         }
     }

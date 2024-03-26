@@ -1,5 +1,6 @@
 package com.xiaoyv.common
 
+import com.blankj.utilcode.util.EncryptUtils
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -13,5 +14,12 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+        val bytes = EncryptUtils.encryptAES2HexString(
+            "xxxxxxxxxxxxxx".toByteArray(),
+            "0123456789abcdef".toByteArray(),
+            "AES/CBC/PKCS5Padding",
+            "0123456789abcdef".toByteArray()
+        )
+        println("bytes: $bytes")
     }
 }
