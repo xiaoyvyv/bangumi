@@ -20,8 +20,8 @@ android {
 
     // Head Hash
     fun headSha() = ByteArrayOutputStream().let {
-        if (project.hasProperty("headSha")) {
-            val headSha = project.properties["headSha"]?.toString().orEmpty()
+        if (project.hasProperty("HeadSha")) {
+            val headSha = project.properties["HeadSha"]?.toString().orEmpty()
             System.err.println("HeadSha: $headSha")
             return@let headSha.lowercase().trim()
         }
@@ -41,6 +41,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField("java.lang.String", "BUILD_HEAD_SHA", "\"${headSha()}\"")
         }
 
         debug {
