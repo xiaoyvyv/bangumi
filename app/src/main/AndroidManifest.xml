@@ -85,7 +85,8 @@
             android:name="com.xiaoyv.bangumi.ui.feature.scheme.SchemeActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/ActivityTranslucent">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -98,6 +99,18 @@
                     android:host="bangumi.android"
                     android:pathPattern="/route"
                     android:scheme="bgm" />
+            </intent-filter>
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="bgm.tv" />
+                <data android:host="chii.in" />
+                <data android:host="bangumi.tv" />
             </intent-filter>
         </activity>
 
@@ -125,8 +138,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" />
-                <data android:scheme="https" />
                 <data android:scheme="ftp" />
                 <data android:scheme="thunder" />
                 <data android:scheme="ed2k" />

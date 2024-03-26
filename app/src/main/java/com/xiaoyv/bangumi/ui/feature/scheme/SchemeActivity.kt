@@ -44,6 +44,9 @@ class SchemeActivity : BaseBindingActivity<ActivitySchemeBinding>() {
         }
     }
 
+    /**
+     * 处理深度链接
+     */
     private fun handleDeepLink(scheme: String, uri: Uri) {
         debugLog { "Scheme: $scheme, uri: $uri" }
 

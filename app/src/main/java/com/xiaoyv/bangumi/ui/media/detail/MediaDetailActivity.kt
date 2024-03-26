@@ -5,9 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.LinearInterpolator
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
@@ -34,7 +32,6 @@ import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonId
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.copyText
-import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.loadImageAnimate
 import com.xiaoyv.common.kts.loadImageBlur
@@ -47,7 +44,6 @@ import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.getAttrColor
 import kotlinx.coroutines.delay
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 /**
  * Class: [MediaDetailActivity]
