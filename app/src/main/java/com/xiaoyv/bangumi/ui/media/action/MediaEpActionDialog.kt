@@ -103,7 +103,7 @@ class MediaEpActionDialog : DialogFragment() {
                 return@addOnButtonCheckedListener
             }
 
-            var saveTypeEps: List<String>
+            val saveTypeEps: List<String>
             when (i) {
                 // 想看
                 R.id.btn_wish -> {
@@ -120,21 +120,32 @@ class MediaEpActionDialog : DialogFragment() {
                     saveTypeEps = listOf(userEp.id)
                     userEp.type = EpCollectType.TYPE_COLLECT
                 }
-                // 看到
-                R.id.btn_collect_to -> {
-                    saveTypeEps = watchedIds
-                    userEp.type = EpCollectType.TYPE_COLLECT
-                }
-                // 撤销
-                else -> {
-                    saveTypeEps = listOf(userEp.id)
-                    userEp.type = EpCollectType.TYPE_NONE
-                }
+                else -> return@addOnButtonCheckedListener
             }
 
             // 保存
             saveEpCollectStatus(
                 saveTypeEps,
+                subjectId = userEp.episode?.subjectId.toString(),
+                type = userEp.type
+            )
+        }
+
+        // 看到
+        binding.btnCollectTo.setOnClickListener {
+            userEp.type = EpCollectType.TYPE_COLLECT
+            saveEpCollectStatus(
+                watchedIds,
+                subjectId = userEp.episode?.subjectId.toString(),
+                type = userEp.type
+            )
+        }
+
+        // 撤销
+        binding.btnRemove.setOnClickListener {
+            userEp.type = EpCollectType.TYPE_NONE
+            saveEpCollectStatus(
+                listOf(userEp.id),
                 subjectId = userEp.episode?.subjectId.toString(),
                 type = userEp.type
             )
