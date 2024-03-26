@@ -7,6 +7,7 @@ import com.xiaoyv.common.api.parser.entity.DollarsEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.request.CreateTokenParam
 import com.xiaoyv.common.api.response.BgmStatusEntity
+import com.xiaoyv.common.api.response.GithubActionEntity
 import com.xiaoyv.common.api.response.NotifyEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.api.response.UploadResultEntity
@@ -51,6 +52,13 @@ import retrofit2.http.QueryMap
 interface BgmWebApi {
     @GET("{url}")
     suspend fun qeuryUrl(@Path("url", encoded = true) url: String): Response<ResponseBody>
+
+    @GET("{url}")
+    suspend fun queryGithubActionDownloadUrl(
+        @Header("Authorization") token: String = "Bearer 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",
+        @Header("X-GitHub-Api-Version") version: String = "2022-11-28",
+        @Path("url", encoded = true) url: String
+    ): Response<ResponseBody>
 
     @GET("/login")
     suspend fun queryLoginPage(): Document

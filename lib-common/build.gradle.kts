@@ -1,3 +1,5 @@
+import java.io.ByteArrayOutputStream
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -16,6 +18,16 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    // Head Hash
+    fun headSha() = ByteArrayOutputStream().let {
+        exec {
+            commandLine("bash", "-c", "git rev-parse HEAD")
+            isIgnoreExitValue = true
+            standardOutput = it
+        }
+        it.toString().trim().lowercase()
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -23,6 +35,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        debug {
+            buildConfigField("java.lang.String", "BUILD_HEAD_SHA", "\"${headSha()}\"")
         }
     }
 
@@ -41,6 +57,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

@@ -9,6 +9,7 @@ import com.xiaoyv.common.api.request.SyncNameParam
 import com.xiaoyv.common.api.response.AuthStatusEntity
 import com.xiaoyv.common.api.response.AuthTokenEntity
 import com.xiaoyv.common.api.response.BaiduTranslateEntity
+import com.xiaoyv.common.api.response.GithubActionEntity
 import com.xiaoyv.common.api.response.GithubContent
 import com.xiaoyv.common.api.response.GithubLatestEntity
 import com.xiaoyv.common.api.response.GithubPutEntity
@@ -79,6 +80,12 @@ interface BgmJsonApi {
 
     @GET("https://api.github.com/repos/xiaoyvyv/bangumi/releases/latest")
     suspend fun queryGithubLatest(): GithubLatestEntity
+
+    @GET("https://api.github.com/repos/xiaoyvyv/bangumi/actions/artifacts")
+    suspend fun queryGithubAction(
+        @Query("name") name: String,
+        @Query("per_page") pageSize: Int
+    ): GithubActionEntity
 
     @GET("https://api.github.com/repos/{user}/{repo}/contents/{path}")
     suspend fun queryGithubFileContent(

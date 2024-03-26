@@ -86,6 +86,7 @@
             android:text="班固米域名"
             app:subtitle="bgm.tv" />
 
+
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,7 +121,7 @@
             android:layout_marginTop="@dimen/ui_layout_margin"
             android:paddingHorizontal="@dimen/ui_layout_margin"
             android:paddingVertical="@dimen/ui_size_6"
-            android:text="图片搜索"
+            android:text="APP 相关"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -131,7 +132,7 @@
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:text="禁用 Tags" />
+            android:text="图片搜索禁用 Tags" />
 
         <com.xiaoyv.common.widget.setting.SettingItemView
             android:id="@+id/setting_search_ap"
@@ -140,6 +141,16 @@
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:text="搜索源 AP" />
+            android:text="图片 AP 搜索源" />
+
+        <com.xiaoyv.common.widget.setting.SettingItemView
+            android:id="@+id/setting_update_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="更新检查通道"
+            app:subtitle="Release" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.GlobalConfig
+import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.initNavBack
@@ -150,7 +151,11 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
         }
 
         binding.settingAbout.setOnFastLimitClickListener {
-            UpdateHelper.checkUpdate(this, true)
+            if (ConfigHelper.updateChannel == UpdateHelper.CHANNEL_RELEASE) {
+                UpdateHelper.checkUpdateRelease(this, true)
+            } else {
+                UpdateHelper.checkUpdateAction(this, true)
+            }
         }
     }
 

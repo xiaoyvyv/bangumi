@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.xiaoyv.common.helper
 
 import android.os.Build
@@ -45,6 +47,7 @@ object ConfigHelper {
     private const val KEY_NETWORK_HOSTS = "network-hosts"
     private const val KEY_VP_SLOP = "vp-slop"
     private const val KEY_BGM_URL = "bgm-url"
+    private const val KEY_UPDATE_CHANNEL = "update-channel"
     private const val KEY_RAKUEN_TAB_REMEMBER = "rakuen-tab-remember"
     private const val KEY_TIMELINE_TAB_REMEMBER = "timeline-tab-remember"
     private const val KEY_FORCE_BROWSER = "force-browser"
@@ -326,6 +329,13 @@ object ConfigHelper {
     var bgmBaseUrl: String
         get() = SPStaticUtils.getString(KEY_BGM_URL, BgmApiManager.baseUrlArray.first())
         set(value) = SPStaticUtils.put(KEY_BGM_URL, value.trim())
+
+    /**
+     * 默认的域名
+     */
+    var updateChannel: String
+        get() = SPStaticUtils.getString(KEY_UPDATE_CHANNEL, UpdateHelper.CHANNEL_RELEASE)
+        set(value) = SPStaticUtils.put(KEY_UPDATE_CHANNEL, value.trim())
 
     /**
      * VP 滚动斜率阈值倍数，SDK 默认值为 2，越大越不容易左右滑动误触发

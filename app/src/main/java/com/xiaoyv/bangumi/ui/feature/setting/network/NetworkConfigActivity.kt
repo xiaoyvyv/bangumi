@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.databinding.ActivitySettingGithubBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.UpdateHelper
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
@@ -114,6 +115,13 @@ class NetworkConfigActivity :
         }
 
         binding.settingSearchAp.bindBoolean(ConfigHelper::isImageSearchAP)
+
+        binding.settingUpdateChannel.bindSerializable(
+            activity = this,
+            property = ConfigHelper::updateChannel,
+            names = listOf("Release 通道", "Action 通道"),
+            values = listOf(UpdateHelper.CHANNEL_RELEASE, UpdateHelper.CHANNEL_ACTION)
+        )
 
         refresh()
     }

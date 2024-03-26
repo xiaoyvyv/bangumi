@@ -149,7 +149,11 @@ class HomeActivity : BaseViewModelActivity<ActivityHomeBinding, MainViewModel>()
         }
 
         // 更新检测
-        UpdateHelper.checkUpdate(this, false)
+        if (ConfigHelper.updateChannel == UpdateHelper.CHANNEL_RELEASE) {
+            UpdateHelper.checkUpdateRelease(this, false)
+        } else {
+            UpdateHelper.checkUpdateAction(this, false)
+        }
 
         showTip()
     }

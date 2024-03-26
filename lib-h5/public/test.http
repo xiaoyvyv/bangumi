@@ -268,13 +268,18 @@ Content-Type: application/json
 
 
 ###
-POST / HTTP/1.1
-Host: res.res.res.res:11400
-Content-Length: 288
-Content-Type: application/octet-stream
-Connection: close
-User-Agent: Mozilla/4.0
-Accept: */*
+# @no-redirect
+https://api.github.com/repos/xiaoyvyv/bangumi/actions/artifacts/1358851382/zip
 
-�X&'  �   ����2�b��,I�1l�[�ᣪ�ȶ�+�����$��;=E�gQ: �u���cŏҦ}[<�Û�v�qV�)3۲GǃSH�q��8����~�E����E���/Ay�0�"��*��   �y�Q�ɣi$�ga٤��?��qK�C��~�&�F��( G�]-0�~CӨ5t��et�,8tJ�
-���-�)$t��2��E�v��Cc5jhS� ��.=�b`f�'=���)�U��ɫp����Y��eq���8J��*P�rL/w�o
+###
+
+# @no-redirect
+GET https://api.github.com/repos/xiaoyvyv/bangumi/actions/artifacts/1358851382/zip
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+X-GitHub-Api-Version: 2022-11-28
+
+###
+
+
+
