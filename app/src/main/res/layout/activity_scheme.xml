@@ -26,11 +26,9 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.xiaoyv.common.widget.button.AnimeButton
-            android:id="@+id/btn_jump"
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="跳转"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

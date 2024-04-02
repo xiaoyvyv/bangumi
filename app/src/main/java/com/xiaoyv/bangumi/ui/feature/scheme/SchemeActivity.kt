@@ -34,14 +34,7 @@ class SchemeActivity : BaseBindingActivity<ActivitySchemeBinding>() {
     }
 
     override fun initListener() {
-        binding.btnJump.setOnFastLimitClickListener {
-            ActivityUtils.startActivity(
-                Intent.createChooser(
-                    Intent.parseUri("https://bgm.tv/subject_search/", Intent.URI_ALLOW_UNSAFE),
-                    "跳转"
-                )
-            )
-        }
+
     }
 
     /**
