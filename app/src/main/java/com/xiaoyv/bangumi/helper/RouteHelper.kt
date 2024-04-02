@@ -195,7 +195,16 @@ object RouteHelper {
             }
             // 条目
             titleLink.contains(BgmPathType.TYPE_SUBJECT) -> {
-                jumpMediaDetail(id)
+                when {
+                    // 章节详情
+                    titleLink.contains(TopicType.TYPE_EP) -> {
+                        jumpTopicDetail(id, TopicType.TYPE_EP, targetComment)
+                    }
+                    // 条目详情
+                    else -> {
+                        jumpMediaDetail(id)
+                    }
+                }
                 return true
             }
             // 小组
