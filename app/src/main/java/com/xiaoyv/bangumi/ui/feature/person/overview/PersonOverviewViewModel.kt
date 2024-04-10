@@ -104,11 +104,11 @@ class PersonOverviewViewModel : BaseViewModel() {
                 AdapterTypeItem(
                     entity = entity.recommendIndexes.map {
                         SampleImageEntity(
-                            it.userId,
-                            it.userAvatar,
-                            it.title,
-                            String.format("by：%s", it.userName),
-                            BgmPathType.TYPE_INDEX
+                            id = it.id,
+                            image = it.userAvatar,
+                            title = it.title,
+                            desc = String.format("by：%s", it.userName),
+                            type = BgmPathType.TYPE_INDEX
                         )
                     },
                     type = PersonOverviewAdapter.TYPE_INDEX,
