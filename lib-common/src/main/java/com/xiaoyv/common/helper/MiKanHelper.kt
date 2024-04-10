@@ -42,13 +42,13 @@ object MiKanHelper {
             runCatching {
                 idMap.putAll(BgmApiManager.bgmWebApi.queryMikanIdMapByJsdelivr())
             }.onFailure {
-                debugLog { "Mikan, js-cdn sync error: " + it.printStackTrace() }
+                debugLog { "Mikan, js-cdn sync error: $it" }
 
                 // cdn 失败用 github
                 runCatching {
                     idMap.putAll(BgmApiManager.bgmWebApi.queryMikanIdMapByGithub())
                 }.onFailure {
-                    debugLog { "Mikan, github sync error: " + it.printStackTrace() }
+                    debugLog { "Mikan, github sync error: $it" }
                 }
             }
 

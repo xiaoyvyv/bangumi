@@ -58,7 +58,7 @@ class OverviewCharacterBinder(private val clickItemListener: (MediaDetailEntity.
             binding.ivAvatar.loadImageAnimate(item.avatar, cropType = ImageView.ScaleType.FIT_START)
             binding.tvName.text = item.characterNameCn.ifBlank { item.characterName }
             binding.tvJobs.text = item.jobs.joinToString(";")
-            binding.tvCommentCount.text = String.format("讨论：%d", item.saveCount)
+            binding.tvCommentCount.text = String.format("+%d", item.saveCount)
             binding.tvCommentCount.isVisible = item.saveCount != 0
             binding.tvPerson.isVisible = item.persons.isNotEmpty()
             binding.tvPerson.text = buildString {

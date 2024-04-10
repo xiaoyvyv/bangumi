@@ -48,6 +48,7 @@ import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.dpf
 import com.xiaoyv.widget.kts.dpi
 import com.xiaoyv.widget.kts.errorMsg
+import com.xiaoyv.widget.kts.fetchActivity
 import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.showToastCompat
 import com.xiaoyv.widget.kts.useNotNull
@@ -189,6 +190,8 @@ abstract class WebBase(open val webView: UiWebView) {
     @Keep
     @JavascriptInterface
     fun onLongClickText(content: String, x: Int, y: Int) {
+        if (webView.context.fetchActivity?.isDestroyed == true || webView.context.fetchActivity?.isFinishing == true) return
+
         val textView = AnimeTextView(webView.context).apply {
             text = "复制内容"
             textSize = 16f
