@@ -160,10 +160,16 @@ interface BgmWebApi {
     suspend fun createToken(@Body param: CreateTokenParam = CreateTokenParam()): String
 
     /**
-     * 获取蜜柑计划首页信息
+     * 获取蜜柑计划ID映射表
      */
-    @GET("https://mikanime.tv")
-    suspend fun queryMikanHome(): Document
+    @GET("https://cdn.jsdelivr.net/gh/xiaoyvyv/bangumi-data@latest/data/mikan/bangumi-mikan.json")
+    suspend fun queryMikanIdMapByJsdelivr(): Map<String, String>
+
+    /**
+     * 获取蜜柑计划ID映射表
+     */
+    @GET("https://raw.githubusercontent.com/xiaoyvyv/bangumi-data/main/data/mikan/bangumi-mikan.json")
+    suspend fun queryMikanIdMapByGithub(): Map<String, String>
 
     /**
      * 获取蜜柑计划媒体详情
