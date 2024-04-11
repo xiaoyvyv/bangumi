@@ -213,7 +213,6 @@ class ReplyCommentDialog : DialogFragment() {
                 binding.menuEmoji.setSelected(false)
                 binding.menuMore.setSelected(false)
 
-                dismissAllowingStateLoss()
             }
             onKeyboard {
                 binding.menuEmoji.setSelected(false)
