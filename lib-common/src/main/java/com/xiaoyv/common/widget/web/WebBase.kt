@@ -379,7 +379,7 @@ abstract class WebBase(open val webView: UiWebView) {
             webView.evaluateJavascript(js) {
                 require(emit.isActive)
 
-                emit.resumeWith(Result.success(it))
+                emit.resumeWith(Result.success(it.orEmpty()))
             }
         }
     }
@@ -398,7 +398,7 @@ abstract class WebBase(open val webView: UiWebView) {
                 webView.evaluateJavascript("window.mounted") {
                     require(emit.isActive)
 
-                    emit.resumeWith(Result.success(it.toBoolean()))
+                    emit.resumeWith(Result.success(it.orEmpty().toBoolean()))
                 }
             }
         }.getOrDefault(true)

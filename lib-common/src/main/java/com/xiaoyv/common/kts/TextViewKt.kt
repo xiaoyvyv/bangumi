@@ -8,17 +8,17 @@ import android.widget.TextView
 /**
  * 添加一个方法用于高亮指定文本
  */
-fun TextView.highlightText(textList: List<String>, highlightColor: Int) {
+fun TextView.highlightText(textList: List<String?>, highlightColor: Int) {
     val fullText = this.text.toString()
 
     val spannableString = SpannableString(fullText)
 
     for (text in textList) {
-        val startIndex = fullText.indexOf(text, ignoreCase = true)
-        val endIndex = startIndex + text.length
-
+        val startIndex = fullText.indexOf(text.orEmpty(), ignoreCase = true)
         if (startIndex != -1) {
+            val endIndex = startIndex + text.orEmpty().length
             val highlightSpan = ForegroundColorSpan(highlightColor)
+
             spannableString.setSpan(
                 highlightSpan,
                 startIndex,
