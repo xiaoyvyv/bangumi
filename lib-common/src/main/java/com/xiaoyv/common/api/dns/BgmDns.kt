@@ -21,7 +21,9 @@ class BgmDns : Dns {
         val addresses = lookupInHostsFile(hostname)
         if (addresses.isEmpty()) {
             // 如果 hosts 文件中没有找到，则使用系统默认的 DNS 解析
-            return Dns.SYSTEM.lookup(hostname)
+            runCatching {
+                return Dns.SYSTEM.lookup(hostname)
+            }
         }
 
         return addresses
