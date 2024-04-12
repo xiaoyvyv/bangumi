@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.R
 import com.xiaoyv.bangumi.databinding.ActivitySignUpBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.binding.BaseBindingActivity
+import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.kts.GoogleAttr
 import com.xiaoyv.common.kts.initNavBack
@@ -59,6 +60,10 @@ class SignUpActivity : BaseBindingActivity<ActivitySignUpBinding>() {
     }
 
     override fun initListener() {
+        binding.tvTip.setOnFastLimitClickListener {
+            RouteHelper.jumpWeb(BgmApiManager.URL_BASE_WEB, forceBrowser = true)
+        }
+
         binding.btnSignUp.setOnFastLimitClickListener {
             if (!binding.checkPrivacy.isChecked) {
                 showToastCompat("您必须阅读并同意《用户协议》和《隐私政策》")

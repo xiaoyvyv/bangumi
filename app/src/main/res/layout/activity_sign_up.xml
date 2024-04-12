@@ -24,7 +24,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="653dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <com.xiaoyv.common.widget.text.AnimeTextView
@@ -85,6 +85,18 @@
                 android:textAppearance="?attr/textAppearanceBodyLarge" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ui_layout_margin"
+            android:lineSpacingMultiplier="1.25"
+            android:paddingHorizontal="@dimen/ui_size_6"
+            android:text="此软件为 Bangumi.TV 的第三方软件，建议使用浏览器进入官方站点进行注册操作！"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorError"
+            app:layout_constraintTop_toBottomOf="@+id/btn_group" />
+
         <com.xiaoyv.common.widget.button.AnimeButton
             android:id="@+id/btn_sign_up"
             android:layout_width="match_parent"
@@ -96,7 +108,7 @@
             android:text="@string/sign_up_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_group" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_tip" />
 
         <com.xiaoyv.common.widget.text.AnimeTextView
             android:id="@+id/tv_sign_in"
