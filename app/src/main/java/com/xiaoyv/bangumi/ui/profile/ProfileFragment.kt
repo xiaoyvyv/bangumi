@@ -69,7 +69,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                             if (UserHelper.isLogin) {
                                 RouteHelper.jumpUserDetail(UserHelper.currentUser.id)
                             } else {
-                                RouteHelper.jumpLogin()
+                                RouteHelper.jumpSignIn()
                             }
                             true
                         }
@@ -86,7 +86,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                             if (UserHelper.isLogin) {
                                 RouteHelper.jumpCollection(LocalCollectionType.TYPE_TOPIC)
                             } else {
-                                RouteHelper.jumpLogin()
+                                RouteHelper.jumpSignIn()
                             }
                             true
                         }
@@ -97,7 +97,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
                             if (UserHelper.isLogin) {
                                 RouteHelper.jumpCollection(LocalCollectionType.TYPE_BLOG)
                             } else {
-                                RouteHelper.jumpLogin()
+                                RouteHelper.jumpSignIn()
                             }
                             true
                         }
@@ -214,7 +214,7 @@ class ProfileFragment : BaseViewModelFragment<FragmentProfileBinding, ProfileVie
         if (UserHelper.isLogin) {
             RouteHelper.jumpEditProfile()
         } else {
-            RouteHelper.jumpLogin()
+            RouteHelper.jumpSignIn()
         }
     }
 

@@ -93,7 +93,7 @@ class TopicActivity : BaseViewModelActivity<ActivityTopicBinding, TopicViewModel
         }
 
         topicView.onNeedLoginListener = {
-            RouteHelper.jumpLogin()
+            RouteHelper.jumpSignIn()
         }
 
         topicView.onClickUserListener = {

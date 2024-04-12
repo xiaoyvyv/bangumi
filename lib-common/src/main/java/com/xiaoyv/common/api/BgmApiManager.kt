@@ -217,5 +217,12 @@ class BgmApiManager {
         fun buildAlmanacUrl(id: String): String {
             return "$URL_BASE_WEB/award/$id"
         }
+
+        /**
+         * 邮箱激活
+         */
+        fun buildVerifyEmailUrl(email: String): String {
+            return "$URL_BASE_WEB/signup/verify?email=$email"
+        }
     }
 }

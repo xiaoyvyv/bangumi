@@ -7,7 +7,6 @@ import com.xiaoyv.common.api.parser.entity.DollarsEntity
 import com.xiaoyv.common.api.parser.entity.LikeEntity
 import com.xiaoyv.common.api.request.CreateTokenParam
 import com.xiaoyv.common.api.response.BgmStatusEntity
-import com.xiaoyv.common.api.response.GithubActionEntity
 import com.xiaoyv.common.api.response.NotifyEntity
 import com.xiaoyv.common.api.response.ReplyResultEntity
 import com.xiaoyv.common.api.response.UploadResultEntity
@@ -57,12 +56,15 @@ interface BgmWebApi {
     @GET
     suspend fun queryGithubActionDownloadUrl(
         @Url url: String,
-        @Header("Authorization") token: String ,
+        @Header("Authorization") token: String,
         @Header("X-GitHub-Api-Version") version: String = "2022-11-28"
     ): Response<ResponseBody>
 
     @GET("/login")
     suspend fun queryLoginPage(): Document
+
+    @GET("/signup")
+    suspend fun querySignUpPage(): Document
 
     @GET("/json/notify")
     suspend fun notify(@Query("_") timestamp: Long): NotifyEntity
@@ -77,16 +79,41 @@ interface BgmWebApi {
     suspend fun queryLoginVerify(@QueryMap map: Map<String, String>): ResponseBody
 
     /**
+     * 邮箱激活页面
+     */
+    @GET("/signup/verify")
+    suspend fun queryLoginVerify(@Query("email") email: String): Document
+
+    /**
      * 登录地址
-     *
-     * - progress
      */
     @FormUrlEncoded
     @POST("/FollowTheRabbit")
-    suspend fun doLogin(
+    suspend fun doSignIn(
         @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
         @FieldMap param: Map<String, String>,
     ): Document
+
+    /**
+     * 注册地址
+     */
+    @FormUrlEncoded
+    @POST("/RedPill")
+    suspend fun doSignUp(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @FieldMap param: Map<String, String>,
+    ): Document
+
+    /**
+     * 注册邮箱验证码
+     */
+    @FormUrlEncoded
+    @POST("/signup/verify")
+    suspend fun doSignUpVerify(
+        @Header("Referer") referer: String = BgmApiManager.URL_BASE_WEB,
+        @FieldMap param: Map<String, String>,
+    ): Document
+
 
     /**
      * 查询指定好友时间胶囊

@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.ui.feature.login
+package com.xiaoyv.bangumi.ui.feature.sign.`in`
 
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.SpanUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.xiaoyv.bangumi.databinding.ActivityLoginBinding
+import com.xiaoyv.bangumi.databinding.ActivitySignInBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.kts.activity
@@ -23,12 +23,12 @@ import com.xiaoyv.widget.kts.getAttrColor
 import com.xiaoyv.widget.kts.showToastCompat
 
 /**
- * Class: [LoginActivity]
+ * Class: [SignInActivity]
  *
  * @author why
  * @since 11/25/23
  */
-class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel>() {
+class SignInActivity : BaseViewModelActivity<ActivitySignInBinding, SignInViewModel>() {
 
     override fun initView() {
         enableEdgeToEdge()
@@ -51,19 +51,15 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
             val password = binding.inputPassword.text.toString()
             val verifyCode = binding.inputVerify.text.toString()
 
-            if (email.isBlank()) {
-                binding.inputEmail.error = getString(CommonString.login_input_error_email)
-            }
-            if (password.isBlank()) {
-                binding.inputPassword.error = getString(CommonString.login_input_error_password)
-            }
-            if (verifyCode.isBlank()) {
-                binding.inputVerify.error = getString(CommonString.login_input_error_verify)
-            }
+            binding.tilEmail.error =
+                if (email.isBlank()) getString(CommonString.login_input_error_email) else null
+            binding.tilPassword.error =
+                if (password.isBlank()) getString(CommonString.login_input_error_password) else null
+            binding.tilVerify.error =
+                if (verifyCode.isBlank()) getString(CommonString.login_input_error_verify) else null
 
             if (email.isNotBlank() && password.isNotBlank() && verifyCode.isNotBlank()) {
                 KeyboardUtils.hideSoftInput(this)
-
                 viewModel.doLogin(email, password, verifyCode)
             }
         }
@@ -92,6 +88,10 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
         binding.ivVerify.setOnFastLimitClickListener {
             binding.inputVerify.text = null
             viewModel.refreshVerifyCode(true)
+        }
+
+        binding.tvSignUp.setOnFastLimitClickListener {
+            RouteHelper.jumpSignUp()
         }
     }
 

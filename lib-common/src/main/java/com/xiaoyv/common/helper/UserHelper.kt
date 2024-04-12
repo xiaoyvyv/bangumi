@@ -11,7 +11,7 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.exception.NeedLoginException
 import com.xiaoyv.common.api.parser.entity.SettingBaseEntity
 import com.xiaoyv.common.api.parser.hrefId
-import com.xiaoyv.common.api.parser.impl.LoginParser.parserCheckIsLogin
+import com.xiaoyv.common.api.parser.impl.SignInParser.parserCheckIsLogin
 import com.xiaoyv.common.api.parser.impl.parserBlockUser
 import com.xiaoyv.common.api.parser.impl.parserSettingInfo
 import com.xiaoyv.common.api.parser.parserFormHash

@@ -2,7 +2,7 @@ package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.exception.NeedLoginException
 import com.xiaoyv.common.api.parser.entity.SettingBaseEntity
-import com.xiaoyv.common.api.parser.impl.LoginParser.parserCheckIsLogin
+import com.xiaoyv.common.api.parser.impl.SignInParser.parserCheckIsLogin
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.config.annotation.FormInputType
 import org.jsoup.nodes.Document

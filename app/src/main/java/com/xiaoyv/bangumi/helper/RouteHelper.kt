@@ -28,7 +28,6 @@ import com.xiaoyv.bangumi.ui.discover.index.detail.IndexDetailActivity
 import com.xiaoyv.bangumi.ui.discover.index.list.IndexListActivity
 import com.xiaoyv.bangumi.ui.discover.mono.list.MonoListActivity
 import com.xiaoyv.bangumi.ui.feature.almanac.AlmanacActivity
-import com.xiaoyv.bangumi.ui.feature.login.LoginActivity
 import com.xiaoyv.bangumi.ui.feature.magi.MagiActivity
 import com.xiaoyv.bangumi.ui.feature.message.MessageActivity
 import com.xiaoyv.bangumi.ui.feature.message.detail.MessageDetailActivity
@@ -50,6 +49,10 @@ import com.xiaoyv.bangumi.ui.feature.setting.robot.RobotConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.tab.TabConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.translate.TranslateConfigActivity
 import com.xiaoyv.bangumi.ui.feature.setting.ui.UiConfigActivity
+import com.xiaoyv.bangumi.ui.feature.sign.`in`.SignInActivity
+import com.xiaoyv.bangumi.ui.feature.sign.up.SignUpActionActivity
+import com.xiaoyv.bangumi.ui.feature.sign.up.SignUpActivity
+import com.xiaoyv.bangumi.ui.feature.sign.up.verify.SignUpVerifyActivity
 import com.xiaoyv.bangumi.ui.feature.summary.SummaryActivity
 import com.xiaoyv.bangumi.ui.feature.tag.TagDetailActivity
 import com.xiaoyv.bangumi.ui.feature.topic.TopicActivity
@@ -67,6 +70,7 @@ import com.xiaoyv.bangumi.ui.profile.edit.EditProfileActivity
 import com.xiaoyv.bangumi.ui.timeline.detail.TimelineDetailActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.open
+import com.xiaoyv.common.api.parser.entity.SignUpResultEntity
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
@@ -232,8 +236,23 @@ object RouteHelper {
         )
     }
 
-    fun jumpLogin() {
-        ActivityUtils.startActivity(LoginActivity::class.java)
+    fun jumpSignIn() {
+        ActivityUtils.startActivity(SignInActivity::class.java)
+    }
+
+    fun jumpSignUp() {
+        ActivityUtils.startActivity(SignUpActivity::class.java)
+    }
+
+    fun jumpSignUpAction() {
+        ActivityUtils.startActivity(SignUpActionActivity::class.java)
+    }
+
+    fun jumpSignUpVerify(entity: SignUpResultEntity?) {
+        ActivityUtils.startActivity(
+            bundleOf(NavKey.KEY_PARCELABLE to entity),
+            SignUpVerifyActivity::class.java,
+        )
     }
 
     fun jumpRobot() {
@@ -583,7 +602,7 @@ object RouteHelper {
 
     fun jumpDollars() {
         if (UserHelper.isLogin.not()) {
-            jumpLogin()
+            jumpSignIn()
         } else {
             DollarsActivity::class.open()
         }
@@ -603,7 +622,7 @@ object RouteHelper {
         if (UserHelper.isLogin) {
             SyncerActivity::class.open()
         } else {
-            jumpLogin()
+            jumpSignIn()
         }
     }
 

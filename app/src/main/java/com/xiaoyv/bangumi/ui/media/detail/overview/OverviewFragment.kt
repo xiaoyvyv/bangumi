@@ -307,7 +307,7 @@ class OverviewFragment : BaseViewModelFragment<FragmentOverviewBinding, Overview
      */
     private fun showCollectPanel(item: AdapterTypeItem) {
         if (!UserHelper.isLogin) {
-            RouteHelper.jumpLogin()
+            RouteHelper.jumpSignIn()
             return
         }
 

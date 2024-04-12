@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="@string/sign_up_title" />
+
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/ui_layout_margin"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_0"
+            app:layout_constraintBottom_toTopOf="@+id/check_privacy"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ui_layout_margin"
+                    android:minHeight="@dimen/ui_size_85"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="?attr/colorControlNormal"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.xiaoyv.common.widget.text.AnimeEditTextView
+                        android:id="@+id/input_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="emailAddress"
+                        android:ellipsize="end"
+                        android:hint="@string/sign_up_input_email"
+                        android:imeOptions="actionNext"
+                        android:inputType="textEmailAddress"
+                        android:maxLength="100"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_size_85"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="?attr/colorControlNormal"
+                    app:layout_constraintTop_toBottomOf="@+id/til_email">
+
+                    <com.xiaoyv.common.widget.text.AnimeEditTextView
+                        android:id="@+id/input_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="password"
+                        android:ellipsize="end"
+                        android:hint="@string/sign_up_input_password"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPassword"
+                        android:maxLength="100"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_password_again"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_size_85"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="?attr/colorControlNormal"
+                    app:layout_constraintTop_toBottomOf="@+id/til_password">
+
+                    <com.xiaoyv.common.widget.text.AnimeEditTextView
+                        android:id="@+id/input_password_again"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="password"
+                        android:ellipsize="end"
+                        android:hint="@string/sign_up_input_password_again"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPassword"
+                        android:maxLength="100"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_size_85"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="?attr/colorControlNormal"
+                    app:layout_constraintTop_toBottomOf="@+id/til_password_again">
+
+                    <com.xiaoyv.common.widget.text.AnimeEditTextView
+                        android:id="@+id/input_nickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="password"
+                        android:ellipsize="end"
+                        android:hint="@string/sign_up_input_nickname"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLength="100"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_verify"
+                    android:layout_width="@dimen/ui_size_0"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_size_85"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/til_nickname">
+
+                    <com.xiaoyv.common.widget.text.AnimeEditTextView
+                        android:id="@+id/input_verify"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:hint="@string/sign_up_input_verify"
+                        android:inputType="textEmailAddress"
+                        android:maxLength="100"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.xiaoyv.common.widget.image.AnimeImageView
+                    android:id="@+id/iv_verify"
+                    android:layout_width="@dimen/ui_size_120"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="12.5dp"
+                    android:layout_marginEnd="7dp"
+                    app:layout_constraintEnd_toEndOf="@+id/til_verify"
+                    app:layout_constraintTop_toTopOf="@+id/til_verify"
+                    app:shapeAppearance="@style/Theme.Bangumi.ImageCornerSmall" />
+
+                <com.xiaoyv.common.widget.button.AnimeButton
+                    android:id="@+id/btn_sign_up"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ui_size_32"
+                    android:layout_marginBottom="@dimen/ui_layout_margin"
+                    android:gravity="center"
+                    android:paddingVertical="@dimen/ui_size_12"
+                    android:text="@string/sign_up_btn"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/til_verify" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/check_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/ui_layout_margin"
+            android:checked="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_privacy"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/ui_size_3"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintBottom_toBottomOf="@+id/check_privacy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/check_privacy"
+            app:layout_constraintTop_toTopOf="@+id/check_privacy"
+            tools:ignore="HardcodedText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

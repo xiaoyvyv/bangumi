@@ -52,7 +52,7 @@ class GroupTopicsActivity : BaseListActivity<TopicSampleEntity, GroupTopicsViewM
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
                     if (UserHelper.isLogin.not()) {
-                        RouteHelper.jumpLogin()
+                        RouteHelper.jumpSignIn()
                         return@setOnMenuItemClickListener true
                     }
 

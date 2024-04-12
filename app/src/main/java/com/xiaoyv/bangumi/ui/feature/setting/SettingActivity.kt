@@ -48,7 +48,7 @@ class SettingActivity : BaseViewModelActivity<ActivitySettingBinding, SettingVie
                     finish()
                 })
             } else {
-                RouteHelper.jumpLogin()
+                RouteHelper.jumpSignIn()
             }
         }
 

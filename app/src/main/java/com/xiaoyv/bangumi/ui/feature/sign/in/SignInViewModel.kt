@@ -1,13 +1,13 @@
-package com.xiaoyv.bangumi.ui.feature.login
+package com.xiaoyv.bangumi.ui.feature.sign.`in`
 
 import androidx.lifecycle.MutableLiveData
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.entity.LoginFormEntity
-import com.xiaoyv.common.api.parser.entity.LoginResultEntity
-import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginForms
-import com.xiaoyv.common.api.parser.impl.LoginParser.parserLoginResult
+import com.xiaoyv.common.api.parser.entity.SignInFormEntity
+import com.xiaoyv.common.api.parser.entity.SignInResultEntity
+import com.xiaoyv.common.api.parser.impl.SignInParser.parserLoginForms
+import com.xiaoyv.common.api.parser.impl.SignInParser.parserLoginResult
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.helper.UserTokenHelper
 import com.xiaoyv.common.kts.debugLog
@@ -18,16 +18,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Class: [LoginViewModel]
+ * Class: [SignInViewModel]
  *
  * @author why
  * @since 11/25/23
  */
-class LoginViewModel : BaseViewModel() {
+class SignInViewModel : BaseViewModel() {
     internal val onVerifyCodeLiveData = MutableLiveData<ByteArray?>()
-    internal val onLoginResultLiveData = MutableLiveData<LoginResultEntity?>()
+    internal val onLoginResultLiveData = MutableLiveData<SignInResultEntity?>()
 
-    private var formEntity: LoginFormEntity = LoginFormEntity()
+    private var formEntity: SignInFormEntity = SignInFormEntity()
 
     override fun onViewCreated() {
         launchUI {
@@ -73,7 +73,7 @@ class LoginViewModel : BaseViewModel() {
             error = {
                 it.printStackTrace()
 
-                onLoginResultLiveData.value = LoginResultEntity(
+                onLoginResultLiveData.value = SignInResultEntity(
                     success = false,
                     error = it.errorMsg
                 )
@@ -85,15 +85,18 @@ class LoginViewModel : BaseViewModel() {
                     forms["password"] = password
                     forms["captcha_challenge_field"] = verifyCode
 
-                    BgmApiManager.bgmWebApi.doLogin(param = forms).parserLoginResult()
+                    BgmApiManager.bgmWebApi.doSignIn(param = forms).parserLoginResult()
                 }
 
-                // 拉取用户信息
-                UserHelper.refresh()
-                UserHelper.cacheEmailAndPassword(email, password)
+                // 成功
+                if (loginResult.success) {
+                    // 拉取用户信息
+                    UserHelper.refresh()
+                    UserHelper.cacheEmailAndPassword(email, password)
 
-                // JsonApi 授权
-                runCatching { UserTokenHelper.fetchAuthToken() }
+                    // JsonApi 授权
+                    runCatching { UserTokenHelper.fetchAuthToken() }
+                }
 
                 onLoginResultLiveData.value = loginResult
             }

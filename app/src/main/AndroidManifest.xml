@@ -151,7 +151,21 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name="com.xiaoyv.bangumi.ui.feature.login.LoginActivity"
+            android:name="com.xiaoyv.bangumi.ui.feature.sign.in.SignInActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.sign.up.SignUpActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.sign.up.SignUpActionActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.ui.feature.sign.up.verify.SignUpVerifyActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
         <activity

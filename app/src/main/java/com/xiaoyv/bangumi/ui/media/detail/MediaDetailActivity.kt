@@ -116,7 +116,7 @@ class MediaDetailActivity :
             binding.speedDial.close()
 
             if (!UserHelper.isLogin) {
-                RouteHelper.jumpLogin()
+                RouteHelper.jumpSignIn()
                 return@OnActionSelectedListener false
             }
 

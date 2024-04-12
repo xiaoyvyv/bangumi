@@ -1,8 +1,8 @@
 package com.xiaoyv.common.api.parser.impl
 
 import com.xiaoyv.common.api.BgmApiManager
-import com.xiaoyv.common.api.parser.entity.LoginFormEntity
-import com.xiaoyv.common.api.parser.entity.LoginResultEntity
+import com.xiaoyv.common.api.parser.entity.SignInFormEntity
+import com.xiaoyv.common.api.parser.entity.SignInResultEntity
 import com.xiaoyv.common.api.parser.fetchStyleBackgroundUrl
 import com.xiaoyv.common.api.parser.hrefId
 import com.xiaoyv.common.api.parser.optImageUrl
@@ -12,15 +12,15 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
 /**
- * Class: [LoginParser]
+ * Class: [SignInParser]
  *
  * @author why
  * @since 11/25/23
  */
-object LoginParser {
+object SignInParser {
 
-    fun Document.parserLoginForms(): LoginFormEntity {
-        val formEntity = LoginFormEntity()
+    fun Document.parserLoginForms(): SignInFormEntity {
+        val formEntity = SignInFormEntity()
         val loginForm = select("#loginForm")
         if (loginForm.isEmpty()) {
             val loginResult = parserLoginResult()
@@ -56,17 +56,17 @@ object LoginParser {
     /**
      * 解析登录结果
      */
-    fun Element.parserLoginResult(): LoginResultEntity {
+    fun Element.parserLoginResult(): SignInResultEntity {
         val welcome = select("#main #header")
         if (welcome.isNotEmpty()) {
-            return LoginResultEntity(
+            return SignInResultEntity(
                 success = true,
                 message = welcome.select("h1").text().trim(),
                 userEntity = parseUserInfo()
             )
         }
         val errorMsg = select("#colunmNotice .text").text().trim()
-        return LoginResultEntity(
+        return SignInResultEntity(
             success = false,
             error = errorMsg,
             userEntity = parseUserInfo()

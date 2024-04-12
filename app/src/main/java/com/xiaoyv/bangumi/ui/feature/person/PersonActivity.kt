@@ -122,7 +122,7 @@ class PersonActivity : BaseViewModelActivity<ActivityPersonBinding, PersonViewMo
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 if (UserHelper.isLogin.not()) {
-                    RouteHelper.jumpLogin()
+                    RouteHelper.jumpSignIn()
                     return@setOnMenuItemClickListener true
                 }
 

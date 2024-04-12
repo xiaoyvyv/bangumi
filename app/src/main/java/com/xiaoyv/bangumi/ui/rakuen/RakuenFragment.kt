@@ -3,19 +3,12 @@
 package com.xiaoyv.bangumi.ui.rakuen
 
 import android.view.MenuItem
-import androidx.core.graphics.Insets
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.marginTop
-import androidx.core.view.updatePadding
 import androidx.lifecycle.LifecycleOwner
-import com.blankj.utilcode.util.BarUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.xiaoyv.bangumi.databinding.FragmentSuperBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelFragment
-import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.SuperType
 import com.xiaoyv.common.helper.ConfigHelper
@@ -26,7 +19,6 @@ import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.kts.adjustScrollSensitivity
 import com.xiaoyv.widget.kts.orEmpty
-import kotlinx.coroutines.delay
 
 /**
  * Class: [RakuenFragment]
@@ -136,7 +128,7 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                 .setOnMenuItemClickListener {
                     if (UserHelper.isLogin.not()) {
-                        RouteHelper.jumpLogin()
+                        RouteHelper.jumpSignIn()
                         return@setOnMenuItemClickListener true
                     }
                     RouteHelper.jumpMyTopics(true)
@@ -147,7 +139,7 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                 .setOnMenuItemClickListener {
                     if (UserHelper.isLogin.not()) {
-                        RouteHelper.jumpLogin()
+                        RouteHelper.jumpSignIn()
                         return@setOnMenuItemClickListener true
                     }
                     RouteHelper.jumpMyTopics(false)
@@ -158,7 +150,7 @@ class RakuenFragment : BaseViewModelFragment<FragmentSuperBinding, RakuenViewMod
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
                 .setOnMenuItemClickListener {
                     if (UserHelper.isLogin.not()) {
-                        RouteHelper.jumpLogin()
+                        RouteHelper.jumpSignIn()
                         return@setOnMenuItemClickListener true
                     }
                     RouteHelper.jumpCollection(LocalCollectionType.TYPE_TOPIC)

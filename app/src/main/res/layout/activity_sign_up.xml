@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="@string/sign_up_title" />
+
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_usage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ui_layout_margin"
+            android:text="我想使用 Bangumi："
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/btn_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_layout_margin"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_usage"
+            app:singleSelection="true">
+
+            <com.xiaoyv.common.widget.button.AnimeButton
+                android:id="@+id/tv_usage_1"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/ui_layout_margin"
+                android:text="在线观看、下载资源"
+                android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+            <com.xiaoyv.common.widget.button.AnimeButton
+                android:id="@+id/tv_usage_2"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/ui_layout_margin"
+                android:text="管理 ACG 收藏与收视进度，分享交流"
+                android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+            <com.xiaoyv.common.widget.button.AnimeButton
+                android:id="@+id/tv_usage_3"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/ui_layout_margin"
+                android:text="在天窗联盟发布与收藏同人作品"
+                android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+            <com.xiaoyv.common.widget.button.AnimeButton
+                android:id="@+id/tv_usage_4"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/ui_layout_margin"
+                android:text="婚恋交友"
+                android:textAppearance="?attr/textAppearanceBodyLarge" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_size_32"
+            android:gravity="center"
+            android:paddingVertical="@dimen/ui_size_12"
+            android:text="@string/sign_up_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_group" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingHorizontal="@dimen/ui_size_8"
+            android:paddingVertical="@dimen/ui_layout_margin"
+            android:text="已有账号？去登录"
+            app:layout_constraintEnd_toEndOf="@+id/btn_sign_up"
+            app:layout_constraintTop_toBottomOf="@+id/btn_sign_up" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/check_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/ui_layout_margin"
+            android:checked="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_privacy"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/ui_size_3"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintBottom_toBottomOf="@+id/check_privacy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/check_privacy"
+            app:layout_constraintTop_toTopOf="@+id/check_privacy"
+            tools:ignore="HardcodedText"
+            tools:text="我已阅读并同意" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -28,6 +28,20 @@
     <string name="login_input_verify">验证码</string>
     <string name="login_btn_login">登录</string>
 
+    <string name="sign_up_title">注册成为 Bangumi 会员</string>
+    <string name="sign_up_btn">注册</string>
+    <string name="sign_up_error">注册出错</string>
+    <string name="sign_up_verify_error">激活码验证出错</string>
+    <string name="sign_up_input_email">你的邮箱</string>
+    <string name="sign_up_input_email_verify">邮箱激活码</string>
+    <string name="sign_up_input_password">设置一个密码</string>
+    <string name="sign_up_input_password_again">确认密码</string>
+    <string name="sign_up_input_nickname">设置一个昵称</string>
+    <string name="sign_up_input_verify">验证码</string>
+    <string name="sign_up_input_error_password_again">请输入确认密码</string>
+    <string name="sign_up_input_error_nickname">请输入一个昵称</string>
+    <string name="sign_up_input_error_email_code">请邮箱激活码</string>
+
     <string name="timeline_title">时间胶囊-时空管理局</string>
     <string name="timeline_user_title">时间胶囊-好友</string>
     <string name="timeline_mine_title">时间胶囊-自己</string>

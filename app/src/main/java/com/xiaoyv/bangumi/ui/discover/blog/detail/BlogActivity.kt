@@ -98,7 +98,7 @@ class BlogActivity : BaseViewModelActivity<ActivityBlogBinding, BlogViewModel>()
         }
 
         blogWeb.onNeedLoginListener = {
-            RouteHelper.jumpLogin()
+            RouteHelper.jumpSignIn()
         }
 
         blogWeb.onClickUserListener = {

@@ -26,7 +26,7 @@ object CommentHelper {
         targetComment: CommentTreeEntity? = null,
         onReplyListener: suspend (ReplyResultEntity) -> Unit = {},
     ) {
-        if (UserHelper.isLogin.not()) RouteHelper.jumpLogin()
+        if (UserHelper.isLogin.not()) RouteHelper.jumpSignIn()
         if (replyForm != null && replyForm.isEmpty.not()) {
             ReplyCommentDialog.show(
                 activity,
