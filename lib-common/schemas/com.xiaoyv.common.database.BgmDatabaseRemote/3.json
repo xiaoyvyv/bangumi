@@ -1,0 +1,77 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "ed99868374556187d6144926d8ec1292",
+    "entities": [
+      {
+        "tableName": "bgm_subject",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `name_cn` TEXT, `type` INTEGER, `nsfw` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nameCn",
+            "columnName": "name_cn",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nsfw",
+            "columnName": "nsfw",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "bgm_subject_name_index",
+            "unique": false,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `bgm_subject_name_index` ON `${TABLE_NAME}` (`name`)"
+          },
+          {
+            "name": "bgm_subject_name_cn_index",
+            "unique": false,
+            "columnNames": [
+              "name_cn"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `bgm_subject_name_cn_index` ON `${TABLE_NAME}` (`name_cn`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ed99868374556187d6144926d8ec1292')"
+    ]
+  }
+}

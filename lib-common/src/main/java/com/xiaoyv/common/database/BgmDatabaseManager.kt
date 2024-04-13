@@ -82,6 +82,8 @@ class BgmDatabaseManager private constructor() {
 
         val collection get() = manager.db.userDao()
 
+        val friendlyRank get() = manager.db.friendlyRankDao()
+
         val subject get() = manager.remoteDb.subjectDao()
     }
 }

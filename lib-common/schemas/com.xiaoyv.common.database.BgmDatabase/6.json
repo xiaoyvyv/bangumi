@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "a90ed0e69869f503b3ca9f6ff76d7fac",
+    "version": 6,
+    "identityHash": "ef217adb5e12acf110e5746b89a8be90",
     "entities": [
       {
         "tableName": "collect",
@@ -92,12 +92,18 @@
       },
       {
         "tableName": "friendly_rank",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `uid` TEXT NOT NULL, `comment` TEXT, `rate` INTEGER NOT NULL, `type` INTEGER NOT NULL, `updated_at` TEXT, `vol_status` INTEGER NOT NULL, `ep_status` INTEGER NOT NULL, `subject_id` INTEGER NOT NULL, `subject_type` INTEGER NOT NULL, `date` TEXT, `eps` INTEGER NOT NULL, `volumes` INTEGER NOT NULL, `cover` TEXT, `name` TEXT, `name_cn` TEXT, `short_summary` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `master` TEXT NOT NULL, `uid` TEXT NOT NULL, `comment` TEXT, `rate` INTEGER NOT NULL, `type` INTEGER NOT NULL, `updated_at` TEXT, `vol_status` INTEGER NOT NULL, `ep_status` INTEGER NOT NULL, `subject_id` INTEGER NOT NULL, `subject_type` INTEGER NOT NULL, `subject_date` TEXT, `subject_eps` INTEGER NOT NULL, `subject_volumes` INTEGER NOT NULL, `subject_score` REAL NOT NULL, `subject_cover` TEXT, `subject_name` TEXT, `subject_name_cn` TEXT, `subject_short_summary` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "master",
+            "columnName": "master",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -156,43 +162,49 @@
           },
           {
             "fieldPath": "subjectDate",
-            "columnName": "date",
+            "columnName": "subject_date",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "subjectEps",
-            "columnName": "eps",
+            "columnName": "subject_eps",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "subjectVolumes",
-            "columnName": "volumes",
+            "columnName": "subject_volumes",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
+            "fieldPath": "subjectScore",
+            "columnName": "subject_score",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
             "fieldPath": "subjectCover",
-            "columnName": "cover",
+            "columnName": "subject_cover",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "subjectname",
-            "columnName": "name",
+            "columnName": "subject_name",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "subjectNameCn",
-            "columnName": "name_cn",
+            "columnName": "subject_name_cn",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "subjectShortSummary",
-            "columnName": "short_summary",
+            "columnName": "subject_short_summary",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -210,7 +222,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a90ed0e69869f503b3ca9f6ff76d7fac')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ef217adb5e12acf110e5746b89a8be90')"
     ]
   }
 }

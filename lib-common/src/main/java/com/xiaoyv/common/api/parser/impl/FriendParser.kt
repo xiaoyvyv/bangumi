@@ -8,10 +8,7 @@ import com.xiaoyv.common.api.parser.styleBackground
 import org.jsoup.nodes.Element
 
 /**
- * Class: [FriendParser]
- *
- * @author why
- * @since 12/14/23
+ * [parserUserFriends]
  */
 fun Element.parserUserFriends(): List<FriendEntity> {
     requireNoError()

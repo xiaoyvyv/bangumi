@@ -63,6 +63,11 @@ class HomeViewModel : BaseViewModel() {
                                     icon = CommonDrawable.ic_bottom_rank
                                 ),
                                 HomeIndexFeature(
+                                    id = FeatureType.TYPE_RANK_FRIEND,
+                                    title = "友评榜",
+                                    icon = CommonDrawable.ic_thumb_up
+                                ),
+                                HomeIndexFeature(
                                     id = FeatureType.TYPE_PROCESS,
                                     title = "进度管理",
                                     icon = CommonDrawable.ic_process

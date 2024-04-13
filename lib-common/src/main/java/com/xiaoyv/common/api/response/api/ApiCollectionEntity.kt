@@ -39,7 +39,7 @@ data class ApiCollectionEntity(
         @SerializedName("subject")
         var subject: ApiSubjectEntity? = null,
         @SerializedName("subject_id")
-        var subjectId: Int = 0,
+        var subjectId: Long = 0,
         @SerializedName("subject_type")
         var subjectType: Int = 0,
         @SerializedName("tags")

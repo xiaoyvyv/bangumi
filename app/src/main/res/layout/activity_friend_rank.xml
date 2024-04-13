@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.xiaoyv.common.widget.appbar.AnimeAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:theme="@style/Theme.Bangumi.AppBarOverlay">
+
+        <com.xiaoyv.common.widget.appbar.AnimeToolbar
+            android:id="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
+            app:title="友评榜数据导入" />
+
+    </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_layout_margin"
+            android:lineSpacingMultiplier="1.25"
+            android:text="此功能可以获取你的全部好友的评分信息，然后生成一个友评条目排行榜。\n\n注意：友评榜生成中请不要退出该页面，生成时间根据你的好友数量以及其收藏的条目数而定（大约1-10分钟）。"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_size_24"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tip"
+            tools:text="你的好友数目" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pb_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_size_6"
+            android:max="100"
+            app:layout_constraintTop_toBottomOf="@+id/tv_friend"
+            app:trackCornerRadius="@dimen/ui_size_6"
+            app:trackThickness="@dimen/ui_size_12" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_layout_margin"
+            android:text="好友评分条目载入进度"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pb_friend" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pb_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_size_6"
+            android:max="100"
+            app:layout_constraintTop_toBottomOf="@+id/tv_progress"
+            app:trackCornerRadius="@dimen/ui_size_6"
+            app:trackThickness="@dimen/ui_size_12" />
+
+        <com.xiaoyv.common.widget.text.AnimeTextView
+            android:id="@+id/tv_locked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_layout_margin"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pb_progress"
+            tools:text="当前状态" />
+
+        <com.xiaoyv.common.widget.button.AnimeButton
+            android:id="@+id/btn_start"
+            android:layout_width="@dimen/ui_size_0"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/ui_layout_margin"
+            android:layout_marginTop="@dimen/ui_size_40"
+            android:enabled="false"
+            android:gravity="center"
+            android:paddingVertical="@dimen/ui_size_12"
+            android:text="拉取或刷新 友评榜"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_locked" />
+
+        <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_size_0"
+            android:layout_marginTop="@dimen/ui_layout_margin"
+            android:layout_marginBottom="@dimen/ui_size_40"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_start">
+
+            <com.xiaoyv.common.widget.text.AnimeTextView
+                android:id="@+id/tv_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/ui_layout_margin"
+                android:background="@drawable/ui_shape_rectangle_corner_6"
+                android:backgroundTint="?attr/colorSurfaceContainer"
+                android:lineSpacingMultiplier="1.25"
+                android:padding="@dimen/ui_size_12"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurface"
+                tools:text="@tools:sample/lorem/random" />
+        </com.xiaoyv.common.widget.scroll.AnimeNestedScrollView>
+
+        <com.xiaoyv.common.widget.state.AnimeStateView
+            android:id="@+id/state_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:layout_marginBottom="@dimen/ui_size_24"
+        android:importantForAccessibility="no"
+        android:visibility="gone"
+        app:backgroundTint="?attr/colorPrimary"
+        app:srcCompat="@drawable/ic_add_comment"
+        app:tint="?attr/colorOnPrimary" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

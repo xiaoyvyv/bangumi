@@ -34,6 +34,7 @@ class SignUpActivity : BaseBindingActivity<ActivitySignUpBinding>() {
         binding.toolbar.initNavBack(this)
     }
 
+
     override fun initData() {
         binding.tvUsage4.paintFlags = binding.tvUsage4.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 

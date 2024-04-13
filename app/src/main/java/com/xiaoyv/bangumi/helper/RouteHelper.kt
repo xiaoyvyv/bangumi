@@ -28,6 +28,8 @@ import com.xiaoyv.bangumi.ui.discover.index.detail.IndexDetailActivity
 import com.xiaoyv.bangumi.ui.discover.index.list.IndexListActivity
 import com.xiaoyv.bangumi.ui.discover.mono.list.MonoListActivity
 import com.xiaoyv.bangumi.ui.feature.almanac.AlmanacActivity
+import com.xiaoyv.bangumi.ui.feature.friendly.FriendRankImportActivity
+import com.xiaoyv.bangumi.ui.feature.friendly.rank.FriendRankDetailActivity
 import com.xiaoyv.bangumi.ui.feature.magi.MagiActivity
 import com.xiaoyv.bangumi.ui.feature.message.MessageActivity
 import com.xiaoyv.bangumi.ui.feature.message.detail.MessageDetailActivity
@@ -638,6 +640,22 @@ object RouteHelper {
         TorrentInfoActivity::class.open(
             bundleOf(NavKey.KEY_PARCELABLE to torrentInfo)
         )
+    }
+
+    fun jumpFriendRankImport() {
+        if (UserHelper.isLogin) {
+            FriendRankImportActivity::class.open()
+        } else {
+            jumpSignIn()
+        }
+    }
+
+    fun jumpFriendRankDetail() {
+        if (UserHelper.isLogin) {
+            FriendRankDetailActivity::class.open()
+        } else {
+            jumpSignIn()
+        }
     }
 
     fun jumpWeb(

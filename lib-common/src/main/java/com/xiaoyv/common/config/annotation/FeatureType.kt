@@ -27,6 +27,7 @@ import androidx.annotation.StringDef
     FeatureType.TYPE_TIMELINE,
     FeatureType.TYPE_RAKUEN,
     FeatureType.TYPE_MAGNET,
+    FeatureType.TYPE_RANK_FRIEND
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class FeatureType {
@@ -38,6 +39,7 @@ annotation class FeatureType {
         const val TYPE_ANIME_YUC = "yuc"
         const val TYPE_SYNCER = "syncer"
         const val TYPE_RANK = "rank"
+        const val TYPE_RANK_FRIEND = "rank_friend"
         const val TYPE_PROCESS = "process"
         const val TYPE_SCHEDULE = "schedule"
         const val TYPE_ALMANAC = "almanac"
@@ -69,6 +71,7 @@ annotation class FeatureType {
                 TYPE_TIMELINE -> "时间胶囊"
                 TYPE_RAKUEN -> "超展开"
                 TYPE_MAGNET -> "搜番资源"
+                TYPE_RANK_FRIEND -> "友评榜"
                 else -> "添加"
             }
         }
