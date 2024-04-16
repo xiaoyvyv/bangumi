@@ -27,7 +27,7 @@ android {
         }
 
         exec {
-            commandLine("bash", "-c", "git rev-parse HEAD")
+            commandLine("git", "rev-parse", "HEAD")
             isIgnoreExitValue = true
             standardOutput = it
         }
@@ -73,6 +73,7 @@ dependencies {
     api(project(":lib-live2d"))
     api(project(":lib-emoji"))
     api(project(":lib-thunder"))
+//    api(project(":lib-subtitle"))
 
     api(libs.blueprint)
     api(libs.blueprint.floater)
@@ -110,6 +111,9 @@ dependencies {
     api(platform(libs.firebase.bom))
     api(libs.firebase.analytics.ktx)
     api(libs.firebase.crashlytics.ktx)
+
+    api("androidx.media3:media3-extractor:1.3.1")
+    api("androidx.media3:media3-common:1.3.1")
 
     compileOnly(files("../lib-live2d/libs/Live2DCubismCore.aar"))
 

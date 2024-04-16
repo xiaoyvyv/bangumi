@@ -39,7 +39,7 @@ class FriendRankDetailActivity : BaseListActivity<FriendlyRankEntity, FriendRank
 
 
     override fun onListDataFinish(list: List<FriendlyRankEntity>) {
-        if (list.isEmpty()) {
+        if (list.isEmpty() && viewModel.overScoreCount == 1) {
             showConfirmDialog(
                 title = "温馨提示",
                 message = "本地暂无好友评分数据，是否去拉取重新生成排行榜？",
@@ -65,7 +65,7 @@ class FriendRankDetailActivity : BaseListActivity<FriendlyRankEntity, FriendRank
                 showOptionsDialog(
                     title = "超过 n 位好友评分才看",
                     items = mutableListOf<String>().apply {
-                        repeat(10) {
+                        repeat(50) {
                             add(String.format("仅看 %d+ 人评分条目", it + 1))
                         }
                     },

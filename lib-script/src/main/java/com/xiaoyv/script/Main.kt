@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.xiaoyv.script.database.BgmScriptDataBase
 import com.xiaoyv.script.database.dao.SubjectDao
+import java.awt.Color
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -18,7 +19,9 @@ object Main {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        parseScript()
+        // parseScript()
+        val decode = Color.decode("#ffff0")
+        System.err.println(decode)
     }
 
     private fun parseScript() {

@@ -41,6 +41,7 @@ include(":lib-common")
 include(":lib-thunder")
 include(":lib-live2d")
 include(":lib-emoji")
+include(":lib-subtitle")
 include(":lib-script")
 
 

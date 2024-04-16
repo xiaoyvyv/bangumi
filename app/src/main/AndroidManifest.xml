@@ -414,6 +414,10 @@
             android:name="com.xiaoyv.bangumi.ui.feature.friendly.rank.FriendRankDetailActivity"
             android:configChanges="orientation|keyboard|screenSize"
             android:exported="false" />
+        <activity
+            android:name="com.xiaoyv.bangumi.special.subtitle.SubtitleToolActivity"
+            android:configChanges="orientation|keyboard|screenSize"
+            android:exported="false" />
 
         <receiver
             android:name="com.xiaoyv.bangumi.special.widget.AnimeWidget"

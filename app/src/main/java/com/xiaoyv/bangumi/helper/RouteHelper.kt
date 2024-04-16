@@ -13,6 +13,7 @@ import com.xiaoyv.bangumi.special.magnet.MagnetActivity
 import com.xiaoyv.bangumi.special.mikan.MikanActivity
 import com.xiaoyv.bangumi.special.mikan.resource.MikanResourceActivity
 import com.xiaoyv.bangumi.special.picture.AnimePicturesNetActivity
+import com.xiaoyv.bangumi.special.subtitle.SubtitleToolActivity
 import com.xiaoyv.bangumi.special.syncer.SyncerActivity
 import com.xiaoyv.bangumi.special.syncer.list.SyncerListActivity
 import com.xiaoyv.bangumi.special.thunder.ThunderActivity
@@ -505,6 +506,10 @@ object RouteHelper {
 
     fun jumpAnimeMagnet(keyword: String? = null) {
         MagnetActivity::class.open(bundleOf(NavKey.KEY_STRING to keyword))
+    }
+
+    fun jumpSubtitleTool() {
+        SubtitleToolActivity::class.open()
     }
 
     fun jumpAlmanac() {

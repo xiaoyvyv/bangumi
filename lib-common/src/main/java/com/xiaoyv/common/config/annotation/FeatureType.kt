@@ -27,7 +27,8 @@ import androidx.annotation.StringDef
     FeatureType.TYPE_TIMELINE,
     FeatureType.TYPE_RAKUEN,
     FeatureType.TYPE_MAGNET,
-    FeatureType.TYPE_RANK_FRIEND
+    FeatureType.TYPE_RANK_FRIEND,
+    FeatureType.TYPE_SUBTITLE
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class FeatureType {
@@ -51,6 +52,7 @@ annotation class FeatureType {
         const val TYPE_TIMELINE = "timeline"
         const val TYPE_RAKUEN = "rakuen"
         const val TYPE_MAGNET = "magnet"
+        const val TYPE_SUBTITLE = "subtitle"
 
         fun name(@FeatureType type: String): String {
             return when (type) {

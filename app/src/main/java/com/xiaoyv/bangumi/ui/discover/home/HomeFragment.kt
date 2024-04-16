@@ -46,6 +46,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     FeatureType.TYPE_DETECT_ANIME -> RouteHelper.jumpDetectAnime()
                     FeatureType.TYPE_DETECT_CHARACTER -> RouteHelper.jumpDetectCharacter()
                     FeatureType.TYPE_MAGNET -> RouteHelper.jumpAnimeMagnet()
+                    FeatureType.TYPE_SUBTITLE->RouteHelper.jumpSubtitleTool()
                     FeatureType.TYPE_DOLLARS -> RouteHelper.jumpDollars()
                     FeatureType.TYPE_WIKI -> {
                         toast("暂未开放")

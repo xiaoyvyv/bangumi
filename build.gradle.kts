@@ -5,8 +5,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinJvm) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.googleKsp) apply false
-
-    id("com.google.gms.google-services") version "4.4.0" apply false
+    alias(libs.plugins.googleServices) apply false
 }
 
 buildscript {
