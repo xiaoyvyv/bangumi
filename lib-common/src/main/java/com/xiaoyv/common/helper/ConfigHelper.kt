@@ -37,7 +37,6 @@ object ConfigHelper {
     private const val KEY_TOPIC_TIME_TAG = "topic-time-tag"
     private const val KEY_HOME_DEFAULT_TAB = "home-tab-default"
     private const val KEY_HOME_TAB = "home-tab"
-    private const val KEY_SMOOTH_FONT = "smooth-font"
     private const val KEY_DEFAULT_COMMENT_SORT = "default-comment-sort"
     private const val KEY_ANIME_DENIED_TAGS = "anime-denied-tags"
     private const val KEY_ANIME_MAGNET_API = "anime-magnet-api"
@@ -237,13 +236,6 @@ object ConfigHelper {
     var isFilterBreakUpComment: Boolean
         get() = SPStaticUtils.getBoolean(KEY_FILTER_BREAK_UP_COMMENT, true)
         set(value) = SPStaticUtils.put(KEY_FILTER_BREAK_UP_COMMENT, value)
-
-    /**
-     * 平滑字体
-     */
-    var isSmoothFont: Boolean
-        get() = SPStaticUtils.getBoolean(KEY_SMOOTH_FONT, true)
-        set(value) = SPStaticUtils.put(KEY_SMOOTH_FONT, value)
 
     /**
      * 章节是否分割

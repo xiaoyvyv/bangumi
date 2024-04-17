@@ -26,10 +26,6 @@ open class ThemeActivityLifecycleCallback : ActivityLifecycleCallbacks {
     private val sActivityDelegatesLock = Object()
 
     override fun onActivityPreCreated(activity: Activity, savedInstanceState: Bundle?) {
-        if (ConfigHelper.isSmoothFont) {
-            // ThemeUtils.applyThemeOverlay(activity, R.style.Theme_Bangumi_Font)
-        }
-
         when (ConfigHelper.appTheme) {
             ThemeType.TYPE_LIGHT -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

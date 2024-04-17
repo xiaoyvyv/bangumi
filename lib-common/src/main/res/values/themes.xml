@@ -59,7 +59,6 @@
     </style>
 
     <style name="Theme.Bangumi.Font" parent="Theme.Bangumi">
-        <item name="android:fontFamily">@raw/font</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -69,12 +68,10 @@
     </style>
 
     <style name="Theme.Bangumi.ToolbarTitle">
-        <item name="android:fontFamily">@raw/font</item>
         <item name="android:textSize">@dimen/ui_font_22</item>
     </style>
 
     <style name="Theme.Bangumi.ExpandTitle">
-        <item name="android:fontFamily">@raw/font</item>
         <item name="android:textSize">@dimen/ui_font_14</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -95,5 +92,6 @@
     </style>
 
     <style name="Theme.Bangumi.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault" />
+
     <style name="Theme.Bangumi.AppWidgetContainer" parent="Theme.Bangumi.AppWidgetContainerParent" />
 </resources>

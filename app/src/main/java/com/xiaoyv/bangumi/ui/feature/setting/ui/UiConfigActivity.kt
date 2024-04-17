@@ -43,7 +43,6 @@ class UiConfigActivity : BaseBindingActivity<ActivitySettingUiBinding>() {
         binding.settingFilterDelete.bindBoolean(ConfigHelper::isFilterDeleteComment)
         binding.settingBreakUp.bindBoolean(ConfigHelper::isFilterBreakUpComment)
         binding.settingEpSplit.bindBoolean(ConfigHelper::isSplitEpList)
-        binding.settingSmoothFont.bindBoolean(ConfigHelper::isSmoothFont)
         binding.settingTopicTag.bindBoolean(ConfigHelper::isTopicTimeFlag)
         binding.settingRakuenTab.bindBoolean(ConfigHelper::isRememberRakuenTab)
         binding.settingTimelineTab.bindBoolean(ConfigHelper::isRememberTimelineTab)

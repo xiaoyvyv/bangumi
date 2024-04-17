@@ -32,7 +32,7 @@ class WebResourceInterceptor(private val themeCssFile: String) : UiWebIntercepto
         when {
             // 检查请求是否是字体文件
             url.contains("font.ttf") -> runCatching {
-                return handFont(view.context)
+                return null
             }
             // 检查请求是否是表情文件
             url.contains("/img/smiles") -> runCatching {
@@ -44,18 +44,6 @@ class WebResourceInterceptor(private val themeCssFile: String) : UiWebIntercepto
             }
         }
         return super.shouldInterceptRequest(view, request)
-    }
-
-    /**
-     * 字体文件
-     */
-    private fun handFont(context: Context): WebResourceResponse? {
-        if (ConfigHelper.isSmoothFont.not()) return null
-        val response = context.resources.openRawResource(R.raw.font).let {
-            WebResourceResponse("font/ttf", "UTF-8", it)
-        }
-        response.setResponseHeaders(setCacheHeaders(System.currentTimeMillis(), cache))
-        return response
     }
 
     /**
