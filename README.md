@@ -1,25 +1,17 @@
-# Bangumi for Android
+# Bangumi for Android [![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/bangumi.svg)](https://github.com/xiaoyvyv/bangumi)
 Bangumi for Android - A full-featured unofficial android native application for the bangumi.tv
-
-<img src="https://github.com/xiaoyvyv/bangumi/blob/main/app/src/main/ic_launcher-playstore.png?raw=true" height="200" width="200" style="display:block; border:1px solid #000;border-radius: 12px;">
-
-[![GitHub code size in bytes](https://img.shields.io/github/repo-size/xiaoyvyv/bangumi)](https://github.com/xiaoyvyv/bangumi)
-[![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total)](https://github.com/xiaoyvyv/bangumi)
-[![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/bangumi.svg)](https://github.com/xiaoyvyv/bangumi)
-[![GitHub forks](https://img.shields.io/github/forks/xiaoyvyv/bangumi.svg)](https://github.com/xiaoyvyv/bangumi/fork)
-[![GitHub issues](https://img.shields.io/github/issues/xiaoyvyv/bangumi)](https://github.com/xiaoyvyv/bangumi/issues)
-[![Views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxiaoyvyv%2Fbangumi&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23AA3535&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/xiaoyvyv/bangumi/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/bangumi/actions)
+[![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total)](https://github.com/xiaoyvyv/bangumi)
+
+<img src="https://github.com/xiaoyvyv/bangumi/blob/main/app/src/main/ic_launcher-playstore.png?raw=true" height="200" width="200" style="display:block; border:1px solid #000;border-radius: 12px;">
+
+<a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi"><img alt="Get it on Google Play" height="80" src="/lib-doc/images/playstore_badge.png"></a>
 
 大家好，各位阿宅、二次元迷们，我是一位热爱动漫文化的安卓开发者，很高兴向大家宣布，我为 https://bgm.tv 这个网站打造了一款全新的 安卓原生客户端！
 
 这款APP不仅完美呈现了 BGM.TV 的所有功能，更为用户提供了更便捷、更流畅的使用体验。
-
-<a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi">
-  <img alt="Get it on Google Play" height="80" src="/lib-doc/images/playstore_badge.png">
-</a>
 
 ### Bangumi
 [https://bgm.tv](https://bgm.tv)
