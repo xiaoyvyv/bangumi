@@ -2,6 +2,7 @@
 agp = "8.3.2"
 blueprint = "1.1.50"
 coreSplashscreen = "1.0.1"
+ffmpegKitMin = "6.0"
 firebaseCrashlyticsGradle = "2.9.9"
 fragmentKtx = "1.6.2"
 googleFirebaseBom = "32.8.1"
@@ -50,6 +51,7 @@ androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version
 avif-integration = { module = "com.github.bumptech.glide:avif-integration", version.ref = "glideVersion" }
 blueprint = { module = "io.github.xiaoyvyv:blueprint", version.ref = "blueprint" }
 blueprint-floater = { module = "io.github.xiaoyvyv:floater", version.ref = "blueprint" }
+ffmpeg-kit-min = { module = "com.arthenica:ffmpeg-kit-min", version.ref = "ffmpegKitMin" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "googleFirebaseBom" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }

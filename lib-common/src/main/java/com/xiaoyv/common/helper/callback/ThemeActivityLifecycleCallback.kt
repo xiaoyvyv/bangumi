@@ -27,7 +27,7 @@ open class ThemeActivityLifecycleCallback : ActivityLifecycleCallbacks {
 
     override fun onActivityPreCreated(activity: Activity, savedInstanceState: Bundle?) {
         if (ConfigHelper.isSmoothFont) {
-            ThemeUtils.applyThemeOverlay(activity, R.style.Theme_Bangumi_Font)
+            // ThemeUtils.applyThemeOverlay(activity, R.style.Theme_Bangumi_Font)
         }
 
         when (ConfigHelper.appTheme) {

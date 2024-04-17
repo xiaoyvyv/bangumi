@@ -23,7 +23,7 @@ android {
             )
         }
     }
-    
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -39,11 +39,16 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+    // 编码猜测
     implementation(libs.juniversalchardet)
+    // LocalTime 类兼容
     implementation(libs.threetenabp)
-    implementation(libs.androidx.exifinterface)
-    api ("androidx.media3:media3-extractor:1.3.1")
+    // FFMpeg
+    api(libs.ffmpeg.kit.min)
 
+//    api("androidx.media3:media3-extractor:1.3.1")
+//    api("androidx.media3:media3-common:1.3.1")
+//    api("androidx.media3:media3-datasource:1.3.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
