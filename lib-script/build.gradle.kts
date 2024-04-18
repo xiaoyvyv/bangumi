@@ -17,10 +17,17 @@ java {
 }
 
 dependencies {
+    implementation(files("libs/utils-1.1.jar"))
+
     api(libs.jsoup)
     api(libs.sqlite.jdbc)
+
     api(libs.log4j.core)
     api(libs.slf4j.simple)
+
+    // Excel 解析
+    implementation(libs.poi.ooxml)
+    implementation(libs.poi)
 
     api(libs.gson)
 }

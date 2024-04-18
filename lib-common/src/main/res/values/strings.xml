@@ -1,4 +1,7 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <!-- 公共模块 -->
     <string name="app_name">Bangumi for Android</string>
     <string name="common_tip">提示</string>
     <string name="common_cancel">取消</string>
@@ -8,6 +11,7 @@
     <string name="common_search">搜索</string>
     <string name="common_filter">过滤</string>
 
+    <!-- 标题 TAB -->
     <string name="title_discover">发现</string>
     <string name="title_timeline">时间胶囊</string>
     <string name="title_media">排行榜</string>
@@ -15,7 +19,7 @@
     <string name="title_super">超展开</string>
     <string name="title_profile">我的</string>
 
-
+    <!-- 登录页面 -->
     <string name="login_title">登录 Bangumi</string>
     <string name="login_result_tip">咕噜~咕噜~</string>
     <string name="login_result_known">知道了</string>
@@ -28,6 +32,7 @@
     <string name="login_input_verify">验证码</string>
     <string name="login_btn_login">登录</string>
 
+    <!-- 注册页面 -->
     <string name="sign_up_title">注册成为 Bangumi 会员</string>
     <string name="sign_up_btn">注册</string>
     <string name="sign_up_error">注册出错</string>
@@ -42,40 +47,47 @@
     <string name="sign_up_input_error_nickname">请输入一个昵称</string>
     <string name="sign_up_input_error_email_code">请邮箱激活码</string>
 
+    <!-- 时间线页面 -->
     <string name="timeline_title">时间胶囊-时空管理局</string>
     <string name="timeline_user_title">时间胶囊-好友</string>
     <string name="timeline_mine_title">时间胶囊-自己</string>
 
+    <!-- 每日放送页面 -->
     <string name="calendar_title">每日放送</string>
     <string name="calendar_today_title">今日放送</string>
     <string name="calendar_tomorrow_title">明日放送</string>
 
+    <!-- 排行榜页面 -->
     <string name="media_title">媒体排行</string>
     <string name="media_detail_title">媒体详情</string>
     <string name="media_save_tip">我%s该%s</string>
     <string name="media_save_click">点击收藏这部%s</string>
     <string name="media_save_summary">%d人想%s / %d人%s过 / %d人在%s / %d人搁置 / %d人抛弃</string>
-
     <string name="robot_title">坛娘</string>
-
     <string name="blog_title">日志</string>
-
     <string name="super_title">超展开</string>
 
+    <!-- 后台服务 -->
     <string name="foreground_notification_channel_name">Foreground service notification</string>
     <string name="foreground_notification_title">%s keep running</string>
     <string name="foreground_notification_text">Click to enter the main page</string>
+
+    <!-- 个人信息页面 -->
     <string name="edit_profile_title">编辑个人信息</string>
 
+    <!-- 发布页面 -->
     <string name="post_result_known">知道了</string>
     <string name="post_result_error">发布出错了</string>
 
+    <!-- 画廊页面 -->
     <string name="anime_gallery_action_save">保存</string>
     <string name="anime_gallery_action_share">分享</string>
     <string name="anime_gallery_action_wallpaper">设置为壁纸</string>
 
+    <!-- MAGI 页面 -->
     <string name="magi_title">Magi 问答</string>
 
+    <!-- 搜索页面 -->
     <string name="anime_search_title">番剧截图搜索出处</string>
     <string name="anime_search_desc">选取番剧原始比例截图搜索来源，仅支持番剧完整截图</string>
     <string name="anime_search_subtitle">上传番剧截取图片</string>
@@ -84,27 +96,30 @@
     <string name="anime_search_upload_btn">点击上传</string>
     <string name="anime_search_result_title">番剧来源搜索结果</string>
 
+    <!-- 以图识人页面 -->
     <string name="anime_character_title">动漫图片人物识别</string>
     <string name="anime_character_subtitle">上传动漫人物图片，以人物正脸最佳</string>
     <string name="anime_character_desc">选取有人物正脸的图片识别效果最佳</string>
     <string name="anime_character_upload_image">上传动漫人物图片</string>
     <string name="anime_character_upload_limit">文件大小限制为 5MB</string>
     <string name="anime_character_upload_btn">点击上传</string>
-
     <string name="anime_character_result_title">动漫人物识别结果</string>
     <string name="anime_character_result_from">来自：%s</string>
     <string name="anime_character_result_copy">复制结果</string>
     <string name="anime_character_result_bing">Bing 搜索</string>
-
     <string name="anime_search_engine">搜索引擎来自于：%s</string>
     <string name="detect_failed">识别失败，请选择其它图片重试!</string>
 
+    <!-- 每日放送小组件 -->
     <string name="app_widget_description">每日放送小组件，每天更新</string>
 
+    <!-- 新番页面 -->
     <string name="yuc_title">新番</string>
 
+    <!-- 蜜柑计划 -->
     <string name="mikan_title">蜜柑计划-RSS</string>
 
+    <!-- 下载相关 -->
     <string name="download_title">下载中心</string>
     <string name="download_dialog_title">资源下载</string>
 </resources>

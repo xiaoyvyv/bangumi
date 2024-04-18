@@ -37,6 +37,7 @@ workRuntimeKtx = "2.9.0"
 vico = "2.0.0-alpha.5"
 slf4j-simple = "2.0.9"
 log4j-core = "2.20.0"
+poi = "5.2.3"
 
 [libraries]
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
@@ -80,6 +81,8 @@ vico-core = { group = "com.patrykandpatrick.vico", name = "core", version.ref = 
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j-core" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-simple" }
+poi = { module = "org.apache.poi:poi", version.ref = "poi" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
