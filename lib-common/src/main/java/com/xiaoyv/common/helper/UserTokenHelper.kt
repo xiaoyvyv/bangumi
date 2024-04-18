@@ -1,12 +1,15 @@
 package com.xiaoyv.common.helper
 
+import com.blankj.utilcode.util.EncodeUtils
 import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.api.response.AuthTokenEntity
+import com.xiaoyv.common.api.response.MicrosoftJwtPayload
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.fromJson
+import com.xiaoyv.widget.kts.orEmpty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -138,6 +141,29 @@ object UserTokenHelper {
                 return@withContext true
             }
             return@withContext false
+        }
+    }
+
+
+    /**
+     * 查询微软翻译 Token
+     */
+    suspend fun queryMicrosoftToken(): String {
+        return withContext(Dispatchers.IO) {
+            val edgeAuthToken = ConfigHelper.edgeAuthToken
+            if (edgeAuthToken.isNotBlank()) {
+                val orEmpty = edgeAuthToken.split(".").getOrNull(1).orEmpty()
+                val jwtJson = EncodeUtils.base64Decode(orEmpty).decodeToString()
+                val payload = jwtJson.fromJson<MicrosoftJwtPayload>()
+                val expirationTime = payload?.expirationTime.orEmpty() * 1000L
+                if (expirationTime > System.currentTimeMillis()) {
+                    return@withContext edgeAuthToken
+                }
+            }
+
+            requireNotNull(BgmApiManager.bgmJsonApi.queryEdgeAuthToken().body()).string().apply {
+                ConfigHelper.edgeAuthToken = this
+            }
         }
     }
 }

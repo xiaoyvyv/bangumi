@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -39,12 +40,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // 编码猜测
+    implementation(libs.gson)
     implementation(libs.juniversalchardet)
-    // LocalTime 类兼容
     implementation(libs.threetenabp)
-    // FFMpeg
-    api(libs.ffmpeg.kit.min)
+    compileOnly(libs.ffmpeg.kit.min)
 
 //    api("androidx.media3:media3-extractor:1.3.1")
 //    api("androidx.media3:media3-common:1.3.1")

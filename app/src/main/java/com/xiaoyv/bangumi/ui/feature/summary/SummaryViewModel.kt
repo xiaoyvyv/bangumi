@@ -13,6 +13,7 @@ import com.xiaoyv.common.api.request.MicrosoftTranslateParam
 import com.xiaoyv.common.api.response.MicrosoftJwtPayload
 import com.xiaoyv.common.helper.CacheHelper
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.helper.UserTokenHelper
 import com.xiaoyv.common.kts.fromJson
 import com.xiaoyv.common.kts.randId
 import com.xiaoyv.widget.kts.errorMsg
@@ -112,7 +113,7 @@ class SummaryViewModel : BaseViewModel() {
     private suspend fun doTranslateWithMicrosoft(): String {
         return withContext(Dispatchers.IO) {
             val translateText = needTranslateText
-            val microsoftToken = queryMicrosoftToken()
+            val microsoftToken = UserTokenHelper.queryMicrosoftToken()
             val translate = BgmApiManager.bgmJsonApi.postMicrosoftTranslate(
                 authentication = "Bearer $microsoftToken",
                 param = listOf(MicrosoftTranslateParam(text = translateText))
@@ -152,25 +153,6 @@ class SummaryViewModel : BaseViewModel() {
 
             result.transResult.orEmpty()
                 .joinToString("\n") { it.dst.orEmpty() }
-        }
-    }
-
-    private suspend fun queryMicrosoftToken(): String {
-        return withContext(Dispatchers.IO) {
-            val edgeAuthToken = ConfigHelper.edgeAuthToken
-            if (edgeAuthToken.isNotBlank()) {
-                val orEmpty = edgeAuthToken.split(".").getOrNull(1).orEmpty()
-                val jwtJson = EncodeUtils.base64Decode(orEmpty).decodeToString()
-                val payload = jwtJson.fromJson<MicrosoftJwtPayload>()
-                val expirationTime = payload?.expirationTime.orEmpty() * 1000L
-                if (expirationTime > System.currentTimeMillis()) {
-                    return@withContext edgeAuthToken
-                }
-            }
-
-            requireNotNull(BgmApiManager.bgmJsonApi.queryEdgeAuthToken().body()).string().apply {
-                ConfigHelper.edgeAuthToken = this
-            }
         }
     }
 
