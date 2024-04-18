@@ -97,11 +97,11 @@ class HomeViewModel : BaseViewModel() {
                                     title = "搜资源",
                                     icon = CommonDrawable.ic_manage_search
                                 ),
-                                HomeIndexFeature(
+                  /*              HomeIndexFeature(
                                     id = FeatureType.TYPE_SUBTITLE,
                                     title = "字幕工具",
                                     icon = CommonDrawable.ic_subtitles
-                                ),
+                                ),*/
                                 HomeIndexFeature(
                                     id = FeatureType.TYPE_DOLLARS,
                                     title = "Dollars",
