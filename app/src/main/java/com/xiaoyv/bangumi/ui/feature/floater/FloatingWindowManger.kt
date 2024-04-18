@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.xiaoyv.bangumi.StartActivity
 import com.xiaoyv.bangumi.ui.feature.musmme.MusumeFloater
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.floater.FloatyService
 import com.xiaoyv.floater.FloatyWindow
 import java.lang.ref.WeakReference
@@ -22,12 +23,12 @@ object FloatingWindowManger {
         FloatyService.start(
             context,
             foregroundNotificationClickClass = StartActivity::class.java.name,
-            foregroundNotificationChannelName = context.getString(com.xiaoyv.common.R.string.foreground_notification_channel_name),
+            foregroundNotificationChannelName = context.getString(CommonString.foreground_notification_channel_name),
             foregroundNotificationTitle = context.getString(
-                com.xiaoyv.common.R.string.foreground_notification_title,
-                context.getString(com.xiaoyv.common.R.string.app_name)
+                CommonString.foreground_notification_title,
+                context.getString(CommonString.app_name)
             ),
-            foregroundNotificationText = context.getString(com.xiaoyv.common.R.string.foreground_notification_text),
+            foregroundNotificationText = context.getString(CommonString.foreground_notification_text),
             foregroundNotificationIcon = com.xiaoyv.common.R.drawable.ic_icon,
         )
     }
