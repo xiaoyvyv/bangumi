@@ -74,6 +74,7 @@ dependencies {
     api(project(":lib-emoji"))
     api(project(":lib-thunder"))
     api(project(":lib-subtitle"))
+    api(project(":lib-i18n"))
 
     api(libs.blueprint)
     api(libs.blueprint.floater)

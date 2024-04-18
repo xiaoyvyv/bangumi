@@ -99,8 +99,8 @@ object LanguageScript {
         // 最新的多语言文档数据
         val webLanguageList = parseWebXlsx()
 
-        // lib-common 模块 Res 文件夹路径
-        val libStringResDir = rootProjectDir + "${sp}lib-common${sp}src${sp}main${sp}res"
+        // lib-i18n 模块 Res 文件夹路径
+        val libStringResDir = rootProjectDir + "${sp}lib-i18n${sp}src${sp}main${sp}res"
 
         // 解析在线文档，同步多语言资源
         webLanguageList.generateAndroidXml(libStringResDir)

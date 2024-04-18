@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/lib-common" />
             <option value="$PROJECT_DIR$/lib-emoji" />
+            <option value="$PROJECT_DIR$/lib-i18n" />
             <option value="$PROJECT_DIR$/lib-live2d" />
             <option value="$PROJECT_DIR$/lib-script" />
             <option value="$PROJECT_DIR$/lib-subtitle" />

@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":lib-i18n")
+
+
 pluginManagement {
     repositories {
         google {
