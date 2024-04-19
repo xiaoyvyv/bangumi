@@ -24,6 +24,8 @@ Source Code: [https://github.com/xiaoyvyv/bangumi](https://github.com/xiaoyvyv/b
 
 Github Release: [Github-Release](https://github.com/xiaoyvyv/bangumi/releases)
 
+贡献多语言本地化: [多语言本地化文档](https://docs.qq.com/sheet/DYk9hdG92dFVtTFlt?tab=koxolo)
+
 ### 功能介绍
 
 **1. 全面覆盖 BGM.TV 的全部功能**
