@@ -1,39 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-    <!-- 公共模块 -->
+    <!-- 公共模組 -->
+    <string name="app_name">Bangumi for Android</string>
+    <string name="common_tip">提示</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_done">確定</string>
+    <string name="common_error_tip">ごめん，Bangumi娘找不到資料了</string>
+    <string name="common_empty_tip">ごめん，暫時沒有資料呢</string>
+    <string name="common_search">搜尋</string>
+    <string name="common_filter">過濾</string>
 
-    <!-- 标题 TAB -->
+    <!-- 標題 TAB -->
+    <string name="title_discover">發現</string>
+    <string name="title_timeline">時間膠囊</string>
+    <string name="title_media">排行榜</string>
+    <string name="title_process">追番進度</string>
+    <string name="title_super">超展開</string>
+    <string name="title_profile">我的</string>
 
-    <!-- 登录页面 -->
+    <!-- 登入頁面 -->
+    <string name="login_title">登入 Bangumi</string>
+    <string name="login_result_tip">咕嚕~咕嚕~</string>
+    <string name="login_result_known">知道了</string>
+    <string name="login_result_error">登入出錯</string>
+    <string name="login_input_error_email">請輸入郵箱</string>
+    <string name="login_input_error_password">請輸入密碼</string>
+    <string name="login_input_error_verify">請輸入驗證碼</string>
+    <string name="login_input_password">密碼</string>
+    <string name="login_input_email">郵箱</string>
+    <string name="login_input_verify">驗證碼</string>
+    <string name="login_btn_login">登入</string>
 
-    <!-- 注册页面 -->
+    <!-- 註冊頁面 -->
+    <string name="sign_up_title">註冊成為 Bangumi 會員</string>
+    <string name="sign_up_btn">註冊</string>
+    <string name="sign_up_error">註冊出錯</string>
+    <string name="sign_up_verify_error">啟用碼驗證出錯</string>
+    <string name="sign_up_input_email">你的郵箱</string>
+    <string name="sign_up_input_email_verify">郵箱啟用碼</string>
+    <string name="sign_up_input_password">設定一個密碼</string>
+    <string name="sign_up_input_password_again">確認密碼</string>
+    <string name="sign_up_input_nickname">設定一個暱稱</string>
+    <string name="sign_up_input_verify">驗證碼</string>
+    <string name="sign_up_input_error_password_again">請輸入確認密碼</string>
+    <string name="sign_up_input_error_nickname">請輸入一個暱稱</string>
+    <string name="sign_up_input_error_email_code">請郵箱啟用碼</string>
 
-    <!-- 时间线页面 -->
+    <!-- 時間線頁面 -->
+    <string name="timeline_title">時間膠囊-時空管理局</string>
+    <string name="timeline_user_title">時間膠囊-好友</string>
+    <string name="timeline_mine_title">時間膠囊-自己</string>
 
-    <!-- 每日放送页面 -->
+    <!-- 每日放送頁面 -->
+    <string name="calendar_title">每日放送</string>
+    <string name="calendar_today_title">今日放送</string>
+    <string name="calendar_tomorrow_title">明日放送</string>
 
-    <!-- 排行榜页面 -->
+    <!-- 排行榜頁面 -->
+    <string name="media_title">媒體排行</string>
+    <string name="media_detail_title">媒體詳情</string>
+    <string name="media_save_tip">我%s該%s</string>
+    <string name="media_save_click">點選收藏這部%s</string>
+    <string name="media_save_summary">%d人想%s / %d人%s過 / %d人在%s / %d人擱置 / %d人拋棄</string>
+    <string name="robot_title">壇娘</string>
+    <string name="blog_title">日誌</string>
+    <string name="super_title">超展開</string>
 
-    <!-- 后台服务 -->
+    <!-- 後臺服務 -->
+    <string name="foreground_notification_channel_name">前景服務通知</string>
+    <string name="foreground_notification_title">%s 一直在運行</string>
+    <string name="foreground_notification_text">點擊進入主頁面</string>
 
-    <!-- 个人信息页面 -->
+    <!-- 個人資訊頁面 -->
+    <string name="edit_profile_title">編輯個人資訊</string>
 
-    <!-- 发布页面 -->
+    <!-- 釋出頁面 -->
+    <string name="post_result_known">知道了</string>
+    <string name="post_result_error">釋出出錯了</string>
 
-    <!-- 画廊页面 -->
+    <!-- 畫廊頁面 -->
+    <string name="anime_gallery_action_save">儲存</string>
+    <string name="anime_gallery_action_share">分享</string>
+    <string name="anime_gallery_action_wallpaper">設定為桌布</string>
 
-    <!-- MAGI 页面 -->
+    <!-- MAGI 頁面 -->
+    <string name="magi_title">Magi 問答</string>
 
-    <!-- 搜索页面 -->
+    <!-- 搜尋頁面 -->
+    <string name="anime_search_title">番劇截圖搜尋出處</string>
+    <string name="anime_search_desc">選取番劇原始比例截圖搜尋來源，僅支援番劇完整截圖</string>
+    <string name="anime_search_subtitle">上傳番劇擷取圖片</string>
+    <string name="anime_search_upload_image">上傳番劇截圖</string>
+    <string name="anime_search_upload_limit">檔案大小限制為 25MB</string>
+    <string name="anime_search_upload_btn">點選上傳</string>
+    <string name="anime_search_result_title">番劇來源搜尋結果</string>
 
-    <!-- 以图识人页面 -->
+    <!-- 以圖識人頁面 -->
+    <string name="anime_character_title">動漫圖片人物識別</string>
+    <string name="anime_character_subtitle">上傳動漫人物圖片，以人物正臉最佳</string>
+    <string name="anime_character_desc">選取有人物正臉的圖片識別效果最佳</string>
+    <string name="anime_character_upload_image">上傳動漫人物圖片</string>
+    <string name="anime_character_upload_limit">檔案大小限制為 5MB</string>
+    <string name="anime_character_upload_btn">點選上傳</string>
+    <string name="anime_character_result_title">動漫人物識別結果</string>
+    <string name="anime_character_result_from">來自：%s</string>
+    <string name="anime_character_result_copy">複製結果</string>
+    <string name="anime_character_result_bing">Bing 搜尋</string>
+    <string name="anime_search_engine">搜尋引擎來自於：%s</string>
+    <string name="detect_failed">識別失敗，請選擇其它圖片重試!</string>
 
-    <!-- 每日放送小组件 -->
+    <!-- 每日放送小元件 -->
+    <string name="app_widget_description">每日放送小元件，每天更新</string>
 
-    <!-- 新番页面 -->
+    <!-- 新番頁面 -->
+    <string name="yuc_title">新番</string>
 
-    <!-- 蜜柑计划 -->
+    <!-- 蜜柑計劃 -->
+    <string name="mikan_title">蜜柑計劃-RSS</string>
 
-    <!-- 下载相关 -->
+    <!-- 下載相關 -->
+    <string name="download_title">下載中心</string>
+    <string name="download_dialog_title">資源下載</string>
 </resources>
