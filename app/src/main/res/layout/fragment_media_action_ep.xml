@@ -54,13 +54,16 @@
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/gp_buttons"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/ui_size_0"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/ui_layout_margin"
+        android:layout_marginStart="@dimen/ui_layout_margin"
+        android:layout_marginEnd="@dimen/ui_layout_margin_compat"
         android:layout_marginTop="@dimen/ui_layout_margin"
         android:layout_marginBottom="@dimen/ui_layout_margin"
         android:gravity="center"
         app:layout_constrainedHeight="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_collect_to"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_comment"
         app:layout_constraintVertical_bias="0"
@@ -88,16 +91,6 @@
             android:textAppearance="?attr/textAppearanceBodyMedium" />
 
         <com.xiaoyv.common.widget.button.AnimeButton
-            android:id="@+id/btn_collect_to"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="@dimen/ui_size_0"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="@dimen/ui_size_0"
-            android:text="看到"
-            android:textAppearance="?attr/textAppearanceBodyMedium" />
-
-        <com.xiaoyv.common.widget.button.AnimeButton
             android:id="@+id/btn_dropped"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="@dimen/ui_size_0"
@@ -106,17 +99,33 @@
             android:padding="@dimen/ui_size_0"
             android:text="抛弃"
             android:textAppearance="?attr/textAppearanceBodyMedium" />
-
-        <com.xiaoyv.common.widget.button.AnimeButton
-            android:id="@+id/btn_remove"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="@dimen/ui_size_0"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="@dimen/ui_size_0"
-            android:text="撤销"
-            android:textAppearance="?attr/textAppearanceBodyMedium" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_collect_to"
+        style="@style/Widget.Material3.Button.IconButton.Outlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin_compat"
+        android:tooltipText="看到"
+        app:layout_constraintEnd_toStartOf="@id/btn_remove"
+        app:layout_constraintTop_toTopOf="@id/gp_buttons"
+        app:layout_constraintBottom_toBottomOf="@id/gp_buttons"
+        app:icon="@drawable/ic_collect_to"
+        app:iconTint="?attr/colorOnSurface" />
+
+    <com.xiaoyv.common.widget.button.AnimeButton
+        android:id="@+id/btn_remove"
+        style="@style/Widget.Material3.Button.IconButton.Outlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ui_layout_margin"
+        android:tooltipText="撤销"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/gp_buttons"
+        app:layout_constraintBottom_toBottomOf="@id/gp_buttons"
+        app:icon="@drawable/ic_undo"
+        app:iconTint="?attr/colorOnSurface" />
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/iv_cancel"
