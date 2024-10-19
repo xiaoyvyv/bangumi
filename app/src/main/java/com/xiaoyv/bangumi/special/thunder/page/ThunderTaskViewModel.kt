@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.special.thunder.page
 import com.xiaoyv.bangumi.base.BaseListViewModel
 import com.xiaoyv.common.config.annotation.ThunderTabType
 import com.xiaoyv.common.config.bean.TaskInfoEntity
-import com.xiaoyv.thunder.Thunder
 
 /**
  * Class: [ThunderTaskViewModel]
@@ -20,8 +19,6 @@ class ThunderTaskViewModel : BaseListViewModel<TaskInfoEntity>() {
     }
 
     private fun queryTaskList(): List<TaskInfoEntity> {
-Thunder.instance
-
         return listOf()
     }
 }

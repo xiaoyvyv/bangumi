@@ -13,6 +13,7 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.parser.entity.MikanEntity
 import com.xiaoyv.common.kts.CommonDrawable
 import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
@@ -50,7 +51,7 @@ class MikanActivity : BaseListActivity<MikanEntity.Group, MikanViewModel>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("Help")
+        menu.add(i18n(CommonString.common_help))
             .setIcon(CommonDrawable.ic_help)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {

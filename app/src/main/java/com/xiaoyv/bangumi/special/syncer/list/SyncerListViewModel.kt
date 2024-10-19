@@ -11,6 +11,8 @@ import com.xiaoyv.common.api.response.anime.AnimeSyncEntity
 import com.xiaoyv.common.config.annotation.InterestType
 import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.helper.SyncerHelper
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.kts.sendValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -108,7 +110,10 @@ class SyncerListViewModel : BaseListViewModel<AnimeSyncEntity>() {
                                         )
                                     ).let {
                                         require(it.isSuccessful) {
-                                            "同步失败：" + (it.body() ?: it.errorBody())?.string()
+                                            i18n(
+                                                CommonString.syncer_error,
+                                                (it.body() ?: it.errorBody())?.string()
+                                            )
                                         }
                                     }
                                 }.onFailure {

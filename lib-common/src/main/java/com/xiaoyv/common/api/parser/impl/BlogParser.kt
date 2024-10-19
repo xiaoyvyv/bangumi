@@ -11,7 +11,9 @@ import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.bean.PostAttach
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.common.kts.i18n
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
@@ -102,7 +104,7 @@ fun Document.parserBlogDetail(blogId: String): BlogDetailEntity {
                 relative.imageLink = attr("href")
                 relative.titleLink = attr("href")
             }
-            blogEntity.related.title = "关联的内容"
+            blogEntity.related.title = i18n(CommonString.parse_relation)
             blogEntity.related.items.add(relative)
         }
 

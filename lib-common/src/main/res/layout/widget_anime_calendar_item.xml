@@ -42,8 +42,8 @@
             android:alpha="0.7"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="葬送的芙莉莲"
             android:textColor="?android:textColorPrimaryInverse"
-            android:textSize="@dimen/ui_font_10" />
+            android:textSize="@dimen/ui_font_10"
+            tools:text="葬送的芙莉莲" />
     </LinearLayout>
 </LinearLayout>

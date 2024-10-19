@@ -1,7 +1,9 @@
 package com.xiaoyv.common.kts
 
 import android.os.Build
+import androidx.annotation.StringRes
 import com.blankj.utilcode.util.ClipboardUtils
+import com.blankj.utilcode.util.StringUtils
 import com.xiaoyv.widget.kts.showToastCompat
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -21,7 +23,7 @@ fun String.decodeUrl(): String {
 
 fun copyText(text: String) {
     ClipboardUtils.copyText(text)
-    showToastCompat("复制成功")
+    showToastCompat(i18n(CommonString.common_copy_success))
 }
 
 /**
@@ -32,4 +34,8 @@ fun String.magnetHash(): String {
         .toRegex(RegexOption.IGNORE_CASE)
         .groupValueOne(this)
         .uppercase()
+}
+
+fun i18n(@StringRes id: Int, vararg args: Any?): String {
+    return StringUtils.getString(id, *args)
 }

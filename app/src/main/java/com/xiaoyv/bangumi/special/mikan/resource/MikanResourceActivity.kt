@@ -11,6 +11,8 @@ import com.xiaoyv.bangumi.special.magnet.MagnetAdapter
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 
@@ -27,7 +29,8 @@ class MikanResourceActivity :
 
     override val toolbarTitle: String
         get() = buildString {
-            append("资源详情-")
+            append(i18n(CommonString.mikan_resource_detail))
+            append("-")
             append(viewModel.subtitleGroupName)
         }
 
@@ -47,12 +50,12 @@ class MikanResourceActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("Help")
+        menu.add(i18n(CommonString.common_help))
             .setIcon(CommonDrawable.ic_help)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "此资源仅供学习交流使用，下载后请在24小时内删除！\n\n压制组：${viewModel.subtitleGroupName}\n数据来源：mikanani.me",
+                    message = i18n(CommonString.mikan_about, viewModel.subtitleGroupName),
                     cancelText = null
                 )
                 true

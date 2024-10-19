@@ -11,6 +11,8 @@ import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.api.response.GalleryEntity
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -64,7 +66,7 @@ class MediaPreviewActivity : BaseListActivity<GalleryEntity, MediaPreviewViewMod
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("Help")
+        menu.add(i18n(CommonString.common_help))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 showConfirmDialog(message = "数据来源：douban.com", cancelText = null)

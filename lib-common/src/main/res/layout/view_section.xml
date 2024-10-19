@@ -29,7 +29,7 @@
         android:layout_height="@dimen/ui_size_0"
         android:gravity="center"
         android:paddingHorizontal="@dimen/ui_layout_margin"
-        android:text="更多 >>"
+        android:text="@string/common_more_tag"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_title"

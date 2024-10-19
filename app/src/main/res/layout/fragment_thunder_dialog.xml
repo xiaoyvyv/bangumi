@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/ui_layout_margin"
-        android:text="请输入下载链接开始下载"
+        android:text="@string/download_dialog_input"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintTop_toBottomOf="@+id/sec_title" />
@@ -35,7 +35,7 @@
             android:layout_marginHorizontal="@dimen/ui_layout_margin"
             android:focusable="true"
             android:gravity="top|start"
-            android:hint="支持下载：Magnet、HTTP、HTTPS、BT、FTP、Thunder 等..."
+            android:hint="@string/download_dialog_input_hint"
             android:lineSpacingMultiplier="1.25"
             android:minLines="5"
             android:textAppearance="?attr/textAppearanceBodyMedium"

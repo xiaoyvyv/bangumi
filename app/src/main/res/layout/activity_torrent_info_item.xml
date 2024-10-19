@@ -33,7 +33,6 @@
         android:layout_marginEnd="@dimen/ui_layout_margin"
         android:ellipsize="end"
         android:maxLines="3"
-        android:text="File"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintBottom_toTopOf="@+id/tv_desc"
@@ -49,13 +48,13 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/ui_size_6"
         android:paddingBottom="@dimen/ui_layout_margin"
-        android:text="12.443KB"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="12.443KB" />
 
     <View
         android:id="@+id/v_divider"

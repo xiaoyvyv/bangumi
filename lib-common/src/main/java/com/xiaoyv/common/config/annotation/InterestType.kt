@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [InterestType]
@@ -28,11 +30,11 @@ annotation class InterestType {
 
         fun string(@InterestType type: String, @MediaType mediaType: String): String {
             return when (type) {
-                TYPE_WISH -> String.format("想%s", MediaType.action(mediaType))
-                TYPE_COLLECT -> String.format("%s过", MediaType.action(mediaType))
-                TYPE_DO -> String.format("在%s", MediaType.action(mediaType))
-                TYPE_ON_HOLD -> "搁置"
-                TYPE_DROPPED -> "抛弃"
+                TYPE_WISH -> i18n(CommonString.type_interest_wish, MediaType.action(mediaType))
+                TYPE_COLLECT -> i18n(CommonString.type_interest_done, MediaType.action(mediaType))
+                TYPE_DO -> i18n(CommonString.type_interest_doing, MediaType.action(mediaType))
+                TYPE_ON_HOLD -> i18n(CommonString.type_interest_hold)
+                TYPE_DROPPED -> i18n(CommonString.type_interest_drop)
                 else -> ""
             }
         }

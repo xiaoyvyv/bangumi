@@ -7,6 +7,8 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.widget.setting.SearchOptionView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -45,7 +47,9 @@ class MagnetViewModel : BaseListViewModel<AnimeMagnetEntity.Resource>() {
             )
 
             val type = entities.first().let {
-                SearchOptionView.Option(name = "类型", fieldName = "type",
+                SearchOptionView.Option(
+                    name = i18n(CommonString.common_kind),
+                    fieldName = "type",
                     options = it.types.orEmpty().map { type ->
                         SearchOptionView.OptionItem(
                             name = type.name.orEmpty(),
@@ -56,7 +60,9 @@ class MagnetViewModel : BaseListViewModel<AnimeMagnetEntity.Resource>() {
             }
 
             val subGroup = entities.last().let {
-                SearchOptionView.Option(name = "字幕组", fieldName = "subgroups",
+                SearchOptionView.Option(
+                    name = i18n(CommonString.magnet_team_title),
+                    fieldName = "subgroups",
                     options = it.subgroups.orEmpty().map { type ->
                         SearchOptionView.OptionItem(
                             name = type.name.orEmpty(),
@@ -71,8 +77,10 @@ class MagnetViewModel : BaseListViewModel<AnimeMagnetEntity.Resource>() {
     }
 
     override suspend fun onRequestListImpl(): List<AnimeMagnetEntity.Resource> {
-        require(magnetUrl.isNotBlank() && URLUtil.isNetworkUrl(magnetUrl)) { "请先配置资源搜索节点" }
-        require(keyword.isNotBlank()) { "请输入关键词搜索资源" }
+        require(magnetUrl.isNotBlank() && URLUtil.isNetworkUrl(magnetUrl)) {
+            i18n(CommonString.magnet_config_first)
+        }
+        require(keyword.isNotBlank()) { i18n(CommonString.magnet_input_first) }
 
         return BgmApiManager.bgmJsonApi.queryAnimeMagnetList(
             magnetApi = magnetUrl,

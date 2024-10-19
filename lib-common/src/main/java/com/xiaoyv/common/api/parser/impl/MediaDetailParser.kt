@@ -104,6 +104,7 @@ fun Document.parserMediaStats(): MediaStatsEntity {
     // Entity
     val statsEntity = json.fromJson<MediaStatsEntity>()?.apply {
         val linkMap = linkedMapOf<String, String>()
+        // 增加 想看 类型对应为 1
         linkMap["想看"] = "1"
         linkMap.putAll(interestType?.seriesSet.orEmpty())
         interestType?.seriesSet = linkMap

@@ -8,7 +8,9 @@ import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.GlobalConfig
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.MediaType
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.decodeUrl
+import com.xiaoyv.common.kts.i18n
 import org.jsoup.nodes.Element
 
 /**
@@ -64,7 +66,10 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                     val entity = SearchResultEntity()
                     entity.id = item.select("a.avatar").hrefId()
                     entity.coverImage = item.select("a.avatar img").attr("src").optImageUrl()
-                    entity.count = "讨论：" + item.select(".rr small").text().ifBlank { "0" }
+                    entity.count = i18n(
+                        CommonString.parse_search_comment,
+                        item.select(".rr small").text().ifBlank { "0" }
+                    )
                     item.select("h2 a.l").apply {
                         entity.isVirtual = attr("href").contains("character")
                         entity.subtitle = select(".tip").remove().text().trim().trim('/')
@@ -72,7 +77,7 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                     }
                     entity.infoTip =
                         BrowserParser.parserInfoTip(item.select(".prsn_info .tip").text().trim('/'))
-                    entity.searchTip = "人物"
+                    entity.searchTip = i18n(CommonString.parse_search_mono)
                     entity
                 }
         }
@@ -83,11 +88,11 @@ fun Element.parserSearchResult(@BgmPathType pathType: String): List<SearchResult
                 entity.id = item.hrefId().decodeUrl()
                 entity.count = item.nextElementSibling()?.text().orEmpty()
                 entity.title = item.text()
-                entity.searchTip = "标签"
+                entity.searchTip = i18n(CommonString.parse_search_tag)
                 entity
             }
         }
 
-        else -> throw IllegalArgumentException("暂不支持搜索该类型")
+        else -> throw IllegalArgumentException(i18n(CommonString.parse_search_not_support))
     }
 }

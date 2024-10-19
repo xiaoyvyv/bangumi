@@ -2,6 +2,7 @@ package com.xiaoyv.common.helper
 
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.EncodeUtils
+import com.blankj.utilcode.util.StringUtils
 import com.xiaoyv.blueprint.entity.LoadingState
 import com.xiaoyv.blueprint.kts.launchProcess
 import com.xiaoyv.blueprint.kts.toJson
@@ -17,7 +18,9 @@ import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.database.collection.Collection
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.fromJson
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +71,7 @@ object CollectionHelper {
             )
         }
 
-        showToastCompat("收藏日志成功")
+        showToastCompat(StringUtils.getString(CommonString.collect_blog_success))
     }
 
     suspend fun saveTopic(entity: TopicDetailEntity, @TopicType topicType: String) {
@@ -91,7 +94,7 @@ object CollectionHelper {
             )
         }
 
-        showToastCompat("收藏话题成功")
+        showToastCompat(StringUtils.getString(CommonString.collect_topic_success))
     }
 
     suspend fun deleteCollect(tid: String, @LocalCollectionType type: Int) {
@@ -99,7 +102,7 @@ object CollectionHelper {
             BgmDatabaseManager.collection.delete(tid, type)
         }
 
-        showToastCompat("取消收藏成功")
+        showToastCompat(StringUtils.getString(CommonString.collect_cancel))
     }
 
     /**
@@ -129,14 +132,14 @@ object CollectionHelper {
                 it.printStackTrace()
                 if (it is HttpException) {
                     if (it.response()?.code() == 401) {
-                        if (toast) showToastCompat("Token 无效或过期，请重新配置")
+                        if (toast) showToastCompat(i18n(CommonString.collect_token_error))
                         return@launchProcess
                     }
                 }
                 if (toast) showToastCompat(it.errorMsg)
             },
             block = {
-                require(isEnable) { "请先配置 Github 同步仓库" }
+                require(isEnable) { i18n(CommonString.collect_config_github) }
 
                 val oldData = withContext(Dispatchers.IO) {
                     runCatching {
@@ -166,9 +169,9 @@ object CollectionHelper {
                         repo = repo,
                         path = "data/collection.json",
                         param = GithubUpdateParam(
-                            message = "收藏更新",
+                            message = i18n(CommonString.collect_update_commit),
                             committer = GithubUpdateParam.Committer(
-                                name = "Bangumi for Android",
+                                name = i18n(CommonString.app_name),
                                 email = UserHelper.cacheEmail
                             ),
                             content = data,
@@ -177,7 +180,7 @@ object CollectionHelper {
                     )
                 }
 
-                if (toast) showToastCompat("同步成功")
+                if (toast) showToastCompat(i18n(CommonString.collect_sync_success))
             }
         )
     }

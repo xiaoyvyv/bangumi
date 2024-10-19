@@ -10,6 +10,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xiaoyv.bangumi.databinding.ActivityMagnetApiBinding
 import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.toast
 
@@ -48,7 +50,7 @@ class MagnetApiDialog : BottomSheetDialogFragment() {
                 onSaveClick?.invoke()
                 dismissAllowingStateLoss()
             } else {
-                toast("请输入正确的链接")
+                toast(i18n(CommonString.common_input_right_link))
             }
         }
     }

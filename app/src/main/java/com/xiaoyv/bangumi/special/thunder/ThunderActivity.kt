@@ -13,7 +13,9 @@ import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.helper.ConfigHelper
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.clear
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -98,7 +100,7 @@ class ThunderActivity : BaseViewModelActivity<ActivityThunderBinding, ThunderVie
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("Add")
+        menu.add(i18n(CommonString.download_add))
             .setIcon(CommonDrawable.ic_add)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
@@ -107,17 +109,17 @@ class ThunderActivity : BaseViewModelActivity<ActivityThunderBinding, ThunderVie
                         viewModel.handleLinkUri(it)
                     }
                 } else {
-                    showToastCompat("下载器仅支持 arm 平台！")
+                    showToastCompat(i18n(CommonString.download_not_arm))
                 }
                 true
             }
 
-        menu.add("Help")
+        menu.add(i18n(CommonString.common_help))
             .setIcon(CommonDrawable.ic_help)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "支持下载：\n\nMagnet、HTTP、HTTPS、BT、FTP、Thunder 等...",
+                    message = i18n(CommonString.download_dialog_input_hint),
                     cancelText = null
                 )
                 true

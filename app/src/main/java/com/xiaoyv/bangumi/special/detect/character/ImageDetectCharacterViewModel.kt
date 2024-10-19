@@ -13,6 +13,8 @@ import com.xiaoyv.common.api.response.anime.DetectCharacterEntity
 import com.xiaoyv.common.api.response.anime.ListParcelableWrapEntity
 import com.xiaoyv.common.helper.ImageHelper
 import com.xiaoyv.common.helper.ImageProcessor
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.widget.setting.SearchOptionView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,31 +35,30 @@ class ImageDetectCharacterViewModel : ImageDetectViewModel() {
 
     private val imageProcessor by lazy { ImageProcessor() }
 
-    @Suppress("SpellCheckingInspection")
     override val searchOptions: List<SearchOptionView.Option>
         get() = listOf(
             SearchOptionView.Option(
-                name = "识别模型",
+                name = i18n(CommonString.detect_model),
                 fieldName = "model",
                 options = listOf(
                     SearchOptionView.OptionItem(
-                        name = "动漫模型-默认",
+                        name = i18n(CommonString.detect_model_anime),
                         value = "anime"
                     ),
                     SearchOptionView.OptionItem(
-                        name = "动漫模型-高准确率1",
+                        name = i18n(CommonString.detect_model_anime1),
                         value = "anime_model_lovelive"
                     ),
                     SearchOptionView.OptionItem(
-                        name = "动漫模型-高准确率2",
+                        name = i18n(CommonString.detect_model_anime2),
                         value = "pre_stable"
                     ),
                     SearchOptionView.OptionItem(
-                        name = "GalGame模型-默认",
+                        name = i18n(CommonString.detect_model_gal),
                         value = "game"
                     ),
                     SearchOptionView.OptionItem(
-                        name = "GalGame模型-高准确率1",
+                        name = i18n(CommonString.detect_model_gal1),
                         value = "game_model_kirakira"
                     )
                 )
@@ -74,7 +75,7 @@ class ImageDetectCharacterViewModel : ImageDetectViewModel() {
             block = {
                 val selectModel: SearchOptionView.OptionItem =
                     (if (selectedOptions.isNotEmpty()) selectedOptions.first().selected else searchOptions.first().options?.first())
-                        ?: throw IllegalArgumentException("Please select a model firstly!")
+                        ?: throw IllegalArgumentException(i18n(CommonString.anime_character_select_model))
 
                 onDetectCharacterLiveData.value = withContext(Dispatchers.IO) {
                     val targetFile = FileUtils.getFileByPath(ImageHelper.compressImage(imageUri))
@@ -90,7 +91,7 @@ class ImageDetectCharacterViewModel : ImageDetectViewModel() {
                     }
 
                     if (entities.isEmpty()) {
-                        throw IllegalArgumentException("Detect failed!")
+                        throw IllegalArgumentException(i18n(CommonString.detect_failed))
                     }
 
                     ListParcelableWrapEntity(entities)

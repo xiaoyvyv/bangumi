@@ -10,8 +10,7 @@
         android:id="@+id/card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="动画" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.xiaoyv.common.widget.image.AnimeImageView
         android:id="@+id/card_left"

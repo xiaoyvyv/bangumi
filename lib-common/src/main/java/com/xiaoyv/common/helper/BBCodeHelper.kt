@@ -9,8 +9,10 @@ import androidx.fragment.app.FragmentActivity
 import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.helper.callback.IdEntity
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.showInputLine2Dialog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.widget.text.AnimeEditTextView
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
@@ -27,73 +29,73 @@ object BBCodeHelper {
             BBCode(
                 tagStart = "[b]",
                 tagEnd = "[/b]",
-                holderText = "加粗内容",
+                holderText = i18n(CommonString.bbcode_holder_b),
                 icon = CommonDrawable.ic_format_bold
             ),
             BBCode(
                 tagStart = "[i]",
                 tagEnd = "[/i]",
-                holderText = "斜体内容",
+                holderText = i18n(CommonString.bbcode_holder_i),
                 icon = CommonDrawable.ic_format_italic
             ),
             BBCode(
                 tagStart = "[u]",
                 tagEnd = "[/u]",
-                holderText = "下划线内容",
+                holderText = i18n(CommonString.bbcode_holder_u),
                 icon = CommonDrawable.ic_format_underlined
             ),
             BBCode(
                 tagStart = "[s]",
                 tagEnd = "[/s]",
-                holderText = "删除线内容",
+                holderText = i18n(CommonString.bbcode_holder_s),
                 icon = CommonDrawable.ic_format_strikethrough
             ),
             BBCode(
                 tagStart = "[size=%s]",
                 tagEnd = "[/size]",
                 holderTagStart = "16",
-                holderTagStartTip = "字号",
+                holderTagStartTip = i18n(CommonString.bbcode_holder_size),
                 holderText = "",
                 icon = CommonDrawable.ic_format_size
             ),
             BBCode(
                 tagStart = "[mask]",
                 tagEnd = "[/mask]",
-                holderText = "遮罩内容",
+                holderText = i18n(CommonString.bbcode_holder_mask),
                 icon = CommonDrawable.ic_format_mask
             ),
             BBCode(
                 tagStart = "[color=%s]",
                 tagEnd = "[/color]",
                 holderTagStart = "#5555FF",
-                holderTagStartTip = "色值",
-                holderText = "颜色文本内容",
+                holderTagStartTip = i18n(CommonString.bbcode_holder_color_value),
+                holderText = i18n(CommonString.bbcode_holder_color),
                 icon = CommonDrawable.ic_format_color
             ),
             BBCode(
                 tagStart = "[url=%s]",
                 tagEnd = "[/url]",
                 holderTagStart = "https://xxx",
-                holderTagStartTip = "链接地址",
-                holderText = "链接描述",
+                holderTagStartTip =i18n(CommonString.bbcode_holder_link),
+                holderText = i18n(CommonString.bbcode_holder_link_desc),
                 icon = CommonDrawable.ic_format_link
             ),
             BBCode(
                 tagStart = "[img]",
                 tagEnd = "[/img]",
-                holderText = "图片链接",
+                holderText = i18n(CommonString.bbcode_holder_img),
                 icon = CommonDrawable.ic_format_image
             ),
             BBCode(
                 tagStart = "[code]",
                 tagEnd = "[/code]",
-                holderText = "代码内容",
+                holderText = i18n(CommonString.bbcode_holder_code),
                 icon = CommonDrawable.ic_format_code
             ),
             BBCode(
                 tagStart = "[quote]",
                 tagEnd = "[/quote]",
-                holderText = "引用内容",
+                holderText = i18n(CommonString.bbcode_holder_quote),
                 icon = CommonDrawable.ic_format_quote
             )
         )
@@ -145,16 +147,6 @@ object BBCodeHelper {
                 )
             }
         }
-
-//        if (pair.third == -1) {
-//            editText.insert(pair.first + pair.second, pair.second.length, pair.second.length)
-//        } else {
-//            editText.insert(
-//                pair.first + pair.second,
-//                pair.second.length,
-//                pair.second.length - pair.third
-//            )
-//        }
     }
 
     fun EditText.insert(textToInsert: String, startOffset: Int, endOffset: Int) {

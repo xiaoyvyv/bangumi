@@ -14,6 +14,8 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -37,7 +39,8 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
         }
 
     private val platformName
-        get() = if (viewModel.isBilibili.value == true) "哔哩" else "豆瓣"
+        get() = if (viewModel.isBilibili.value == true) i18n(CommonString.syncer_bilibili)
+        else i18n(CommonString.syncer_dou_ban)
 
     override fun initView() {
         binding.toolbar.initNavBack(this)
@@ -71,11 +74,11 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
     override fun LifecycleOwner.initViewObserver() {
         viewModel.isBilibili.observe(this) {
             if (it) {
-                binding.tvB.text = "哔哩哔哩同步"
-                binding.etB.hint = "请输入哔哩哔哩 ID"
+                binding.tvB.text = i18n(CommonString.syncer_bilibili_title)
+                binding.etB.hint = i18n(CommonString.syncer_bilibili_id)
             } else {
-                binding.tvB.text = "豆瓣同步"
-                binding.etB.hint = "请输入豆瓣 ID"
+                binding.tvB.text = i18n(CommonString.syncer_dou_ban_title)
+                binding.etB.hint = i18n(CommonString.syncer_dou_ban_id)
             }
         }
 
@@ -83,9 +86,9 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
         viewModel.isDoing.observe(this) {
             binding.btnStart.isEnabled = binding.etB.text.toString().isNotBlank() && !it
             if (it) {
-                binding.btnStart.text = "正在载入收藏，请勿退出该页面！"
+                binding.btnStart.text = i18n(CommonString.syncer_loading)
             } else {
-                binding.btnStart.text = "同步，启动！"
+                binding.btnStart.text = i18n(CommonString.syncer_start)
             }
         }
 
@@ -99,7 +102,7 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
         viewModel.onBgmCollectProgress.observe(this) {
             binding.pbBgmCollect.max = it.second
             binding.pbBgmCollect.setProgress(it.first, true)
-            binding.tvBgm.text = String.format("获取你班收藏：%d/%d", it.first, it.second)
+            binding.tvBgm.text = i18n(CommonString.syncer_bgm_data_format, it.first, it.second)
         }
 
         // 想看数目
@@ -107,7 +110,12 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
             binding.pbPlatformWishCollect.max = it.second
             binding.pbPlatformWishCollect.setProgress(it.first, true)
             binding.tvPlatformWish.text =
-                String.format("%s想看条目：%d/%d", platformName, it.first, it.second)
+                i18n(
+                    CommonString.syncer_platform_data_format_wish,
+                    platformName,
+                    it.first,
+                    it.second
+                )
         }
 
         // 在看数目
@@ -115,7 +123,12 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
             binding.pbPlatformDoingCollect.max = it.second
             binding.pbPlatformDoingCollect.setProgress(it.first, true)
             binding.tvPlatformDoing.text =
-                String.format("%s在看条目：%d/%d", platformName, it.first, it.second)
+                i18n(
+                    CommonString.syncer_platform_data_format_doing,
+                    platformName,
+                    it.first,
+                    it.second
+                )
         }
 
         // 看过数目
@@ -123,7 +136,12 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
             binding.pbPlatformDoneCollect.max = it.second
             binding.pbPlatformDoneCollect.setProgress(it.first, true)
             binding.tvPlatformDone.text =
-                String.format("%s看过条目：%d/%d", platformName, it.first, it.second)
+                i18n(
+                    CommonString.syncer_platform_data_format_done,
+                    platformName,
+                    it.first,
+                    it.second
+                )
         }
 
         viewModel.onDatabaseInstall.observe(this) {
@@ -134,14 +152,12 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
     private fun refreshSubjectDatabase() {
         if (BgmDatabaseManager.isSubjectInstalled()) {
             SpanUtils.with(binding.tvDatabase)
-                .append("索引数据库：")
-                .append("已安装")
+                .append(i18n(CommonString.syncer_database_installed))
                 .setForegroundColor(Color.GREEN)
                 .create()
         } else {
             SpanUtils.with(binding.tvDatabase)
-                .append("索引数据库：")
-                .append("未安装")
+                .append(i18n(CommonString.syncer_database_not_install))
                 .setForegroundColor(Color.RED)
                 .create()
         }
@@ -152,18 +168,18 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("Help")
+        menu.add(i18n(CommonString.common_help))
             .setIcon(CommonDrawable.ic_help)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "查看短链ID，请在浏览器打开短链后，复制链接中的原始ID。\n\nB站追番同步，请在APP设置内暂时公开追番隐私权限。\n\n哔哩哔哩权限配置路径：设置->安全隐私->空间隐私设置->公开我的追番",
+                    message = i18n(CommonString.syncer_config),
                     cancelText = null
                 )
                 true
             }
 
-        menu.add("安装索引数据库")
+        menu.add(i18n(CommonString.syncer_database_install))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -173,7 +189,7 @@ class SyncerActivity : BaseViewModelActivity<ActivitySyncerBinding, SyncerViewMo
                 true
             }
 
-        menu.add("下载索引数据库")
+        menu.add(i18n(CommonString.syncer_database_download))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 RouteHelper.jumpWeb(

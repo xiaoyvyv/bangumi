@@ -25,15 +25,14 @@
             android:layout_height="@dimen/ui_size_44"
             android:background="@drawable/ui_shape_rectangle_corner_6"
             android:backgroundTint="?attr/colorSurfaceContainer"
-            android:hint="搜索番剧资源"
+            android:hint="@string/magnet_search_hint"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
             android:paddingVertical="@dimen/ui_size_0"
             android:paddingStart="@dimen/ui_size_44"
             android:paddingEnd="@dimen/ui_size_16"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            tools:ignore="HardcodedText" />
+            android:textAppearance="?attr/textAppearanceBodyLarge" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.xiaoyv.common.widget.image.AnimeImageView

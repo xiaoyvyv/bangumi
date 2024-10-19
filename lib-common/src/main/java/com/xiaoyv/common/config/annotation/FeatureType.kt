@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [FeatureType]
@@ -56,25 +58,25 @@ annotation class FeatureType {
 
         fun name(@FeatureType type: String): String {
             return when (type) {
-                TYPE_UNSET -> "未设置"
-                TYPE_DOLLARS -> "Dollars"
-                TYPE_MAGI -> "MAGI"
-                TYPE_SYNCER -> "豆哔同步"
-                TYPE_ANIME_YUC -> "新番"
-                TYPE_SCHEDULE -> "每日放送"
-                TYPE_ALMANAC -> "年鉴"
-                TYPE_WIKI -> "WIKI"
-                TYPE_RANK -> "排行榜"
-                TYPE_PROCESS -> "追番进度"
-                TYPE_DETECT_ANIME -> "以图搜番"
-                TYPE_DETECT_CHARACTER -> "以图识人"
-                TYPE_DISCOVER -> "发现"
-                TYPE_PROFILE -> "我的"
-                TYPE_TIMELINE -> "时间胶囊"
-                TYPE_RAKUEN -> "超展开"
-                TYPE_MAGNET -> "搜番资源"
-                TYPE_RANK_FRIEND -> "友评榜"
-                else -> "添加"
+                TYPE_UNSET -> i18n(CommonString.type_feature_unset)
+                TYPE_DOLLARS -> i18n(CommonString.type_feature_dollars)
+                TYPE_MAGI -> i18n(CommonString.type_feature_magi)
+                TYPE_SYNCER -> i18n(CommonString.type_feature_syncer)
+                TYPE_ANIME_YUC -> i18n(CommonString.type_feature_anime_yuc)
+                TYPE_SCHEDULE -> i18n(CommonString.type_feature_schedule)
+                TYPE_ALMANAC -> i18n(CommonString.type_feature_almanac)
+                TYPE_WIKI -> i18n(CommonString.type_feature_wiki)
+                TYPE_RANK -> i18n(CommonString.type_feature_rank)
+                TYPE_PROCESS -> i18n(CommonString.type_feature_process)
+                TYPE_DETECT_ANIME -> i18n(CommonString.type_feature_detect_anime)
+                TYPE_DETECT_CHARACTER -> i18n(CommonString.type_feature_detect_character)
+                TYPE_DISCOVER -> i18n(CommonString.type_feature_discover)
+                TYPE_PROFILE -> i18n(CommonString.type_feature_profile)
+                TYPE_TIMELINE -> i18n(CommonString.type_feature_timeline)
+                TYPE_RAKUEN -> i18n(CommonString.type_feature_rakuen)
+                TYPE_MAGNET -> i18n(CommonString.type_feature_magnet)
+                TYPE_RANK_FRIEND -> i18n(CommonString.type_feature_rank_friend)
+                else -> i18n(CommonString.type_unknown)
             }
         }
     }

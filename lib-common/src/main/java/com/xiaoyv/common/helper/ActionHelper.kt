@@ -11,7 +11,9 @@ import com.xiaoyv.common.api.parser.entity.UserDetailEntity
 import com.xiaoyv.common.api.parser.impl.parserUserInfo
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.ReportType
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.widget.dialog.AnimeReportDialog
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -25,11 +27,11 @@ fun FragmentActivity.showActionMenu(
 ) {
     PopupMenu(this, view)
         .apply {
-            menu.add("绝交").setOnMenuItemClickListener {
+            menu.add(i18n(CommonString.action_block)).setOnMenuItemClickListener {
                 ignoreUser(userNumberId, loadingState)
                 true
             }
-            menu.add("报告疑虑").setOnMenuItemClickListener {
+            menu.add(i18n(CommonString.action_report)).setOnMenuItemClickListener {
                 AnimeReportDialog.show(userNumberId, reportType)
                 true
             }
@@ -48,32 +50,36 @@ fun FragmentActivity.ignoreUser(
     loadingState: MutableLiveData<LoadingState>? = null,
 ) {
     showConfirmDialog(
-        message = "确认与该用户绝交？\n绝交后将不再看到用户的所有话题、评论、日志、私信、提醒",
+        message = i18n(CommonString.action_block_message),
         onConfirmClick = {
             launchUI(
                 state = loadingState,
                 error = {
                     it.printStackTrace()
 
-                    showToastCompat("绝交失败")
+                    showToastCompat(i18n(CommonString.action_block_error))
                 },
                 block = {
                     withContext(Dispatchers.IO) {
                         val userInfo: UserDetailEntity =
                             BgmApiManager.bgmWebApi.queryUserInfo(userId).parserUserInfo(userId)
                                 .apply {
-                                    require(gh.isNotBlank()) { "绝交失败" }
+                                    require(gh.isNotBlank()) {
+                                        i18n(CommonString.action_block_error)
+                                    }
                                 }
                         val referer = BgmApiManager.buildReferer(BgmPathType.TYPE_FRIEND, userId)
 
                         BgmApiManager.bgmWebApi.postIgnoreUser(referer, userId, userInfo.gh)
                             .apply {
-                                require(status.equals("ok", true)) { "绝交失败" }
+                                require(status.equals("ok", true)) {
+                                    i18n(CommonString.action_block_error)
+                                }
                             }
                         // 刷新屏蔽用户缓存
                         UserHelper.refreshBlockUser()
                     }
-                    showToastCompat("绝交成功")
+                    showToastCompat(i18n(CommonString.action_block_success))
                 }
             )
         })

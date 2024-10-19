@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="direct_access_persist.xml">
-    <option name="deviceSelectionList">
-      <list>
-        <PersistentDeviceSelectionData>
-          <option name="api" value="30" />
-          <option name="brand" value="google" />
-          <option name="codename" value="redfin" />
-          <option name="id" value="redfin" />
-          <option name="manufacturer" value="Google" />
-          <option name="name" value="Pixel 5" />
-          <option name="screenDensity" value="440" />
-          <option name="screenX" value="1080" />
-          <option name="screenY" value="2340" />
-          <option name="selected" value="true" />
-        </PersistentDeviceSelectionData>
-      </list>
-    </option>
-    <option name="selectedCloudProject" value="bangumi-android" />
+    <option name="selectedCloudProject" />
   </component>
 </project>

@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title="字幕工具" />
+            app:title="@string/subtitle_title" />
 
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
@@ -34,7 +34,6 @@
             android:layout_marginHorizontal="@dimen/ui_layout_margin"
             android:layout_marginTop="@dimen/ui_layout_margin"
             android:paddingVertical="@dimen/ui_size_12"
-            android:text="一键翻译字幕文件"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

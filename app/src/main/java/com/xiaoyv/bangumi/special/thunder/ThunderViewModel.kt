@@ -8,7 +8,9 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModel
 import com.xiaoyv.blueprint.kts.launchUI
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.thunder.Thunder
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
@@ -57,14 +59,14 @@ class ThunderViewModel : BaseViewModel() {
             block = {
                 withContext(Dispatchers.IO) {
                     require(supportScheme.contains(uri.scheme)) {
-                        "支持下载的链接 Scheme: $supportScheme"
+                        i18n(CommonString.download_support_scheme, supportScheme)
                     }
 
                     // 如果是磁力链接则先获取种子文件
                     val url = Thunder.instance.convertUrl(uri.toString())
                     if (url.startsWith("magnet")) {
                         val torrentPath = Thunder.instance.downloadMagnetTorrent(url, btSaveDir)
-                        requireNotNull(torrentPath) { "磁力链接解析失败！" }
+                        requireNotNull(torrentPath) { i18n(CommonString.download_magnet_error) }
                         handleTorrentUri(UriUtils.file2Uri(FileUtils.getFileByPath(torrentPath)))
                     }
                     // 普通链接

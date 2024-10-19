@@ -16,7 +16,9 @@ import com.xiaoyv.common.api.parser.entity.ReportEntity
 import com.xiaoyv.common.api.parser.impl.parserReportForm
 import com.xiaoyv.common.config.annotation.ReportType
 import com.xiaoyv.common.databinding.ViewReportBinding
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.onStartConfig
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.toast
@@ -79,7 +81,7 @@ class AnimeReportDialog : DialogFragment() {
             }
 
             if (value.isBlank()) {
-                toast("请选择一种疑虑类型报告")
+                toast(i18n(CommonString.action_report_select_one))
                 return@setOnFastLimitClickListener
             }
             report(binding, value)
@@ -103,7 +105,7 @@ class AnimeReportDialog : DialogFragment() {
                     )
                 }
                 hideLoading(binding)
-                toast("报告成功")
+                toast(i18n(CommonString.action_report_success))
 
                 dismissAllowingStateLoss()
             }

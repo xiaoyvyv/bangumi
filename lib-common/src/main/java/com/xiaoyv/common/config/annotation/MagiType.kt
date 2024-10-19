@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [MagiType]
@@ -32,14 +34,14 @@ annotation class MagiType {
 
         fun string(@MagiType type: String): String {
             return when (type) {
-                TYPE_ANIME -> "动画"
-                TYPE_BOOK -> "书籍"
-                TYPE_MUSIC -> "音乐"
-                TYPE_GAME -> "游戏"
-                TYPE_REAL -> "三次元"
-                TYPE_OTHER -> "其它"
-                TYPE_MONO -> "人物"
-                else -> "全部"
+                TYPE_ANIME -> i18n(CommonString.common_anime)
+                TYPE_BOOK -> i18n(CommonString.common_book)
+                TYPE_MUSIC -> i18n(CommonString.common_music)
+                TYPE_GAME -> i18n(CommonString.common_game)
+                TYPE_REAL ->i18n(CommonString.common_real)
+                TYPE_OTHER -> i18n(CommonString.common_other)
+                TYPE_MONO -> i18n(CommonString.common_mono)
+                else -> i18n(CommonString.common_all)
             }
         }
 

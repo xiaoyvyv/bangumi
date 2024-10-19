@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/ui_layout_margin"
-    android:paddingVertical="@dimen/ui_size_6"
-    tools:ignore="HardcodedText">
+    android:paddingVertical="@dimen/ui_size_6">
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/list_type"
@@ -28,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="相关度排序"
+            android:text="@string/search_sort_relation"
             android:textSize="@dimen/text_label"
             app:chipMinHeight="@dimen/ui_size_24"
             app:chipMinTouchTargetSize="@dimen/ui_size_36"
@@ -40,7 +38,7 @@
             style="@style/Widget.Material3.Chip.Suggestion.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="时间排序"
+            android:text="@string/search_sort_date"
             android:textSize="@dimen/text_label"
             app:chipMinHeight="@dimen/ui_size_24"
             app:chipMinTouchTargetSize="@dimen/ui_size_36"
@@ -53,7 +51,7 @@
         style="@style/Widget.Material3.Chip.Assist.Elevated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="模糊匹配"
+        android:text="@string/search_match_m"
         android:textSize="@dimen/text_label"
         app:chipIcon="@drawable/ic_filter"
         app:chipIconSize="@dimen/ui_size_16"

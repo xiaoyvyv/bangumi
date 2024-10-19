@@ -3,6 +3,8 @@ package com.xiaoyv.common.api.parser.impl
 import com.xiaoyv.common.api.parser.entity.MikanEntity
 import com.xiaoyv.common.api.parser.parseCount
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import org.jsoup.nodes.Document
 
 
@@ -54,7 +56,7 @@ fun Document.parserMikanGroupInfo(groupName: String): List<AnimeMagnetEntity.Res
             magnet = magnet,
             publishDate = time,
             title = name,
-            typeName = "动画",
+            typeName = i18n(CommonString.common_anime),
             subgroupName = groupName
         )
     }

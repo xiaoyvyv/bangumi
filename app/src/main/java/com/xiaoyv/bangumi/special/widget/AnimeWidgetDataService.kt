@@ -14,8 +14,10 @@ import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
 import com.xiaoyv.common.config.annotation.SubjectType
 import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.centerCropBitmap
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.roundedCorner
 import com.xiaoyv.widget.kts.dpf
 import kotlinx.coroutines.runBlocking
@@ -109,10 +111,11 @@ class AnimeWidgetDataService : RemoteViewsService() {
                     buildString {
                         append(SubjectType.string(item.type))
                         append(" / ")
-                        append("首播：")
+                        append(i18n(CommonString.app_widget_first_play))
                         append(item.airDate)
                         append(" / ")
-                        append("每周 ")
+                        append(i18n(CommonString.app_widget_peer_week))
+                        append(" ")
                         append(item.airWeekday)
                     }
                 )

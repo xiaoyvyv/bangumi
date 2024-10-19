@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.IntDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [BilibiliInterestType]
@@ -24,9 +26,9 @@ annotation class BilibiliInterestType {
 
         fun string(@BilibiliInterestType type: Int): String {
             return when (type) {
-                TYPE_WISH -> "想看"
-                TYPE_DOING -> "在看"
-                TYPE_DONE -> "看过"
+                TYPE_WISH -> i18n(CommonString.type_bilibili_wish)
+                TYPE_DOING -> i18n(CommonString.type_bilibili_doing)
+                TYPE_DONE -> i18n(CommonString.type_bilibili_done)
                 else -> ""
             }
         }

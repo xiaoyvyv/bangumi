@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/ui_layout_margin"
         android:paddingVertical="@dimen/ui_layout_margin"
-        android:text="资料与账号"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="资料与账号" />
 
     <com.xiaoyv.common.widget.text.AnimeTextView
         android:id="@+id/tv_desc"

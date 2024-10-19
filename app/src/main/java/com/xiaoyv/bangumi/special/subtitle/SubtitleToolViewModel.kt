@@ -11,7 +11,9 @@ import com.xiaoyv.common.api.request.MicrosoftTranslateParam
 import com.xiaoyv.common.config.annotation.SubtitleActionType
 import com.xiaoyv.common.config.bean.SubtitleResult
 import com.xiaoyv.common.helper.UserTokenHelper
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.subtitle.api.parser.ParserFactory
 import com.xiaoyv.subtitle.api.subtitle.common.SubtitleLine
 import com.xiaoyv.subtitle.api.subtitle.common.TimedLine
@@ -53,7 +55,7 @@ class SubtitleToolViewModel : BaseViewModel() {
                     extractor = MediaSubtitleExtractor.from(context, uri)
                     val entity = extractor?.extractStreamInfo()
                     val streams = entity?.streams.orEmpty()
-                    check(streams.isNotEmpty()) { "当前文件没有内挂任何字幕" }
+                    check(streams.isNotEmpty()) { i18n(CommonString.subtitle_none) }
                     streams
                 }
             }

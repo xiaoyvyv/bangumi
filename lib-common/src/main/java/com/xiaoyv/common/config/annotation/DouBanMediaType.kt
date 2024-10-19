@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [DouBanMediaType]
@@ -27,23 +29,23 @@ annotation class DouBanMediaType {
 
         fun action(@DouBanMediaType mediaType: String): String {
             return when (mediaType) {
-                TYPE_UNKNOWN -> "看"
-                TYPE_MOVE -> "看"
-                TYPE_BOOK -> "读"
-                TYPE_MUSIC -> "听"
-                TYPE_GAME -> "玩"
-                TYPE_DRAMA -> "看"
-                else -> "看"
+                TYPE_UNKNOWN -> i18n(CommonString.type_action_see)
+                TYPE_MOVE -> i18n(CommonString.type_action_see)
+                TYPE_BOOK -> i18n(CommonString.type_action_read)
+                TYPE_MUSIC -> i18n(CommonString.type_action_listen)
+                TYPE_GAME -> i18n(CommonString.type_action_play)
+                TYPE_DRAMA -> i18n(CommonString.type_action_see)
+                else -> i18n(CommonString.type_action_see)
             }
         }
 
         fun string(@DouBanMediaType type: String): String {
             return when (type) {
-                TYPE_MOVE -> "影视"
-                TYPE_BOOK -> "书籍"
-                TYPE_MUSIC -> "音乐"
-                TYPE_GAME -> "游戏"
-                TYPE_DRAMA -> "舞台剧"
+                TYPE_MOVE -> i18n(CommonString.common_anime)
+                TYPE_BOOK -> i18n(CommonString.common_book)
+                TYPE_MUSIC -> i18n(CommonString.common_music)
+                TYPE_GAME -> i18n(CommonString.common_game)
+                TYPE_DRAMA -> i18n(CommonString.common_drama)
                 else -> ""
             }
         }

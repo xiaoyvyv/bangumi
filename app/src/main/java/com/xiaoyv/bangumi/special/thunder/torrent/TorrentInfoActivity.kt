@@ -12,6 +12,8 @@ import com.xiaoyv.bangumi.base.BaseListActivity
 import com.xiaoyv.bangumi.databinding.ActivityTorrentInfoNavBinding
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.config.bean.TorrentInfoWrap
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
@@ -30,10 +32,11 @@ class TorrentInfoActivity : BaseListActivity<TorrentInfoWrap, TorrentInfoViewMod
         get() = true
 
     override val toolbarTitle: String
-        get() = buildString {
-            append("Torrent: ")
-            append(viewModel.torrentInfo?.mInfoHash.orEmpty().uppercase())
-        }
+        get() = i18n(
+            CommonString.download_torrent_title,
+            viewModel.torrentInfo?.mInfoHash.orEmpty().uppercase()
+        )
+
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
         viewModel.setTorrentMap(bundle.getParcelObj(NavKey.KEY_PARCELABLE))
@@ -72,7 +75,7 @@ class TorrentInfoActivity : BaseListActivity<TorrentInfoWrap, TorrentInfoViewMod
         viewModel.nodeNavHistory.observe(this) {
             val wraps = it ?: return@observe
             val path = wraps.lastOrNull()?.dirPath.orEmpty().trimEnd('/')
-            navBinding.tvNav.text = path.ifBlank { "种子根目录" }
+            navBinding.tvNav.text = path.ifBlank { i18n(CommonString.download_torrent_root) }
             navBinding.tvNav.post {
                 navBinding.scrollView.fullScroll(View.FOCUS_RIGHT)
             }

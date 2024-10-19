@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [BgmPathType]
@@ -50,21 +52,21 @@ annotation class BgmPathType {
 
         fun string(@BgmPathType type: String): String {
             return when (type) {
-                TYPE_SEARCH_SUBJECT -> "条目查询"
-                TYPE_SEARCH_MONO -> "人物查询"
-                TYPE_SEARCH_TAG -> "标签查询"
-                TYPE_CHARACTER -> "角色"
-                TYPE_GROUP -> "小组"
-                TYPE_PERSON -> "人物"
-                TYPE_USER -> "用户"
-                TYPE_BLOG -> "日志"
-                TYPE_TOPIC -> "话题"
-                TYPE_SUBJECT -> "条目"
-                TYPE_MESSAGE_BOX -> "短信"
-                TYPE_INDEX -> "目录"
-                TYPE_FRIEND -> "好友"
-                TYPE_EP -> "章节"
-                TYPE_TIMELINE -> "时间线"
+                TYPE_SEARCH_SUBJECT -> i18n(CommonString.type_path_search_subject)
+                TYPE_SEARCH_MONO -> i18n(CommonString.type_path_search_mono)
+                TYPE_SEARCH_TAG -> i18n(CommonString.type_path_search_tag)
+                TYPE_CHARACTER -> i18n(CommonString.type_path_character)
+                TYPE_GROUP -> i18n(CommonString.type_path_group)
+                TYPE_PERSON -> i18n(CommonString.type_path_person)
+                TYPE_USER -> i18n(CommonString.type_path_user)
+                TYPE_BLOG -> i18n(CommonString.type_path_blog)
+                TYPE_TOPIC -> i18n(CommonString.type_path_topic)
+                TYPE_SUBJECT -> i18n(CommonString.type_path_subject)
+                TYPE_MESSAGE_BOX -> i18n(CommonString.type_path_message_box)
+                TYPE_INDEX -> i18n(CommonString.type_path_index)
+                TYPE_FRIEND -> i18n(CommonString.type_path_friend)
+                TYPE_EP -> i18n(CommonString.type_path_ep)
+                TYPE_TIMELINE -> i18n(CommonString.type_path_timeline)
                 else -> ""
             }
         }

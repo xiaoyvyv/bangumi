@@ -14,7 +14,9 @@ import com.xiaoyv.common.database.BgmDatabaseManager
 import com.xiaoyv.common.database.collection.Collection
 import com.xiaoyv.common.helper.CollectionHelper
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.fromJson
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -59,15 +61,13 @@ class CollectionViewModel : BaseListViewModel<Collection>() {
                         .fromJson<List<Collection>>()
                         .orEmpty()
 
-                    require(collections.isNotEmpty()) {
-                        "导入文件格式不支持，请使用该软件导出的文件数据"
-                    }
+                    require(collections.isNotEmpty()) { i18n(CommonString.collect_not_support) }
 
                     // 对比插入本地数据库
                     CollectionHelper.mergeIntoLocal(collections, false)
                 }
 
-                showToastCompat("导入成功！")
+                showToastCompat(i18n(CommonString.collect_import_success))
             }
         )
     }

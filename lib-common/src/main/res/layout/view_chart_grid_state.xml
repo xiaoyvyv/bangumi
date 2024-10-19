@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_grid_state"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/ui_size_6"
-        android:text="0"
+        tools:text="0"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnPrimarySurface"
         android:textStyle="bold" />
@@ -28,7 +29,7 @@
         android:id="@+id/tv_value1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="收藏"
+        android:text="@string/collect_title"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnPrimarySurface"
         android:textStyle="bold" />

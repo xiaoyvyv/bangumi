@@ -16,24 +16,28 @@ class JsonAuthInterceptor : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
+        val throwable = runCatching {
+            val request = chain.request()
 
-        // 不包含 BGM 的直接通过
-        if (request.url.toString().contains(BgmApiManager.URL_BASE_API).not()) {
-            return chain.proceed(request)
-        }
+            // 不包含 BGM 的直接通过
+            if (request.url.toString().contains(BgmApiManager.URL_BASE_API).not()) {
+                return chain.proceed(request)
+            }
 
-        // Bgm Token 为空直接跳过
-        val accessToken = UserTokenHelper.authToken.accessToken
-        if (accessToken.isNullOrBlank()) {
-            return chain.proceed(request)
-        }
+            // Bgm Token 为空直接跳过
+            val accessToken = UserTokenHelper.authToken.accessToken
+            if (accessToken.isNullOrBlank()) {
+                return chain.proceed(request)
+            }
 
-        return chain.proceed(
-            request
-                .newBuilder()
-                .addHeader("Authorization", "Bearer $accessToken")
-                .build()
-        )
+            return chain.proceed(
+                request
+                    .newBuilder()
+                    .addHeader("Authorization", "Bearer $accessToken")
+                    .build()
+            )
+        }.exceptionOrNull()
+
+        throw IOException(throwable)
     }
 }

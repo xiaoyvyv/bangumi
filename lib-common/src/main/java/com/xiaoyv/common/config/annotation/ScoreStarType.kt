@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.IntDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [ScoreStarType]
@@ -38,17 +40,18 @@ annotation class ScoreStarType {
 
         fun string(@ScoreStarType type: Int): String {
             return when (type) {
-                TYPE_1 -> "不忍直视（1）"
-                TYPE_2 -> "很差（2）"
-                TYPE_3 -> "差（3）"
-                TYPE_4 -> "较差（4）"
-                TYPE_5 -> "不过不失（5）"
-                TYPE_6 -> "还行（6）"
-                TYPE_7 -> "推荐（7）"
-                TYPE_8 -> "力荐（8）"
-                TYPE_9 -> "神作（9）"
-                TYPE_10 -> "超神作（10）"
-                else -> "未评分"
+                TYPE_1 -> i18n(CommonString.type_score_1)
+                TYPE_2 -> i18n(CommonString.type_score_2)
+                TYPE_3 -> i18n(CommonString.type_score_3)
+                TYPE_4 -> i18n(CommonString.type_score_4)
+                TYPE_5 -> i18n(CommonString.type_score_5)
+                TYPE_6 -> i18n(CommonString.type_score_6)
+                TYPE_7 -> i18n(CommonString.type_score_7)
+                TYPE_8 -> i18n(CommonString.type_score_8)
+                TYPE_9 -> i18n(CommonString.type_score_9)
+                TYPE_10 -> i18n(CommonString.type_score_10)
+                else -> i18n(CommonString.type_score_unset)
+
             }
         }
     }

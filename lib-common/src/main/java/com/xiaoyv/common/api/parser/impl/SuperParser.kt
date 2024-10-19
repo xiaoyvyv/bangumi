@@ -10,7 +10,9 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TopicTimeType
 import com.xiaoyv.common.config.annotation.TopicType
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.groupValueOne
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.kts.orEmpty
 import com.xiaoyv.widget.kts.subListLimit
 import org.jsoup.nodes.Document
@@ -48,10 +50,10 @@ fun Document.parserSuperTopic(): List<SuperTopicEntity> {
                 entity.topicType = "/topic/(.*?)/".toRegex().groupValueOne(titleLink)
 
                 if (entity.topicType == TopicType.TYPE_CRT) {
-                    entity.attachTitle = "虚拟人物"
+                    entity.attachTitle = i18n(CommonString.type_topic_crt)
                 }
                 if (entity.topicType == TopicType.TYPE_PERSON) {
-                    entity.attachTitle = "现实人物"
+                    entity.attachTitle = i18n(CommonString.type_topic_person)
                 }
             }
         }

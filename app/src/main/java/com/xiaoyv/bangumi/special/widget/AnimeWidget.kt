@@ -12,6 +12,8 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.common.R
 import com.xiaoyv.common.api.response.api.ApiCalendarEntity
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.kts.getParcelObj
 
 
@@ -30,7 +32,10 @@ class AnimeWidget : AppWidgetProvider() {
 
             ACTION_CLICK_REFRESH -> {
                 AnimeWidgetDataService.refresh()
-                Toast.makeText(context, "已刷新！", Toast.LENGTH_SHORT).show()
+
+                Toast
+                    .makeText(context, i18n(CommonString.app_widget_refreshed), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
         super.onReceive(context, intent)

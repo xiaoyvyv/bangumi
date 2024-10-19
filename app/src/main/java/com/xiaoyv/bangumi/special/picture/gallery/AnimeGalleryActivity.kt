@@ -17,6 +17,8 @@ import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.activity
 import com.xiaoyv.common.api.response.GalleryEntity
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -39,7 +41,8 @@ class AnimeGalleryActivity : BaseListActivity<GalleryEntity, AnimeGalleryViewMod
     }
 
     override val toolbarTitle: String
-        get() = if (viewModel.isPreviewSubject) "条目预览" else "Anime-Pictures"
+        get() = if (viewModel.isPreviewSubject) i18n(CommonString.anime_gallery_subject)
+        else i18n(CommonString.anime_gallery_ap)
 
     override val isOnlyOnePage: Boolean
         get() = false
@@ -67,7 +70,7 @@ class AnimeGalleryActivity : BaseListActivity<GalleryEntity, AnimeGalleryViewMod
             }
         }
     }
-    
+
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<GalleryEntity, *> {
         return AnimeGalleryAdapter(viewModel.isPreviewSubject)
     }
@@ -82,12 +85,12 @@ class AnimeGalleryActivity : BaseListActivity<GalleryEntity, AnimeGalleryViewMod
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (!viewModel.isPreviewSubject) menu.add("Help")
+        if (!viewModel.isPreviewSubject) menu.add(i18n(CommonString.common_help))
             .setIcon(CommonDrawable.ic_notifications)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "列表显示的缩略图，滑动停止时才会开始加载图片，点击可以查看大图。\n\n数据来源：anime-pictures.net",
+                    message = i18n(CommonString.anime_gallery_about),
                     cancelText = null
                 )
                 true

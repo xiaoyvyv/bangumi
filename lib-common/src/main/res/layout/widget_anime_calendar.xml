@@ -14,11 +14,10 @@
         android:background="#7F000000"
         android:paddingHorizontal="@dimen/ui_size_12"
         android:paddingVertical="@dimen/ui_size_12"
-        android:text="每日放送"
+        android:text="@string/calendar_title"
         android:textColor="?android:textColorPrimaryInverse"
         android:textSize="@dimen/ui_font_14"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_update"
@@ -30,10 +29,10 @@
         android:alpha="0.9"
         android:gravity="center"
         android:paddingHorizontal="@dimen/ui_size_12"
-        android:text="每天更新，点击刷新"
+        android:text="@string/calendar_update_every_day"
         android:textColor="?android:textColorPrimaryInverse"
         android:textSize="@dimen/ui_font_10"
-        tools:ignore="HardcodedText" />
+        tools:ignore="RelativeOverlap" />
 
     <ListView
         android:id="@+id/lv_item"

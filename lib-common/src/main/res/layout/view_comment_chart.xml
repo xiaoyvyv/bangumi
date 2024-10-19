@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/ui_layout_margin"
     app:layout_constraintBottom_toBottomOf="parent"
+    tools:ignore="HardcodedText"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <ProgressBar

@@ -15,7 +15,9 @@ import com.xiaoyv.common.api.parser.parserLikeParam
 import com.xiaoyv.common.api.parser.preHandleHtml
 import com.xiaoyv.common.api.parser.requireNoError
 import com.xiaoyv.common.config.annotation.BgmPathType
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.groupValueOne
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.kts.useNotNull
 import org.jsoup.nodes.Element
 import java.io.StringReader
@@ -39,7 +41,7 @@ fun Element.parserTopic(topicId: String): TopicDetailEntity {
 
     // 关联的讨论条目
     entity.related = select("#pageHeader").let { item ->
-        val related = SampleRelatedEntity(title = "关联的讨论")
+        val related = SampleRelatedEntity(title = i18n(CommonString.parse_relation_topic))
         val relatedItem = SampleRelatedEntity.Item()
         val a = item.select("a")
         useNotNull(a.firstOrNull()) {
@@ -154,7 +156,7 @@ fun Element.parserTopicIndex(indexId: String): TopicDetailEntity {
     entity.time = infoBox.select(".tip_j .tip").firstOrNull()?.text().orEmpty()
     entity.content = infoBox.select(".line_detail .tip").html()
 
-    val related = SampleRelatedEntity(title = "关联的目录")
+    val related = SampleRelatedEntity(title = i18n(CommonString.parse_relation_index))
     val relatedItem = SampleRelatedEntity.Item()
     relatedItem.image = infoBox.select("img.avatar").attr("src").optImageUrl()
     relatedItem.title = entity.title

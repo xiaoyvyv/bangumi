@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [MediaType]
@@ -28,13 +30,13 @@ annotation class MediaType {
 
         fun action(@MediaType mediaType: String): String {
             return when (mediaType) {
-                TYPE_UNKNOWN -> "看"
-                TYPE_ANIME -> "看"
-                TYPE_BOOK -> "读"
-                TYPE_MUSIC -> "听"
-                TYPE_GAME -> "玩"
-                TYPE_REAL -> "看"
-                else -> "看"
+                TYPE_UNKNOWN -> i18n(CommonString.type_action_see)
+                TYPE_ANIME -> i18n(CommonString.type_action_see)
+                TYPE_BOOK -> i18n(CommonString.type_action_read)
+                TYPE_MUSIC -> i18n(CommonString.type_action_listen)
+                TYPE_GAME -> i18n(CommonString.type_action_play)
+                TYPE_REAL -> i18n(CommonString.type_action_see)
+                else -> i18n(CommonString.type_action_see)
             }
         }
 

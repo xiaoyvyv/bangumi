@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title="豆哔收藏导入" />
+            app:title="@string/syncer_title" />
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 
     <com.xiaoyv.common.widget.scroll.AnimeNestedScrollView
@@ -59,14 +59,14 @@
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="哔哩" />
+                    android:text="@string/syncer_bilibili" />
 
                 <com.xiaoyv.common.widget.button.AnimeButton
                     android:id="@+id/btn_d"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="豆瓣" />
+                    android:text="@string/syncer_dou_ban" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -87,12 +87,12 @@
                     android:background="@drawable/shape_full_corner"
                     android:backgroundTint="?attr/colorSurfaceContainer"
                     android:gravity="top"
+                    android:hint="@string/syncer_bilibili_id"
                     android:inputType="text"
                     android:maxLines="1"
                     android:paddingVertical="@dimen/ui_size_12"
                     android:paddingStart="@dimen/ui_size_24"
-                    android:paddingEnd="@dimen/ui_size_24"
-                    tools:hint="哔哩哔哩ID" />
+                    android:paddingEnd="@dimen/ui_size_24" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.xiaoyv.common.widget.text.AnimeTextView
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ui_layout_margin"
                 android:lineSpacingMultiplier="1.25"
-                android:text="此功能可以快速将你在豆瓣或哔哩的收藏同步到BGM，包括在看状态以及评分等内容，并且会过滤掉你已经收藏过的条目，由于收录原因，部分条目在BGM内不存在的将不会同步！\n\n哔哩同步时，请开启公开访问追番。"
+                android:text="@string/syncer_desc"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@+id/tl_b" />
@@ -114,7 +114,7 @@
                 android:enabled="false"
                 android:gravity="center"
                 android:paddingVertical="@dimen/ui_size_12"
-                android:text="同步，启动！"
+                android:text="@string/syncer_start"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_tip" />
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/ui_size_24"
                 android:paddingBottom="@dimen/ui_layout_margin"
-                android:text="索引数据库：未安装"
+                android:text="@string/syncer_database_not_install"
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +135,7 @@
                 android:id="@+id/tv_bgm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="获取你班收藏"
+                android:text="@string/syncer_bgm_data"
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
@@ -156,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ui_layout_margin"
-                android:text="加载平台收藏"
+                android:text="@string/syncer_platform_data"
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
@@ -177,7 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ui_layout_margin"
-                android:text="加载平台收藏"
+                android:text="@string/syncer_platform_data"
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
@@ -198,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ui_layout_margin"
-                android:text="加载平台收藏"
+                android:text="@string/syncer_platform_data"
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"

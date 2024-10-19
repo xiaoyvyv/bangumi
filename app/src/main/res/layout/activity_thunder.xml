@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/Theme.Bangumi.PopupOverlay"
-            app:title="下载管理" />
+            app:title="@string/download_title" />
 
     </com.xiaoyv.common.widget.appbar.AnimeAppBarLayout>
 

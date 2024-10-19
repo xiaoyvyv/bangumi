@@ -15,9 +15,11 @@ import com.blankj.utilcode.util.EncodeUtils
 import com.blankj.utilcode.util.ResourceUtils
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.request.EmojiParam
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.groupValue
 import com.xiaoyv.common.kts.groupValueOne
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.emoji.BgmEmoji
 import com.xiaoyv.widget.kts.spi
 import org.jsoup.nodes.Element
@@ -203,7 +205,7 @@ fun String?.parserSignBackground(): String {
 @Throws(IllegalArgumentException::class)
 fun <T : Element> T.selectLegal(selector: String): Elements {
     val elements = select(selector)
-    require(elements.isNotEmpty()) { "Bangumi娘：报告数据不不见了" }
+    require(elements.isNotEmpty()) { i18n(CommonString.parse_data_none) }
     return elements
 }
 
@@ -250,7 +252,7 @@ fun Elements.parseStar(): Float {
 fun <T : Element> T.requireNoError() {
     val errorMsg = select("#colunmNotice .text").text().trim()
     if (errorMsg.isNotBlank()) {
-        throw IllegalArgumentException(errorMsg.ifBlank { "Bangumi娘：报告数据出错啦" })
+        throw IllegalArgumentException(errorMsg.ifBlank { i18n(CommonString.parse_data_none) })
     }
 }
 
@@ -313,7 +315,11 @@ fun String.parserImage(): String {
 fun Elements.parserUserCollectTitle(): String {
     return text().replace("/", "").trim().let {
         val typeName = it.substringAfterLast("的")
-        if (it.contains("我的")) it else "Ta 的$typeName"
+        if (it.contains("我的")) {
+            i18n(CommonString.parse_mine_x, typeName)
+        } else {
+            i18n(CommonString.parse_them_x, typeName)
+        }
     }
 }
 

@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [TopicType]
@@ -30,13 +32,13 @@ annotation class TopicType {
 
         fun string(@TopicType type: String): String {
             return when (type) {
-                TYPE_EP -> "条目章节"
-                TYPE_GROUP -> "小组话题"
-                TYPE_PERSON -> "现实人物"
-                TYPE_CRT -> "虚拟人物"
-                TYPE_SUBJECT -> "条目话题"
-                TYPE_INDEX -> "目录"
-                else -> "未知"
+                TYPE_EP -> i18n(CommonString.type_topic_ep)
+                TYPE_GROUP -> i18n(CommonString.type_topic_group)
+                TYPE_PERSON -> i18n(CommonString.type_topic_person)
+                TYPE_CRT -> i18n(CommonString.type_topic_crt)
+                TYPE_SUBJECT -> i18n(CommonString.type_topic_subject)
+                TYPE_INDEX -> i18n(CommonString.type_topic_index)
+                else -> i18n(CommonString.type_unknown)
             }
         }
     }

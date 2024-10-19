@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.IntDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [SubjectType]
@@ -28,12 +30,12 @@ annotation class SubjectType {
 
         fun string(@SubjectType type: Int?): String {
             return when (type) {
-                TYPE_BOOK -> "书籍"
-                TYPE_ANIME -> "动画"
-                TYPE_MUSIC -> "音乐"
-                TYPE_GAME -> "游戏"
-                TYPE_REAL -> "三次元"
-                else -> "其它"
+                TYPE_BOOK -> i18n(CommonString.common_book)
+                TYPE_ANIME -> i18n(CommonString.common_anime)
+                TYPE_MUSIC -> i18n(CommonString.common_music)
+                TYPE_GAME -> i18n(CommonString.common_game)
+                TYPE_REAL -> i18n(CommonString.common_real)
+                else -> i18n(CommonString.common_other)
             }
         }
     }

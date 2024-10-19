@@ -16,6 +16,8 @@ import com.xiaoyv.common.config.annotation.LocalCollectionType
 import com.xiaoyv.common.database.collection.Collection
 import com.xiaoyv.common.helper.CollectionHelper
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
@@ -42,9 +44,9 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
 
     override val toolbarTitle: String
         get() = when (viewModel.type) {
-            LocalCollectionType.TYPE_BLOG -> "我收藏的日志"
-            LocalCollectionType.TYPE_TOPIC -> "我收藏的话题"
-            else -> "我的收藏"
+            LocalCollectionType.TYPE_BLOG -> i18n(CommonString.collect_data_blog)
+            LocalCollectionType.TYPE_TOPIC -> i18n(CommonString.collect_data_topic)
+            else -> i18n(CommonString.collect_data)
         }
 
     override fun initIntentData(intent: Intent, bundle: Bundle, isNewIntent: Boolean) {
@@ -63,8 +65,8 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
                 adapter.getItem(position) ?: return@addOnItemChildLongClickListener true
 
             requireActivity.showConfirmDialog(
-                title = "删除",
-                message = "是否删除该收藏？",
+                title = i18n(CommonString.collect_cancel_title),
+                message = i18n(CommonString.collect_cancel_message),
                 onConfirmClick = {
                     viewModel.deleteCollection(collection)
                 }
@@ -78,12 +80,14 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "application/json"
             shareIntent.putExtra(Intent.EXTRA_STREAM, it)
-            ActivityUtils.startActivity(Intent.createChooser(shareIntent, "收藏数据导出"))
+            ActivityUtils.startActivity(
+                Intent.createChooser(shareIntent, i18n(CommonString.collect_export))
+            )
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("同步合并远程数据")
+        menu.add(i18n(CommonString.collect_merge_remote))
             .setIcon(CommonDrawable.ic_sync_cloud)
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener {
@@ -99,7 +103,7 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
                 true
             }
 
-        menu.add("覆盖远程数据")
+        menu.add(i18n(CommonString.collect_override_remote))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 if (!CollectionHelper.isEnable) {
@@ -114,7 +118,7 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
                 true
             }
 
-        menu.add("导入")
+        menu.add(i18n(CommonString.collect_import))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 pickFile.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -124,14 +128,14 @@ class CollectionActivity : BaseListActivity<Collection, CollectionViewModel>() {
                 true
             }
 
-        menu.add("导出")
+        menu.add(i18n(CommonString.collect_export_title))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 viewModel.exportData()
                 true
             }
 
-        menu.add("配置")
+        menu.add(i18n(CommonString.collect_config))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 RouteHelper.jumpConfigNetwork()

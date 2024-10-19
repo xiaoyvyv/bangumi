@@ -22,6 +22,8 @@ import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.SearchCatType
 import com.xiaoyv.common.databinding.ViewSearchMediaFilterBinding
 import com.xiaoyv.common.kts.CommonId
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.callback.setOnFastLimitClickListener
@@ -96,8 +98,11 @@ class SearchMediaFragment : BaseListFragment<SearchResultEntity, SearchMediaView
         // 类别切换
         filterBinding.typeMode.setOnFastLimitClickListener {
             requireActivity().showOptionsDialog(
-                title = "匹配模式",
-                items = listOf("模糊匹配", "精准匹配"),
+                title = i18n(CommonString.search_match_mode),
+                items = listOf(
+                    i18n(CommonString.search_match_m),
+                    i18n(CommonString.search_match_e)
+                ),
                 onItemClick = { _, position ->
                     viewModel.isLegacy.value = position == 1
                     viewModel.refresh()
@@ -143,9 +148,9 @@ class SearchMediaFragment : BaseListFragment<SearchResultEntity, SearchMediaView
 
         viewModel.isLegacy.observe(this) {
             if (it == true) {
-                filterBinding.typeMode.text = "精准匹配"
+                filterBinding.typeMode.text = i18n(CommonString.search_match_e)
             } else {
-                filterBinding.typeMode.text = "模糊匹配"
+                filterBinding.typeMode.text = i18n(CommonString.search_match_m)
             }
         }
 

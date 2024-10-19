@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.effective.android.panel.view.PanelSwitchLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/panel_switch_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:android11KeyboardFeature="false"
-    app:animationSpeed="standard"
-    tools:ignore="HardcodedText">
+    app:animationSpeed="standard">
 
     <!-- 内容区域 -->
     <com.effective.android.panel.view.content.FrameContentContainer
@@ -53,7 +51,7 @@
                     android:background="@drawable/ui_shape_rectangle_corner_6"
                     android:backgroundTint="?attr/colorSurfaceContainer"
                     android:gravity="start|top"
-                    android:hint="请输入回复内容..."
+                    android:hint="@string/reply_comment_hint"
                     android:lineSpacingMultiplier="1.25"
                     android:maxLines="10"
                     android:minLines="3"
@@ -132,7 +130,7 @@
                 android:layout_marginEnd="@dimen/ui_size_16"
                 android:enabled="false"
                 android:padding="@dimen/ui_size_0"
-                android:text="发送"
+                android:text="@string/reply_comment_send"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 app:layout_constraintBottom_toBottomOf="@+id/menu_image"
                 app:layout_constraintEnd_toEndOf="parent"

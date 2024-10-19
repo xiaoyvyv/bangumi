@@ -89,6 +89,7 @@ dependencies {
     api(libs.androidx.activity)
     api(libs.androidx.fragment.ktx)
     api(libs.persistent.cookie.jar)
+    api("com.github.DSAppTeam:PanelSwitchHelper:v1.5.12")
 
     api(libs.androidx.work.runtime.ktx)
     api(libs.subsampling.scale.image.view.androidx)

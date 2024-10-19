@@ -7,9 +7,11 @@ import com.xiaoyv.blueprint.kts.launchUI
 import com.xiaoyv.common.BuildConfig
 import com.xiaoyv.common.api.BgmApiManager
 import com.xiaoyv.common.api.response.GithubActionEntity
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
 import com.xiaoyv.common.kts.openInBrowser
 import com.xiaoyv.common.kts.showConfirmDialog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.widget.kts.errorMsg
 import com.xiaoyv.widget.kts.showToastCompat
 import kotlinx.coroutines.Dispatchers
@@ -68,10 +70,10 @@ object UpdateHelper {
                 val workId = artifact.workflowRun?.id
 
                 activity.showConfirmDialog(
-                    title = "检测到 Action 更新",
-                    message = "检测到有新的 Action 版本（$workId），是否下载更新？",
-                    confirmText = "下载",
-                    neutralText = "查看详情",
+                    title = i18n(CommonString.update_dialog_action_title),
+                    message = i18n(CommonString.update_dialog_action_message, workId),
+                    confirmText = i18n(CommonString.update_dialog_download),
+                    neutralText = i18n(CommonString.update_dialog_detail),
                     cancelable = false,
                     onNeutralClick = {
                         openInBrowser("https://github.com/xiaoyvyv/bangumi/actions/runs/$workId")
@@ -116,23 +118,23 @@ object UpdateHelper {
                 }
 
                 val tagName = entity.tagName.orEmpty()
-                require(tagName.isNotBlank()) { "暂无更新包发布" }
+                require(tagName.isNotBlank()) { i18n(CommonString.update_none) }
 
                 val versionName = AppUtils.getAppVersionName()
                 val tagVersionName = tagName.removePrefix("v").trim()
-                require(versionName != tagVersionName) { "当前已经是最新版" }
+                require(versionName != tagVersionName) { i18n(CommonString.update_newest) }
 
                 val assets = entity.assets.orEmpty().firstOrNull {
                     it.contentType == "application/vnd.android.package-archive"
                             || it.browserDownloadUrl.orEmpty().endsWith(".apk", true)
                 }
-                requireNotNull(assets) { "暂无更新包发布" }
+                requireNotNull(assets) { i18n(CommonString.update_none) }
 
                 activity.showConfirmDialog(
-                    title = "检测到更新",
-                    message = "检测到有新版本（${entity.tagName}），是否下载更新？",
-                    confirmText = "下载",
-                    neutralText = "查看详情",
+                    title = i18n(CommonString.update_dialog_title),
+                    message = i18n(CommonString.update_dialog_message, entity.tagName.orEmpty()),
+                    confirmText = i18n(CommonString.update_dialog_download),
+                    neutralText = i18n(CommonString.update_dialog_detail),
                     cancelable = false,
                     onNeutralClick = {
                         openInBrowser(entity.htmlUrl.orEmpty())

@@ -18,7 +18,9 @@ import com.xiaoyv.common.api.parser.styleBackground
 import com.xiaoyv.common.config.annotation.BgmPathType
 import com.xiaoyv.common.config.annotation.TimelineAdapterType
 import com.xiaoyv.common.helper.UserHelper
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.groupValueOne
+import com.xiaoyv.common.kts.i18n
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -207,7 +209,7 @@ private fun Elements.fetchHtmlTitle(): CharSequence {
         }
         infoUserActionText += node.toString()
     }
-    if (infoUserActionText.isBlank()) infoUserActionText = "时间线"
+    if (infoUserActionText.isBlank()) infoUserActionText = i18n(CommonString.parse_timeline)
     return infoUserActionText.parseHtml()
 }
 

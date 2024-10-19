@@ -10,6 +10,26 @@
     <string name="common_empty_tip">ごめん，暂时没有数据呢</string>
     <string name="common_search">搜索</string>
     <string name="common_filter">过滤</string>
+    <string name="common_copy_success">复制成功</string>
+    <string name="common_input_hint">输入内容...</string>
+    <string name="common_share">分享</string>
+    <string name="common_copy_link">复制链接</string>
+    <string name="common_open_browser">在浏览器中打开</string>
+    <string name="common_anime">动画</string>
+    <string name="common_book">书籍</string>
+    <string name="common_music">音乐</string>
+    <string name="common_game">游戏</string>
+    <string name="common_real">三次元</string>
+    <string name="common_drama">舞台剧</string>
+    <string name="common_movie">影视</string>
+    <string name="common_other">其它</string>
+    <string name="common_mono">人物</string>
+    <string name="common_all">全部</string>
+    <string name="common_login_first">请先登录后才能继续进行</string>
+    <string name="common_more_tag">更多 &gt;&gt;</string>
+    <string name="common_input_right_link">请输入正确的链接</string>
+    <string name="common_kind">类型</string>
+    <string name="common_help">帮助</string>
 
     <!-- 标题 TAB -->
     <string name="title_discover">发现</string>
@@ -56,6 +76,7 @@
     <string name="calendar_title">每日放送</string>
     <string name="calendar_today_title">今日放送</string>
     <string name="calendar_tomorrow_title">明日放送</string>
+    <string name="calendar_update_every_day">每天更新，点击刷新</string>
 
     <!-- 排行榜页面 -->
     <string name="media_title">媒体排行</string>
@@ -68,12 +89,49 @@
     <string name="super_title">超展开</string>
 
     <!-- 后台服务 -->
-    <string name="foreground_notification_channel_name">Foreground service notification</string>
-    <string name="foreground_notification_title">%s keep running</string>
-    <string name="foreground_notification_text">Click to enter the main page</string>
+    <string name="foreground_notification_channel_name">前台服务通知</string>
+    <string name="foreground_notification_title">%s 个正在运行</string>
+    <string name="foreground_notification_text">点击进入主页</string>
 
     <!-- 个人信息页面 -->
     <string name="edit_profile_title">编辑个人信息</string>
+
+    <!-- 同步功能页面 -->
+    <string name="syncer_title">豆哔收藏导入</string>
+    <string name="syncer_bilibili">哔哩</string>
+    <string name="syncer_dou_ban">豆瓣</string>
+    <string name="syncer_desc">此功能可以快速将你在豆瓣或哔哩的收藏同步到BGM，包括在看状态以及评分等内容，并且会过滤掉你已经收藏过的条目，由于收录原因，部分条目在BGM内不存在的将不会同步！\n\n哔哩同步时，请开启公开访问追番。</string>
+    <string name="syncer_start">同步，启动！</string>
+    <string name="syncer_database_install">安装索引数据库</string>
+    <string name="syncer_database_download">下载索引数据库</string>
+    <string name="syncer_database_not_install">索引数据库：未安装</string>
+    <string name="syncer_database_installed">索引数据库：已安装</string>
+    <string name="syncer_bgm_data">获取你班收藏</string>
+    <string name="syncer_bgm_data_format">获取你班收藏：%d/%d</string>
+    <string name="syncer_platform_data">加载平台收藏</string>
+    <string name="syncer_platform_data_format_wish">%s想看条目：%d/%d</string>
+    <string name="syncer_platform_data_format_doing">%s在看条目：%d/%d</string>
+    <string name="syncer_platform_data_format_done">%s看过条目：%d/%d</string>
+    <string name="syncer_bilibili_title">哔哩哔哩同步</string>
+    <string name="syncer_bilibili_id">请输入哔哩哔哩 ID</string>
+    <string name="syncer_dou_ban_title">豆瓣同步</string>
+    <string name="syncer_dou_ban_id">请输入豆瓣 ID</string>
+    <string name="syncer_loading">正在载入收藏，请勿退出该页面！</string>
+    <string name="syncer_config">查看短链ID，请在浏览器打开短链后，复制链接中的原始ID。\n\nB站追番同步，请在APP设置内暂时公开追番隐私权限。\n\n哔哩哔哩权限配置路径：设置-&gt;安全隐私-&gt;空间隐私设置-&gt;公开我的追番</string>
+    <string name="syncer_list">待同步条目列表</string>
+    <string name="syncer_list_item">条目</string>
+    <string name="syncer_list_start">开始同步</string>
+    <string name="syncer_list_empty">没有内容？</string>
+    <string name="syncer_list_empty_reason">如果当前页面显示为空，可能是以下情况：\n\n1、当前你的 BGM 收藏已经包含全部条目。\n2、你在其它平台收藏的条目，BGM 未收录。</string>
+    <string name="syncer_list_pref">速度优化</string>
+    <string name="syncer_list_pref_reason">如果你在该页面长时间处于加载状态，请返回前一页，在右上角菜单下载并导入索引数据库</string>
+    <string name="syncer_list_success">条目同步完成</string>
+    <string name="syncer_progress">同步进度</string>
+    <string name="syncer_progress_running">正在同步...</string>
+    <string name="syncer_progress_finish">已同步：%s</string>
+    <string name="syncer_progress_total">全部：%s</string>
+    <string name="syncer_progress_current">正在同步：%s</string>
+    <string name="syncer_error">同步失败：%s</string>
 
     <!-- 发布页面 -->
     <string name="post_result_known">知道了</string>
@@ -83,11 +141,25 @@
     <string name="anime_gallery_action_save">保存</string>
     <string name="anime_gallery_action_share">分享</string>
     <string name="anime_gallery_action_wallpaper">设置为壁纸</string>
+    <string name="anime_gallery_subject">条目预览</string>
+    <string name="anime_gallery_ap">Anime-Pictures</string>
+    <string name="anime_gallery_about">列表显示的缩略图，滑动停止时才会开始加载图片，点击可以查看大图。\n\n数据来源：anime-pictures.net</string>
 
     <!-- MAGI 页面 -->
     <string name="magi_title">Magi 问答</string>
 
-    <!-- 搜索页面 -->
+    <!-- 字幕工具页面 -->
+    <string name="subtitle_title">字幕工具</string>
+    <string name="subtitle_count">内挂 %d 组字幕</string>
+    <string name="subtitle_export">导出字幕文件</string>
+    <string name="subtitle_translate_progress">翻译进度：%d/%d, %.2f%%</string>
+    <string name="subtitle_dialog_title">字幕：%s</string>
+    <string name="subtitle_dialog_menu_export">分享导出</string>
+    <string name="subtitle_dialog_menu_copy">复制内容</string>
+    <string name="subtitle_dialog_menu_translate">一键翻译</string>
+    <string name="subtitle_none">当前文件没有内挂任何字幕</string>
+
+    <!-- 番剧识别相关页面 -->
     <string name="anime_search_title">番剧截图搜索出处</string>
     <string name="anime_search_desc">选取番剧原始比例截图搜索来源，仅支持番剧完整截图</string>
     <string name="anime_search_subtitle">上传番剧截取图片</string>
@@ -95,6 +167,15 @@
     <string name="anime_search_upload_limit">文件大小限制为 25MB</string>
     <string name="anime_search_upload_btn">点击上传</string>
     <string name="anime_search_result_title">番剧来源搜索结果</string>
+    <string name="anime_search_result_ep">话数: %s</string>
+    <string name="anime_search_result_sim">相似度: %.2f%%</string>
+
+    <!-- 全局搜索相关 -->
+    <string name="search_sort_relation">相关度排序</string>
+    <string name="search_sort_date">时间排序</string>
+    <string name="search_match_mode">匹配模式</string>
+    <string name="search_match_m">模糊匹配</string>
+    <string name="search_match_e">精准匹配</string>
 
     <!-- 以图识人页面 -->
     <string name="anime_character_title">动漫图片人物识别</string>
@@ -108,18 +189,225 @@
     <string name="anime_character_result_copy">复制结果</string>
     <string name="anime_character_result_bing">Bing 搜索</string>
     <string name="anime_search_engine">搜索引擎来自于：%s</string>
+    <string name="anime_character_select_model">请选选择一个识别模型</string>
     <string name="detect_failed">识别失败，请选择其它图片重试!</string>
+    <string name="detect_model">识别模型</string>
+    <string name="detect_model_anime">动漫模型-默认</string>
+    <string name="detect_model_anime1">动漫模型-高准确率1</string>
+    <string name="detect_model_anime2">动漫模型-高准确率2</string>
+    <string name="detect_model_gal">GalGame模型-默认</string>
+    <string name="detect_model_gal1">GalGame模型-高准确率1</string>
 
     <!-- 每日放送小组件 -->
     <string name="app_widget_description">每日放送小组件，每天更新</string>
+    <string name="app_widget_refreshed">已刷新！</string>
+    <string name="app_widget_first_play">首播：</string>
+    <string name="app_widget_peer_week">每周</string>
 
     <!-- 新番页面 -->
     <string name="yuc_title">新番</string>
 
     <!-- 蜜柑计划 -->
     <string name="mikan_title">蜜柑计划-RSS</string>
+    <string name="mikan_resource_detail">资源详情</string>
+    <string name="mikan_resource_copy_link">复制磁链</string>
+    <string name="mikan_resource_copy_from">复制发布来源</string>
+    <string name="mikan_resource_open_way">打开方式</string>
+    <string name="mikan_resource_preview">磁链资源预览</string>
+    <string name="mikan_about">此资源仅供学习交流使用，下载后请在24小时内删除！\n\n压制组：%s\n数据来源：mikanani.me</string>
 
     <!-- 下载相关 -->
     <string name="download_title">下载中心</string>
     <string name="download_dialog_title">资源下载</string>
+    <string name="download_dialog_input">请输入下载链接开始下载</string>
+    <string name="download_dialog_input_hint">支持下载：Magnet、HTTP、HTTPS、BT、FTP、Thunder 等...</string>
+    <string name="download_running">下载中</string>
+    <string name="download_finish">已下载</string>
+    <string name="download_support_scheme">支持下载的链接 Scheme：%s</string>
+    <string name="download_magnet_error">磁力链接解析失败！</string>
+    <string name="download_add">添加</string>
+    <string name="download_not_arm">下载器仅支持 arm 平台！</string>
+    <string name="download_torrent_title">种子：%s</string>
+    <string name="download_torrent_root">种子根目录</string>
+
+    <!-- 评论回复 -->
+    <string name="reply_comment_hint">请输入回复内容...</string>
+    <string name="reply_comment_send">发送</string>
+
+    <!-- 收藏服务 -->
+    <string name="collect_title">收藏</string>
+    <string name="collect_blog_success">收藏日志成功</string>
+    <string name="collect_topic_success">收藏话题成功</string>
+    <string name="collect_token_error">Token 无效或过期，请重新配置</string>
+    <string name="collect_config_github">请先配置 Github 同步仓库</string>
+    <string name="collect_update_commit">收藏更新</string>
+    <string name="collect_sync_success">同步成功</string>
+    <string name="collect_data">我的收藏</string>
+    <string name="collect_data_blog">我收藏的日志</string>
+    <string name="collect_data_topic">我收藏的话题</string>
+    <string name="collect_cancel_title">删除收藏</string>
+    <string name="collect_cancel_message">是否删除该收藏？</string>
+    <string name="collect_cancel">取消收藏成功</string>
+    <string name="collect_export_title">收藏数据导出</string>
+    <string name="collect_merge_remote">同步合并远程数据</string>
+    <string name="collect_override_remote">覆盖远程数据</string>
+    <string name="collect_import">导入</string>
+    <string name="collect_export">导出</string>
+    <string name="collect_config">配置</string>
+    <string name="collect_not_support">导入文件格式不支持，请使用该软件导出的文件数据</string>
+    <string name="collect_import_success">导入成功！</string>
+
+    <!-- 目录页面 -->
+    <string name="index_my_create">我创建的</string>
+    <string name="index_my_collection">我收藏的</string>
+
+    <!-- 更新服务 -->
+    <string name="update_none">暂无更新包发布</string>
+    <string name="update_newest">当前已经是最新版</string>
+    <string name="update_dialog_title">检测到更新</string>
+    <string name="update_dialog_message">检测到有新版本（%s），是否下载更新？</string>
+    <string name="update_dialog_download">下载</string>
+    <string name="update_dialog_detail">查看详情</string>
+    <string name="update_dialog_action_message">检测到有新的 Action 版本（%s），是否下载更新？</string>
+    <string name="update_dialog_action_title">检测到 Action 更新</string>
+
+    <!-- Action 服务 -->
+    <string name="action_block">绝交</string>
+    <string name="action_block_message">确认与该用户绝交？\n绝交后将不再看到用户的所有话题、评论、日志、私信、提醒</string>
+    <string name="action_block_error">绝交失败</string>
+    <string name="action_block_success">绝交成功</string>
+    <string name="action_report">报告疑虑</string>
+    <string name="action_report_success">报告成功</string>
+    <string name="action_report_select_one">请选择一种疑虑类型报告</string>
+    <string name="action_report_menu_ad">广告</string>
+    <string name="action_report_menu_argument">引战</string>
+    <string name="action_report_menu_attack">辱骂、人身攻击</string>
+    <string name="action_report_menu_irrelevant">刷屏、无关内容</string>
+    <string name="action_report_menu_political">政治相关</string>
+    <string name="action_report_menu_illegal">违法信息</string>
+    <string name="action_report_menu_privacy">泄露隐私</string>
+    <string name="action_report_menu_score">涉嫌刷分</string>
+    <string name="action_report_menu_spoiler">剧透</string>
+    <string name="action_report_menu_other">其他</string>
+    <string name="action_report_attach">附加信息</string>
+    <string name="action_report_submit">报告疑虑</string>
+
+    <!-- BBCODE -->
+    <string name="bbcode_holder_b">加粗内容</string>
+    <string name="bbcode_holder_i">斜体内容</string>
+    <string name="bbcode_holder_u">下划线内容</string>
+    <string name="bbcode_holder_s">删除线内容</string>
+    <string name="bbcode_holder_size">字号</string>
+    <string name="bbcode_holder_mask">遮罩内容</string>
+    <string name="bbcode_holder_color">颜色文本内容</string>
+    <string name="bbcode_holder_color_value">色值</string>
+    <string name="bbcode_holder_link">链接地址</string>
+    <string name="bbcode_holder_link_desc">链接描述</string>
+    <string name="bbcode_holder_img">图片链接</string>
+    <string name="bbcode_holder_code">代码内容</string>
+    <string name="bbcode_holder_quote">引用内容</string>
+
+    <!-- 数据库 -->
+    <string name="database_format_error">数据库文件不合法</string>
+
+    <!-- 磁链资源搜索功能 -->
+    <string name="magnet_title">动画资源搜索</string>
+    <string name="magnet_search_hint">搜索番剧资源</string>
+    <string name="magnet_team">来源：%s</string>
+    <string name="magnet_time">时间：%s</string>
+    <string name="magnet_size">大小：%s</string>
+    <string name="magnet_kind">类型：%s</string>
+    <string name="magnet_config_title">完善搜索节点</string>
+    <string name="magnet_config_input_hint">填入搜索节点</string>
+    <string name="magnet_config_desc">Q：为什么需要搜索节点？\nA：Bangumi for Android不提供任何番剧资源的搜索服务，如果需要相关功能，请通过节点从第三方服务获取搜索内容\n\nQ：如何获取第三方资源搜索服务节点？\nA：Bangumi for Android 不提供节点，请自行从网络上搜索相关节点</string>
+    <string name="magnet_config_where">查找第三方资源搜索服务节点</string>
+    <string name="magnet_team_title">字幕组</string>
+    <string name="magnet_config_first">请先配置资源搜索节点</string>
+    <string name="magnet_input_first">请输入关键词搜索资源</string>
+
+    <!-- 网页解析功能 -->
+    <string name="parse_relation">关联的内容</string>
+    <string name="parse_search_not_support">暂不支持搜索该类型</string>
+    <string name="parse_search_tag">标签</string>
+    <string name="parse_search_mono">人物</string>
+    <string name="parse_search_comment">讨论：%s</string>
+    <string name="parse_timeline">时间线</string>
+    <string name="parse_relation_topic">关联的讨论</string>
+    <string name="parse_relation_index">关联的目录</string>
+    <string name="parse_mine_x">我的%s</string>
+    <string name="parse_them_x">Ta 的%s</string>
+    <string name="parse_data_none">Bangumi娘：报告数据不不见了</string>
+
+    <!-- 各个枚举类型名称 -->
+    <string name="type_unknown">未知</string>
+    <string name="type_topic_ep">条目章节</string>
+    <string name="type_topic_group">小组话题</string>
+    <string name="type_topic_person">现实人物</string>
+    <string name="type_topic_crt">虚拟人物</string>
+    <string name="type_topic_subject">条目话题</string>
+    <string name="type_topic_index">目录</string>
+    <string name="type_topic_other">其它</string>
+    <string name="type_path_search_subject">条目查询</string>
+    <string name="type_path_search_mono">人物查询</string>
+    <string name="type_path_search_tag">标签查询</string>
+    <string name="type_path_character">角色</string>
+    <string name="type_path_group">小组</string>
+    <string name="type_path_person">人物</string>
+    <string name="type_path_user">用户</string>
+    <string name="type_path_blog">日志</string>
+    <string name="type_path_topic">话题</string>
+    <string name="type_path_subject">条目</string>
+    <string name="type_path_message_box">短信</string>
+    <string name="type_path_index">目录</string>
+    <string name="type_path_friend">好友</string>
+    <string name="type_path_ep">章节</string>
+    <string name="type_path_timeline">时间线</string>
+    <string name="type_bilibili_wish">想看</string>
+    <string name="type_bilibili_doing">再看</string>
+    <string name="type_bilibili_done">看过</string>
+    <string name="type_bilibili_media_anime">动画</string>
+    <string name="type_bilibili_media_real">影视</string>
+    <string name="type_interest_wish">想%s</string>
+    <string name="type_interest_done">%s过</string>
+    <string name="type_interest_doing">在%s</string>
+    <string name="type_interest_hold">搁置</string>
+    <string name="type_interest_drop">抛弃</string>
+    <string name="type_action_see">看</string>
+    <string name="type_action_read">读</string>
+    <string name="type_action_listen">听</string>
+    <string name="type_action_play">玩</string>
+    <string name="type_feature_unset">未设置</string>
+    <string name="type_feature_dollars">Dollars</string>
+    <string name="type_feature_magi">MAGI</string>
+    <string name="type_feature_syncer">豆哔同步</string>
+    <string name="type_feature_anime_yuc">新番</string>
+    <string name="type_feature_schedule">每日放送</string>
+    <string name="type_feature_almanac">年鉴</string>
+    <string name="type_feature_wiki">WIKI</string>
+    <string name="type_feature_rank">排行榜</string>
+    <string name="type_feature_process">追番进度</string>
+    <string name="type_feature_detect_anime">以图搜番</string>
+    <string name="type_feature_detect_character">以图识人</string>
+    <string name="type_feature_discover">发现</string>
+    <string name="type_feature_profile">我的</string>
+    <string name="type_feature_timeline">时间胶囊</string>
+    <string name="type_feature_rakuen">超展开</string>
+    <string name="type_feature_magnet">搜番资源</string>
+    <string name="type_feature_rank_friend">友评榜</string>
+    <string name="type_mono_query_all">全部</string>
+    <string name="type_mono_query_collect">收藏</string>
+    <string name="type_mono_query_comment">评论</string>
+    <string name="type_mono_query_dateline">时间</string>
+    <string name="type_mono_query_title">名称</string>
+    <string name="type_score_1">不忍直视（1）</string>
+    <string name="type_score_2">很差（2）</string>
+    <string name="type_score_3">差（3）</string>
+    <string name="type_score_4">较差（4）</string>
+    <string name="type_score_5">不过不失（5）</string>
+    <string name="type_score_6">还行（6）</string>
+    <string name="type_score_7">推荐（7）</string>
+    <string name="type_score_8">力荐（8）</string>
+    <string name="type_score_9">神作（9）</string>
+    <string name="type_score_10">超神作（10）</string>
+    <string name="type_score_unset">未评分</string>
 </resources>

@@ -89,7 +89,7 @@ inline fun Context.showOptionsDialog(
  */
 inline fun Context.showInputDialog(
     title: String = StringUtils.getString(CommonString.common_tip),
-    inputHint: String = "输入内容...",
+    inputHint: String = getString(CommonString.common_input_hint),
     maxInput: Int = 1000,
     minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
@@ -134,8 +134,8 @@ inline fun Context.showInputDialog(
  */
 inline fun Context.showInputLine2Dialog(
     title: String = StringUtils.getString(CommonString.common_tip),
-    inputHint1: String = "输入内容...",
-    inputHint2: String = "输入内容...",
+    inputHint1: String = getString(CommonString.common_input_hint),
+    inputHint2: String = getString(CommonString.common_input_hint),
     default1: String = "",
     default2: String = "",
     crossinline onInput: (String, String) -> Unit = { _, _ -> },

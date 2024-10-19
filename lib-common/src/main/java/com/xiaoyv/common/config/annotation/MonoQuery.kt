@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 @StringDef(
     MonoOrderByType.TYPE_ALL,
@@ -20,12 +22,12 @@ annotation class MonoOrderByType {
 
         fun string(@MonoOrderByType type: String): String {
             return when (type) {
-                TYPE_ALL -> "全部"
-                TYPE_COLLECT -> "收藏"
-                TYPE_COMMENT -> "评论"
-                TYPE_DATELINE -> "时间"
-                TYPE_TITLE -> "名称"
-                else -> "全部"
+                TYPE_ALL -> i18n(CommonString.type_mono_query_all)
+                TYPE_COLLECT -> i18n(CommonString.type_mono_query_collect)
+                TYPE_COMMENT -> i18n(CommonString.type_mono_query_comment)
+                TYPE_DATELINE -> i18n(CommonString.type_mono_query_dateline)
+                TYPE_TITLE -> i18n(CommonString.type_mono_query_title)
+                else -> i18n(CommonString.type_mono_query_all)
             }
         }
     }

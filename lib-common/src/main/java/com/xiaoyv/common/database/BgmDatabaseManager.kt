@@ -7,7 +7,9 @@ import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ZipUtils
 import com.xiaoyv.common.currentApplication
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.i18n
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -73,7 +75,7 @@ class BgmDatabaseManager private constructor() {
 
                 if (!isSubjectInstalled()) {
                     FileUtils.deleteAllInDir(remoteDbDir)
-                    throw IllegalArgumentException("数据库文件不合法")
+                    throw IllegalArgumentException(i18n(CommonString.database_format_error))
                 }
 
                 debugLog { "数据库安装完成！" }

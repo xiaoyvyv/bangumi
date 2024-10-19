@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [BilibiliMediaType]
@@ -22,8 +24,8 @@ annotation class BilibiliMediaType {
 
         fun string(@BilibiliMediaType type: String): String {
             return when (type) {
-                TYPE_ANIME -> "动画"
-                TYPE_REAL -> "影视"
+                TYPE_ANIME -> i18n(CommonString.type_bilibili_media_anime)
+                TYPE_REAL -> i18n(CommonString.type_bilibili_media_real)
                 else -> ""
             }
         }

@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xiaoyv.bangumi.databinding.ActivitySyncerListDialogBinding
 import com.xiaoyv.common.helper.ConfigHelper
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [SyncerListDialog]
@@ -33,12 +35,12 @@ class SyncerListDialog : BottomSheetDialogFragment() {
             binding.pbProgress.max = it.second
             binding.pbProgress.setProgress(it.first, true)
 
-            binding.tvFinish.text = String.format("已同步：%s", it.first)
-            binding.tvTotal.text = String.format("全部：%s", it.second)
+            binding.tvFinish.text = i18n(CommonString.syncer_progress_finish, it.first)
+            binding.tvTotal.text = i18n(CommonString.syncer_progress_total, it.second)
         }
 
         parentActivity.viewModel.onSyncSubject.observe(viewLifecycleOwner) {
-            binding.tvDesc.text = String.format("正在同步：%s", it)
+            binding.tvDesc.text = i18n(CommonString.syncer_progress_current, it)
         }
 
         parentActivity.viewModel.onSyncFinish.observe(viewLifecycleOwner) {

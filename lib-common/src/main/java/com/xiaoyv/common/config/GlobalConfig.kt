@@ -1,7 +1,9 @@
 package com.xiaoyv.common.config
 
+import com.blankj.utilcode.util.StringUtils
 import com.xiaoyv.common.config.annotation.MediaType
 import com.xiaoyv.common.config.bean.tab.MediaTab
+import com.xiaoyv.common.kts.CommonString
 
 /**
  * Class: [GlobalConfig]
@@ -35,11 +37,11 @@ object GlobalConfig {
 
     val mediaTypes by lazy {
         listOf(
-            MediaTab("动画", MediaType.TYPE_ANIME),
-            MediaTab("书籍", MediaType.TYPE_BOOK),
-            MediaTab("音乐", MediaType.TYPE_MUSIC),
-            MediaTab("游戏", MediaType.TYPE_GAME),
-            MediaTab("三次元", MediaType.TYPE_REAL),
+            MediaTab(StringUtils.getString(CommonString.common_anime), MediaType.TYPE_ANIME),
+            MediaTab(StringUtils.getString(CommonString.common_book), MediaType.TYPE_BOOK),
+            MediaTab(StringUtils.getString(CommonString.common_music), MediaType.TYPE_MUSIC),
+            MediaTab(StringUtils.getString(CommonString.common_game), MediaType.TYPE_GAME),
+            MediaTab(StringUtils.getString(CommonString.common_real), MediaType.TYPE_REAL),
         )
     }
 

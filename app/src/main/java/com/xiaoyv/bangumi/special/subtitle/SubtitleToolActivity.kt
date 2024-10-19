@@ -11,7 +11,9 @@ import com.blankj.utilcode.util.UriUtils
 import com.xiaoyv.bangumi.databinding.ActivitySubtitleToolBinding
 import com.xiaoyv.blueprint.base.mvvm.normal.BaseViewModelActivity
 import com.xiaoyv.common.config.annotation.SubtitleActionType
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.initNavBack
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.common.widget.dialog.AnimeLoadingDialog
@@ -46,7 +48,7 @@ class SubtitleToolActivity :
             val streams = it.orEmpty()
             if (streams.isNotEmpty()) {
                 showOptionsDialog(
-                    title = String.format("内挂 %d 组字幕", streams.size),
+                    title = i18n(CommonString.subtitle_count, streams.size),
                     items = streams.map { stream -> stream.displayTitle },
                     onItemClick = { item, index ->
                         showSubtitleActionOptions(item, streams[index])
@@ -61,7 +63,7 @@ class SubtitleToolActivity :
                 // 复制内容
                 SubtitleActionType.TYPE_COPY -> {
                     ClipboardUtils.copyText(result.file.readText())
-                    showToast("复制成功")
+                    showToast(i18n(CommonString.common_copy_success))
                 }
                 // 分享导出
                 SubtitleActionType.TYPE_SHARE -> {
@@ -69,7 +71,7 @@ class SubtitleToolActivity :
                     intent.setType("text/*")
                     intent.putExtra(Intent.EXTRA_STREAM, UriUtils.file2Uri(result.file))
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent = Intent.createChooser(intent, "导出字幕文件")
+                    intent = Intent.createChooser(intent, i18n(CommonString.subtitle_export))
                     ActivityUtils.startActivity(intent)
                 }
                 // 翻译字幕
@@ -82,8 +84,8 @@ class SubtitleToolActivity :
         // 翻译进度
         viewModel.onTranslateProgress.observe(this) {
             debugLog {
-                String.format(
-                    "翻译进度：%d/%d, %.2f%%",
+                i18n(
+                    CommonString.subtitle_translate_progress,
                     it.first,
                     it.second,
                     it.first * 100f / it.second.toFloat()
@@ -97,13 +99,13 @@ class SubtitleToolActivity :
      */
     private fun showSubtitleActionOptions(item: String, stream: FFProbeEntity.Stream) {
         val actions = mapOf(
-            SubtitleActionType.TYPE_SHARE to "分享导出",
-            SubtitleActionType.TYPE_COPY to "复制内容",
-            SubtitleActionType.TYPE_TRANSLATE to "一键翻译"
+            SubtitleActionType.TYPE_SHARE to i18n(CommonString.subtitle_dialog_menu_export),
+            SubtitleActionType.TYPE_COPY to i18n(CommonString.subtitle_dialog_menu_copy),
+            SubtitleActionType.TYPE_TRANSLATE to i18n(CommonString.subtitle_dialog_menu_translate),
         )
 
         showOptionsDialog(
-            title = "字幕：$item",
+            title = i18n(CommonString.subtitle_dialog_title, item),
             items = actions.values.toList(),
             onItemClick = { _, index ->
                 viewModel.extractSubtitle(actions.keys.toList()[index], stream)

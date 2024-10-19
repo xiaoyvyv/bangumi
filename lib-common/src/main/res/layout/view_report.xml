@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="广告"
+            android:text="@string/action_report_menu_ad"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="引战"
+            android:text="@string/action_report_menu_argument"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="辱骂、人身攻击"
+            android:text="@string/action_report_menu_attack"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="刷屏、无关内容"
+            android:text="@string/action_report_menu_irrelevant"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="政治相关"
+            android:text="@string/action_report_menu_political"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="违法信息"
+            android:text="@string/action_report_menu_illegal"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -80,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="泄露隐私"
+            android:text="@string/action_report_menu_privacy"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="涉嫌刷分"
+            android:text="@string/action_report_menu_score"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="剧透"
+            android:text="@string/action_report_menu_spoiler"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
         <com.google.android.material.chip.Chip
@@ -107,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="其他"
+            android:text="@string/action_report_menu_other"
             android:textAppearance="?attr/textAppearanceBodySmall" />
 
     </com.google.android.material.chip.ChipGroup>
@@ -120,7 +120,7 @@
         android:background="@drawable/ui_shape_rectangle_corner_6"
         android:backgroundTint="?attr/colorSurfaceContainer"
         android:gravity="start|top"
-        android:hint="附加信息:"
+        android:hint="@string/action_report_attach"
         android:maxLines="6"
         android:minLines="4"
         android:padding="@dimen/ui_size_12"
@@ -138,7 +138,7 @@
         android:layout_marginBottom="@dimen/ui_layout_margin"
         android:enabled="false"
         android:paddingVertical="@dimen/ui_size_12"
-        android:text="报告疑虑"
+        android:text="@string/action_report_submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

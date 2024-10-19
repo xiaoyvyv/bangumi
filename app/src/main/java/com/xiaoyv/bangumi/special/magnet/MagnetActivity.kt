@@ -16,8 +16,10 @@ import com.xiaoyv.bangumi.helper.RouteHelper
 import com.xiaoyv.blueprint.constant.NavKey
 import com.xiaoyv.blueprint.kts.toJson
 import com.xiaoyv.common.api.response.anime.AnimeMagnetEntity
+import com.xiaoyv.common.kts.CommonString
 import com.xiaoyv.common.kts.copyText
 import com.xiaoyv.common.kts.debugLog
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.magnetHash
 import com.xiaoyv.common.kts.showOptionsDialog
 import com.xiaoyv.widget.binder.BaseQuickDiffBindingAdapter
@@ -35,7 +37,7 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
     private lateinit var filterBinding: ActivityMagnetBinding
 
     override val toolbarTitle: String
-        get() = "动画资源搜索"
+        get() = i18n(CommonString.magnet_title)
 
     override val isOnlyOnePage: Boolean
         get() = true
@@ -109,12 +111,12 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
         @JvmStatic
         fun FragmentActivity.onMagnetItemClick(resource: AnimeMagnetEntity.Resource) {
             showOptionsDialog(
-                title = "资源详情",
+                title = i18n(CommonString.mikan_resource_detail),
                 items = listOf(
-                    "复制磁链",
-                    "复制发布来源",
-                    "打开方式",
-                    "磁链资源预览"
+                    i18n(CommonString.mikan_resource_copy_link),
+                    i18n(CommonString.mikan_resource_copy_from),
+                    i18n(CommonString.mikan_resource_open_way),
+                    i18n(CommonString.mikan_resource_preview),
                 ),
                 onItemClick = { _, which ->
                     when (which) {
@@ -127,7 +129,7 @@ class MagnetActivity : BaseListActivity<AnimeMagnetEntity.Resource, MagnetViewMo
                                 ActivityUtils.startActivity(
                                     Intent.createChooser(
                                         intent,
-                                        "打开方式"
+                                        i18n(CommonString.mikan_resource_open_way)
                                     )
                                 )
                             }.onFailure {

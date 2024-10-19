@@ -1,6 +1,8 @@
 package com.xiaoyv.common.config.annotation
 
 import androidx.annotation.StringDef
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 
 /**
  * Class: [DouBanInterestType]
@@ -24,9 +26,21 @@ annotation class DouBanInterestType {
 
         fun string(@DouBanInterestType type: String, @DouBanMediaType mediaType: String): String {
             return when (type) {
-                TYPE_WISH -> String.format("想%s", DouBanMediaType.action(mediaType))
-                TYPE_DOING -> String.format("在%s", DouBanMediaType.action(mediaType))
-                TYPE_DONE -> String.format("%s过", DouBanMediaType.action(mediaType))
+                TYPE_WISH -> i18n(
+                    CommonString.type_interest_wish,
+                    DouBanMediaType.action(mediaType)
+                )
+
+                TYPE_DONE -> i18n(
+                    CommonString.type_interest_done,
+                    DouBanMediaType.action(mediaType)
+                )
+
+                TYPE_DOING -> i18n(
+                    CommonString.type_interest_doing,
+                    DouBanMediaType.action(mediaType)
+                )
+
                 else -> ""
             }
         }

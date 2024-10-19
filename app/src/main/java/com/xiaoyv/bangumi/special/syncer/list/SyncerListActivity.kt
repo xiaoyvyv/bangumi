@@ -10,6 +10,8 @@ import com.xiaoyv.common.api.response.anime.AnimeSyncEntity
 import com.xiaoyv.common.config.annotation.SubjectType
 import com.xiaoyv.common.helper.UserHelper
 import com.xiaoyv.common.kts.CommonDrawable
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import com.xiaoyv.common.kts.setOnDebouncedChildClickListener
 import com.xiaoyv.common.kts.showConfirmDialog
 import com.xiaoyv.common.kts.showOptionsDialog
@@ -28,7 +30,7 @@ class SyncerListActivity : BaseListActivity<AnimeSyncEntity, SyncerListViewModel
         get() = true
 
     override val toolbarTitle: String
-        get() = "待同步条目列表"
+        get() = i18n(CommonString.syncer_list)
 
     override fun onCreateContentAdapter(): BaseQuickDiffBindingAdapter<AnimeSyncEntity, *> {
         return SyncerListAdapter()
@@ -39,7 +41,7 @@ class SyncerListActivity : BaseListActivity<AnimeSyncEntity, SyncerListViewModel
 
         contentAdapter.setOnDebouncedChildClickListener(R.id.item_subject) {
             showOptionsDialog(
-                title = "条目",
+                title = i18n(CommonString.syncer_list_item),
                 items = it.subject.map { item ->
                     buildString {
                         append(item.name.orEmpty())
@@ -57,7 +59,7 @@ class SyncerListActivity : BaseListActivity<AnimeSyncEntity, SyncerListViewModel
     override fun LifecycleOwner.initViewObserverExt() {
         viewModel.onSyncFinish.observe(this) {
             showConfirmDialog(
-                message = "条目同步完成",
+                message = i18n(CommonString.syncer_list_success),
                 cancelText = null,
                 cancelable = false,
                 onConfirmClick = {
@@ -69,7 +71,7 @@ class SyncerListActivity : BaseListActivity<AnimeSyncEntity, SyncerListViewModel
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("开始同步")
+        menu.add(i18n(CommonString.syncer_list_start))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setIcon(CommonDrawable.ic_play_round)
             .setOnMenuItemClickListener {
@@ -83,21 +85,21 @@ class SyncerListActivity : BaseListActivity<AnimeSyncEntity, SyncerListViewModel
                 true
             }
 
-        menu.add("没有内容？")
+        menu.add(i18n(CommonString.syncer_list_empty))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "如果当前页面显示为空，可能是以下情况：\n\n1、当前你的 BGM 收藏已经包含全部条目。\n2、你在其它平台收藏的条目，BGM 未收录。",
+                    message = i18n(CommonString.syncer_list_empty_reason),
                     cancelText = null
                 )
                 true
             }
 
-        menu.add("速度优化")
+        menu.add(i18n(CommonString.syncer_list_pref))
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER)
             .setOnMenuItemClickListener {
                 showConfirmDialog(
-                    message = "如果你在该页面长时间处于加载状态，请返回前一页，在右上角菜单下载并导入索引数据库",
+                    message = i18n(CommonString.syncer_list_pref_reason),
                     cancelText = null
                 )
                 true

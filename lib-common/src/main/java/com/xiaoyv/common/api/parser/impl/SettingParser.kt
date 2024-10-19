@@ -5,6 +5,8 @@ import com.xiaoyv.common.api.parser.entity.SettingBaseEntity
 import com.xiaoyv.common.api.parser.impl.SignInParser.parserCheckIsLogin
 import com.xiaoyv.common.api.parser.optImageUrl
 import com.xiaoyv.common.config.annotation.FormInputType
+import com.xiaoyv.common.kts.CommonString
+import com.xiaoyv.common.kts.i18n
 import org.jsoup.nodes.Document
 
 /**
@@ -13,7 +15,7 @@ import org.jsoup.nodes.Document
  */
 fun Document.parserSettingInfo(): List<SettingBaseEntity> {
     val loginState = parserCheckIsLogin()
-    if (loginState.not()) throw NeedLoginException("请先登录后才能继续进行")
+    if (loginState.not()) throw NeedLoginException(i18n(CommonString.common_login_first))
 
     return select("#main form input, #main form textarea, #main form select").map {
         val superEntity = SettingBaseEntity()
