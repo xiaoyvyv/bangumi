@@ -5,6 +5,11 @@ on:
     branches: [ "multiplatform" ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  pages: write
+
 env:
   INSTANCE: 'Writerside/bgm-doc'
   DOCKER_VERSION: '2025.04.8412'
