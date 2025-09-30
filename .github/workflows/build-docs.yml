@@ -2,7 +2,7 @@ name: Build documentation
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "multiplatform" ]
   workflow_dispatch:
 
 env:

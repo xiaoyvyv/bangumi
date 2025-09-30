@@ -2,9 +2,9 @@ name: Build CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "multiplatform" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "multiplatform" ]
 
 jobs:
   build:
