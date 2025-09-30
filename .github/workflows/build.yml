@@ -31,11 +31,7 @@ jobs:
 
       # 安装 Android SDK
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: 33
-          build-tools: 33.0.0
-          ndk-version: 25.2.9519653
+        uses: android-actions/setup-android@v3
 
       # 构建 Android APK
       - name: Build Android Release
@@ -53,6 +49,19 @@ jobs:
         with:
           name: android-release-apk
           path: composeApp/build/outputs/apk/release/*.apk
+
+      # Build shared framework
+      - name: Build shared framework for iOS (Release)
+        run: |
+          ./gradlew :shared:core_native:syncFramework \
+            -Pkotlin.native.cocoapods.configuration="Release" \
+            -Pkotlin.native.cocoapods.platform="iphoneos" \
+            -Pkotlin.native.cocoapods.archs="arm64" \
+            --stacktrace
+
+      # Embed
+      - name: Embed and sign framework for iOS
+        run: ./gradlew :composeApp:embedAndSignAppleFrameworkForXcode --stacktrace
 
       # 构建 iOS
       - name: Build iOS Release
