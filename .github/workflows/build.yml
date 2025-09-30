@@ -48,7 +48,7 @@ jobs:
 
       # 上传 Android APK
       - name: Upload Android APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android-release-apk
           path: composeApp/build/outputs/apk/release/*.apk
@@ -81,7 +81,7 @@ jobs:
 
       # 上传 IPA
       - name: Upload iOS IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ios-release-ipa
           path: iosApp/build/ipa/*.ipa
