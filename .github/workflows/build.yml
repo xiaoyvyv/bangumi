@@ -16,6 +16,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      # 安装 Cocoapods
+      - name: Install CocoaPods
+        run: |
+          sudo gem install cocoapods
+          pod repo update
+
       # 安装 Java
       - name: Setup JDK
         uses: actions/setup-java@v4
@@ -31,17 +37,6 @@ jobs:
           build-tools: 33.0.0
           ndk-version: 25.2.9519653
 
-      # 缓存 Gradle
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-
-
       # 构建 Android APK
       - name: Build Android Release
         run: ./gradlew :composeApp:assembleRelease --stacktrace
@@ -52,12 +47,6 @@ jobs:
         with:
           name: android-release-apk
           path: composeApp/build/outputs/apk/release/*.apk
-
-      # 安装 Cocoapods
-      - name: Install CocoaPods
-        run: |
-          sudo gem install cocoapods
-          pod repo update
 
       # 构建 iOS
       - name: Build iOS Release
