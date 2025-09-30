@@ -39,6 +39,12 @@ jobs:
 
       # 构建 Android APK
       - name: Build Android Release
+        id: build
+        continue-on-error: true
+        run: ./gradlew :composeApp:assembleRelease --stacktrace
+
+      - name: Build Android Release (retry on failure)
+        if: ${{ steps.build.outcome == 'failure' }}
         run: ./gradlew :composeApp:assembleRelease --stacktrace
 
       # 上传 Android APK
