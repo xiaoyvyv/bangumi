@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bangumi App</string>
+    <string name="global_home">首页</string>
+    <string name="global_empty" />
+    <string name="global_close">关闭</string>
+    <string name="global_unselected">未选择</string>
+    <string name="global_timeline">时间线</string>
+    <string name="global_rank">排行榜</string>
+    <string name="global_comments">评论</string>
+    <string name="global_community">超展开</string>
+    <string name="global_profile">我的</string>
+    <string name="global_back">返回</string>
+    <string name="global_loading">载入中…</string>
+    <string name="global_password">密码</string>
+    <string name="global_email">邮箱</string>
+    <string name="global_confirm">确认</string>
+    <string name="global_cancel">取消</string>
+    <string name="global_clear">清理</string>
+    <string name="global_done">完成</string>
+    <string name="global_delete">删除</string>
+    <string name="global_login">登录</string>
+    <string name="global_next">下一步</string>
+    <string name="global_image">图片</string>
+    <string name="global_search">搜索</string>
+    <string name="global_year">年份</string>
+    <string name="global_month">月份</string>
+    <string name="global_settings">设置</string>
+    <string name="global_avatar">头像</string>
+    <string name="global_save">保存</string>
+    <string name="global_ok">好的</string>
+    <string name="global_edit">编辑</string>
+    <string name="global_nickname">昵称</string>
+    <string name="global_sign">签名</string>
+    <string name="global_artwork">作品</string>
+    <string name="global_timezone">时区</string>
+    <string name="global_user_site">个人主页</string>
+    <string name="global_intro">个人介绍</string>
+    <string name="global_psn">PSN</string>
+    <string name="global_steam">Steam</string>
+    <string name="global_xbox">Xbox Live</string>
+    <string name="global_pixiv">Pixiv</string>
+    <string name="global_album">相册</string>
+    <string name="global_anime_pictures">AnimePic</string>
+    <string name="global_github">Github</string>
+    <string name="global_twitter">Twitter</string>
+    <string name="global_ins">Instagram</string>
+    <string name="global_not_set">未设置</string>
+    <string name="global_network_service">网络服务</string>
+    <string name="global_notification">通知</string>
+    <string name="global_message">消息</string>
+    <string name="global_subject">条目</string>
+    <string name="global_character">角色</string>
+    <string name="global_person">人物</string>
+    <string name="global_blog">日志</string>
+    <string name="global_group">小组</string>
+    <string name="global_index">目录</string>
+    <string name="global_book">书籍</string>
+    <string name="global_anime">动画</string>
+    <string name="global_game">游戏</string>
+    <string name="global_real">三次元</string>
+    <string name="global_tag">标签</string>
+    <string name="global_music">音乐</string>
+    <string name="global_topic">话题</string>
+    <string name="global_sort">排序</string>
+    <string name="global_sort_match">匹配程度</string>
+    <string name="global_sort_bookmark">收藏人数</string>
+    <string name="global_sort_rank">排名</string>
+    <string name="global_sort_rating">评分</string>
+    <string name="global_sort_trends">热门</string>
+    <string name="global_sort_title">名称</string>
+    <string name="global_sort_date">发售日</string>
+    <string name="global_sort_update">收藏时间</string>
+    <string name="global_sort_rate">评价</string>
+    <string name="global_nsfw">NSFW</string>
+    <string name="global_on">开启</string>
+    <string name="global_off">关闭</string>
+    <string name="global_all">全部</string>
+    <string name="global_date">日期</string>
+    <string name="global_rating">评分</string>
+    <string name="global_rank_no">排名</string>
+    <string name="global_type">类型</string>
+    <string name="global_unknown">未知</string>
+    <string name="global_refresh">刷新</string>
+    <string name="global_tip">提示</string>
+    <string name="global_load_error">加载失败</string>
+    <string name="global_timeout">服务器错误或超时，请重试</string>
+    <string name="global_error_tip">ごめん，Bangumi娘找不到数据了</string>
+    <string name="global_empty_tip">ごめん，暂时没有数据呢</string>
+    <string name="global_filter">过滤</string>
+    <string name="global_copy_success">复制成功</string>
+    <string name="global_input_hint">输入内容…</string>
+    <string name="global_share">分享</string>
+    <string name="global_copy">复制</string>
+    <string name="global_copy_link">复制链接</string>
+    <string name="global_netabare">Netabare 趋势</string>
+    <string name="global_open_browser">在浏览器中打开</string>
+    <string name="global_drama">舞台剧</string>
+    <string name="global_movie">影视</string>
+    <string name="global_aired">已放送</string>
+    <string name="global_not_aired">未放送</string>
+    <string name="global_other">其它</string>
+    <string name="global_more">更多</string>
+    <string name="global_no_more">没有更多内容了~</string>
+    <string name="global_mono">人物</string>
+    <string name="global_login_first">请先登录后才能继续进行</string>
+    <string name="global_more_tag">更多 &gt;&gt;</string>
+    <string name="global_input_right_link">请输入正确的链接</string>
+    <string name="global_kind">类型</string>
+    <string name="global_staff">职位</string>
+    <string name="global_help">帮助</string>
+    <string name="global_collection">收藏</string>
+    <string name="global_status">状态</string>
+    <string name="global_episode">章节</string>
+    <string name="global_summary">简介</string>
+    <string name="global_preview">预览</string>
+    <string name="global_parade">巡礼</string>
+    <string name="global_detail">详情</string>
+    <string name="global_score">评分</string>
+    <string name="global_related_subject">关联条目</string>
+    <string name="global_related_index">关联目录</string>
+    <string name="global_recently_collection">最近收藏</string>
+    <string name="global_spit_out">吐槽</string>
+    <string name="global_casts">出演</string>
+    <string name="global_works">作品</string>
+    <string name="global_collabs">合作</string>
+    <string name="global_dynamic">动态</string>
+    <string name="global_progress">进度</string>
+    <string name="global_friend">好友</string>
+    <string name="global_wiki">维基</string>
+    <string name="global_domain">域名</string>
+    <string name="global_req_timeout">超时</string>
+    <string name="global_host">Host</string>
+    <string name="global_resolution">分辨率：%1$sx%2$s</string>
+    <string name="global_file_size">大小：%1$s</string>
+    <string name="global_reaction">贴贴</string>
+    <string name="global_newest">最新</string>
+    <string name="global_oldest">最先</string>
+    <string name="global_hot">最热</string>
+    <string name="global_hot_group">🔥热门</string>
+    <string name="global_master">楼主</string>
+    <string name="global_match">匹配</string>
+    <string name="global_show_summary">概览</string>
+    <string name="global_inbox">收件箱</string>
+    <string name="global_outbox">发件箱</string>
+    <string name="global_self">自己</string>
+    <string name="global_bookmark">收藏</string>
+    <string name="global_bookmarked">已收藏</string>
+    <string name="global_swap">清除</string>
+    <string name="global_public">公开</string>
+    <string name="global_private">仅自己</string>
+    <string name="global_update">更新</string>
+    <string name="global_layout">布局</string>
+    <string name="global_list">列表</string>
+    <string name="global_grid">网格</string>
+    <string name="global_show">显示</string>
+    <string name="global_hide">隐藏</string>
+
+    <string name="emoji_tv">TV</string>
+    <string name="emoji_tv_1">TV-1</string>
+    <string name="emoji_tv_2">TV-2</string>
+    <string name="emoji_normal">其它</string>
+
+    <string name="career_producer">制作人</string>
+    <string name="career_mangaka">漫画家</string>
+    <string name="career_artist">美术 / 画师</string>
+    <string name="career_seiyu">声优</string>
+    <string name="career_writer">作家 / 编剧</string>
+    <string name="career_illustrator">插画师</string>
+    <string name="career_actor">演员</string>
+
+    <string name="mono_actor">出演</string>
+    <string name="mono_recently_character">最近演出角色</string>
+    <string name="mono_recently_work">最近参与</string>
+    <string name="mono_character_list">虚构角色</string>
+    <string name="mono_person_list">现实人物</string>
+
+    <!-- 登录页面 -->
+    <string name="login_input_error_email">请输入邮箱</string>
+    <string name="login_input_error_password">请输入密码</string>
+    <string name="login_input_error_verify">请输入验证码</string>
+    <string name="login_input_password">密码</string>
+    <string name="login_input_email">邮箱</string>
+    <string name="login_input_verify">验证码</string>
+    <string name="login_btn_login">登录</string>
+    <string name="login_title">登录至 Bangumi</string>
+    <string name="login_email">你的 Email 地址</string>
+    <string name="login_password">你的密码</string>
+    <string name="login_forget_password">忘记密码？</string>
+    <string name="login_no_account">还没有 Bangumi 账户？</string>
+    <string name="login_signup_now">立即注册</string>
+    <string name="login_verify_code">验证码</string>
+    <string name="login_result_tip">咕噜~咕噜~</string>
+    <string name="login_result_known">知道了</string>
+    <string name="login_first">请先登录后才能继续进行</string>
+    <string name="login_first_tip">请先登录~</string>
+    <string name="login_result_error">登录出错</string>
+
+    <string name="settings_title">设置中心</string>
+    <string name="settings_account">账号设置</string>
+    <string name="settings_account_info">账号与资料</string>
+    <string name="settings_change_avatar">更换头像</string>
+    <string name="settings_privacy">隐私设置</string>
+    <string name="settings_block_user">绝交用户</string>
+    <string name="settings_common">通用</string>
+    <string name="settings_live2d">Bangumi 娘</string>
+    <string name="settings_ui">UI 配置</string>
+    <string name="settings_bar">底栏配置</string>
+    <string name="settings_network">网络配置</string>
+    <string name="settings_translate">翻译配置</string>
+    <string name="settings_clean_cache">清理缓存</string>
+    <string name="settings_clean_cache_success">缓存清理完成</string>
+    <string name="settings_relate">相关</string>
+    <string name="settings_feedback">反馈 BUG</string>
+    <string name="settings_feedback_desc">建议或反馈</string>
+    <string name="settings_donate">投食赞助</string>
+    <string name="settings_qq_group">QQ 交流群</string>
+    <string name="settings_source">开源地址</string>
+    <string name="settings_user_argument">用户协议</string>
+    <string name="settings_user_privacy">隐私政策</string>
+    <string name="settings_about">关于</string>
+    <string name="settings_about_author">关于作者</string>
+    <string name="settings_about_app">关于 Bangumi App</string>
+    <string name="settings_logout">退出登录</string>
+    <string name="settings_logout_desc">你确定立即注销登录吗？</string>
+    <string name="settings_version">版本 %1$s</string>
+    <string name="settings_appearance">外观</string>
+    <string name="settings_content">内容</string>
+    <string name="settings_deeplink">深度链接</string>
+    <string name="settings_theme">主题</string>
+    <string name="settings_theme_system">跟随系统</string>
+    <string name="settings_theme_light">明亮</string>
+    <string name="settings_theme_dark">黑暗</string>
+    <string name="settings_time_machine_grid_limit">时光机格子限制</string>
+    <string name="settings_navigation_animation">导航动画</string>
+    <string name="settings_navigation_animation_none">关闭</string>
+    <string name="settings_navigation_animation_fade">渐入渐出</string>
+    <string name="settings_navigation_animation_slide">右入右出</string>
+    <string name="settings_cache_state">页面状态缓存</string>
+    <string name="settings_cache_state_desc">开启时，跳转条目、人物等页面会立即加载缓存，配合导航动画可能在部分设备有轻微掉帧</string>
+    <string name="settings_performance">性能</string>
+    <string name="settings_indication">触摸反馈</string>
+    <string name="settings_indication_none">无</string>
+    <string name="settings_indication_ripped">水波纹</string>
+    <string name="settings_indication_fade">蒙版</string>
+
+
+    <string name="settings_bar_boot">启动</string>
+    <string name="settings_bar_boot_default">冷启动默认 Tab</string>
+    <string name="settings_bar_tab">底栏</string>
+    <string name="settings_bar_1">首页底栏 Tab-1</string>
+    <string name="settings_bar_2">首页底栏 Tab-2</string>
+    <string name="settings_bar_3">首页底栏 Tab-3</string>
+    <string name="settings_bar_4">首页底栏 Tab-4</string>
+    <string name="settings_bar_5">首页底栏 Tab-5</string>
+    <string name="settings_domain_bgm">Bangumi 域</string>
+    <string name="settings_domain_pixiv">图片域</string>
+    <string name="settings_update_channel">更新检测通道</string>
+    <string name="settings_reboot_active">网络配置变更需要冷重启 App 才能生效</string>
+    <string name="settings_timeout_request">请求超时</string>
+    <string name="settings_timeout_socket">读写超时</string>
+    <string name="settings_dou_ban">豆瓣</string>
+    <string name="settings_live2d_voice">触摸语音</string>
+
+    <string name="search_history">搜索历史</string>
+
+    <string name="subject_rate_count">（%1$d人评分）</string>
+    <string name="subject_locked">条目已锁定</string>
+    <string name="subject_action_deleted">删除 >></string>
+    <string name="subject_action_more">更多 >></string>
+    <string name="subject_action_score">查看评分 >></string>
+    <string name="subject_collection_this">点击收藏该%1$s</string>
+    <string name="subject_tag_hint">标签 (使用半角空格或逗号隔开，至多10个)</string>
+    <string name="subject_tag_normal">常用标签</string>
+    <string name="subject_tag_mine">我的标签</string>
+    <string name="subject_comment_hint">吐槽 (如果公开，该内容会显示在条目详情页面的最下方的评论区)</string>
+    <string name="subject_my_progress">我的完成度：%1$s/%1$s</string>
+    <string name="subject_standard_deviation">标准差：%1$s</string>
+    <string name="subject_standard_deviation_tip">标准差越大，评分越分散，参考价值越弱\n\nσ &lt; 1.2：观众意见高度一致\n1.2 ≤ σ &lt; 1.8：存在合理分歧\nσ ≥ 1.8：极端两极分化</string>
+    <string name="subject_score_empty">0人评分</string>
+    <string name="subject_score_format">%1$s%（%2$d人）</string>
+    <string name="subject_track_input_disable_tip">请点击格子使用「看到」功能批量修改</string>
+    <string name="subject_home_calendar">今日上映 %1$d 部，共 %2$d 人收看今日番组</string>
+
+    <string name="subject_tab_overview">概览</string>
+    <string name="subject_tab_preview">预览</string>
+    <string name="subject_tab_episode">章节</string>
+    <string name="subject_tab_tracks">曲目</string>
+    <string name="subject_tab_character">角色</string>
+    <string name="subject_tab_person">制作人员</string>
+    <string name="subject_tab_blog">日志</string>
+    <string name="subject_tab_topic">话题</string>
+    <string name="subject_tab_chart">透视</string>
+    <string name="subject_tab_related">关联</string>
+    <string name="subject_tab_index">目录</string>
+
+
+    <string name="group_hot">热门小组</string>
+    <string name="group_newest">新成立小组</string>
+    <string name="group_newest_topic">全站小组最新话题</string>
+    <string name="group_join">加入</string>
+    <string name="group_joined">已加入</string>
+
+    <string name="type_group_posts">帖子数</string>
+    <string name="type_group_topics">最多发帖</string>
+    <string name="type_group_members">最多成员</string>
+    <string name="type_group_created">最新创建</string>
+    <string name="type_group_updated">最新讨论</string>
+
+    <string name="type_path_search_subject">条目查询</string>
+    <string name="type_path_search_mono">人物查询</string>
+    <string name="type_path_search_tag">标签查询</string>
+    <string name="type_path_character">角色</string>
+    <string name="type_path_group">小组</string>
+    <string name="type_path_person">人物</string>
+    <string name="type_path_user">用户</string>
+    <string name="type_path_blog">日志</string>
+    <string name="type_path_topic">话题</string>
+    <string name="type_path_subject">条目</string>
+    <string name="type_path_message_box">短信</string>
+    <string name="type_path_index">目录</string>
+    <string name="type_path_friend">好友</string>
+    <string name="type_path_ep">章节</string>
+    <string name="type_path_timeline">时间线</string>
+    <string name="type_path_browser">浏览</string>
+
+    <!-- 网页解析功能 -->
+    <string name="parse_relation">关联的内容</string>
+    <string name="parse_search_not_support">暂不支持搜索该类型</string>
+    <string name="parse_search_tag">标签</string>
+    <string name="parse_search_mono">人物</string>
+    <string name="parse_search_comment">讨论：%1$s</string>
+    <string name="parse_timeline">时间线</string>
+    <string name="parse_relation_topic">关联的讨论</string>
+    <string name="parse_relation_index">关联的目录</string>
+    <string name="parse_mine_x">我的%1$s</string>
+    <string name="parse_them_x">Ta 的%1$s</string>
+    <string name="parse_data_none">Bangumi娘：报告数据不不见了</string>
+
+    <!-- 标题 TAB -->
+    <string name="title_discover">发现</string>
+    <string name="title_timeline">时间胶囊</string>
+    <string name="title_media">排行榜</string>
+    <string name="title_process">追番进度</string>
+    <string name="title_super">超展开</string>
+    <string name="title_profile">我的</string>
+
+
+    <!-- 注册页面 -->
+    <string name="sign_up_title">注册成为 Bangumi 会员</string>
+    <string name="sign_up_btn">注册</string>
+    <string name="sign_up_error">注册出错</string>
+    <string name="sign_up_verify_error">激活码验证出错</string>
+    <string name="sign_up_input_email">你的邮箱</string>
+    <string name="sign_up_input_email_verify">邮箱激活码</string>
+    <string name="sign_up_input_password">设置一个密码</string>
+    <string name="sign_up_input_password_again">确认密码</string>
+    <string name="sign_up_input_nickname">设置一个昵称</string>
+    <string name="sign_up_input_verify">验证码</string>
+    <string name="sign_up_input_error_password_again">请输入确认密码</string>
+    <string name="sign_up_input_error_nickname">请输入一个昵称</string>
+    <string name="sign_up_input_error_email_code">请邮箱激活码</string>
+
+    <!-- 时间线页面 -->
+    <string name="timeline_title">时间胶囊-时空管理局</string>
+    <string name="timeline_friend_title">时间胶囊-好友</string>
+    <string name="timeline_mine_title">时间胶囊-自己</string>
+
+    <!-- 每日放送页面 -->
+    <string name="calendar_title">每日放送</string>
+    <string name="calendar_today_title">今日放送</string>
+    <string name="calendar_tomorrow_title">明日放送</string>
+    <string name="calendar_update_every_day">每天更新，点击刷新</string>
+
+    <!-- 排行榜页面 -->
+    <string name="media_title">媒体排行</string>
+    <string name="media_detail_title">媒体详情</string>
+    <string name="media_save_tip">我%1$s该%2$s</string>
+    <string name="media_save_click">点击收藏这部%1$s</string>
+    <string name="media_save_summary">%d人想%1$s / %d人%1$s过 / %d人在%1$s / %d人搁置 / %d人抛弃</string>
+    <string name="robot_title">坛娘</string>
+    <string name="blog_title">日志</string>
+    <string name="super_title">超展开</string>
+
+    <!-- 后台服务 -->
+    <string name="foreground_notification_channel_name">前台服务通知</string>
+    <string name="foreground_notification_title">%1$s 个正在运行</string>
+    <string name="foreground_notification_text">点击进入主页</string>
+
+    <!-- 个人信息页面 -->
+    <string name="edit_profile_title">编辑个人信息</string>
+    <string name="profile_time_machine">时光机</string>
+    <string name="profile_state">统计</string>
+    <string name="profile_bio">个人介绍</string>
+    <string name="profile_network_service">社交网络</string>
+
+    <string name="notification_no_data">暂时没有通知哦~</string>
+
+    <!-- 同步功能页面 -->
+    <string name="syncer_title">豆哔收藏导入</string>
+    <string name="syncer_bilibili">哔哩</string>
+    <string name="syncer_dou_ban">豆瓣</string>
+    <string name="syncer_desc">此功能可以快速将你在豆瓣或哔哩的收藏同步到BGM，包括在看状态以及评分等内容，并且会过滤掉你已经收藏过的条目，由于收录原因，部分条目在BGM内不存在的将不会同步！\n\n哔哩同步时，请开启公开访问追番。</string>
+    <string name="syncer_start">同步，启动！</string>
+    <string name="syncer_database_install">安装索引数据库</string>
+    <string name="syncer_database_download">下载索引数据库</string>
+    <string name="syncer_database_not_install">索引数据库：未安装</string>
+    <string name="syncer_database_installed">索引数据库：已安装</string>
+    <string name="syncer_bgm_data">获取你班收藏</string>
+    <string name="syncer_bgm_data_format">获取你班收藏：%d/%d</string>
+    <string name="syncer_platform_data">加载平台收藏</string>
+    <string name="syncer_platform_data_format_wish">%1$s想看条目：%d/%d</string>
+    <string name="syncer_platform_data_format_doing">%1$s在看条目：%d/%d</string>
+    <string name="syncer_platform_data_format_done">%1$s看过条目：%d/%d</string>
+    <string name="syncer_bilibili_title">哔哩哔哩同步</string>
+    <string name="syncer_bilibili_id">请输入哔哩哔哩 ID</string>
+    <string name="syncer_dou_ban_title">豆瓣同步</string>
+    <string name="syncer_dou_ban_id">请输入豆瓣 ID</string>
+    <string name="syncer_loading">正在载入收藏，请勿退出该页面！</string>
+    <string name="syncer_config">查看短链ID，请在浏览器打开短链后，复制链接中的原始ID。\n\nB站追番同步，请在APP设置内暂时公开追番隐私权限。\n\n哔哩哔哩权限配置路径：设置-&gt;安全隐私-&gt;空间隐私设置-&gt;公开我的追番</string>
+    <string name="syncer_list">待同步条目列表</string>
+    <string name="syncer_list_item">条目</string>
+    <string name="syncer_list_start">开始同步</string>
+    <string name="syncer_list_empty">没有内容？</string>
+    <string name="syncer_list_empty_reason">如果当前页面显示为空，可能是以下情况：\n\n1、当前你的 BGM 收藏已经包含全部条目。\n2、你在其它平台收藏的条目，BGM 未收录。</string>
+    <string name="syncer_list_pref">速度优化</string>
+    <string name="syncer_list_pref_reason">如果你在该页面长时间处于加载状态，请返回前一页，在右上角菜单下载并导入索引数据库</string>
+    <string name="syncer_list_success">条目同步完成</string>
+    <string name="syncer_progress">同步进度</string>
+    <string name="syncer_progress_running">正在同步…</string>
+    <string name="syncer_progress_finish">已同步：%1$s</string>
+    <string name="syncer_progress_total">全部：%1$s</string>
+    <string name="syncer_progress_current">正在同步：%1$s</string>
+    <string name="syncer_error">同步失败：%1$s</string>
+
+    <!-- 发布页面 -->
+    <string name="post_result_known">知道了</string>
+    <string name="post_result_error">发布出错了</string>
+
+    <!-- 画廊页面 -->
+    <string name="anime_gallery_action_save">保存</string>
+    <string name="anime_gallery_action_share">分享</string>
+    <string name="anime_gallery_action_wallpaper">设置为壁纸</string>
+    <string name="anime_gallery_subject">条目预览</string>
+    <string name="anime_gallery_ap">Anime-Pictures</string>
+    <string name="anime_gallery_about">列表显示的缩略图，滑动停止时才会开始加载图片，点击可以查看大图。\n\n数据来源：anime-pictures.net</string>
+
+    <!-- MAGI 页面 -->
+    <string name="magi_title">Magi 问答</string>
+
+
+    <!-- 动漫识别相关页面 -->
+    <string name="image_detect">图像识别功能</string>
+    <string name="image_detect_pick">选取</string>
+    <string name="image_detect_start">开始识别</string>
+    <string name="image_detect_running">识别中…</string>
+    <string name="image_detect_engine">搜索引擎来自于：%1$s</string>
+    <string name="image_detect_failed">识别失败，请选择其它图片重试!</string>
+    <string name="image_detect_subject">识别动画来源</string>
+    <string name="image_detect_subject_subtitle">温馨提示：\n请尽量裁掉图片的黑边，并保持裁剪内容区域的比例为番剧的原始比例（16:9 或 4:3） 以提高检测结果准确性</string>
+    <string name="image_detect_character">识别动画人物</string>
+    <string name="image_detect_character_subtitle">温馨提示：\n上传动漫人物图片，选取有人物正脸的图片识别效果最佳，支持框选多个人物头像识别</string>
+    <string name="image_detect_character_choose_model">识别模型选择</string>
+    <string name="image_detect_character_change_model">模型选择：%1$s</string>
+    <string name="image_detect_character_model_anime_1">高级动画识别模型①</string>
+    <string name="image_detect_character_model_anime_2">高级动画识别模型②</string>
+    <string name="image_detect_character_model_anime">普通动画识别模型</string>
+    <string name="image_detect_character_model_gal">高级Gal识别模型</string>
+    <string name="image_detect_action_search_character">搜索人物名称</string>
+    <string name="image_detect_action_search_subject">搜索动画名称</string>
+    <string name="image_detect_action_copy_character">复制人物名称</string>
+    <string name="image_detect_action_copy_subject">复制动画名称</string>
+
+    <!-- 全局搜索相关 -->
+    <string name="search_sort_relation">相关度排序</string>
+    <string name="search_sort_date">时间排序</string>
+    <string name="search_sort_date_create">创建时间</string>
+    <string name="search_sort_date_update">更新时间</string>
+    <string name="search_match_mode">匹配模式</string>
+    <string name="search_match_m">模糊匹配</string>
+    <string name="search_match_e">精准匹配</string>
+
+    <!-- 每日放送小组件 -->
+    <string name="app_widget_description">每日放送小组件，每天更新</string>
+    <string name="app_widget_refreshed">已刷新！</string>
+    <string name="app_widget_first_play">首播：</string>
+    <string name="app_widget_peer_week">每周</string>
+
+    <!-- 新番页面 -->
+    <string name="yuc_title">新番</string>
+
+    <!-- 蜜柑计划 -->
+    <string name="mikan_title">蜜柑计划-RSS</string>
+    <string name="mikan_resource_detail">资源详情</string>
+    <string name="mikan_resource_copy_link">复制磁链</string>
+    <string name="mikan_resource_copy_torrent">复制种子</string>
+    <string name="mikan_resource_copy_from">复制发布来源</string>
+    <string name="mikan_resource_open_way">打开方式</string>
+    <string name="mikan_resource_preview">磁链资源预览</string>
+    <string name="mikan_about">此资源仅供学习交流使用，下载后请在24小时内删除！\n\n压制组：%1$s\n数据来源：mikanani.me</string>
+    <string name="mikan_kind">分类</string>
+    <string name="mikan_group">汉化组</string>
+    <string name="mikan_sort">排序</string>
+    <string name="mikan_search_rule">搜索规则</string>
+    <string name="mikan_search_tip">1. 或者 (OR)\n将「|」放在两个或以上关键字之间，只要标题包含其中一个关键字，便会在搜索结果中显示出来。\n使用方法： 芙莉莲|Frieren\n\n2. 及 (AND)\n将「 」(半形空格) 放在两个或以上关键字之间，标题包含所有关键字，便会在搜索结果中显示出来。\n使用方法： 芙莉莲 简 01\n\n3. 以上两种规则可以组合。</string>
+
+    <!-- 下载相关 -->
+    <string name="download_title">下载中心</string>
+    <string name="download_dialog_title">资源下载</string>
+    <string name="download_dialog_input">请输入下载链接开始下载</string>
+    <string name="download_dialog_input_hint">支持下载：Magnet、HTTP、HTTPS、BT、FTP、Thunder 等…</string>
+    <string name="download_running">下载中</string>
+    <string name="download_finish">已下载</string>
+    <string name="download_support_scheme">支持下载的链接 Scheme：%1$s</string>
+    <string name="download_magnet_error">磁力链接解析失败！</string>
+    <string name="download_add">添加</string>
+    <string name="download_not_arm">下载器仅支持 arm 平台！</string>
+    <string name="download_torrent_title">种子：%1$s</string>
+    <string name="download_torrent_root">种子根目录</string>
+
+    <!-- 评论回复 -->
+    <string name="reply_comment">回复</string>
+    <string name="reply_comment_hint">请输入评论内容…</string>
+    <string name="reply_comment_send">发送</string>
+    <string name="reply_dollars_hint">和大家聊天</string>
+    <string name="reply_message_warn">请避免在聊天中对陌生人泄漏联系方式（包括但不限于电话、微信、QQ、电子邮件等）或家庭住址</string>
+    <string name="reply_message_hint_disable">在对方回复前，你无法在此主题下继续发送信息</string>
+    <string name="reply_message_hint_normal">回复Ta</string>
+
+    <!-- 收藏服务 -->
+    <string name="collect_title">收藏</string>
+    <string name="collect_blog_success">收藏日志成功</string>
+    <string name="collect_topic_success">收藏话题成功</string>
+    <string name="collect_token_error">Token 无效或过期，请重新配置</string>
+    <string name="collect_config_github">请先配置 Github 同步仓库</string>
+    <string name="collect_update_commit">收藏更新</string>
+    <string name="collect_sync_success">同步成功</string>
+    <string name="collect_data">我的收藏</string>
+    <string name="collect_data_blog">我收藏的日志</string>
+    <string name="collect_data_topic">我收藏的话题</string>
+    <string name="collect_cancel_title">删除收藏</string>
+    <string name="collect_cancel_message">是否删除该收藏？</string>
+    <string name="collect_cancel_success">取消收藏成功</string>
+    <string name="collect_firstly">需要先收藏才能更新进度</string>
+    <string name="collect_success">收藏成功</string>
+    <string name="collect_export_title">收藏数据导出</string>
+    <string name="collect_merge_remote">同步合并远程数据</string>
+    <string name="collect_override_remote">覆盖远程数据</string>
+    <string name="collect_import">导入</string>
+    <string name="collect_export">导出</string>
+    <string name="collect_config">配置</string>
+    <string name="collect_not_support">导入文件格式不支持，请使用该软件导出的文件数据</string>
+    <string name="collect_import_success">导入成功！</string>
+    <string name="global_no_summary">暂时没有描述~</string>
+
+    <!-- 目录页面 -->
+    <string name="index_my_create">我创建的</string>
+    <string name="index_my_collection">我收藏的</string>
+    <string name="index_add_related_success">已成功收集至目录</string>
+
+    <!-- 更新服务 -->
+    <string name="update_none">暂无更新包发布</string>
+    <string name="update_newest">当前已经是最新版</string>
+    <string name="update_dialog_title">检测到更新</string>
+    <string name="update_dialog_message">检测到有新版本（%1$s），是否下载更新？</string>
+    <string name="update_dialog_download">下载</string>
+    <string name="update_dialog_detail">查看详情</string>
+    <string name="update_dialog_action_message">检测到有新的 Action 版本（%1$s），是否下载更新？</string>
+    <string name="update_dialog_action_title">检测到 Action 更新</string>
+
+    <!-- Action 服务 -->
+    <string name="action_block">绝交</string>
+    <string name="action_block_message">确认与该用户绝交？\n绝交后将不再看到用户的所有话题、评论、日志、私信、提醒</string>
+    <string name="action_block_error">绝交失败</string>
+    <string name="action_block_success">绝交成功</string>
+    <string name="action_report">报告疑虑</string>
+    <string name="action_report_success">报告成功</string>
+    <string name="action_report_select_one">请选择一种疑虑类型报告</string>
+    <string name="action_report_menu_ad">广告</string>
+    <string name="action_report_menu_argument">引战</string>
+    <string name="action_report_menu_attack">辱骂、人身攻击</string>
+    <string name="action_report_menu_irrelevant">刷屏、无关内容</string>
+    <string name="action_report_menu_political">政治相关</string>
+    <string name="action_report_menu_illegal">违法信息</string>
+    <string name="action_report_menu_privacy">泄露隐私</string>
+    <string name="action_report_menu_score">涉嫌刷分</string>
+    <string name="action_report_menu_spoiler">剧透</string>
+    <string name="action_report_menu_other">其他</string>
+    <string name="action_report_attach">附加信息</string>
+    <string name="action_report_submit">报告疑虑</string>
+
+    <!-- BBCODE -->
+    <string name="bbcode_holder_b">加粗内容</string>
+    <string name="bbcode_holder_i">斜体内容</string>
+    <string name="bbcode_holder_u">下划线内容</string>
+    <string name="bbcode_holder_s">删除线内容</string>
+    <string name="bbcode_holder_size">字号</string>
+    <string name="bbcode_holder_mask">遮罩内容</string>
+    <string name="bbcode_holder_color">颜色文本内容</string>
+    <string name="bbcode_holder_color_value">色值</string>
+    <string name="bbcode_holder_link">链接地址</string>
+    <string name="bbcode_holder_link_desc">链接描述</string>
+    <string name="bbcode_holder_img">图片链接</string>
+    <string name="bbcode_holder_code">代码内容</string>
+    <string name="bbcode_holder_quote">引用内容</string>
+
+    <!-- 数据库 -->
+    <string name="database_format_error">数据库文件不合法</string>
+
+    <!-- 磁链资源搜索功能 -->
+    <string name="magnet_title">动画资源搜索</string>
+    <string name="magnet_search_hint">搜索番剧资源</string>
+    <string name="magnet_team">来源：%1$s</string>
+    <string name="magnet_time">时间：%1$s</string>
+    <string name="magnet_size">大小：%1$s</string>
+    <string name="magnet_kind">类型：%1$s</string>
+    <string name="magnet_config_title">完善搜索节点</string>
+    <string name="magnet_config_input_hint">填入搜索节点</string>
+    <string name="magnet_config_desc">Q：为什么需要搜索节点？\nA：Bangumi for Android不提供任何番剧资源的搜索服务，如果需要相关功能，请通过节点从第三方服务获取搜索内容\n\nQ：如何获取第三方资源搜索服务节点？\nA：Bangumi for Android 不提供节点，请自行从网络上搜索相关节点</string>
+    <string name="magnet_config_where">查找第三方资源搜索服务节点</string>
+    <string name="magnet_team_title">字幕组</string>
+    <string name="magnet_config_first">请先配置资源搜索节点</string>
+    <string name="magnet_input_first">请输入关键词搜索资源</string>
+
+    <string name="calendar_monday">周一</string>
+    <string name="calendar_tuesday">周二</string>
+    <string name="calendar_wednesday">周三</string>
+    <string name="calendar_thursday">周四</string>
+    <string name="calendar_friday">周五</string>
+    <string name="calendar_saturday">周六</string>
+    <string name="calendar_sunday">周日</string>
+
+
+    <!-- 各个枚举类型名称 -->
+    <string name="type_unknown">未知</string>
+    <string name="type_topic_ep">章节</string>
+    <string name="type_topic_group">小组</string>
+    <string name="type_topic_person">现实人物</string>
+    <string name="type_topic_crt">虚拟角色</string>
+    <string name="type_topic_subject">条目</string>
+    <string name="type_topic_index">目录</string>
+    <string name="type_topic_blog">日志</string>
+    <string name="type_topic_other">其它</string>
+
+
+    <string name="type_bilibili_wish">想看</string>
+    <string name="type_bilibili_doing">再看</string>
+    <string name="type_bilibili_done">看过</string>
+    <string name="type_bilibili_media_anime">动画</string>
+    <string name="type_bilibili_media_real">影视</string>
+    <string name="type_interest_wish">想%1$s</string>
+    <string name="type_interest_done">%1$s过</string>
+    <string name="type_interest_doing">在%1$s</string>
+    <string name="type_interest_hold">搁置</string>
+    <string name="type_interest_drop">抛弃</string>
+    <string name="type_action_see">看</string>
+    <string name="type_action_read">读</string>
+    <string name="type_action_listen">听</string>
+    <string name="type_action_play">玩</string>
+    <string name="type_feature_unset">未设置</string>
+    <string name="type_feature_dollars">Dollars</string>
+    <string name="type_feature_magi">MAGI</string>
+    <string name="type_feature_syncer">豆哔同步</string>
+    <string name="type_feature_anime_yuc">新番</string>
+    <string name="type_feature_schedule">每日放送</string>
+    <string name="type_feature_almanac">年鉴</string>
+    <string name="type_feature_wiki">WIKI</string>
+    <string name="type_feature_rank">排行榜</string>
+    <string name="type_feature_process">追番进度</string>
+    <string name="type_feature_detect_anime">以图搜番</string>
+    <string name="type_feature_detect_character">以图识人</string>
+    <string name="type_feature_discover">首页</string>
+    <string name="type_feature_hidden">隐藏</string>
+    <string name="type_feature_profile">我的</string>
+    <string name="type_feature_timeline">时间胶囊</string>
+    <string name="type_feature_rakuen">超展开</string>
+    <string name="type_feature_magnet">搜番资源</string>
+    <string name="type_feature_tag">标签</string>
+    <string name="type_feature_pixiv">Pixiv</string>
+    <string name="type_feature_subject_browser">条目浏览</string>
+    <string name="type_feature_pm">短信</string>
+
+
+    <string name="type_mono_query_collect">收藏</string>
+    <string name="type_mono_query_comment">评论</string>
+    <string name="type_mono_query_dateline">时间</string>
+    <string name="type_mono_query_title">名称</string>
+    <string name="type_score_1">不忍直视</string>
+    <string name="type_score_2">很差</string>
+    <string name="type_score_3">差</string>
+    <string name="type_score_4">较差</string>
+    <string name="type_score_5">不过不失</string>
+    <string name="type_score_6">还行</string>
+    <string name="type_score_7">推荐</string>
+    <string name="type_score_8">力荐</string>
+    <string name="type_score_9">神作</string>
+    <string name="type_score_10">超神作</string>
+    <string name="type_score_unset">未评分</string>
+
+    <string name="type_collection_score_1">不忍直视（1）</string>
+    <string name="type_collection_score_2">很差（2）</string>
+    <string name="type_collection_score_3">差（3）</string>
+    <string name="type_collection_score_4">较差（4）</string>
+    <string name="type_collection_score_5">不过不失（5）</string>
+    <string name="type_collection_score_6">还行（6）</string>
+    <string name="type_collection_score_7">推荐（7）</string>
+    <string name="type_collection_score_8">力荐（8）</string>
+    <string name="type_collection_score_9">神作（9）</string>
+    <string name="type_collection_score_10">超神作（10）</string>
+    <string name="type_collection_score_unset">未评分</string>
+</resources>

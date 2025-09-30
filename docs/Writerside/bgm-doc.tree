@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="bgm-doc"
+                 name="Bangumi App 文档中心"
+                 start-page="bangumi-topic.md">
+
+    <toc-element topic="bangumi-topic.md"/>
+    <toc-element topic="bangumi-topic-install.md"/>
+    <toc-element topic="bangumi-topic-argument.md"/>
+    <toc-element topic="bangumi-topic-privacy.md"/>
+</instance-profile>

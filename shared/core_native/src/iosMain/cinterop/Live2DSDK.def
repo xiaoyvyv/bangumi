@@ -1,0 +1,4 @@
+language = Objective-C
+package = com.xiaoyv.bangumi.shared.live2d
+headers = Live2DView.h Live2D/LCubismSdk.h
+compilerOpts = -framework UIKit

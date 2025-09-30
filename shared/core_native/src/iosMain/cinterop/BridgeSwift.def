@@ -1,0 +1,3 @@
+language = Objective-C
+package = com.xiaoyv.bangumi.shared
+headers = Bangumi-Swift.h

@@ -1,0 +1,24 @@
+CREATE TABLE SqlCookie (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    domain TEXT NOT NULL,
+    path TEXT,
+    expires INTEGER,
+    cookie TEXT
+);
+
+selectAll:
+SELECT * FROM SqlCookie;
+
+deleteCookieByNameAndDomain:
+DELETE FROM SqlCookie WHERE name = ? AND domain = ? AND path = ?;
+
+deleteExpiredSqlCookie:
+DELETE FROM SqlCookie WHERE expires < ?;
+
+insertCookie:
+INSERT INTO SqlCookie (name, domain, path, expires, cookie)
+VALUES (?, ?, ?, ?, ?);
+
+deleteAllCookie:
+DELETE FROM SqlCookie;

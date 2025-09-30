@@ -1,0 +1,23 @@
+-- SqlSerializable.sq
+CREATE TABLE SqlSerializable (
+    key TEXT NOT NULL PRIMARY KEY,       -- 缓存唯一标识
+    value TEXT NOT NULL,                 -- 序列化后的数据
+    createdAt INTEGER NOT NULL           -- 缓存创建时间（Unix timestamp）
+);
+
+-- 可选：查询接口
+selectByKey:
+SELECT * FROM SqlSerializable WHERE key = ?;
+
+insertOrReplace:
+INSERT OR REPLACE INTO SqlSerializable(key, value, createdAt)
+VALUES (?, ?, ?);
+
+deleteByKey:
+DELETE FROM SqlSerializable WHERE key = ?;
+
+deleteAll:
+DELETE FROM SqlSerializable;
+
+deleteExpired:
+DELETE FROM SqlSerializable WHERE createdAt < ?;

@@ -1,0 +1,62 @@
+-- 创建表 UserInfo
+CREATE TABLE SqlUser (
+    id INTEGER NOT NULL PRIMARY KEY,
+    avatar TEXT NOT NULL,
+    username TEXT NOT NULL,
+    nickname TEXT NOT NULL,
+    sign TEXT NOT NULL,
+    roomPic TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    formHash TEXT NOT NULL,
+    updateAt INTEGER NOT NULL,
+    online TEXT NOT NULL,
+    userGroup INTEGER NOT NULL
+);
+
+-- 插入数据
+insertUser:
+INSERT INTO SqlUser(
+    id, avatar, username, nickname, sign, roomPic, summary, formHash, updateAt, online, userGroup
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- 查询所有用户
+selectAllUsers:
+SELECT * FROM SqlUser;
+
+-- 根据 ID 查询用户
+selectUserById:
+SELECT * FROM SqlUser WHERE id = ?;
+
+-- 获取最新用户
+selectCurrentUser:
+SELECT * FROM SqlUser
+ORDER BY updateAt DESC
+LIMIT 1;
+
+-- 更新用户信息
+updateUser:
+UPDATE SqlUser
+SET avatar = ?, username = ?, nickname = ?, sign = ?, roomPic = ?, summary = ?, formHash = ?, updateAt = ?, online = ?, userGroup = ?
+WHERE id = ?;
+
+-- 检查某个 ID 是否存在
+checkIdExists:
+SELECT EXISTS(SELECT 1 FROM SqlUser WHERE id = ?);
+
+-- 删除用户
+deleteUserById:
+DELETE FROM SqlUser WHERE id = ?;
+
+-- 删除全部用户
+deleteAll:
+DELETE FROM SqlUser;
+
+-- 删除当前用户
+
+deleteCurrentUser:
+DELETE FROM SqlUser
+WHERE id = (
+    SELECT id FROM SqlUser
+    ORDER BY updateAt DESC
+    LIMIT 1
+);

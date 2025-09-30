@@ -1,0 +1,31 @@
+CREATE TABLE SqlHistory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, -- 唯一标识
+    keyword TEXT NOT NULL UNIQUE,         -- 搜索关键词，唯一约束
+    timestamp INTEGER NOT NULL            -- 搜索时间戳（毫秒时间戳）
+);
+
+-- 插入新的搜索记录
+saveHistory:
+INSERT INTO SqlHistory (keyword, timestamp)
+VALUES (:keyword, :timestamp);
+
+-- 查询所有搜索历史，按时间倒序
+queryAllHistory:
+SELECT * FROM SqlHistory
+ORDER BY timestamp DESC
+LIMIT :limit;
+
+-- 查询某个关键词是否存在
+queryHistory:
+SELECT * FROM SqlHistory
+WHERE keyword = :keyword
+LIMIT 1;
+
+-- 删除某个关键词的历史记录
+deleteHistory:
+DELETE FROM SqlHistory
+WHERE keyword = :keyword;
+
+-- 清空所有搜索历史
+clearHistory:
+DELETE FROM SqlHistory;

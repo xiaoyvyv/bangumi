@@ -1,0 +1,64 @@
+/*
+ * Copyright(c) Live2D Inc. All rights reserved.
+ *
+ * Use of this source code is governed by the Live2D Open Software license
+ * that can be found at http://live2d.com/eula/live2d-open-software-license-agreement_en.html.
+ */
+
+package com.live2d.sdk.cubism.framework.id;
+
+import java.util.Objects;
+
+/**
+ * The name of parameters, parts and Drawable is held in this class.
+ */
+public class CubismId {
+    /**
+     * Get ID name
+     */
+    public String getString() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CubismId cubismId = (CubismId) o;
+
+        return Objects.equals(id, cubismId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    /**
+     * Constructor
+     *
+     * @param id A ID name
+     * @throws IllegalArgumentException if an argument is null
+     */
+    CubismId(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id is null.");
+        }
+        this.id = id;
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param id the CubismId instance
+     */
+    CubismId(CubismId id) {
+        this.id = id.getString();
+    }
+
+    /**
+     * ID name
+     */
+    private final String id;
+}

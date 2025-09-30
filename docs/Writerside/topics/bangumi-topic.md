@@ -1,0 +1,3 @@
+# 关于 Bangumi App
+
+Start typing here...
