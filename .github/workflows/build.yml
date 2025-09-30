@@ -16,17 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      # Gradle 缓存
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-
-
       # 安装 Cocoapods
       - name: Install CocoaPods
         run: |
@@ -39,6 +28,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
+          cache: gradle
 
       # 安装 Android SDK
       - name: Setup Android SDK
@@ -48,11 +38,7 @@ jobs:
       - name: Build Android Release
         id: build
         continue-on-error: true
-        run: ./gradlew :composeApp:assembleRelease --stacktrace
-
-      - name: Build Android Release (retry on failure)
-        if: ${{ steps.build.outcome == 'failure' }}
-        run: ./gradlew :composeApp:assembleRelease --stacktrace
+        run: ./gradlew :composeApp:assembleRelease
 
       # 上传 Android APK
       - name: Upload Android APK
@@ -61,18 +47,11 @@ jobs:
           name: android-release-apk
           path: composeApp/build/outputs/apk/release/*.apk
 
-      # Build shared framework
-      - name: Build shared framework for iOS (Release)
-        run: |
-          ./gradlew :shared:core_native:syncFramework \
-            -Pkotlin.native.cocoapods.configuration="Release" \
-            -Pkotlin.native.cocoapods.platform="iphoneos" \
-            -Pkotlin.native.cocoapods.archs="arm64" \
-            --stacktrace
+      - name: generateDummyFramework
+        run: ./gradlew generateDummyFramework
 
-      # Embed
-      - name: Embed and sign framework for iOS
-        run: ./gradlew :composeApp:embedAndSignAppleFrameworkForXcode --stacktrace
+      - name: podspec
+        run: ./gradlew podspec
 
       # 构建 iOS
       - name: Build iOS Release
@@ -85,6 +64,7 @@ jobs:
             -workspace iosApp.xcworkspace \
             -sdk iphoneos \
             -archivePath build/iosApp.xcarchive archive
+            ENABLE_USER_SCRIPT_SANDBOXING=NO
 
       # 导出 IPA
       - name: Export iOS IPA
