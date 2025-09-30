@@ -1,26 +1,87 @@
-name: Build CI
+name: Compose Multiplatform CI
 
 on:
   push:
-    branches: [ "multiplatform" ]
+    branches: [ 'multiplatform' ]
   pull_request:
-    branches: [ "multiplatform" ]
+    branches: [ 'multiplatform' ]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
+    env:
+      JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 
     steps:
-      - uses: actions/checkout@v4
-      - name: set up JDK 21
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      # 安装 Java
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: gradle
+          distribution: 'zulu'
+          java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew build
+      # 安装 Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 33
+          build-tools: 33.0.0
+          ndk-version: 25.2.9519653
+
+      # 缓存 Gradle
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # 构建 Android APK
+      - name: Build Android Release
+        run: ./gradlew :composeApp:assembleRelease --stacktrace
+
+      # 上传 Android APK
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-release-apk
+          path: composeApp/build/outputs/apk/release/*.apk
+
+      # 安装 Cocoapods
+      - name: Install CocoaPods
+        run: |
+          sudo gem install cocoapods
+          pod repo update
+
+      # 构建 iOS
+      - name: Build iOS Release
+        run: |
+          cd iosApp
+          pod install
+          xcodebuild \
+            -scheme iosApp \
+            -configuration Release \
+            -workspace iosApp.xcworkspace \
+            -sdk iphoneos \
+            -archivePath build/iosApp.xcarchive archive
+
+      # 导出 IPA
+      - name: Export iOS IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath iosApp/build/iosApp.xcarchive \
+            -exportPath iosApp/build/ipa \
+            -exportOptionsPlist iosApp/ExportOptions.plist
+
+      # 上传 IPA
+      - name: Upload iOS IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-release-ipa
+          path: iosApp/build/ipa/*.ipa
