@@ -24,7 +24,7 @@ jobs:
           cache: gradle
 
       - name: Install CocoaPods on hosted runners
-        if: !contains(runner.labels, 'self-hosted')
+        if: contains(runner.labels, 'self-hosted') == false
         run: |
           sudo gem install cocoapods
           pod repo update
