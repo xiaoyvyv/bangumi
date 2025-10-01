@@ -48,11 +48,7 @@ jobs:
       #          path: composeApp/build/outputs/apk/release/*.apk
 
       - name: generateDummyFramework
-        run: ./gradlew generateDummyFramework \
-          -Pkotlin.native.cocoapods.configuration="Release" \
-          -Pkotlin.native.cocoapods.platform="iphoneos" \
-          -Pkotlin.native.cocoapods.archs="arm64" \
-          --info
+        run: ./gradlew generateDummyFramework
 
       - name: podspec
         run: ./gradlew podspec --info
