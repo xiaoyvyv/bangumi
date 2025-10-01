@@ -24,16 +24,11 @@ jobs:
           cache: gradle
 
       # 安装 CocoaPods
-      - name: Install CocoaPods
+      - name: Install CocoaPods on hosted runners
+        if: !contains(runner.labels, 'self-hosted')
         run: |
           sudo gem install cocoapods
           pod repo update
-
-      # Setup CocoaPods
-      - name: Setup CocoaPods
-        run: |
-          cd iosApp
-          pod install
 
       # 生成 Kotlin Multiplatform Framework
       - name: generateDummyFramework
@@ -42,6 +37,12 @@ jobs:
       # 生成 Podspec
       - name: podspec
         run: ./gradlew podspec --info
+
+      # Setup CocoaPods
+      - name: Setup CocoaPods
+        run: |
+          cd iosApp
+          pod install
 
       # 构建 iOS
       - name: Build iOS Release
