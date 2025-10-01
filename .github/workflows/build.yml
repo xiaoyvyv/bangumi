@@ -23,11 +23,29 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      - name: Install CocoaPods on hosted runners
-        if: contains(runner.labels, 'self-hosted') == false
+      - name: Install CocoaPods if needed
         run: |
-          sudo gem install cocoapods
-          pod repo update
+          echo "Runner labels: $RUNNER_LABELS"
+          if [[ "$RUNNER_LABELS" == *"self-hosted"* ]]; then
+            echo "Self-hosted runner detected"
+            if command -v pod >/dev/null 2>&1; then
+              echo "CocoaPods already installed — skipping"
+            else
+              echo "CocoaPods not found — installing"
+              sudo gem install cocoapods
+              pod repo update
+            fi
+          else
+            echo "Hosted runner detected — always install CocoaPods"
+            sudo gem install cocoapods
+            pod repo update
+          fi
+      #
+      #      - name: Install CocoaPods on hosted runners
+      #        if: contains(runner.labels, 'self-hosted') == false
+      #        run: |
+      #          sudo gem install cocoapods
+      #          pod repo update
 
       # 生成 Kotlin Multiplatform Framework
       - name: generateDummyFramework
