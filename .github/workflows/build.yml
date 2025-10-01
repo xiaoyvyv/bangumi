@@ -48,14 +48,22 @@ jobs:
       #          path: composeApp/build/outputs/apk/release/*.apk
 
       - name: generateDummyFramework
-        run: ./gradlew generateDummyFramework --info
+        run: ./gradlew generateDummyFramework \
+          -Pkotlin.native.cocoapods.configuration="Release" \
+          -Pkotlin.native.cocoapods.platform="iphoneos" \
+          -Pkotlin.native.cocoapods.archs="arm64" \
+          --info
 
       - name: podspec
         run: ./gradlew podspec --info
-
-      # Embed
-      - name: Embed and sign framework for iOS
-        run: ./gradlew :composeApp:embedAndSignAppleFrameworkForXcode --info
+      #
+      #      # Embed
+      #      - name: Embed and sign framework for iOS
+      #        run: ./gradlew :composeApp:embedAndSignAppleFrameworkForXcode \
+      #          -Pkotlin.native.cocoapods.configuration="Release" \
+      #          -Pkotlin.native.cocoapods.platform="iphoneos" \
+      #          -Pkotlin.native.cocoapods.archs="arm64" \
+      #          --info
 
       # 构建 iOS
       - name: Build iOS Release
