@@ -75,8 +75,13 @@ jobs:
             -configuration Release \
             -workspace iosApp.xcworkspace \
             -sdk iphoneos \
-            -archivePath build/iosApp.xcarchive
-            CODE_SIGNING_ALLOWED=NO archive
+            -archivePath build/iosApp.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            PROVISIONING_PROFILE="" \
+            archive
 
       # 导出 IPA
       - name: Export iOS IPA
