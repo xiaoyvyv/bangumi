@@ -34,33 +34,24 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 构建 Android APK
-      - name: Build Android Release
-        id: build
-        continue-on-error: true
-        run: ./gradlew :composeApp:assembleRelease --info
-
-      # 上传 Android APK
-      - name: Upload Android APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-release-apk
-          path: composeApp/build/outputs/apk/release/*.apk
+      #      # 构建 Android APK
+      #      - name: Build Android Release
+      #        id: build
+      #        continue-on-error: true
+      #        run: ./gradlew :composeApp:assembleRelease --info
+      #
+      #      # 上传 Android APK
+      #      - name: Upload Android APK
+      #        uses: actions/upload-artifact@v4
+      #        with:
+      #          name: android-release-apk
+      #          path: composeApp/build/outputs/apk/release/*.apk
 
       - name: generateDummyFramework
         run: ./gradlew generateDummyFramework --info
 
       - name: podspec
         run: ./gradlew podspec --info
-
-      # Build shared framework
-      - name: Build shared framework for iOS (Release)
-        run: |
-          ./gradlew :shared:core_native:syncFramework \
-            -Pkotlin.native.cocoapods.configuration="Release" \
-            -Pkotlin.native.cocoapods.platform="iphoneos" \
-            -Pkotlin.native.cocoapods.archs="arm64" \
-            --info
 
       # Embed
       - name: Embed and sign framework for iOS
