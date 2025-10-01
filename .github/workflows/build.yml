@@ -9,6 +9,7 @@ on:
 jobs:
   build-ios:
     name: Build iOS
+    if: false
     runs-on: macos-latest
     #    runs-on: self-hosted
     steps:
@@ -60,7 +61,7 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             | xcpretty
-                
+      
       
       # 导出 IPA
       - name: Export iOS IPA
