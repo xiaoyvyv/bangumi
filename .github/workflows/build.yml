@@ -8,7 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    #    runs-on: macos-latest
+    runs-on: self-hosted
     env:
       JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 

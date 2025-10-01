@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
     spec.summary                  = 'Some description for the Shared Module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/core_native.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target    = '14.0'
+    spec.ios.deployment_target    = '14'
     spec.dependency 'libavif'
                 
     if !Dir.exist?('build/cocoapods/framework/core_native.framework') || Dir.empty?('build/cocoapods/framework/core_native.framework')
