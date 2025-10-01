@@ -7,46 +7,6 @@ on:
     branches: [ 'multiplatform' ]
 
 jobs:
-  build-android:
-    name: Build Android
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      # 安装 Java
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: gradle
-
-      # 安装 Android SDK
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      # 构建 Android APK
-      - name: Build Android Release
-        id: build
-        continue-on-error: true
-        run: ./gradlew :composeApp:assembleRelease --info
-
-      # 上传 Android APK
-      - name: Upload Android APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-release-apk
-          path: composeApp/build/outputs/apk/release/*.apk
-
-      # 生成 Kotlin Multiplatform Framework
-      - name: generateDummyFramework
-        run: ./gradlew generateDummyFramework --info
-
-      # 生成 Podspec
-      - name: podspec
-        run: ./gradlew podspec --info
-
   build-ios:
     name: Build iOS
     runs-on: macos-latest
@@ -74,6 +34,14 @@ jobs:
         run: |
           cd iosApp
           pod install
+
+      # 生成 Kotlin Multiplatform Framework
+      - name: generateDummyFramework
+        run: ./gradlew generateDummyFramework --info
+
+      # 生成 Podspec
+      - name: podspec
+        run: ./gradlew podspec --info
 
       # 构建 iOS
       - name: Build iOS Release
@@ -105,3 +73,35 @@ jobs:
         with:
           name: ios-release-ipa
           path: iosApp/build/ipa/*.ipa
+
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      # 安装 Java
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: gradle
+
+      # 安装 Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 构建 Android APK
+      - name: Build Android Release
+        id: build
+        continue-on-error: true
+        run: ./gradlew :composeApp:assembleRelease
+
+      # 上传 Android APK
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk
+          path: composeApp/build/outputs/apk/release/*.apk
