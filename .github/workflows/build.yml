@@ -23,7 +23,6 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      # 安装 CocoaPods
       - name: Install CocoaPods on hosted runners
         if: !contains(runner.labels, 'self-hosted')
         run: |
