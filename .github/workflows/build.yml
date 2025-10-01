@@ -10,7 +10,6 @@ jobs:
   build-ios:
     name: Build iOS
     runs-on: macos-latest
-    needs: build-android
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
