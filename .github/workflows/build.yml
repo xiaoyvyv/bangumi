@@ -7,27 +7,18 @@ on:
     branches: [ 'multiplatform' ]
 
 jobs:
-  build:
-    #    runs-on: macos-latest
-    runs-on: self-hosted
-    env:
-      JAVA_HOME: /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
-
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
-      # 安装 Cocoapods
-      - name: Install CocoaPods
-        run: |
-          sudo gem install cocoapods
-          pod repo update
 
       # 安装 Java
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
           cache: gradle
 
@@ -35,33 +26,50 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      #      # 构建 Android APK
-      #      - name: Build Android Release
-      #        id: build
-      #        continue-on-error: true
-      #        run: ./gradlew :composeApp:assembleRelease --info
-      #
-      #      # 上传 Android APK
-      #      - name: Upload Android APK
-      #        uses: actions/upload-artifact@v4
-      #        with:
-      #          name: android-release-apk
-      #          path: composeApp/build/outputs/apk/release/*.apk
+      # 构建 Android APK
+      - name: Build Android Release
+        id: build
+        continue-on-error: true
+        run: ./gradlew :composeApp:assembleRelease --info
 
+      # 上传 Android APK
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk
+          path: composeApp/build/outputs/apk/release/*.apk
+
+      # 生成 Kotlin Multiplatform Framework
       - name: generateDummyFramework
-        run: ./gradlew generateDummyFramework  --info
+        run: ./gradlew generateDummyFramework --info
 
+      # 生成 Podspec
       - name: podspec
         run: ./gradlew podspec --info
-      #
-      #      # Embed
-      #      - name: Embed and sign framework for iOS
-      #        run: ./gradlew :composeApp:embedAndSignAppleFrameworkForXcode \
-      #          -Pkotlin.native.cocoapods.configuration="Release" \
-      #          -Pkotlin.native.cocoapods.platform="iphoneos" \
-      #          -Pkotlin.native.cocoapods.archs="arm64" \
-      #          --info
 
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+    needs: build-android
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      # 安装 Java
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: gradle
+
+      # 安装 CocoaPods
+      - name: Install CocoaPods
+        run: |
+          sudo gem install cocoapods
+          pod repo update
+
+      # Setup CocoaPods
       - name: Setup CocoaPods
         run: |
           cd iosApp
@@ -71,18 +79,17 @@ jobs:
       - name: Build iOS Release
         run: |
           cd iosApp
-          xcodebuild \
+          xcodebuild clean build \
             -scheme iosApp \
-            -configuration Release \
             -workspace iosApp.xcworkspace \
-            -sdk iphoneos \
+            -configuration Release \
+            -destination generic/platform=iOS \
             -archivePath build/iosApp.xcarchive \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
+            archive \
             CODE_SIGN_IDENTITY="" \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            PROVISIONING_PROFILE="" \
-            archive
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            -quiet
 
       # 导出 IPA
       - name: Export iOS IPA
