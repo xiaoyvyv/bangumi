@@ -10,7 +10,7 @@ jobs:
   build-ios:
     name: Build iOS
     # runs-on: macos-latest
-    runs-on: [ self-hosted, macos-latest ]
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
