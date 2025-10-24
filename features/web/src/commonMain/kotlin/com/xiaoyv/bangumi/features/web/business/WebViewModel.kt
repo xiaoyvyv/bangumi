@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.core.utils.trimStr
-import com.xiaoyv.bangumi.shared.data.api.client.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
 import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
 import io.ktor.http.Url
 import kotlinx.collections.immutable.toPersistentList

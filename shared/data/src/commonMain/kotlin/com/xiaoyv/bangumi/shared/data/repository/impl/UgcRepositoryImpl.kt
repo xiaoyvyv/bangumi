@@ -85,7 +85,7 @@ class UgcRepositoryImpl(
                         }
 
                         TimelineTarget.WHOLE -> {
-                            client.bgmWebNoCookieApi
+                            client.bgmWebApiNoCookie
                                 .fetchTimelineForWhole(type = type, page = it)
                                 .fetchTimelineConverted(target, type)
                         }

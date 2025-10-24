@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.manager.app
 import androidx.compose.runtime.Stable
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
-import com.xiaoyv.bangumi.shared.data.api.client.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
@@ -41,17 +41,15 @@ class UserManager(
     /**
      * 用户信息
      */
-    val userInfo: ComposeUser
-        get() = preferenceStore.userInfo
+    val userInfo: ComposeUser get() = preferenceStore.userInfo
+    val userToken: ComposeAuthToken get() = preferenceStore.userToken
 
     private val _notification = MutableStateFlow(seq)
     val notification = _notification.asStateFlow()
 
     init {
         launch {
-            if (isLogin) {
-                updateUserInfo()
-            }
+            if (isLogin) updateUserInfo()
         }
     }
 
@@ -62,6 +60,10 @@ class UserManager(
         preferenceStore.userInfo = userInfo
         preferenceStore.userToken = token
         notificationChanged()
+    }
+
+    fun setToken(token: ComposeAuthToken) {
+        preferenceStore.userToken = token
     }
 
     /**
@@ -98,12 +100,6 @@ class UserManager(
             onSuccess = {
                 // 拉取个人信息，顺便检查 Json 授权是否失效
                 userRepository.fetchUserProfile()
-                    .onFailure {
-                        // Token 失效了，重新拉取
-                        if (it is ApiHttpException && it.code == 401) {
-                            preferenceStore.userToken = ComposeAuthToken.Empty
-                        }
-                    }
                     .onSuccess {
                         debugLog { "更新用户信息: ${it.copy(formHash = userInfo.formHash)}" }
 

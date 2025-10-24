@@ -14,6 +14,7 @@ object WebConstant {
     const val URL_BASE_NEXT_API = "https://next.bgm.tv/"
     const val URL_BASE_APP_API = "https://api.xiaoyv.com.cn/"
     const val URL_BASE_API_DOUBAN = "https://frodo.douban.com/"
+    const val URL_BASE_API_PIXIV = "https://app-api.pixiv.net/"
     const val URL_BASE_WEB = "https://bgm.tv/"
 }
 

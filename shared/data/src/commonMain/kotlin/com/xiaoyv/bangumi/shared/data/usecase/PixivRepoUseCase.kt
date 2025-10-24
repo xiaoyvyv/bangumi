@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.usecase
 
-import com.xiaoyv.bangumi.shared.data.api.client.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 

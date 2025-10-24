@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.shared.data.api.client
+package com.xiaoyv.bangumi.shared.data.api.client.cookie
 
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson

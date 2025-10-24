@@ -2,11 +2,11 @@
 
 package com.xiaoyv.bangumi.shared.data.api.client
 
-import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.System.createHttpClient
+import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
-import com.xiaoyv.bangumi.shared.core.utils.defaultJson
+import com.xiaoyv.bangumi.shared.core.utils.requireNoError
+import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.uppercaseFirstChar
 import com.xiaoyv.bangumi.shared.data.api.BgmJsonApi
 import com.xiaoyv.bangumi.shared.data.api.BgmWebApi
@@ -14,9 +14,11 @@ import com.xiaoyv.bangumi.shared.data.api.DouBanApi
 import com.xiaoyv.bangumi.shared.data.api.ImageApi
 import com.xiaoyv.bangumi.shared.data.api.PixivApi
 import com.xiaoyv.bangumi.shared.data.api.TraceApi
+import com.xiaoyv.bangumi.shared.data.api.app.AppApi
 import com.xiaoyv.bangumi.shared.data.api.app.createAppApi
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpCodeConverterFactory
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpDocumentConverterFactory
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.DouBanPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.PixivProxyPlugin
 import com.xiaoyv.bangumi.shared.data.api.createBgmJsonApi
@@ -49,26 +51,15 @@ import com.xiaoyv.bangumi.shared.data.api.next.createTimelineApi
 import com.xiaoyv.bangumi.shared.data.api.next.createUserApi
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
 import com.xiaoyv.bangumi.shared.systemDevice
 import de.jensklingenberg.ktorfit.ktorfit
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.DefaultRequest
-import io.ktor.client.plugins.HttpRedirect
-import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
-import io.ktor.client.plugins.compression.ContentEncoding
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.cookies.HttpCookies
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.header
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.utils.io.KtorDsl
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -85,77 +76,100 @@ class BgmApiClient(
     private val cookieStorage: BgmCookieStorage,
     private val preferenceStore: PreferenceStore,
 ) {
-    val client by lazy {
-        BgmHttpClientImpl(redirect = true, cookie = true)
+    private val config get() = preferenceStore.settings.network
+
+    val baseUrl get() = config.bgmHost
+
+    val bgmHttpClient by lazy {
+        createHttpClient(
+            config = config,
+            cookieStorage = cookieStorage,
+            block = { installBgmAuth(preferenceStore) }
+        )
     }
 
-    private val clientNoCookie by lazy {
-        BgmHttpClientImpl(redirect = true, cookie = false)
+    private val bgmHttpClientNoRedirect by lazy {
+        createHttpClient(
+            redirect = false,
+            config = config,
+            cookieStorage = cookieStorage,
+            block = { installBgmAuth(preferenceStore) }
+        )
     }
-
-    private val clientNoRedirect by lazy {
-        BgmHttpClientImpl(redirect = false, cookie = true)
-    }
-
-    val baseUrl = preferenceStore.settings.network.bgmHost
 
     private val webRetrofit = ktorfit {
-        httpClient(client)
+        httpClient(bgmHttpClient)
         baseUrl(baseUrl)
         converterFactories(HttpDocumentConverterFactory(), HttpCodeConverterFactory())
     }
 
-    private val webNoRedirectRetrofit = ktorfit {
-        httpClient(clientNoRedirect)
+    private val webRetrofitNoRedirect = ktorfit {
+        httpClient(bgmHttpClientNoRedirect)
         baseUrl(baseUrl)
         converterFactories(HttpDocumentConverterFactory(), HttpCodeConverterFactory())
     }
 
-    private val webNoCookieRetrofit = ktorfit {
-        httpClient(clientNoCookie)
+    private val webRetrofitAnonymous = ktorfit {
+        httpClient(createHttpClient(config))
         baseUrl(baseUrl)
         converterFactories(HttpDocumentConverterFactory(), HttpCodeConverterFactory())
     }
 
-    private val jsonRetrofit = ktorfit {
-        httpClient(clientNoRedirect)
-        baseUrl(WebConstant.URL_BASE_API)
-        converterFactories(HttpCodeConverterFactory())
-    }
-
-    private val jsonNextRetrofit = ktorfit {
-        httpClient(clientNoRedirect)
+    private val nextApiRetrofit = ktorfit {
+        httpClient(bgmHttpClientNoRedirect)
         baseUrl(WebConstant.URL_BASE_NEXT_API)
         converterFactories(HttpCodeConverterFactory())
     }
 
-    private val jsonAppRetrofit = ktorfit {
-        httpClient(clientNoRedirect)
+    private val publicApiRetrofit = ktorfit {
+        httpClient(bgmHttpClientNoRedirect)
+        baseUrl(WebConstant.URL_BASE_API)
+        converterFactories(HttpCodeConverterFactory())
+    }
+
+    private val appApiRetrofit = ktorfit {
+        httpClient(createHttpClient(config))
         baseUrl(WebConstant.URL_BASE_APP_API)
         converterFactories(HttpCodeConverterFactory())
     }
 
-    val bgmWebApi = webRetrofit.createBgmWebApi()
-    val bgmWebNoRedirectApi = webNoRedirectRetrofit.createBgmWebApi()
-    val bgmWebNoCookieApi = webNoCookieRetrofit.createBgmWebApi()
-    val bgmJsonApi = jsonRetrofit.createBgmJsonApi()
-    val dbApi = jsonRetrofit.createDouBanApi()
-    val traceApi = jsonRetrofit.createTraceApi()
-    val imageApi = jsonRetrofit.createImageApi()
-    val pixivApi = jsonRetrofit.createPixivApi()
-    val appApi = jsonAppRetrofit.createAppApi()
-    val mikanApi = webRetrofit.createMikanApi()
+    private val dbApiRetrofit = ktorfit {
+        httpClient(createHttpClient(config) { installDbAuth() })
+        baseUrl(WebConstant.URL_BASE_API_DOUBAN)
+        converterFactories(HttpCodeConverterFactory())
+    }
 
-    val nextRelationshipApi = jsonNextRetrofit.createRelationshipApi()
-    val nextUserApi = jsonNextRetrofit.createUserApi()
-    val nextGroupApi = jsonNextRetrofit.createGroupApi()
-    val nextCharacterApi = jsonNextRetrofit.createCharacterApi()
-    val nextSubjectApi = jsonNextRetrofit.createSubjectApi()
-    val nextPersonApi = jsonNextRetrofit.createPersonApi()
-    val nextEpisodeApi = jsonNextRetrofit.createEpisodeApi()
-    val nextCollectionApi = jsonNextRetrofit.createCollectionApi()
-    val nextTimelineApi = jsonNextRetrofit.createTimelineApi()
-    val nextSearchApi = jsonNextRetrofit.createSearchApi()
+    private val pixivApiRetrofit = ktorfit {
+        httpClient(createHttpClient(config) { installPixivAuth() })
+        baseUrl(WebConstant.URL_BASE_API_PIXIV)
+        converterFactories(HttpCodeConverterFactory())
+    }
+
+    val bgmWebApi = webRetrofit.createBgmWebApi()
+    val bgmWebApiNoRedirect = webRetrofitNoRedirect.createBgmWebApi()
+    val bgmWebApiNoCookie = webRetrofitAnonymous.createBgmWebApi()
+    val bgmJsonApi = publicApiRetrofit.createBgmJsonApi()
+
+    val nextRelationshipApi = nextApiRetrofit.createRelationshipApi()
+    val nextUserApi = nextApiRetrofit.createUserApi()
+    val nextGroupApi = nextApiRetrofit.createGroupApi()
+    val nextCharacterApi = nextApiRetrofit.createCharacterApi()
+    val nextSubjectApi = nextApiRetrofit.createSubjectApi()
+    val nextPersonApi = nextApiRetrofit.createPersonApi()
+    val nextEpisodeApi = nextApiRetrofit.createEpisodeApi()
+    val nextCollectionApi = nextApiRetrofit.createCollectionApi()
+    val nextTimelineApi = nextApiRetrofit.createTimelineApi()
+    val nextSearchApi = nextApiRetrofit.createSearchApi()
+
+    /**
+     * 第三方 API
+     */
+    val mikanApi: MikanApi = appApiRetrofit.createMikanApi()
+    val appApi: AppApi = appApiRetrofit.createAppApi()
+    val traceApi: TraceApi = appApiRetrofit.createTraceApi()
+    val imageApi: ImageApi = appApiRetrofit.createImageApi()
+    val pixivApi: PixivApi = pixivApiRetrofit.createPixivApi()
+    val dbApi: DouBanApi = dbApiRetrofit.createDouBanApi()
 
     suspend fun <R> requestTraceApi(block: suspend TraceApi.() -> R) = requestApi(traceApi, block = block)
     suspend fun <R> requestImageApi(block: suspend ImageApi.() -> R) = requestApi(imageApi, block = block)
@@ -190,7 +204,7 @@ class BgmApiClient(
         context: CoroutineContext = Dispatchers.IO,
         disableRedirect: Boolean = false,
         block: suspend BgmWebApi.() -> R,
-    ) = runCatching { withContext(context) { (if (disableRedirect) bgmWebNoRedirectApi else bgmWebApi).block() } }
+    ) = runCatching { withContext(context) { (if (disableRedirect) bgmWebApiNoRedirect else bgmWebApi).block() } }
         .onFailure { debugLog { it } }
 
     suspend fun <API : Any, R> requestApi(
@@ -201,145 +215,135 @@ class BgmApiClient(
         .onFailure { debugLog { it } }
 
 
-    @KtorDsl
-    private fun BgmHttpClientImpl(redirect: Boolean, cookie: Boolean): HttpClient {
-        return createHttpClient {
-            val config = preferenceStore.settings.network
+    /**
+     * Douban Api 自动授权
+     */
+    private fun HttpClientConfig<*>.installDbAuth() {
+        install(DouBanPlugin) {
+            agent = config.douBanUA
+            key = config.douBanKey
+        }
+    }
 
-            // 重定向配置，不检查方法，让POST的302也支持重定向
-            if (redirect) {
-                install(HttpRedirect) {
-                    checkHttpMethod = false
-                    allowHttpsDowngrade = true
-                }
-            }
-
-            install(HttpTimeout) {
-                connectTimeoutMillis = config.connectTimeoutMillis
-                socketTimeoutMillis = config.socketTimeoutMillis
-                requestTimeoutMillis = config.connectTimeoutMillis + config.socketTimeoutMillis + 5_000
-            }
-
-            install(PixivProxyPlugin) {
-                network = config
-                os = systemDevice.os
-                userAgent = buildString {
-                    append("PixivAndroidApp/${config.pixivVersion} (")
-                    append(systemDevice.os.uppercaseFirstChar())
-                    append(" ")
-                    append(systemDevice.systemVersion)
-                    append("; ")
-                    append(systemDevice.deviceModel)
-                    append(")")
-                }
-            }
-
-            install(Auth) {
-                // Bangumi Api 自动授权
-                bearer {
-                    loadTokens {
-                        val token = preferenceStore.userToken
-                        if (token.accessToken.isBlank() || token.refreshToken.isBlank()) null else BearerTokens(
-                            accessToken = token.accessToken,
-                            refreshToken = token.refreshToken
-                        )
-                    }
-
-                    refreshTokens {
-                        val refreshToken = oldTokens?.refreshToken.orEmpty()
-                        if (refreshToken.isBlank()) null else {
-                            val authToken = bgmWebNoRedirectApi.sendAuthJsonApiToken(
-                                refreshToken = refreshToken,
-                                grantType = "refresh_token"
-                            )
-                            preferenceStore.userToken = authToken
-                            BearerTokens(authToken.accessToken, authToken.refreshToken)
-                        }
-                    }
-
-                    sendWithoutRequest { request ->
-                        request.url.host.contains("bgm.tv", true)
-                                || request.url.host.contains("bangumi.tv", true)
-                                || request.url.host.contains("chii.in", true)
-                    }
-                }
-
-                // Pixiv 自动授权
-                bearer {
-                    loadTokens {
-                        val token = preferenceStore.pixivToken
-                        if (token.accessToken.isBlank() || token.refreshToken.isBlank()) null else BearerTokens(
-                            accessToken = token.accessToken,
-                            refreshToken = token.refreshToken
-                        )
-                    }
-
-                    refreshTokens {
-                        val refreshToken = oldTokens?.refreshToken.orEmpty()
-                        if (refreshToken.isBlank()) null else {
-                            val newToken = pixivApi.sendAuthTokenRefresh(
-                                grantType = "refresh_token",
-                                clientId = config.pixivClientId,
-                                clientSecret = config.pixivClientSecret,
-                                includePolicy = true,
-                                refreshToken = refreshToken
-                            )
-                            preferenceStore.pixivToken = newToken
-                            BearerTokens(newToken.accessToken, newToken.refreshToken)
-                        }
-                    }
-
-                    sendWithoutRequest { request ->
-                        request.url.host.contains("app-api.pixiv.net")
-                    }
-                }
-            }
-
-            install(DouBanPlugin) {
-                agent = config.douBanUA
-                key = config.douBanKey
-            }
-
-            install(ContentNegotiation) {
-                json(defaultJson)
-            }
-
-            install(ContentEncoding) {
-                deflate(1f)
-                gzip(0.9f)
-                identity()
-            }
-
-            if (cookie) install(HttpCookies) {
-                storage = cookieStorage
-            }
-
-            if (System.isDebugType) install(Logging) {
-                level = LogLevel.ALL
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        message.lineSequence().forEach { line ->
-                            var start = 0
-                            while (start < line.length) {
-                                val end = minOf(start + 2000, line.length)
-                                debugLog { line.substring(start, end) }
-                                start = end
-                            }
-                        }
-                    }
-                }
-            }
-
-            install(DefaultRequest) {
-                header(HttpHeaders.ContentType, ContentType.Application.Json)
-                header(HttpHeaders.Pragma, "no-cache")
-                header(HttpHeaders.CacheControl, "no-cache")
-                header(HttpHeaders.TE, "trailers")
-                header(HttpHeaders.AcceptLanguage, "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
-                header(HttpHeaders.Cookie, "kira=4")
-                header(HttpHeaders.UserAgent, System.userAgent())
+    /**
+     * Pixiv Api 自动授权
+     */
+    private fun HttpClientConfig<*>.installPixivAuth() {
+        install(PixivProxyPlugin) {
+            network = config
+            os = systemDevice.os
+            userAgent = buildString {
+                append("PixivAndroidApp/${config.pixivVersion} (")
+                append(systemDevice.os.uppercaseFirstChar())
+                append(" ")
+                append(systemDevice.systemVersion)
+                append("; ")
+                append(systemDevice.deviceModel)
+                append(")")
             }
         }
+
+        install(Auth) {
+            // Pixiv 自动授权
+            bearer {
+                sendWithoutRequest { request ->
+                    request.url.host.contains("app-api.pixiv.net")
+                }
+
+                loadTokens {
+                    val token = preferenceStore.pixivToken
+                    if (token.accessToken.isBlank() || token.refreshToken.isBlank()) null else BearerTokens(
+                        accessToken = token.accessToken,
+                        refreshToken = token.refreshToken
+                    )
+                }
+
+                refreshTokens {
+                    val refreshToken = oldTokens?.refreshToken.orEmpty()
+                    if (refreshToken.isBlank()) null else {
+                        val newToken = pixivApi.sendAuthTokenRefresh(
+                            grantType = "refresh_token",
+                            clientId = config.pixivClientId,
+                            clientSecret = config.pixivClientSecret,
+                            includePolicy = true,
+                            refreshToken = refreshToken
+                        )
+                        preferenceStore.pixivToken = newToken
+                        BearerTokens(newToken.accessToken, newToken.refreshToken)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Bgm Public Api 自动授权
+     */
+    private fun HttpClientConfig<*>.installBgmAuth(preferenceStore: PreferenceStore) {
+        install(Auth) {
+            bearer {
+                sendWithoutRequest { builder ->
+                    builder.url.host.equals("api.bgm.tv", true)
+                }
+
+                loadTokens {
+                    val token = preferenceStore.userToken
+                    if (token.accessToken.isBlank() || token.refreshToken.isBlank()) null else {
+                        BearerTokens(accessToken = token.accessToken, refreshToken = token.refreshToken)
+                    }
+                }
+
+                refreshTokens {
+                    val refreshToken = oldTokens?.refreshToken.orEmpty()
+                    var token = ComposeAuthToken.Empty
+                    if (refreshToken.isNotBlank()) {
+                        val authToken = runResult {
+                            bgmWebApi.sendAuthJsonApiToken(refreshToken = refreshToken, grantType = "refresh_token")
+                        }
+                        if (authToken.isSuccess) token = authToken.getOrThrow()
+                    }
+
+                    if (token == ComposeAuthToken.Empty) {
+                        token = createBgmToken(preferenceStore.userInfo.formHash).getOrThrow()
+                    }
+
+                    if (token == ComposeAuthToken.Empty) {
+                        preferenceStore.userInfo = ComposeUser.Empty
+                        null
+                    } else {
+                        preferenceStore.userToken = token
+                        BearerTokens(token.accessToken, token.refreshToken)
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun createBgmToken(formHash: String) = runResult {
+        val response = bgmWebApiNoRedirect.sendAuthJsonApi(formhash = formHash)
+        if (response.status.value == 200) {
+            Ksoup.parse(response.bodyAsText()).requireNoError()
+        }
+
+        val location = response.headers["Location"].orEmpty()
+        val code = location
+            .substringAfter("code=")
+            .substringBefore("=")
+
+        require(code.isNotBlank()) { "授权失败" }
+
+        // 返回授权结果
+        val tokenEntity = bgmWebApiNoRedirect.sendAuthJsonApiToken(
+            code = code,
+            grantType = "authorization_code"
+        )
+
+        require(tokenEntity.accessToken.isNotBlank())
+        require(tokenEntity.refreshToken.isNotBlank())
+
+        debugLog { "AuthToken ：${tokenEntity}" }
+
+        tokenEntity
     }
 }
 

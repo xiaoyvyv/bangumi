@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.component.toPinYin
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
@@ -10,9 +9,7 @@ import com.xiaoyv.bangumi.shared.core.types.EditInfoType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
-import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.fromJson
-import com.xiaoyv.bangumi.shared.core.utils.requireNoError
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
@@ -38,7 +35,6 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetL
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 
@@ -316,36 +312,10 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken> = runResult {
-        val response = client.bgmWebNoRedirectApi.sendAuthJsonApi(formhash = formHash)
-
-        if (response.status.value == 200) {
-            Ksoup.parse(response.bodyAsText()).requireNoError()
-        }
-
-        val location = response.headers["Location"].orEmpty()
-        val code = location
-            .substringAfter("code=")
-            .substringBefore("=")
-
-        require(code.isNotBlank()) { "授权失败" }
-
-        // 返回授权结果
-        val tokenEntity = client.bgmWebNoRedirectApi.sendAuthJsonApiToken(
-            code = code,
-            grantType = "authorization_code"
-        )
-
-        require(tokenEntity.accessToken.isNotBlank())
-        require(tokenEntity.refreshToken.isNotBlank())
-
-        debugLog { "授权结果：${tokenEntity}" }
-
-        tokenEntity
-    }
+    override suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken> = client.createBgmToken(formHash)
 
     override suspend fun submitRefreshToken(refreshToken: String): Result<ComposeAuthToken> = runResult {
-        client.bgmWebNoRedirectApi.sendAuthJsonApiToken(
+        client.bgmWebApiNoRedirect.sendAuthJsonApiToken(
             refreshToken = refreshToken,
             grantType = "refresh_token"
         )

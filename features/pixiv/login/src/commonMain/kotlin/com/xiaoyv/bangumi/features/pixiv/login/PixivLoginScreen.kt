@@ -19,7 +19,7 @@ import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginViewModel
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -144,7 +144,6 @@ private fun PixivLoginScreenContent(
             Text(text = "Deeplink 配置")
         }
 
-        koinInject<BgmApiClient>()
         Button(
             onClick = {
                 scope.launch {
@@ -154,6 +153,18 @@ private fun PixivLoginScreenContent(
             }
         ) {
             Text(text = "动漫花园测试")
+        }
+
+        val manager = koinInject<UserManager>()
+
+        Button(
+            onClick = {
+                scope.launch {
+                    manager.setToken(manager.userToken.copy(accessToken = "a"))
+                }
+            }
+        ) {
+            Text(text = "设置过期")
         }
     }
 }

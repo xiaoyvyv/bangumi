@@ -58,11 +58,11 @@ class CollectionRepositoryImpl(
         if (type == MonoType.PERSON) {
             if (bookmarked) addPersonCollection(monoId)
             // TODO 删除人物收藏 API 不可用，WEB 请求代替
-            else client.bgmWebNoRedirectApi.submitCollectionPersonRemove(monoId, preferenceStore.userInfo.formHash)
+            else client.bgmWebApiNoRedirect.submitCollectionPersonRemove(monoId, preferenceStore.userInfo.formHash)
         } else {
             if (bookmarked) addCharacterCollection(monoId)
             // TODO 删除角色收藏 API 不可用，WEB 请求代替
-            else client.bgmWebNoRedirectApi.submitCollectionCharacterRemove(monoId, preferenceStore.userInfo.formHash)
+            else client.bgmWebApiNoRedirect.submitCollectionCharacterRemove(monoId, preferenceStore.userInfo.formHash)
         }
         bookmarked
     }

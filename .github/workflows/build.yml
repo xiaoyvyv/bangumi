@@ -7,76 +7,76 @@ on:
     branches: [ 'multiplatform' ]
 
 jobs:
-  build-ios:
-    name: Build iOS
-    if: false
-    runs-on: macos-latest
-    #    runs-on: self-hosted
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      # 安装 Java
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: gradle
-
-      - name: Install xcpretty
-        run: gem install xcpretty
-
-      - name: Install CocoaPods
-        run: |
-          gem install cocoapods
-          pod repo update
-
-      # 生成 Kotlin Multiplatform Framework
-      - name: generateDummyFramework
-        run: ./gradlew generateDummyFramework --info
-
-      # 生成 Podspec
-      - name: podspec
-        run: ./gradlew podspec --info
-
-      # Setup CocoaPods
-      - name: Setup CocoaPods
-        run: |
-          cd iosApp
-          pod install
-
-      # 构建 iOS
-      - name: Build iOS Release
-        run: |
-          cd iosApp
-          xcodebuild clean build \
-            -scheme iosApp \
-            -workspace iosApp.xcworkspace \
-            -configuration Release \
-            -destination generic/platform=iOS \
-            -archivePath build/iosApp.xcarchive \
-            archive \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
-      
-      
-      # 导出 IPA
-      - name: Export iOS IPA
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath iosApp/build/iosApp.xcarchive \
-            -exportPath iosApp/build/ipa \
-            -exportOptionsPlist iosApp/ExportOptions.plist
-
-      # 上传 IPA
-      - name: Upload iOS IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-release-ipa
-          path: iosApp/build/ipa/*.ipa
+  #  build-ios:
+  #    name: Build iOS
+  #    if: false
+  #    runs-on: macos-latest
+  #    #    runs-on: self-hosted
+  #    steps:
+  #      - name: Checkout code
+  #        uses: actions/checkout@v5
+  #
+  #      # 安装 Java
+  #      - name: Setup JDK
+  #        uses: actions/setup-java@v4
+  #        with:
+  #          distribution: 'temurin'
+  #          java-version: '17'
+  #          cache: gradle
+  #
+  #      - name: Install xcpretty
+  #        run: gem install xcpretty
+  #
+  #      - name: Install CocoaPods
+  #        run: |
+  #          gem install cocoapods
+  #          pod repo update
+  #
+  #      # 生成 Kotlin Multiplatform Framework
+  #      - name: generateDummyFramework
+  #        run: ./gradlew generateDummyFramework --info
+  #
+  #      # 生成 Podspec
+  #      - name: podspec
+  #        run: ./gradlew podspec --info
+  #
+  #      # Setup CocoaPods
+  #      - name: Setup CocoaPods
+  #        run: |
+  #          cd iosApp
+  #          pod install
+  #
+  #      # 构建 iOS
+  #      - name: Build iOS Release
+  #        run: |
+  #          cd iosApp
+  #          xcodebuild clean build \
+  #            -scheme iosApp \
+  #            -workspace iosApp.xcworkspace \
+  #            -configuration Release \
+  #            -destination generic/platform=iOS \
+  #            -archivePath build/iosApp.xcarchive \
+  #            archive \
+  #            CODE_SIGN_IDENTITY="" \
+  #            CODE_SIGNING_REQUIRED=NO \
+  #            CODE_SIGNING_ALLOWED=NO \
+  #            | xcpretty
+  #
+  #
+  #      # 导出 IPA
+  #      - name: Export iOS IPA
+  #        run: |
+  #          xcodebuild -exportArchive \
+  #            -archivePath iosApp/build/iosApp.xcarchive \
+  #            -exportPath iosApp/build/ipa \
+  #            -exportOptionsPlist iosApp/ExportOptions.plist
+  #
+  #      # 上传 IPA
+  #      - name: Upload iOS IPA
+  #        uses: actions/upload-artifact@v4
+  #        with:
+  #          name: ios-release-ipa
+  #          path: iosApp/build/ipa/*.ipa
 
   build-android:
     name: Build Android

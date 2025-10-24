@@ -42,7 +42,7 @@ class IndexRepositoryImpl(
         } else {
             // TODO API有问题，暂时用WEB代替
             // submitBookmarkRemoveIndex(indexId)
-            client.bgmWebNoRedirectApi.submitCollectionIndexRemove(indexId, preferenceStore.userInfo.formHash)
+            client.bgmWebApiNoRedirect.submitCollectionIndexRemove(indexId, preferenceStore.userInfo.formHash)
         }
         bookmarked
     }

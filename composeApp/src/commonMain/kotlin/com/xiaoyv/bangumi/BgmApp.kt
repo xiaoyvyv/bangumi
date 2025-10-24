@@ -78,7 +78,7 @@ fun App() = KoinApplication(application = { initializeKoin() }) {
         ImageLoader.Builder(context)
             .crossfade(true)
             .components {
-                add(KtorNetworkFetcherFactory(apiClient.client))
+                add(KtorNetworkFetcherFactory(apiClient.bgmHttpClient))
                 add(ImageInterceptor)
                 add(AvifDecoderFactory.create(context))
                 addPlatformGifSupport()

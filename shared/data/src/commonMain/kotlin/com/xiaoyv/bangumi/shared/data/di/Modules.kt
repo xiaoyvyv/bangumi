@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.di
 
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
-import com.xiaoyv.bangumi.shared.data.api.client.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
