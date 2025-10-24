@@ -80,7 +80,7 @@ jobs:
 
   build-android:
     name: Build Android
-    needs: build-ios
+    #    needs: build-ios
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
