@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -193,12 +194,13 @@ fun SubjectCardItem(
 fun SubjectLineItem(
     display: ComposeSubjectDisplay,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clickable(onClick = onClick)
-            .then(modifier),
+            .padding(contentPadding),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         SubjectInfoCover(

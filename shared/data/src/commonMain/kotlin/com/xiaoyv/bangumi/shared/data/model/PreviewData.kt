@@ -1,8 +1,10 @@
 package com.xiaoyv.bangumi.shared.data.model
 
 import androidx.paging.PagingData
+import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollectionInfo
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
 import kotlinx.coroutines.flow.flowOf
@@ -30,6 +32,12 @@ val PreviewComposeCollection = ComposeCollection(
     epStatus = 6
 )
 
+val PreviewComposeIndexRelated = ComposeIndexRelated(
+    id = 1111,
+    cat = IndexCatType.SUBJECT,
+    subject = PreviewComposeSubject
+)
+
 val PreviewComposeCollectionLazyItems = flowOf(
     PagingData.from(
         listOf(
@@ -49,6 +57,18 @@ val PreviewComposeSubjectLazyItems = flowOf(
             PreviewComposeSubject.copy(id = 3),
             PreviewComposeSubject.copy(id = 4),
             PreviewComposeSubject.copy(id = 5),
+        )
+    )
+)
+
+val PreviewComposeIndexRelatedLazyItems = flowOf(
+    PagingData.from(
+        listOf(
+            PreviewComposeIndexRelated.copy(id = 1),
+            PreviewComposeIndexRelated.copy(id = 2),
+            PreviewComposeIndexRelated.copy(id = 3),
+            PreviewComposeIndexRelated.copy(id = 4),
+            PreviewComposeIndexRelated.copy(id = 5),
         )
     )
 )

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,10 +40,13 @@ fun EpisodeItem(
     modifier: Modifier,
     @SubjectType subjectType: Int,
     item: ComposeEpisode,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     onClick: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.clickable(onClick = onClick).then(modifier),
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .padding(contentPadding),
         verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
     ) {
         Row(

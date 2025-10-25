@@ -64,7 +64,6 @@ import com.xiaoyv.bangumi.core_resource.resources.ic_image_search
 import com.xiaoyv.bangumi.core_resource.resources.ic_manage_search
 import com.xiaoyv.bangumi.core_resource.resources.ic_new
 import com.xiaoyv.bangumi.core_resource.resources.ic_person_search
-import com.xiaoyv.bangumi.core_resource.resources.ic_pixiv
 import com.xiaoyv.bangumi.core_resource.resources.ic_process
 import com.xiaoyv.bangumi.core_resource.resources.ic_show
 import com.xiaoyv.bangumi.core_resource.resources.ic_tag
@@ -298,7 +297,7 @@ object TabTokens {
         createFeature(FeatureType.TYPE_DOLLARS, Res.drawable.ic_dollars),
         createFeature(FeatureType.TYPE_TIMELINE, Res.drawable.ic_timeline),
         createFeature(FeatureType.TYPE_RAKUEN, Res.drawable.ic_chat),
-        createFeature(FeatureType.TYPE_PIXIV, Res.drawable.ic_pixiv),
+//        createFeature(FeatureType.TYPE_PIXIV, Res.drawable.ic_pixiv),
     )
 
     val mainHomeBlogFilters = persistentListOf(

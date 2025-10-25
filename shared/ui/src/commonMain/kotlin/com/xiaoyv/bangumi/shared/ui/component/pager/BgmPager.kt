@@ -124,8 +124,10 @@ fun <Key : Any> BgmTabHorizontalPager(
                                 // === 偏移平滑过渡计算 (关键!) ===
                                 val targetOffset = if (nextTab != null) {
                                     lerp(currentTab.left, nextTab.left, fraction)
+                                } else if (preTab != null) {
+                                    lerp(preTab.left, currentTab.left, 1 + fraction)
                                 } else {
-                                    lerp(requireNotNull(preTab).left, currentTab.left, 1 + fraction)
+                                    currentTab.left
                                 }
 
                                 // 测量指示器 Box

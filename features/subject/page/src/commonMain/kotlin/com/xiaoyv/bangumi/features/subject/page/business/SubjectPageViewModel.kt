@@ -31,9 +31,7 @@ class SubjectPageViewModel(
 ) : BaseViewModel<SubjectPageState, SubjectPageSideEffect, SubjectPageEvent.Action>(savedStateHandle) {
 
     private val subjectPager = subjectRepository.fetchSubjectPager(param)
-
-    internal val subjects = subjectPager.flow
-        .cachedIn(viewModelScope)
+    internal val subjects = subjectPager.flow.cachedIn(viewModelScope)
 
     override fun initSate(onCreate: Boolean) = SubjectPageState(
         param = param

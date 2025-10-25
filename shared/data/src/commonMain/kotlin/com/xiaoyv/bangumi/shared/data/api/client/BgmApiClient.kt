@@ -33,6 +33,7 @@ import com.xiaoyv.bangumi.shared.data.api.next.CharacterApi
 import com.xiaoyv.bangumi.shared.data.api.next.CollectionApi
 import com.xiaoyv.bangumi.shared.data.api.next.EpisodeApi
 import com.xiaoyv.bangumi.shared.data.api.next.GroupApi
+import com.xiaoyv.bangumi.shared.data.api.next.IndexApi
 import com.xiaoyv.bangumi.shared.data.api.next.PersonApi
 import com.xiaoyv.bangumi.shared.data.api.next.RelationshipApi
 import com.xiaoyv.bangumi.shared.data.api.next.SearchApi
@@ -43,6 +44,7 @@ import com.xiaoyv.bangumi.shared.data.api.next.createCharacterApi
 import com.xiaoyv.bangumi.shared.data.api.next.createCollectionApi
 import com.xiaoyv.bangumi.shared.data.api.next.createEpisodeApi
 import com.xiaoyv.bangumi.shared.data.api.next.createGroupApi
+import com.xiaoyv.bangumi.shared.data.api.next.createIndexApi
 import com.xiaoyv.bangumi.shared.data.api.next.createPersonApi
 import com.xiaoyv.bangumi.shared.data.api.next.createRelationshipApi
 import com.xiaoyv.bangumi.shared.data.api.next.createSearchApi
@@ -160,6 +162,7 @@ class BgmApiClient(
     val nextCollectionApi = nextApiRetrofit.createCollectionApi()
     val nextTimelineApi = nextApiRetrofit.createTimelineApi()
     val nextSearchApi = nextApiRetrofit.createSearchApi()
+    val nextIndexApi = nextApiRetrofit.createIndexApi()
 
     /**
      * 第三方 API
@@ -187,6 +190,7 @@ class BgmApiClient(
     suspend fun <R> requestNextEpisodeApi(block: suspend EpisodeApi.() -> R) = requestApi(nextEpisodeApi, block = block)
     suspend fun <R> requestNextCollectionApi(block: suspend CollectionApi.() -> R) = requestApi(nextCollectionApi, block = block)
     suspend fun <R> requestNextTimelineApi(block: suspend TimelineApi.() -> R) = requestApi(nextTimelineApi, block = block)
+    suspend fun <R> requestNextIndexApi(block: suspend IndexApi.() -> R) = requestApi(nextIndexApi, block = block)
 
 
     /**

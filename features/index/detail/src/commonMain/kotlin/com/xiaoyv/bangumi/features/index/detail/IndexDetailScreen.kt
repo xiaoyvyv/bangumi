@@ -23,6 +23,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -31,15 +32,20 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.core_resource.resources.global_bookmark
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailEvent
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailState
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailViewModel
+import com.xiaoyv.bangumi.features.index.detail.page.IndexDetailPageScreen
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
+import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
+import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -49,11 +55,15 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
@@ -209,7 +219,7 @@ private fun IndexDetailScreenHeader(
                         text = buildString {
                             append(state.index.total)
                             append("个收录 ")
-                            append(state.index.stat.collects)
+                            append(state.index.collects)
                             append("人收藏")
                         }
                     )
@@ -237,6 +247,42 @@ private fun IndexDetailScreenContent(
     onUiEvent: (IndexDetailEvent.UI) -> Unit,
     onActionEvent: (IndexDetailEvent.Action) -> Unit,
 ) {
+    BgmTabHorizontalPager(
+        modifier = Modifier.fillMaxSize(),
+        tabs = state.tabs
+    ) {
+        val tab = state.tabs[it]
 
+        IndexDetailPageScreen(
+            param = remember(tab, state.index) {
+                ListIndexRelatedParam(
+                    type = tab.type,
+                    indexId = state.index.id
+                )
+            },
+            onNavScreen = { screen ->
+                onUiEvent(IndexDetailEvent.UI.OnNavScreen(screen))
+            }
+        )
+    }
+}
+
+
+@Composable
+@Preview
+private fun PreviewIndexDetailScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        IndexDetailScreen(
+            baseState = BaseState.Success(
+                IndexDetailState(
+                    tabs = persistentListOf(
+                        ComposeTextTab(IndexCatWebTabType.ALL, Res.string.global_all)
+                    )
+                )
+            ),
+            onUiEvent = {},
+            onActionEvent = {},
+        )
+    }
 }
 

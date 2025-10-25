@@ -4,10 +4,8 @@ import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
-import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
@@ -25,10 +23,8 @@ class IndexRepositoryImpl(
         }
     }
 
-    override suspend fun fetchIndexDetail(indexId: Long): Result<ComposeIndex> = client.requestJsonApi {
-        fetchIndexById(indexId).let {
-            it.copy(creator = it.creator.copy(avatar = ComposeImages.fromUrl(userImage(it.creator.username))))
-        }
+    override suspend fun fetchIndexDetail(indexId: Long): Result<ComposeIndex> = client.requestNextIndexApi {
+        getIndex(indexId)
     }
 
     override suspend fun fetchIndexIsBookmarked(indexId: Long): Result<Boolean> = client.requestWebApi {

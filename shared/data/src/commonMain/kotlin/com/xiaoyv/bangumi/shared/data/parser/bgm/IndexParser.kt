@@ -58,10 +58,7 @@ class IndexParser(
                 desc = description,
                 createdAt = createAt.formatMills(),
                 updatedAt = updateAt.formatMills(),
-                stat = ComposeIndex.Stat(
-                    collects = webStateMap.values.sum(),
-                    comments = 0
-                ),
+                total = webStateMap.values.sum(),
                 creator = ComposeUser(
                     id = avatar.avatarUrlId(username),
                     avatar = ComposeImages.fromUrl(avatar),
@@ -121,16 +118,13 @@ class IndexParser(
             desc = description,
             createdAt = createAt.formatMills(),
             updatedAt = updateAt.formatMills(),
-            stat = ComposeIndex.Stat(
-                collects = collectCount,
-                comments = 0
-            ),
             creator = ComposeUser(
                 id = avatarUrl.avatarUrlId(username),
                 avatar = ComposeImages.fromUrl(avatarUrl),
                 nickname = nickname,
                 username = username
             ),
+            total = collectCount,
             category = cats,
             subjects = subjects.toPersistentList(),
             eps = eps.toPersistentList(),

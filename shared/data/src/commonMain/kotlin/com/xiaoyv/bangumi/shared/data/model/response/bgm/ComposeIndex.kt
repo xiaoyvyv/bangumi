@@ -13,26 +13,23 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Serializable
 data class ComposeIndex(
-    @SerialName("ban") val ban: Boolean = false,
-    @SerialName("created_at") val createdAt: SerializeDateLong = 0,
-    @SerialName("creator") val creator: ComposeUser = ComposeUser.Empty,
-    @SerialName("desc") val desc: String = "",
-    @SerialName("id") val id: Long = 0,
-    @SerialName("nsfw") val nsfw: Boolean = false,
-    @SerialName("stat") val stat: Stat = Stat(),
-    @SerialName("title") val title: String = "",
-    @SerialName("total") val total: Int = 0,
-    @SerialName("updated_at") val updatedAt: SerializeDateLong = 0,
-
-
     /**
      * Private api detail fields
      */
     @SerialName("award") val award: Int = 0,
     @SerialName("collects") val collects: Int = 0,
+    @SerialName("created_at") val createdAt: SerializeDateLong = 0,
+    @SerialName("updatedAt") val updatedAt: SerializeDateLong = 0,
+    @SerialName("desc") val desc: String = "",
+    @SerialName("id") val id: Long = 0,
+    @SerialName("private") val `private`: Boolean = false,
     @SerialName("replies") val replies: Int = 0,
+    @SerialName("stats") val stats: ComposeIndexStats = ComposeIndexStats(),
+    @SerialName("title") val title: String = "",
+    @SerialName("total") val total: Int = 0,
     @SerialName("type") val type: Int = 0,
-    @SerialName("uid") val uid: Long = 0,
+    @SerialName("uid") val uid: Int = 0,
+    @SerialName("user") val creator: ComposeUser = ComposeUser.Empty,
     @SerialName("isBookmarked") val isBookmarked: Boolean = false,
 
     /**
@@ -47,14 +44,9 @@ data class ComposeIndex(
 ) {
     val shareUrl: String get() = WebConstant.URL_BASE_WEB + "index/" + id
 
-    @Immutable
-    @Serializable
-    data class Stat(
-        @SerialName("collects") val collects: Int = 0,
-        @SerialName("comments") val comments: Int = 0,
-    )
 
     companion object {
         val Empty = ComposeIndex()
     }
 }
+

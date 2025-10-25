@@ -154,8 +154,8 @@ fun IndexPageItem(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
                 ) {
-                    if (item.stat.collects > 0) Text(
-                        text = "收录：${item.stat.collects}",
+                    if (item.total > 0) Text(
+                        text = "收录：${item.total}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodyMedium,

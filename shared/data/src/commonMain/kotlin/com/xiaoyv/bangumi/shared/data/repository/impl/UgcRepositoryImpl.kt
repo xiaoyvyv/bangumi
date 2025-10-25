@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
@@ -18,12 +17,14 @@ import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
+import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry.Companion.optImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroupHomepage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexFocus
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
@@ -222,17 +223,26 @@ class UgcRepositoryImpl(
         )
     }
 
+    override fun fetchIndexRelatePager(param: ListIndexRelatedParam): Pager<Int, ComposeIndexRelated> {
+        return createNetworkOffsetLimitPagingPager(
+            pagingConfig = pagingConfig,
+            keySelector = { it.id },
+            onLoadData = {
+                client.nextIndexApi.getIndexRelated(
+                    indexID = param.indexId,
+                    cat = param.cat,
+                    type = param.subjectType,
+                    limit = pagingConfig.pageSize,
+                    offset = it,
+                ).result
+            }
+        )
+    }
+
     override suspend fun fetchIndexFocus(): Result<List<ComposeIndexFocus>> = client.requestWebApi {
         with(indexParser) {
             fetchIndexHomepage()
                 .fetchIndexFocusConverted()
-        }
-    }
-
-    override suspend fun fetchIndexDetail(id: Long, @IndexCatWebTabType cat: String): Result<ComposeIndex> = client.requestWebApi {
-        with(indexParser) {
-            fetchIndexDetail(id, cat)
-                .fetchIndexDetailConverted(id)
         }
     }
 

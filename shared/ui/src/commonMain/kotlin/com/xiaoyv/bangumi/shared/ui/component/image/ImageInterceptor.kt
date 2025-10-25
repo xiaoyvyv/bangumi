@@ -14,7 +14,9 @@ object ImageInterceptor : Interceptor {
         chain.request.newBuilder()
             .data(chain.request.data.let {
                 if (it !is String) it else {
-                    if (blankImageUrlRegex.matches(it)) DEFAULT_IMAGE else it
+                    if (blankImageUrlRegex.matches(it)) DEFAULT_IMAGE
+                    else if (it.contains("/lain.bgm.tv/r/")) it
+                    else it.replace("/pic/cover/l/", "/r/800/pic/cover/l/")
                 }
             })
             .httpHeaders(

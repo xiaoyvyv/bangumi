@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
@@ -29,7 +30,6 @@ import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoCardItem
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 

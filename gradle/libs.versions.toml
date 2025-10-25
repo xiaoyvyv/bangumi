@@ -1,22 +1,22 @@
 [versions]
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 kotlin-serialization = "1.9.0"
 kotlin-datetime = "0.7.1"
 kotlin-atomicfu = "0.29.0"
 kotlin-immutable = "0.4.0"
 agp = "8.13.0"
-compose-multiplatform = "1.10.0-alpha01"
+compose-multiplatform = "1.10.0-alpha03"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
 androidx-activityCompose = "1.11.0"
 immersionbar = "3.2.2"
-androidx-lifecycle = "2.9.4"
-navigation = "2.9.0"
+androidx-lifecycle = "2.9.5"
+navigation = "2.9.1"
 orbit-mvi = "10.0.0"
 cryptohash = "1.0.2"
 cryptorandom = "0.6.0"
-ktor = "3.3.0"
+ktor = "3.3.1"
 ktorfit = "2.6.4"
 coil3 = "3.3.0"
 zoomimage = "1.4.0"
@@ -24,16 +24,16 @@ koin = "4.1.1"
 tinypinyin = "2.0.3"
 ksoup = "0.2.5"
 ksoup-engine = "0.6.0"
-ksp = "2.2.20-2.0.2"
+ksp = "2.3.0"
 compose-paging-common = "3.3.6"
 dataStore = "1.1.7"
 sqldelight = "2.1.0"
 compose-webview = "2.0.3"
-vico = "2.2.0"
-file-kit = "0.11.0"
+vico = "2.2.1"
+file-kit = "0.12.0"
 krop = "0.2.0"
 kotlinx-coroutines = "1.10.2"
-hot-reload = "1.0.0-beta08"
+hot-reload = "1.0.0-rc02"
 confettikit = "0.6.0"
 junit = "1.3.0"
 espressoCore = "3.7.0"
@@ -83,7 +83,7 @@ compose-mvi = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit-mvi" }
 compose-mvi-compose = { module = "org.orbit-mvi:orbit-compose", version.ref = "orbit-mvi" }
 compose-paging-common = { module = "androidx.paging:paging-common", version.ref = "compose-paging-common" }
 compose-paging-common-android = { module = "androidx.paging:paging-compose-android", version.ref = "compose-paging-common" }
-compose-grid = { module = "com.cheonjaeung.compose.grid:grid", version = "2.4.0" }
+compose-grid = { module = "com.cheonjaeung.compose.grid:grid", version = "2.5.0" }
 compose-webview = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "compose-webview" }
 compose-confettikit = { module = "io.github.vinceglb:confettikit", version.ref = "confettikit" }
 

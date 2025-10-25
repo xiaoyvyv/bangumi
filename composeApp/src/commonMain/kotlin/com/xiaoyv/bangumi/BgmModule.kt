@@ -11,6 +11,7 @@ import com.xiaoyv.bangumi.features.garden.business.GardenViewModel
 import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailViewModel
 import com.xiaoyv.bangumi.features.groups.page.business.GroupsPageViewModel
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailViewModel
+import com.xiaoyv.bangumi.features.index.detail.page.IndexDetailPageViewModel
 import com.xiaoyv.bangumi.features.index.page.dialog.IndexDialogViewModel
 import com.xiaoyv.bangumi.features.index.page.page.IndexPageViewModel
 import com.xiaoyv.bangumi.features.main.business.MainViewModel
@@ -68,6 +69,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.album.ListAlbumParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.group.ListGroupParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
+import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListPersonCastParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
@@ -268,6 +270,14 @@ val commonModule = module {
             savedStateHandle = get(),
             subjectRepository = get(),
             param = param,
+        )
+    }
+
+    viewModel { (param: ListIndexRelatedParam) ->
+        IndexDetailPageViewModel(
+            param = param,
+            savedStateHandle = get(),
+            ugcRepository = get()
         )
     }
 }

@@ -34,7 +34,6 @@ data class ComposeSearchIndex(
             collects = collects,
             replies = comments,
             total = total,
-            nsfw = nsfw == 1,
             creator = ComposeUser(
                 username = username,
                 nickname = nickname,

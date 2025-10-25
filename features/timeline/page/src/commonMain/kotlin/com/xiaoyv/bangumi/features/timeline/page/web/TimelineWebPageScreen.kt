@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
@@ -47,7 +48,6 @@ import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private const val CONTENT_TYPE_TIMELINE = "CONTENT_TYPE_TIMELINE"
 private const val CONTENT_TYPE_TIMELINE_SUBJECT = "CONTENT_TYPE_TIMELINE_SUBJECT"

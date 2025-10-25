@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicEvent
 import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
 import com.xiaoyv.bangumi.shared.core.types.RakuenTab
@@ -15,7 +16,6 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.topic.TopicPageItem
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private const val CONTENT_TYPE_TOPIC = "CONTENT_TYPE_TOPIC"
 
@@ -30,9 +30,9 @@ fun TopicPageScreen(
         modifier = Modifier.fillMaxSize(),
         pagingItems = viewModel.topicFlow.collectAsLazyPagingItems(),
         showScrollUpBtn = true,
-        key = { item, index -> item.id },
+        key = { item, _ -> item.id },
         contentType = { CONTENT_TYPE_TOPIC }
-    ) { item, index ->
+    ) { item, _ ->
         TopicPageItem(
             modifier = Modifier.fillMaxWidth(),
             item = item,

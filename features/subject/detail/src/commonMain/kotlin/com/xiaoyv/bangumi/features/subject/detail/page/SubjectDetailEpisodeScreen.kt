@@ -88,11 +88,10 @@ fun SubjectDetailEpisodeScreen(
 
                     Box(modifier = Modifier.fillMaxWidth()) {
                         EpisodeItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(LayoutPadding),
+                            modifier = Modifier.fillMaxWidth(),
                             subjectType = state.subject.type,
                             item = episode,
+                            contentPadding = PaddingValues(horizontal = LayoutPadding, vertical = 12.dp),
                             onClick = { expanded = true }
                         )
 

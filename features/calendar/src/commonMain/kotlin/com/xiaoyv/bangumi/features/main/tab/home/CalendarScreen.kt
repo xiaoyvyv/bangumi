@@ -162,9 +162,8 @@ private fun CalendarScreenPage(
         ) {
             items(sections) {
                 SubjectLineItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = LayoutPadding, vertical = 12.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = LayoutPadding, vertical = 12.dp),
                     display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
                     onClick = { onUiEvent(CalendarEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) }
                 )

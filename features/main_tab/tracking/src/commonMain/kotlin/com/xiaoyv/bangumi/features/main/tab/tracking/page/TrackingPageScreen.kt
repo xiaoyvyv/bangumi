@@ -29,6 +29,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
@@ -57,7 +58,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodePager
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectTrackingBar
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.orbitmvi.orbit.compose.collectAsState
 
 private const val CONTENT_TYPE_SUBJECT_ITEM = "CONTENT_TYPE_SUBJECT_ITEM"

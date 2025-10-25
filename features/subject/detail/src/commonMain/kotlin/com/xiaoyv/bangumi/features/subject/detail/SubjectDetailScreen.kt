@@ -280,7 +280,7 @@ private fun SubjectDetailScreenHeader(
                             onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.subject.images.displayLargeImage)))
                         },
                     shape = MaterialTheme.shapes.small,
-                    contentScale = ContentScale.FillBounds,
+                    contentScale = ContentScale.Crop,
                     model = state.subject.images.displayLargeImage,
                     contentDescription = stringResource(Res.string.global_image),
                 )
