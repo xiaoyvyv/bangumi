@@ -2,10 +2,10 @@ plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.features.sign.sign_in"
-}
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.features.sign.sign_in"
+    }
 
     sourceSets {
         commonMain.dependencies {

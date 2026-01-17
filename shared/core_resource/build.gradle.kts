@@ -2,11 +2,10 @@ plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.shared.resource"
-}
-
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.shared.resource"
+    }
 }
 
 compose.resources {

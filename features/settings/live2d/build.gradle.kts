@@ -2,10 +2,10 @@ plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.features.settings.live2d"
-}
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.features.settings.live2d"
+    }
 
     sourceSets {
         commonMain.dependencies {

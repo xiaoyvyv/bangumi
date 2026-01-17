@@ -1,11 +1,12 @@
+
 plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.features.friend"
-}
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.features.friend"
+    }
 
     sourceSets {
         commonMain.dependencies {

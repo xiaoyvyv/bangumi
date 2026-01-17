@@ -2,11 +2,12 @@ plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.features.main.tab.tracking"
-}
 
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.features.main.tab.tracking"
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.core)

@@ -43,6 +43,7 @@ plugins {
 
 rootProject.name = "bangumi-multiplatform"
 
+include(":android")
 include(":composeApp")
 include(":shared:core")
 include(":shared:core_native")

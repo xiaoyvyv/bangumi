@@ -6,11 +6,11 @@ plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.shared.libavif"
-}
-
 kotlin {
+
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.shared.libavif"
+    }
 
     sourceSets {
         androidMain.dependencies {

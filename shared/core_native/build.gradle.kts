@@ -10,11 +10,12 @@ plugins {
 }
 
 
-android {
-    namespace = "com.xiaoyv.bangumi.shared.libnative"
-}
 
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.shared.libnative"
+    }
+
     cocoapods {
         podfile = project.file("../../iosApp/Podfile")
         pod("libavif")

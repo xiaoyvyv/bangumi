@@ -2,28 +2,16 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("com.android.application")
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.multiplatform")
     id("org.jetbrains.compose.hot-reload")
-    alias(libs.plugins.baselineprofile)
+    id("com.android.kotlin.multiplatform.library")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_11)
-    }
-}
 
 kotlin {
     jvmToolchain(21)
-
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
 
     listOf(
         iosX64(),
@@ -37,7 +25,36 @@ kotlin {
     }
 
     jvm("desktop") {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
 
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi"
+
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        withJava()
+
+        lint {
+            targetSdk = libs.versions.android.targetSdk.get().toInt()
+        }
+
+        androidResources {
+            enable = true
+        }
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+
+        enableCoreLibraryDesugaring = false
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
 
     sourceSets {
@@ -129,87 +146,6 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        applicationId = "com.xiaoyv.bangumi.multiplatform"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-        testInstrumentationRunnerArguments.put("clearPackageData", "false")
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    splits {
-        abi {
-            isEnable = true
-            isUniversalApk = true
-            reset()
-            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-        }
-    }
-
-    signingConfigs {
-        create("release") {
-            storeFile = file("$rootDir/composeApp/keystore/why.keystore")
-            storePassword = "why981229"
-            keyAlias = "whykey"
-            keyPassword = "why981229"
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            signingConfig = signingConfigs.getByName("release")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard.pro"
-            )
-        }
-
-        debug {
-            signingConfig = signingConfigs.getByName("release")
-        }
-    }
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-}
-
-dependencies {
-    implementation(libs.androidx.profileinstaller)
-    "baselineProfile"(project(":baselineprofile"))
-
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    debugImplementation(libs.compose.ui.tooling)
-}
-
 compose.resources {
     publicResClass = false
     packageOfResClass = "com.xiaoyv.bangumi.resources"
@@ -242,30 +178,3 @@ compose.desktop {
         }
     }
 }
-
-/*
-
-tasks.whenTaskAdded {
-    if (name.contains("NativeLibs")) {
-        doFirst {
-            println("list so files begin")
-            inputs.files.forEach { file ->
-                printSoPath(file)
-            }
-            println("list so files end")
-        }
-    }
-}
-
-fun printSoPath(file: File?) {
-    if (file != null) {
-        if (file.isDirectory) {
-            file.listFiles()?.forEach {
-                printSoPath(it)
-            }
-        } else if (file.absolutePath.endsWith(".so")) {
-            println("so file: ${file.absolutePath}")
-        }
-    }
-}
-*/

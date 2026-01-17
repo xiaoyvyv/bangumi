@@ -1,11 +1,11 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.api.dsl.TestExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 
 plugins {
     id("com.android.test")
-    id("org.jetbrains.kotlin.android")
     alias(libs.plugins.baselineprofile)
 }
 
@@ -15,8 +15,9 @@ kotlin {
     }
 }
 
-android {
+extensions.configure<TestExtension> {
     namespace = "com.bgm.baselineprofile"
+
     compileSdk {
         version = release(36)
     }

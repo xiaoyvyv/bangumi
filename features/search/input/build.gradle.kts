@@ -1,12 +1,12 @@
 plugins {
     id("bgm.library")
 }
-android {
-    namespace = "com.xiaoyv.bangumi.features.search.input"
-}
-
 
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.features.search.input"
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.core)

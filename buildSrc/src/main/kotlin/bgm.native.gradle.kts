@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.targets.native.tasks.PodGenTask
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("org.jetbrains.kotlin.native.cocoapods")
-    id("com.android.library")
+    id("com.android.kotlin.multiplatform.library")
 }
 
 kotlin {

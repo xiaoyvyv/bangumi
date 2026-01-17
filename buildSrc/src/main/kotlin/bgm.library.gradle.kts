@@ -1,6 +1,6 @@
 @file:Suppress("SpellCheckingInspection", "UnstableApiUsage")
 
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -10,7 +10,7 @@ plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("com.android.library")
+    id("com.android.kotlin.multiplatform.library")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
@@ -19,6 +19,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     }
 }
 
+/*
 android {
     experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -39,7 +40,7 @@ android {
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].java.srcDirs("src/androidMain/java")
-}
+}*/
 
 
 kotlin {
@@ -60,7 +61,30 @@ kotlin {
 
     jvm()
 
-    androidTarget()
+    androidLibrary {
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        withJava()
+
+        lint {
+            targetSdk = libs.versions.android.targetSdk.get().toInt()
+        }
+
+        androidResources {
+            enable = true
+        }
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+
+        enableCoreLibraryDesugaring = false
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
 
     composeCompiler {
         reportsDestination = layout.buildDirectory.dir("compose_compiler")
@@ -158,9 +182,6 @@ kotlin {
     }
 }
 
-dependencies {
-    debugImplementation(libs.compose.ui.tooling)
-}
 
 compose.resources {
     publicResClass = false

@@ -2,11 +2,11 @@ plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.shared.ui"
-}
-
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.shared.ui"
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.core)
@@ -16,6 +16,7 @@ kotlin {
 }
 
 dependencies {
-    debugImplementation(libs.compose.ui.tooling)
+//    debugImplementation(libs.compose.ui.tooling)
+    "androidRuntimeClasspath"(libs.compose.ui.tooling)
 }
 

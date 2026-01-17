@@ -5,11 +5,11 @@ plugins {
     id("org.jetbrains.kotlin.multiplatform")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.features.detect"
-}
 
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.features.detect"
+    }
 
     sourceSets {
         commonMain.dependencies {

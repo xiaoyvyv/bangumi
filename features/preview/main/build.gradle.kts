@@ -2,11 +2,10 @@ plugins {
     id("bgm.library")
 }
 
-android {
-    namespace = "com.xiaoyv.bangumi.features.preivew.main"
-}
-
 kotlin {
+    androidLibrary {
+        namespace = "com.xiaoyv.bangumi.features.preivew.main"
+    }
 
     sourceSets {
         commonMain.dependencies {
