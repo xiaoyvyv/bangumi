@@ -207,7 +207,7 @@ dependencies {
     "baselineProfile"(project(":baselineprofile"))
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.compose.ui.tooling)
 }
 
 compose.resources {

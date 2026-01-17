@@ -54,6 +54,7 @@
 
 # Ksoup
 -keep class com.mohamedrejeb.ksoup.html.**{ *; }
+-keep class com.fleeksoft.ksoup.**{ *; }
 
 # Live2D
 -keep class com.live2d.sdk.cubism.core.**{ *; }

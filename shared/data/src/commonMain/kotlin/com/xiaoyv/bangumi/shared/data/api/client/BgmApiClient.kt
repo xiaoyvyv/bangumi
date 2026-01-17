@@ -132,7 +132,7 @@ class BgmApiClient(
     private val appApiRetrofit = ktorfit {
         httpClient(createHttpClient(config))
         baseUrl(WebConstant.URL_BASE_APP_API)
-        converterFactories(HttpCodeConverterFactory())
+        converterFactories(HttpDocumentConverterFactory(), HttpCodeConverterFactory())
     }
 
     private val dbApiRetrofit = ktorfit {

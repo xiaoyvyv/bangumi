@@ -3,6 +3,7 @@
 package com.xiaoyv.bangumi.shared.data.parser
 
 import com.fleeksoft.ksoup.nodes.Element
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.href
 import com.xiaoyv.bangumi.shared.core.utils.hrefLongId
@@ -24,17 +25,19 @@ class MikanParser : BaseParser() {
     fun Element.fetchMikanResourcesConverted(groupName: String): List<ComposeMikanResource> {
         return select("table > tbody > tr").map { item ->
             val tds = item.select("tr td")
-            val element = tds.getOrNull(0)
+            val element = tds.getOrNull(1)
             val name = element?.select(".magnet-link-wrap")?.text().orEmpty()
             val pageUrl = element?.select(".magnet-link-wrap")?.attr("href").orEmpty().let {
                 "https://mikanime.tv$it"
             }
             val magnet = element?.select(".js-magnet")?.attr("data-clipboard-text").orEmpty()
-            val size = tds.text(1)
-            val time = tds.text(2)
-            val torrent = tds.getOrNull(3)?.select("a")?.attr("href").orEmpty().let {
+            val size = tds.text(2)
+            val time = tds.text(3)
+            val torrent = tds.getOrNull(4)?.select("a")?.attr("href").orEmpty().let {
                 "https://mikanime.tv$it"
             }
+
+            debugLog { "magnet: $name" }
 
             ComposeMikanResource(
                 fileSize = size,

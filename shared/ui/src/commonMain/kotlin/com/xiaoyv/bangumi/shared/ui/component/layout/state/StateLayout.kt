@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_refresh
+import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
@@ -210,7 +211,7 @@ fun StateErrorLayout(
             text = throwable.errMsg,
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center,
-            maxLines = 3,
+            maxLines = if (System.isDebugType) 10 else 3,
             overflow = TextOverflow.Ellipsis
         )
 

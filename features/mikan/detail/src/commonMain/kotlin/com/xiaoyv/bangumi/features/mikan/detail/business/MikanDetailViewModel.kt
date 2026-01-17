@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
@@ -36,7 +37,15 @@ class MikanDetailViewModel(
         cacheRepository = cacheRepository,
         cacheKey = cacheKey,
         loadWhenEmpty = true,
-        transform = { it.copy(checkMode = false, checkItems = emptyList()) }
+        transform = {
+            it.copy(
+                checkMode = false,
+                checkItems = emptyList(),
+                resources = it.resources.map { resource ->
+                    resource.copy(titleHtml = resource.title.parseAsHtml())
+                }
+            )
+        }
     )
 
     override fun initSate(onCreate: Boolean) = MikanDetailState(
@@ -104,7 +113,7 @@ class MikanDetailViewModel(
         val text = buildString {
             items.fastForEach {
                 appendLine()
-                append(it.magnet.orEmpty())
+                append(it.magnet)
                 appendLine()
             }
         }

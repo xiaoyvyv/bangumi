@@ -69,7 +69,7 @@ inline fun <reified T : Any> BaseViewModel<T, *, *>.readViewModelCache(
 //            runCatching { defaultProtoBuf.decodeFromHexString<T>(text.orEmpty()) }.onFailure { debugLog { it } }.getOrNull()
 //                ?.let { transform(it) }
 //        }
-    debugLog { "cacheState is null==${cacheState == null},loadWhenEmpty=$loadWhenEmpty" }
+    debugLog { "$cacheState ,loadWhenEmpty=$loadWhenEmpty" }
     if (cacheState != null) return BaseState.Success(cacheState)
     return if (loadWhenEmpty) BaseState.Loading() else BaseState.Success(data = initSate(true))
 }

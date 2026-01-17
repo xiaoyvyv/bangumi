@@ -56,15 +56,7 @@ internal abstract class SnizzorsInteropElementHolder<T : InteropView>(
     factory,
     interopContainer,
     interopWrappingView,
-    compositeKeyHashCode,
-    MeasurePolicy { _, constraints ->
-        layout(constraints.minWidth, constraints.minHeight) {
-            // No-op, no children are expected
-            // TODO: attempt to calculate the size of the wrapped view using constraints
-            //  and autolayout system if possible
-            //  https://youtrack.jetbrains.com/issue/CMP-5873/iOS-investigate-intrinsic-sizing-of-interop-elements
-        }
-    }
+    compositeKeyHashCode
 ) {
     constructor(
         factory: () -> T,
@@ -80,6 +72,15 @@ internal abstract class SnizzorsInteropElementHolder<T : InteropView>(
         properties = properties,
         compositeKeyHashCode = compositeKeyHashCode
     )
+
+    override val measurePolicy: MeasurePolicy = MeasurePolicy { _, constraints ->
+        layout(constraints.minWidth, constraints.minHeight) {
+            // No-op, no children are expected
+            // TODO: attempt to calculate the size of the wrapped view using constraints
+            //  and autolayout system if possible
+            //  https://youtrack.jetbrains.com/issue/CMP-5873/iOS-investigate-intrinsic-sizing-of-interop-elements
+        }
+    }
 
     // TODO: no more clipping. rename/refactor?
     private var currentUnclippedRect: IntRect? = null

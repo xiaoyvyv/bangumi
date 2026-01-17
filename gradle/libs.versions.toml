@@ -1,40 +1,42 @@
 [versions]
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlin-serialization = "1.9.0"
 kotlin-datetime = "0.7.1"
 kotlin-atomicfu = "0.29.0"
 kotlin-immutable = "0.4.0"
-agp = "8.13.0"
-compose-multiplatform = "1.10.0-alpha03"
+agp = "8.13.2"
+compose-multiplatform = "1.10.0"
+compose-material3 = "1.10.0-alpha05"
+compose-material-icon = "1.7.3"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
-androidx-activityCompose = "1.11.0"
+androidx-activityCompose = "1.12.2"
 immersionbar = "3.2.2"
-androidx-lifecycle = "2.9.5"
+androidx-lifecycle = "2.9.6"
 navigation = "2.9.1"
-orbit-mvi = "10.0.0"
+orbit-mvi = "11.0.0"
 cryptohash = "1.0.2"
 cryptorandom = "0.6.0"
-ktor = "3.3.1"
-ktorfit = "2.6.4"
+ktor = "3.3.3"
+ktorfit = "2.7.2"
 coil3 = "3.3.0"
 zoomimage = "1.4.0"
 koin = "4.1.1"
 tinypinyin = "2.0.3"
 ksoup = "0.2.5"
 ksoup-engine = "0.6.0"
-ksp = "2.3.0"
+ksp = "2.3.2"
 compose-paging-common = "3.3.6"
-dataStore = "1.1.7"
-sqldelight = "2.1.0"
+dataStore = "1.2.0"
+sqldelight = "2.2.1"
 compose-webview = "2.0.3"
-vico = "2.2.1"
+vico = "2.4.1"
 file-kit = "0.12.0"
 krop = "0.2.0"
 kotlinx-coroutines = "1.10.2"
-hot-reload = "1.0.0-rc02"
-confettikit = "0.6.0"
+hot-reload = "1.0.0"
+confettikit = "0.7.0"
 junit = "1.3.0"
 espressoCore = "3.7.0"
 uiautomator = "2.3.0"
@@ -70,20 +72,29 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 android-immersionbar = { module = "com.geyifeng.immersionbar:immersionbar", version.ref = "immersionbar" }
 
+# compose
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
+compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
+compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "compose-material-icon" }
+
 
 # compose-common
-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-multiplatform" }
-compose-material3-navigation-suite = { module = "org.jetbrains.compose.material3:material3-adaptive-navigation-suite", version.ref = "compose-multiplatform" }
+compose-material3-navigation-suite = { module = "org.jetbrains.compose.material3:material3-adaptive-navigation-suite", version.ref = "compose-material3" }
 compose-performance-annotation = { module = "androidx.performance:performance-annotation", version = "1.0.0-alpha01" }
 compose-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 compose-lifecycle-runtime = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
-compose-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version = "1.1.2" }
+compose-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version = "1.2.0" }
 compose-mvi = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit-mvi" }
 compose-mvi-compose = { module = "org.orbit-mvi:orbit-compose", version.ref = "orbit-mvi" }
 compose-paging-common = { module = "androidx.paging:paging-common", version.ref = "compose-paging-common" }
 compose-paging-common-android = { module = "androidx.paging:paging-compose-android", version.ref = "compose-paging-common" }
-compose-grid = { module = "com.cheonjaeung.compose.grid:grid", version = "2.5.0" }
+compose-grid = { module = "com.cheonjaeung.compose.grid:grid", version = "2.6.0" }
 compose-webview = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "compose-webview" }
 compose-confettikit = { module = "io.github.vinceglb:confettikit", version.ref = "confettikit" }
 
