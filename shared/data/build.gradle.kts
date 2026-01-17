@@ -19,3 +19,10 @@ kotlin {
         }
     }
 }
+
+afterEvaluate {
+    tasks.named("extractAndroidMainAnnotations") {
+        dependsOn(tasks.named("kspAndroidMain"))
+        dependsOn(tasks.named("kspCommonMainKotlinMetadata"))
+    }
+}

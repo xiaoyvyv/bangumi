@@ -67,11 +67,12 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.dsl.koinConfiguration
 import org.orbitmvi.orbit.compose.collectAsState
 
 
 @Composable
-fun App() = KoinApplication(application = { initializeKoin() }) {
+fun App() = KoinApplication(configuration = koinConfiguration(declaration = { initializeKoin() })) {
     val apiClient: BgmApiClient = koinInject()
     val personalStateStore: PersonalStateStore = koinInject()
     setSingletonImageLoaderFactory { context ->

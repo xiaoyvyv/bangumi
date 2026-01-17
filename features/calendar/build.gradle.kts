@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "com.xiaoyv.bangumi.features.main.tab.home"
+        namespace = "com.xiaoyv.bangumi.features.calendar"
     }
 
     sourceSets {

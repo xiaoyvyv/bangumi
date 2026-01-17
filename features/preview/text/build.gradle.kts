@@ -5,7 +5,7 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "com.xiaoyv.bangumi.features.preivew.gallery"
+        namespace = "com.xiaoyv.bangumi.features.preivew.text"
     }
 
     sourceSets {
