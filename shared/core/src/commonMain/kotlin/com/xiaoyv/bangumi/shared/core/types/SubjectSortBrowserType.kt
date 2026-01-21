@@ -48,5 +48,15 @@ annotation class SubjectSortBrowserType {
                 else -> Res.string.global_unknown
             }
         }
+
+        fun toSearchType(@SubjectSortBrowserType type: String): String {
+            return when (type) {
+                TITLE -> SubjectSortSearchType.MATCH
+                RANK -> SubjectSortSearchType.RANK
+                TRENDS -> SubjectSortSearchType.SCORE
+                COLLECTS -> SubjectSortSearchType.COLLECTS
+                else -> SubjectSortSearchType.MATCH
+            }
+        }
     }
 }

@@ -26,7 +26,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SettingsPrivacyRoute(
-    viewModel: SettingsPrivacyViewModel = koinViewModel<SettingsPrivacyViewModel>(),
+    viewModel: SettingsPrivacyViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

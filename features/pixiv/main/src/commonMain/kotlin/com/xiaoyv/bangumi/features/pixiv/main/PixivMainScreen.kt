@@ -22,7 +22,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun PixivMainRoute(
-    viewModel: PixivMainViewModel = koinViewModel<PixivMainViewModel>(),
+    viewModel: PixivMainViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

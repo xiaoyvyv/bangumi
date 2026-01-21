@@ -70,7 +70,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun IndexDetailRoute(
-    viewModel: IndexDetailViewModel = koinViewModel<IndexDetailViewModel>(),
+    viewModel: IndexDetailViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -170,7 +170,7 @@ private fun IndexDetailScreenHeader(
     Box(modifier = Modifier.fillMaxWidth()) {
         BlurImage(
             modifier = Modifier.matchParentSize(),
-            model = state.index.creator.avatar.displayBlurUrl,
+            model = state.index.creator.avatar.displayGridImage,
             contentDescription = state.index.title,
             contentScale = ContentScale.Crop
         )
@@ -201,7 +201,7 @@ private fun IndexDetailScreenHeader(
                         .size(64.dp)
                         .clickable { onUiEvent(IndexDetailEvent.UI.OnNavScreen(Screen.UserDetail(state.index.creator.username))) }
                         .border(2.dp, MaterialTheme.colorScheme.surface, MaterialTheme.shapes.small),
-                    model = state.index.creator.displayAvatar,
+                    model = state.index.creator.avatar.displayMediumImage,
                     shape = MaterialTheme.shapes.small,
                 )
             },

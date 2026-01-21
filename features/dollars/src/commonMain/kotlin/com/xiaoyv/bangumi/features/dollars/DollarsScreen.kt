@@ -64,7 +64,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun DollarsRoute(
-    viewModel: DollarsViewModel = koinViewModel<DollarsViewModel>(),
+    viewModel: DollarsViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

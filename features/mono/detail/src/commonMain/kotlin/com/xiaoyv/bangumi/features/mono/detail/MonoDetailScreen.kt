@@ -86,7 +86,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun MonoDetailRoute(
-    viewModel: MonoDetailViewModel = koinViewModel<MonoDetailViewModel>(),
+    viewModel: MonoDetailViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -253,12 +253,10 @@ private fun MonoDetailScreenHeader(
                     )
                     .fillMaxHeight()
                     .aspectRatio(3 / 4f)
-                    .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.mono.images.displayLargeImage))) },
+                    .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.mono.images.displayMediumImage))) },
                 shape = MaterialTheme.shapes.small,
-                model = state.mono.images.displayLargeImage,
-                loadingThumb = state.mono.images.displayGridImage,
+                model = state.mono.images.displayMediumImage,
                 alignment = Alignment.TopCenter,
-                transparent = true,
                 contentDescription = stringResource(Res.string.global_image)
             )
 

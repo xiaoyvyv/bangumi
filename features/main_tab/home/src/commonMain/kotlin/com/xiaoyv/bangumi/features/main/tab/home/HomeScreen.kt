@@ -46,7 +46,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun HomeRoute(
-    viewModel: HomeViewModel = koinViewModel<HomeViewModel>(),
+    viewModel: HomeViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

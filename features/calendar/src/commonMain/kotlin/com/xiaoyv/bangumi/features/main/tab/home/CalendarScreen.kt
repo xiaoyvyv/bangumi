@@ -49,7 +49,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun CalendarRoute(
-    viewModel: CalendarViewModel = koinViewModel<CalendarViewModel>(),
+    viewModel: CalendarViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

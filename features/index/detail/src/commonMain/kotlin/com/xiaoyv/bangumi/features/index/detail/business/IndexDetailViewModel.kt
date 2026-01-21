@@ -15,7 +15,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_music
 import com.xiaoyv.bangumi.core_resource.resources.global_person
 import com.xiaoyv.bangumi.core_resource.resources.global_real
 import com.xiaoyv.bangumi.core_resource.resources.global_subject_topic
-import com.xiaoyv.bangumi.features.index.detail.IndexDetailArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -25,6 +24,7 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -38,10 +38,10 @@ import org.jetbrains.compose.resources.getString
  */
 class IndexDetailViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.IndexDetail,
     private val indexRepository: IndexRepository,
     private val userManager: UserManager,
 ) : BaseViewModel<IndexDetailState, IndexDetailSideEffect, IndexDetailEvent.Action>(savedStateHandle) {
-    private val args = IndexDetailArguments(savedStateHandle)
 
     override fun initBaseState(): BaseState<IndexDetailState> = BaseState.Loading()
 

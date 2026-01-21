@@ -9,8 +9,9 @@ import kotlinx.serialization.protobuf.ProtoBuf
 val defaultJson = Json {
     ignoreUnknownKeys = true
     isLenient = true
-    explicitNulls = true
+    explicitNulls = false
     coerceInputValues = true
+    encodeDefaults = true
 }
 
 val defaultProtoBuf = ProtoBuf {

@@ -1,35 +1,21 @@
 package com.xiaoyv.bangumi.features.web
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import com.xiaoyv.bangumi.shared.core.utils.composableByRoute
-import com.xiaoyv.bangumi.shared.core.utils.debounce
-import com.xiaoyv.bangumi.shared.core.utils.navString
-import com.xiaoyv.bangumi.shared.core.utils.navigateByRoute
-import com.xiaoyv.bangumi.shared.ui.component.navigation.SCREEN_ROUTE_WEB
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import io.ktor.util.decodeBase64String
-import io.ktor.util.encodeBase64
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
-data class WebArguments(val url: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        url = savedStateHandle.get<String>("url").orEmpty().decodeBase64String()
-    )
-}
-
-fun NavHostController.navigateWeb(screen: Screen.Web) = debounce(screen.route) {
-    navigateByRoute(screen.route, "url" to screen.url.encodeBase64())
-}
-
-fun NavGraphBuilder.addWebScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composableByRoute(route = SCREEN_ROUTE_WEB, navString("url")) {
-        WebRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
+val webModule = module {
+    navScope {
+        navigation<Screen.Web> { key ->
+            WebRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
+        }
     }
 }

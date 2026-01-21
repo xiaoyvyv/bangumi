@@ -49,7 +49,7 @@ fun MonoLineItemPerson(
                 .padding(LayoutPadding)
                 .width(100.dp),
             blur = item.mono.images.displayGridImage,
-            model = item.mono.images.displayLargeImage,
+            model = item.mono.images.displayMediumImage,
             onClick = { onClick(item.mono.id, MonoType.PERSON) }
         )
         Column(
@@ -144,8 +144,8 @@ fun MonoCardItemPerson(
     Column(modifier = modifier) {
         InfoImage(
             modifier = Modifier.fillMaxWidth(),
-            blur = item.mono.images.displayBlurUrl,
-            model = item.mono.images.displayLargeImage,
+            blur = item.mono.images.displayGridImage,
+            model = item.mono.images.displayMediumImage,
             maskText = item.mono.name,
             onClick = { onClick(item.mono.id, MonoType.PERSON) }
         )

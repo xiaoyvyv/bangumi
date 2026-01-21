@@ -13,10 +13,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.request.ImageRequest
@@ -24,6 +27,26 @@ import coil3.request.transformations
 import coil3.size.Scale
 import kotlin.math.cos
 import kotlin.math.sin
+
+actual fun rgbaToImageBitmap(width: Int, height: Int, rgba: ByteArray): ImageBitmap? {
+    if (width <= 0 || height <= 0) return null
+    // 创建 Android Bitmap
+    val bitmap = createBitmap(width, height)
+
+    // 将 ByteArray 转为 IntArray (Android Bitmap 需要 int 颜色值)
+    val pixels = IntArray(width * height)
+    for (i in pixels.indices) {
+        val r = rgba[i * 4].toInt() and 0xFF
+        val g = rgba[i * 4 + 1].toInt() and 0xFF
+        val b = rgba[i * 4 + 2].toInt() and 0xFF
+        val a = rgba[i * 4 + 3].toInt() and 0xFF
+        // Android Color Int: AARRGGBB
+        pixels[i] = (a shl 24) or (r shl 16) or (g shl 8) or b
+    }
+
+    bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
+    return bitmap.asImageBitmap()
+}
 
 actual fun Modifier.fastBlur(radius: Dp): Modifier {
     if (radius <= 0.dp || radius == Dp.Unspecified) return this
@@ -108,3 +131,4 @@ actual fun BlurImage(
         )
     }
 }
+

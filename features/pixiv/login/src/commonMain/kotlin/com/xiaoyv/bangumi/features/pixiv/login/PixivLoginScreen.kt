@@ -33,7 +33,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun PixivLoginRoute(
-    viewModel: PixivLoginViewModel = koinViewModel<PixivLoginViewModel>(),
+    viewModel: PixivLoginViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

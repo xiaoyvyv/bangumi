@@ -45,7 +45,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SettingsNetworkRoute(
-    viewModel: SettingsNetworkViewModel = koinViewModel<SettingsNetworkViewModel>(),
+    viewModel: SettingsNetworkViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

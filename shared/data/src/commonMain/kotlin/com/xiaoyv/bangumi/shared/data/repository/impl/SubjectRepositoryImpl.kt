@@ -6,16 +6,19 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionWebPath
 import com.xiaoyv.bangumi.shared.core.types.EpisodeType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
+import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTagType
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.substringBeforeSymbol
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
@@ -39,6 +42,7 @@ import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -264,26 +268,51 @@ class SubjectRepositoryImpl(
                 ).result
             }
 
-            ListSubjectType.SEARCH -> client.requestJsonApi {
-                fetchSearchSubject(
-                    body = param.search,
-                    offset = offset,
-                    limit = pagingConfig.pageSize
-                ).result.map { ComposeSubjectDisplay(subject = it.toSubject()) }
+            ListSubjectType.SEARCH -> {
+                debugLog { "Search:${param.search}" }
+                client.requestNextSearchApi {
+                    searchSubjects(
+                        body = param.search,
+                        offset = offset,
+                        limit = pagingConfig.pageSize
+                    ).result.map { ComposeSubjectDisplay(subject = it) }
+                }
             }
 
-            ListSubjectType.BROWSER -> client.requestNextSubjectApi {
-                getSubjects(
-                    type = param.browser.subjectType,
-                    cat = param.browser.cat,
-                    series = param.browser.series,
-                    sort = param.browser.sort,
-                    year = param.browser.year,
-                    tags = param.browser.tags,
-                    month = param.browser.month,
-                    page = offset.toApiPage(pageSize),
-                ).result.map {
-                    ComposeSubjectDisplay(subject = it.copy(airtime = Airtime.fromInfo(it.info)))
+            ListSubjectType.BROWSER -> {
+                // 浏览API有TAG时有BUG，暂时用搜索接口替代
+                if (param.browser.tags.isNotEmpty()) {
+                    client.requestNextSearchApi {
+                        searchSubjects(
+                            body = SubjectSearchBody(
+                                keyword = "",
+                                filter = SubjectSearchBody.SubjectSearchFilter(
+                                    nsfw = false,
+                                    type = if (param.browser.subjectType != SubjectType.UNKNOWN) persistentListOf(param.browser.subjectType) else null,
+                                    tags = param.browser.tags,
+                                    date = param.browser.searchData()
+                                ),
+                                sort = SubjectSortBrowserType.toSearchType(param.browser.sort),
+                            ),
+                            offset = offset,
+                            limit = pagingConfig.pageSize
+                        ).result.map { ComposeSubjectDisplay(subject = it) }
+                    }
+                } else {
+                    client.requestNextSubjectApi {
+                        getSubjects(
+                            type = param.browser.subjectType,
+                            cat = param.browser.cat,
+                            series = param.browser.series,
+                            sort = param.browser.sort,
+                            year = param.browser.year,
+                            tags = param.browser.tags,
+                            month = param.browser.month,
+                            page = offset.toApiPage(pageSize),
+                        ).result.map {
+                            ComposeSubjectDisplay(subject = it.copy(airtime = Airtime.fromInfo(it.info)))
+                        }
+                    }
                 }
             }
 

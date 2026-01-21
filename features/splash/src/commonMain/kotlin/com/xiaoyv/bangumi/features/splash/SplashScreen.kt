@@ -2,6 +2,8 @@ package com.xiaoyv.bangumi.features.splash
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -20,10 +22,12 @@ fun SplashScreen(onNavScreen: (Screen) -> Unit) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-
+        Button(onClick = { onNavScreen(Screen.Main) }) {
+            Text(text = "Home")
+        }
     }
 
-    LaunchedEffect(Unit) {
-        onNavScreen(Screen.Main)
-    }
+//    LaunchedEffect(Unit) {
+//        onNavScreen(Screen.Main)
+//    }
 }

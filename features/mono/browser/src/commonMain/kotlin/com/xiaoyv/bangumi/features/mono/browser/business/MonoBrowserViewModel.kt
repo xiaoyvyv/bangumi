@@ -8,13 +8,13 @@ import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_collect
 import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_comment
 import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_dateline
 import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_title
-import com.xiaoyv.bangumi.features.mono.browser.MonoBrowserArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.MonoOrderByType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 
@@ -24,9 +24,10 @@ import kotlinx.collections.immutable.persistentListOf
  * @author why
  * @since 2025/1/12
  */
-class MonoBrowserViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<MonoBrowserState, MonoBrowserSideEffect, MonoBrowserEvent.Action>(savedStateHandle) {
-    private val args = MonoBrowserArguments(savedStateHandle)
+class MonoBrowserViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val args: Screen.MonoBrowser,
+) : BaseViewModel<MonoBrowserState, MonoBrowserSideEffect, MonoBrowserEvent.Action>(savedStateHandle) {
 
     override fun initSate(onCreate: Boolean) = MonoBrowserState(
         title = if (args.type == MonoType.CHARACTER) Res.string.mono_character_list else Res.string.mono_person_list,

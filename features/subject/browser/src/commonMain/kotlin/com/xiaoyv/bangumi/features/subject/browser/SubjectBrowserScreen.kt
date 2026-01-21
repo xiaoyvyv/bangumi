@@ -50,13 +50,14 @@ import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.subjectBrowserSortTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
+import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SubjectBrowserRoute(
-    viewModel: SubjectBrowserViewModel = koinViewModel<SubjectBrowserViewModel>(),
+    viewModel: SubjectBrowserViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -178,7 +179,11 @@ private fun SubjectBrowserScreenContent(
             if (!state.param.browser.hideSortFilter) DropMenuChip(
                 labelPrefix = stringResource(Res.string.global_sort),
                 current = param.browser.sort,
-                options = subjectBrowserSortTabs,
+                options = subjectBrowserSortTabs.let {
+                    // 由于带标签的数据是通过搜索接口实现的，这里暂时不支持发售日过滤
+                    if (state.param.browser.tags.isNotEmpty()) it.filter { type -> type.type != SubjectSortBrowserType.DATE }
+                        .toPersistentList() else it
+                },
                 onOptionClick = {
                     onActionEvent(
                         SubjectBrowserEvent.Action.OnUpdateBrowserSubjectParam(

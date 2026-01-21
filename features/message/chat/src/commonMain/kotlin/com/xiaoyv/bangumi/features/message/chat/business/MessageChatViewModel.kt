@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.message.chat.business
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.features.message.chat.MessageChatArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -11,6 +10,7 @@ import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.limit
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -23,10 +23,9 @@ import kotlinx.coroutines.launch
  */
 class MessageChatViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.MessageChat,
     private val userRepository: UserRepository,
 ) : BaseViewModel<MessageChatState, MessageChatSideEffect, MessageChatEvent.Action>(savedStateHandle) {
-    private val args = MessageChatArguments(savedStateHandle)
-
 
     init {
         viewModelScope.launch {

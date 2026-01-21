@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.features.preivew.main.business
 
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.preivew.main.PreviewMainArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -11,9 +11,10 @@ import kotlinx.collections.immutable.toPersistentList
  * @author why
  * @since 2025/1/12
  */
-class PreviewMainViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<PreviewMainState, PreviewMainSideEffect, PreviewMainEvent.Action>(savedStateHandle) {
-    private val args = PreviewMainArguments(savedStateHandle)
+class PreviewMainViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val args: Screen.PreviewMain,
+) : BaseViewModel<PreviewMainState, PreviewMainSideEffect, PreviewMainEvent.Action>(savedStateHandle) {
 
     override fun initSate(onCreate: Boolean) = PreviewMainState(
         items = args.items.toPersistentList(),

@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.shared.core.utils.infoEpsRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoMonthDayRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthDayRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthRegex
-import com.xiaoyv.bangumi.shared.core.utils.optImageUrl
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.parseStar
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.Airtime
@@ -74,7 +74,7 @@ class SubjectParser : BaseParser() {
                     total = rateInfo.select(".tip_j").text().parseCount()
                 ),
                 images = ComposeImages.fromUrl(
-                    item.select("a.cover img").attr("src").optImageUrl()
+                    item.select("a.cover img").attr("src").sanitizeImageUrl()
                 ),
                 summary = item.select(".info.tip").text().trim(),
                 airtime = Airtime(date = "2020-12-12"),
@@ -194,7 +194,7 @@ class SubjectParser : BaseParser() {
 
         return select("#browserItemList > li").map { item ->
             val id = item.select("a.cover").hrefLongId()
-            val coverImage = item.select("a.cover img").attr("src").optImageUrl()
+            val coverImage = item.select("a.cover img").attr("src").sanitizeImageUrl()
             val name = item.select(".inner h3 small").text()
             val nameCn = item.select(".inner h3 a").text()
             val infoTip = item.select(".info.tip").text()

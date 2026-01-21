@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_success
-import com.xiaoyv.bangumi.features.mikan.detail.MikanStudioArguments
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
@@ -15,6 +14,7 @@ import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import org.jetbrains.compose.resources.getString
 
 /**
@@ -25,11 +25,11 @@ import org.jetbrains.compose.resources.getString
  */
 class MikanDetailViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.MikanResources,
     private val mikanRepository: MikanRepository,
     private val cacheRepository: CacheRepository,
 ) : BaseViewModel<MikanDetailState, MikanDetailSideEffect, MikanDetailEvent.Action>(savedStateHandle) {
 
-    private val args = MikanStudioArguments(savedStateHandle)
     private val cacheKey =
         stringPreferencesKey(name = "mikan_detail_" + args.mikanId + "_" + args.groupId)
 

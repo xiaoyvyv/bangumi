@@ -54,7 +54,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun MikanDetailRoute(
-    viewModel: MikanDetailViewModel = koinViewModel<MikanDetailViewModel>(),
+    viewModel: MikanDetailViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

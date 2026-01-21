@@ -223,7 +223,6 @@ fun BgmProgressIndicator(
     trackColor: Color = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
     strokeCap: StrokeCap = ProgressIndicatorDefaults.CircularIndeterminateStrokeCap,
 ) {
-
     CircularProgressIndicator(
         modifier = modifier,
         color = color,

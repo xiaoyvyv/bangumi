@@ -4,12 +4,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.xiaoyv.bangumi.features.garden.GardenArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
 import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 
@@ -21,10 +21,10 @@ import kotlinx.coroutines.flow.update
  */
 class GardenViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.Garden,
     private val mikanRepository: MikanRepository,
 ) : BaseViewModel<GardenState, GardenSideEffect, GardenEvent.Action>(savedStateHandle) {
-    private val args = GardenArguments(savedStateHandle)
-    private val argsParam = SearchMagnetBody(keyword = args.text)
+    private val argsParam = SearchMagnetBody(keyword = args.query)
 
     private val queryParam = mutableStateFlowOf(argsParam)
 
@@ -33,7 +33,7 @@ class GardenViewModel(
         .cachedIn(viewModelScope)
 
     override fun initSate(onCreate: Boolean) = GardenState(
-        query = args.text.asTextFieldValue(),
+        query = args.query.asTextFieldValue(),
         param = argsParam
     )
 

@@ -93,7 +93,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SignInRoute(
-    viewModel: SignInViewModel = koinViewModel<SignInViewModel>(),
+    viewModel: SignInViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

@@ -1,6 +1,8 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.utils.BgmImageVariant
+import com.xiaoyv.bangumi.shared.core.utils.bgmImageUrl
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,35 +35,36 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Serializable
 data class ComposeImages(
-    @SerialName("common") val common: String = "",
     @SerialName("grid") val grid: String = "",
-    @SerialName("large") val large: String = "",
-    @SerialName("medium") val medium: String = "",
     @SerialName("small") val small: String = "",
+    @SerialName("common") val common: String = "",
+    @SerialName("medium") val medium: String = "",
+    @SerialName("large") val large: String = "",
 ) {
-    val displayBlurUrl: String
-        get() = small.ifBlank { grid }.ifBlank { medium }.ifBlank { common }.ifBlank { large }
-
-    val displayLargeImage: String
-        get() = large.ifBlank { common }.ifBlank { small }.ifBlank { grid }
+    private val imageUrl = large.ifBlank { common }.ifBlank { small }.ifBlank { grid }
 
     val displayGridImage: String
-        get() = grid.ifBlank { small }.ifBlank { medium }.ifBlank { large }
+        get() = imageUrl.bgmImageUrl(variant = BgmImageVariant.GRID)
 
     val displayMediumImage: String
-        get() = medium.ifBlank { large }.ifBlank { grid }.ifBlank { small }
+        get() = imageUrl.bgmImageUrl(variant = BgmImageVariant.M)
+
+    val displayLargeImage: String
+        get() = imageUrl.bgmImageUrl(variant = BgmImageVariant.L)
+
+    val displayOriginalUrl: String
+        get() = imageUrl.bgmImageUrl(variant = BgmImageVariant.ORIGINAL)
 
     companion object {
         val Empty = ComposeImages()
 
         fun fromUrl(url: String): ComposeImages {
-            val largeUrl = url.replace("/[gcsml]/".toRegex(), "/l/")
             return ComposeImages(
-                large = url,
-                common = largeUrl.replace("/l/", "/m/"),
-                grid = url.replace("/l/", "/g/"),
-                medium = url.replace("/l/", "/m/"),
-                small = url.replace("/l/", "/s/"),
+                grid = url.bgmImageUrl(BgmImageVariant.GRID),
+                small = url.bgmImageUrl(BgmImageVariant.S),
+                common = url.bgmImageUrl(BgmImageVariant.M),
+                medium = url.bgmImageUrl(BgmImageVariant.M),
+                large = url.bgmImageUrl(BgmImageVariant.L),
             )
         }
     }

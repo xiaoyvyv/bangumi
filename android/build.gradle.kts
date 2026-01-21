@@ -8,12 +8,6 @@ plugins {
     alias(libs.plugins.baselineprofile)
 }
 
-//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-//    compilerOptions {
-//        jvmTarget.set(JvmTarget.JVM_11)
-//    }
-//}
-
 kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)
@@ -26,7 +20,7 @@ baselineProfile {
     }
 }
 
-configure<ApplicationExtension> {
+android {
     namespace = "com.xiaoyv.bangumi"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 

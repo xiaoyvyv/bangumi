@@ -6,12 +6,10 @@ import com.xiaoyv.bangumi.shared.data.model.request.CollectionEpisodeUpdate
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.request.IndexBasicInfo
 import com.xiaoyv.bangumi.shared.data.model.request.IndexSubjectEditInfo
-import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectVariant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
@@ -37,16 +35,6 @@ interface BgmJsonApi {
      */
     @GET("v0/me")
     suspend fun fetchUserProfile(): ComposeUser
-
-    /**
-     * 搜索条目
-     */
-    @POST("v0/search/subjects")
-    suspend fun fetchSearchSubject(
-        @Body body: SubjectSearchBody,
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int,
-    ): ComposePage<ComposeSubjectVariant>
 
     /**
      * 获取条目巡礼

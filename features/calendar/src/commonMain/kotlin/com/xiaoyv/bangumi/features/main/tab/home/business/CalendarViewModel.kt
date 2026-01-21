@@ -2,13 +2,13 @@ package com.xiaoyv.bangumi.features.main.tab.home.business
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.main.tab.home.CalendarArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toPersistentMap
 
 /**
@@ -19,10 +19,10 @@ import kotlinx.collections.immutable.toPersistentMap
  */
 class CalendarViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.Calendar,
     private val cacheRepository: CacheRepository,
     private val subjectRepository: SubjectRepository,
 ) : BaseViewModel<CalendarState, CalendarSideEffect, CalendarEvent.Action>(savedStateHandle) {
-    private val args = CalendarArguments(savedStateHandle)
 
     private val cacheKey = stringPreferencesKey(name = "calendar_${args.isToday}")
 

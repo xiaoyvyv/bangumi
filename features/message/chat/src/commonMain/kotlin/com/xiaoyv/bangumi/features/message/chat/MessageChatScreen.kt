@@ -62,7 +62,7 @@ private const val CONTENT_TYPE_MESSAGE_ITEM = "CONTENT_TYPE_MESSAGE_ITEM"
 
 @Composable
 fun MessageChatRoute(
-    viewModel: MessageChatViewModel = koinViewModel<MessageChatViewModel>(),
+    viewModel: MessageChatViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -252,7 +252,7 @@ private fun MessageChatScreenPageItem(
             val isSelf = item.user.username == currentUser.username
             if (!isSelf) StateImage(
                 modifier = Modifier.size(44.dp),
-                model = item.user.displayAvatar,
+                model = item.user.avatar.displayMediumImage,
                 shape = MaterialTheme.shapes.small,
             )
 
@@ -304,7 +304,7 @@ private fun MessageChatScreenPageItem(
 
             if (isSelf) StateImage(
                 modifier = Modifier.size(44.dp),
-                model = item.user.displayAvatar,
+                model = item.user.avatar.displayMediumImage,
                 shape = MaterialTheme.shapes.small,
             )
         }

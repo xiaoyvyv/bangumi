@@ -79,7 +79,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun ProfileRoute(
-    viewModel: ProfileViewModel = koinViewModel<ProfileViewModel>(),
+    viewModel: ProfileViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -203,7 +203,6 @@ private fun ProfileScreenHeader(
     onUiEvent: (ProfileEvent.UI) -> Unit,
     onActionEvent: (ProfileEvent.Action) -> Unit,
 ) {
-
     Box(
         Modifier
             .fillMaxWidth()
@@ -211,13 +210,13 @@ private fun ProfileScreenHeader(
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         val currentUser = currentUser()
-        val avatar = currentUser.displayAvatar.ifBlank { "https://lain.bgm.tv/pic/user/m/icon.jpg" }
+        val avatar = currentUser.avatar.displayMediumImage
 
         BlurImage(
             modifier = Modifier.fillMaxSize(),
             model = avatar,
             contentDescription = stringResource(Res.string.global_image),
-            androidSampling = if (currentUser.displayAvatar.isBlank()) 20f else 5f
+            androidSampling = if (avatar.isBlank()) 20f else 5f
         )
 
         Column(

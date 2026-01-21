@@ -7,10 +7,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
+import org.jetbrains.skia.Bitmap
+import org.jetbrains.skia.ColorAlphaType
+import org.jetbrains.skia.ColorType
+import org.jetbrains.skia.Image
 
 actual fun Modifier.fastBlur(radius: Dp): Modifier {
     return blur(radius)
@@ -46,4 +52,27 @@ actual fun BlurImage(
         filterQuality = filterQuality,
         clipToBounds = clipToBounds
     )
+}
+
+actual fun rgbaToImageBitmap(width: Int, height: Int, rgba: ByteArray): ImageBitmap? {
+    if (rgba.size < width * height * 4) return null
+
+    val bitmap = Bitmap()
+    bitmap.allocPixels(
+        imageInfo = org.jetbrains.skia.ImageInfo(
+            width = width,
+            height = height,
+            colorType = ColorType.RGBA_8888,
+            alphaType = ColorAlphaType.PREMUL
+        )
+    )
+
+    bitmap.installPixels(
+        bitmap.imageInfo,
+        rgba,
+        width * 4
+    )
+
+    val skiaImage = Image.makeFromBitmap(bitmap)
+    return skiaImage.toComposeImageBitmap()
 }

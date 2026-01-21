@@ -119,7 +119,6 @@ fun createImageInlineContent(
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Fit,
                     model = it,
-                    transparent = true,
                 )
             }
         }

@@ -33,7 +33,7 @@ class DatabaseRepositoryImpl(val json: Json) : DatabaseRepository {
                 // 存在则更新
                 database.appUserInfoQueries.checkIdExists(composeUser.id).executeAsOne() -> database.appUserInfoQueries.updateUser(
                     id = composeUser.id,
-                    avatar = composeUser.displayAvatar,
+                    avatar = composeUser.avatar.displayMediumImage,
                     username = composeUser.username,
                     nickname = composeUser.nickname,
                     sign = composeUser.sign,
@@ -47,7 +47,7 @@ class DatabaseRepositoryImpl(val json: Json) : DatabaseRepository {
                 // 不存在则插入
                 else -> database.appUserInfoQueries.insertUser(
                     id = composeUser.id,
-                    avatar = composeUser.displayAvatar,
+                    avatar = composeUser.avatar.displayMediumImage,
                     username = composeUser.username,
                     nickname = composeUser.nickname,
                     sign = composeUser.sign,

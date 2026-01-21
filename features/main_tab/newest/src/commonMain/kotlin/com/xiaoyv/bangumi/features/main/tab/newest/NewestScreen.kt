@@ -31,7 +31,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun NewestRoute(
-    viewModel: NewestViewModel = koinViewModel<NewestViewModel>(),
+    viewModel: NewestViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

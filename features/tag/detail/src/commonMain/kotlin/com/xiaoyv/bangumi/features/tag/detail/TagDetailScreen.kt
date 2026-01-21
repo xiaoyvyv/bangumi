@@ -33,7 +33,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun TagDetailRoute(
-    viewModel: TagDetailViewModel = koinViewModel<TagDetailViewModel>(),
+    viewModel: TagDetailViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

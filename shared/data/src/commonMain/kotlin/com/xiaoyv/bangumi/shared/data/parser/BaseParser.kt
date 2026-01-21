@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.shared.core.exception.ApiException
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.utils.fetchStyleBackgroundUrl
-import com.xiaoyv.bangumi.shared.core.utils.optImageUrl
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmojiParam
 import org.jetbrains.compose.resources.getString
 
@@ -51,16 +51,16 @@ open class BaseParser {
     fun Elements.doubleValue() = text().toDoubleOrNull() ?: 0.0
     fun Element.doubleValue() = text().toDoubleOrNull() ?: 0.0
 
-    fun Elements.src() = attr("src").optImageUrl()
-    fun Element.src() = attr("src").optImageUrl()
+    fun Elements.src() = attr("src").sanitizeImageUrl()
+    fun Element.src() = attr("src").sanitizeImageUrl()
 
     fun Elements.styleAvatarUrl() = attr("style")
         .fetchStyleBackgroundUrl()
-        .optImageUrl()
+        .sanitizeImageUrl()
 
     fun Element.styleAvatarUrl() = attr("style")
         .fetchStyleBackgroundUrl()
-        .optImageUrl()
+        .sanitizeImageUrl()
 
     fun String.avatarUrlId(username: String): Long = substringAfterLast("/")
         .substringBefore("?")

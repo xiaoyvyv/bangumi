@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.features.timeline.detail.business
 
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.timeline.detail.TimelineDetailArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
  * [TimelineDetailViewModel]
@@ -10,9 +10,10 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
  * @author why
  * @since 2025/1/12
  */
-class TimelineDetailViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<TimelineDetailState, TimelineDetailSideEffect, TimelineDetailEvent.Action>(savedStateHandle) {
-    private val args = TimelineDetailArguments(savedStateHandle)
+class TimelineDetailViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val args: Screen.TimelineDetail,
+) : BaseViewModel<TimelineDetailState, TimelineDetailSideEffect, TimelineDetailEvent.Action>(savedStateHandle) {
 
     override fun initSate(onCreate: Boolean) = TimelineDetailState()
 

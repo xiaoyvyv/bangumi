@@ -31,12 +31,6 @@ data class ComposeGroup(
 
     val isJoined get() = membership != ComposeMembership.Empty
 
-    val displayLargeImage: String
-        get() = images.run { large.ifBlank { common }.ifBlank { small }.ifBlank { grid } }
-
-    val displayGridImage: String
-        get() = images.run { grid.ifBlank { small }.ifBlank { medium }.ifBlank { large } }
-
     companion object {
         val Empty = ComposeGroup()
     }

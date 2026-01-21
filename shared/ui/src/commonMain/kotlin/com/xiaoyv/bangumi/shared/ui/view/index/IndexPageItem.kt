@@ -63,7 +63,7 @@ fun IndexCardItem(
             ) {
                 StateImage(
                     modifier = Modifier.size(24.dp),
-                    model = item.creator.displayAvatar,
+                    model = item.creator.avatar.displayMediumImage,
                     shape = MaterialTheme.shapes.small
                 )
                 Text(
@@ -105,9 +105,9 @@ fun IndexPageItem(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
                 ) {
-                    if (item.creator.displayAvatar.isNotBlank()) StateImage(
+                    if (item.creator.avatar.displayMediumImage.isNotBlank()) StateImage(
                         modifier = Modifier.size(24.dp),
-                        model = item.creator.displayAvatar,
+                        model = item.creator.avatar.displayMediumImage,
                         shape = MaterialTheme.shapes.extraSmall,
                     )
                     Text(

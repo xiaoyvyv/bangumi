@@ -164,7 +164,7 @@ class UserRepositoryImpl(
     override suspend fun fetchUserList(param: ListUserParam): Result<List<ComposeUserDisplay>> = runResult {
         loadAllData { offset, limit -> fetchUserListByPage(param, offset, limit) }
             .distinctBy { it.user.username }
-            .map { it.copy(pinyin = it.user.nickname.toPinYin(), user = it.user.opt()) }
+            .map { it.copy(pinyin = it.user.nickname.toPinYin()) }
             .apply { require(isNotEmpty()) { "这里没有人哦~" } }
     }
 

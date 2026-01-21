@@ -81,7 +81,7 @@ fun CommentItem(
                             onClickUser(item.user.username)
                         },
                     shape = MaterialTheme.shapes.small,
-                    model = item.user.displayAvatar,
+                    model = item.user.avatar.displayMediumImage,
                 )
             }
         },
@@ -106,7 +106,7 @@ fun CommentItem(
                                 onClickUser(item.user.username)
                             },
                         shape = MaterialTheme.shapes.small,
-                        model = item.user.displayAvatar
+                        model = item.user.avatar.displayMediumImage
                     )
                     Text(
                         modifier = Modifier.clickWithoutRipped {

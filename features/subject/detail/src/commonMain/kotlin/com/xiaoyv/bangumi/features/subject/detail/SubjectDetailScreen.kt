@@ -96,7 +96,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SubjectDetailRoute(
-    viewModel: SubjectDetailViewModel = koinViewModel<SubjectDetailViewModel>(),
+    viewModel: SubjectDetailViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -277,11 +277,11 @@ private fun SubjectDetailScreenHeader(
                     modifier = Modifier
                         .matchParentSize()
                         .clickable {
-                            onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.subject.images.displayLargeImage)))
+                            onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.subject.images.displayMediumImage)))
                         },
                     shape = MaterialTheme.shapes.small,
                     contentScale = ContentScale.Crop,
-                    model = state.subject.images.displayLargeImage,
+                    model = state.subject.images.displayMediumImage,
                     contentDescription = stringResource(Res.string.global_image),
                 )
 

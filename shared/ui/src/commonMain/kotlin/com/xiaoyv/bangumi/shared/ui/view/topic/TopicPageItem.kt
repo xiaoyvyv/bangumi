@@ -351,7 +351,7 @@ private fun TopicPageItemAvatar(
                         else if (item.creator != ComposeUser.Empty) onClickUser(item.creator)
                     },
                 shape = MaterialTheme.shapes.small,
-                model = item.creator.displayAvatar
+                model = item.creator.avatar.displayMediumImage
             )
         }
 
@@ -361,7 +361,7 @@ private fun TopicPageItemAvatar(
                     .size(44.dp)
                     .clickWithoutRipped { onClickUser(item.creator) },
                 shape = MaterialTheme.shapes.small,
-                model = item.creator.displayAvatar
+                model = item.creator.avatar.displayMediumImage
             )
         }
 
@@ -371,7 +371,7 @@ private fun TopicPageItemAvatar(
                     .size(44.dp)
                     .clickWithoutRipped { onClickUser(item.creator) },
                 shape = MaterialTheme.shapes.small,
-                model = item.creator.displayAvatar
+                model = item.creator.avatar.displayMediumImage
             )
         }
 
@@ -382,7 +382,7 @@ private fun TopicPageItemAvatar(
                     .aspectRatio(3 / 4f)
                     .clickWithoutRipped { onClickSubject(item.subject) },
                 shape = MaterialTheme.shapes.small,
-                model = item.subject.images.displayLargeImage
+                model = item.subject.images.displayMediumImage
             )
         }
 
@@ -395,7 +395,7 @@ private fun TopicPageItemAvatar(
                     .aspectRatio(3 / 4f)
                     .clickWithoutRipped { onClickMono(item.mono) },
                 shape = MaterialTheme.shapes.small,
-                model = item.mono.mono.images.displayLargeImage,
+                model = item.mono.mono.images.displayMediumImage,
                 alignment = Alignment.TopCenter
             )
         }

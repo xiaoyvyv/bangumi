@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.xiaoyv.bangumi.shared.ui.component.image
 
 import android.content.Context

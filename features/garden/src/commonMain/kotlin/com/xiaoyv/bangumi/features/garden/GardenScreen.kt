@@ -63,7 +63,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun GardenRoute(
-    viewModel: GardenViewModel = koinViewModel<GardenViewModel>(),
+    viewModel: GardenViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

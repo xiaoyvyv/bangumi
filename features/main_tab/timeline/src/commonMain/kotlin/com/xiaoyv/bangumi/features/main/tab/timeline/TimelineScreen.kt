@@ -39,7 +39,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun TimelineRoute(
-    viewModel: TimelineViewModel = koinViewModel<TimelineViewModel>(),
+    viewModel: TimelineViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

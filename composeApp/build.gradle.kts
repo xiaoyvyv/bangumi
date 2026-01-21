@@ -1,84 +1,17 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("org.jetbrains.compose")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("org.jetbrains.kotlin.multiplatform")
+    id("bgm.library")
     id("org.jetbrains.compose.hot-reload")
-    id("com.android.kotlin.multiplatform.library")
 }
 
-
 kotlin {
-    jvmToolchain(21)
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
-
-    jvm("desktop") {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-
     androidLibrary {
         namespace = "com.xiaoyv.bangumi.compose"
-
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.minSdk.get().toInt()
-
-        withJava()
-
-        lint {
-            targetSdk = libs.versions.android.targetSdk.get().toInt()
-        }
-
-        androidResources {
-            enable = true
-        }
-
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-
-        enableCoreLibraryDesugaring = false
-
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-
-            implementation(libs.android.immersionbar)
-        }
-
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.preview)
-            implementation(compose.components.resources)
-            implementation(libs.bundles.compose.common)
-            implementation(libs.bundles.kotlinx)
-
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.bundles.koin.common)
-            implementation(libs.bundles.coil3.common)
-
             implementation(projects.shared.ui)
             implementation(projects.shared.core)
             implementation(projects.shared.coreNative)
@@ -145,13 +78,6 @@ kotlin {
         }
     }
 }
-
-compose.resources {
-    publicResClass = false
-    packageOfResClass = "com.xiaoyv.bangumi.resources"
-    generateResClass = auto
-}
-
 
 compose.desktop {
     application {

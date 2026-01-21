@@ -48,7 +48,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun NotificationRoute(
-    viewModel: NotificationViewModel = koinViewModel<NotificationViewModel>(),
+    viewModel: NotificationViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -116,7 +116,7 @@ private fun NotificationScreenContent(
                 leadingContent = {
                     StateImage(
                         modifier = Modifier.size(44.dp),
-                        model = it.user.displayAvatar,
+                        model = it.user.avatar.displayMediumImage,
                         shape = MaterialTheme.shapes.small
                     )
                 },

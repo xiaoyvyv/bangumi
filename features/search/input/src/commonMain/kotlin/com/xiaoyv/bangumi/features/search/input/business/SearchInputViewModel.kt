@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.search.input.business
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.features.search.input.SearchInputArguments
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -11,6 +10,7 @@ import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.limit
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.ktor.util.date.getTimeMillis
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
@@ -26,9 +26,9 @@ import kotlinx.coroutines.flow.update
  */
 class SearchInputViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.SearchInput,
     private val subjectRepository: SubjectRepository,
 ) : BaseViewModel<SearchInputState, SearchInputSideEffect, SearchInputEvent.Action>(savedStateHandle) {
-    private val args = SearchInputArguments(savedStateHandle)
     private val search = mutableStateFlowOf(args.query)
     private val searchHistory = System.database.appSearchHistoryQueries
 

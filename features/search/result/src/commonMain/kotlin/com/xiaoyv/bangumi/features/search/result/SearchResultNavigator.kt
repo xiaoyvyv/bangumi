@@ -1,38 +1,22 @@
 package com.xiaoyv.bangumi.features.search.result
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import com.xiaoyv.bangumi.shared.core.utils.composableByRoute
-import com.xiaoyv.bangumi.shared.core.utils.debounce
-import com.xiaoyv.bangumi.shared.core.utils.navString
-import com.xiaoyv.bangumi.shared.core.utils.navigateByRoute
-import com.xiaoyv.bangumi.shared.ui.component.navigation.SCREEN_ROUTE_SEARCH_RESULT
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
 
-data class SearchResultArguments(val query: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        query = savedStateHandle.get<String>("query").orEmpty()
-    )
-}
-
-fun NavHostController.navigateSearchResult(screen: Screen.SearchResult) = debounce(screen.route) {
-    navigateByRoute(screen.route, "query" to screen.query) {
-        popUpTo(screen.route) {
-            inclusive = true
+val searchResultModule = module {
+    navScope {
+        navigation<Screen.SearchResult> { key ->
+            SearchResultRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
         }
-    }
-}
-
-fun NavGraphBuilder.addSearchResultScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composableByRoute(SCREEN_ROUTE_SEARCH_RESULT, navString("query")) {
-        SearchResultRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
     }
 }

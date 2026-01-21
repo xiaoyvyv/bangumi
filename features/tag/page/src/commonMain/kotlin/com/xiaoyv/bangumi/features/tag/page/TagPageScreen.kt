@@ -120,7 +120,7 @@ private fun TagPageScreenContent(
                         Screen.SubjectBrowser(
                             body = SubjectBrowserBody(
                                 subjectType = SubjectType.ANIME,
-                                sort = SubjectSortBrowserType.TRENDS,
+                                sort = SubjectSortBrowserType.COLLECTS,
                                 tags = persistentListOf(item.name)
                             )
                         )

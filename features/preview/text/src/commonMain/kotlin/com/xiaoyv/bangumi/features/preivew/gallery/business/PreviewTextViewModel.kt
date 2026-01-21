@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.preivew.gallery.business
 
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.preivew.gallery.PreviewTextArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -10,6 +9,7 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
 import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
  * [PreviewTextViewModel]
@@ -19,9 +19,9 @@ import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
  */
 class PreviewTextViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.PreviewText,
     private val choreRepository: ChoreRepository,
 ) : BaseViewModel<PreviewTextState, PreviewTextSideEffect, PreviewTextEvent.Action>(savedStateHandle) {
-    private val args = PreviewTextArguments(savedStateHandle)
     override fun initBaseState(): BaseState<PreviewTextState> = BaseState.Loading()
 
     override fun initSate(onCreate: Boolean) = PreviewTextState()

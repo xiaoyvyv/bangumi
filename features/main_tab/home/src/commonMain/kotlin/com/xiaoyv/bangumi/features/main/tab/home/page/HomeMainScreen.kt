@@ -164,7 +164,7 @@ fun HomeMainBanner(
                             onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(display.subject.id)))
                         }
                     },
-                model = display.subject.images.displayLargeImage,
+                model = display.subject.images.displayMediumImage,
                 contentScale = ContentScale.Crop
             )
 
@@ -247,21 +247,11 @@ fun HomeMainAction(
                         .clickable {
                             when (it.type) {
                                 FeatureType.TYPE_DETECT_ANIME -> onUiEvent(
-                                    HomeEvent.UI.OnNavScreen(
-                                        Screen.DetectImage(
-                                            path = null,
-                                            type = DetectType.SOURCE
-                                        )
-                                    )
+                                    HomeEvent.UI.OnNavScreen(Screen.DetectImage(type = DetectType.SOURCE))
                                 )
 
                                 FeatureType.TYPE_DETECT_CHARACTER -> onUiEvent(
-                                    HomeEvent.UI.OnNavScreen(
-                                        Screen.DetectImage(
-                                            path = null,
-                                            type = DetectType.CHARACTER
-                                        )
-                                    )
+                                    HomeEvent.UI.OnNavScreen(Screen.DetectImage(type = DetectType.CHARACTER))
                                 )
 
                                 FeatureType.TYPE_ALMANAC -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Almanac))

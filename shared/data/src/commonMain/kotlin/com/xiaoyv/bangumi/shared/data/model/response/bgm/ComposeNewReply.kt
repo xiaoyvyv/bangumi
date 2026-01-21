@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 import androidx.compose.runtime.Immutable
 import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.core.types.CommentType
-import com.xiaoyv.bangumi.shared.core.utils.optImageUrl
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.serialization.ImmutableMapSerializer
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
@@ -95,7 +95,7 @@ data class ComposeNewReplyItem(
                 id = subReplyUid,
                 username = username,
                 nickname = nickname,
-                avatar = ComposeImages.fromUrl(avatar.optImageUrl()),
+                avatar = ComposeImages.fromUrl(avatar.sanitizeImageUrl()),
                 sign = sign,
             ),
             comment = content,

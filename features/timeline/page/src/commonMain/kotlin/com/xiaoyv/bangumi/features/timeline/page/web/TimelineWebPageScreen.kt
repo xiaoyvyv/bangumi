@@ -68,7 +68,7 @@ fun TimelineWebPageScreen(
         key = { item, index -> item.id },
         contentType = { CONTENT_TYPE_TIMELINE }
     ) { item, index ->
-        if (index != 0 && item.user.displayAvatar.isNotBlank()) BgmHorizontalDivider()
+        if (index != 0 && item.user.avatar.displayMediumImage.isNotBlank()) BgmHorizontalDivider()
 
         TimelinePageItem(
             modifier = Modifier.fillMaxWidth(),
@@ -103,7 +103,7 @@ private fun TimelinePageItem(
     ListItem(
         modifier = modifier.clickable { onClick(item) },
         leadingContent = {
-            if (item.user.displayAvatar.isBlank()) {
+            if (item.user.avatar.displayMediumImage.isBlank()) {
                 Spacer(modifier = Modifier.size(44.dp))
             } else {
                 StateImage(
@@ -111,7 +111,7 @@ private fun TimelinePageItem(
                         .size(44.dp)
                         .clickWithoutRipped { onClickUser(item.user) },
                     shape = MaterialTheme.shapes.small,
-                    model = item.user.displayAvatar
+                    model = item.user.avatar.displayMediumImage
                 )
             }
         },
@@ -273,7 +273,7 @@ private fun TimelinePageItemSubject(
                     InfoImage(
                         modifier = Modifier.width(80.dp),
                         blur = subject.images.displayGridImage,
-                        model = subject.images.displayLargeImage,
+                        model = subject.images.displayMediumImage,
                         maskText = subject.relation,
                         onClick = { onClick(subject) }
                     )
@@ -323,7 +323,7 @@ private fun TimelinePageItemSubject(
                     InfoImage(
                         modifier = Modifier.width(80.dp),
                         blur = subject.images.displayGridImage,
-                        model = subject.images.displayLargeImage,
+                        model = subject.images.displayMediumImage,
                         maskText = subject.relation,
                         onClick = { onClick(subject) }
                     )
@@ -346,7 +346,7 @@ private fun TimelinePageItemMono(
             InfoImage(
                 modifier = Modifier.width(80.dp),
                 blur = display.mono.images.displayGridImage,
-                model = display.mono.images.displayLargeImage,
+                model = display.mono.images.displayMediumImage,
                 maskText = display.mono.displayName,
                 onClick = { onClick(display) }
             )

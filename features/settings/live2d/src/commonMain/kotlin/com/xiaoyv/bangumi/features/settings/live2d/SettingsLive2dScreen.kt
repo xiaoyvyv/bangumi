@@ -33,7 +33,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SettingsLive2dRoute(
-    viewModel: SettingsLive2dViewModel = koinViewModel<SettingsLive2dViewModel>(),
+    viewModel: SettingsLive2dViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

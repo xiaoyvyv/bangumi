@@ -1,24 +1,22 @@
 package com.xiaoyv.bangumi.features.topic.detail
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import com.xiaoyv.bangumi.shared.core.utils.composableScreen
-import com.xiaoyv.bangumi.shared.core.utils.debounce
+import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen.Companion.TopicDetailRouteDefinition
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
-fun NavHostController.navigateTopicDetail(screen: Screen.TopicDetail) = debounce(screen.route) {
-    navigate(screen.route)
-}
-
-fun NavGraphBuilder.addTopicDetailScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composableScreen(TopicDetailRouteDefinition) {
-        TopicDetailRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
+val topicDetailModule = module {
+    navScope {
+        navigation<Screen.TopicDetail>(metadata = ListDetailSceneStrategy.detailPane()) { key ->
+            TopicDetailRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
+        }
     }
 }

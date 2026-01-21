@@ -38,7 +38,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun AlmanacRoute(
-    viewModel: AlmanacViewModel = koinViewModel<AlmanacViewModel>(),
+    viewModel: AlmanacViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

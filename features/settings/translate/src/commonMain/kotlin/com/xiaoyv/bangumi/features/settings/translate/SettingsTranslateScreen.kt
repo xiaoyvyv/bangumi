@@ -26,7 +26,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SettingsTranslateRoute(
-    viewModel: SettingsTranslateViewModel = koinViewModel<SettingsTranslateViewModel>(),
+    viewModel: SettingsTranslateViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

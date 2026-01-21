@@ -12,7 +12,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_sort_rating
 import com.xiaoyv.bangumi.core_resource.resources.global_subject
 import com.xiaoyv.bangumi.core_resource.resources.global_tag
 import com.xiaoyv.bangumi.core_resource.resources.global_topic
-import com.xiaoyv.bangumi.features.search.result.SearchResultArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.SearchType
@@ -35,6 +34,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.tag.TagSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.TopicSearchBody
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 
@@ -46,11 +46,8 @@ import kotlinx.collections.immutable.persistentListOf
  */
 class SearchResultViewModel(
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<SearchResultState, SearchResultSideEffect, SearchResultEvent.Action>(
-    savedStateHandle
-) {
-    private val args = SearchResultArguments(savedStateHandle)
-
+    private val args: Screen.SearchResult,
+) : BaseViewModel<SearchResultState, SearchResultSideEffect, SearchResultEvent.Action>(savedStateHandle) {
     override fun initSate(onCreate: Boolean) = SearchResultState(
         query = args.query,
         tabs = persistentListOf(

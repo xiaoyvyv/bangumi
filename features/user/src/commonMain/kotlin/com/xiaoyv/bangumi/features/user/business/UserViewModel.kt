@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.user.business
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.features.user.UserArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
@@ -22,6 +21,7 @@ import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -38,12 +38,12 @@ import org.jetbrains.compose.resources.getString
  */
 class UserViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.UserDetail,
     private val cacheRepository: CacheRepository,
     private val userRepository: UserRepository,
     private val personalStateStore: PersonalStateStore,
     private val userManager: UserManager,
 ) : BaseViewModel<UserState, UserSideEffect, UserEvent.Action>(savedStateHandle) {
-    private val args = UserArguments(savedStateHandle)
     private val cacheKey = stringPreferencesKey(name = "user_detail_" + args.username)
 
     init {

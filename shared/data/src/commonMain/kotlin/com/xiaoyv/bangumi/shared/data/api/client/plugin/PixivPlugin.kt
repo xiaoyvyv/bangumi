@@ -7,7 +7,6 @@ import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import io.ktor.client.plugins.api.ClientPlugin
 import io.ktor.client.plugins.api.createClientPlugin
-import io.ktor.client.request.url
 import io.ktor.utils.io.KtorDsl
 
 /**
@@ -31,11 +30,6 @@ val PixivProxyPlugin: ClientPlugin<PixivImagePluginConfig> =
 
         onRequest { request, _ ->
             val url = request.url.toString()
-            if (url.contains("i.pximg.net")) {
-                val newUrl = config.network.pixivImageHost + url.substringAfter("i.pximg.net").trimStart('/')
-                request.headers["Referer"] = "https://www.pixiv.net/"
-                request.url(newUrl)
-            }
 
             // 授权登录添加请求头
             if (url.contains("oauth.secure.pixiv.net")) {

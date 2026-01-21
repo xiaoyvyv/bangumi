@@ -266,7 +266,7 @@ private fun FriendScreenItem(
         leadingContent = {
             StateImage(
                 modifier = Modifier.size(44.dp),
-                model = item.user.displayAvatar.ifBlank { userImage(item.user.username) },
+                model = item.user.avatar.displayMediumImage.ifBlank { userImage(item.user.username) },
                 shape = MaterialTheme.shapes.small,
             )
         },

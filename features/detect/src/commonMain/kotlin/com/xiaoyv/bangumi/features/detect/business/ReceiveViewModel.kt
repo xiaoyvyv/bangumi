@@ -18,13 +18,13 @@ import com.xiaoyv.bangumi.core_resource.resources.image_detect_character_subtitl
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_failed
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject_subtitle
-import com.xiaoyv.bangumi.features.detect.ReceiveArguments
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.repository.TraceRepository
 import com.xiaoyv.bangumi.shared.ui.component.image.cropper.imageCropperCompat
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.exists
@@ -43,9 +43,9 @@ import org.jetbrains.compose.resources.getString
  */
 class ReceiveViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.DetectImage,
     private val traceRepository: TraceRepository,
 ) : BaseViewModel<ReceiveState, ReceiveSideEffect, ReceiveEvent.Action>(savedStateHandle) {
-    private val args = ReceiveArguments(savedStateHandle)
     internal val imageCropper = imageCropperCompat()
 
     override fun initSate(onCreate: Boolean) =

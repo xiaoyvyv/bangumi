@@ -31,7 +31,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun TopicRoute(
-    viewModel: TopicViewModel = koinViewModel<TopicViewModel>(),
+    viewModel: TopicViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

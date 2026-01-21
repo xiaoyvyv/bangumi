@@ -70,7 +70,7 @@ fun SubjectBlogItem(
                 ) {
                     StateImage(
                         modifier = Modifier.size(24.dp),
-                        model = item.user.displayAvatar,
+                        model = item.user.avatar.displayMediumImage,
                         shape = MaterialTheme.shapes.extraSmall,
                     )
                     Text(

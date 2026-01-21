@@ -38,7 +38,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SearchResultRoute(
-    viewModel: SearchResultViewModel = koinViewModel<SearchResultViewModel>(),
+    viewModel: SearchResultViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

@@ -7,7 +7,6 @@ import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
-import com.xiaoyv.bangumi.features.mono.detail.MonoDetailArguments
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -23,6 +22,7 @@ import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.data.usecase.MonoRepoUseCase
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
@@ -40,6 +40,7 @@ import org.jetbrains.compose.resources.getString
  */
 class MonoDetailViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.MonoDetail,
     private val monoRepoUseCase: MonoRepoUseCase,
     private val cacheRepository: CacheRepository,
     private val imageRepository: ImageRepository,
@@ -47,8 +48,6 @@ class MonoDetailViewModel(
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
 ) : BaseViewModel<MonoDetailState, MonoDetailSideEffect, MonoDetailEvent.Action>(savedStateHandle) {
-
-    private val args = MonoDetailArguments(savedStateHandle)
 
     private val cacheKey = stringPreferencesKey(name = "mono_detail_${args.type}_" + args.id)
 

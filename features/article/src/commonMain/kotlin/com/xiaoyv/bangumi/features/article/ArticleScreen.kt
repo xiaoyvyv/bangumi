@@ -104,7 +104,7 @@ private const val CONTENT_TYPE_BOTTOM_CHARACTER = "CONTENT_TYPE_BOTTOM_CHARACTER
 
 @Composable
 fun ArticleRoute(
-    viewModel: ArticleViewModel = koinViewModel<ArticleViewModel>(),
+    viewModel: ArticleViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -341,7 +341,7 @@ private fun ArticleScreenContentHeader(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.dp),
-                    avatar = state.article.group.displayGridImage,
+                    avatar = state.article.group.images.displayGridImage,
                     title = state.article.group.title,
                     time = state.article.time,
                     onClick = {
@@ -450,7 +450,7 @@ private fun ArticleScreenUserBar(
         StateImage(
             modifier = Modifier.size(44.dp),
             shape = MaterialTheme.shapes.small,
-            model = state.article.user.displayAvatar
+            model = state.article.user.avatar.displayMediumImage
         )
 
         Column(verticalArrangement = Arrangement.Center) {

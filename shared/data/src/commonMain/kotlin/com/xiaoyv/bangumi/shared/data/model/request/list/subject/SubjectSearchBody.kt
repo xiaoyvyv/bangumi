@@ -28,8 +28,8 @@ data class SubjectSearchBody(
         @SerialName("nsfw") val nsfw: Boolean = true,
         @SerialName("rank") val rank: SerializeList<String>? = null,
         @SerialName("rating") val rating: SerializeList<String>? = null,
-        @SerialName("tags") val tags: SerializeList<String>? = null,
         @SerialName("type") val type: SerializeList<Int>? = null,
+        @SerialName("tags") val tags: SerializeList<String>? = null,
     ) {
         companion object Companion {
             val Empty = SubjectSearchFilter()

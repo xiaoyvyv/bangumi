@@ -22,7 +22,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun TopicDetailRoute(
-    viewModel: TopicDetailViewModel = koinViewModel<TopicDetailViewModel>(),
+    viewModel: TopicDetailViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

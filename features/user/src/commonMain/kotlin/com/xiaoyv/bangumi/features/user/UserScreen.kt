@@ -56,7 +56,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun UserRoute(
-    viewModel: UserViewModel = koinViewModel<UserViewModel>(),
+    viewModel: UserViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -152,7 +152,7 @@ private fun UserScreenHeader(
     ) {
         BlurImage(
             modifier = Modifier.fillMaxSize(),
-            model = state.user.displayAvatar,
+            model = state.user.avatar.displayGridImage,
             contentDescription = stringResource(Res.string.global_image)
         )
 
@@ -170,7 +170,7 @@ private fun UserScreenHeader(
                         .size(80.dp)
                         .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
                         .clickable { onUiEvent(UserEvent.UI.OnNavScreen(Screen.PreviewMain(state.user.avatar.displayLargeImage))) },
-                    model = state.user.displayAvatar,
+                    model = state.user.avatar.displayMediumImage,
                     shape = CircleShape,
                 )
             }

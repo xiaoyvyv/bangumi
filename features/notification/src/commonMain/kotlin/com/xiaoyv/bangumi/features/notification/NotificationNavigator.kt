@@ -1,23 +1,21 @@
 package com.xiaoyv.bangumi.features.notification
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
-import com.xiaoyv.bangumi.shared.core.utils.debounce
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
-fun NavHostController.navigateNotification(screen: Screen.Notification) = debounce(screen.route) {
-    navigate(screen.route)
-}
-
-fun NavGraphBuilder.addNotificationScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composable(route = Screen.Notification.route) {
-        NotificationRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
+val notificationModule = module {
+    navScope {
+        navigation<Screen.Notification> { key ->
+            NotificationRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
+        }
     }
 }

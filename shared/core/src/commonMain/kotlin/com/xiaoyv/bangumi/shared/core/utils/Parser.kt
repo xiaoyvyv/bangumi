@@ -25,25 +25,17 @@ fun String.fetchStyleBackgroundUrl(): String {
 val blankImageUrlRegex = "https://.*/(info_only\\.png|no_icon\\.jpg|no_photo\\.png|no_icon_subject\\.png|icon\\.jpg)".toRegex()
 
 /**
- * 优化图片
- *
- * @param mode g|c|s|m|l
+ * 检测图片链接是否合法
  */
-fun String.optImageUrl(
-    mode: String = "l",
-    defaultImage: String = "https://lain.bgm.tv/img/no_icon_subject.png",
-): String {
+fun String.sanitizeImageUrl(): String {
     val imageUrl = when {
         startsWith("//") -> "https:$this"
         startsWith("/") -> "https://bgm.tv$this"
         else -> this
     }
     return imageUrl
-        .substringBefore("?")
-        .replace("/r/(.*?)/".toRegex(), "/")
-        .replace("/pic/(.*?)/[gcsml]/".toRegex(), "/pic/$1/$mode/")
-        .replace(blankImageUrlRegex, defaultImage)
-        .ifBlank { defaultImage }
+        .bgmImageUrl(BgmImageVariant.ORIGINAL)
+        .ifBlank { "https://lain.bgm.tv/img/no_icon_subject.png" }
 }
 
 fun String?.parseCount(): Int {

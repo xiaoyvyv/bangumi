@@ -48,7 +48,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SettingsBarRoute(
-    viewModel: SettingsBarViewModel = koinViewModel<SettingsBarViewModel>(),
+    viewModel: SettingsBarViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

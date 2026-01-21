@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.shared
 
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.ClipEntry
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -39,6 +40,7 @@ actual object System {
         )
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     actual fun createClipEntry(text: String): ClipEntry {
         return ClipEntry(nativeClipEntry = text)
     }

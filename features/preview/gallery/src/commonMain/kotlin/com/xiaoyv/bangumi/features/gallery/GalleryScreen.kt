@@ -44,7 +44,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun GalleryRoute(
-    viewModel: GalleryViewModel = koinViewModel<GalleryViewModel>(),
+    viewModel: GalleryViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -133,8 +133,7 @@ private fun GalleryPictureItem(
             modifier = Modifier
                 .matchParentSize()
                 .background(item.uiColor),
-            model = item.image,
-            transparent = true
+            model = item.image
         )
 
         Text(

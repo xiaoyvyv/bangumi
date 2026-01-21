@@ -84,12 +84,15 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-fun KoinApplication.initializeKoin() = modules(appModule())
-
-fun appModule() = listOf(commonModule, *dataModules)
+fun KoinApplication.initializeKoin() = modules(
+    commonModule,
+    navigationModule,
+    *dataModules
+)
 
 val commonModule = module {
     viewModelOf(::SharedViewModel)
+
     viewModelOf(::MainViewModel)
     viewModelOf(::AlmanacViewModel)
     viewModelOf(::SignInViewModel)

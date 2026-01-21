@@ -47,7 +47,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun MikanStudioRoute(
-    viewModel: MikanStudioViewModel = koinViewModel<MikanStudioViewModel>(),
+    viewModel: MikanStudioViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

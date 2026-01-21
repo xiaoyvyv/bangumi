@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.subject.browser.business
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.subject.browser.SubjectBrowserArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -12,6 +11,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserB
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
  * [SubjectBrowserViewModel]
@@ -21,11 +21,11 @@ import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
  */
 class SubjectBrowserViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.SubjectBrowser,
     private val cacheRepository: CacheRepository,
 ) : BaseViewModel<SubjectBrowserState, SubjectBrowserSideEffect, SubjectBrowserEvent.Action>(savedStateHandle) {
-    private val args = SubjectBrowserArguments(savedStateHandle)
 
-    private val cacheKey = stringPreferencesKey(name = "subject_browser_${args.uniqueKey}")
+    private val cacheKey = stringPreferencesKey(name = "subject_browser_${args.body.uniqueKey}")
 
     override fun initBaseState() = readViewModelCache(
         cacheRepository = cacheRepository,
@@ -47,7 +47,7 @@ class SubjectBrowserViewModel(
             browser = if (args.body != SubjectBrowserBody.Empty) args.body else {
                 SubjectBrowserBody(
                     subjectType = SubjectType.ANIME,
-                    sort = SubjectSortBrowserType.TRENDS,
+                    sort = SubjectSortBrowserType.COLLECTS,
                 )
             }
         )

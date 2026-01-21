@@ -48,6 +48,18 @@ data class SubjectBrowserBody(
         append(hideDateFilter)
     }
 
+    fun searchData(): SerializeList<String>? {
+        if (year == 0) return null
+        return if (month == 0) persistentListOf(
+            ">=$year-01-01",
+            "<${(year + 1)}-01-01"
+        )
+        else persistentListOf(
+            ">=$year-${month.toString().padStart(2, '0')}-01",
+            "<=$year-${month.toString().padStart(2, '0')}-31"
+        )
+    }
+
     companion object Companion {
         val Empty = SubjectBrowserBody(SubjectType.UNKNOWN, SubjectSortBrowserType.TRENDS)
     }

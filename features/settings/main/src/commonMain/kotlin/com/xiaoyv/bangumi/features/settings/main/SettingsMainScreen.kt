@@ -81,7 +81,7 @@ import kotlin.random.Random
 
 @Composable
 fun SettingsMainRoute(
-    viewModel: SettingsMainViewModel = koinViewModel<SettingsMainViewModel>(),
+    viewModel: SettingsMainViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

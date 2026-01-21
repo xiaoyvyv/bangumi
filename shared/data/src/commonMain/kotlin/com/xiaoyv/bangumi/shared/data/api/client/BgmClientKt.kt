@@ -26,6 +26,7 @@ import io.ktor.serialization.kotlinx.json.json
 fun createHttpClient(
     config: ComposeSetting.NetworkConfig,
     redirect: Boolean = true,
+    logLevel: LogLevel = LogLevel.HEADERS,
     cookieStorage: CookiesStorage = AcceptAllCookiesStorage(),
     block: HttpClientConfig<*>.() -> Unit = {},
 ): HttpClient {
@@ -56,7 +57,7 @@ fun createHttpClient(
         }
 
         if (System.isDebugType) install(Logging) {
-            level = LogLevel.HEADERS
+            level = logLevel
             logger = object : Logger {
                 override fun log(message: String) {
                     message.lineSequence().forEach { line ->

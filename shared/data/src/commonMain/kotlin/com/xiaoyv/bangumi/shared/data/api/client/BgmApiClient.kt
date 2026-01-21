@@ -61,6 +61,7 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -90,12 +91,21 @@ class BgmApiClient(
         )
     }
 
+
     private val bgmHttpClientNoRedirect by lazy {
         createHttpClient(
             redirect = false,
             config = config,
             cookieStorage = cookieStorage,
             block = { installBgmAuth(preferenceStore) }
+        )
+    }
+
+    val imageHttpClient by lazy {
+        createHttpClient(
+            config = config,
+            cookieStorage = cookieStorage,
+            logLevel = LogLevel.HEADERS,
         )
     }
 
@@ -141,7 +151,7 @@ class BgmApiClient(
         converterFactories(HttpCodeConverterFactory())
     }
 
-    private val pixivApiRetrofit = ktorfit {
+    val pixivApiRetrofit = ktorfit {
         httpClient(createHttpClient(config) { installPixivAuth() })
         baseUrl(WebConstant.URL_BASE_API_PIXIV)
         converterFactories(HttpCodeConverterFactory())

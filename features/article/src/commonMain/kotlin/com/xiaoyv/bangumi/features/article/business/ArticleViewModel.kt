@@ -11,7 +11,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_newest
 import com.xiaoyv.bangumi.core_resource.resources.global_oldest
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.global_self
-import com.xiaoyv.bangumi.features.article.ArticleArguments
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -31,6 +30,7 @@ import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -48,13 +48,12 @@ import kotlinx.coroutines.withContext
  */
 class ArticleViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.Article,
     private val ugcRepository: UgcRepository,
     private val userManager: UserManager,
     private val cacheRepository: CacheRepository,
     private val userRepository: UserRepository,
 ) : BaseViewModel<ArticleState, ArticleSideEffect, ArticleEvent.Action>(savedStateHandle) {
-    private val args = ArticleArguments(savedStateHandle)
-
     private val rawComments: MutableList<ComposeComment> = mutableListOf()
 
     private val cacheKey = stringPreferencesKey(name = "article_detail_" + args.id + "_" + args.type)

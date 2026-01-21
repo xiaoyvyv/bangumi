@@ -3,7 +3,7 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.core.utils.optImageUrl
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import kotlinx.collections.immutable.persistentListOf
@@ -63,7 +63,7 @@ data class ComposeBlogEntry(
 ) {
     fun opt(): ComposeBlogEntry {
         if (icon.isBlank()) return this
-        return copy(icon = icon.optImageUrl(mode = "l"))
+        return copy(icon = icon.sanitizeImageUrl())
     }
 
     companion object {

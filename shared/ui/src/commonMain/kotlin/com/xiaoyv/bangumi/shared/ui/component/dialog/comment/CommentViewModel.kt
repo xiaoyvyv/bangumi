@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.core.utils.BBCode
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
-import com.xiaoyv.bangumi.shared.core.utils.optImageUrl
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
@@ -43,7 +43,7 @@ class CommentViewModel(
             .onCompletion { reduce { state.copy(sending = false) } }
             .onFailure { debugLog { it } }
             .onSuccess {
-                val imageUrl = it.thumbUrl.optImageUrl()
+                val imageUrl = it.thumbUrl.sanitizeImageUrl()
                 val code = BBCode(hint = imageUrl, code = "img")
 
                 reduce { state.copy(comment = state.comment.insertBBCode(code, suffix = "\n")) }

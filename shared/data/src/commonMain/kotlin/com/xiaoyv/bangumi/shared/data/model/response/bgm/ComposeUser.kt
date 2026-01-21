@@ -5,7 +5,6 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.UserGroup
-import com.xiaoyv.bangumi.shared.core.utils.optImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
@@ -43,21 +42,6 @@ data class ComposeUser(
     @SerialName("online") val online: String = "",
 ) {
     val shareUrl: String get() = WebConstant.URL_BASE_WEB + "user/" + username
-
-    val displayAvatar: String
-        get() = avatar.large
-            .ifBlank { avatar.medium }
-            .ifBlank { avatar.small }
-
-
-    fun opt(): ComposeUser {
-        return copy(
-            avatar = avatar.copy(
-                medium = avatar.medium.optImageUrl(),
-                large = avatar.large.optImageUrl()
-            )
-        )
-    }
 
     companion object {
         val Empty: ComposeUser = ComposeUser()

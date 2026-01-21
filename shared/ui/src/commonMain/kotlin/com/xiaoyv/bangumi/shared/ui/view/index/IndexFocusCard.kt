@@ -57,7 +57,7 @@ fun IndexFocusCard(
         if (payload.isNullOrEmpty()) {
             BlurImage(
                 modifier = Modifier.matchParentSize(),
-                model = item.creator.displayAvatar,
+                model = item.creator.avatar.displayMediumImage,
                 contentDescription = null
             )
         } else {
@@ -109,7 +109,7 @@ fun IndexFocusCard(
                     contentDescription = null,
                     model = remember(img) {
                         ImageRequest.Builder(context)
-                            .data(img.displayBlurUrl)
+                            .data(img.displayGridImage)
                             .size(size)
                             .build()
                     },

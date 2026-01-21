@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
@@ -38,12 +42,11 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.mp.KoinPlatform
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun WebRoute(
-    viewModel: WebViewModel = koinViewModel<WebViewModel>(),
+    viewModel: WebViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -126,10 +129,21 @@ private fun WebScreenContent(
     onActionEvent: (WebEvent.Action) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        val webState = rememberSaveableWebViewState(state.url)
+        val webState = rememberSaveableWebViewState(url = state.url)
+
+        DisposableEffect(Unit) {
+            webState.webSettings.supportZoom = false
+            webState.webSettings.allowFileAccessFromFileURLs = true
+            webState.webSettings.allowUniversalAccessFromFileURLs = true
+            webState.webSettings.desktopWebSettings.disablePopupWindows = true
+            webState.webSettings.androidWebSettings.allowFileAccess = true
+            webState.webSettings.androidWebSettings.domStorageEnabled = true
+            webState.webSettings.isJavaScriptEnabled = true
+            webState.webSettings.customUserAgentString = System.userAgent()
+            onDispose { }
+        }
 
         LaunchedEffect(state.cookies) {
-            KoinPlatform.getKoin()
             state.cookies.forEach {
                 webState.cookieManager.setCookie(
                     state.url, Cookie(
@@ -143,16 +157,6 @@ private fun WebScreenContent(
                         maxAge = it.maxAge?.toLong(),
                     )
                 )
-            }
-
-            with(webState.webSettings) {
-                customUserAgentString = System.userAgent()
-                supportZoom = false
-                allowFileAccessFromFileURLs = true
-                allowUniversalAccessFromFileURLs = true
-                desktopWebSettings.disablePopupWindows = true
-                androidWebSettings.allowFileAccess = true
-                androidWebSettings.domStorageEnabled = true
             }
         }
 
@@ -176,7 +180,7 @@ private fun WebScreenContent(
             modifier = Modifier.fillMaxSize(),
             captureBackPresses = false,
             state = webState,
-            navigator = navigator,
+            navigator = navigator
         )
 
         val loadingState = webState.loadingState

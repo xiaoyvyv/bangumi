@@ -74,8 +74,7 @@ private fun MonoDetailPictureItem(
             modifier = Modifier
                 .matchParentSize()
                 .background(item.uiColor),
-            model = item.image,
-            transparent = true
+            model = item.image
         )
 
         if (item.count > 1) Text(

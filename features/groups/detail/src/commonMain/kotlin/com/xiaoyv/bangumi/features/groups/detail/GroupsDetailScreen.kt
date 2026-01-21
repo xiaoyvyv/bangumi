@@ -74,7 +74,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun GroupsDetailRoute(
-    viewModel: GroupsDetailViewModel = koinViewModel<GroupsDetailViewModel>(),
+    viewModel: GroupsDetailViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -168,7 +168,7 @@ private fun GroupsDetailScreenHeader(
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         BlurImage(
             modifier = Modifier.matchParentSize(),
-            model = state.group.images.small,
+            model = state.group.images.displayGridImage,
             contentDescription = state.group.name,
             contentScale = ContentScale.Crop
         )

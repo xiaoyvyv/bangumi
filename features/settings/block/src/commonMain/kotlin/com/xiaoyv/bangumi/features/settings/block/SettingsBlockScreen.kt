@@ -27,7 +27,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SettingsBlockRoute(
-    viewModel: SettingsBlockViewModel = koinViewModel<SettingsBlockViewModel>(),
+    viewModel: SettingsBlockViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

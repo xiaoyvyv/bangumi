@@ -133,7 +133,6 @@ private fun MonoDetailPictureItem(
                 .matchParentSize()
                 .background(item.uiColor),
             model = item.image,
-            transparent = true,
             alignment = Alignment.TopCenter,
         )
 

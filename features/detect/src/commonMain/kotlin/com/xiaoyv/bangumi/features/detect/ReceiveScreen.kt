@@ -116,7 +116,7 @@ import kotlin.math.roundToLong
 
 @Composable
 fun ReceiveRoute(
-    viewModel: ReceiveViewModel = koinViewModel<ReceiveViewModel>(),
+    viewModel: ReceiveViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

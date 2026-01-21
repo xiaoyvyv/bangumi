@@ -1,39 +1,22 @@
 package com.xiaoyv.bangumi.features.preivew.gallery
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import com.xiaoyv.bangumi.shared.core.utils.composableScreen
-import com.xiaoyv.bangumi.shared.core.utils.debounce
-import com.xiaoyv.bangumi.shared.core.utils.navigateScreen
-import com.xiaoyv.bangumi.shared.ui.component.navigation.EXTRA_TEXT
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen.Companion.PreviewTextRouteDefinition
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
 
-private var html = mutableMapOf<String, String>()
-
-data class PreviewTextArguments(val text: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        text = html[EXTRA_TEXT].orEmpty()
-    )
-}
-
-fun NavHostController.navigatePreviewText(screen: Screen.PreviewText) = debounce(screen.route) {
-    html[EXTRA_TEXT] = screen.text
-    navigateScreen(screen.route) {
-        param(EXTRA_TEXT, EXTRA_TEXT)
-    }
-}
-
-fun NavGraphBuilder.addPreviewTextScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composableScreen(PreviewTextRouteDefinition) {
-        PreviewTextRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
+val previewTextModule = module {
+    navScope {
+        navigation<Screen.PreviewText> { key ->
+            PreviewTextRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
+        }
     }
 }

@@ -20,9 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import coil3.disk.DiskCache
@@ -34,7 +31,6 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.image_detect
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_character
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
-import com.xiaoyv.bangumi.features.detect.navigateReceive
 import com.xiaoyv.bangumi.shared.avif.AvifDecoderFactory
 import com.xiaoyv.bangumi.shared.component.BgmLive2DView
 import com.xiaoyv.bangumi.shared.component.DetectType
@@ -53,6 +49,7 @@ import com.xiaoyv.bangumi.shared.ui.component.action.rememberAppActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.image.ImageInterceptor
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
@@ -75,11 +72,12 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun App() = KoinApplication(configuration = koinConfiguration(declaration = { initializeKoin() })) {
     val apiClient: BgmApiClient = koinInject()
     val personalStateStore: PersonalStateStore = koinInject()
+
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .crossfade(true)
             .components {
-                add(KtorNetworkFetcherFactory(apiClient.bgmHttpClient))
+                add(KtorNetworkFetcherFactory(apiClient.imageHttpClient))
                 add(ImageInterceptor)
                 add(AvifDecoderFactory.create(context))
                 addPlatformGifSupport()
@@ -100,11 +98,11 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
             .build()
     }
 
-    val navController = rememberNavController()
+    val navigator = koinInject<Navigator>()
     val popupTipState = rememberPopupTipState()
     val popupLoadingState = rememberPopupLoadingState()
     val actionHandler = rememberAppActionHandler {
-        navController.navigateToScreen(it)
+        navigator.navigate(it)
     }
 
     // 全局状态
@@ -123,10 +121,7 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
         LocalPersonalState provides personState
     ) {
         BgmAppTheme(modifier = Modifier.fillMaxSize()) {
-            BgmScreenNavGraph(
-                navController = navController,
-                startDestination = Screen.Splash
-            )
+            BgmScreenNavGraph(navigator = navigator)
 
             // Loading
             PopupLoadingScreen(popupLoadingState)
@@ -162,15 +157,11 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
         }
     }
 
-    HandleShareContent(navController)
+    HandleShareContent(navigator)
 }
 
 @Composable
-private fun HandleShareContent(
-    navController: NavHostController,
-) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+private fun HandleShareContent(navigator: Navigator) {
     var currentPath by remember { mutableStateOf("") }
     val dialogState = rememberAlertDialogState()
 
@@ -185,11 +176,11 @@ private fun HandleShareContent(
         },
         onClick = { item, _ ->
             when (item.type) {
-                DetectType.SOURCE -> navController.navigateReceive(
+                DetectType.SOURCE -> navigator.navigate(
                     Screen.DetectImage(DetectType.SOURCE, currentPath)
                 )
 
-                DetectType.CHARACTER -> navController.navigateReceive(
+                DetectType.CHARACTER -> navigator.navigate(
                     Screen.DetectImage(DetectType.CHARACTER, currentPath)
                 )
             }
@@ -197,10 +188,10 @@ private fun HandleShareContent(
     )
 
     LaunchReceiveShareImageEffect(
-        enable = currentDestination != null && currentDestination.route != Screen.Splash.route,
+        enable = navigator.backStack.lastOrNull() !is Screen.Splash,
         onReceiveImagePath = { path, type ->
             if (type == DetectType.CHARACTER || type == DetectType.SOURCE) {
-                navController.navigateReceive(Screen.DetectImage(type, path))
+                navigator.navigate(Screen.DetectImage(type, path))
             } else {
                 currentPath = path
                 dialogState.show()

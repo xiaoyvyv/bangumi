@@ -65,7 +65,7 @@ private const val CONTENT_TYPE_MESSAGE_ITEM = "CONTENT_TYPE_MESSAGE_ITEM"
 
 @Composable
 fun MessageMainRoute(
-    viewModel: MessageMainViewModel = koinViewModel<MessageMainViewModel>(),
+    viewModel: MessageMainViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -272,7 +272,7 @@ private fun MessageMainScreenPageItem(
                 content = {
                     StateImage(
                         modifier = Modifier.size(44.dp),
-                        model = item.user.displayAvatar,
+                        model = item.user.avatar.displayMediumImage,
                         shape = MaterialTheme.shapes.small,
                     )
                 }

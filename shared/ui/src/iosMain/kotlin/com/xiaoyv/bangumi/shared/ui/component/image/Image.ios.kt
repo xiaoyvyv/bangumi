@@ -7,10 +7,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
+import org.jetbrains.skia.ColorAlphaType
+import org.jetbrains.skia.ColorType
+import org.jetbrains.skia.Image
+import org.jetbrains.skia.ImageInfo
+
+actual fun rgbaToImageBitmap(width: Int, height: Int, rgba: ByteArray): ImageBitmap? {
+    if (width <= 0 || height <= 0) return null
+
+    val imageInfo = ImageInfo(
+        width,
+        height,
+        ColorType.RGBA_8888,
+        ColorAlphaType.PREMUL
+    )
+
+    // 使用 Skia 直接从字节创建 Image
+    return Image.makeRaster(imageInfo, rgba, width * 4).toComposeImageBitmap()
+}
 
 actual fun Modifier.fastBlur(radius: Dp): Modifier {
     return blur(radius)

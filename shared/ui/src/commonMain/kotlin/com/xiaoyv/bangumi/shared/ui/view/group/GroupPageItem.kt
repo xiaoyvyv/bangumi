@@ -27,7 +27,7 @@ fun GroupPageItem(
         leadingContent = {
             StateImage(
                 modifier = Modifier.size(44.dp),
-                model = item.displayLargeImage,
+                model = item.images.displayLargeImage,
                 shape = MaterialTheme.shapes.small,
             )
         },

@@ -1,8 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-include(":baselineprofile")
-
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -43,6 +40,7 @@ plugins {
 
 rootProject.name = "bangumi-multiplatform"
 
+include(":baselineprofile")
 include(":android")
 include(":composeApp")
 include(":shared:core")

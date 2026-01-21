@@ -38,7 +38,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun PreviewTextRoute(
-    viewModel: PreviewTextViewModel = koinViewModel<PreviewTextViewModel>(),
+    viewModel: PreviewTextViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

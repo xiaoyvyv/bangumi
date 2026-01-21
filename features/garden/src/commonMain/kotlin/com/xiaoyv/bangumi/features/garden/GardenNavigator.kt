@@ -1,39 +1,21 @@
 package com.xiaoyv.bangumi.features.garden
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import com.xiaoyv.bangumi.shared.core.utils.composableScreen
-import com.xiaoyv.bangumi.shared.core.utils.debounce
-import com.xiaoyv.bangumi.shared.core.utils.getString
-import com.xiaoyv.bangumi.shared.core.utils.navigateScreen
-import com.xiaoyv.bangumi.shared.ui.component.navigation.EXTRA_TEXT
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen.Companion.GardenRouteDefinition
-import io.ktor.http.decodeURLQueryComponent
-import io.ktor.http.encodeURLQueryComponent
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
-
-data class GardenArguments(val text: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        text = savedStateHandle.getString(EXTRA_TEXT).decodeURLQueryComponent()
-    )
-}
-
-fun NavHostController.navigateGarden(screen: Screen.Garden) = debounce(screen.route) {
-    navigateScreen(screen.route) {
-        param(EXTRA_TEXT, screen.query.encodeURLQueryComponent())
-    }
-}
-
-fun NavGraphBuilder.addGardenScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composableScreen(GardenRouteDefinition) {
-        GardenRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
+val gardenModule = module {
+    navScope {
+        navigation<Screen.Garden> { key ->
+            GardenRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
+        }
     }
 }

@@ -30,7 +30,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun PreviewMainRoute(
-    viewModel: PreviewMainViewModel = koinViewModel<PreviewMainViewModel>(),
+    viewModel: PreviewMainViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

@@ -54,7 +54,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun SettingsAccountRoute(
-    viewModel: SettingsAccountViewModel = koinViewModel<SettingsAccountViewModel>(),
+    viewModel: SettingsAccountViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

@@ -81,7 +81,7 @@ fun SubjectCardItem(
         ) {
             InfoImage(
                 modifier = Modifier.fillMaxWidth(),
-                model = subject.images.displayLargeImage,
+                model = subject.images.displayMediumImage,
                 blur = subject.images.displayGridImage,
                 shape = MaterialTheme.shapes.small
             )
@@ -386,7 +386,7 @@ fun SubjectWorkItem(
             InfoImage(
                 modifier = Modifier.width(80.dp),
                 blur = display.subject.images.displayGridImage,
-                model = display.subject.images.displayLargeImage,
+                model = display.subject.images.displayMediumImage,
                 maskText = stringResource(SubjectType.string(display.subject.type)),
                 textStyle = MaterialTheme.typography.bodySmall,
                 onClick = onClick
@@ -445,7 +445,7 @@ fun SubjectInfoCover(
     Box(modifier = modifier.noNull(onClick) { clickable(onClick = it) }) {
         InfoImage(
             modifier = Modifier.matchParentSize(),
-            model = subject.images.displayLargeImage,
+            model = subject.images.displayMediumImage,
             blur = subject.images.displayGridImage,
             shape = MaterialTheme.shapes.small,
         )

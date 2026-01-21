@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.ui.component.image
 
 import androidx.annotation.IntRange
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
@@ -35,10 +39,42 @@ import coil3.compose.AsyncImagePainter.Companion.DefaultTransform
 import coil3.compose.AsyncImagePainter.State
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import com.xiaoyv.bangumi.shared.core.utils.KotlinThumbHash
 import com.xiaoyv.bangumi.shared.core.utils.noNull
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.io.encoding.Base64
+
+/**
+ * 将 RGBA 字节数组转换为 Compose ImageBitmap
+ *
+ * @param width 图片宽度
+ * @param height 图片高度
+ * @param rgba 原始像素数据 (R, G, B, A, R, G, B, A...)
+ */
+expect fun rgbaToImageBitmap(width: Int, height: Int, rgba: ByteArray): ImageBitmap?
+
+
+@Composable
+fun produceThumbHashImage(key: Any?): ImageBitmap? {
+    val imageBitmap by produceState<ImageBitmap?>(key1 = key, initialValue = null) {
+        value = withContext(Dispatchers.Default) {
+            try {
+                val text = ThumbHashGenerator.generate(key.toString())
+                val hashBytes = Base64.Mime.decode(text)
+                val decoded = KotlinThumbHash.thumbHashToRGBA(hashBytes)
+                rgbaToImageBitmap(decoded.width, decoded.height, decoded.rgba)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
+    }
+    return imageBitmap
+}
 
 /**
  * Android API31及以下，使用半透明蒙层兼容实现，避免 blur 无效果更突兀问题
@@ -73,7 +109,7 @@ fun StateImage(
     contentDescription: String? = null,
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
-    transparent: Boolean = false,
+    blurLoading: Boolean = true,
     transform: (State) -> State = DefaultTransform,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Crop,
@@ -81,13 +117,12 @@ fun StateImage(
     colorFilter: ColorFilter? = null,
     filterQuality: FilterQuality = FilterQuality.High,
     clipToBounds: Boolean = true,
-    loadingThumb: Any? = null,
 ) {
     SubcomposeAsyncImage(
         modifier = modifier
             .clip(shape)
             .fillMaxSize()
-            .background(if (transparent) Color.Unspecified else MaterialTheme.colorScheme.surfaceContainer),
+            .background(MaterialTheme.colorScheme.surfaceContainer),
         model = model,
         contentDescription = contentDescription,
         transform = transform,
@@ -102,13 +137,13 @@ fun StateImage(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                if (loadingThumb != null) {
-                    BlurImage(
-                        modifier = Modifier.fillMaxSize(),
-                        model = loadingThumb,
+                if (blurLoading) {
+                    val imageBitmap = produceThumbHashImage(model.toString())
+                    if (imageBitmap != null) Image(
+                        bitmap = imageBitmap,
                         contentDescription = contentDescription,
                         contentScale = ContentScale.Crop,
-                        filterQuality = FilterQuality.None
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
                 BgmProgressIndicator(
@@ -125,11 +160,7 @@ fun StateImage(
             SubcomposeAsyncImageContent()
         },
         error = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(if (transparent) Color.Unspecified else MaterialTheme.colorScheme.surfaceContainer),
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     style = MaterialTheme.typography.bodyLarge,
@@ -170,8 +201,6 @@ fun InfoImage(
             model = model,
             contentDescription = contentDescription,
             contentScale = contentScale,
-            transparent = true,
-            loadingThumb = blur,
             alignment = alignment,
             shape = shape
         )

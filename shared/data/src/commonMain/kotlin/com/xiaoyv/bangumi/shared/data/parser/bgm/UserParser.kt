@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
-import com.xiaoyv.bangumi.shared.core.utils.optImageUrl
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
@@ -204,7 +204,7 @@ class UserParser : BaseParser() {
         val input = element.select("input").first()
         val select = element.select("select [selected]").first()
         return when {
-            img != null -> img.attr("src").optImageUrl()
+            img != null -> img.attr("src").sanitizeImageUrl()
             textarea != null -> textarea.value()
             input != null -> input.value()
             select != null -> select.value()

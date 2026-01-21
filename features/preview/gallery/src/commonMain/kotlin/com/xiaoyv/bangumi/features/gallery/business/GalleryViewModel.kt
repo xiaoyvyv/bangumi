@@ -2,13 +2,13 @@ package com.xiaoyv.bangumi.features.gallery.business
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.gallery.GalleryArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.data.usecase.ImageRepoUseCase
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
  * [GalleryViewModel]
@@ -18,10 +18,10 @@ import com.xiaoyv.bangumi.shared.data.usecase.ImageRepoUseCase
  */
 class GalleryViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.Gallery,
     private val imageRepoUseCase: ImageRepoUseCase,
     private val cacheRepository: CacheRepository,
 ) : BaseViewModel<GalleryState, GallerySideEffect, GalleryEvent.Action>(savedStateHandle) {
-    private val args = GalleryArguments(savedStateHandle)
 
     private val cacheKey = stringPreferencesKey(name = "gallery_${args.type}_" + args.id)
 

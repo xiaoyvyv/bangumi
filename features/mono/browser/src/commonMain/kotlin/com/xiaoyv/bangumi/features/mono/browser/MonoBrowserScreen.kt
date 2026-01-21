@@ -42,7 +42,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun MonoBrowserRoute(
-    viewModel: MonoBrowserViewModel = koinViewModel<MonoBrowserViewModel>(),
+    viewModel: MonoBrowserViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

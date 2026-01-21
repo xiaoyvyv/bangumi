@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.android.build.api.dsl.TestExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 
@@ -15,7 +14,7 @@ kotlin {
     }
 }
 
-extensions.configure<TestExtension> {
+android {
     namespace = "com.bgm.baselineprofile"
 
     compileSdk {

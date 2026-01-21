@@ -32,7 +32,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun TrackingRoute(
-    viewModel: TrackingViewModel = koinViewModel<TrackingViewModel>(),
+    viewModel: TrackingViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {

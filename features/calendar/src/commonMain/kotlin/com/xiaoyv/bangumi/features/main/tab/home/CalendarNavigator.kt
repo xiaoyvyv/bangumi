@@ -1,38 +1,21 @@
 package com.xiaoyv.bangumi.features.main.tab.home
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import com.xiaoyv.bangumi.shared.core.utils.composableScreen
-import com.xiaoyv.bangumi.shared.core.utils.debounce
-import com.xiaoyv.bangumi.shared.core.utils.getBoolean
-import com.xiaoyv.bangumi.shared.core.utils.navigateScreen
-import com.xiaoyv.bangumi.shared.ui.component.navigation.EXTRA_BOOLEAN
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen.Companion.CalendarRouteDefinition
-import com.xiaoyv.bangumi.shared.ui.component.navigation.withScreenParams
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
-
-data class CalendarArguments(val isToday: Boolean) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        isToday = savedStateHandle.getBoolean(EXTRA_BOOLEAN)
-    )
-}
-
-fun NavHostController.navigateCalendar(screen: Screen.Calendar) = debounce(screen.route) {
-    navigateScreen(screen.route) {
-        withScreenParams(screen)
-    }
-}
-
-fun NavGraphBuilder.addCalendarScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composableScreen(CalendarRouteDefinition) {
-        CalendarRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
+val calendarModule = module {
+    navScope {
+        navigation<Screen.Calendar> { key ->
+            CalendarRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
+        }
     }
 }

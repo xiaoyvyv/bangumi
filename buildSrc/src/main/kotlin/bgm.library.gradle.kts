@@ -13,43 +13,18 @@ plugins {
     id("com.android.kotlin.multiplatform.library")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_11)
-    }
-}
-
-/*
-android {
-    experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    lint {
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].java.srcDirs("src/androidMain/java")
-}*/
-
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
+
     jvmToolchain(21)
 
     applyDefaultHierarchyTemplate()
 
     listOf(
-        iosX64(),
+//        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -59,7 +34,11 @@ kotlin {
         }
     }
 
-    jvm()
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
 
     androidLibrary {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -93,7 +72,9 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.android.immersionbar)
 
             implementation(libs.bundles.coil3.android)
             implementation(libs.koin.android)
@@ -164,15 +145,18 @@ kotlin {
         all {
             languageSettings {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
+                optIn("org.koin.core.annotation.KoinExperimentalAPI")
                 optIn("kotlin.time.ExperimentalTime")
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
                 optIn("kotlinx.coroutines.FlowPreview")
                 optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
                 optIn("androidx.compose.material3.ExperimentalMaterial3Api")
                 optIn("androidx.compose.foundation.layout.ExperimentalLayoutApi")
+                optIn("androidx.compose.ui.ExperimentalComposeUiApi")
                 optIn("androidx.compose.foundation.ExperimentalFoundationApi")
                 optIn("androidx.paging.ExperimentalPagingApi")
                 optIn("org.orbitmvi.orbit.annotation.OrbitExperimental")
+                optIn("androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi")
 
                 compilerOptions {
                     freeCompilerArgs.add("-Xexpect-actual-classes")
@@ -276,7 +260,7 @@ tasks.register("generateMvi") {
             "package ${namespace}\n" +
                     "\n" +
                     "import androidx.navigation.NavGraphBuilder\n" +
-                    "import androidx.navigation.NavHostController\n" +
+                    "import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator\n" +
                     "import androidx.navigation.compose.composable\n" +
                     "import com.xiaoyv.bangumi.shared.core.utils.debounce\n" +
                     "import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen\n" +
@@ -288,7 +272,7 @@ tasks.register("generateMvi") {
                     "    )\n" +
                     "}" +
                     "\n" +
-                    "fun NavHostController.navigate${moduleName}(screen: Screen.${moduleName}) = debounce(screen.route) {\n" +
+                    "fun Navigator.navigate${moduleName}(screen: Screen.${moduleName}) = debounce(screen.route) {\n" +
                     "    navigate(screen.route)\n" +
                     "}\n" +
                     "\n" +
@@ -360,7 +344,7 @@ tasks.register("generateMvi") {
                     "\n" +
                     "@Composable\n" +
                     "fun ${moduleName}Route(\n" +
-                    "    viewModel: ${moduleName}ViewModel = koinViewModel<${moduleName}ViewModel>(),\n" +
+                    "    viewModel: ${moduleName}ViewModel ,\n" +
                     "    onNavUp: () -> Unit,\n" +
                     "    onNavScreen: (Screen) -> Unit,\n" +
                     ") {\n" +

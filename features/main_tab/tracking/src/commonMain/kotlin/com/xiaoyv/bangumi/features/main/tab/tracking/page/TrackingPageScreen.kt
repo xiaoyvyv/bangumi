@@ -149,7 +149,7 @@ private fun TrackingPageScreenContentItem(
                 StateImage(
                     modifier = Modifier.matchParentSize(),
                     shape = MaterialTheme.shapes.small,
-                    model = item.images.displayLargeImage,
+                    model = item.images.displayMediumImage,
                 )
 
                 if (item.rating.rank != 0) Text(

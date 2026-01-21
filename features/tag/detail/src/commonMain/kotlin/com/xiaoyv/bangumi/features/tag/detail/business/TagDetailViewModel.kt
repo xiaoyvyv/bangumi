@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.features.tag.detail.business
 
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.tag.detail.TagDetailArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
  * [TagDetailViewModel]
@@ -10,9 +10,10 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
  * @author why
  * @since 2025/1/12
  */
-class TagDetailViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<TagDetailState, TagDetailSideEffect, TagDetailEvent.Action>(savedStateHandle) {
-    private val args = TagDetailArguments(savedStateHandle)
+class TagDetailViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val args: Screen.TagDetail,
+) : BaseViewModel<TagDetailState, TagDetailSideEffect, TagDetailEvent.Action>(savedStateHandle) {
 
     override fun initSate(onCreate: Boolean) = TagDetailState(
         type = args.type

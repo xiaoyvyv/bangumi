@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.groups.detail.business
 
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.features.groups.detail.GroupsDetailArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -9,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupMemberRole
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMembership
 import com.xiaoyv.bangumi.shared.data.repository.GroupRepository
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 
@@ -20,9 +20,9 @@ import kotlinx.collections.immutable.persistentListOf
  */
 class GroupsDetailViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.GroupDetail,
     private val groupRepository: GroupRepository,
 ) : BaseViewModel<GroupsDetailState, GroupsDetailSideEffect, GroupsDetailEvent.Action>(savedStateHandle) {
-    private val args = GroupsDetailArguments(savedStateHandle)
 
     override fun initBaseState(): BaseState<GroupsDetailState> = BaseState.Loading()
 

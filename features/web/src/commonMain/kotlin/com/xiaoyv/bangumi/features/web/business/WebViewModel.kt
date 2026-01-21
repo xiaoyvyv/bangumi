@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.web.business
 
 import androidx.lifecycle.SavedStateHandle
 import com.multiplatform.webview.request.WebRequest
-import com.xiaoyv.bangumi.features.web.WebArguments
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -12,6 +11,7 @@ import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.core.utils.trimStr
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
 import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
+import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.ktor.http.Url
 import kotlinx.collections.immutable.toPersistentList
 
@@ -23,10 +23,10 @@ import kotlinx.collections.immutable.toPersistentList
  */
 class WebViewModel(
     savedStateHandle: SavedStateHandle,
+    private val args: Screen.Web,
     private val pixivRepoUseCase: PixivRepoUseCase,
     private val cookieStorage: BgmCookieStorage,
 ) : BaseViewModel<WebState, WebSideEffect, WebEvent.Action>(savedStateHandle) {
-    private val args = WebArguments(savedStateHandle)
 
     override fun initBaseState(): BaseState<WebState> = BaseState.Loading()
 

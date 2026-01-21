@@ -14,11 +14,6 @@ data class ComposeFriend(
     @SerialName("avatar") val avatar: ComposeImages = ComposeImages.Empty,
     @SerialName("pinyin") val pinyin: String = "",
 ) {
-    val displayAvatar: String
-        get() = avatar.medium
-            .ifBlank { avatar.large }
-            .ifBlank { avatar.small }
-
     companion object {
         val Empty = ComposeFriend()
     }

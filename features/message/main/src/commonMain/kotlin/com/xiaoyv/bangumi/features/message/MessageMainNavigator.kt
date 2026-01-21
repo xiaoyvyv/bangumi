@@ -1,23 +1,22 @@
 package com.xiaoyv.bangumi.features.message
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
-import com.xiaoyv.bangumi.shared.core.utils.debounce
+import androidx.navigation3.scene.DialogSceneStrategy
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
+import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
+import org.koin.dsl.navigation3.navigation
 
-fun NavHostController.navigateMessageMain(screen: Screen.MessageMain) = debounce(screen.route) {
-    navigate(screen.route)
-}
-
-fun NavGraphBuilder.addMessageMainScreen(
-    onNavUp: () -> Unit,
-    onNavScreen: (Screen) -> Unit,
-) {
-    composable(route = Screen.MessageMain.route) {
-        MessageMainRoute(
-            onNavUp = onNavUp,
-            onNavScreen = onNavScreen
-        )
+val messageMainModule = module {
+    navScope {
+        navigation<Screen.MessageMain> { key ->
+            MessageMainRoute(
+                viewModel = koinViewModel { parametersOf(key) },
+                onNavScreen = { navigator.navigate(it) },
+                onNavUp = { navigator.goBack() }
+            )
+        }
     }
 }
