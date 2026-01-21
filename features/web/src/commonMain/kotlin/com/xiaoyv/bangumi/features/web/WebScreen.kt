@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +23,8 @@ import com.multiplatform.webview.request.WebRequestInterceptResult
 import com.multiplatform.webview.web.LoadingState
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.WebViewNavigator
+import com.multiplatform.webview.web.WebViewState
+import com.multiplatform.webview.web.defaultWebViewFactory
 import com.multiplatform.webview.web.rememberSaveableWebViewState
 import com.multiplatform.webview.web.rememberWebViewNavigator
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -40,8 +41,8 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import kotlinx.coroutines.flow.filter
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -55,7 +56,7 @@ fun WebRoute(
     val navigator = rememberWebViewNavigator(
         requestInterceptor = createWebRequestInterceptor(
             onHandleHttpUrl = {
-                if (actionHandler.openBgmLink(it.url)) {
+                if (actionHandler.openBgmLink(it.url, jumpWeb = false)) {
                     WebRequestInterceptResult.Reject
                 } else {
                     WebRequestInterceptResult.Allow
@@ -107,7 +108,7 @@ private fun WebScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            onRefresh = { onActionEvent(WebEvent.Action.OnRefresh(it)) },
+            onRefresh = { loading -> onActionEvent(WebEvent.Action.OnRefresh(loading)) },
             baseState = baseState,
         ) { state ->
             WebScreenContent(
@@ -130,74 +131,73 @@ private fun WebScreenContent(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val webState = rememberSaveableWebViewState(url = state.url)
+        var synced by rememberSaveable { mutableStateOf(false) }
 
-        DisposableEffect(Unit) {
-            webState.webSettings.supportZoom = false
-            webState.webSettings.allowFileAccessFromFileURLs = true
-            webState.webSettings.allowUniversalAccessFromFileURLs = true
-            webState.webSettings.desktopWebSettings.disablePopupWindows = true
-            webState.webSettings.androidWebSettings.allowFileAccess = true
-            webState.webSettings.androidWebSettings.domStorageEnabled = true
-            webState.webSettings.isJavaScriptEnabled = true
-            webState.webSettings.customUserAgentString = System.userAgent()
-            onDispose { }
-        }
-
-        LaunchedEffect(state.cookies) {
-            state.cookies.forEach {
-                webState.cookieManager.setCookie(
-                    state.url, Cookie(
-                        name = it.name,
-                        value = it.value,
-                        domain = it.domain,
-                        path = it.path,
-                        expiresDate = it.expires?.timestamp,
-                        isSecure = it.secure,
-                        isHttpOnly = it.httpOnly,
-                        maxAge = it.maxAge?.toLong(),
+        LaunchedEffect(navigator, webState, state) {
+            if (!synced) {
+                webState.config()
+                state.cookies.forEach {
+                    webState.cookieManager.setCookie(
+                        state.url, Cookie(
+                            name = it.name,
+                            value = it.value,
+                            domain = it.domain,
+                            path = it.path,
+                            expiresDate = it.expires?.timestamp,
+                            isSecure = it.secure,
+                            isHttpOnly = it.httpOnly,
+                            maxAge = it.maxAge?.toLong(),
+                        )
                     )
-                )
-            }
-        }
-
-        LaunchedEffect(navigator, webState) {
-            val bundle = webState.viewState
-            if (bundle == null) {
+                }
                 navigator.loadUrl(state.url)
+                synced = true
             }
         }
 
         LaunchedEffect(webState) {
-            snapshotFlow { webState.pageTitle }
+            snapshotFlow { webState.pageTitle.orEmpty() }
+                .filter { it.isNotBlank() }
                 .collect {
-                    if (it.orEmpty().isNotBlank()) {
-                        onActionEvent(WebEvent.Action.OnTitleChange(it.orEmpty()))
-                    }
+                    onActionEvent(WebEvent.Action.OnTitleChange(it))
                 }
         }
 
-        WebView(
-            modifier = Modifier.fillMaxSize(),
-            captureBackPresses = false,
-            state = webState,
-            navigator = navigator
-        )
-
-        val loadingState = webState.loadingState
-        if (loadingState is LoadingState.Loading) {
-            val progress by animateFloatAsState(
-                targetValue = loadingState.progress,
-                animationSpec = tween(),
-                label = "WebProgressBar"
+        if (synced) {
+            WebView(
+                modifier = Modifier.fillMaxSize(),
+                captureBackPresses = false,
+                state = webState,
+                navigator = navigator,
+                factory = { defaultWebViewFactory(it) }
             )
 
-            LinearProgressIndicator(
-                modifier = Modifier.fillMaxWidth(),
-                progress = { progress },
-                gapSize = 0.dp,
-                strokeCap = StrokeCap.Square,
-                drawStopIndicator = {}
-            )
+            val loadingState = webState.loadingState
+            if (loadingState is LoadingState.Loading) {
+                val progress by animateFloatAsState(
+                    targetValue = loadingState.progress,
+                    animationSpec = tween(),
+                )
+
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    progress = { progress },
+                    gapSize = 0.dp,
+                    strokeCap = StrokeCap.Square,
+                    drawStopIndicator = {}
+                )
+            }
         }
     }
+}
+
+private fun WebViewState.config() {
+    webSettings.supportZoom = false
+    webSettings.allowFileAccessFromFileURLs = true
+    webSettings.allowUniversalAccessFromFileURLs = true
+    webSettings.desktopWebSettings.disablePopupWindows = true
+    webSettings.androidWebSettings.allowFileAccess = true
+    webSettings.androidWebSettings.domStorageEnabled = true
+    webSettings.isJavaScriptEnabled = true
+    webSettings.customUserAgentString = System.userAgent()
 }

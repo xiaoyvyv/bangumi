@@ -54,7 +54,7 @@ data class ComposeAnimePictureImage(
     @SerialName("pubtime")
     val pubtime: String? = null,
     @SerialName("score")
-    val score: Int = 0,
+    val score: Float = 0f,
     @SerialName("score_number")
     val scoreNumber: Int = 0,
     @SerialName("size")

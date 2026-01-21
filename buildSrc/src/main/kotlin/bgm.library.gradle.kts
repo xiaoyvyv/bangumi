@@ -24,12 +24,15 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     listOf(
-//        iosX64(),
+        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = frameworkBaseName
+            // 主模块导出单独修改一下模块名为 ComposeApp
+            baseName = frameworkBaseName.let {
+                if (it == "composeapp") "ComposeApp" else it
+            }
             isStatic = true
         }
     }

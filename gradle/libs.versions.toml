@@ -44,6 +44,7 @@ uiautomator = "2.3.0"
 benchmarkMacroJunit4 = "1.4.1"
 baselineprofile = "1.5.0-alpha01"
 profileinstaller = "1.4.1"
+cloudy = "0.5.0"
 
 [libraries]
 # gradle-plugin
@@ -99,6 +100,7 @@ compose-paging-common-android = { module = "androidx.paging:paging-compose-andro
 compose-grid = { module = "com.cheonjaeung.compose.grid:grid", version = "2.6.0" }
 compose-webview = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "compose-webview" }
 compose-confettikit = { module = "io.github.vinceglb:confettikit", version.ref = "confettikit" }
+compose-cloudy = { module = "com.github.skydoves:cloudy", version.ref = "cloudy" }
 
 # cryptohash
 cryptohash = { module = "com.appmattus.crypto:cryptohash", version.ref = "cryptohash" }
@@ -205,6 +207,7 @@ compose-common = [
     "compose-grid",
     "compose-webview",
     "compose-confettikit",
+    "compose-cloudy",
 ]
 kotlinx = [
     "kotlinx-atomicfu",

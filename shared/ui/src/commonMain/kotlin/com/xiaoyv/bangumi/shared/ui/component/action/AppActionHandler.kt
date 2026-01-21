@@ -54,7 +54,7 @@ class AppActionHandler(val actionHandler: ActionHandler?) {
         onNavScreen?.invoke(Screen.PreviewMain(url))
     }
 
-    fun openBgmLink(titleLink: String): Boolean {
+    fun openBgmLink(titleLink: String, jumpWeb: Boolean = true): Boolean {
         debugLog { "Handle Url: $titleLink" }
 
         val onNavScreen = onNavScreen ?: return false
@@ -68,8 +68,11 @@ class AppActionHandler(val actionHandler: ActionHandler?) {
 
         // 无法处理的 URL 直接跳转内置浏览器
         if (!handleHosts.contains(url.host)) {
-            onNavScreen(Screen.Web(url.toString()))
-            return true
+            if (jumpWeb) {
+                onNavScreen(Screen.Web(url.toString()))
+                return true
+            }
+            return false
         }
 
         when {
