@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -629,7 +630,7 @@ private fun SubjectDetailScore(
             TooltipBox(
                 modifier = Modifier.padding(horizontal = LayoutPadding),
                 state = tooltipState,
-                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Below, 4.dp),
                 tooltip = {
                     PlainTooltip(
                         modifier = Modifier.padding(horizontal = LayoutPadding),

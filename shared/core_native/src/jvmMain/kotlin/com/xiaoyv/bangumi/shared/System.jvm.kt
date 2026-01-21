@@ -64,7 +64,6 @@ actual object System {
         }
     }
 
-    @KtorDsl
     actual fun createHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient {
         return HttpClient(OkHttp) {
             engine {

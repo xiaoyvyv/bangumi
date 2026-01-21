@@ -31,6 +31,5 @@ expect object System {
 
     fun shareText(text: String)
 
-    @KtorDsl
     fun createHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient
 }

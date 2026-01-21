@@ -1,11 +1,12 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("bgm.library")
     id("bgm.native")
-    id("app.cash.sqldelight") version "2.1.0"
+    id("app.cash.sqldelight") version "2.2.1"
     alias(libs.plugins.googleKsp)
 }
 
@@ -16,13 +17,17 @@ kotlin {
         namespace = "com.xiaoyv.bangumi.shared.libnative"
     }
 
+    jvm {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+
     cocoapods {
-        podfile = project.file("../../iosApp/Podfile")
         pod("libavif")
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -30,11 +35,6 @@ kotlin {
             val myInterop by cinterops.creating {
                 definitionFile.set(project.file("src/iosMain/cinterop/BridgeSwift.def"))
                 includeDirs(project.file("headers"))
-            }
-
-            val live2d by cinterops.creating {
-                definitionFile.set(project.file("src/iosMain/cinterop/Live2DSDK.def"))
-                includeDirs(rootProject.file("iosApp/iosApp"), rootProject.file("iosApp/iosApp/Live2D"))
             }
         }
     }

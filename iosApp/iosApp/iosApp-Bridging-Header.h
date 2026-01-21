@@ -9,7 +9,5 @@
 #ifndef iosApp_Bridging_Header_h
 #define iosApp_Bridging_Header_h
 
-#import "Live2D/LCubismSdk.h"
-#import "Live2DView.h"
 
 #endif /* iosApp_Bridging_Header_h */

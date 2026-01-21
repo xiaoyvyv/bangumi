@@ -16,15 +16,6 @@ kotlin {
         homepage = "Link to the Shared Module homepage"
 
         ios.deploymentTarget = "14"
-
-        framework {
-            baseName = frameworkBaseName
-            isStatic = true
-        }
-
-        // Maps custom Xcode configuration to NativeBuildType
-        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
-        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
     }
 
     sourceSets {

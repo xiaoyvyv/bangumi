@@ -83,7 +83,6 @@ actual object System {
         application.startActivity(chooser)
     }
 
-    @KtorDsl
     actual fun createHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient {
         return HttpClient(OkHttp) {
             block()
