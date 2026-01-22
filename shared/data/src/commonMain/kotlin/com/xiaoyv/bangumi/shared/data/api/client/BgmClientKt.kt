@@ -64,7 +64,10 @@ fun createHttpClient(
                         var start = 0
                         while (start < line.length) {
                             val end = minOf(start + 2000, line.length)
-                            debugLog { line.substring(start, end) }
+                            debugLog {
+                                setTag { "Network" }
+                                line.substring(start, end)
+                            }
                             start = end
                         }
                     }

@@ -22,7 +22,7 @@ captures
 /iosApp/Podfile.lock
 /composeApp/bgm.db
 /composeApp/bgm.preferences_pb
-/shared/core_avif/darwin/libavif/
+/shared/core-avif/darwin/libavif/
 /composeApp/kcef-bundle/
 /composeApp/bgm.window_state
 /h5/BACK/

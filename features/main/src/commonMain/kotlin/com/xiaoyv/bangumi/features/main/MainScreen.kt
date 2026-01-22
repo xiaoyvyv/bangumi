@@ -4,35 +4,29 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Badge
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveComponentOverrideApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.xiaoyv.bangumi.features.main.business.MainEvent
 import com.xiaoyv.bangumi.features.main.business.MainState
 import com.xiaoyv.bangumi.features.main.business.MainViewModel
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalHideNavIcon
-import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.PagerNavHost
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.stateConfiguration
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
 import com.xiaoyv.bangumi.shared.ui.kts.isWideScreen
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -57,6 +51,7 @@ fun MainRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveComponentOverrideApi::class)
 @Composable
 fun MainScreen(
     state: MainState,
@@ -69,11 +64,16 @@ fun MainScreen(
         tab.first.fillParams(tab.second.label)
     }
     val backStack = rememberNavBackStack(stateConfiguration, startDestinationRoute)
-    val current = backStack.lastOrNull() as? Screen
+    backStack.lastOrNull() as? Screen
     val isWideScreen = isWideScreen
+    var selected by remember { mutableIntStateOf(0) }
 
-    NavigationSuiteScaffold(
-        navigationSuiteItems = {
+    NavigationSuiteScaffold1(
+        modifier = Modifier.fillMaxSize(),
+        navigationSuiteItems = bottomTabs,
+        onTabSelected = { selected = it },
+        selectedTabIndex = { selected },
+        /*navigationSuiteItems = {
             bottomTabs.forEach { item ->
                 item(
                     modifier = Modifier.padding(bottom = if (isWideScreen) LayoutPadding else 0.dp),
@@ -98,7 +98,7 @@ fun MainScreen(
                     }
                 )
             }
-        },
+        },*/
         content = {
             CompositionLocalProvider(LocalHideNavIcon provides true) {
                 PagerNavHost(
@@ -118,6 +118,7 @@ fun MainScreen(
         }
     )
 }
+
 
 private fun Screen.fillParams(label: StringResource): Screen {
     return when (this) {

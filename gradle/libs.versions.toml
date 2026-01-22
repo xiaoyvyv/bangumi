@@ -45,6 +45,7 @@ benchmarkMacroJunit4 = "1.4.1"
 baselineprofile = "1.5.0-alpha01"
 profileinstaller = "1.4.1"
 cloudy = "0.5.0"
+liquid = "1.1.1"
 
 [libraries]
 # gradle-plugin
@@ -101,6 +102,7 @@ compose-grid = { module = "com.cheonjaeung.compose.grid:grid", version = "2.6.0"
 compose-webview = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "compose-webview" }
 compose-confettikit = { module = "io.github.vinceglb:confettikit", version.ref = "confettikit" }
 compose-cloudy = { module = "com.github.skydoves:cloudy", version.ref = "cloudy" }
+compose-liquid = { module = "io.github.fletchmckee.liquid:liquid", version.ref = "liquid" }
 
 # cryptohash
 cryptohash = { module = "com.appmattus.crypto:cryptohash", version.ref = "cryptohash" }
@@ -208,6 +210,7 @@ compose-common = [
     "compose-webview",
     "compose-confettikit",
     "compose-cloudy",
+    "compose-liquid"
 ]
 kotlinx = [
     "kotlinx-atomicfu",
