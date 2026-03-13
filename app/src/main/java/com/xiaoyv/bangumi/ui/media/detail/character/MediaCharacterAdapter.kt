@@ -24,9 +24,18 @@ class MediaCharacterAdapter : BaseQuickDiffBindingAdapter<MediaCharacterEntity,
         binding.tvComment.text = String.format("讨论：%s", item.commentCount)
         binding.tvComment.isVisible = item.commentCount.isNotBlank()
         binding.tvJob.text = buildString {
-            append(item.personJob)
-            append(";")
-            append(item.personSex)
+            if (!item.personJob.isNullOrBlank()) {
+                append(item.personJob)
+            }
+            if (!item.personSex.isNullOrBlank()) {
+                if (isNotEmpty()) append(" ; ")
+                append(item.personSex)
+            }
+            if (!item.actors.isNullOrEmpty()) {
+                if (isNotEmpty()) append("\n")
+                append("CV: ")
+                append(item.actors?.joinToString(" / ") { it.name.toString() })
+            }
         }
     }
 

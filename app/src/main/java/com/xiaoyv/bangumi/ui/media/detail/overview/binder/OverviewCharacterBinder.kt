@@ -56,7 +56,7 @@ class OverviewCharacterBinder(private val clickItemListener: (MediaDetailEntity.
             FragmentOverviewCharacterItemBinding>(IdDiffItemCallback()) {
         override fun BaseQuickBindingHolder<FragmentOverviewCharacterItemBinding>.converted(item: MediaDetailEntity.MediaCharacter) {
             binding.ivAvatar.loadImageAnimate(item.avatar, cropType = ImageView.ScaleType.FIT_START)
-            binding.tvName.text = item.characterNameCn.ifBlank { item.characterName }
+            binding.tvName.text = item.characterName.ifBlank { item.characterNameCn }
             binding.tvJobs.text = item.jobs.joinToString(";")
             binding.tvCommentCount.text = String.format("+%d", item.saveCount)
             binding.tvCommentCount.isVisible = item.saveCount != 0

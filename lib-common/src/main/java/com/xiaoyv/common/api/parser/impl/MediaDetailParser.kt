@@ -172,21 +172,31 @@ fun Document.parserMediaMakers(): List<MediaMakerEntity> {
 fun Document.parserMediaCharacters(): List<MediaCharacterEntity> {
     requireNoError()
 
-    return select("#columnInSubjectA > div").map {
+    return select("#columnInSubjectA .item").map {
         val entity = MediaCharacterEntity()
-        entity.id = it.select("h2 a").hrefId()
+        entity.id = it.select("a.avatar").hrefId()
         entity.avatar = it.select(".avatar img").attr("src").optImageUrl()
-        entity.titleCn = it.select("h2 .tip").text()
-        entity.titleNative = it.select("h2 a").firsTextNode()
-        entity.commentCount = it.select(".rr > .na").text()
-        entity.personJob = it.select(".prsn_info > .badge_job").text()
-        entity.personSex = it.select(".prsn_info > .tip").text()
+        entity.titleCn = it.select("h2 span.tip").text()
+        entity.titleNative = it.select("h2 a.l").text()
+        entity.commentCount = it.select(".rr > .primary").text()
+        
+        entity.personJob = it.select(".badge_job_tip").text()
+        // prsn_info contains the job text inside it. We substring it out to avoid duplication.
+        val rawSex = it.select(".prsn_info").text()
+        val jobStr = entity.personJob.orEmpty()
+        entity.personSex = if (jobStr.isNotEmpty() && rawSex.startsWith(jobStr)) {
+            rawSex.substringAfter(jobStr).trim()
+        } else {
+            rawSex
+        }
+
         entity.actors = it.select(".actorBadge").map { actor ->
             val actorBadge = MediaCharacterEntity.ActorBadge()
             actorBadge.id = actor.select("a.avatar").hrefId()
+            // Fix: the image is usually located directly inside the a tag
             actorBadge.avatar = actor.select("a.avatar img").attr("src").optImageUrl()
             actorBadge.name = actor.select("p a.l").text()
-            actorBadge.nameCn = actor.select("p small").text()
+            actorBadge.nameCn = actor.select("p small.grey").text()
             actorBadge
         }
         entity
@@ -362,19 +372,19 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }.filterNotNull()
 
     // 角色
-    entity.characters = subjectDetail.select("#browserItemList > li").map { item ->
+    entity.characters = select("#browserItemList > li").map { item ->
         val mediaCharacter = MediaDetailEntity.MediaCharacter()
-        mediaCharacter.saveCount = item.select(".userContainer .fade").text().parseCount()
-        item.select(".userContainer a.avatar").apply {
+        mediaCharacter.saveCount = item.select(".info .primary").text().parseCount()
+        item.select("a.thumbTip").apply {
             mediaCharacter.id = hrefId()
             mediaCharacter.characterName = attr("title")
-            mediaCharacter.avatar = select(".userImage > span").attr("style")
+            mediaCharacter.avatar = select(".avatarNeue").attr("style")
                 .fetchStyleBackgroundUrl().optImageUrl()
         }
-        item.select(".info .tip_j").apply {
+        item.select(".info").apply {
             mediaCharacter.jobs = select(".badge_job_tip").map { it.text() }
-            mediaCharacter.characterNameCn = select("span.tip").text()
-            mediaCharacter.persons = select("a").map { person ->
+            mediaCharacter.characterNameCn = select(".title a").text()
+            mediaCharacter.persons = select(".badge_actor a").map { person ->
                 val characterPerson = MediaDetailEntity.MediaCharacterPerson()
                 characterPerson.personName = person.text()
                 characterPerson.personId = person.hrefId()
@@ -402,7 +412,7 @@ fun Document.parserMediaDetail(): MediaDetailEntity {
     }
 
     // 关联的条目
-    entity.relativeMedia = subjectDetail.select(".browserCoverMedium > li").map { item ->
+    entity.relativeMedia = select("ul.browserCoverMedium:not(#browserItemList) > li").map { item ->
         val mediaRelative = MediaDetailEntity.MediaRelative()
         mediaRelative.type = item.select("span.sub").text()
         item.select("a.avatar").apply {
