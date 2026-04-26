@@ -48,18 +48,19 @@ fun ScreenNavHost(
 @Composable
 fun PagerNavHost(
     backStack: NavBackStack<NavKey>,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavDisplay(
         modifier = modifier,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = onBack,
         backStack = backStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = koinEntryProvider(),
-        transitionSpec = EmptyNavTransitions.transitionSpec,
-        popTransitionSpec = EmptyNavTransitions.popTransitionSpec
+        transitionSpec = FadeNavTransitions.transitionSpec,
+        popTransitionSpec = FadeNavTransitions.popTransitionSpec
     )
 }

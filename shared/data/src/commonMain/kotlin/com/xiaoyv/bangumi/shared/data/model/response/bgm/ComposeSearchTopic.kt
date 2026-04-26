@@ -1,8 +1,10 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.constant.userImage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -30,7 +32,7 @@ data class ComposeSearchTopic(
             id = id,
             title = title,
             summary = summary,
-            topicType = RakuenIdType.TYPE_GROUP,
+            topicType = TopicDetailType.TYPE_GROUP,
             createdAt = timeDate,
             updatedAt = timeDate,
             group = ComposeGroup(

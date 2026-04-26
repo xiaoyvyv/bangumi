@@ -59,7 +59,9 @@ import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageViewModel
 import com.xiaoyv.bangumi.features.tag.detail.business.TagDetailViewModel
 import com.xiaoyv.bangumi.features.tag.page.business.TagPageViewModel
 import com.xiaoyv.bangumi.features.timeline.detail.business.TimelineDetailViewModel
+import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageViewModel
 import com.xiaoyv.bangumi.features.timeline.page.web.TimelineWebPageViewModel
+import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailViewModel
 import com.xiaoyv.bangumi.features.user.business.UserViewModel
 import com.xiaoyv.bangumi.features.web.business.WebViewModel
 import com.xiaoyv.bangumi.shared.data.di.dataModules
@@ -140,6 +142,7 @@ val commonModule = module {
     viewModelOf(::PixivMainViewModel)
     viewModelOf(::PixivLoginViewModel)
     viewModelOf(::GardenViewModel)
+    viewModelOf(::TopicDetailViewModel)
 
     viewModel { (type: Int) ->
         TrackingPageViewModel(
@@ -169,6 +172,14 @@ val commonModule = module {
 
     viewModel { (param: ListTimelineParam) ->
         TimelineWebPageViewModel(
+            savedStateHandle = get(),
+            ugcRepository = get(),
+            param = param,
+        )
+    }
+
+    viewModel { (param: ListTimelineParam) ->
+        TimelinePageViewModel(
             savedStateHandle = get(),
             ugcRepository = get(),
             param = param,
@@ -244,13 +255,6 @@ val commonModule = module {
             savedStateHandle = get(),
             param = param,
             imageRepository = get()
-        )
-    }
-
-    viewModel { (param: ListTimelineParam) ->
-        com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageViewModel(
-            savedStateHandle = get(),
-            param = param,
         )
     }
 

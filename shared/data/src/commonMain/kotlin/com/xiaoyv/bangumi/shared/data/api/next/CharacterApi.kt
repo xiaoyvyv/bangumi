@@ -4,12 +4,12 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCommentReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -30,7 +30,7 @@ interface CharacterApi {
     suspend fun createCharacterComment(
         @Path("characterID") characterID: Int,
         @Body createBlogCommentRequest: CreateBlogCommentRequest? = null,
-    ): ComposeCommentReply
+    ): ComposeReply
 
     /**
      * 删除角色的吐槽
@@ -38,7 +38,7 @@ interface CharacterApi {
      * @param commentID
      */
     @DELETE("p1/characters/-/comments/{commentID}")
-    suspend fun deleteCharacterComment(@Path("commentID") commentID: Int): ComposeCommentReply
+    suspend fun deleteCharacterComment(@Path("commentID") commentID: Int): ComposeReply
 
     /**
      * 获取角色
@@ -86,7 +86,7 @@ interface CharacterApi {
      * @param characterID
      */
     @GET("p1/characters/{characterID}/comments")
-    suspend fun getCharacterComments(@Path("characterID") characterID: Int): ComposeCommentReply
+    suspend fun getCharacterComments(@Path("characterID") characterID: Int): ComposeReply
 
     /**
      * 编辑角色的吐槽

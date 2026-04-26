@@ -94,7 +94,6 @@ fun <T> WheelPicker(
     }
 
     Box(modifier = modifier) {
-
         LazyColumn(
             state = listState,
             modifier = Modifier.fillMaxSize(),
@@ -155,7 +154,7 @@ fun MonthPicker(
     val years = remember {
         buildList {
             add(0)
-            addAll(1970..currentYear() + 5)
+            addAll((1970..currentYear() + 5).reversed())
         }
     }
     val months = remember { (0..12).toList() }
@@ -169,7 +168,6 @@ fun MonthPicker(
             )
         },
         text = {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

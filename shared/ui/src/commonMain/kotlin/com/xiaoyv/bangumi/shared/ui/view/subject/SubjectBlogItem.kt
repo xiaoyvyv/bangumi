@@ -25,7 +25,7 @@ import com.xiaoyv.bangumi.core_resource.resources.reply_comment
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
@@ -55,7 +55,6 @@ fun SubjectBlogItem(
                 modifier = Modifier.width(80.dp),
                 model = item.blog.icon,
                 shape = MaterialTheme.shapes.medium,
-                blur = item.blog.icon,
                 onClick = onClick
             )
 

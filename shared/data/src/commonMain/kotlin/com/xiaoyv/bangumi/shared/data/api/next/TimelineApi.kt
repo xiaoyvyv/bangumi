@@ -2,10 +2,11 @@ package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
+import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.CreateTimelineSayRequest
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCommentReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTimelineDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -54,9 +55,10 @@ interface TimelineApi {
     @GET("p1/timeline")
     suspend fun getTimeline(
         @Query("mode") @TimelineTarget mode: String? = null,
+        @Query("cat") @TimelineCat cat: Int? = null,
         @Query("limit") limit: Int? = 20,
-        @Query("until") until: Int? = null,
-    ): List<ComposeTimelineDisplay>
+        @Query("until") until: Long? = null,
+    ): List<ComposeTimeline>
 
     /**
      * 获取时间线回复
@@ -64,5 +66,5 @@ interface TimelineApi {
      * @param timelineID
      */
     @GET("p1/timeline/{timelineID}/replies")
-    suspend fun getTimelineReplies(@Path("timelineID") timelineID: Int): List<ComposeCommentReply>
+    suspend fun getTimelineReplies(@Path("timelineID") timelineID: Int): List<ComposeReply>
 }

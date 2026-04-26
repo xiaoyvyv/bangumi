@@ -57,9 +57,8 @@ fun MonoLineItemCharacter(
             modifier = Modifier
                 .padding(LayoutPadding)
                 .width(100.dp),
-            blur = item.mono.images.displayGridImage,
             model = item.mono.images.displayMediumImage,
-            maskText = MonoCastType.string(item.type),
+            text = MonoCastType.string(item.type),
             onClick = { onClick(item.mono.id, MonoType.CHARACTER) }
         )
         Column(
@@ -170,9 +169,8 @@ fun MonoCardItemCharacter(
     Column(modifier = modifier) {
         InfoImage(
             modifier = Modifier.fillMaxWidth(),
-            blur = item.mono.images.displayGridImage,
             model = item.mono.images.displayMediumImage,
-            maskText = item.mono.displayName,
+            text = item.mono.displayName,
             onClick = { onClick(item.mono.id, MonoType.CHARACTER) }
         )
 

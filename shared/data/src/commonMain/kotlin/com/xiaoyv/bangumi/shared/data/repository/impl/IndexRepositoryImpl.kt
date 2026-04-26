@@ -6,8 +6,8 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 

@@ -17,14 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeIndexRelatedLazyItems
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexRelated
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
@@ -132,7 +132,7 @@ fun IndexDetailPageRelatedContent(
                 item = item.episode,
                 contentPadding = PaddingValues(horizontal = LayoutPadding, vertical = 12.dp),
                 onClick = {
-                    onNavScreen(Screen.Article(item.episode.id, RakuenIdType.TYPE_EP))
+                    onNavScreen(Screen.Article(item.episode.id, TopicDetailType.TYPE_EP))
                 }
             )
         }
@@ -145,7 +145,7 @@ fun IndexDetailPageRelatedContent(
                     user = item.blog.user,
                 ),
                 onClick = {
-                    onNavScreen(Screen.Article(item.blog.id, RakuenIdType.TYPE_BLOG))
+                    onNavScreen(Screen.Article(item.blog.id, TopicDetailType.TYPE_BLOG))
                 },
                 onClickUser = {
                     onNavScreen(Screen.UserDetail(item.blog.user.username))
@@ -156,9 +156,9 @@ fun IndexDetailPageRelatedContent(
         IndexCatType.GROUP_TOPIC -> {
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
-                item = item.groupTopic.copy(topicType = RakuenIdType.TYPE_GROUP),
+                item = item.groupTopic.copy(topicType = TopicDetailType.TYPE_GROUP),
                 onClick = {
-                    onNavScreen(Screen.Article(item.groupTopic.id, RakuenIdType.TYPE_GROUP))
+                    onNavScreen(Screen.Article(item.groupTopic.id, TopicDetailType.TYPE_GROUP))
                 }
             )
         }
@@ -166,9 +166,9 @@ fun IndexDetailPageRelatedContent(
         IndexCatType.SUBJECT_TOPIC -> {
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
-                item = item.subjectTopic.copy(topicType = RakuenIdType.TYPE_SUBJECT),
+                item = item.subjectTopic.copy(topicType = TopicDetailType.TYPE_SUBJECT),
                 onClick = {
-                    onNavScreen(Screen.Article(item.subjectTopic.id, RakuenIdType.TYPE_SUBJECT))
+                    onNavScreen(Screen.Article(item.subjectTopic.id, TopicDetailType.TYPE_SUBJECT))
                 }
             )
         }

@@ -83,6 +83,15 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
+import com.xiaoyv.bangumi.core_resource.resources.timeline_blog
+import com.xiaoyv.bangumi.core_resource.resources.timeline_daily
+import com.xiaoyv.bangumi.core_resource.resources.timeline_index
+import com.xiaoyv.bangumi.core_resource.resources.timeline_mono
+import com.xiaoyv.bangumi.core_resource.resources.timeline_progress
+import com.xiaoyv.bangumi.core_resource.resources.timeline_status
+import com.xiaoyv.bangumi.core_resource.resources.timeline_subject
+import com.xiaoyv.bangumi.core_resource.resources.timeline_wiki
+import com.xiaoyv.bangumi.core_resource.resources.timeline_window
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_discover
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_hidden
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_pm
@@ -110,6 +119,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoCastType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
+import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
@@ -353,6 +363,19 @@ object TabTokens {
         ComposeTextTab(TimelineTab.GROUP, Res.string.global_group),
         ComposeTextTab(TimelineTab.WIKI, Res.string.global_wiki),
         ComposeTextTab(TimelineTab.INDEX, Res.string.global_index),
+    )
+
+    val timelineCatTabs = persistentListOf(
+        ComposeTextTab(TimelineCat.UNKNOWN, Res.string.global_all),
+//        ComposeTextTab(TimelineCat.STATUS, Res.string.timeline_status),
+//        ComposeTextTab(TimelineCat.SUBJECT, Res.string.timeline_subject),
+//        ComposeTextTab(TimelineCat.PROGRESS, Res.string.timeline_progress),
+//        ComposeTextTab(TimelineCat.BLOG, Res.string.timeline_blog),
+//        ComposeTextTab(TimelineCat.DAILY, Res.string.timeline_daily),
+//        ComposeTextTab(TimelineCat.MONO, Res.string.timeline_mono),
+//        ComposeTextTab(TimelineCat.INDEX, Res.string.timeline_index),
+//        ComposeTextTab(TimelineCat.WIKI, Res.string.timeline_wiki),
+//        ComposeTextTab(TimelineCat.WINDOW, Res.string.timeline_window),
     )
 
     val calendarWeekDays = persistentListOf(

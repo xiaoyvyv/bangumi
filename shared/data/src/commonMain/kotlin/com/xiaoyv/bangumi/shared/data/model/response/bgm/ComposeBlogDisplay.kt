@@ -2,10 +2,21 @@
 
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
+import com.xiaoyv.bangumi.shared.core.utils.addUrl
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -60,7 +71,29 @@ data class ComposeBlogEntry(
     @SerialName("tags") val tags: SerializeList<String> = persistentListOf(),
     @SerialName("user") val user: ComposeUser = ComposeUser.Empty,
     @SerialName("views") val views: Int = 0,
+
+    @SerialName("reactions") val reactions: SerializeList<ComposeReaction> = persistentListOf(),
+    @SerialName("subjects") val subjects: SerializeList<ComposeSubject> = persistentListOf(),
 ) {
+
+    @Composable
+    fun rememberTimelineTitle(
+        highlightColor: Color = MaterialTheme.colorScheme.primary,
+        onBlogClickListener: (ComposeBlogEntry) -> Unit = { },
+    ): AnnotatedString = remember(this, highlightColor, onBlogClickListener) {
+        buildAnnotatedString {
+            append("发表了新日志 ")
+            addUrl(
+                text = title,
+                style = SpanStyle(
+                    color = highlightColor,
+                    textDecoration = TextDecoration.Underline
+                ),
+                listener = { onBlogClickListener(this@ComposeBlogEntry) }
+            )
+        }
+    }
+
     fun opt(): ComposeBlogEntry {
         if (icon.isBlank()) return this
         return copy(icon = icon.sanitizeImageUrl())

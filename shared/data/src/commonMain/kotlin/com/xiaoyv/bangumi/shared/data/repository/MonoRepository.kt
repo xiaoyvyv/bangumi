@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 
 /**
  * [MonoRepository]

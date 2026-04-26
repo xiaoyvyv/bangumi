@@ -4,9 +4,9 @@ import androidx.paging.PagingData
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollectionInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexRelated
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import kotlinx.coroutines.flow.flowOf
 
 val PreviewComposeSubject = ComposeSubject(

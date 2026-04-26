@@ -14,7 +14,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCommentSubParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

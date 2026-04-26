@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Modifier.Companion
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
@@ -25,6 +28,7 @@ fun BottomSheetDialog(
     contentColor: Color = contentColorFor(containerColor),
     tonalElevation: Dp = 0.dp,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
+    sheetGesturesEnabled: Boolean = true,
     dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
     contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
     content: @Composable ColumnScope.() -> Unit,
@@ -34,6 +38,7 @@ fun BottomSheetDialog(
             modifier = modifier.statusBarsPadding(),
             onDismissRequest = { state.dismiss() },
             sheetState = state.sheetState,
+            sheetGesturesEnabled = sheetGesturesEnabled,
             sheetMaxWidth = sheetMaxWidth,
             shape = shape,
             containerColor = containerColor,

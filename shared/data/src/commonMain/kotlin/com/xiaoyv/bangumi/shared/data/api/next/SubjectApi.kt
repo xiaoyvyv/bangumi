@@ -9,16 +9,16 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateGroupTopicRequest
 import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCommentReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -127,7 +127,7 @@ interface SubjectApi {
         @Query("type") type: CollectionType? = null,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeCommentReply>
+    ): ComposePage<ComposeReply>
 
     /**
      * 获取条目的剧集

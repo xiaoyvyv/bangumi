@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

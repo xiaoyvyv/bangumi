@@ -11,7 +11,7 @@ import com.xiaoyv.bangumi.features.blog.page.business.BlogPageState
 import com.xiaoyv.bangumi.features.blog.page.business.BlogPageViewModel
 import com.xiaoyv.bangumi.features.blog.page.business.koinBlogPageViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -89,7 +89,7 @@ private fun BlogPageScreenContent(
                 onUiEvent(BlogPageEvent.UI.OnNavScreen(Screen.UserDetail(it.username)))
             },
             onClick = {
-                onUiEvent(BlogPageEvent.UI.OnNavScreen(Screen.Article(item.blog.id, RakuenIdType.TYPE_BLOG)))
+                onUiEvent(BlogPageEvent.UI.OnNavScreen(Screen.Article(item.blog.id, TopicDetailType.TYPE_BLOG)))
             }
         )
     }

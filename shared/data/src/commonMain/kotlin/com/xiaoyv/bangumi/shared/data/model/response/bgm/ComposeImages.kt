@@ -46,6 +46,9 @@ data class ComposeImages(
     val displayGridImage: String
         get() = imageUrl.bgmImageUrl(variant = BgmImageVariant.GRID)
 
+    val displaySmallImage: String
+        get() = imageUrl.bgmImageUrl(variant = BgmImageVariant.S)
+
     val displayMediumImage: String
         get() = imageUrl.bgmImageUrl(variant = BgmImageVariant.M)
 

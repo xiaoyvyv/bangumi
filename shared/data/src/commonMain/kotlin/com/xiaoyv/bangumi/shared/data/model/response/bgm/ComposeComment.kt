@@ -7,11 +7,16 @@ import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.Node
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.parser.bbcode.parseAsBbcode
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonNames
 
 @Immutable
 @Serializable
@@ -57,15 +62,37 @@ data class ComposeComment(
     }
 }
 
-
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
-data class ComposeCommentReply(
+data class ComposeReply(
     @SerialName("content") val content: String = "",
-    @SerialName("createdAt") val createdAt: Long = 0,
-    @SerialName("creator") val creator: ComposeUser = ComposeUser.Empty,
+    @SerialName("createdAt") val createdAt: SerializeDateLong = 0,
+    @SerialName("creator") @JsonNames("creator", "user") val user: ComposeUser = ComposeUser.Empty,
     @SerialName("creatorID") val creatorID: Long = 0,
     @SerialName("id") val id: Long = 0,
+    @SerialName("mainID") val mainID: Long = 0,
+    @SerialName("relatedID") val relatedID: Long = 0,
     @SerialName("reactions") val reactions: SerializeList<ComposeReaction> = persistentListOf(),
-    @SerialName("replies") val replies: SerializeList<ComposeCommentReply> = persistentListOf(),
-    @SerialName("state") val state: Int = 0,
-)
+    @SerialName("replies") val replies: SerializeList<ComposeReply> = persistentListOf(),
+    @SerialName("state") val state: Int = 0
+) : Node<ComposeReply> {
+    @Transient
+    val displayContent = if (content.startsWith("[quote]")) {
+        content.substringAfter("[/quote]").trim().parseAsBbcode()
+    } else {
+        content.trim().parseAsBbcode()
+    }
+
+    @Transient
+    val displayQuote = if (content.startsWith("[quote]")) {
+        content
+            .substringBefore("[/quote]")
+            .substringAfter("[quote]")
+            .trim()
+            .parseAsBbcode()
+    } else {
+        AnnotatedString("")
+    }
+
+    override val children: SerializeList<ComposeReply> get() = replies
+}

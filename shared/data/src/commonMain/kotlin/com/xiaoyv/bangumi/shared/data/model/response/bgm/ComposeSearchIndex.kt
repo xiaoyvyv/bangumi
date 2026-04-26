@@ -2,6 +2,8 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.data.constant.userImage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

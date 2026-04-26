@@ -5,7 +5,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
@@ -29,7 +29,7 @@ inline fun Module.navScope(scopeSet: Module.() -> Unit) {
 /**
  * Creates the required serializing configuration for open polymorphism
  */
-val stateConfiguration = SavedStateConfiguration {
+val u7u7stateConfiguration = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(NavKey::class) {
             subclass(Screen.Empty::class, Screen.Empty.serializer())
@@ -183,10 +183,10 @@ sealed class Screen(
     data object PixivLogin : Screen(SCREEN_ROUTE_PIXIV_LOGIN)
 
     @Serializable
-    data class TopicDetail(val id: Long, @field:RakuenIdType val type: String) : Screen(SCREEN_ROUTE_TOPIC)
+    data class TopicDetail(val id: Long, @field:TopicDetailType val type: String) : Screen(SCREEN_ROUTE_TOPIC)
 
     @Serializable
-    data class Article(val id: Long, @field:RakuenIdType val type: String) : Screen(SCREEN_ROUTE_ARTICLE)
+    data class Article(val id: Long, @field:TopicDetailType val type: String) : Screen(SCREEN_ROUTE_ARTICLE)
 
     @Serializable
     data class DetectImage(@field:DetectType val type: Int, val path: String = "") : Screen(SCREEN_ROUTE_RECEIVE)

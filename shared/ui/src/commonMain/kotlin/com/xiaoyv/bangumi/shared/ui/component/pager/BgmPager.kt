@@ -83,15 +83,14 @@ fun <Key : Any> BgmTabHorizontalPager(
         pageCount = { tabs.size }
     ),
     divider: @Composable () -> Unit = @Composable { BgmHorizontalDivider() },
-    pageContent: @Composable PagerScope.(page: Int) -> Unit,
+    pageContent: @Composable (page: Int) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-
     val currentPage = pagerState.currentPage.coerceAtMost(tabs.size - 1)
     var inputType by remember { mutableStateOf(PointerType.Touch) }
 
     Column(modifier = modifier.fillMaxSize()) {
-        if (tabs.isNotEmpty()) {
+        if (tabs.size > 1) {
             SecondaryScrollableTabRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -186,28 +185,32 @@ fun <Key : Any> BgmTabHorizontalPager(
             )
         }
 
-        divider()
-        HorizontalPager(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            val pointer = event.changes.firstOrNull()
-                            if (pointer != null) {
-                                inputType = pointer.type
+        if (tabs.size == 1) {
+            pageContent(0)
+        } else {
+            divider()
+            HorizontalPager(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                val pointer = event.changes.firstOrNull()
+                                if (pointer != null) {
+                                    inputType = pointer.type
+                                }
                             }
                         }
-                    }
-                },
-            state = pagerState,
-            userScrollEnabled = inputType == PointerType.Touch && userScrollEnabled,
-            beyondViewportPageCount = beyondViewportPageCount,
-            key = key,
-            pageContent = pageContent
-        )
+                    },
+                state = pagerState,
+                userScrollEnabled = inputType == PointerType.Touch && userScrollEnabled,
+                beyondViewportPageCount = beyondViewportPageCount,
+                key = key,
+                pageContent = { pageContent(it) }
+            )
+        }
     }
 }
 
@@ -229,10 +232,10 @@ fun <Key : Any> BgmChipHorizontalPager(
         pageCount = { tabs.size }
     ),
     extra: @Composable (ColumnScope.() -> Unit)? = null,
-    pageContent: @Composable PagerScope.(page: Int) -> Unit,
+    pageContent: @Composable (page: Int) -> Unit,
 ) {
     Column(modifier = modifier) {
-        LazyRow(
+        if (tabs.size > 1) LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
@@ -254,7 +257,9 @@ fun <Key : Any> BgmChipHorizontalPager(
 
         if (extra != null) extra()
 
-        HorizontalPager(
+        if (tabs.size == 1) {
+            pageContent(0)
+        } else HorizontalPager(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -262,7 +267,7 @@ fun <Key : Any> BgmChipHorizontalPager(
             state = pagerState,
             userScrollEnabled = userScrollEnabled,
             beyondViewportPageCount = beyondViewportPageCount,
-            pageContent = pageContent
+            pageContent = { pageContent(it) }
         )
     }
 }

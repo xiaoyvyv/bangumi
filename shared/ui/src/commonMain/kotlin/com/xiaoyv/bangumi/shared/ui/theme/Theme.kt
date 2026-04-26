@@ -17,12 +17,13 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.component.SideEffectForStatusBar
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
-import org.koin.compose.KoinApplication
+import org.koin.compose.KoinApplicationPreview
 import org.koin.dsl.ModuleDeclaration
 import org.koin.dsl.module
 
@@ -157,7 +158,7 @@ fun PreviewColumn(
     module: ModuleDeclaration = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    KoinApplication(application = { module(moduleDeclaration = module) }) {
+    KoinApplicationPreview(application = { module(moduleDeclaration = module) }) {
         BgmAppTheme(
             darkTheme,
             modifier = Modifier

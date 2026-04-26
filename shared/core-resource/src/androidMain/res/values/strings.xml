@@ -81,6 +81,7 @@
     <string name="global_date">日期</string>
     <string name="global_rating">评分</string>
     <string name="global_rank_no">排名</string>
+    <string name="global_ep_cnt">%1$s话</string>
     <string name="global_type">类型</string>
     <string name="global_unknown">未知</string>
     <string name="global_refresh">刷新</string>
@@ -367,6 +368,22 @@
     <string name="timeline_title">时间胶囊-时空管理局</string>
     <string name="timeline_friend_title">时间胶囊-好友</string>
     <string name="timeline_mine_title">时间胶囊-自己</string>
+    <string name="timeline_daily">日常</string>
+    <string name="timeline_wiki">维基</string>
+    <string name="timeline_subject">收藏</string>
+    <string name="timeline_progress">进度</string>
+    <string name="timeline_status">吐槽</string>
+    <string name="timeline_blog">日志</string>
+    <string name="timeline_index">目录</string>
+    <string name="timeline_mono">人物</string>
+    <string name="timeline_window">天窗</string>
+    <string name="timeline_index_content_update">%1$s个收录，更新于 %1$s</string>
+    <string name="timeline_member_cnt">%1$s个成员</string>
+    <string name="timeline_reply_cnt">%1$s 个回复</string>
+
+    <string name="topic_title">详情</string>
+    <string name="topic_ep_info">时长：%1$s / 首播：%2$s</string>
+    <string name="topic_index_info">创建于：%1$s，更新于：%2$s</string>
 
     <!-- 每日放送页面 -->
     <string name="calendar_title">每日放送</string>

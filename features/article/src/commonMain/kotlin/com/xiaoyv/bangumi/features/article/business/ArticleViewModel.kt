@@ -16,7 +16,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.CommentFilterType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SortType
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -115,14 +115,14 @@ class ArticleViewModel(
     }
 
     private fun onReactionClick(@CommentType type: Int, id: String, value: String) = action {
-        val authorId = if (args.type == RakuenIdType.TYPE_BLOG && stateRaw.article.user.id == 0L) {
+        val authorId = if (args.type == TopicDetailType.TYPE_BLOG && stateRaw.article.user.id == 0L) {
             userRepository.fetchUserInfo(stateRaw.article.user.username).map { it.id }.getOrDefault(0)
         } else {
             stateRaw.article.user.id
         }
 
         ugcRepository.submitReaction(
-            mainId = if (args.type == RakuenIdType.TYPE_BLOG) authorId else args.id,
+            mainId = if (args.type == TopicDetailType.TYPE_BLOG) authorId else args.id,
             type = type,
             id = id,
             value = value

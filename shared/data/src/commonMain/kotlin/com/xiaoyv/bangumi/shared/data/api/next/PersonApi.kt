@@ -5,13 +5,13 @@ import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCommentReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -32,7 +32,7 @@ interface PersonApi {
     suspend fun createPersonComment(
         @Path("personID") personID: Int,
         @Body createBlogCommentRequest: CreateBlogCommentRequest? = null,
-    ): ComposeCommentReply
+    ): ComposeReply
 
     /**
      * 删除人物的吐槽
@@ -88,7 +88,7 @@ interface PersonApi {
      * @param personID
      */
     @GET("p1/persons/{personID}/comments")
-    suspend fun getPersonComments(@Path("personID") personID: Int): List<ComposeCommentReply>
+    suspend fun getPersonComments(@Path("personID") personID: Int): List<ComposeReply>
 
     /**
      * 获取人物的参与作品

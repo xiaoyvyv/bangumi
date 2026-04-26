@@ -28,6 +28,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Constraints
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -41,80 +42,102 @@ private enum class BgmCollapsingSlot {
 @Composable
 fun BgmCollapsingScaffold(
     modifier: Modifier = Modifier,
-    state: ScrollState = rememberScrollState(),
+    state: ScrollState = rememberScrollState(), // Header 内部的滚动状态
     windowInsets: WindowInsets = WindowInsets.navigationBars,
     collapse: @Composable BoxScope.(pinPadding: PaddingValues) -> Unit,
     topBar: @Composable (BoxScope.(Float) -> Unit)? = null,
     overlay: @Composable (() -> Unit)? = null,
-    // 折叠进度 (0f: 展开, 1f: 折叠)
     content: @Composable BoxScope.(scrollProgress: Float) -> Unit,
 ) {
     val density = LocalDensity.current
     var minHeightPx by rememberSaveable { mutableIntStateOf(0) }
     var maxHeightPx by rememberSaveable { mutableIntStateOf(0) }
 
-    // Header 区域当前的垂直偏移量。范围: 0 (展开) 到 -(maxHeightPx - minHeightPx) (折叠)
+    // OffsetLimit: Header 可以向上移动的最大距离 (负值)
     val offsetLimit by remember(minHeightPx, maxHeightPx) {
         mutableIntStateOf(-(maxHeightPx - minHeightPx).coerceAtLeast(0))
     }
+
+    // currentOffset: 当前 Header 的偏移量，范围在 [offsetLimit, 0] 之间
     var currentOffset by rememberSaveable(maxHeightPx) { mutableFloatStateOf(0f) }
 
-    // 计算滚动进度 (0f: 展开, 1f: 折叠)
+    // 进度计算
     val scrollProgress by remember(currentOffset, offsetLimit) {
         derivedStateOf {
             if (offsetLimit == 0) 0f else ((abs(currentOffset) / abs(offsetLimit) * 1000).toLong() / 1000f).coerceIn(0f, 1f)
         }
     }
-    // --- 核心滚动逻辑 (Header 优先折叠，内容优先展开) ---
-    val nestedScrollConnection = remember(offsetLimit) {
+
+    // --- 1. Content 区域的滚动逻辑 (手指在内容区滑动) ---
+    // 需求：
+    // 上拉 (Delta < 0): 头部优先折叠 -> 头部折叠完 -> 内容滚动
+    // 下拉 (Delta > 0): 内容优先滚动 -> 内容滚到顶 -> 头部展开
+    val contentNestedScrollConnection = remember(offsetLimit) {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y // 向上是负值，向下是正值
-
-                // 1. 向上滚动 (delta < 0)：实现 Header 优先折叠
-                if (delta < 0) {
-                    // a. 优先让 Header 消费
-                    val newOffset = (currentOffset + delta).coerceIn(offsetLimit.toFloat(), 0f)
-                    val headerConsumed = newOffset - currentOffset
+                val delta = available.y
+                // 上拉：如果头部还没完全折叠，优先消费 Delta 来折叠头部
+                if (delta < 0 && currentOffset > offsetLimit) {
+                    val newOffset = (currentOffset + delta).coerceAtLeast(offsetLimit.toFloat())
+                    val consumed = newOffset - currentOffset
                     currentOffset = newOffset
-
-                    // 返回 Header 消费的
-                    return Offset(0f, headerConsumed)
+                    return Offset(0f, consumed)
                 }
-
-                // 2. 向下滚动 (delta > 0)：直接返回 0，交给内容区域不做操作
-                else if (delta > 0) {
-                    return Offset.Zero
-                }
-
+                // 下拉：返回 Zero，让内容区优先滚动 (onPostScroll 会处理剩下的)
                 return Offset.Zero
             }
 
             override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y
-
-                // 只有在向下滚动 (delta > 0) 且有剩余距离 (内容已滑到顶部) 时，才让 Header 展开
+                // 下拉：如果内容区已经滚到头了 (available > 0)，且头部还没完全展开，则展开头部
                 if (delta > 0 && currentOffset < 0) {
-                    val newOffset = (currentOffset + delta).coerceIn(offsetLimit.toFloat(), 0f)
-                    val headerConsumed = newOffset - currentOffset
+                    val newOffset = (currentOffset + delta).coerceAtMost(0f)
+                    val consumedByHeader = newOffset - currentOffset
                     currentOffset = newOffset
-                    return Offset(0f, headerConsumed)
+                    return Offset(0f, consumedByHeader)
                 }
-
                 return Offset.Zero
             }
         }
     }
 
+    // --- 2. Header (Collapse) 区域的滚动逻辑 (手指在折叠区滑动) ---
+    // 需求：
+    // 上拉 (Delta < 0): 优先让折叠部分展示滚到底 (内部滚动) -> 再让头部折叠
+    // 下拉 (Delta > 0): 优先展开头部 -> 头部展开了 -> 继续滚动折叠部分自身 (内部滚动)
+    val headerNestedScrollConnection = remember(offsetLimit) {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                // 下拉：如果头部被折叠了 (currentOffset < 0)，优先消费 Delta 展开头部
+                if (delta > 0 && currentOffset < 0) {
+                    val newOffset = (currentOffset + delta).coerceAtMost(0f)
+                    val consumed = newOffset - currentOffset
+                    currentOffset = newOffset
+                    return Offset(0f, consumed)
+                }
+                // 上拉：返回 Zero，优先让 Header 内部滚动 (ScrollState) 消费。
+                // 如果内部滚到底了，ScrollState 无法消费，会进入 onPostScroll
+                return Offset.Zero
+            }
 
-    // --- 滚动逻辑结束 ---
-    SubcomposeLayout(
-        modifier = modifier
-            .windowInsetsPadding(windowInsets)
-            .nestedScroll(nestedScrollConnection) // 整个 Scaffold 处理嵌套滚动
-    ) { constraints ->
+            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                // 上拉：Header 内部已经滚到底了 (available < 0)，此时消费剩余 Delta 来折叠整个 Header 结构
+                if (delta < 0 && currentOffset > offsetLimit) {
+                    val newOffset = (currentOffset + delta).coerceAtLeast(offsetLimit.toFloat())
+                    val consumedByHeader = newOffset - currentOffset
+                    currentOffset = newOffset
+                    return Offset(0f, consumedByHeader)
+                }
+                return Offset.Zero
+            }
+        }
+    }
 
-        // --- 1. 测量 TopBar 以确定 minHeightPx ---
+    SubcomposeLayout(modifier = modifier.windowInsetsPadding(windowInsets)) { constraints ->
+
+        // --- 测量 TopBar ---
         val topBarPlaceable = subcompose(BgmCollapsingSlot.TOP_BAR) {
             if (topBar != null) Box(Modifier.fillMaxWidth()) { topBar(scrollProgress) }
         }.firstOrNull()?.measure(constraints.copy(minHeight = 0))
@@ -122,135 +145,61 @@ fun BgmCollapsingScaffold(
         minHeightPx = topBarPlaceable?.height ?: 0
         val pinPadding = with(density) { PaddingValues(top = minHeightPx.toDp()) }
 
-        // --- 2. 测量 Collapse 区域以确定 maxHeightPx ---
         val collapsePlaceable = subcompose(BgmCollapsingSlot.COLLAPSE) {
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .verticalScroll(state, flingBehavior = rememberFlingBehavior())
-            ) { collapse(pinPadding) } // 传入 pinPadding
-        }.firstOrNull()?.measure(constraints.copy(minHeight = 0))
+                    .nestedScroll(headerNestedScrollConnection)
+                    .verticalScroll(state)
+            ) {
+                collapse(pinPadding)
+            }
+        }.firstOrNull()?.measure(constraints.copy(minHeight = 0, maxHeight = constraints.maxHeight * 50))
 
-        // maxHeightPx = collapse区域的测量高度 + minHeightPx
-        maxHeightPx = (collapsePlaceable?.height ?: 0)
+        // 计算最大高度，用于确定折叠范围
+        maxHeightPx = collapsePlaceable?.height ?: 0
 
-        // --- 3. 测量内容区域 ---
+        // --- 测量 Content 区域 ---
+        // 注意：这里将 contentNestedScrollConnection 挂载到了包裹容器上
         val contentConstraints = constraints.copy(minHeight = 0)
         val contentPlaceable = subcompose(BgmCollapsingSlot.CONTENT) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.tertiaryContainer)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .nestedScroll(contentNestedScrollConnection)
             ) {
-                // 将 ScrollState 和 Progress 传入插槽
                 content(scrollProgress)
             }
-        }.first().measure(contentConstraints.copy(maxHeight = contentConstraints.maxHeight - minHeightPx)) // 内容区域最大视窗高度需要减去pin bar 高度
+        }.first().measure(contentConstraints.copy(maxHeight = contentConstraints.maxHeight - minHeightPx))
 
-        // --- 4. 测量 Overlay ---
+        // --- 测量 Overlay ---
         val overlayPlaceable = subcompose(BgmCollapsingSlot.OVERLAY) {
             if (overlay != null) overlay()
         }.firstOrNull()?.measure(constraints)
 
-        // --- 5. 放置 (Layout) ---
+        // --- 布局 (Layout) ---
         layout(constraints.maxWidth, constraints.maxHeight) {
+            val currentOffsetPx = currentOffset.roundToInt()
 
-            // 放置内容：内容基于内容 ScrollState 的值进行偏移，同时基于 Header 的 currentOffset 偏移
+            // 1. Content: 位于 Header 底部，随 offset 移动
+            // y = Header总高度 + 当前偏移 (负数)
             contentPlaceable.placeRelative(
                 x = 0,
-                // 内容的 Y 坐标 = Header最大高度 + Header当前偏移 - 内容自身的滚动距离
-                y = maxHeightPx + currentOffset.roundToInt()
+                y = maxHeightPx + currentOffsetPx
             )
 
-            // 放置 Collapse 区域：它始终和容器顶部对齐 (y=0)
+            // 2. Collapse: 始终从 0 开始，随 offset 移动，实现折叠效果
             collapsePlaceable?.placeRelative(
                 x = 0,
-                // 要求 2: Collapse 区域始终从 y=0 开始，并随滚动而偏移
-                y = currentOffset.roundToInt()
+                y = currentOffsetPx
             )
 
-            // 放置 TopBar：始终固定在顶部
+            // 3. TopBar: 固定不动，或者根据需要做透明度动画等
             topBarPlaceable?.placeRelative(x = 0, y = 0)
 
-            // 放置 Overlay
+            // 4. Overlay
             overlayPlaceable?.placeRelative(x = 0, y = 0)
         }
     }
 }
-
-/*
-@Composable
-fun BgmCollapsingScaffold(
-    modifier: Modifier = Modifier,
-    state: ScrollState = rememberScrollState(),
-    windowInsets: WindowInsets = WindowInsets.navigationBars,
-    collapse: @Composable BoxScope.(PaddingValues) -> Unit,
-    topBar: @Composable (BoxScope.(Float) -> Unit)? = null,
-    overlay: @Composable (BoxScope.() -> Unit)? = null,
-    content: @Composable BoxScope.(Float) -> Unit,
-) {
-    BoxWithConstraints(modifier = modifier.windowInsetsPadding(windowInsets)) {
-        var pinHeight by rememberSaveable { mutableIntStateOf(0) }
-        val parentHeight = maxHeight
-        val density = LocalDensity.current
-
-        val nestedScrollConnection = remember(state) {
-            object : NestedScrollConnection {
-                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                    // 向下（available.y > 0）：优先让子组件消费
-                    if (available.y > 0) return Offset.Zero
-
-                    // 向上（available.y < 0）：先让 外层 消费
-                    val consumed = state.dispatchRawDelta(-available.y)
-                    return Offset(0f, -consumed)
-                }
-            }
-        }
-
-        val scrollProgress by remember {
-            derivedStateOf {
-                if (state.maxValue > 0) state.value.toFloat() / state.maxValue else 0f
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .matchParentSize()
-                .verticalScroll(state, overscrollEffect = null)
-                .nestedScroll(nestedScrollConnection)
-        ) {
-            val topPadding = with(density) { if (LocalInspectionMode.current) 64.dp else pinHeight.toDp() }
-
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                content = { collapse(PaddingValues(top = topPadding)) }
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(parentHeight - topPadding),
-                content = {
-                    content(scrollProgress)
-                }
-            )
-        }
-
-        if (topBar != null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onGloballyPositioned {
-                        val newHeight = it.size.height
-                        if (newHeight != pinHeight) {
-                            pinHeight = newHeight
-                        }
-                    }
-            ) {
-                topBar(scrollProgress)
-            }
-        }
-
-        if (overlay != null) overlay()
-    }
-}*/

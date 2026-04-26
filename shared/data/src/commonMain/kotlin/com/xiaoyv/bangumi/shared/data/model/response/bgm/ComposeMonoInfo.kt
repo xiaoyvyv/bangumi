@@ -5,6 +5,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.MonoCastType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName

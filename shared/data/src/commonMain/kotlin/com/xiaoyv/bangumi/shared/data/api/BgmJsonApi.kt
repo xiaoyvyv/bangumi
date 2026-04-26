@@ -6,11 +6,11 @@ import com.xiaoyv.bangumi.shared.data.model.request.CollectionEpisodeUpdate
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.request.IndexBasicInfo
 import com.xiaoyv.bangumi.shared.data.model.request.IndexSubjectEditInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET

@@ -3,8 +3,8 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexRelated
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path

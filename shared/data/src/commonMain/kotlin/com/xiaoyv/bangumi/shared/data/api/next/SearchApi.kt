@@ -5,7 +5,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query

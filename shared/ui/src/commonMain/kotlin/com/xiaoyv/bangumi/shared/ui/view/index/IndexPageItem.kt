@@ -29,7 +29,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_index
 import com.xiaoyv.bangumi.core_resource.resources.global_timeline
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons

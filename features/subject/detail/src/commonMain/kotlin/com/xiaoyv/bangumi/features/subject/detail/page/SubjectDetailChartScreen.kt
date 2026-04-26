@@ -61,8 +61,8 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectStats
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectStats.GridState
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats.GridState
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState

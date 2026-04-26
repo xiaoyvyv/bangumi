@@ -3,7 +3,6 @@ plugins {
 }
 
 kotlin {
-
     androidLibrary {
         namespace = "com.xiaoyv.bangumi.features.timeline.page"
     }

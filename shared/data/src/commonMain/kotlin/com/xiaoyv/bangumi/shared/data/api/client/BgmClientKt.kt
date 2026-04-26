@@ -15,18 +15,21 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.client.plugins.cookies.HttpCookies
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.LoggingFormat
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.appendIfNameAbsent
 
 fun createHttpClient(
     config: ComposeSetting.NetworkConfig,
     redirect: Boolean = true,
-    logLevel: LogLevel = LogLevel.HEADERS,
+    logLevel: LogLevel = LogLevel.BODY,
     cookieStorage: CookiesStorage = AcceptAllCookiesStorage(),
     block: HttpClientConfig<*>.() -> Unit = {},
 ): HttpClient {
@@ -57,6 +60,7 @@ fun createHttpClient(
         }
 
         if (System.isDebugType) install(Logging) {
+            format = LoggingFormat.Default
             level = logLevel
             logger = object : Logger {
                 override fun log(message: String) {
@@ -75,14 +79,14 @@ fun createHttpClient(
             }
         }
 
-        install(DefaultRequest) {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-            header(HttpHeaders.Pragma, "no-cache")
-            header(HttpHeaders.CacheControl, "no-cache")
-            header(HttpHeaders.TE, "trailers")
-            header(HttpHeaders.AcceptLanguage, "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
-            header(HttpHeaders.Cookie, "kira=4")
-            header(HttpHeaders.UserAgent, System.userAgent())
+        defaultRequest {
+            headers.appendIfNameAbsent(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            headers.appendIfNameAbsent(HttpHeaders.Pragma, "no-cache")
+            headers.appendIfNameAbsent(HttpHeaders.CacheControl, "no-cache")
+            headers.appendIfNameAbsent(HttpHeaders.TE, "trailers")
+            headers.appendIfNameAbsent(HttpHeaders.AcceptLanguage, "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
+            headers.appendIfNameAbsent(HttpHeaders.Cookie, "kira=4")
+            headers.appendIfNameAbsent(HttpHeaders.UserAgent, System.userAgent())
         }
 
         block()

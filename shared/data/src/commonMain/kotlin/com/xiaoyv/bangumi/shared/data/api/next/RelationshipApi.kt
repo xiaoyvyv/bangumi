@@ -4,7 +4,7 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlocklist
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.PUT

@@ -22,5 +22,9 @@ data class ComposeMonoDisplay(
 
     companion object {
         val Empty = ComposeMonoDisplay()
+
+        fun from(@MonoType type: Int, mono: ComposeMono): ComposeMonoDisplay {
+            return ComposeMonoDisplay(type = type, info = ComposeMonoInfo(mono = mono))
+        }
     }
 }

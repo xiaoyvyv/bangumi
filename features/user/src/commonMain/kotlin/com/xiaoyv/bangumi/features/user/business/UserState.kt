@@ -19,8 +19,8 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectCollectionBody
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName

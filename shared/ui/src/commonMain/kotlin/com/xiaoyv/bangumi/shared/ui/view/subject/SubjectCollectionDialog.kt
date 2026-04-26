@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.ui.view.subject
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,7 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,7 +71,7 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingSeekBar
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
@@ -95,14 +97,19 @@ fun SubjectCollectionDialog(
     loadState: LoadingState = LoadingState.NotLoading,
     onCollectionUpdate: (CollectionSubjectUpdate) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+    val scrollTop by remember { derivedStateOf { scrollState.value } }
+
     BottomSheetDialog(
         modifier = Modifier.fillMaxWidth(),
         state = state,
+        sheetGesturesEnabled = scrollTop == 0,
         contentWindowInsets = { WindowInsets() },
     ) {
 
         SubjectCollectionDialogContent(
             subject = subject,
+            scrollState = scrollState,
             myTags = myTags,
             loadState = loadState,
             onCollectionUpdate = onCollectionUpdate
@@ -121,12 +128,13 @@ fun SubjectCollectionDialogContent(
     subject: ComposeSubject,
     myTags: SerializeList<ComposeTag>,
     loadState: LoadingState,
+    scrollState: ScrollState = rememberScrollState(),
     onCollectionUpdate: (CollectionSubjectUpdate) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState,overscrollEffect = null)
             .windowInsetsPadding(WindowInsets.safeContent.only(WindowInsetsSides.Bottom))
             .padding(LayoutPadding),
         verticalArrangement = Arrangement.spacedBy(LayoutPadding),

@@ -24,8 +24,8 @@ import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.chineseNames
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto

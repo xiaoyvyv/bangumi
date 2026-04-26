@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 

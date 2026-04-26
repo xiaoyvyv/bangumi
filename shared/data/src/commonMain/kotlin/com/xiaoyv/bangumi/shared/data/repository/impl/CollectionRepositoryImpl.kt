@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.CollectionEpisodeUpdate
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
@@ -132,7 +132,12 @@ class CollectionRepositoryImpl(
                     async {
                         it.id to subjectRepository.fetchSubjectEpisodes(
                             subjectId = it.id,
-                            type = EpisodeType.TYPE_MAIN
+                            type = EpisodeType.TYPE_MAIN,
+                            offset = it.interest.epStatus.let { ep ->
+                                // 这里进度列表填充的格子，总共不超过24是直接拿全部，负责以当前进度往前偏移3格
+                                if (it.eps in 1..24) 0 else (ep - 3).coerceAtLeast(0)
+                            },
+                            limit = 40
                         ).getOrNull().orEmpty()
                     }
                 }

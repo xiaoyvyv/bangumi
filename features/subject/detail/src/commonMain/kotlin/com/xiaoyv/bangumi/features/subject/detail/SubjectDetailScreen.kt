@@ -332,7 +332,7 @@ private fun SubjectDetailScreenHeader(
                         start = LayoutPaddingHalf,
                         end = LayoutPadding
                     ),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
             ) {
                 Text(
                     text = state.subject.displayName,

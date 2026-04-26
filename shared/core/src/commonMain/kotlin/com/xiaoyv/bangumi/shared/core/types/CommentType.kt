@@ -36,14 +36,14 @@ annotation class CommentType {
             return type == GROUP || type == SUBJECT || type == SUBJECT_TOPIC || type == EP
         }
 
-        fun fromRakuenIdType(@RakuenIdType type: String): Int {
+        fun fromRakuenIdType(@TopicDetailType type: String): Int {
             return when (type) {
-                RakuenIdType.TYPE_SUBJECT -> SUBJECT_TOPIC
-                RakuenIdType.TYPE_GROUP -> GROUP
-                RakuenIdType.TYPE_EP -> EP
-                RakuenIdType.TYPE_BLOG -> BLOG_COMMENT
-                RakuenIdType.TYPE_PERSON,
-                RakuenIdType.TYPE_CRT,
+                TopicDetailType.TYPE_SUBJECT -> SUBJECT_TOPIC
+                TopicDetailType.TYPE_GROUP -> GROUP
+                TopicDetailType.TYPE_EP -> EP
+                TopicDetailType.TYPE_BLOG -> BLOG_COMMENT
+                TopicDetailType.TYPE_PERSON,
+                TopicDetailType.TYPE_CRT,
                     -> MONO
 
                 else -> UNKNOWN

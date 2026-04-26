@@ -57,12 +57,12 @@ import com.xiaoyv.bangumi.features.article.business.ArticleViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.utils.animateScrollToItem
 import com.xiaoyv.bangumi.shared.core.utils.nodesIndexed
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -92,7 +92,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 private var stickHeaderHeight = 0
@@ -152,9 +151,9 @@ private fun ArticleScreen(
 
                                 // 仅以下几种话题才显示举报
                                 when (article.type) {
-                                    RakuenIdType.TYPE_SUBJECT,
-                                    RakuenIdType.TYPE_BLOG,
-                                    RakuenIdType.TYPE_GROUP,
+                                    TopicDetailType.TYPE_SUBJECT,
+                                    TopicDetailType.TYPE_BLOG,
+                                    TopicDetailType.TYPE_GROUP,
                                         -> add(ButtonType.Report)
                                 }
                             },
@@ -336,7 +335,7 @@ private fun ArticleScreenContentHeader(
 
         when (state.article.type) {
             // 小组贴
-            RakuenIdType.TYPE_GROUP -> {
+            TopicDetailType.TYPE_GROUP -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -350,7 +349,7 @@ private fun ArticleScreenContentHeader(
                 )
             }
             // 条目贴
-            RakuenIdType.TYPE_SUBJECT -> {
+            TopicDetailType.TYPE_SUBJECT -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -364,7 +363,7 @@ private fun ArticleScreenContentHeader(
                 )
             }
             // 章节贴
-            RakuenIdType.TYPE_EP -> {
+            TopicDetailType.TYPE_EP -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -378,7 +377,7 @@ private fun ArticleScreenContentHeader(
                 )
             }
             // 人物贴
-            RakuenIdType.TYPE_PERSON, RakuenIdType.TYPE_CRT -> {
+            TopicDetailType.TYPE_PERSON, TopicDetailType.TYPE_CRT -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -409,7 +408,7 @@ private fun ArticleScreenContentHeader(
         )
 
         // 支持贴贴表情的话题
-        if (RakuenIdType.isSupportRection(state.article.type)) {
+        if (TopicDetailType.isSupportRection(state.article.type)) {
             state.article.reactions[state.article.contentId]?.let {
                 ReactionGroup(
                     modifier = Modifier.fillMaxWidth(),
@@ -418,7 +417,7 @@ private fun ArticleScreenContentHeader(
                         // 针对日志内容部分贴贴，type = 20
                         onActionEvent(
                             ArticleEvent.Action.OnReactionClick(
-                                if (state.article.type == RakuenIdType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
+                                if (state.article.type == TopicDetailType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
                                 state.article.contentId,
                                 reaction.value
                             )
@@ -500,7 +499,7 @@ private fun ArticleScreenRecationButton(
                 // 针对日志内容部分贴贴，type = 20
                 onActionEvent(
                     ArticleEvent.Action.OnReactionClick(
-                        if (state.article.type == RakuenIdType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
+                        if (state.article.type == TopicDetailType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
                         state.article.contentId,
                         value
                     )

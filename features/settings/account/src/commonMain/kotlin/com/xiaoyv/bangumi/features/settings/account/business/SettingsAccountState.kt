@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.features.settings.account.business
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.EditInfoType
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserEdit
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
 
 /**
  * [SettingsAccountState]

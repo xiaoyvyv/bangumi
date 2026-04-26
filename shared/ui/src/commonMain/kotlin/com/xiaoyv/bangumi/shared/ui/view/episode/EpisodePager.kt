@@ -1,11 +1,18 @@
 package com.xiaoyv.bangumi.shared.ui.view.episode
 
+import androidx.annotation.IntRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.automirrored.rounded.Undo
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Done
@@ -28,12 +35,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cheonjaeung.compose.grid.SimpleGridCells
+import com.cheonjaeung.compose.grid.VerticalGrid
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_topic
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
@@ -58,6 +69,8 @@ import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionWishContainer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 private fun tab(@EpisodeActionMenu action: Int, label: String) = ComposeTextTab(action, labelText = label)
 
@@ -89,6 +102,91 @@ val episodeOptions: Map<Int, ImmutableList<ComposeTextTab<Int>>> =
         ),
     )
 
+@Composable
+fun EpisodeGrid(
+    episodes: SerializeList<ComposeEpisode>,
+    modifier: Modifier = Modifier,
+    minItemSize: Dp = 38.dp,
+    @IntRange(from = 1) maxRows: Int = 5,
+    verticalSpacing: Dp = LayoutPaddingHalf,
+    horizontalSpacing: Dp = LayoutPaddingHalf,
+    contentPadding: PaddingValues = PaddingValues(
+        start = LayoutPadding,
+        top = LayoutPaddingHalf,
+        end = LayoutPadding,
+        bottom = LayoutPadding
+    ),
+    onEpisodeChange: (List<ComposeEpisode>, Int) -> Unit = { _, _ -> },
+    onClickEpisode: (ComposeEpisode) -> Unit = {},
+) {
+
+    BoxWithConstraints(modifier = modifier) {
+        val screenWidth = maxWidth -
+                contentPadding.calculateStartPadding(LocalLayoutDirection.current) -
+                contentPadding.calculateEndPadding(LocalLayoutDirection.current)
+
+        val columns = floor(screenWidth / (minItemSize + horizontalSpacing))
+            .roundToInt()
+            .coerceAtLeast(1)
+        val horizontalSpacingCount = columns - 1
+        val itemSize = (screenWidth - horizontalSpacing * horizontalSpacingCount) / columns
+        val items = episodes.take(columns * maxRows)
+
+        VerticalGrid(
+            columns = SimpleGridCells.Fixed(columns),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
+            verticalArrangement = Arrangement.spacedBy(verticalSpacing),
+            horizontalArrangement = Arrangement.spacedBy(horizontalSpacing)
+        ) {
+            items.forEach {
+                Box(modifier = Modifier.size(itemSize)) {
+                    val buttonColors = episodeCollectionButtonColors(it.collection.status, it.isAiring, it.isAired)
+                    var expanded by remember { mutableStateOf(false) }
+
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clip(MaterialTheme.shapes.small)
+                            .background(if (it.splitter != null) Color.Transparent else buttonColors.containerColor)
+                            .clickable { expanded = true },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = it.splitter ?: it.sortOrder.toTrimString(),
+                            color = buttonColors.contentColor,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Normal
+                        )
+
+                        if (it.splitter == null) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .align(Alignment.TopStart),
+                                text = EpisodeType.toAbbrType(it.episodeType),
+                                color = buttonColors.contentColor,
+                                fontSize = 8.sp,
+                                lineHeight = 8.sp,
+                                fontWeight = FontWeight.Normal
+                            )
+
+                            EpisodeDropMenu(
+                                episodes = episodes,
+                                item = it,
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                                onEpisodeChange = onEpisodeChange,
+                                onClickEpisode = { onClickEpisode(it) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun EpisodePager(
@@ -248,7 +346,7 @@ fun EpisodeDropMenu(
             },
             text = {
                 Text(
-                    text = item.rememberDisplayTitle(),
+                    text = item.displayTitle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

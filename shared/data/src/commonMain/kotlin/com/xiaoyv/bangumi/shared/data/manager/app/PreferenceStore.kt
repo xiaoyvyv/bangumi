@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.manager.app
 import com.xiaoyv.bangumi.shared.data.constant.SpKey
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository

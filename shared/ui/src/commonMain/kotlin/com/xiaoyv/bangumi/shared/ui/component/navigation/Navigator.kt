@@ -87,32 +87,15 @@ class Navigator(startDestination: NavKey = Screen.Splash) {
         }
     }
 
-    private fun applyLaunchMode(route: NavKey, mode: LaunchMode) {
+    private fun applyLaunchMode(key: NavKey, mode: LaunchMode) {
         when (mode) {
-            LaunchMode.DEFAULT -> backStack.add(route)
-
-            LaunchMode.SINGLE_TOP -> {
-                if (backStack.lastOrNull() != route) {
-                    backStack.add(route)
-                }
-            }
-
-            LaunchMode.SINGLE_TASK -> {
-                val index = backStack.indexOfLast { it == route }
-                if (index >= 0) {
-                    backStack.subList(index + 1, backStack.size).clear()
-                } else {
-                    backStack.add(route)
-                }
-            }
+            LaunchMode.DEFAULT -> backStack.add(key)
+            LaunchMode.SINGLE_TOP -> backStack.singleTop(key)
+            LaunchMode.SINGLE_TASK -> backStack.singleTask(key)
         }
     }
 
-    fun goBack(): Boolean {
-        if (backStack.size <= 1) return false
-        backStack.removeLast()
-        return true
-    }
+    fun goBack() = backStack.goBack()
 
     private inline fun requireLogin(block: () -> Unit) {
         val manager = KoinPlatform.getKoin().get<UserManager>()
@@ -139,5 +122,61 @@ class Navigator(startDestination: NavKey = Screen.Splash) {
         } else {
             debugLog { "Navigator: skip diff = $diff" }
         }
+    }
+}
+
+val NavBackStack<NavKey>.current
+    get() = lastOrNull() as? Screen ?: Screen.Empty
+
+fun NavBackStack<NavKey>.goBack(): Boolean {
+    if (size <= 1) return false
+    removeLast()
+    return true
+}
+
+fun NavBackStack<NavKey>.navigate(
+    key: NavKey,
+    popUpTo: NavKey? = null,
+    popUpToInclusive: Boolean = false
+) {
+    if (popUpTo != null) {
+        val index = indexOf(popUpTo)
+        if (index != -1) {
+            val cutIndex = if (popUpToInclusive) index else index + 1
+            while (size > cutIndex) {
+                removeLast()
+            }
+        }
+    }
+    if (lastOrNull() != key) {
+        add(key)
+    }
+}
+
+fun NavBackStack<NavKey>.moveTop(key: NavKey) {
+    val index = indexOf(key)
+    if (index == -1) {
+        add(key)
+        return
+    }
+
+    if (index == lastIndex) return
+
+    add(key)
+    removeAt(index)
+}
+
+fun NavBackStack<NavKey>.singleTask(key: NavKey) {
+    val index = indexOfLast { it == key }
+    if (index >= 0) {
+        subList(index + 1, size).clear()
+    } else {
+        add(key)
+    }
+}
+
+fun NavBackStack<NavKey>.singleTop(key: NavKey) {
+    if (lastOrNull() != key) {
+        add(key)
     }
 }

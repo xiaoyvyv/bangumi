@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope

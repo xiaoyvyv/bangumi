@@ -31,7 +31,7 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyGridState

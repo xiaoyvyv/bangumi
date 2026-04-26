@@ -3,13 +3,15 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
@@ -163,7 +165,8 @@ interface UserApi {
     @GET("p1/users/{username}/timeline")
     suspend fun getUserTimeline(
         @Path("username", encoded = true) username: String,
+        @Query("cat") @TimelineCat cat: Int? = null,
         @Query("limit") limit: Int? = 20,
-        @Query("until") until: Int? = null,
-    ): ComposePage<JsonElement>
+        @Query("until") until: Long? = null,
+    ): List<ComposeTimeline>
 }

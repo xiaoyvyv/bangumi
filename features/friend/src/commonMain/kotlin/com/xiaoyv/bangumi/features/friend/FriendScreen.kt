@@ -46,7 +46,7 @@ import com.xiaoyv.bangumi.features.friend.business.koinFriendViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -54,6 +54,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
+import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.coroutines.launch
@@ -213,7 +214,7 @@ private fun FriendScreenContent(
                         onDragEnd = { selectedKey = null }
                     )
                 }
-                .padding(vertical = 8.dp)
+                .padding(vertical = LayoutPaddingHalf)
         ) {
             state.keys.fastForEachIndexed { index, it ->
                 Text(

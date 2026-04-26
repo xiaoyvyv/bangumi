@@ -15,8 +15,8 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.group.ListGroupParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexFocus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

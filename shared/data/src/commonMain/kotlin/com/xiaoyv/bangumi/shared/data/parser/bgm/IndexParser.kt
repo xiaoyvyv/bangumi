@@ -10,9 +10,9 @@ import com.xiaoyv.bangumi.shared.core.utils.href
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
 import com.xiaoyv.bangumi.shared.core.utils.hrefLongId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexFocus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentList

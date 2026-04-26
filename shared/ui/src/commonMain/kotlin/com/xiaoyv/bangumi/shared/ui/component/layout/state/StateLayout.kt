@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -45,8 +46,8 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun rememberCacheWindowLazyListState(
-    @FloatRange(from = 0.0) aheadFraction: Float = 10f,
-    @FloatRange(from = 0.0) behindFraction: Float = 10f,
+    @FloatRange(from = 0.0) aheadFraction: Float = 1f,
+    @FloatRange(from = 0.0) behindFraction: Float = 1f,
 ): LazyListState {
     return rememberLazyListState()
 }

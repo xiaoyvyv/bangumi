@@ -35,7 +35,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_topic
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
@@ -105,7 +105,7 @@ fun SubjectDetailEpisodeScreen(
                                 onActionEvent(SubjectDetailEvent.Action.OnUpdateEpisodeCollection(eps, type))
                             },
                             onClickEpisode = {
-                                onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Article(episode.id, RakuenIdType.TYPE_EP)))
+                                onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Article(episode.id, TopicDetailType.TYPE_EP)))
                             },
                             content = {
                                 DropdownMenuItem(

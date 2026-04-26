@@ -18,18 +18,17 @@ import com.xiaoyv.bangumi.core_resource.resources.timeline_title
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineEvent
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
-import com.xiaoyv.bangumi.features.timeline.page.web.TimelineWebPageScreen
+import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
-import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineWebParam
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineWebTabs
+import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineCatTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -117,17 +116,15 @@ private fun TimelineScreenContent(
 ) {
     BgmTabHorizontalPager(
         modifier = modifier.fillMaxSize(),
-        tabs = timelineWebTabs
+        tabs = timelineCatTabs
     ) {
-        TimelineWebPageScreen(
+        TimelinePageRoute(
             param = remember(it, state.target) {
                 ListTimelineParam(
                     type = ListTimelineType.BROWSER_BY_WEB,
-                    browserWeb = ListTimelineWebParam(
-                        target = state.target,
-                        type = timelineWebTabs[it].type,
-                        username = state.username
-                    )
+                    timlineMode = state.target,
+                    timelineCat = timelineCatTabs[it].type,
+                    username = state.username
                 )
             },
             onNavScreen = { screen ->

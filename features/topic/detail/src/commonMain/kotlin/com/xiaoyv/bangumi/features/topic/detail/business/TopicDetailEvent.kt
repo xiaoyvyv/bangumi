@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.topic.detail.business
 
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -16,5 +17,7 @@ sealed class TopicDetailEvent {
 
     sealed class Action : TopicDetailEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
+
+        data class OnReactionClick(val commentId: Long, val reaction: ComposeReaction) : Action()
     }
 }

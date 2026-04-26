@@ -7,8 +7,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.LinkInteractionListener
 import androidx.compose.ui.text.PlatformSpanStyle
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -160,7 +163,37 @@ fun Int.generateRatingStars(starMax: Int = 5, scoreMax: Int = 10): String {
     return ratingStars
 }
 
-fun <R : Any> AnnotatedString.Builder.withSpanStyle(
+fun <T> Iterable<T>.joinToString(
+    separator: CharSequence = ", ",
+    prefix: CharSequence = "",
+    postfix: CharSequence = "",
+    limit: Int = -1,
+    truncated: CharSequence = "...",
+    transform: ((T) -> CharSequence)? = null
+): String {
+    return joinTo(StringBuilder(), separator, prefix, postfix, limit, truncated, transform).toString()
+}
+
+fun AnnotatedString.Builder.addUrl(
+    text: String,
+    style: SpanStyle? = null,
+    focusedStyle: SpanStyle? = null,
+    hoveredStyle: SpanStyle? = null,
+    pressedStyle: SpanStyle? = null,
+    listener: LinkInteractionListener?,
+) {
+    val start = length
+    append(text)
+    addLink(
+        LinkAnnotation.Clickable(
+            text,
+            TextLinkStyles(style, focusedStyle, hoveredStyle, pressedStyle),
+            listener
+        ), start, start + text.length
+    )
+}
+
+inline fun <R : Any> AnnotatedString.Builder.withSpanStyle(
     fontSize: TextUnit = TextUnit.Unspecified,
     fontWeight: FontWeight? = null,
     fontStyle: FontStyle? = null,

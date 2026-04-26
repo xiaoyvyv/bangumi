@@ -23,7 +23,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectPersonWo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName

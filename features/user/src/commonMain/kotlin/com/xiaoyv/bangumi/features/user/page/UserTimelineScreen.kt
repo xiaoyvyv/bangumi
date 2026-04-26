@@ -4,14 +4,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
 import com.xiaoyv.bangumi.features.timeline.page.web.TimelineWebPageScreen
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
+import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineWebParam
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineCatTabs
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineWebTabs
 
 
@@ -23,17 +26,15 @@ fun UserTimelineScreen(
 ) {
     BgmChipHorizontalPager(
         modifier = Modifier.fillMaxSize(),
-        tabs = timelineWebTabs
+        tabs = timelineCatTabs
     ) {
-        TimelineWebPageScreen(
+        TimelinePageRoute(
             param = remember(it) {
                 ListTimelineParam(
                     type = ListTimelineType.BROWSER_BY_WEB,
-                    browserWeb = ListTimelineWebParam(
-                        target = TimelineTarget.USER,
-                        type = timelineWebTabs[it].type,
-                        username = state.username
-                    )
+                    timelineCat = timelineCatTabs[it].type,
+                    timlineMode = TimelineTarget.USER,
+                    username = state.username
                 )
             },
             onNavScreen = { screen ->

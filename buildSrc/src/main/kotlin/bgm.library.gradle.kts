@@ -16,7 +16,10 @@ plugins {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.add("-Xcontext-parameters")
+        freeCompilerArgs.addAll(
+            "-Xcontext-parameters",
+            "-Xexpect-actual-classes"
+        )
     }
 
     jvmToolchain(21)
@@ -84,6 +87,7 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.material.icons.extended)
             implementation(libs.compose.ui)
+            implementation(libs.compose.ui.graphics)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.compose.resources)
 
@@ -149,15 +153,14 @@ kotlin {
                 optIn("androidx.paging.ExperimentalPagingApi")
                 optIn("org.orbitmvi.orbit.annotation.OrbitExperimental")
                 optIn("androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi")
-
-                compilerOptions {
-                    freeCompilerArgs.add("-Xexpect-actual-classes")
-                }
             }
         }
     }
 }
 
+dependencies {
+    androidRuntimeClasspath(libs.compose.ui.tooling)
+}
 
 compose.resources {
     publicResClass = false

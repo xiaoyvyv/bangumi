@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,14 +14,17 @@ data class ComposeEpisodeRelated(
     @SerialName("desc") val desc: String = "",
     @SerialName("disc") val disc: Int = 0,
     @SerialName("duration") val duration: String = "",
-    @SerialName("id") val id: Int = 0,
+    @SerialName("id") val id: Long = 0,
     @SerialName("name") val name: String = "",
     @SerialName("nameCN") val nameCN: String = "",
-    @SerialName("sort") val sort: Int = 0,
+    @SerialName("sort") val sort: Double = .0,
     @SerialName("subject") val subject: ComposeSubject = ComposeSubject.Empty,
     @SerialName("subjectID") val subjectID: Long = 0,
     @SerialName("type") val type: Int = 0,
 ) {
+    val displayName: String
+        get() = nameCN.ifBlank { name }
+
     companion object Companion {
         val Empty = ComposeEpisodeRelated()
     }

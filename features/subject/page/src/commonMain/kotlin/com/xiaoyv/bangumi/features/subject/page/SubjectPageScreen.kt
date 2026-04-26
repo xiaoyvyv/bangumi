@@ -20,7 +20,7 @@ import com.xiaoyv.bangumi.features.subject.page.business.koinSubjectPageViewMode
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid

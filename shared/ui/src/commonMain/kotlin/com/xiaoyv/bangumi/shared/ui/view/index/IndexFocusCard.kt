@@ -29,7 +29,7 @@ import coil3.size.Size
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.usecase.ImageRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf

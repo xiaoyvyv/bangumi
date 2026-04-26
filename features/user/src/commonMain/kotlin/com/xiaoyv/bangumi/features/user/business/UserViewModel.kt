@@ -15,8 +15,8 @@ import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSectionTitle
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollectionInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache

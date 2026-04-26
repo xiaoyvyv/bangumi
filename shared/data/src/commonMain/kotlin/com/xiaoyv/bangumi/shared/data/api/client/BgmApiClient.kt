@@ -29,6 +29,7 @@ import com.xiaoyv.bangumi.shared.data.api.createPixivApi
 import com.xiaoyv.bangumi.shared.data.api.createTraceApi
 import com.xiaoyv.bangumi.shared.data.api.magnet.MikanApi
 import com.xiaoyv.bangumi.shared.data.api.magnet.createMikanApi
+import com.xiaoyv.bangumi.shared.data.api.next.BlogApi
 import com.xiaoyv.bangumi.shared.data.api.next.CharacterApi
 import com.xiaoyv.bangumi.shared.data.api.next.CollectionApi
 import com.xiaoyv.bangumi.shared.data.api.next.EpisodeApi
@@ -39,7 +40,9 @@ import com.xiaoyv.bangumi.shared.data.api.next.RelationshipApi
 import com.xiaoyv.bangumi.shared.data.api.next.SearchApi
 import com.xiaoyv.bangumi.shared.data.api.next.SubjectApi
 import com.xiaoyv.bangumi.shared.data.api.next.TimelineApi
+import com.xiaoyv.bangumi.shared.data.api.next.TopicApi
 import com.xiaoyv.bangumi.shared.data.api.next.UserApi
+import com.xiaoyv.bangumi.shared.data.api.next.createBlogApi
 import com.xiaoyv.bangumi.shared.data.api.next.createCharacterApi
 import com.xiaoyv.bangumi.shared.data.api.next.createCollectionApi
 import com.xiaoyv.bangumi.shared.data.api.next.createEpisodeApi
@@ -50,11 +53,12 @@ import com.xiaoyv.bangumi.shared.data.api.next.createRelationshipApi
 import com.xiaoyv.bangumi.shared.data.api.next.createSearchApi
 import com.xiaoyv.bangumi.shared.data.api.next.createSubjectApi
 import com.xiaoyv.bangumi.shared.data.api.next.createTimelineApi
+import com.xiaoyv.bangumi.shared.data.api.next.createTopicApi
 import com.xiaoyv.bangumi.shared.data.api.next.createUserApi
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.systemDevice
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClientConfig
@@ -173,6 +177,8 @@ class BgmApiClient(
     val nextTimelineApi = nextApiRetrofit.createTimelineApi()
     val nextSearchApi = nextApiRetrofit.createSearchApi()
     val nextIndexApi = nextApiRetrofit.createIndexApi()
+    val nextTopicApi = nextApiRetrofit.createTopicApi()
+    val nextBlogApi = nextApiRetrofit.createBlogApi()
 
     /**
      * 第三方 API
@@ -201,6 +207,8 @@ class BgmApiClient(
     suspend fun <R> requestNextCollectionApi(block: suspend CollectionApi.() -> R) = requestApi(nextCollectionApi, block = block)
     suspend fun <R> requestNextTimelineApi(block: suspend TimelineApi.() -> R) = requestApi(nextTimelineApi, block = block)
     suspend fun <R> requestNextIndexApi(block: suspend IndexApi.() -> R) = requestApi(nextIndexApi, block = block)
+    suspend fun <R> requestNextTopicApi(block: suspend TopicApi.() -> R) = requestApi(nextTopicApi, block = block)
+    suspend fun <R> requestNextBlogApi(block: suspend BlogApi.() -> R) = requestApi(nextBlogApi, block = block)
 
 
     /**

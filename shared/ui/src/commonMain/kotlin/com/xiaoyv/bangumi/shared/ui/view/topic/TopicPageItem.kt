@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
@@ -35,9 +35,9 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
@@ -107,14 +107,14 @@ fun TopicPageItemHeadline(item: ComposeTopic) {
         verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
     ) {
         val title = when (item.topicType) {
-            RakuenIdType.TYPE_GROUP,
-            RakuenIdType.TYPE_EP,
-            RakuenIdType.TYPE_SUBJECT,
-            RakuenIdType.TYPE_BLOG,
+            TopicDetailType.TYPE_GROUP,
+            TopicDetailType.TYPE_EP,
+            TopicDetailType.TYPE_SUBJECT,
+            TopicDetailType.TYPE_BLOG,
                 -> item.title
 
-            RakuenIdType.TYPE_PERSON,
-            RakuenIdType.TYPE_CRT,
+            TopicDetailType.TYPE_PERSON,
+            TopicDetailType.TYPE_CRT,
                 -> item.mono.info.mono.displayName
 
             else -> ""
@@ -166,9 +166,9 @@ private fun TopicPageItemTrailing(
     onReport: (ReportParam) -> Unit,
 ) {
     when (item.topicType) {
-        RakuenIdType.TYPE_SUBJECT,
-        RakuenIdType.TYPE_GROUP,
-        RakuenIdType.TYPE_BLOG,
+        TopicDetailType.TYPE_SUBJECT,
+        TopicDetailType.TYPE_GROUP,
+        TopicDetailType.TYPE_BLOG,
             -> {
             val reportDialogState = rememberAlertDialogState()
             val user = LocalSharedState.current.user
@@ -194,9 +194,9 @@ private fun TopicPageItemTrailing(
             )
         }
 
-        RakuenIdType.TYPE_EP,
-        RakuenIdType.TYPE_PERSON,
-        RakuenIdType.TYPE_CRT,
+        TopicDetailType.TYPE_EP,
+        TopicDetailType.TYPE_PERSON,
+        TopicDetailType.TYPE_CRT,
             -> {
             DropMenuActionButton(
                 modifier = Modifier.size(20.dp),
@@ -222,13 +222,13 @@ private fun TopicPageItemOverline(
 ) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
         itemVerticalAlignment = Alignment.CenterVertically
     ) {
         when (item.topicType) {
             // 展示用户名称
-            RakuenIdType.TYPE_GROUP -> {
+            TopicDetailType.TYPE_GROUP -> {
                 Text(
                     modifier = Modifier.clickWithoutRipped { onClickUser(item.creator) },
                     text = item.creator.nickname,
@@ -239,9 +239,9 @@ private fun TopicPageItemOverline(
                 )
             }
             // 展示条目名称
-            RakuenIdType.TYPE_BLOG,
-            RakuenIdType.TYPE_SUBJECT,
-            RakuenIdType.TYPE_EP,
+            TopicDetailType.TYPE_BLOG,
+            TopicDetailType.TYPE_SUBJECT,
+            TopicDetailType.TYPE_EP,
                 -> {
                 Text(
                     modifier = Modifier.clickWithoutRipped {
@@ -259,8 +259,8 @@ private fun TopicPageItemOverline(
                 )
             }
             // 展示人物名称
-            RakuenIdType.TYPE_PERSON,
-            RakuenIdType.TYPE_CRT,
+            TopicDetailType.TYPE_PERSON,
+            TopicDetailType.TYPE_CRT,
                 -> {
                 Text(
                     modifier = Modifier.clickWithoutRipped { onClickMono(item.mono) },
@@ -274,7 +274,7 @@ private fun TopicPageItemOverline(
         }
 
         Text(
-            text = stringResource(RakuenIdType.string(item.topicType)),
+            text = stringResource(TopicDetailType.string(item.topicType)),
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.extraSmall)
                 .padding(vertical = 2.dp, horizontal = 4.dp),
@@ -342,7 +342,7 @@ private fun TopicPageItemAvatar(
     onClickSubject: (ComposeSubject) -> Unit,
 ) {
     when (item.topicType) {
-        RakuenIdType.TYPE_SUBJECT -> {
+        TopicDetailType.TYPE_SUBJECT -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
@@ -355,7 +355,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        RakuenIdType.TYPE_GROUP -> {
+        TopicDetailType.TYPE_GROUP -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
@@ -365,7 +365,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        RakuenIdType.TYPE_BLOG -> {
+        TopicDetailType.TYPE_BLOG -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
@@ -375,7 +375,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        RakuenIdType.TYPE_EP -> {
+        TopicDetailType.TYPE_EP -> {
             StateImage(
                 modifier = Modifier
                     .width(44.dp)
@@ -386,8 +386,8 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        RakuenIdType.TYPE_PERSON,
-        RakuenIdType.TYPE_CRT,
+        TopicDetailType.TYPE_PERSON,
+        TopicDetailType.TYPE_CRT,
             -> {
             StateImage(
                 modifier = Modifier
@@ -400,7 +400,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        RakuenIdType.TYPE_INDEX -> {
+        TopicDetailType.TYPE_INDEX -> {
             Spacer(modifier = Modifier.size(44.dp))
         }
 

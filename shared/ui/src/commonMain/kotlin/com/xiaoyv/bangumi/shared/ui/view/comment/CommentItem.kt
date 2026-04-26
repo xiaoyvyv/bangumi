@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,43 +14,28 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
-import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
-import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
+import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
-import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
-import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
-import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
-import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
-
-/**
- * 评论的对应的话题的楼主用户名
- */
-val LocalCommentTargetAuthorUsername = compositionLocalOf { "" }
 
 /**
  * [CommentItem]
@@ -59,10 +43,11 @@ val LocalCommentTargetAuthorUsername = compositionLocalOf { "" }
  * @since 2025/5/7
  */
 @Composable
-fun CommentItem(
-    item: ComposeComment,
+fun CommentReplyItem(
+    item: ComposeReply,
+    level: Int = 0,
     modifier: Modifier = Modifier,
-    reactions: SerializeList<ComposeReaction>? = null,
+    isLikeable: Boolean = false,
     onClickReaction: (ComposeReaction) -> Unit = {},
     onClickUser: (String) -> Unit = {},
     onClick: () -> Unit = {},
@@ -70,16 +55,15 @@ fun CommentItem(
     ListItem(
         modifier = Modifier
             .clickable(onClick = onClick)
-            .let { if (item.parent == null) it else it.padding(start = 60.dp) }
+            .let { if (level == 0) it else it.padding(start = 60.dp) }
             .then(modifier),
-        leadingContent = if (item.parent != null) null else {
+        leadingContent = if (level > 0) null else {
             {
                 StateImage(
                     modifier = Modifier
                         .size(44.dp)
-                        .clickWithoutRipped {
-                            onClickUser(item.user.username)
-                        },
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small)
+                        .clickWithoutRipped { onClickUser(item.user.username) },
                     shape = MaterialTheme.shapes.small,
                     model = item.user.avatar.displayMediumImage,
                 )
@@ -99,19 +83,16 @@ fun CommentItem(
                     itemVerticalAlignment = Alignment.CenterVertically
                 ) {
                     // 子评论使用小头像
-                    if (item.parent != null) StateImage(
+                    if (level > 0) StateImage(
                         modifier = Modifier
                             .size(32.dp)
-                            .clickWithoutRipped {
-                                onClickUser(item.user.username)
-                            },
+                            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small)
+                            .clickWithoutRipped { onClickUser(item.user.username) },
                         shape = MaterialTheme.shapes.small,
                         model = item.user.avatar.displayMediumImage
                     )
                     Text(
-                        modifier = Modifier.clickWithoutRipped {
-                            onClickUser(item.user.username)
-                        },
+                        modifier = Modifier.clickWithoutRipped { onClickUser(item.user.username) },
                         text = item.user.nickname,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -129,7 +110,7 @@ fun CommentItem(
                                 .padding(horizontal = 4.dp, vertical = 2.dp),
                             text = "楼主",
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = MaterialTheme.colorScheme.primary,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.Medium
                             )
                         )
@@ -144,38 +125,6 @@ fun CommentItem(
                         )
                     )
                 }
-
-                // 条目底部评论收藏状态
-                if (item.collectType != CollectionType.UNKNOWN) {
-                    val buttonColors = collectionButtonColors(item.collectType)
-
-                    Text(
-                        text = CollectionType.string(item.subjectType, item.collectType),
-                        modifier = Modifier
-                            .background(buttonColors.containerColor, MaterialTheme.shapes.extraSmall)
-                            .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = buttonColors.contentColor
-                        )
-                    )
-                }
-
-                // 底部条目评论评分
-                if (item.star > 0) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        RatingBar(value = item.star, starSize = 16.dp)
-                        Text(
-                            text = "(${item.star})",
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                color = StarColor,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-                    }
-                }
             }
         },
         headlineContent = {
@@ -185,7 +134,7 @@ fun CommentItem(
                     .padding(vertical = LayoutPaddingHalf),
                 verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
             ) {
-                if (item.replyQuote.isNotBlank()) {
+                if (item.displayQuote.isNotBlank()) {
                     val colorScheme = MaterialTheme.colorScheme
 
                     Text(
@@ -202,7 +151,7 @@ fun CommentItem(
                             }
                             .padding(vertical = LayoutPaddingHalf)
                             .padding(start = 12.dp, end = LayoutPaddingHalf),
-                        text = item.replyQuote,
+                        text = item.displayQuote,
                         style = MaterialTheme.typography.labelSmall.copy(
                             color = colorScheme.primary,
                             textDecoration = TextDecoration.Underline
@@ -212,16 +161,8 @@ fun CommentItem(
 
                 BgmLinkedText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = item.commentHtml,
+                    text = item.displayContent,
                 )
-
-                if (reactions != null) {
-                    ReactionGroup(
-                        modifier = Modifier.fillMaxWidth(),
-                        reactions = reactions,
-                        onClick = onClickReaction
-                    )
-                }
             }
         },
         trailingContent = {
@@ -238,7 +179,7 @@ fun CommentItem(
             PopupReaction(
                 state = reactionState,
                 onClick = {
-                    onClickReaction(ComposeReaction(value = it, type = item.type))
+                    onClickReaction(ComposeReaction(value = it))
                 }
             )
 
@@ -247,7 +188,7 @@ fun CommentItem(
                 imageVector = BgmIcons.MoreHoriz,
                 imageTint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 options = rememberButtonTypeMenu {
-                    if (CommentType.isSupportRection(item.type)) {
+                    if (isLikeable) {
                         add(ButtonType.Reaction)
                     }
                     add(ButtonType.Report)
@@ -263,20 +204,7 @@ fun CommentItem(
         },
         supportingContent = {
             Text(
-                text = buildAnnotatedString {
-                    if (item.floor.isNotBlank()) {
-                        withStyle(
-                            SpanStyle(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        ) {
-                            append(item.floor)
-                            append(" ")
-                        }
-                    }
-                    append(item.time)
-                },
+                text = item.createdAt.formatAgo(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -16,6 +16,7 @@ import com.xiaoyv.bangumi.shared.core.utils.isToday
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
@@ -54,6 +55,16 @@ data class ComposeEpisode(
 ) {
     val key = id.toString() + splitter.orEmpty()
 
+    val displayName: String
+        get() = chineseName.orEmpty().ifBlank { name }.ifBlank { "？" }
+
+    val displayTitle: String
+        get() = buildString {
+            append(sortOrder.toTrimString())
+            append(". ")
+            append(displayName)
+        }
+
     val isAired: Boolean
         @Composable
         get() = remember(airdate) { if (airdate.isBlank()) false else System.currentTimeMillis() > airdate.formatMills() }
@@ -61,18 +72,6 @@ data class ComposeEpisode(
     val isAiring: Boolean
         @Composable
         get() = remember(airdate) { airdate.formatMills().isToday() }
-
-
-    @Composable
-    fun rememberDisplayTitle(): String {
-        return remember(this) {
-            buildString {
-                append(sortOrder.toTrimString())
-                append(". ")
-                append(chineseName.orEmpty().ifBlank { name }.ifBlank { "？" })
-            }
-        }
-    }
 
     @Composable
     fun rememberDisplaySubtitle(): String {

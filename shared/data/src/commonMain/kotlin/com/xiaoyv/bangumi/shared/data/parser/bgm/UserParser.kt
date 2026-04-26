@@ -14,9 +14,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePrivacy
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserEdit
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserStats
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserStats
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.toPersistentList
 

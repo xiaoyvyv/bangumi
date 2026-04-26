@@ -10,12 +10,13 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectStats
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectWebInfo
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
 import kotlinx.coroutines.flow.Flow
@@ -48,10 +49,20 @@ interface SubjectRepository {
 
     suspend fun fetchSubjectParade(subjectId: Long): Result<ComposeParade>
 
+    suspend fun fetchSubjectEpisode(episodeId: Long): Result<ComposeEpisode>
+
     suspend fun fetchSubjectEpisodes(
         subjectId: Long,
         @EpisodeType type: Int? = null,
+        offset: Int = 0,
+        limit: Int
     ): Result<List<ComposeEpisode>>
+
+    suspend fun fetchSubjectAllEpisodes(
+        subjectId: Long,
+        @EpisodeType type: Int? = null,
+    ): Result<List<ComposeEpisode>>
+
 
     suspend fun fetchSubjectStats(id: Long): Result<ComposeSubjectStats>
 
@@ -81,4 +92,6 @@ interface SubjectRepository {
     suspend fun fetchSearchSubjectTags(query: String, @SubjectType type: Int): Result<List<ComposeTag>>
 
     suspend fun fetchBrowserSubjectTags(@SubjectType type: Int, page: Int): Result<List<ComposeTag>>
+
+    suspend fun submitEpisodeReaction(commentId: Long, value: String?): Result<Unit>
 }

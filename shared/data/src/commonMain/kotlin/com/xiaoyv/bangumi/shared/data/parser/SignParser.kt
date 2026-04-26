@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.shared.core.utils.parserFormHash
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginForm
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginResult
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 
 /**
  * [SignParser]

@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.manager.shared
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 
 /**
  * [SharedState]

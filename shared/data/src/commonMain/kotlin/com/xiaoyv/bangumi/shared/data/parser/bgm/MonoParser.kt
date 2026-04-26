@@ -15,7 +15,7 @@ import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSectionTitle
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeInfobox
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
@@ -23,7 +23,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPersonType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.json.JsonPrimitive

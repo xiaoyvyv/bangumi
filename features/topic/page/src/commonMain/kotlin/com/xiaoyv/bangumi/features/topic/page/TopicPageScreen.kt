@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.features.topic.page.business.rememberTopicPageViewMode
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
@@ -81,7 +81,7 @@ private fun TopicPageScreenContent(
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
                 item = item,
-                onClick = { onUiEvent(TopicPageEvent.UI.OnNavScreen(Screen.Article(it.id, it.topicType))) },
+                onClick = { onUiEvent(TopicPageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType))) },
                 onClickUser = { onUiEvent(TopicPageEvent.UI.OnNavScreen(Screen.UserDetail(it.username))) },
                 onClickSubject = { onUiEvent(TopicPageEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
                 onClickMono = { onUiEvent(TopicPageEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, it.type))) },

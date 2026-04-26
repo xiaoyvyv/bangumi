@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
@@ -23,12 +23,6 @@ val LocalPersonalState = staticCompositionLocalOf { PersonalState() }
 @ReadOnlyComposable
 @Composable
 fun currentPersonalState() = LocalPersonalState.current
-
-@ReadOnlyComposable
-@Composable
-fun ComposeSubject.fromPersonState(): ComposeSubject {
-    return currentPersonalState().subjects[id] ?: this
-}
 
 @Stable
 data class PersonalState(

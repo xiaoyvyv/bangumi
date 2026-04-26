@@ -219,7 +219,7 @@ fun SearchResultSubjectAdvanceFilter(
                         )
                     )
                 },
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = LayoutPaddingHalf),
                 shape = MaterialTheme.shapes.small,
             ) {
                 Text(text = stringResource(Res.string.global_done))

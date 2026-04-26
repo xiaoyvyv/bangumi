@@ -1,9 +1,10 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
+import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCommentReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
@@ -13,6 +14,7 @@ import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import io.ktor.client.statement.HttpResponse
 
+@AppJsonApiDsl
 interface EpisodeApi {
     /**
      * 创建条目的剧集吐槽
@@ -24,7 +26,7 @@ interface EpisodeApi {
     suspend fun createEpisodeComment(
         @Path("episodeID") episodeID: Int,
         @Body createBlogCommentRequest: CreateBlogCommentRequest? = null,
-    ): ComposeCommentReply
+    ): ComposeReply
 
     /**
      * 删除条目的剧集吐槽
@@ -40,7 +42,7 @@ interface EpisodeApi {
      * @param episodeID
      */
     @GET("p1/episodes/{episodeID}")
-    suspend fun getEpisode(@Path("episodeID") episodeID: Int): ComposeEpisode
+    suspend fun getEpisode(@Path("episodeID") episodeID: Long): ComposeEpisode
 
     /**
      * 获取条目的剧集吐槽箱
@@ -48,7 +50,7 @@ interface EpisodeApi {
      * @param episodeID
      */
     @GET("p1/episodes/{episodeID}/comments")
-    suspend fun getEpisodeComments(@Path("episodeID") episodeID: Int): List<ComposeCommentReply>
+    suspend fun getEpisodeComments(@Path("episodeID") episodeID: Int): List<ComposeReply>
 
     /**
      * 给条目的剧集吐槽点赞

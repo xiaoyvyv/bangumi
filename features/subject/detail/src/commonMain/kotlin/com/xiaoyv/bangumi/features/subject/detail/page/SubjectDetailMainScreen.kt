@@ -65,7 +65,7 @@ import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -396,7 +396,7 @@ private fun SubjectDetailEpisode(
                 onActionEvent(SubjectDetailEvent.Action.OnUpdateEpisodeCollection(eps, type))
             },
             onClickEpisode = {
-                onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Article(it.id, RakuenIdType.TYPE_EP)))
+                onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Article(it.id, TopicDetailType.TYPE_EP)))
             }
         )
     }

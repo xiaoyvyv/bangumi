@@ -36,15 +36,15 @@ import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingEvent
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
+import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
-import com.xiaoyv.bangumi.shared.data.manager.app.fromPersonState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeSubjectLazyItems
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
@@ -55,7 +55,7 @@ import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
-import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodePager
+import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodeGrid
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectTrackingBar
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -96,9 +96,7 @@ private fun TrackingPageScreenContent(
         pagingItems = pagingItems,
         key = { item, _ -> item.id },
         contentType = { CONTENT_TYPE_SUBJECT_ITEM }
-    ) { item, index ->
-        val item = item.fromPersonState()
-
+    ) { item, _ ->
         OutlinedCard(
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,14 +111,14 @@ private fun TrackingPageScreenContent(
             )
 
             if (state.showEp && item.episodes.isNotEmpty()) {
-                EpisodePager(
+                EpisodeGrid(
                     episodes = item.episodes,
                     maxRows = currentSettings().ui.trackingGridLineLimit,
                     onEpisodeChange = { epIds, type ->
                         onActionEvent(TrackingPageEvent.Action.OnUpdateEpisodeCollection(item, epIds, type))
                     },
                     onClickEpisode = {
-                        onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.Article(it.id, RakuenIdType.TYPE_EP)))
+                        onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.Article(it.id, TopicDetailType.TYPE_EP)))
                     }
                 )
             }
@@ -175,7 +173,7 @@ private fun TrackingPageScreenContentItem(
                     if (item.rating.score > 0) {
                         append(" ")
                         withStyle(SpanStyle(color = StarColor, fontWeight = FontWeight.Medium)) {
-                            append(item.rating.score.toString())
+                            append(item.rating.score.toFixed(1).toTrimString())
                         }
                     }
                 },

@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,6 +44,7 @@ import com.xiaoyv.bangumi.shared.core.utils.KotlinThumbHash
 import com.xiaoyv.bangumi.shared.core.utils.noNull
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
+import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -178,26 +180,26 @@ fun StateImage(
 @Composable
 fun InfoImage(
     model: Any?,
-    blur: String? = null,
-    maskText: String? = null,
+    text: String? = null,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
+    textPadding: Dp = LayoutPaddingHalf,
+    textMaxLines: Int = 1,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,
     alignment: Alignment = Alignment.TopCenter,
     shape: Shape = MaterialTheme.shapes.small,
-    contentDescription: String? = null,
+    contentDescription: String? = text,
     aspectRatio: Float = 32 / 45f,
-    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     onClick: (() -> Unit)? = null,
 ) {
     Box(
         modifier = modifier
+            .aspectRatio(aspectRatio)
             .clip(shape)
             .noNull(onClick) { clickable(onClick = it) }
     ) {
         StateImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(aspectRatio),
+            modifier = Modifier.fillMaxSize(),
             model = model,
             contentDescription = contentDescription,
             contentScale = contentScale,
@@ -205,17 +207,16 @@ fun InfoImage(
             shape = shape
         )
 
-        if (maskText != null) Text(
+        if (!text.isNullOrBlank()) Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(BrushVerticalTransparentToHalfBlack)
-                .padding(horizontal = LayoutPaddingHalf)
-                .padding(bottom = LayoutPaddingHalf, top = LayoutPaddingHalf * 2)
+                .padding(horizontal = textPadding)
+                .padding(bottom = textPadding, top = textPadding * 3)
                 .align(Alignment.BottomCenter),
-            text = maskText,
+            text = text,
             style = textStyle,
-            color = Color.White,
-            maxLines = 1,
+            maxLines = textMaxLines,
             overflow = TextOverflow.Ellipsis,
         )
     }

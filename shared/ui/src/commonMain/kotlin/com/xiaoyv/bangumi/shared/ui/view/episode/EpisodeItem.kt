@@ -56,7 +56,7 @@ fun EpisodeItem(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = item.rememberDisplayTitle(),
+                text = item.displayTitle,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold,

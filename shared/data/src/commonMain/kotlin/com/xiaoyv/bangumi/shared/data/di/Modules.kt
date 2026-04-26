@@ -20,6 +20,7 @@ import com.xiaoyv.bangumi.shared.data.parser.bgm.TimelineParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicTableParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
+import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
@@ -37,6 +38,7 @@ import com.xiaoyv.bangumi.shared.data.repository.TraceRepository
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
+import com.xiaoyv.bangumi.shared.data.repository.impl.BlogRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.CacheRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.ChoreRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.CollectionRepositoryImpl
@@ -81,6 +83,7 @@ private val repositoryModules = module {
     single<MikanRepository> { MikanRepositoryImpl(get(), get(), get()) }
     single<SubjectRepository> { SubjectRepositoryImpl(get(), get(), get(), get(), get()) }
     single<MonoRepository> { MonoRepositoryImpl(get(), get(), get()) }
+    single<BlogRepository> { BlogRepositoryImpl(get(), get()) }
     single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get(), get(), get(), get()) }
     single<ChoreRepository> { ChoreRepositoryImpl(get()) }
     single<GroupRepository> { GroupRepositoryImpl(get(), get(), get()) }

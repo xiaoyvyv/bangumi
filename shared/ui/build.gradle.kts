@@ -11,12 +11,9 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.core)
             implementation(projects.shared.data)
+            api(projects.shared.uiLiquid)
+            api(projects.shared.uiMaterial3)
         }
     }
-}
-
-dependencies {
-//    debugImplementation(libs.compose.ui.tooling)
-    "androidRuntimeClasspath"(libs.compose.ui.tooling)
 }
 

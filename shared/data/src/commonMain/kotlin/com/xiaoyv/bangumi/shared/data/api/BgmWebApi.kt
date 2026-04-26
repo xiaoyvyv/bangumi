@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionWebSortType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.RakuenTab
 import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.ReportValueType
@@ -410,7 +410,7 @@ interface BgmWebApi {
     @GET("rakuen/topic/{type}/{id}")
     suspend fun fetchRakuenTopicDetail(
         @Path("id") id: Long,
-        @Path("type", encoded = true) @RakuenIdType type: String,
+        @Path("type", encoded = true) @TopicDetailType type: String,
         @ReqBuilder ext: HttpRequestBuilder.() -> Unit = {},
     ): Document
 

@@ -270,7 +270,7 @@ private fun MonoDetailScreenHeader(
                         start = LayoutPaddingHalf,
                         end = LayoutPadding
                     ),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
             ) {
                 Text(
                     text = state.mono.displayName,

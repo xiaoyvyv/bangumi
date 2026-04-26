@@ -20,18 +20,18 @@ import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.Airtime
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectStats
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectWebInfo
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.chineseNames
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
@@ -186,7 +186,25 @@ class SubjectRepositoryImpl(
         getTrends(type = type, limit = limit).result
     }
 
-    override suspend fun fetchSubjectEpisodes(subjectId: Long, @EpisodeType type: Int?): Result<List<ComposeEpisode>> =
+    override suspend fun fetchSubjectEpisode(episodeId: Long): Result<ComposeEpisode> = client.requestNextEpisodeApi {
+        getEpisode(episodeId)
+    }
+
+    override suspend fun fetchSubjectEpisodes(
+        subjectId: Long,
+        @EpisodeType type: Int?,
+        offset: Int,
+        limit: Int
+    ): Result<List<ComposeEpisode>> = client.requestNextSubjectApi {
+        getSubjectEpisodes(
+            subjectID = subjectId,
+            type = type,
+            offset = offset,
+            limit = limit
+        ).result
+    }
+
+    override suspend fun fetchSubjectAllEpisodes(subjectId: Long, @EpisodeType type: Int?): Result<List<ComposeEpisode>> =
         client.requestNextSubjectApi {
             fetchAllPages(1000) { offset, limit ->
                 getSubjectEpisodes(
@@ -197,6 +215,7 @@ class SubjectRepositoryImpl(
                 ).result
             }
         }
+
 
     override suspend fun fetchSubjectStats(id: Long): Result<ComposeSubjectStats> = client.requestWebApi {
         with(subjectParser) {
@@ -338,4 +357,7 @@ class SubjectRepositoryImpl(
         fetchSubjectParade(subjectId)
     }
 
+    override suspend fun submitEpisodeReaction(commentId: Long, value: String?): Result<Unit> {
+        error("")
+    }
 }

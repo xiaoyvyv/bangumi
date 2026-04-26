@@ -33,10 +33,10 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelinePa
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectWebInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTimeline
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeWebTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
@@ -44,6 +44,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
+import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -93,9 +94,9 @@ fun TimelineWebPageScreen(
 @Composable
 private fun TimelinePageItem(
     modifier: Modifier,
-    item: ComposeTimeline = ComposeTimeline.Empty,
+    item: ComposeWebTimeline = ComposeWebTimeline.Empty,
     headlineContent: @Composable (() -> Unit)? = null,
-    onClick: (ComposeTimeline) -> Unit = {},
+    onClick: (ComposeWebTimeline) -> Unit = {},
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
     onClickMono: (ComposeMonoDisplay) -> Unit = {},
@@ -119,8 +120,8 @@ private fun TimelinePageItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(vertical = LayoutPaddingHalf),
+                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
             ) {
                 if (item.title.isNotBlank()) {
                     BgmLinkedText(
@@ -195,7 +196,7 @@ private fun TimelinePageItem(
 
 @Composable
 private fun TimelinePageItemBlog(
-    item: ComposeTimeline,
+    item: ComposeWebTimeline,
 ) {
     OutlinedCard(modifier = Modifier.fillMaxWidth()) {
         BgmLinkedText(
@@ -220,12 +221,12 @@ private fun TimelinePageItemCollection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
         ) {
             if (item.rate > 0) {
                 Row(
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
                 ) {
                     RatingBar(
                         value = item.rate.toDouble(),
@@ -253,7 +254,7 @@ private fun TimelinePageItemCollection(
 
 @Composable
 private fun TimelinePageItemSubject(
-    item: ComposeTimeline,
+    item: ComposeWebTimeline,
     onClick: (ComposeSubject) -> Unit,
 ) {
     when {
@@ -268,13 +269,12 @@ private fun TimelinePageItemSubject(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
                 ) {
                     InfoImage(
                         modifier = Modifier.width(80.dp),
-                        blur = subject.images.displayGridImage,
                         model = subject.images.displayMediumImage,
-                        maskText = subject.relation,
+                        text = subject.relation,
                         onClick = { onClick(subject) }
                     )
                     Column(
@@ -314,7 +314,7 @@ private fun TimelinePageItemSubject(
         item.subjects.size > 1 -> {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
             ) {
                 items(
                     items = item.subjects,
@@ -322,9 +322,8 @@ private fun TimelinePageItemSubject(
                 ) { subject ->
                     InfoImage(
                         modifier = Modifier.width(80.dp),
-                        blur = subject.images.displayGridImage,
                         model = subject.images.displayMediumImage,
-                        maskText = subject.relation,
+                        text = subject.relation,
                         onClick = { onClick(subject) }
                     )
                 }
@@ -335,19 +334,18 @@ private fun TimelinePageItemSubject(
 
 @Composable
 private fun TimelinePageItemMono(
-    item: ComposeTimeline,
+    item: ComposeWebTimeline,
     onClick: (ComposeMonoDisplay) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
     ) {
         items(items = item.monos, contentType = { CONTENT_TYPE_TIMELINE_MONO }) { display ->
             InfoImage(
                 modifier = Modifier.width(80.dp),
-                blur = display.mono.images.displayGridImage,
                 model = display.mono.images.displayMediumImage,
-                maskText = display.mono.displayName,
+                text = display.mono.displayName,
                 onClick = { onClick(display) }
             )
         }
@@ -360,7 +358,7 @@ fun PreviewTimelinePageItem() {
     PreviewColumn {
         TimelinePageItem(
             modifier = Modifier.fillMaxWidth(),
-            item = ComposeTimeline(
+            item = ComposeWebTimeline(
                 title = buildAnnotatedString { append("落秋 读过 今日から始める幼なじみ 第100话 ") },
                 time = "15小时54分钟前",
                 user = ComposeUser(

@@ -26,21 +26,3 @@ data class ComposeEmptyBody(
         val Empty = ComposeEmptyBody()
     }
 }
-
-
-@Immutable
-@Serializable
-data class ComposeError(
-    /**
-     * private api error
-     */
-    @SerialName("code") val code: String = "",
-    @SerialName("statusCode") val statusCode: Int = 0,
-
-    /**
-     * public api error
-     */
-    @SerialName("description") @JsonNames("description", "message") val description: String = "",
-    @SerialName("title") @JsonNames("title", "error") val title: String = "",
-    @SerialName("details") val details: String = "",
-)

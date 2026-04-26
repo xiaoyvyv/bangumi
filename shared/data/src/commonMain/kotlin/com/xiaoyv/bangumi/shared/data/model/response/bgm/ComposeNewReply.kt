@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.serialization.ImmutableMapSerializer
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.core.utils.toLongValue
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

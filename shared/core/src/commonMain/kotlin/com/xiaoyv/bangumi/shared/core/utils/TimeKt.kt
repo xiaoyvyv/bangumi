@@ -76,6 +76,7 @@ fun Long.formatHMS(): String {
  * xx 秒前，xx 分钟
  */
 fun Long.formatAgo(now: Long = System.currentTimeMillis()): String {
+    if (this <= 0) return ""
     val diff = (now - this).coerceAtLeast(0L)
 
     val second = 1000L

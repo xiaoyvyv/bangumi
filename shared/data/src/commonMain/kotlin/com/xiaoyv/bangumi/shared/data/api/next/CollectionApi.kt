@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.UpdateSubjectProgress
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET

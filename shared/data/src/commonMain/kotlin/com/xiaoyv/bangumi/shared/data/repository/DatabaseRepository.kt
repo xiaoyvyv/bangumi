@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.serialization.KSerializer
 
 /**

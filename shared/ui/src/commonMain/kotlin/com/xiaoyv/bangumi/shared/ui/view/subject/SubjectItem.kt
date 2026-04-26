@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material3.HorizontalDivider
@@ -36,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_ep_cnt
 import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
 import com.xiaoyv.bangumi.core_resource.resources.global_timeline
 import com.xiaoyv.bangumi.core_resource.resources.subject_rate_count
@@ -43,15 +43,12 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.noNull
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
-import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -64,7 +61,6 @@ fun SubjectCardItem(
     display: ComposeSubjectDisplay,
     modifier: Modifier = Modifier,
     maxLine: Int = 2,
-    fontWeightOnImage: FontWeight = FontWeight.Medium,
     style: TextStyle = MaterialTheme.typography.bodyLarge,
     onClick: () -> Unit,
 ) {
@@ -82,53 +78,17 @@ fun SubjectCardItem(
             InfoImage(
                 modifier = Modifier.fillMaxWidth(),
                 model = subject.images.displayMediumImage,
-                blur = subject.images.displayGridImage,
-                shape = MaterialTheme.shapes.small
-            )
-
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(
-                        brush = BrushVerticalTransparentToHalfBlack,
-                        shape = MaterialTheme.shapes.small.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
-                    )
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (subject.rating.score > 0) {
-                    Text(
-                        text = buildAnnotatedString {
-                            append(subject.rating.score.toFixed(1).toString())
-                            if (subject.airtime != Airtime.Empty) {
-                                withSpanStyle(
-                                    color = Color.White,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Normal
-                                ) {
-                                    append(" ")
-                                    append(subject.airtime.date)
-                                }
-                            }
-                        },
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = StarColor
-                    )
+                shape = MaterialTheme.shapes.small,
+                text = if (subject.rating.score > 0) {
+                    subject.rating.score.toFixed(1).toString()
                 } else {
-                    Text(
-                        text = subject.name,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = fontWeightOnImage,
-                        color = Color.White,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-            }
+                    stringResource(SubjectType.string(subject.type))
+                },
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = if (subject.rating.score > 0) StarColor else Color.White,
+                    fontWeight = if (subject.rating.score > 0) FontWeight.SemiBold else FontWeight.Normal,
+                )
+            )
 
             if (subject.rating.rank > 0) {
                 Text(
@@ -385,9 +345,8 @@ fun SubjectWorkItem(
         ) {
             InfoImage(
                 modifier = Modifier.width(80.dp),
-                blur = display.subject.images.displayGridImage,
                 model = display.subject.images.displayMediumImage,
-                maskText = stringResource(SubjectType.string(display.subject.type)),
+                text = stringResource(SubjectType.string(display.subject.type)),
                 textStyle = MaterialTheme.typography.bodySmall,
                 onClick = onClick
             )
@@ -446,25 +405,8 @@ fun SubjectInfoCover(
         InfoImage(
             modifier = Modifier.matchParentSize(),
             model = subject.images.displayMediumImage,
-            blur = subject.images.displayGridImage,
             shape = MaterialTheme.shapes.small,
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .background(
-                    BrushVerticalTransparentToHalfBlack,
-                    MaterialTheme.shapes.small.copy(
-                        topStart = CornerSize(0.dp),
-                        topEnd = CornerSize(0.dp)
-                    )
-                )
-                .padding(8.dp),
-            text = subject.airtime.date,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Medium,
-            color = Color.White
+            text = subject.airtime.date
         )
 
         // 右上角文案
@@ -476,7 +418,7 @@ fun SubjectInfoCover(
                 append(subject.rating.rank)
             }
             // 话数
-            subject.eps > 0 -> subject.eps.toString() + "话"
+            subject.eps > 0 -> stringResource(Res.string.global_ep_cnt, subject.eps)
             else -> null
         }
 

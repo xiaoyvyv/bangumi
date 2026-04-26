@@ -18,8 +18,8 @@ import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectWebInfo
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
@@ -104,7 +104,7 @@ class SubjectDetailViewModel(
         awaitAll(
             block1 = { subjectRepository.fetchSubjectDetail(args.subjectId) },
             block2 = { subjectRepository.fetchSubjectDetailByWeb(args.subjectId).recover { ComposeSubjectWebInfo.Empty } },
-            block3 = { subjectRepository.fetchSubjectEpisodes(args.subjectId, type = null) },
+            block3 = { subjectRepository.fetchSubjectAllEpisodes(args.subjectId, type = null) },
             block4 = { subjectRepository.fetchSubjectCharacter(args.subjectId, limit = 12) },
             block5 = { subjectRepository.fetchSubjectRelated(args.subjectId) },
         ).onFailure {

@@ -21,10 +21,10 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectWebInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTimeline
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeWebTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -35,7 +35,7 @@ class TimelineParser : BaseParser() {
     suspend fun Element.fetchTimelineConverted(
         @TimelineTarget target: String,
         @TimelineTab type: String,
-    ): List<ComposeTimeline> {
+    ): List<ComposeWebTimeline> {
         requireNoError()
         return select("#timeline ul > li").map { item ->
             fetchTimelineItemConverted(target, type, item)
@@ -46,7 +46,7 @@ class TimelineParser : BaseParser() {
         @TimelineTarget target: String,
         @TimelineTab type: String,
         item: Element,
-    ): ComposeTimeline {
+    ): ComposeWebTimeline {
         val user = if (target == TimelineTarget.USER) ComposeUser.Empty else {
             val avatarUrl = item.select("a.avatar > span").styleAvatarUrl()
             val username = item.select("li").attr("data-item-user")
@@ -87,7 +87,7 @@ class TimelineParser : BaseParser() {
             ComposeCollection.Empty
         }
 
-        return ComposeTimeline(
+        return ComposeWebTimeline(
             id = item.select("li").attr("id"),
             user = user,
             title = item.select(".info, .info_full").htmlTitle().parseAsHtml(),

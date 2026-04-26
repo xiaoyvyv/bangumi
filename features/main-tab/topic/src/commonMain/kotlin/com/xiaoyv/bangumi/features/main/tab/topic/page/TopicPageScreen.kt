@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicEvent
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.RakuenTab
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -36,7 +36,7 @@ fun TopicPageScreen(
         TopicPageItem(
             modifier = Modifier.fillMaxWidth(),
             item = item,
-            onClick = { onUiEvent(TopicEvent.UI.OnNavScreen(Screen.Article(it.id, it.topicType))) },
+            onClick = { onUiEvent(TopicEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType))) },
             onClickUser = { onUiEvent(TopicEvent.UI.OnNavScreen(Screen.UserDetail(it.username))) },
             onClickSubject = { onUiEvent(TopicEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
             onClickMono = { onUiEvent(TopicEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, it.type))) },
@@ -59,7 +59,7 @@ fun PreviewTopicPageItem() {
                 ),
                 replyCount = 100,
                 title = "葬送的芙莉莲",
-                topicType = RakuenIdType.TYPE_GROUP
+                topicType = TopicDetailType.TYPE_GROUP
             )
         )
     }

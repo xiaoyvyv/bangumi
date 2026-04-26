@@ -2,17 +2,16 @@
 
 package com.xiaoyv.bangumi.features.main.tab.home.page
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,13 +22,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.carousel.CarouselDefaults
-import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
-import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,14 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.cheonjaeung.compose.grid.SimpleGridCells
 import com.cheonjaeung.compose.grid.VerticalGrid
@@ -61,20 +54,14 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubjectDisplay
-import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.image.fastBlur
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.BrushSubjectBanner
-import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
-import com.xiaoyv.bangumi.shared.ui.component.text.InlineTextContentIdStar
-import com.xiaoyv.bangumi.shared.ui.component.text.InlineTextContentMap
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
-import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeActions
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
@@ -82,7 +69,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kotlin.math.round
 
 private const val CONTENT_TYPE_BANNER = "CONTENT_TYPE_BANNER"
 private const val CONTENT_TYPE_ACTION = "CONTENT_TYPE_ACTION"
@@ -106,7 +92,7 @@ fun HomeMainScreen(
         verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
     ) {
         item(key = CONTENT_TYPE_BANNER, contentType = CONTENT_TYPE_BANNER) {
-            HomeMainBanner(Modifier.fillParentMaxWidth(), state, onUiEvent, onActionEvent)
+            HomeMainBanner(state, onUiEvent, onActionEvent)
         }
         item(key = CONTENT_TYPE_ACTION, contentType = CONTENT_TYPE_ACTION) {
             HomeMainAction(state, onUiEvent, onActionEvent)
@@ -127,85 +113,27 @@ fun HomeMainScreen(
 
 @Composable
 fun HomeMainBanner(
-    modifier: Modifier,
     state: HomeState,
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val carouselState = rememberCarouselState { state.hotSubjects.size }
-    HorizontalCenteredHeroCarousel(
-        state = carouselState,
-        modifier = modifier,
-        flingBehavior = CarouselDefaults.multiBrowseFlingBehavior(state = carouselState),
-        maxItemWidth = 180.dp,
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
     ) {
-        val display = state.hotSubjects[it]
-        val f = carouselItemDrawInfo.maskRect.width / carouselItemDrawInfo.maxSize
-        val fRounded = (round(f * 100)) / 100f
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(32 / 45f)
-                .fastBlur(25.dp * (1 - fRounded))
-        ) {
-            StateImage(
-                modifier = Modifier
-                    .matchParentSize()
-                    .clickable {
-                        if (f <= 0.9f) {
-                            if (it < carouselState.currentItem) {
-                                scope.launch { carouselState.animateScrollToItem(it, tween(500)) }
-                            } else {
-                                scope.launch { carouselState.animateScrollToItem(carouselState.currentItem + 1, tween(500)) }
-                            }
-                        } else {
-                            onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(display.subject.id)))
-                        }
-                    },
+        items(state.hotSubjects) { display ->
+            InfoImage(
+                modifier = Modifier.fillMaxHeight(),
                 model = display.subject.images.displayMediumImage,
-                contentScale = ContentScale.Crop
-            )
-
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(BrushSubjectBanner)
-            )
-            if (display.subject.rating.score > 0) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.TopStart)
-                        .padding(8.dp),
-                    text = buildAnnotatedString {
-                        appendInlineContent(InlineTextContentIdStar)
-                        withStyle(
-                            style = SpanStyle(
-                                color = StarColor,
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            block = { append(display.subject.rating.score.toString()) }
-                        )
-                    },
-                    inlineContent = InlineTextContentMap,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .background(BrushVerticalTransparentToHalfBlack)
-                    .padding(horizontal = 8.dp)
-                    .padding(bottom = LayoutPaddingHalf, top = LayoutPadding * 3),
+                contentScale = ContentScale.Crop,
                 text = display.subject.displayName,
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.White,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                textMaxLines = 2,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
+                shape = RectangleShape,
+                onClick = {
+                    onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(display.subject.id)))
+                }
             )
         }
     }
@@ -235,7 +163,7 @@ fun HomeMainAction(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
             ) {
                 BoxWithConstraints(
                     modifier = Modifier
@@ -243,7 +171,7 @@ fun HomeMainAction(
                         .clip(CircleShape)
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .background(MaterialTheme.colorScheme.onSurface)
+                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
                         .clickable {
                             when (it.type) {
                                 FeatureType.TYPE_DETECT_ANIME -> onUiEvent(
@@ -288,7 +216,7 @@ fun HomeMainAction(
                         modifier = Modifier.size(maxWidth / 2.25f),
                         painter = painterResource(it.icon),
                         contentDescription = label,
-                        tint = MaterialTheme.colorScheme.surface
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
                 Text(
@@ -347,7 +275,6 @@ fun HomeMainCalendar(
                         .width(LayoutGridWidth)
                         .semantics { contentDescription = "calendar_card_item" },
                     display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
-                    fontWeightOnImage = FontWeight.Normal,
                     maxLine = 1,
                     onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) },
                 )
@@ -382,7 +309,6 @@ fun HomeMainCalendar(
                         .semantics { contentDescription = "calendar_card_item" },
                     display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
                     maxLine = 1,
-                    fontWeightOnImage = FontWeight.Normal,
                     onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) },
                 )
             }

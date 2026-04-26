@@ -11,7 +11,7 @@ import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import org.jetbrains.compose.resources.getString
 

@@ -12,11 +12,11 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUser
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUserEdit
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
 
 /**
  * [UserRepository]

@@ -2,9 +2,10 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.xiaoyv.bangumi.shared.core.types.RakuenIdType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
+import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
@@ -22,21 +23,24 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry.Companion.optImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroupHomepage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexFocus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeIndexRelated
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTimeline
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeWebTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.BlogParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.GroupParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TimelineParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicParser
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkKeyLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
@@ -53,12 +57,48 @@ class UgcRepositoryImpl(
     private val groupParser: GroupParser,
     private val userManager: UserManager,
 ) : UgcRepository {
+    private val userCache = HashMap<String, ComposeUser>()
+
+    override fun fetchTimelineDisplayPager(
+        @TimelineTarget target: String,
+        @TimelineCat type: Int,
+        username: String
+    ): Pager<Long, ComposeTimeline> {
+        return createNetworkKeyLimitPagingPager(
+            pagingConfig = pagingConfig,
+            keySelector = { it.id },
+            onLoadData = {
+                val displays = if (target == TimelineTarget.USER) {
+                    client.requestNextUserApi {
+                        val user = userCache.getOrPut(username) { getUser(username) }
+
+                        getUserTimeline(
+                            username = username,
+                            cat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN },
+                            limit = pagingConfig.pageSize,
+                            until = it
+                        ).map { timeline -> timeline.copy(user = user) }
+                    }.getOrThrow()
+                } else {
+                    client.requestNextTimelineApi {
+                        getTimeline(
+                            mode = target,
+                            cat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN },
+                            limit = pagingConfig.pageSize,
+                            until = it
+                        )
+                    }.getOrThrow()
+                }
+                displays to displays.lastOrNull()?.id
+            }
+        )
+    }
 
     override fun fetchTimelinePager(
         @TimelineTarget target: String,
         @TimelineTab type: String,
         username: String,
-    ): Pager<Int, ComposeTimeline> {
+    ): Pager<Int, ComposeWebTimeline> {
         return createNetworkPageLimitPagingPager(
             pagingConfig = pagingConfig,
             keySelector = { it.id },
@@ -97,6 +137,7 @@ class UgcRepositoryImpl(
             }
         )
     }
+
 
     override fun fetchTopicPager(type: String, filter: String?): Pager<Int, ComposeTopic> {
         return createNetworkPageLimitPagingPager(
@@ -246,9 +287,9 @@ class UgcRepositoryImpl(
         }
     }
 
-    override suspend fun fetchTopicDetail(id: Long, @RakuenIdType type: String): Result<ComposeTopicDetail> = runResult {
+    override suspend fun fetchTopicDetail(id: Long, @TopicDetailType type: String): Result<ComposeTopicDetail> = runResult {
         with(topicParser) {
-            if (type == RakuenIdType.TYPE_BLOG) {
+            if (type == TopicDetailType.TYPE_BLOG) {
                 client.bgmWebApi
                     .fetchRakuenBlogDetail(id)
                     .fetchRakuenBlogDetailConverted(id)

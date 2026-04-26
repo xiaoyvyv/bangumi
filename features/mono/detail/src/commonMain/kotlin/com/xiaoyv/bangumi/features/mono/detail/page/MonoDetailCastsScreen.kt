@@ -114,9 +114,8 @@ private fun MonoCharacterCastItem(
             // 角色出演
             InfoImage(
                 modifier = Modifier.width(60.dp),
-                blur = item.subject.images.displayGridImage,
                 model = item.subject.images.displayMediumImage,
-                maskText = stringResource(SubjectType.string(item.subject.type)),
+                text = stringResource(SubjectType.string(item.subject.type)),
                 textStyle = MaterialTheme.typography.bodySmall,
                 onClick = {
                     onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id)))
@@ -172,7 +171,6 @@ private fun MonoCharacterCastItem(
                     InfoImage(
                         modifier = Modifier.width(60.dp),
                         model = it.images.displayMediumImage,
-                        blur = it.images.displayGridImage,
                         onClick = {
                             onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, MonoType.PERSON)))
                         }
@@ -202,9 +200,8 @@ private fun MonoPersonCastItem(
             // 人物出演
             InfoImage(
                 modifier = Modifier.width(60.dp),
-                blur = item.mono.images.displayGridImage,
                 model = item.mono.images.displayMediumImage,
-                maskText = item.mono.name,
+                text = item.mono.name,
                 textStyle = MaterialTheme.typography.bodySmall,
                 onClick = {
                     onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.MonoDetail(item.mono.id, MonoType.CHARACTER)))
@@ -260,7 +257,6 @@ private fun MonoPersonCastItem(
                     InfoImage(
                         modifier = Modifier.width(60.dp),
                         model = it.subject.images.displayMediumImage,
-                        blur = it.subject.images.displayGridImage,
                         onClick = {
                             onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id)))
                         }

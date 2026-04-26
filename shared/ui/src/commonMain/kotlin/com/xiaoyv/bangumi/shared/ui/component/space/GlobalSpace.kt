@@ -7,25 +7,15 @@ import androidx.compose.ui.unit.dp
 
 val LayoutPadding: Dp = 16.dp
 val LayoutPaddingHalf: Dp = 8.dp
-val LayoutGridWidth = 136.dp
+val LayoutGridWidth = 125.dp
 
 val BrushVerticalTransparentToHalfBlack = Brush.verticalGradient(
     colors = listOf(
         Color.Transparent,
-        Color.Black.copy(alpha = 0.75f)
+        Color.Black.copy(alpha = 0.85f)
     )
 )
 
-val BrushSubjectBanner = Brush.horizontalGradient(
-    colors = listOf(
-        Color.Black.copy(alpha = 0.5f),
-        Color.Transparent,
-        Color.Transparent,
-        Color.Transparent,
-        Color.Transparent,
-        Color.Black.copy(alpha = 0.5f),
-    )
-)
 
 val BrushVerticalHalfBlackToTransparent = Brush.verticalGradient(
     colors = listOf(
