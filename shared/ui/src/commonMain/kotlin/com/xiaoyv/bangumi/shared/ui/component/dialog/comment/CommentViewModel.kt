@@ -69,7 +69,7 @@ class CommentViewModel(
                 append("[quote][b]")
                 append(reply.user.nickname)
                 append("[/b] 说: ")
-                append(reply.commentHtml.text.take(200))
+                append(reply.comment.take(200))
                 append("[/quote]\n")
                 append(comment)
             }

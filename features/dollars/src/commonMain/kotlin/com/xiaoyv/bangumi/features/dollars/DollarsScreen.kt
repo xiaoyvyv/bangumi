@@ -59,7 +59,6 @@ import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -228,8 +227,8 @@ private fun DollarsScreenContentItem(
                     .clip(MaterialTheme.shapes.small)
                     .background(MaterialTheme.colorScheme.primary)
                     .padding(12.dp),
-                text = item.contentHtml,
-                style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
+                text = item.content,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
             )
 
             StateImage(
@@ -260,8 +259,8 @@ private fun DollarsScreenContentItem(
                         .background(MaterialTheme.colorScheme.surfaceContainerLow)
                         .border(CardDefaults.outlinedCardBorder(true), MaterialTheme.shapes.small)
                         .padding(12.dp),
-                    text = item.contentHtml,
-                    style = MaterialTheme.typography.bodyLarge,
+                    text = item.content,
+                    textStyle = MaterialTheme.typography.bodyLarge,
                 )
             }
         }

@@ -91,6 +91,7 @@ fun CommentReplyItem(
                         shape = MaterialTheme.shapes.small,
                         model = item.user.avatar.displayMediumImage
                     )
+
                     Text(
                         modifier = Modifier.clickWithoutRipped { onClickUser(item.user.username) },
                         text = item.user.nickname,

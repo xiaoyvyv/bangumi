@@ -3,7 +3,7 @@ plugins {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.xiaoyv.bangumi.shared.ui"
     }
 
@@ -11,6 +11,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.core)
             implementation(projects.shared.data)
+
             api(projects.shared.uiLiquid)
             api(projects.shared.uiMaterial3)
         }

@@ -289,7 +289,7 @@ fun CommentDialogContent(
                                     append(state.anchor.reply.user.nickname)
                                     pop()
                                     append(": ")
-                                    append(state.anchor.reply.commentHtml.text)
+                                    append(state.anchor.reply.comment)
                                 },
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
@@ -503,10 +503,10 @@ private fun CommentDialogPanel(
                         .verticalScroll(rememberScrollState())
                         .padding(LayoutPadding)
                 ) {
-                    var previewText by remember { mutableStateOf(AnnotatedString("")) }
+                    var previewText by remember { mutableStateOf("") }
 
                     LaunchedEffect(value.text) {
-                        previewText = bbcodeToHtml(value.text, true).parseAsHtml()
+                        previewText = bbcodeToHtml(value.text, true)
                     }
 
                     BgmLinkedText(

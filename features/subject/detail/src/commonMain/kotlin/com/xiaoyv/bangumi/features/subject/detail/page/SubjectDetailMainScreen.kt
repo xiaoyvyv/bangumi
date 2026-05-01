@@ -601,7 +601,7 @@ private fun SubjectDetailInfo(
                 .fillMaxWidth()
                 .padding(horizontal = LayoutPadding)
                 .clickWithoutRipped { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.webInfo.info))) },
-            text = state.subject.webInfo.shortInfoHtml,
+            text = state.subject.webInfo.shortInfo,
             maxLines = 10,
             minLines = 5,
         )

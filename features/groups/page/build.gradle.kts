@@ -2,7 +2,7 @@ plugins {
     id("bgm.library")
 }
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.xiaoyv.bangumi.features.groups.page"
     }
 

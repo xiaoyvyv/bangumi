@@ -26,7 +26,6 @@ data class ComposeTopicDetail(
     val type: String = TopicDetailType.TYPE_UNKNOWN,
     val title: String = "",
     val content: String = "",
-    val contentHtml: AnnotatedString = AnnotatedString(""),
     val time: String = "",
     val commentCount: Int = 0,
     val user: ComposeUser = ComposeUser.Empty,

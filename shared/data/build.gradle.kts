@@ -9,7 +9,7 @@ ktorfit {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.xiaoyv.bangumi.shared.data"
     }
 

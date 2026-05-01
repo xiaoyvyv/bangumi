@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.text.AnnotatedString
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
@@ -10,7 +9,6 @@ import com.xiaoyv.bangumi.shared.core.utils.Node
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
-import com.xiaoyv.bangumi.shared.data.parser.bbcode.parseAsBbcode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
@@ -51,10 +49,6 @@ data class ComposeComment(
      * 子评论
      */
     @SerialName("children") override val children: SerializeList<ComposeComment> = persistentListOf(),
-
-
-    @Transient
-    val commentHtml: AnnotatedString = AnnotatedString(""),
 ) : Node<ComposeComment> {
 
     companion object {
@@ -76,23 +70,19 @@ data class ComposeReply(
     @SerialName("replies") val replies: SerializeList<ComposeReply> = persistentListOf(),
     @SerialName("state") val state: Int = 0
 ) : Node<ComposeReply> {
+
     @Transient
-    val displayContent = if (content.startsWith("[quote]")) {
-        content.substringAfter("[/quote]").trim().parseAsBbcode()
+    val displayContent: String = if (content.startsWith("[quote]")) {
+        content.substringAfter("[/quote]").trim()
     } else {
-        content.trim().parseAsBbcode()
+        content.trim()
     }
 
     @Transient
-    val displayQuote = if (content.startsWith("[quote]")) {
-        content
-            .substringBefore("[/quote]")
-            .substringAfter("[quote]")
-            .trim()
-            .parseAsBbcode()
-    } else {
-        AnnotatedString("")
-    }
+    val displayQuote: String = if (!content.startsWith("[quote]")) "" else content
+        .substringBefore("[/quote]")
+        .substringAfter("[quote]")
+        .trim()
 
     override val children: SerializeList<ComposeReply> get() = replies
 }

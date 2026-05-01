@@ -13,14 +13,11 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.unit.sp
-import com.mohamedrejeb.ksoup.entities.KsoupEntities
+//import com.mohamedrejeb.ksoup.entities.KsoupEntities
 import com.xiaoyv.bangumi.shared.core.utils.TagCode
 import com.xiaoyv.bangumi.shared.core.utils.TagImage
 import com.xiaoyv.bangumi.shared.core.utils.TagLink
-import com.xiaoyv.bangumi.shared.core.utils.TagMask
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
-import com.xiaoyv.bangumi.shared.core.utils.parseParagraphStyleAttributes
-import com.xiaoyv.bangumi.shared.core.utils.parseSpanStyleAttributes
 import com.xiaoyv.bangumi.shared.core.utils.preHandleHtml
 
 fun String.parseAsBbcode(
@@ -222,7 +219,7 @@ fun String.parseAsBbcode(
         }
     )
 
-    val html = if (requiresHtmlDecode) KsoupEntities.decodeHtml(this) else this
-    handler.parse(html.preHandleHtml())
+//    val html = if (requiresHtmlDecode) KsoupEntities.decodeHtml(this) else this
+//    handler.parse(html.preHandleHtml())
     return string.toAnnotatedString()
 }

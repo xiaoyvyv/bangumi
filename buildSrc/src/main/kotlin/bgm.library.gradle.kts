@@ -35,7 +35,7 @@ kotlin {
         }
     }
 
-    androidLibrary {
+    android {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -97,8 +97,7 @@ kotlin {
             implementation(libs.cryptorandom)
 
             implementation(libs.ksoup)
-            implementation(libs.ksoup.engine.html)
-            implementation(libs.ksoup.engine.entities)
+            implementation(libs.ksoup.html)
 
             implementation(libs.tinypinyin.core)
 
@@ -109,6 +108,7 @@ kotlin {
             implementation(libs.bundles.ktorfit.common)
 
             implementation(libs.bundles.coil3.common)
+            implementation(libs.bundles.markdown)
             implementation(libs.bundles.zoomimage)
             implementation(libs.bundles.vico)
             implementation(libs.bundles.file.kit)

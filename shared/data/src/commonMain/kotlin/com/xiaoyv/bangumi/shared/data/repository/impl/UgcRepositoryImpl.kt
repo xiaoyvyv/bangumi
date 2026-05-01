@@ -304,7 +304,7 @@ class UgcRepositoryImpl(
     override suspend fun fetchDollarsChat(): Result<List<ComposeDollarItem>> = client.requestWebApi {
         fetchDollarChat().map {
             it.copy(
-                contentHtml = bbcodeToHtml(it.msg, true).parseAsHtml(),
+                content = bbcodeToHtml(it.msg, true),
                 avatar = "https://bgm.tv/pic/user/l/" + it.avatar
             )
         }

@@ -16,9 +16,9 @@ import kotlinx.collections.immutable.persistentListOf
 data class ComposeWebTimeline(
     val timelineType: String = TimelineTab.DYNAMIC,
     val id: String = "",
-    val title: AnnotatedString = buildAnnotatedString { },
-    val content: AnnotatedString = buildAnnotatedString { },
-    val blog: AnnotatedString = buildAnnotatedString { },
+    val title: String = "",
+    val content: String = "",
+    val blog: String = "",
     val time: String = "",
     val platform: String = "",
     val user: ComposeUser = ComposeUser.Empty,

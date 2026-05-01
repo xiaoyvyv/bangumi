@@ -22,9 +22,7 @@ data class ComposeDollarItem(
     @SerialName("nickname") val nickname: String = "",
     @SerialName("timestamp") val timestamp: Long = 0,
     @SerialName("uid") val uid: Long = 0,
-
-    @Transient
-    val contentHtml: AnnotatedString = AnnotatedString(""),
+    @SerialName("content") val content: String = "",
 ) {
     @Composable
     fun displayColor(): Color {

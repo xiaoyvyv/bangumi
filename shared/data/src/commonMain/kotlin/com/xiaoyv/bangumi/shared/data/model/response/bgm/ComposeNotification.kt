@@ -20,10 +20,6 @@ data class ComposeNotification(
     @SerialName("message") val message: String = "",
     @SerialName("link") val link: String = "",
     @SerialName("user") val user: ComposeUser = ComposeUser.Empty,
-
-
-    @Transient
-    val messageHtml: AnnotatedString = AnnotatedString(""),
 ) {
     companion object {
         val Empty = ComposeNotification()

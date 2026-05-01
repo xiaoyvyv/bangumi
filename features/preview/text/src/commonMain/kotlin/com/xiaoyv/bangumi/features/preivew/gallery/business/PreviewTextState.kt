@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.shared.core.types.LoadingState
 @Immutable
 data class PreviewTextState(
     val showOrigin: Boolean = true,
-    val originText: AnnotatedString = AnnotatedString(""),
-    val translateText: AnnotatedString = AnnotatedString(""),
+    val originText: String = "",
+    val translateText: String = "",
     val loading: LoadingState = LoadingState.NotLoading,
 )

@@ -91,7 +91,7 @@ class MonoDetailViewModel(
         cacheKey = cacheKey,
         loadWhenEmpty = true,
         transform = {
-            it.copy(mono = it.mono.copy(webInfo = it.mono.webInfo.restore()))
+            it.copy(mono = it.mono.copy(webInfo = it.mono.webInfo))
         }
     )
 

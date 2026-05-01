@@ -27,6 +27,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        mavenLocal()
         maven("https://jogamp.org/deployment/maven")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://maven.aliyun.com/repository/public")
@@ -51,6 +52,10 @@ include(":shared:data")
 include(":shared:ui")
 include(":shared:ui-liquid")
 include(":shared:ui-material3")
+//include(":shared:bbcode:bbob-compose")
+//include(":shared:bbcode:bbob-parser")
+//include(":shared:bbcode:bbob-plugin-helper")
+//include(":shared:bbcode:bbob-types")
 include(":features:almanac")
 include(":features:sign:sign-in")
 include(":features:sign:sign-up")

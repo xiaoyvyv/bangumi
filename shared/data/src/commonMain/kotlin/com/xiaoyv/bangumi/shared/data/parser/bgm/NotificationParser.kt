@@ -47,8 +47,7 @@ class NotificationParser : BaseParser() {
                     username = username,
                     avatar = ComposeImages.fromUrl(avatarUrl)
                 ),
-                message = replyContent,
-                messageHtml = replyContent.parseAsHtml()
+                message = replyContent
             )
         }.distinctBy { it.id }
     }

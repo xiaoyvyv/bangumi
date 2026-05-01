@@ -213,7 +213,7 @@ fun CommentItem(
 
                 BgmLinkedText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = item.commentHtml,
+                    text = item.comment,
                 )
 
                 if (reactions != null) {

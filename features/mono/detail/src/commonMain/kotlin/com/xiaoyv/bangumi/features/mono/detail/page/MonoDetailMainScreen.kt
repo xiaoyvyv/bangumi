@@ -201,7 +201,7 @@ private fun MonoDetailInfo(
                 .fillMaxWidth()
                 .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.webInfo.info))) }
                 .padding(horizontal = LayoutPadding),
-            text = state.mono.webInfo.shortInfoHtml,
+            text = state.mono.webInfo.shortInfo,
             maxLines = 10,
             minLines = 5,
         )

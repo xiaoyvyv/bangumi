@@ -404,7 +404,7 @@ private fun ArticleScreenContentHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = LayoutPaddingHalf),
-            text = state.article.contentHtml,
+            text = state.article.content,
         )
 
         // 支持贴贴表情的话题

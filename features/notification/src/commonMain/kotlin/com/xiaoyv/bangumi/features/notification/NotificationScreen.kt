@@ -136,7 +136,7 @@ private fun NotificationScreenContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp),
-                        text = it.messageHtml,
+                        text = it.message,
                     )
                 },
                 supportingContent = {

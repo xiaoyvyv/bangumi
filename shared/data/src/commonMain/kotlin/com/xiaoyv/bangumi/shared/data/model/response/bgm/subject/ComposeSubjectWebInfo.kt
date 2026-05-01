@@ -22,7 +22,6 @@ data class ComposeSubjectWebInfo(
      */
     @SerialName("info") val info: String = "",
     @SerialName("shortInfo") val shortInfo: String = "",
-    @Transient val shortInfoHtml: AnnotatedString = AnnotatedString(""),
 
     /**
      * Html 的推荐目录，API 暂无该功能

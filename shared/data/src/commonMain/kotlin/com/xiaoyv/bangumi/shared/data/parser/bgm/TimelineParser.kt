@@ -90,9 +90,9 @@ class TimelineParser : BaseParser() {
         return ComposeWebTimeline(
             id = item.select("li").attr("id"),
             user = user,
-            title = item.select(".info, .info_full").htmlTitle().parseAsHtml(),
-            content = item.select("p.status").html().parseAsHtml(),
-            blog = item.select(".info_sub").html().parseAsHtml(),
+            title = item.select(".info, .info_full").htmlTitle(),
+            content = item.select("p.status").html(),
+            blog = item.select(".info_sub").html(),
             time = item.select(".titleTip").text(),
             subjects = subjects,
             monos = monos,

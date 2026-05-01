@@ -34,7 +34,6 @@ import com.xiaoyv.bangumi.shared.core.utils.generateRatingStars
 import com.xiaoyv.bangumi.shared.core.utils.groupValue
 import com.xiaoyv.bangumi.shared.core.utils.infoMonthDayRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthRegex
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
@@ -270,17 +269,6 @@ data class ComposeSubject(
                 }
             }
         }
-    }
-
-    /**
-     * 恢复 Html 渲染
-     */
-    fun restoreHtml(): ComposeSubject {
-        return copy(
-            webInfo = webInfo.let { webInfo ->
-                webInfo.copy(shortInfoHtml = webInfo.shortInfo.parseAsHtml())
-            }
-        )
     }
 
     companion object {

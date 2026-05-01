@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
 
-    androidLibrary {
+    android {
         namespace = "com.xiaoyv.bangumi.features.tag.detail"
     }
     sourceSets {

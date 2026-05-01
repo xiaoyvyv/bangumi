@@ -19,14 +19,12 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.profile_network_service
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
@@ -41,8 +39,8 @@ fun UserBioScreen(
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
-    val summary by produceState(AnnotatedString("个人简介"), state.user.bio) {
-        value = bbcodeToHtml(state.user.bio, true).parseAsHtml()
+    val summary by produceState("个人简介", state.user.bio) {
+        value = bbcodeToHtml(state.user.bio, true)
     }
     Column(
         modifier = Modifier
@@ -93,7 +91,7 @@ fun UserBioScreen(
                 .fillMaxWidth()
                 .padding(LayoutPadding),
             text = summary,
-            style = MaterialTheme.typography.bodyLarge.copy(
+            textStyle = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.onSurface
             )
         )

@@ -359,7 +359,7 @@ fun PreviewTimelinePageItem() {
         TimelinePageItem(
             modifier = Modifier.fillMaxWidth(),
             item = ComposeWebTimeline(
-                title = buildAnnotatedString { append("落秋 读过 今日から始める幼なじみ 第100话 ") },
+                title = "落秋 读过 今日から始める幼なじみ 第100话 ",
                 time = "15小时54分钟前",
                 user = ComposeUser(
                     id = 1,

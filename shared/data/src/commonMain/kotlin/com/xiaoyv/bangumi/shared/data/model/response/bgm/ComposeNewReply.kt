@@ -100,7 +100,6 @@ data class ComposeNewReplyItem(
                 sign = sign,
             ),
             comment = content,
-            commentHtml = content.parseAsHtml(),
             replyQuote = replyQuote,
             replyParam = ComposeCommentSubParam(
                 type = model,

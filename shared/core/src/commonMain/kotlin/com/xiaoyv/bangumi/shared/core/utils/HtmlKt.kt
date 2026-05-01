@@ -9,6 +9,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,9 +22,9 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.mohamedrejeb.ksoup.entities.KsoupEntities
-import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlHandler
-import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlParser
+//import com.mohamedrejeb.ksoup.entities.KsoupEntities
+//import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlHandler
+//import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlParser
 
 internal const val ElementBr = "br"
 internal const val ElementP = "p"
@@ -103,6 +104,13 @@ suspend fun PointerInputScope.awaitHtmlEvent(
     }
 }
 
+fun String.parseAsHtml(
+    linkColor: Color = Color.Blue,
+    requiresHtmlDecode: Boolean = true,
+): AnnotatedString{
+    return AnnotatedString(this)
+}
+/*
 fun String.parseAsHtml(
     linkColor: Color = Color.Blue,
     requiresHtmlDecode: Boolean = true,
@@ -289,7 +297,7 @@ fun String.parseAsHtml(
     ksoupHtmlParser.write(html.preHandleHtml())
     ksoupHtmlParser.end()
     return string.toAnnotatedString()
-}
+}*/
 
 fun parseParagraphStyleAttributes(style: String): ParagraphStyle? {
     if (style.isBlank()) return null

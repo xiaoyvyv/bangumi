@@ -7,7 +7,7 @@ plugins {
 
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.xiaoyv.bangumi.features.detect"
     }
 

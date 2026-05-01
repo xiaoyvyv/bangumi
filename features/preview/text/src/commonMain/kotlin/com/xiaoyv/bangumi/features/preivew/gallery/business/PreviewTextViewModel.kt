@@ -35,14 +35,14 @@ class PreviewTextViewModel(
 
     private fun onToggleTranslate() = action {
         if (stateRaw.showOrigin) {
-            if (stateRaw.translateText.text.isBlank()) {
+            if (stateRaw.translateText.isBlank()) {
                 reduceContent { state.copy(loading = LoadingState.Loading) }
                 choreRepository.translate(text = args.text, true)
                     .onCompletion { reduceContent { state.copy(loading = LoadingState.NotLoading) } }
                     .onFailure { postToast { it.errMsg } }
                     .onSuccess {
                         reduceContent {
-                            state.copy(translateText = it.parseAsHtml(), showOrigin = false)
+                            state.copy(translateText = it, showOrigin = false)
                         }
                     }
             } else {
@@ -54,6 +54,6 @@ class PreviewTextViewModel(
     }
 
     override suspend fun BaseSyntax<PreviewTextState, PreviewTextSideEffect>.refreshSync() {
-        reduceContent { state.copy(originText = args.text.parseAsHtml()) }
+        reduceContent { state.copy(originText = args.text) }
     }
 }

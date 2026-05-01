@@ -1,16 +1,18 @@
 package com.xiaoyv.bangumi.shared.ui.component.text
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldColors
@@ -18,36 +20,25 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.shared.core.utils.TagCode
-import com.xiaoyv.bangumi.shared.core.utils.applyTheme
-import com.xiaoyv.bangumi.shared.core.utils.awaitHtmlEvent
-import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
+import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.ui.component.action.AppActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
-import kotlinx.collections.immutable.toImmutableMap
+import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.library.Html
 
 @Composable
 fun textFieldTransparentColors() = TextFieldDefaults.colors(
@@ -153,25 +144,68 @@ fun BmgTextField(
     }
 }
 
+
 @Composable
 fun BgmLinkedText(
-    text: AnnotatedString,
+    text: String,
     modifier: Modifier = Modifier,
-    style: TextStyle = MaterialTheme.typography.bodyLarge,
-    inlineContent: SerializeMap<String, InlineTextContent> = InlineTextContentMap,
-    softWrap: Boolean = true,
-    overflow: TextOverflow = TextOverflow.Ellipsis,
+    textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
     actionHandler: AppActionHandler = LocalActionHandler.current,
-    onTextLayout: (TextLayoutResult) -> Unit = {},
-    onClickLink: (AnnotatedString.Range<String>) -> Unit = {
-        actionHandler.openBgmLink(it.item)
-    },
-    onClickImage: (AnnotatedString.Range<String>) -> Unit = {
-        actionHandler.openImage(it.item)
-    },
 ) {
+    Html(
+        modifier = modifier,
+        html = remember(text) { if (text.contains("[")) bbcodeToHtml(text, true) else text },
+        onClickUrl = { actionHandler.openBgmLink(it) },
+        inlineImage = {
+            StateImage(
+                model = it.source,
+                modifier = Modifier.fillMaxSize(),
+                contentDescription = it.alt
+            )
+        },
+        blockImage = {
+            StateImage(
+                model = it.source,
+                modifier = Modifier
+                    .widthIn(max = 500.dp)
+                    .fillMaxWidth()
+                    .aspectRatio(4 / 3f)
+                    .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
+                    .clip(MaterialTheme.shapes.small)
+                    .clickable { actionHandler.openImage(it.source) },
+                shape = MaterialTheme.shapes.small,
+                alignment = Alignment.CenterStart,
+                contentDescription = it.alt
+            )
+        }
+    )
+
+
+//    BbCode(
+//        modifier = modifier,
+//        source = if (text.contains("</")) Html2Bbcode.convert(text) else text,
+//        textStyle = textStyle,
+//        verticalArrangement = Arrangement.spacedBy(8.dp),
+//        onLinkClick = { actionHandler.openBgmLink(it) },
+//        imageRenderer = {
+//            StateImage(
+//                model = it.url,
+//                modifier = Modifier
+//                    .widthIn(max = 500.dp)
+//                    .fillMaxWidth()
+//                    .aspectRatio(4 / 3f)
+//                    .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
+//                    .clip(MaterialTheme.shapes.small)
+//                    .clickable { actionHandler.openImage(it.url) },
+//                shape = MaterialTheme.shapes.small,
+//                alignment = Alignment.CenterStart
+//            )
+//        }
+//    )
+
+    /*
     BoxWithConstraints(modifier) {
         val density = LocalDensity.current
         var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -257,5 +291,5 @@ fun BgmLinkedText(
                 onTextLayout(it)
             }
         )
-    }
+    }*/
 }

@@ -67,7 +67,6 @@ class MonoParser(private val commentParser: CommentParser) : BaseParser() {
             info = info,
             indexList = indexList.toPersistentList(),
             shortInfo = shortInfo,
-            shortInfoHtml = shortInfo.parseAsHtml(),
             comments = comments.toPersistentList(),
         )
     }
@@ -195,7 +194,6 @@ class MonoParser(private val commentParser: CommentParser) : BaseParser() {
 //                            commentCount = item.select("small.na").text().parseCount(),
                             info = info,
                             shortInfo = info,
-                            shortInfoHtml = AnnotatedString(info)
                         )
                     )
                 )

@@ -298,7 +298,7 @@ private fun MessageChatScreenPageItem(
 
                 BgmLinkedText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = item.contentHtml,
+                    text = item.content,
                 )
             }
 

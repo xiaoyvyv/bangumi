@@ -73,7 +73,6 @@ class SubjectDetailViewModel(
         cacheKey = cacheKey,
         loadWhenEmpty = true,
         enable = userManager.settings.ui.cacheState,
-        transform = { it.copy(subject = it.subject.restoreHtml()) }
     )
 
     override fun initSate(onCreate: Boolean): SubjectDetailState {

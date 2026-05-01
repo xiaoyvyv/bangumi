@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
 
-    androidLibrary {
+    android {
         namespace = "com.xiaoyv.bangumi.shared.libavif"
     }
 

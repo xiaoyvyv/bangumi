@@ -135,7 +135,10 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
                 replyCount = commentCount,
                 creator = user,
                 subject = subject,
-                group = if (idType == TopicDetailType.TYPE_GROUP) ComposeGroup(name = attachId, title = attachTitle) else ComposeGroup.Empty,
+                group = if (idType == TopicDetailType.TYPE_GROUP) ComposeGroup(
+                    name = attachId,
+                    title = attachTitle
+                ) else ComposeGroup.Empty,
                 mono = mono
             )
         }
@@ -149,7 +152,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
      */
     suspend fun Element.fetchRakuenBlogDetailConverted(id: Long): ComposeTopicDetail {
         requireNoError()
-        val main = select("#main")
+        val main = id("main")
         val viewEntry = main.select("#viewEntry")
         val authorBar = viewEntry.select(".author")
         val title = viewEntry.select(".header > h1.title").lastTextNode()
@@ -184,7 +187,6 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
             user = user,
             time = time,
             content = content,
-            contentHtml = content.parseAsHtml(),
             replyParam = with(commentParser) { with(main) { parserReplyForm() } },
             comments = with(commentParser) { with(main) { parserBottomComment(CommentType.BLOG_COMMENT) }.toPersistentList() },
             reactions = covertReactions()
@@ -301,7 +303,6 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
             time = time,
             mono = mono,
             content = content,
-            contentHtml = content.parseAsHtml(),
             emojiParam = emojiParam,
             replyParam = with(commentParser) { parserReplyForm() },
             comments = with(commentParser) { parserBottomComment(commentType) }.toPersistentList(),

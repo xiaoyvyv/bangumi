@@ -2,7 +2,6 @@
 
 package com.xiaoyv.bangumi.shared.data.parser.bgm
 
-import androidx.compose.ui.text.AnnotatedString
 import com.fleeksoft.ksoup.nodes.Element
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
@@ -18,21 +17,20 @@ import com.xiaoyv.bangumi.shared.core.utils.infoEpsRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoMonthDayRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthDayRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthRegex
-import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.parseStar
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexEp
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
@@ -131,7 +129,6 @@ class SubjectParser : BaseParser() {
         return ComposeSubjectWebInfo(
             info = info,
             shortInfo = shortInfo,
-            shortInfoHtml = shortInfo.parseAsHtml(),
             indexList = indexList.toPersistentList()
         )
     }
@@ -147,7 +144,6 @@ class SubjectParser : BaseParser() {
                 id = it.attr("data-item-user"),
                 type = CommentType.SUBJECT,
                 comment = comment,
-                commentHtml = comment.parseAsHtml(),
                 time = text.substringAfterLast("@").trim(),
                 collectType = CollectionType.from(text.substringBefore("@")),
                 star = it.parseStar(),
@@ -231,7 +227,6 @@ class SubjectParser : BaseParser() {
                     webInfo = ComposeSubjectWebInfo(
                         info = info,
                         shortInfo = info,
-                        shortInfoHtml = AnnotatedString(info)
                     )
                 ),
                 collection = if (collectInfo.isEmpty()) ComposeCollection.Empty else ComposeCollection(

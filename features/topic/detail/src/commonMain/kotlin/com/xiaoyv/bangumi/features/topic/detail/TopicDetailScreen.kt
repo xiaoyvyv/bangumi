@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -320,7 +319,7 @@ fun TopicDetailScreenHeader(
 
         BgmLinkedText(
             modifier = Modifier.fillMaxWidth(),
-            text = state.displayContent,
+            text = state.displayContentText,
         )
 
         // 支持贴贴表情的话题
@@ -386,7 +385,14 @@ private fun TopicDetailScreenContent(
                 key = { it.id },
                 contentType = { CONTENT_TYPE_COMMENT_ITEM }
             ) { item, level, index ->
-                if (index > 0 && item.relatedID == 0L) BgmHorizontalDivider()
+                if (index > 0 && item.relatedID == 0L) {
+                    BgmHorizontalDivider(
+                        modifier = Modifier.padding(
+                            start = if (level == 0) 0.dp else 76.dp
+                        )
+                    )
+                }
+
                 val commentDialogState = rememberAlertDialogState()
                 val density = LocalDensity.current
                 /*

@@ -1,18 +1,15 @@
 package com.xiaoyv.bangumi.features.topic.detail.business
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
-import com.xiaoyv.bangumi.shared.data.parser.bbcode.parseAsBbcode
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -60,17 +57,17 @@ data class TopicDetailState(
         else -> persistentListOf()
     }
 
-    val displayContent: AnnotatedString = when (type) {
-        TopicDetailType.TYPE_EP -> episode.description.parseAsBbcode()
+    val displayContentText: String = when (type) {
+        TopicDetailType.TYPE_EP -> episode.description
         TopicDetailType.TYPE_SUBJECT,
-        TopicDetailType.TYPE_GROUP -> topic.replies.firstOrNull()?.content.orEmpty().parseAsBbcode()
+        TopicDetailType.TYPE_GROUP -> topic.replies.firstOrNull()?.content.orEmpty()
 
         TopicDetailType.TYPE_CRT,
-        TopicDetailType.TYPE_PERSON -> mono.mono.summary.parseAsBbcode()
+        TopicDetailType.TYPE_PERSON -> mono.mono.summary
 
-        TopicDetailType.TYPE_INDEX -> index.desc.parseAsBbcode()
-        TopicDetailType.TYPE_BLOG -> blog.content.parseAsBbcode()
-        else -> buildAnnotatedString { }
+        TopicDetailType.TYPE_INDEX -> index.desc
+        TopicDetailType.TYPE_BLOG -> blog.content
+        else -> ""
     }
 
     val shareUrl: String = when (type) {

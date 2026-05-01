@@ -83,7 +83,6 @@ class CommentParser : BaseParser() {
                     .lastTextNode().trim()
                     .removePrefix("-").trim(),
                 comment = content,
-                commentHtml = content.parseAsHtml(),
                 replyParam = replyJs.parserReplyParam(),
                 replyQuote = replyQuote,
                 floor = item.select(".post_actions a.floor-anchor").text(),
