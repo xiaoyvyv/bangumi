@@ -30,7 +30,7 @@ fun ScreenNavHost(
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = koinEntryProvider(),
-        sceneStrategy = listDetailStrategy,
+        sceneStrategies = listOf(listDetailStrategy),
         transitionSpec = when (settings.ui.navigationAnimation) {
             SettingNavigationAnimation.FADE -> FadeNavTransitions.transitionSpec
             SettingNavigationAnimation.SLIDE -> DefaultNavTransitions.transitionSpec
