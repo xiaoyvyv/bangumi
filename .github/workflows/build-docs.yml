@@ -17,6 +17,7 @@ env:
 
 jobs:
   build:
+    if: github.repository == github.event.repository.full_name && !github.event.repository.fork
     runs-on: ubuntu-latest
     outputs:
       algolia_artifact: ${{ steps.define-ids.outputs.algolia_artifact }}

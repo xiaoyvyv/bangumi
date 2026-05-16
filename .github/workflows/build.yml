@@ -91,7 +91,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
           cache: gradle
 
       # 安装 Android SDK
@@ -101,7 +101,6 @@ jobs:
       # 构建 Android APK
       - name: Build Android Release
         id: build
-        continue-on-error: true
         run: ./gradlew :composeApp:assembleRelease
 
       # 上传 Android APK
