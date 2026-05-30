@@ -63,7 +63,9 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.rememberSheetDialogState
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
+import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -121,15 +123,24 @@ private fun MonoDetailScreen(
     onUiEvent: (MonoDetailEvent.UI) -> Unit,
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
 ) {
+    val imageColorState = rememberImageColorState()
+
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
+            val iconColor = androidx.compose.ui.graphics.lerp(
+                imageColorState.contentColor,
+                MaterialTheme.colorScheme.onSurface,
+                it
+            )
             BgmTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 title = baseState.payload?.mono?.displayName,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
-                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it)
+                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    navigationIconContentColor = iconColor,
+                    actionIconContentColor = iconColor
                 ),
                 actions = {
                     baseState.content {
@@ -197,6 +208,7 @@ private fun MonoDetailScreen(
                         .background(MaterialTheme.colorScheme.secondaryContainer),
                     insets = it,
                     state = this,
+                    imageColorState = imageColorState,
                     onUiEvent = onUiEvent,
                     onActionEvent = onActionEvent
                 )
@@ -227,6 +239,7 @@ private fun MonoDetailScreenHeader(
     modifier: Modifier,
     insets: PaddingValues,
     state: MonoDetailState,
+    imageColorState: ImageColorState,
     onUiEvent: (MonoDetailEvent.UI) -> Unit,
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
 ) {
@@ -235,7 +248,8 @@ private fun MonoDetailScreenHeader(
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.FillBounds,
             model = state.mono.images.displayGridImage,
-            contentDescription = state.mono.displayName
+            contentDescription = state.mono.displayName,
+            onState = imageColorState.onImageState
         )
 
         Row(
@@ -275,7 +289,7 @@ private fun MonoDetailScreenHeader(
                 Text(
                     text = state.mono.displayName,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = imageColorState.contentColor,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -284,7 +298,7 @@ private fun MonoDetailScreenHeader(
                     modifier = Modifier.basicMarquee(),
                     text = state.mono.name,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = imageColorState.contentColor,
                     maxLines = 1,
                 )
 
@@ -292,7 +306,7 @@ private fun MonoDetailScreenHeader(
                 Text(
                     text = "",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.75f),
+                    color = imageColorState.contentColorSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.MiddleEllipsis,
                 )

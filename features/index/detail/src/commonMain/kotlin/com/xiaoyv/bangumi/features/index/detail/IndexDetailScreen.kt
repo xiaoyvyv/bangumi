@@ -50,7 +50,9 @@ import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
+import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -98,14 +100,23 @@ private fun IndexDetailScreen(
     onUiEvent: (IndexDetailEvent.UI) -> Unit,
     onActionEvent: (IndexDetailEvent.Action) -> Unit,
 ) {
+    val imageColorState = rememberImageColorState()
+
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
+            val iconColor = androidx.compose.ui.graphics.lerp(
+                imageColorState.contentColor,
+                MaterialTheme.colorScheme.onSurface,
+                it
+            )
             BgmTopAppBar(
                 title = baseState.content { index.title },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    navigationIconContentColor = iconColor,
+                    actionIconContentColor = iconColor
                 ),
                 actions = {
                     baseState.content {
@@ -142,6 +153,7 @@ private fun IndexDetailScreen(
                 IndexDetailScreenHeader(
                     state = this,
                     padding = it,
+                    imageColorState = imageColorState,
                     onUiEvent = onUiEvent,
                     onActionEvent = onActionEvent
                 )
@@ -164,6 +176,7 @@ private fun IndexDetailScreen(
 private fun IndexDetailScreenHeader(
     state: IndexDetailState,
     padding: PaddingValues,
+    imageColorState: ImageColorState,
     onUiEvent: (IndexDetailEvent.UI) -> Unit,
     onActionEvent: (IndexDetailEvent.Action) -> Unit,
 ) {
@@ -172,7 +185,8 @@ private fun IndexDetailScreenHeader(
             modifier = Modifier.matchParentSize(),
             model = state.index.creator.avatar.displayGridImage,
             contentDescription = state.index.title,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            onState = imageColorState.onImageState
         )
 
         Box(
@@ -192,8 +206,8 @@ private fun IndexDetailScreenHeader(
                 .padding(vertical = LayoutPaddingHalf),
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
-                headlineColor = MaterialTheme.colorScheme.onPrimary,
-                supportingColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                headlineColor = imageColorState.contentColor,
+                supportingColor = imageColorState.contentColorSecondary
             ),
             leadingContent = {
                 StateImage(
@@ -225,7 +239,7 @@ private fun IndexDetailScreenHeader(
                     )
                     Text(
                         text = buildAnnotatedString {
-                            withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onPrimary)) {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = imageColorState.contentColor)) {
                                 append(state.index.creator.nickname)
                             }
                             append(" 创建 ")

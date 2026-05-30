@@ -41,7 +41,9 @@ import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
+import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -85,16 +87,24 @@ private fun UserScreen(
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val imageColorState = rememberImageColorState()
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         state = scrollState,
         topBar = {
+            val iconColor = androidx.compose.ui.graphics.lerp(
+                imageColorState.contentColor,
+                MaterialTheme.colorScheme.onSurface,
+                it
+            )
             BgmTopAppBar(
                 title = baseState.payload?.user?.nickname,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
-                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it)
+                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    navigationIconContentColor = iconColor,
+                    actionIconContentColor = iconColor
                 ),
                 actions = {
                     baseState.content {
@@ -121,7 +131,7 @@ private fun UserScreen(
         },
         collapse = {
             baseState.content {
-                UserScreenHeader(state = this, it, onUiEvent, onActionEvent)
+                UserScreenHeader(state = this, it, imageColorState, onUiEvent, onActionEvent)
             }
         }
     ) {
@@ -141,6 +151,7 @@ private fun UserScreen(
 private fun UserScreenHeader(
     state: UserState,
     padding: PaddingValues,
+    imageColorState: ImageColorState,
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
@@ -153,7 +164,8 @@ private fun UserScreenHeader(
         BlurImage(
             modifier = Modifier.fillMaxSize(),
             model = state.user.avatar.displayGridImage,
-            contentDescription = stringResource(Res.string.global_image)
+            contentDescription = stringResource(Res.string.global_image),
+            onState = imageColorState.onImageState
         )
 
         Column(
@@ -179,7 +191,7 @@ private fun UserScreenHeader(
                 modifier = Modifier.padding(top = LayoutPaddingHalf),
                 text = state.user.nickname + "@" + state.user.username,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.surface
+                    color = imageColorState.contentColor
                 )
             )
         }

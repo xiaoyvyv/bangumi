@@ -60,7 +60,9 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
+import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLoginLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
@@ -109,14 +111,25 @@ private fun ProfileScreen(
     val scrollState = rememberScrollState()
     val user = currentUser()
     val sharedState = LocalSharedState.current
+    val imageColorState = rememberImageColorState()
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         state = scrollState,
         topBar = {
+            val iconColor = androidx.compose.ui.graphics.lerp(
+                imageColorState.contentColor,
+                MaterialTheme.colorScheme.onSurface,
+                it
+            )
             BgmTopAppBar(
                 title = currentUser().nickname,
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it)),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
+                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    navigationIconContentColor = iconColor,
+                    actionIconContentColor = iconColor
+                ),
                 navigationIcon = {
                     DropMenuActionButton(
                         imageVector = BgmIcons.Menu,
@@ -177,7 +190,7 @@ private fun ProfileScreen(
         },
         collapse = {
             baseState.content {
-                ProfileScreenHeader(state = this, it, onUiEvent, onActionEvent)
+                ProfileScreenHeader(state = this, it, imageColorState, onUiEvent, onActionEvent)
             }
         }
     ) {
@@ -199,6 +212,7 @@ private fun ProfileScreen(
 private fun ProfileScreenHeader(
     state: ProfileState,
     padding: PaddingValues,
+    imageColorState: ImageColorState,
     onUiEvent: (ProfileEvent.UI) -> Unit,
     onActionEvent: (ProfileEvent.Action) -> Unit,
 ) {
@@ -215,7 +229,8 @@ private fun ProfileScreenHeader(
             modifier = Modifier.fillMaxSize(),
             model = avatar,
             contentDescription = stringResource(Res.string.global_image),
-            androidSampling = if (avatar.isBlank()) 20f else 5f
+            androidSampling = if (avatar.isBlank()) 20f else 5f,
+            onState = imageColorState.onImageState
         )
 
         Column(
@@ -247,13 +262,13 @@ private fun ProfileScreenHeader(
                 modifier = Modifier.padding(top = LayoutPaddingHalf),
                 text = currentUser.nickname.ifBlank { stringResource(Res.string.login_first_tip) },
                 style = MaterialTheme.typography.titleLarge.copy(
-                    color = MaterialTheme.colorScheme.surface
+                    color = imageColorState.contentColor
                 )
             )
             Text(
                 text = "@" + currentUser.username.ifBlank { "bangumi" },
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.surface
+                    color = imageColorState.contentColor
                 )
             )
         }
