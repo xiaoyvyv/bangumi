@@ -130,7 +130,7 @@ val NavBackStack<NavKey>.current
 
 fun NavBackStack<NavKey>.goBack(): Boolean {
     if (size <= 1) return false
-    removeLast()
+    removeLastOrNull()
     return true
 }
 
@@ -144,7 +144,7 @@ fun NavBackStack<NavKey>.navigate(
         if (index != -1) {
             val cutIndex = if (popUpToInclusive) index else index + 1
             while (size > cutIndex) {
-                removeLast()
+                removeLastOrNull()
             }
         }
     }

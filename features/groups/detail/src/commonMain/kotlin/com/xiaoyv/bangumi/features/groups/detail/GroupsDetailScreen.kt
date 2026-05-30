@@ -55,7 +55,9 @@ import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
+import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -102,14 +104,23 @@ private fun GroupsDetailScreen(
     onUiEvent: (GroupsDetailEvent.UI) -> Unit,
     onActionEvent: (GroupsDetailEvent.Action) -> Unit,
 ) {
+    val imageColorState = rememberImageColorState()
+
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
+            val iconColor = androidx.compose.ui.graphics.lerp(
+                imageColorState.contentColor,
+                MaterialTheme.colorScheme.onSurface,
+                it
+            )
             BgmTopAppBar(
                 title = baseState.content { group.title },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    navigationIconContentColor = iconColor,
+                    actionIconContentColor = iconColor
                 ),
                 actions = {
                     baseState.content {
@@ -139,6 +150,7 @@ private fun GroupsDetailScreen(
                 GroupsDetailScreenHeader(
                     state = this,
                     padding = it,
+                    imageColorState = imageColorState,
                     onUiEvent = onUiEvent,
                     onActionEvent = onActionEvent
                 )
@@ -162,6 +174,7 @@ private fun GroupsDetailScreen(
 private fun GroupsDetailScreenHeader(
     state: GroupsDetailState,
     padding: PaddingValues,
+    imageColorState: ImageColorState,
     onUiEvent: (GroupsDetailEvent.UI) -> Unit,
     onActionEvent: (GroupsDetailEvent.Action) -> Unit,
 ) {
@@ -170,7 +183,8 @@ private fun GroupsDetailScreenHeader(
             modifier = Modifier.matchParentSize(),
             model = state.group.images.displayGridImage,
             contentDescription = state.group.name,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            onState = imageColorState.onImageState
         )
 
         Box(
@@ -190,8 +204,8 @@ private fun GroupsDetailScreenHeader(
                 .padding(vertical = LayoutPaddingHalf),
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
-                headlineColor = MaterialTheme.colorScheme.onPrimary,
-                supportingColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                headlineColor = imageColorState.contentColor,
+                supportingColor = imageColorState.contentColorSecondary
             ),
             leadingContent = {
                 StateImage(
@@ -227,9 +241,9 @@ private fun GroupsDetailScreenHeader(
                 OutlinedButton(
                     shape = MaterialTheme.shapes.small,
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = if (state.group.isJoined) MaterialTheme.colorScheme.onPrimary else StarColor,
+                        contentColor = if (state.group.isJoined) imageColorState.contentColor else StarColor,
                     ),
-                    border = BorderStroke(1.dp, if (state.group.isJoined) MaterialTheme.colorScheme.onPrimary else StarColor),
+                    border = BorderStroke(1.dp, if (state.group.isJoined) imageColorState.contentColor else StarColor),
                     onClick = { onActionEvent(GroupsDetailEvent.Action.OnToggleJoinGroup) }
                 ) {
                     Text(

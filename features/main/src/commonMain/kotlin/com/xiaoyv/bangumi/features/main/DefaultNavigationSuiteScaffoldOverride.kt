@@ -67,7 +67,7 @@ object DefaultNavigationSuiteScaffoldOverride : NavigationSuiteScaffoldOverride 
                             NavigationItemIcon(icon = it.icon, badge = it.badge)
 
                             ProvideContentColorTextStyle(
-                                contentColor = contentColor,
+                                contentColor = MaterialTheme.colorScheme.primary,
                                 textStyle = MaterialTheme.typography.bodySmall,
                                 content = {
                                     it.label?.invoke()
@@ -87,7 +87,7 @@ internal fun ProvideContentColorTextStyle(
     textStyle: TextStyle,
     content: @Composable () -> Unit,
 ) {
-    val mergedStyle = LocalTextStyle.current.merge(textStyle)
+    val mergedStyle = LocalTextStyle.current.merge(textStyle).copy(color = contentColor)
     CompositionLocalProvider(
         LocalContentColor provides contentColor,
         LocalTextStyle provides mergedStyle,

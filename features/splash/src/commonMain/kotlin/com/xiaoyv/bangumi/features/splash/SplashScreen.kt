@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,19 +47,9 @@ fun SplashRoute(onNavScreen: (Screen) -> Unit) {
 
 @Composable
 fun SplashScreen(onNavScreen: (Screen) -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Button(onClick = { onNavScreen(Screen.Main) }) {
-            Text(text = "Home")
-        }
+    LaunchedEffect(Unit) {
+        onNavScreen(Screen.Main)
     }
-//    Navigation()
-
-//    LaunchedEffect(Unit) {
-//        onNavScreen(Screen.Main)
-//    }
 }
 
 @Composable

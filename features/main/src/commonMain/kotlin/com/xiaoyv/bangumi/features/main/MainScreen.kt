@@ -74,17 +74,33 @@ fun MainScreen(
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             bottomTabs.forEach { item ->
+                val selected = backStack.current == item.first
                 item(
                     modifier = Modifier.padding(bottom = if (isWideScreen) LayoutPadding else 0.dp),
                     label = {
                         Text(
                             text = stringResource(item.second.label),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            color = if (selected) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            }
                         )
                     },
-                    icon = { Icon(item.second.icon, stringResource(item.second.label)) },
-                    selected = backStack.current == item.first,
+                    icon = {
+                        Icon(
+                            item.second.icon,
+                            stringResource(item.second.label),
+                            tint = if (selected) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            }
+                        )
+                    },
+                    selected = selected,
                     badge = {
                         val appState = LocalSharedState.current
                         val unreadCnt = appState.unreadNotification + appState.unreadMessage
