@@ -29,7 +29,7 @@ inline fun Module.navScope(scopeSet: Module.() -> Unit) {
 /**
  * Creates the required serializing configuration for open polymorphism
  */
-val u7u7stateConfiguration = SavedStateConfiguration {
+val stateConfiguration = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(NavKey::class) {
             subclass(Screen.Empty::class, Screen.Empty.serializer())

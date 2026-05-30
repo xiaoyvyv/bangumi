@@ -27,3 +27,7 @@ kotlin {
     }
 }
 
+// Skip iOS metadata compilation on non-macOS hosts (cocoapods interop unavailable)
+tasks.matching { it.name.contains("IosMainKotlinMetadata") || it.name.contains("Ios") && it.name.contains("Metadata") }.configureEach {
+    enabled = org.apache.tools.ant.taskdefs.condition.Os.isFamily(org.apache.tools.ant.taskdefs.condition.Os.FAMILY_MAC)
+}
