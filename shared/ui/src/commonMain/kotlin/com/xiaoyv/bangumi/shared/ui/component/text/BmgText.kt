@@ -154,10 +154,14 @@ fun BgmLinkedText(
     minLines: Int = 1,
     actionHandler: AppActionHandler = LocalActionHandler.current,
 ) {
+    // 如果没有显式传文字颜色，则自动回退到 onSurface
+    val resolvedTextStyle = textStyle.copy(
+        color = textStyle.color.takeOrElse { MaterialTheme.colorScheme.onSurface }
+    )
     Html(
         modifier = modifier,
         html = remember(text) { if (text.contains("[")) bbcodeToHtml(text, true) else text },
-        textStyle = textStyle,
+        textStyle = resolvedTextStyle,
         onClickUrl = { actionHandler.openBgmLink(it) },
         inlineImage = {
             StateImage(
