@@ -157,6 +157,7 @@ fun BgmLinkedText(
     Html(
         modifier = modifier,
         html = remember(text) { if (text.contains("[")) bbcodeToHtml(text, true) else text },
+        textStyle = textStyle,
         onClickUrl = { actionHandler.openBgmLink(it) },
         inlineImage = {
             StateImage(

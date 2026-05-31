@@ -17,20 +17,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.text.font.FontWeight
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_copy_success
 import com.xiaoyv.bangumi.core_resource.resources.profile_network_service
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
+import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
+import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -66,18 +73,32 @@ fun UserBioScreen(
                 verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
             ) {
                 val actionHandler = LocalActionHandler.current
+                val clipboard = LocalClipboard.current
+                val scope = rememberCoroutineScope()
+                val popupTipState = LocalPopupTipState.current
 
-                state.user.networkServices.forEach {
+                state.user.networkServices.forEach { service ->
+                    val hasLink = service.url.isNotBlank()
+
                     AssistChip(
                         colors = AssistChipDefaults.assistChipColors(
-                            containerColor = remember(it.color) { parseHtmlHexColor(it.color) ?: Color.Unspecified },
-                            labelColor = MaterialTheme.colorScheme.onPrimary
+                            containerColor = remember(service.color) { parseHtmlHexColor(service.color) ?: Color.Unspecified },
+                            labelColor = Color.White
                         ),
-                        onClick = { actionHandler.openInBrowser(it.url) },
+                        onClick = {
+                            if (hasLink) {
+                                actionHandler.openInBrowser(service.url + service.account)
+                            } else {
+                                scope.launch {
+                                    clipboard.setClipEntry(System.createClipEntry(service.account))
+                                    popupTipState.showToast(getString(Res.string.global_copy_success))
+                                }
+                            }
+                        },
                         shape = CircleShape,
                         label = {
                             Text(
-                                text = it.title + ": " + it.account,
+                                text = service.title + ": " + service.account,
                                 fontWeight = FontWeight.Medium
                             )
                         }
