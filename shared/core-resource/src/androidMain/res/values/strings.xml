@@ -259,7 +259,6 @@
     <string name="settings_domain_bgm">Bangumi 域</string>
     <string name="settings_proxy_bgm">Bangumi 代理</string>
     <string name="settings_proxy_none">无代理</string>
-    <string name="settings_proxy_cloudflare">Cloudflare Workers 中转</string>
     <string name="settings_domain_pixiv">图片域</string>
     <string name="settings_update_channel">更新检测通道</string>
     <string name="settings_reboot_active">网络配置变更需要冷重启 App 才能生效</string>
