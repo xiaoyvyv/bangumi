@@ -22,6 +22,8 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_domain_bgm
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_pixiv
 import com.xiaoyv.bangumi.core_resource.resources.settings_dou_ban
 import com.xiaoyv.bangumi.core_resource.resources.settings_network
+import com.xiaoyv.bangumi.core_resource.resources.settings_proxy_bgm
+import com.xiaoyv.bangumi.core_resource.resources.settings_proxy_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_request
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_socket
 import com.xiaoyv.bangumi.core_resource.resources.settings_update_channel
@@ -116,6 +118,17 @@ private fun SettingsNetworkScreenContent(
                 items = TabTokens.settingBangumiHosts,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(bgmHost = it)))
+                }
+            )
+
+            SettingOptionItem(
+                title = stringResource(Res.string.settings_proxy_bgm),
+                value = TabTokens.settingBangumiProxyItems
+                    .find { it.type == settings.network.bgmProxy }?.displayText()
+                    ?: if (settings.network.bgmProxy.isBlank()) stringResource(Res.string.settings_proxy_none) else settings.network.bgmProxy,
+                items = TabTokens.settingBangumiProxyItems,
+                onClick = {
+                    onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(bgmProxy = it)))
                 }
             )
         }
@@ -214,5 +227,4 @@ private fun SettingsNetworkScreenContent(
         }
     }
 }
-
 

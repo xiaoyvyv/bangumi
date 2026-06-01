@@ -80,6 +80,7 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_indication_ripped
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_fade
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_slide
+import com.xiaoyv.bangumi.core_resource.resources.settings_proxy_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
@@ -402,6 +403,18 @@ object TabTokens {
         ComposeTextTab("https://chii.in/", labelText = "chii.in"),
     )
 
+    val settingBangumiProxyHosts = persistentListOf(
+        "https://bgm-proxy.melonhu.cn/",
+    )
+
+    val settingBangumiProxyItems: PersistentList<ComposeTextTab<String>> =
+        buildList {
+            add(ComposeTextTab("", Res.string.settings_proxy_none))
+            addAll(settingBangumiProxyHosts.map { proxyUrl ->
+                ComposeTextTab(proxyUrl, labelText = proxyUrl.proxyDisplayHost())
+            })
+        }.toPersistentList()
+
     val settingPixivImgHosts = persistentListOf(
         ComposeTextTab("https://xget.xiaoyv.com.cn/pximg/", labelText = "xget.xiaoyv.com.cn"),
         ComposeTextTab("https://imp.pximg.net/", labelText = "imp.pximg.net"),
@@ -452,6 +465,11 @@ object TabTokens {
         ComposeTextTab(SettingIndication.FADE, Res.string.settings_indication_fade),
         ComposeTextTab(SettingIndication.RIPPLE, Res.string.settings_indication_ripped),
     )
+
+    private fun String.proxyDisplayHost(): String {
+        val withoutScheme = substringAfter("://", this)
+        return withoutScheme.substringBefore("/").ifBlank { this }
+    }
 
     val magnetGardenSorts by lazy {
         listOf(MagnetGardenSort.RELATED, MagnetGardenSort.DATE_ASC, MagnetGardenSort.DATE_DESC)

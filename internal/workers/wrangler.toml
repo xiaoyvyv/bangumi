@@ -1,0 +1,7 @@
+name = "bangumi-proxy"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+# 允许代理的 Bangumi 域名列表
+ALLOWED_HOSTS = "api.bgm.tv,lain.bgm.tv,bgm.tv,bangumi.tv,chii.in,next.bgm.tv"

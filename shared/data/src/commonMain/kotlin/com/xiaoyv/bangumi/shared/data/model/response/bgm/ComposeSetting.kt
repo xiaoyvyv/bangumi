@@ -76,6 +76,7 @@ data class ComposeSetting(
     @Immutable
     data class NetworkConfig(
         @SerialName("bgmHost") val bgmHost: String = "https://bgm.tv/",
+        @SerialName("bgmProxy") val bgmProxy: String = "https://bgm-proxy.melonhu.cn/",
         @SerialName("updateChannel") @field:SettingUpdateChannel val updateChannel: Int = SettingUpdateChannel.RELEASE,
         @SerialName("connectTimeoutMillis") val connectTimeoutMillis: Long = 15_000,
         @SerialName("socketTimeoutMillis") val socketTimeoutMillis: Long = 15_000,
