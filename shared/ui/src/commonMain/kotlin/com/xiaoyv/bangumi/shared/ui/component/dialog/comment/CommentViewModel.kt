@@ -74,7 +74,7 @@ class CommentViewModel(
                 append(comment)
             }
         }
-        params["related_photo"] to "0"
+        params["related_photo"] = "0"
         params["lastview"] = state.anchor.lastViewedInMillis.toString().take(10)
 
         // 如果回复的子评论
