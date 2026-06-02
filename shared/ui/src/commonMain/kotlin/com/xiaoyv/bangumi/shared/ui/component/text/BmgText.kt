@@ -1,14 +1,10 @@
 package com.xiaoyv.bangumi.shared.ui.component.text
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,13 +13,17 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -31,14 +31,23 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.xiaoyv.bangumi.shared.core.utils.TagImage
+import com.xiaoyv.bangumi.shared.core.utils.TagMask
+import com.xiaoyv.bangumi.shared.core.utils.applyTheme
+import com.xiaoyv.bangumi.shared.core.utils.awaitHtmlEvent
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
+import com.xiaoyv.bangumi.shared.core.utils.packTextRangeKey
+import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.ui.component.action.AppActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
-import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.library.Html
 
 @Composable
 fun textFieldTransparentColors() = TextFieldDefaults.colors(
@@ -158,143 +167,67 @@ fun BgmLinkedText(
     val resolvedTextStyle = textStyle.copy(
         color = textStyle.color.takeOrElse { MaterialTheme.colorScheme.onSurface }
     )
-    Html(
-        modifier = modifier,
-        html = remember(text) { if (text.contains("[")) bbcodeToHtml(text, true) else text },
-        textStyle = resolvedTextStyle,
-        onClickUrl = { actionHandler.openBgmLink(it) },
-        inlineImage = {
-            StateImage(
-                model = it.source,
-                modifier = Modifier.fillMaxSize(),
-                contentDescription = it.alt
-            )
-        },
-        blockImage = {
-            StateImage(
-                model = it.source,
-                modifier = Modifier
-                    .widthIn(max = 500.dp)
-                    .fillMaxWidth()
-                    .aspectRatio(4 / 3f)
-                    .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
-                    .clip(MaterialTheme.shapes.small)
-                    .clickable { actionHandler.openImage(it.source) },
-                shape = MaterialTheme.shapes.small,
-                alignment = Alignment.CenterStart,
-                contentDescription = it.alt
-            )
-        }
-    )
+    val html = remember(text) { if (text.contains("[")) bbcodeToHtml(text, true) else text }
+    val parsed = remember(html) { html.parseAsHtml() }
+    val targetShowMasks = remember { mutableStateSetOf<Long>() }
 
-
-//    BbCode(
-//        modifier = modifier,
-//        source = if (text.contains("</")) Html2Bbcode.convert(text) else text,
-//        textStyle = textStyle,
-//        verticalArrangement = Arrangement.spacedBy(8.dp),
-//        onLinkClick = { actionHandler.openBgmLink(it) },
-//        imageRenderer = {
-//            StateImage(
-//                model = it.url,
-//                modifier = Modifier
-//                    .widthIn(max = 500.dp)
-//                    .fillMaxWidth()
-//                    .aspectRatio(4 / 3f)
-//                    .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
-//                    .clip(MaterialTheme.shapes.small)
-//                    .clickable { actionHandler.openImage(it.url) },
-//                shape = MaterialTheme.shapes.small,
-//                alignment = Alignment.CenterStart
-//            )
-//        }
-//    )
-
-    /*
     BoxWithConstraints(modifier) {
         val density = LocalDensity.current
-        var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
-        val aspect = 16 / 9f
-        val width = with(density) {
-            maxWidth.coerceAtMost(450.dp).toSp()
+        val aspect = 16f / 9f
+
+        val imageWidth = with(density) { maxWidth.coerceAtMost(450.dp).toSp() }
+        val imageHeight = (imageWidth.value / aspect).sp
+
+        val inlineContent = remember(imageWidth, imageHeight) {
+            InlineTextContentMap + mapOf(TagImage to createImageInlineContent(imageWidth, imageHeight))
         }
 
-        val newInlineContent = remember(inlineContent, width) {
-            val tmp = inlineContent.toMutableMap()
-            tmp["image"] = createImageInlineContent(
-                width = width,
-                height = width / aspect
-            )
-            tmp.toImmutableMap()
+        val maskKeys = remember(parsed) {
+            parsed.getStringAnnotations(TagMask, 0, parsed.length)
+                .map { range -> packTextRangeKey(range.start, range.end) }
+                .distinct()
+                .sorted()
         }
 
-        val showMasks: MutableSet<AnnotatedString.Range<String>> = remember { mutableStateSetOf() }
-        val content = text.applyTheme(
-            showMaskRanges = showMasks,
-            contentColor = style.color
+        val maskAlphaByRange = buildMap {
+            maskKeys.forEach { key ->
+                val alpha by animateFloatAsState(
+                    targetValue = if (targetShowMasks.contains(key)) 1f else 0f,
+                    animationSpec = tween(220),
+                    label = "mask-$key"
+                )
+                put(key, alpha)
+            }
+        }
+
+        val content = parsed.applyTheme(
+            contentColor = resolvedTextStyle.color,
+            linkColor = MaterialTheme.colorScheme.primary,
+            maskAlphaByRange = maskAlphaByRange
         )
 
-        // 代码块
-        val codeCornerRadius = with(density) { 4.dp.toPx() }
-        val cachedRects = remember(text, layoutResult) {
-            layoutResult?.let { result ->
-                text.getStringAnnotations(TagCode, 0, text.length).map { annotation ->
-                    val startLine = result.getLineForOffset(annotation.start)
-                    val endLine = result.getLineForOffset(annotation.end)
-
-                    val top = result.getLineTop(startLine)
-                    val bottom = result.getLineBottom(endLine)
-
-                    // 块级背景铺满整行宽度
-                    val left = 0f
-                    val right = result.size.width.toFloat()
-
-                    androidx.compose.ui.geometry.Rect(
-                        left,
-                        top - codeCornerRadius,
-                        right,
-                        bottom + codeCornerRadius
-                    )
-                }
-            } ?: emptyList()
-        }
-
+        var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
 
         BasicText(
             text = content,
-            modifier = Modifier
-                .drawBehind {
-                    cachedRects.forEach { rect ->
-                        drawRoundRect(
-                            color = Color.Black.copy(alpha = 0.75f),
-                            topLeft = Offset(rect.left, rect.top),
-                            size = androidx.compose.ui.geometry.Size(rect.width, rect.height),
-                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(codeCornerRadius),
-                        )
-                    }
-                }
-                .pointerInput(onClickLink) {
-                    awaitHtmlEvent(
-                        text = content,
-                        onTextLayoutResult = { layoutResult },
-                        onClickLink = onClickLink,
-                        onClickImage = onClickImage,
-                        onClickMask = { range -> showMasks.add(range) }
-                    )
-                },
-            style = style.copy(
-                color = if (style.color == Color.Unspecified) LocalContentColor.current else style.color,
-                lineHeight = style.fontSize * 1.75f
-            ),
-            softWrap = softWrap,
-            inlineContent = newInlineContent,
-            overflow = overflow,
+            modifier = Modifier.pointerInput(content, actionHandler) {
+                awaitHtmlEvent(
+                    text = content,
+                    onTextLayoutResult = { layoutResult },
+                    onClickLink = { range -> actionHandler.openBgmLink(range.item) },
+                    onClickMask = { range ->
+                        val key = packTextRangeKey(range.start, range.end)
+                        if (!targetShowMasks.remove(key)) targetShowMasks.add(key)
+                    },
+                    onClickImage = { range -> actionHandler.openImage(range.item) },
+                )
+            },
+            style = resolvedTextStyle,
+            inlineContent = inlineContent,
+            overflow = TextOverflow.Clip,
             maxLines = maxLines,
             minLines = minLines,
-            onTextLayout = {
-                layoutResult = it
-                onTextLayout(it)
-            }
+            onTextLayout = { layoutResult = it }
         )
-    }*/
+    }
 }

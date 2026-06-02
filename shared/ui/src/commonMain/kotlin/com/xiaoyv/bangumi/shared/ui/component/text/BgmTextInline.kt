@@ -39,8 +39,14 @@ val StarColor = Color(0xFFFFAA00)
 
 val InlineTextContentMap by lazy {
     val inlineMap = mutableMapOf<String, InlineTextContent>()
-    bgmEmojis.forEach {
-        inlineMap.put(it.key, createIconInlineContent(it.value.image, 20.dp))
+    bgmEmojis.forEach { (key, emoji) ->
+        // blake 和 musume 表情包在网页版中会稍大一些
+        val size = when {
+            key.startsWith("blake_") -> 40.dp
+            key.startsWith("musume_") -> 40.dp
+            else -> 20.dp
+        }
+        inlineMap.put(key, createIconInlineContent(emoji.image, size))
     }
     inlineMap.put(InlineTextContentIdStar, createIconInlineContent(BgmIcons.Star, 20.dp, StarColor))
     inlineMap.toImmutableMap()

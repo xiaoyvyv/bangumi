@@ -3,200 +3,7 @@ package com.xiaoyv.bangumi.shared.core.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.bgm_01
-import com.xiaoyv.bangumi.core_resource.resources.bgm_02
-import com.xiaoyv.bangumi.core_resource.resources.bgm_03
-import com.xiaoyv.bangumi.core_resource.resources.bgm_04
-import com.xiaoyv.bangumi.core_resource.resources.bgm_05
-import com.xiaoyv.bangumi.core_resource.resources.bgm_06
-import com.xiaoyv.bangumi.core_resource.resources.bgm_07
-import com.xiaoyv.bangumi.core_resource.resources.bgm_08
-import com.xiaoyv.bangumi.core_resource.resources.bgm_09
-import com.xiaoyv.bangumi.core_resource.resources.bgm_10
-import com.xiaoyv.bangumi.core_resource.resources.bgm_11
-import com.xiaoyv.bangumi.core_resource.resources.bgm_12
-import com.xiaoyv.bangumi.core_resource.resources.bgm_13
-import com.xiaoyv.bangumi.core_resource.resources.bgm_14
-import com.xiaoyv.bangumi.core_resource.resources.bgm_15
-import com.xiaoyv.bangumi.core_resource.resources.bgm_16
-import com.xiaoyv.bangumi.core_resource.resources.bgm_17
-import com.xiaoyv.bangumi.core_resource.resources.bgm_18
-import com.xiaoyv.bangumi.core_resource.resources.bgm_19
-import com.xiaoyv.bangumi.core_resource.resources.bgm_20
-import com.xiaoyv.bangumi.core_resource.resources.bgm_200
-import com.xiaoyv.bangumi.core_resource.resources.bgm_201
-import com.xiaoyv.bangumi.core_resource.resources.bgm_202
-import com.xiaoyv.bangumi.core_resource.resources.bgm_203
-import com.xiaoyv.bangumi.core_resource.resources.bgm_204
-import com.xiaoyv.bangumi.core_resource.resources.bgm_205
-import com.xiaoyv.bangumi.core_resource.resources.bgm_206
-import com.xiaoyv.bangumi.core_resource.resources.bgm_207
-import com.xiaoyv.bangumi.core_resource.resources.bgm_208
-import com.xiaoyv.bangumi.core_resource.resources.bgm_209
-import com.xiaoyv.bangumi.core_resource.resources.bgm_21
-import com.xiaoyv.bangumi.core_resource.resources.bgm_210
-import com.xiaoyv.bangumi.core_resource.resources.bgm_211
-import com.xiaoyv.bangumi.core_resource.resources.bgm_212
-import com.xiaoyv.bangumi.core_resource.resources.bgm_213
-import com.xiaoyv.bangumi.core_resource.resources.bgm_214
-import com.xiaoyv.bangumi.core_resource.resources.bgm_215
-import com.xiaoyv.bangumi.core_resource.resources.bgm_216
-import com.xiaoyv.bangumi.core_resource.resources.bgm_217
-import com.xiaoyv.bangumi.core_resource.resources.bgm_218
-import com.xiaoyv.bangumi.core_resource.resources.bgm_219
-import com.xiaoyv.bangumi.core_resource.resources.bgm_22
-import com.xiaoyv.bangumi.core_resource.resources.bgm_220
-import com.xiaoyv.bangumi.core_resource.resources.bgm_221
-import com.xiaoyv.bangumi.core_resource.resources.bgm_222
-import com.xiaoyv.bangumi.core_resource.resources.bgm_223
-import com.xiaoyv.bangumi.core_resource.resources.bgm_224
-import com.xiaoyv.bangumi.core_resource.resources.bgm_225
-import com.xiaoyv.bangumi.core_resource.resources.bgm_226
-import com.xiaoyv.bangumi.core_resource.resources.bgm_227
-import com.xiaoyv.bangumi.core_resource.resources.bgm_228
-import com.xiaoyv.bangumi.core_resource.resources.bgm_229
-import com.xiaoyv.bangumi.core_resource.resources.bgm_23
-import com.xiaoyv.bangumi.core_resource.resources.bgm_230
-import com.xiaoyv.bangumi.core_resource.resources.bgm_231
-import com.xiaoyv.bangumi.core_resource.resources.bgm_232
-import com.xiaoyv.bangumi.core_resource.resources.bgm_233
-import com.xiaoyv.bangumi.core_resource.resources.bgm_234
-import com.xiaoyv.bangumi.core_resource.resources.bgm_235
-import com.xiaoyv.bangumi.core_resource.resources.bgm_236
-import com.xiaoyv.bangumi.core_resource.resources.bgm_237
-import com.xiaoyv.bangumi.core_resource.resources.bgm_238
-import com.xiaoyv.bangumi.core_resource.resources.bgm_500
-import com.xiaoyv.bangumi.core_resource.resources.bgm_501
-import com.xiaoyv.bangumi.core_resource.resources.bgm_502
-import com.xiaoyv.bangumi.core_resource.resources.bgm_503
-import com.xiaoyv.bangumi.core_resource.resources.bgm_504
-import com.xiaoyv.bangumi.core_resource.resources.bgm_505
-import com.xiaoyv.bangumi.core_resource.resources.bgm_506
-import com.xiaoyv.bangumi.core_resource.resources.bgm_507
-import com.xiaoyv.bangumi.core_resource.resources.bgm_508
-import com.xiaoyv.bangumi.core_resource.resources.bgm_509
-import com.xiaoyv.bangumi.core_resource.resources.bgm_510
-import com.xiaoyv.bangumi.core_resource.resources.bgm_511
-import com.xiaoyv.bangumi.core_resource.resources.bgm_512
-import com.xiaoyv.bangumi.core_resource.resources.bgm_513
-import com.xiaoyv.bangumi.core_resource.resources.bgm_514
-import com.xiaoyv.bangumi.core_resource.resources.bgm_515
-import com.xiaoyv.bangumi.core_resource.resources.bgm_516
-import com.xiaoyv.bangumi.core_resource.resources.bgm_517
-import com.xiaoyv.bangumi.core_resource.resources.bgm_518
-import com.xiaoyv.bangumi.core_resource.resources.bgm_519
-import com.xiaoyv.bangumi.core_resource.resources.bgm_520
-import com.xiaoyv.bangumi.core_resource.resources.bgm_521
-import com.xiaoyv.bangumi.core_resource.resources.bgm_522
-import com.xiaoyv.bangumi.core_resource.resources.bgm_523
-import com.xiaoyv.bangumi.core_resource.resources.bgm_524
-import com.xiaoyv.bangumi.core_resource.resources.bgm_525
-import com.xiaoyv.bangumi.core_resource.resources.bgm_526
-import com.xiaoyv.bangumi.core_resource.resources.bgm_527
-import com.xiaoyv.bangumi.core_resource.resources.bgm_528
-import com.xiaoyv.bangumi.core_resource.resources.bgm_529
-import com.xiaoyv.bangumi.core_resource.resources.tv_01
-import com.xiaoyv.bangumi.core_resource.resources.tv_02
-import com.xiaoyv.bangumi.core_resource.resources.tv_03
-import com.xiaoyv.bangumi.core_resource.resources.tv_04
-import com.xiaoyv.bangumi.core_resource.resources.tv_05
-import com.xiaoyv.bangumi.core_resource.resources.tv_06
-import com.xiaoyv.bangumi.core_resource.resources.tv_07
-import com.xiaoyv.bangumi.core_resource.resources.tv_08
-import com.xiaoyv.bangumi.core_resource.resources.tv_09
-import com.xiaoyv.bangumi.core_resource.resources.tv_10
-import com.xiaoyv.bangumi.core_resource.resources.tv_100
-import com.xiaoyv.bangumi.core_resource.resources.tv_101
-import com.xiaoyv.bangumi.core_resource.resources.tv_102
-import com.xiaoyv.bangumi.core_resource.resources.tv_11
-import com.xiaoyv.bangumi.core_resource.resources.tv_12
-import com.xiaoyv.bangumi.core_resource.resources.tv_13
-import com.xiaoyv.bangumi.core_resource.resources.tv_14
-import com.xiaoyv.bangumi.core_resource.resources.tv_15
-import com.xiaoyv.bangumi.core_resource.resources.tv_16
-import com.xiaoyv.bangumi.core_resource.resources.tv_17
-import com.xiaoyv.bangumi.core_resource.resources.tv_18
-import com.xiaoyv.bangumi.core_resource.resources.tv_19
-import com.xiaoyv.bangumi.core_resource.resources.tv_20
-import com.xiaoyv.bangumi.core_resource.resources.tv_21
-import com.xiaoyv.bangumi.core_resource.resources.tv_22
-import com.xiaoyv.bangumi.core_resource.resources.tv_23
-import com.xiaoyv.bangumi.core_resource.resources.tv_24
-import com.xiaoyv.bangumi.core_resource.resources.tv_25
-import com.xiaoyv.bangumi.core_resource.resources.tv_26
-import com.xiaoyv.bangumi.core_resource.resources.tv_27
-import com.xiaoyv.bangumi.core_resource.resources.tv_28
-import com.xiaoyv.bangumi.core_resource.resources.tv_29
-import com.xiaoyv.bangumi.core_resource.resources.tv_30
-import com.xiaoyv.bangumi.core_resource.resources.tv_31
-import com.xiaoyv.bangumi.core_resource.resources.tv_32
-import com.xiaoyv.bangumi.core_resource.resources.tv_33
-import com.xiaoyv.bangumi.core_resource.resources.tv_34
-import com.xiaoyv.bangumi.core_resource.resources.tv_35
-import com.xiaoyv.bangumi.core_resource.resources.tv_36
-import com.xiaoyv.bangumi.core_resource.resources.tv_37
-import com.xiaoyv.bangumi.core_resource.resources.tv_38
-import com.xiaoyv.bangumi.core_resource.resources.tv_39
-import com.xiaoyv.bangumi.core_resource.resources.tv_40
-import com.xiaoyv.bangumi.core_resource.resources.tv_41
-import com.xiaoyv.bangumi.core_resource.resources.tv_42
-import com.xiaoyv.bangumi.core_resource.resources.tv_43
-import com.xiaoyv.bangumi.core_resource.resources.tv_44
-import com.xiaoyv.bangumi.core_resource.resources.tv_45
-import com.xiaoyv.bangumi.core_resource.resources.tv_46
-import com.xiaoyv.bangumi.core_resource.resources.tv_47
-import com.xiaoyv.bangumi.core_resource.resources.tv_48
-import com.xiaoyv.bangumi.core_resource.resources.tv_49
-import com.xiaoyv.bangumi.core_resource.resources.tv_50
-import com.xiaoyv.bangumi.core_resource.resources.tv_51
-import com.xiaoyv.bangumi.core_resource.resources.tv_52
-import com.xiaoyv.bangumi.core_resource.resources.tv_53
-import com.xiaoyv.bangumi.core_resource.resources.tv_54
-import com.xiaoyv.bangumi.core_resource.resources.tv_55
-import com.xiaoyv.bangumi.core_resource.resources.tv_56
-import com.xiaoyv.bangumi.core_resource.resources.tv_57
-import com.xiaoyv.bangumi.core_resource.resources.tv_58
-import com.xiaoyv.bangumi.core_resource.resources.tv_59
-import com.xiaoyv.bangumi.core_resource.resources.tv_60
-import com.xiaoyv.bangumi.core_resource.resources.tv_61
-import com.xiaoyv.bangumi.core_resource.resources.tv_62
-import com.xiaoyv.bangumi.core_resource.resources.tv_63
-import com.xiaoyv.bangumi.core_resource.resources.tv_64
-import com.xiaoyv.bangumi.core_resource.resources.tv_65
-import com.xiaoyv.bangumi.core_resource.resources.tv_66
-import com.xiaoyv.bangumi.core_resource.resources.tv_67
-import com.xiaoyv.bangumi.core_resource.resources.tv_68
-import com.xiaoyv.bangumi.core_resource.resources.tv_69
-import com.xiaoyv.bangumi.core_resource.resources.tv_70
-import com.xiaoyv.bangumi.core_resource.resources.tv_71
-import com.xiaoyv.bangumi.core_resource.resources.tv_72
-import com.xiaoyv.bangumi.core_resource.resources.tv_73
-import com.xiaoyv.bangumi.core_resource.resources.tv_74
-import com.xiaoyv.bangumi.core_resource.resources.tv_75
-import com.xiaoyv.bangumi.core_resource.resources.tv_76
-import com.xiaoyv.bangumi.core_resource.resources.tv_77
-import com.xiaoyv.bangumi.core_resource.resources.tv_78
-import com.xiaoyv.bangumi.core_resource.resources.tv_79
-import com.xiaoyv.bangumi.core_resource.resources.tv_80
-import com.xiaoyv.bangumi.core_resource.resources.tv_81
-import com.xiaoyv.bangumi.core_resource.resources.tv_82
-import com.xiaoyv.bangumi.core_resource.resources.tv_83
-import com.xiaoyv.bangumi.core_resource.resources.tv_84
-import com.xiaoyv.bangumi.core_resource.resources.tv_85
-import com.xiaoyv.bangumi.core_resource.resources.tv_86
-import com.xiaoyv.bangumi.core_resource.resources.tv_87
-import com.xiaoyv.bangumi.core_resource.resources.tv_88
-import com.xiaoyv.bangumi.core_resource.resources.tv_89
-import com.xiaoyv.bangumi.core_resource.resources.tv_90
-import com.xiaoyv.bangumi.core_resource.resources.tv_91
-import com.xiaoyv.bangumi.core_resource.resources.tv_92
-import com.xiaoyv.bangumi.core_resource.resources.tv_93
-import com.xiaoyv.bangumi.core_resource.resources.tv_94
-import com.xiaoyv.bangumi.core_resource.resources.tv_95
-import com.xiaoyv.bangumi.core_resource.resources.tv_96
-import com.xiaoyv.bangumi.core_resource.resources.tv_97
-import com.xiaoyv.bangumi.core_resource.resources.tv_98
-import com.xiaoyv.bangumi.core_resource.resources.tv_99
+import com.xiaoyv.bangumi.core_resource.resources.*
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.DrawableResource
@@ -423,6 +230,262 @@ val bgmEmojis by lazy {
         "527" to BgmEmoji(smileId = "527", image = Res.drawable.bgm_527, number = 527),
         "528" to BgmEmoji(smileId = "528", image = Res.drawable.bgm_528, number = 528),
         "529" to BgmEmoji(smileId = "529", image = Res.drawable.bgm_529, number = 529),
+
+        "blake_1" to BgmEmoji(smileId = "blake_1", image = Res.drawable.blake_01, number = 10001),
+        "blake_01" to BgmEmoji(smileId = "blake_01", image = Res.drawable.blake_01, number = 10001),
+        "blake_2" to BgmEmoji(smileId = "blake_2", image = Res.drawable.blake_02, number = 10002),
+        "blake_02" to BgmEmoji(smileId = "blake_02", image = Res.drawable.blake_02, number = 10002),
+        "blake_3" to BgmEmoji(smileId = "blake_3", image = Res.drawable.blake_03, number = 10003),
+        "blake_03" to BgmEmoji(smileId = "blake_03", image = Res.drawable.blake_03, number = 10003),
+        "blake_4" to BgmEmoji(smileId = "blake_4", image = Res.drawable.blake_04, number = 10004),
+        "blake_04" to BgmEmoji(smileId = "blake_04", image = Res.drawable.blake_04, number = 10004),
+        "blake_5" to BgmEmoji(smileId = "blake_5", image = Res.drawable.blake_05, number = 10005),
+        "blake_05" to BgmEmoji(smileId = "blake_05", image = Res.drawable.blake_05, number = 10005),
+        "blake_6" to BgmEmoji(smileId = "blake_6", image = Res.drawable.blake_06, number = 10006),
+        "blake_06" to BgmEmoji(smileId = "blake_06", image = Res.drawable.blake_06, number = 10006),
+        "blake_7" to BgmEmoji(smileId = "blake_7", image = Res.drawable.blake_07, number = 10007),
+        "blake_07" to BgmEmoji(smileId = "blake_07", image = Res.drawable.blake_07, number = 10007),
+        "blake_8" to BgmEmoji(smileId = "blake_8", image = Res.drawable.blake_08, number = 10008),
+        "blake_08" to BgmEmoji(smileId = "blake_08", image = Res.drawable.blake_08, number = 10008),
+        "blake_9" to BgmEmoji(smileId = "blake_9", image = Res.drawable.blake_09, number = 10009),
+        "blake_09" to BgmEmoji(smileId = "blake_09", image = Res.drawable.blake_09, number = 10009),
+        "blake_10" to BgmEmoji(smileId = "blake_10", image = Res.drawable.blake_10, number = 10010),
+        "blake_11" to BgmEmoji(smileId = "blake_11", image = Res.drawable.blake_11, number = 10011),
+        "blake_12" to BgmEmoji(smileId = "blake_12", image = Res.drawable.blake_12, number = 10012),
+        "blake_13" to BgmEmoji(smileId = "blake_13", image = Res.drawable.blake_13, number = 10013),
+        "blake_14" to BgmEmoji(smileId = "blake_14", image = Res.drawable.blake_14, number = 10014),
+        "blake_15" to BgmEmoji(smileId = "blake_15", image = Res.drawable.blake_15, number = 10015),
+        "blake_16" to BgmEmoji(smileId = "blake_16", image = Res.drawable.blake_16, number = 10016),
+        "blake_17" to BgmEmoji(smileId = "blake_17", image = Res.drawable.blake_17, number = 10017),
+        "blake_18" to BgmEmoji(smileId = "blake_18", image = Res.drawable.blake_18, number = 10018),
+        "blake_19" to BgmEmoji(smileId = "blake_19", image = Res.drawable.blake_19, number = 10019),
+        "blake_20" to BgmEmoji(smileId = "blake_20", image = Res.drawable.blake_20, number = 10020),
+        "blake_21" to BgmEmoji(smileId = "blake_21", image = Res.drawable.blake_21, number = 10021),
+        "blake_22" to BgmEmoji(smileId = "blake_22", image = Res.drawable.blake_22, number = 10022),
+        "blake_23" to BgmEmoji(smileId = "blake_23", image = Res.drawable.blake_23, number = 10023),
+        "blake_24" to BgmEmoji(smileId = "blake_24", image = Res.drawable.blake_24, number = 10024),
+        "blake_25" to BgmEmoji(smileId = "blake_25", image = Res.drawable.blake_25, number = 10025),
+        "blake_26" to BgmEmoji(smileId = "blake_26", image = Res.drawable.blake_26, number = 10026),
+        "blake_27" to BgmEmoji(smileId = "blake_27", image = Res.drawable.blake_27, number = 10027),
+        "blake_28" to BgmEmoji(smileId = "blake_28", image = Res.drawable.blake_28, number = 10028),
+        "blake_29" to BgmEmoji(smileId = "blake_29", image = Res.drawable.blake_29, number = 10029),
+        "blake_30" to BgmEmoji(smileId = "blake_30", image = Res.drawable.blake_30, number = 10030),
+        "blake_31" to BgmEmoji(smileId = "blake_31", image = Res.drawable.blake_31, number = 10031),
+        "blake_32" to BgmEmoji(smileId = "blake_32", image = Res.drawable.blake_32, number = 10032),
+        "blake_33" to BgmEmoji(smileId = "blake_33", image = Res.drawable.blake_33, number = 10033),
+        "blake_34" to BgmEmoji(smileId = "blake_34", image = Res.drawable.blake_34, number = 10034),
+        "blake_35" to BgmEmoji(smileId = "blake_35", image = Res.drawable.blake_35, number = 10035),
+        "blake_36" to BgmEmoji(smileId = "blake_36", image = Res.drawable.blake_36, number = 10036),
+        "blake_37" to BgmEmoji(smileId = "blake_37", image = Res.drawable.blake_37, number = 10037),
+        "blake_38" to BgmEmoji(smileId = "blake_38", image = Res.drawable.blake_38, number = 10038),
+        "blake_39" to BgmEmoji(smileId = "blake_39", image = Res.drawable.blake_39, number = 10039),
+        "blake_40" to BgmEmoji(smileId = "blake_40", image = Res.drawable.blake_40, number = 10040),
+        "blake_41" to BgmEmoji(smileId = "blake_41", image = Res.drawable.blake_41, number = 10041),
+        "blake_42" to BgmEmoji(smileId = "blake_42", image = Res.drawable.blake_42, number = 10042),
+        "blake_43" to BgmEmoji(smileId = "blake_43", image = Res.drawable.blake_43, number = 10043),
+        "blake_44" to BgmEmoji(smileId = "blake_44", image = Res.drawable.blake_44, number = 10044),
+        "blake_45" to BgmEmoji(smileId = "blake_45", image = Res.drawable.blake_45, number = 10045),
+        "blake_46" to BgmEmoji(smileId = "blake_46", image = Res.drawable.blake_46, number = 10046),
+        "blake_47" to BgmEmoji(smileId = "blake_47", image = Res.drawable.blake_47, number = 10047),
+        "blake_48" to BgmEmoji(smileId = "blake_48", image = Res.drawable.blake_48, number = 10048),
+        "blake_49" to BgmEmoji(smileId = "blake_49", image = Res.drawable.blake_49, number = 10049),
+        "blake_50" to BgmEmoji(smileId = "blake_50", image = Res.drawable.blake_50, number = 10050),
+        "blake_51" to BgmEmoji(smileId = "blake_51", image = Res.drawable.blake_51, number = 10051),
+        "blake_52" to BgmEmoji(smileId = "blake_52", image = Res.drawable.blake_52, number = 10052),
+        "blake_53" to BgmEmoji(smileId = "blake_53", image = Res.drawable.blake_53, number = 10053),
+        "blake_54" to BgmEmoji(smileId = "blake_54", image = Res.drawable.blake_54, number = 10054),
+        "blake_55" to BgmEmoji(smileId = "blake_55", image = Res.drawable.blake_55, number = 10055),
+        "blake_56" to BgmEmoji(smileId = "blake_56", image = Res.drawable.blake_56, number = 10056),
+        "blake_57" to BgmEmoji(smileId = "blake_57", image = Res.drawable.blake_57, number = 10057),
+        "blake_58" to BgmEmoji(smileId = "blake_58", image = Res.drawable.blake_58, number = 10058),
+        "blake_59" to BgmEmoji(smileId = "blake_59", image = Res.drawable.blake_59, number = 10059),
+        "blake_60" to BgmEmoji(smileId = "blake_60", image = Res.drawable.blake_60, number = 10060),
+        "blake_61" to BgmEmoji(smileId = "blake_61", image = Res.drawable.blake_61, number = 10061),
+        "blake_62" to BgmEmoji(smileId = "blake_62", image = Res.drawable.blake_62, number = 10062),
+        "blake_63" to BgmEmoji(smileId = "blake_63", image = Res.drawable.blake_63, number = 10063),
+        "blake_64" to BgmEmoji(smileId = "blake_64", image = Res.drawable.blake_64, number = 10064),
+        "blake_65" to BgmEmoji(smileId = "blake_65", image = Res.drawable.blake_65, number = 10065),
+        "blake_66" to BgmEmoji(smileId = "blake_66", image = Res.drawable.blake_66, number = 10066),
+        "blake_67" to BgmEmoji(smileId = "blake_67", image = Res.drawable.blake_67, number = 10067),
+        "blake_68" to BgmEmoji(smileId = "blake_68", image = Res.drawable.blake_68, number = 10068),
+        "blake_69" to BgmEmoji(smileId = "blake_69", image = Res.drawable.blake_69, number = 10069),
+        "blake_70" to BgmEmoji(smileId = "blake_70", image = Res.drawable.blake_70, number = 10070),
+        "blake_71" to BgmEmoji(smileId = "blake_71", image = Res.drawable.blake_71, number = 10071),
+        "blake_72" to BgmEmoji(smileId = "blake_72", image = Res.drawable.blake_72, number = 10072),
+        "blake_73" to BgmEmoji(smileId = "blake_73", image = Res.drawable.blake_73, number = 10073),
+        "blake_74" to BgmEmoji(smileId = "blake_74", image = Res.drawable.blake_74, number = 10074),
+        "blake_75" to BgmEmoji(smileId = "blake_75", image = Res.drawable.blake_75, number = 10075),
+        "blake_76" to BgmEmoji(smileId = "blake_76", image = Res.drawable.blake_76, number = 10076),
+        "blake_77" to BgmEmoji(smileId = "blake_77", image = Res.drawable.blake_77, number = 10077),
+        "blake_78" to BgmEmoji(smileId = "blake_78", image = Res.drawable.blake_78, number = 10078),
+        "blake_79" to BgmEmoji(smileId = "blake_79", image = Res.drawable.blake_79, number = 10079),
+        "blake_80" to BgmEmoji(smileId = "blake_80", image = Res.drawable.blake_80, number = 10080),
+        "blake_81" to BgmEmoji(smileId = "blake_81", image = Res.drawable.blake_81, number = 10081),
+        "blake_82" to BgmEmoji(smileId = "blake_82", image = Res.drawable.blake_82, number = 10082),
+        "blake_83" to BgmEmoji(smileId = "blake_83", image = Res.drawable.blake_83, number = 10083),
+        "blake_84" to BgmEmoji(smileId = "blake_84", image = Res.drawable.blake_84, number = 10084),
+        "blake_85" to BgmEmoji(smileId = "blake_85", image = Res.drawable.blake_85, number = 10085),
+        "blake_86" to BgmEmoji(smileId = "blake_86", image = Res.drawable.blake_86, number = 10086),
+        "blake_87" to BgmEmoji(smileId = "blake_87", image = Res.drawable.blake_87, number = 10087),
+        "blake_88" to BgmEmoji(smileId = "blake_88", image = Res.drawable.blake_88, number = 10088),
+        "blake_89" to BgmEmoji(smileId = "blake_89", image = Res.drawable.blake_89, number = 10089),
+        "blake_90" to BgmEmoji(smileId = "blake_90", image = Res.drawable.blake_90, number = 10090),
+        "blake_91" to BgmEmoji(smileId = "blake_91", image = Res.drawable.blake_91, number = 10091),
+        "blake_92" to BgmEmoji(smileId = "blake_92", image = Res.drawable.blake_92, number = 10092),
+        "blake_93" to BgmEmoji(smileId = "blake_93", image = Res.drawable.blake_93, number = 10093),
+        "blake_94" to BgmEmoji(smileId = "blake_94", image = Res.drawable.blake_94, number = 10094),
+        "blake_95" to BgmEmoji(smileId = "blake_95", image = Res.drawable.blake_95, number = 10095),
+        "blake_96" to BgmEmoji(smileId = "blake_96", image = Res.drawable.blake_96, number = 10096),
+        "blake_97" to BgmEmoji(smileId = "blake_97", image = Res.drawable.blake_97, number = 10097),
+        "blake_98" to BgmEmoji(smileId = "blake_98", image = Res.drawable.blake_98, number = 10098),
+        "blake_99" to BgmEmoji(smileId = "blake_99", image = Res.drawable.blake_99, number = 10099),
+        "blake_100" to BgmEmoji(smileId = "blake_100", image = Res.drawable.blake_100, number = 10100),
+        "blake_101" to BgmEmoji(smileId = "blake_101", image = Res.drawable.blake_101, number = 10101),
+        "blake_102" to BgmEmoji(smileId = "blake_102", image = Res.drawable.blake_102, number = 10102),
+        "blake_103" to BgmEmoji(smileId = "blake_103", image = Res.drawable.blake_103, number = 10103),
+        "blake_104" to BgmEmoji(smileId = "blake_104", image = Res.drawable.blake_104, number = 10104),
+        "blake_105" to BgmEmoji(smileId = "blake_105", image = Res.drawable.blake_105, number = 10105),
+        "blake_106" to BgmEmoji(smileId = "blake_106", image = Res.drawable.blake_106, number = 10106),
+        "blake_107" to BgmEmoji(smileId = "blake_107", image = Res.drawable.blake_107, number = 10107),
+        "blake_108" to BgmEmoji(smileId = "blake_108", image = Res.drawable.blake_108, number = 10108),
+        "blake_109" to BgmEmoji(smileId = "blake_109", image = Res.drawable.blake_109, number = 10109),
+        "blake_110" to BgmEmoji(smileId = "blake_110", image = Res.drawable.blake_110, number = 10110),
+        "blake_111" to BgmEmoji(smileId = "blake_111", image = Res.drawable.blake_111, number = 10111),
+        "blake_112" to BgmEmoji(smileId = "blake_112", image = Res.drawable.blake_112, number = 10112),
+        "blake_113" to BgmEmoji(smileId = "blake_113", image = Res.drawable.blake_113, number = 10113),
+        "blake_114" to BgmEmoji(smileId = "blake_114", image = Res.drawable.blake_114, number = 10114),
+        "blake_115" to BgmEmoji(smileId = "blake_115", image = Res.drawable.blake_115, number = 10115),
+        "blake_116" to BgmEmoji(smileId = "blake_116", image = Res.drawable.blake_116, number = 10116),
+        "blake_117" to BgmEmoji(smileId = "blake_117", image = Res.drawable.blake_117, number = 10117),
+        "blake_118" to BgmEmoji(smileId = "blake_118", image = Res.drawable.blake_118, number = 10118),
+
+        "musume_1" to BgmEmoji(smileId = "musume_1", image = Res.drawable.musume_01, number = 20001),
+        "musume_01" to BgmEmoji(smileId = "musume_01", image = Res.drawable.musume_01, number = 20001),
+        "musume_2" to BgmEmoji(smileId = "musume_2", image = Res.drawable.musume_02, number = 20002),
+        "musume_02" to BgmEmoji(smileId = "musume_02", image = Res.drawable.musume_02, number = 20002),
+        "musume_3" to BgmEmoji(smileId = "musume_3", image = Res.drawable.musume_03, number = 20003),
+        "musume_03" to BgmEmoji(smileId = "musume_03", image = Res.drawable.musume_03, number = 20003),
+        "musume_4" to BgmEmoji(smileId = "musume_4", image = Res.drawable.musume_04, number = 20004),
+        "musume_04" to BgmEmoji(smileId = "musume_04", image = Res.drawable.musume_04, number = 20004),
+        "musume_5" to BgmEmoji(smileId = "musume_5", image = Res.drawable.musume_05, number = 20005),
+        "musume_05" to BgmEmoji(smileId = "musume_05", image = Res.drawable.musume_05, number = 20005),
+        "musume_6" to BgmEmoji(smileId = "musume_6", image = Res.drawable.musume_06, number = 20006),
+        "musume_06" to BgmEmoji(smileId = "musume_06", image = Res.drawable.musume_06, number = 20006),
+        "musume_7" to BgmEmoji(smileId = "musume_7", image = Res.drawable.musume_07, number = 20007),
+        "musume_07" to BgmEmoji(smileId = "musume_07", image = Res.drawable.musume_07, number = 20007),
+        "musume_8" to BgmEmoji(smileId = "musume_8", image = Res.drawable.musume_08, number = 20008),
+        "musume_08" to BgmEmoji(smileId = "musume_08", image = Res.drawable.musume_08, number = 20008),
+        "musume_9" to BgmEmoji(smileId = "musume_9", image = Res.drawable.musume_09, number = 20009),
+        "musume_09" to BgmEmoji(smileId = "musume_09", image = Res.drawable.musume_09, number = 20009),
+        "musume_10" to BgmEmoji(smileId = "musume_10", image = Res.drawable.musume_10, number = 20010),
+        "musume_11" to BgmEmoji(smileId = "musume_11", image = Res.drawable.musume_11, number = 20011),
+        "musume_12" to BgmEmoji(smileId = "musume_12", image = Res.drawable.musume_12, number = 20012),
+        "musume_13" to BgmEmoji(smileId = "musume_13", image = Res.drawable.musume_13, number = 20013),
+        "musume_14" to BgmEmoji(smileId = "musume_14", image = Res.drawable.musume_14, number = 20014),
+        "musume_15" to BgmEmoji(smileId = "musume_15", image = Res.drawable.musume_15, number = 20015),
+        "musume_16" to BgmEmoji(smileId = "musume_16", image = Res.drawable.musume_16, number = 20016),
+        "musume_17" to BgmEmoji(smileId = "musume_17", image = Res.drawable.musume_17, number = 20017),
+        "musume_18" to BgmEmoji(smileId = "musume_18", image = Res.drawable.musume_18, number = 20018),
+        "musume_19" to BgmEmoji(smileId = "musume_19", image = Res.drawable.musume_19, number = 20019),
+        "musume_20" to BgmEmoji(smileId = "musume_20", image = Res.drawable.musume_20, number = 20020),
+        "musume_21" to BgmEmoji(smileId = "musume_21", image = Res.drawable.musume_21, number = 20021),
+        "musume_22" to BgmEmoji(smileId = "musume_22", image = Res.drawable.musume_22, number = 20022),
+        "musume_23" to BgmEmoji(smileId = "musume_23", image = Res.drawable.musume_23, number = 20023),
+        "musume_24" to BgmEmoji(smileId = "musume_24", image = Res.drawable.musume_24, number = 20024),
+        "musume_25" to BgmEmoji(smileId = "musume_25", image = Res.drawable.musume_25, number = 20025),
+        "musume_26" to BgmEmoji(smileId = "musume_26", image = Res.drawable.musume_26, number = 20026),
+        "musume_27" to BgmEmoji(smileId = "musume_27", image = Res.drawable.musume_27, number = 20027),
+        "musume_28" to BgmEmoji(smileId = "musume_28", image = Res.drawable.musume_28, number = 20028),
+        "musume_29" to BgmEmoji(smileId = "musume_29", image = Res.drawable.musume_29, number = 20029),
+        "musume_30" to BgmEmoji(smileId = "musume_30", image = Res.drawable.musume_30, number = 20030),
+        "musume_31" to BgmEmoji(smileId = "musume_31", image = Res.drawable.musume_31, number = 20031),
+        "musume_32" to BgmEmoji(smileId = "musume_32", image = Res.drawable.musume_32, number = 20032),
+        "musume_33" to BgmEmoji(smileId = "musume_33", image = Res.drawable.musume_33, number = 20033),
+        "musume_34" to BgmEmoji(smileId = "musume_34", image = Res.drawable.musume_34, number = 20034),
+        "musume_35" to BgmEmoji(smileId = "musume_35", image = Res.drawable.musume_35, number = 20035),
+        "musume_36" to BgmEmoji(smileId = "musume_36", image = Res.drawable.musume_36, number = 20036),
+        "musume_37" to BgmEmoji(smileId = "musume_37", image = Res.drawable.musume_37, number = 20037),
+        "musume_38" to BgmEmoji(smileId = "musume_38", image = Res.drawable.musume_38, number = 20038),
+        "musume_39" to BgmEmoji(smileId = "musume_39", image = Res.drawable.musume_39, number = 20039),
+        "musume_40" to BgmEmoji(smileId = "musume_40", image = Res.drawable.musume_40, number = 20040),
+        "musume_41" to BgmEmoji(smileId = "musume_41", image = Res.drawable.musume_41, number = 20041),
+        "musume_42" to BgmEmoji(smileId = "musume_42", image = Res.drawable.musume_42, number = 20042),
+        "musume_43" to BgmEmoji(smileId = "musume_43", image = Res.drawable.musume_43, number = 20043),
+        "musume_44" to BgmEmoji(smileId = "musume_44", image = Res.drawable.musume_44, number = 20044),
+        "musume_45" to BgmEmoji(smileId = "musume_45", image = Res.drawable.musume_45, number = 20045),
+        "musume_46" to BgmEmoji(smileId = "musume_46", image = Res.drawable.musume_46, number = 20046),
+        "musume_47" to BgmEmoji(smileId = "musume_47", image = Res.drawable.musume_47, number = 20047),
+        "musume_48" to BgmEmoji(smileId = "musume_48", image = Res.drawable.musume_48, number = 20048),
+        "musume_49" to BgmEmoji(smileId = "musume_49", image = Res.drawable.musume_49, number = 20049),
+        "musume_50" to BgmEmoji(smileId = "musume_50", image = Res.drawable.musume_50, number = 20050),
+        "musume_51" to BgmEmoji(smileId = "musume_51", image = Res.drawable.musume_51, number = 20051),
+        "musume_52" to BgmEmoji(smileId = "musume_52", image = Res.drawable.musume_52, number = 20052),
+        "musume_53" to BgmEmoji(smileId = "musume_53", image = Res.drawable.musume_53, number = 20053),
+        "musume_54" to BgmEmoji(smileId = "musume_54", image = Res.drawable.musume_54, number = 20054),
+        "musume_55" to BgmEmoji(smileId = "musume_55", image = Res.drawable.musume_55, number = 20055),
+        "musume_56" to BgmEmoji(smileId = "musume_56", image = Res.drawable.musume_56, number = 20056),
+        "musume_57" to BgmEmoji(smileId = "musume_57", image = Res.drawable.musume_57, number = 20057),
+        "musume_58" to BgmEmoji(smileId = "musume_58", image = Res.drawable.musume_58, number = 20058),
+        "musume_59" to BgmEmoji(smileId = "musume_59", image = Res.drawable.musume_59, number = 20059),
+        "musume_60" to BgmEmoji(smileId = "musume_60", image = Res.drawable.musume_60, number = 20060),
+        "musume_61" to BgmEmoji(smileId = "musume_61", image = Res.drawable.musume_61, number = 20061),
+        "musume_62" to BgmEmoji(smileId = "musume_62", image = Res.drawable.musume_62, number = 20062),
+        "musume_63" to BgmEmoji(smileId = "musume_63", image = Res.drawable.musume_63, number = 20063),
+        "musume_64" to BgmEmoji(smileId = "musume_64", image = Res.drawable.musume_64, number = 20064),
+        "musume_65" to BgmEmoji(smileId = "musume_65", image = Res.drawable.musume_65, number = 20065),
+        "musume_66" to BgmEmoji(smileId = "musume_66", image = Res.drawable.musume_66, number = 20066),
+        "musume_67" to BgmEmoji(smileId = "musume_67", image = Res.drawable.musume_67, number = 20067),
+        "musume_68" to BgmEmoji(smileId = "musume_68", image = Res.drawable.musume_68, number = 20068),
+        "musume_69" to BgmEmoji(smileId = "musume_69", image = Res.drawable.musume_69, number = 20069),
+        "musume_70" to BgmEmoji(smileId = "musume_70", image = Res.drawable.musume_70, number = 20070),
+        "musume_71" to BgmEmoji(smileId = "musume_71", image = Res.drawable.musume_71, number = 20071),
+        "musume_72" to BgmEmoji(smileId = "musume_72", image = Res.drawable.musume_72, number = 20072),
+        "musume_73" to BgmEmoji(smileId = "musume_73", image = Res.drawable.musume_73, number = 20073),
+        "musume_74" to BgmEmoji(smileId = "musume_74", image = Res.drawable.musume_74, number = 20074),
+        "musume_75" to BgmEmoji(smileId = "musume_75", image = Res.drawable.musume_75, number = 20075),
+        "musume_76" to BgmEmoji(smileId = "musume_76", image = Res.drawable.musume_76, number = 20076),
+        "musume_77" to BgmEmoji(smileId = "musume_77", image = Res.drawable.musume_77, number = 20077),
+        "musume_78" to BgmEmoji(smileId = "musume_78", image = Res.drawable.musume_78, number = 20078),
+        "musume_79" to BgmEmoji(smileId = "musume_79", image = Res.drawable.musume_79, number = 20079),
+        "musume_80" to BgmEmoji(smileId = "musume_80", image = Res.drawable.musume_80, number = 20080),
+        "musume_81" to BgmEmoji(smileId = "musume_81", image = Res.drawable.musume_81, number = 20081),
+        "musume_82" to BgmEmoji(smileId = "musume_82", image = Res.drawable.musume_82, number = 20082),
+        "musume_83" to BgmEmoji(smileId = "musume_83", image = Res.drawable.musume_83, number = 20083),
+        "musume_84" to BgmEmoji(smileId = "musume_84", image = Res.drawable.musume_84, number = 20084),
+        "musume_85" to BgmEmoji(smileId = "musume_85", image = Res.drawable.musume_85, number = 20085),
+        "musume_86" to BgmEmoji(smileId = "musume_86", image = Res.drawable.musume_86, number = 20086),
+        "musume_87" to BgmEmoji(smileId = "musume_87", image = Res.drawable.musume_87, number = 20087),
+        "musume_88" to BgmEmoji(smileId = "musume_88", image = Res.drawable.musume_88, number = 20088),
+        "musume_89" to BgmEmoji(smileId = "musume_89", image = Res.drawable.musume_89, number = 20089),
+        "musume_90" to BgmEmoji(smileId = "musume_90", image = Res.drawable.musume_90, number = 20090),
+        "musume_91" to BgmEmoji(smileId = "musume_91", image = Res.drawable.musume_91, number = 20091),
+        "musume_92" to BgmEmoji(smileId = "musume_92", image = Res.drawable.musume_92, number = 20092),
+        "musume_93" to BgmEmoji(smileId = "musume_93", image = Res.drawable.musume_93, number = 20093),
+        "musume_94" to BgmEmoji(smileId = "musume_94", image = Res.drawable.musume_94, number = 20094),
+        "musume_95" to BgmEmoji(smileId = "musume_95", image = Res.drawable.musume_95, number = 20095),
+        "musume_96" to BgmEmoji(smileId = "musume_96", image = Res.drawable.musume_96, number = 20096),
+        // "musume_97" to BgmEmoji(smileId = "musume_97", image = Res.drawable.musume_97, number = 20097),
+        // "musume_98" to BgmEmoji(smileId = "musume_98", image = Res.drawable.musume_98, number = 20098),
+        "musume_99" to BgmEmoji(smileId = "musume_99", image = Res.drawable.musume_99, number = 20099),
+        "musume_100" to BgmEmoji(smileId = "musume_100", image = Res.drawable.musume_100, number = 20100),
+        "musume_101" to BgmEmoji(smileId = "musume_101", image = Res.drawable.musume_101, number = 20101),
+        "musume_102" to BgmEmoji(smileId = "musume_102", image = Res.drawable.musume_102, number = 20102),
+        "musume_103" to BgmEmoji(smileId = "musume_103", image = Res.drawable.musume_103, number = 20103),
+        "musume_104" to BgmEmoji(smileId = "musume_104", image = Res.drawable.musume_104, number = 20104),
+        "musume_105" to BgmEmoji(smileId = "musume_105", image = Res.drawable.musume_105, number = 20105),
+        "musume_106" to BgmEmoji(smileId = "musume_106", image = Res.drawable.musume_106, number = 20106),
+        "musume_107" to BgmEmoji(smileId = "musume_107", image = Res.drawable.musume_107, number = 20107),
+        "musume_108" to BgmEmoji(smileId = "musume_108", image = Res.drawable.musume_108, number = 20108),
+        "musume_109" to BgmEmoji(smileId = "musume_109", image = Res.drawable.musume_109, number = 20109),
+        "musume_110" to BgmEmoji(smileId = "musume_110", image = Res.drawable.musume_110, number = 20110),
+        "musume_111" to BgmEmoji(smileId = "musume_111", image = Res.drawable.musume_111, number = 20111),
+        "musume_112" to BgmEmoji(smileId = "musume_112", image = Res.drawable.musume_112, number = 20112),
+        "musume_113" to BgmEmoji(smileId = "musume_113", image = Res.drawable.musume_113, number = 20113),
+        "musume_114" to BgmEmoji(smileId = "musume_114", image = Res.drawable.musume_114, number = 20114),
+        "musume_115" to BgmEmoji(smileId = "musume_115", image = Res.drawable.musume_115, number = 20115),
+        "musume_116" to BgmEmoji(smileId = "musume_116", image = Res.drawable.musume_116, number = 20116),
+        "musume_117" to BgmEmoji(smileId = "musume_117", image = Res.drawable.musume_117, number = 20117),
+        "musume_118" to BgmEmoji(smileId = "musume_118", image = Res.drawable.musume_118, number = 20118),
     )
 }
 
