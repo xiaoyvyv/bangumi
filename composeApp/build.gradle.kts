@@ -78,7 +78,6 @@ kotlin {
             implementation(projects.features.user)
             implementation(projects.features.almanac)
             implementation(projects.features.timeline.page)
-            implementation(projects.features.timeline.detail)
             implementation(projects.features.calendar)
             implementation(projects.features.garden)
             implementation(projects.features.tag.page)

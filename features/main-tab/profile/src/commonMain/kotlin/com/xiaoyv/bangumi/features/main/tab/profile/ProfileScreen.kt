@@ -135,15 +135,12 @@ private fun ProfileScreen(
                         imageVector = BgmIcons.Menu,
                         options = baseState.payload?.topBarMenu ?: persistentListOf()
                     ) { item ->
-                        when (item.type) {
-                            ProfileMenu.TIME_MACHINE -> {
-                                if (sharedState.isLogin) {
-                                    onUiEvent(ProfileEvent.UI.OnNavScreen(Screen.UserDetail(user.username)))
-                                } else {
-                                    onUiEvent(ProfileEvent.UI.OnNavScreen(Screen.SignIn))
-                                }
-                            }
+                        val target = if (sharedState.isLogin) {
+                            Screen.UserDetail(user.username, tab = item.type)
+                        } else {
+                            Screen.SignIn
                         }
+                        onUiEvent(ProfileEvent.UI.OnNavScreen(target))
                     }
                 },
                 actions = {

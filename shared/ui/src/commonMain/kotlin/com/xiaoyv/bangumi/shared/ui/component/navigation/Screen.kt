@@ -5,6 +5,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
+import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
@@ -78,7 +79,6 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.MonoDetail::class, Screen.MonoDetail.serializer())
             subclass(Screen.MonoBrowser::class, Screen.MonoBrowser.serializer())
             subclass(Screen.Web::class, Screen.Web.serializer())
-            subclass(Screen.TimelineDetail::class, Screen.TimelineDetail.serializer())
             subclass(Screen.Calendar::class, Screen.Calendar.serializer())
         }
     }
@@ -165,7 +165,10 @@ sealed class Screen(
     data object Dollars : Screen(SCREEN_ROUTE_DOLLARS)
 
     @Serializable
-    data class UserDetail(val username: String) : Screen(SCREEN_ROUTE_USER_DETAIL)
+    data class UserDetail(
+        val username: String,
+        @field:ProfileMenu val tab: Int = ProfileMenu.TIME_MACHINE,
+    ) : Screen(SCREEN_ROUTE_USER_DETAIL)
 
     @Serializable
     data class GroupDetail(val name: String) : Screen(SCREEN_ROUTE_GROUP_DETAIL)
@@ -237,9 +240,6 @@ sealed class Screen(
 
     @Serializable
     data class Web(val url: String) : Screen(SCREEN_ROUTE_WEB)
-
-    @Serializable
-    data class TimelineDetail(val id: Long) : Screen(SCREEN_ROUTE_TIMELINE_DETAIL)
 
     @Serializable
     data class Calendar(val isToday: Boolean) : Screen(SCREEN_ROUTE_CALENDAR)
