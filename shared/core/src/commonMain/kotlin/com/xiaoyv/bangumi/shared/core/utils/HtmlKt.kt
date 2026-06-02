@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.core.utils
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.text.AnnotatedString
@@ -45,6 +46,29 @@ const val TagMask = "mask"
 const val TagImage = "image"
 const val TagCode = "code"
 
+private fun TextLayoutResult.findStringAnnotation(
+    text: AnnotatedString,
+    tag: String,
+    position: Offset,
+): AnnotatedString.Range<String>? {
+    if (text.isEmpty()) return null
+    val offset = getOffsetForPosition(position)
+
+    if (tag != TagImage) {
+        return text.getStringAnnotations(tag, offset, offset).firstOrNull()
+    }
+
+    val hitByBox = text.getStringAnnotations(tag, 0, text.length)
+        .firstOrNull { range ->
+            val start = range.start
+            if (start < 0 || start >= text.length) return@firstOrNull false
+            getBoundingBox(start).contains(position)
+        }
+    if (hitByBox != null) return hitByBox
+
+    return text.getStringAnnotations(tag, offset, offset).firstOrNull()
+}
+
 suspend fun PointerInputScope.awaitHtmlEvent(
     text: AnnotatedString,
     onTextLayoutResult: () -> TextLayoutResult?,
@@ -60,7 +84,7 @@ suspend fun PointerInputScope.awaitHtmlEvent(
             val offset = layout.getOffsetForPosition(down.position)
             val linkAnnotation = text.getStringAnnotations(TagLink, offset, offset).firstOrNull()
             val maskAnnotation = text.getStringAnnotations(TagMask, offset, offset).firstOrNull()
-            val imageAnnotation = text.getStringAnnotations(TagImage, offset, offset).firstOrNull()
+            val imageAnnotation = layout.findStringAnnotation(text, TagImage, down.position)
 
             // 检测是否点击了链接
             if (linkAnnotation != null) {
@@ -93,8 +117,7 @@ suspend fun PointerInputScope.awaitHtmlEvent(
             if (imageAnnotation != null) {
                 val up = waitForUpOrCancellation()
                 if (up != null) {
-                    val upOffset = layout.getOffsetForPosition(up.position)
-                    val upAnnotation = text.getStringAnnotations(TagImage, upOffset, upOffset).firstOrNull()
+                    val upAnnotation = layout.findStringAnnotation(text, TagImage, up.position)
                     if (upAnnotation?.item == imageAnnotation.item) {
                         onClickImage(imageAnnotation)
                         up.consume()
