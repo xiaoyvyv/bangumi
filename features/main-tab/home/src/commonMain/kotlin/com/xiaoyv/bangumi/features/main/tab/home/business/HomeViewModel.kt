@@ -103,7 +103,7 @@ class HomeViewModel(
                 it.data7.toHomeSectionCard(SubjectType.REAL),
             )
 
-            reduceContent {
+            reduceContent(forceRefresh = true) {
                 state.copy(
                     hotSubjects = it.data1.toPersistentList(),
                     todayCalendar = toadyItems.toPersistentList(),
@@ -129,7 +129,7 @@ class HomeViewModel(
 
     private fun onRefreshIndexHomepage() = action {
         ugcRepository.fetchIndexFocus().onSuccess {
-            reduceContent { state.copy(indexFocus = it.toPersistentList()) }
+            reduceContent(forceRefresh = true) { state.copy(indexFocus = it.toPersistentList()) }
         }
     }
 

@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -70,6 +72,12 @@ fun MainScreen(
     }
     val backStack = rememberNavBackStack(stateConfiguration, startDestination.first)
     val isWideScreen = isWideScreen
+    val indicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+    val bottomNavItemColors = NavigationSuiteDefaults.itemColors(
+        navigationBarItemColors = NavigationBarItemDefaults.colors(
+            indicatorColor = indicatorColor,
+        ),
+    )
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -101,6 +109,7 @@ fun MainScreen(
                         )
                     },
                     selected = selected,
+                    colors = bottomNavItemColors,
                     badge = {
                         val appState = LocalSharedState.current
                         val unreadCnt = appState.unreadNotification + appState.unreadMessage

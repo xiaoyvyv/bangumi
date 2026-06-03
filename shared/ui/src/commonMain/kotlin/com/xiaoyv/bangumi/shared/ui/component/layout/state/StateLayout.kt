@@ -22,6 +22,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_refresh
@@ -73,11 +76,13 @@ fun <T> StateLayout(
     propagateMinConstraints: Boolean = false,
     enablePullRefresh: Boolean = false,
     onRefresh: (Boolean) -> Unit = {},
+    pullRefreshIndicatorPaddingTop: Dp = 0.dp,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     content: @Composable BoxScope.(T) -> Unit,
 ) {
     if (enablePullRefresh) {
         var isRefreshing by rememberSaveable { mutableStateOf(false) }
+        val pullRefreshState = rememberPullToRefreshState()
 
         LaunchedEffect(baseState) {
             when (baseState) {
@@ -88,12 +93,23 @@ fun <T> StateLayout(
         }
         PullToRefreshBox(
             modifier = modifier,
+            state = pullRefreshState,
             isRefreshing = isRefreshing,
             onRefresh = {
                 isRefreshing = true
                 onRefresh(false)
             },
             enabled = LocalCollapsingPullRefresh.current
+            ,
+            indicator = {
+                Indicator(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = pullRefreshIndicatorPaddingTop),
+                    isRefreshing = isRefreshing,
+                    state = pullRefreshState
+                )
+            }
         ) {
             StateLayoutImpl(
                 modifier = Modifier.fillMaxSize(),
