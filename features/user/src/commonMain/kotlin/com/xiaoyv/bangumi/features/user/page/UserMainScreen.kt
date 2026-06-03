@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
+import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
@@ -48,6 +49,7 @@ fun UserMainScreen(
     state: UserState,
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
+    onOpenCollection: (Int) -> Unit = {},
 ) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
@@ -66,7 +68,8 @@ fun UserMainScreen(
             UserMainScreenSection(
                 item = it,
                 onUiEvent = onUiEvent,
-                onActionEvent = onActionEvent
+                onActionEvent = onActionEvent,
+                onOpenCollection = onOpenCollection
             )
         }
     }
@@ -78,6 +81,7 @@ private fun UserMainScreenSection(
     item: ComposeSection<ComposeSubject>,
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
+    onOpenCollection: (Int) -> Unit,
 ) {
     if (item.isHeader) {
         SectionTitle(
@@ -87,7 +91,10 @@ private fun UserMainScreenSection(
             text = item.header.title,
             subtitle = item.header.subtitle,
             action = item.header.more,
-            onClick = {}
+            onClick = {
+                val subjectType = item.header.id.toIntOrNull() ?: SubjectType.ANIME
+                onOpenCollection(subjectType)
+            }
         )
     } else {
         Column(verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)) {

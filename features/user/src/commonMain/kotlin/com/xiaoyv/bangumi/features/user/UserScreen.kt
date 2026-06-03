@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -53,6 +54,7 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
@@ -214,14 +216,31 @@ private fun UserScreenContent(
         val idx = tabs.indexOfFirst { it.type == initialTab }
         if (idx >= 0) idx else 0
     }
+    val scope = rememberCoroutineScope()
+    val pagerState = androidx.compose.foundation.pager.rememberPagerState(
+        initialPage = initialPage.coerceAtLeast(0),
+        pageCount = { tabs.size }
+    )
+    val collectionPageIndex = remember(tabs) { tabs.indexOfFirst { it.type == ProfileMenu.COLLECTION } }
 
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         tabs = tabs,
-        initialPage = initialPage
+        initialPage = initialPage,
+        pagerState = pagerState
     ) {
         when (tabs[it].type) {
-            ProfileMenu.TIME_MACHINE -> UserMainScreen(state, onUiEvent, onActionEvent)
+            ProfileMenu.TIME_MACHINE -> UserMainScreen(
+                state = state,
+                onUiEvent = onUiEvent,
+                onActionEvent = onActionEvent,
+                onOpenCollection = { subjectType ->
+                    onActionEvent(UserEvent.Action.OnChangeSubjectTypeFilter(subjectType))
+                    if (collectionPageIndex >= 0) {
+                        scope.launch { pagerState.animateScrollToPage(collectionPageIndex) }
+                    }
+                }
+            )
             ProfileMenu.BIO -> UserBioScreen(state, onUiEvent, onActionEvent)
             ProfileMenu.TIMELINE -> UserTimelineScreen(state, onUiEvent, onActionEvent)
             ProfileMenu.COLLECTION -> UserCollectionScreen(state, onUiEvent, onActionEvent)
