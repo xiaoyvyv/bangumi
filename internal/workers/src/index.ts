@@ -235,7 +235,7 @@ export default {
         {
           name: "Bangumi API Proxy",
           usage:
-            "/{target_url} - 例如 /https://api.bgm.tv/v0/subjects/1",
+            "/{target_url} - 例如 /https://bgm.tv/user/sai",
           allowed_hosts: Array.from(getAllowedHosts(env)),
           methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"],
         },
