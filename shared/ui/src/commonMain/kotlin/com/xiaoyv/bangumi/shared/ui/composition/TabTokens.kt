@@ -404,7 +404,7 @@ object TabTokens {
     )
 
     val settingBangumiProxyHosts = persistentListOf(
-        "https://bgm-proxy.melonhu.cn/",
+        "https://bgm-proxy.melonhu.com/",
     )
 
     val settingBangumiProxyItems: PersistentList<ComposeTextTab<String>> =
