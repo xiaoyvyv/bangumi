@@ -23,13 +23,16 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_bar_2
 import com.xiaoyv.bangumi.core_resource.resources.settings_bar_3
 import com.xiaoyv.bangumi.core_resource.resources.settings_bar_4
 import com.xiaoyv.bangumi.core_resource.resources.settings_bar_5
+import com.xiaoyv.bangumi.core_resource.resources.settings_bar_appearance
 import com.xiaoyv.bangumi.core_resource.resources.settings_bar_boot
 import com.xiaoyv.bangumi.core_resource.resources.settings_bar_boot_default
 import com.xiaoyv.bangumi.core_resource.resources.settings_bar_tab
+import com.xiaoyv.bangumi.core_resource.resources.settings_appearance
 import com.xiaoyv.bangumi.features.settings.bar.business.SettingsBarEvent
 import com.xiaoyv.bangumi.features.settings.bar.business.SettingsBarState
 import com.xiaoyv.bangumi.features.settings.bar.business.SettingsBarViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
@@ -39,6 +42,7 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItem
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItemTrailing
+import com.xiaoyv.bangumi.shared.ui.component.settings.SettingOptionItem
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.collections.immutable.persistentListOf
@@ -112,6 +116,16 @@ private fun SettingsBarScreenContent(
     val settings = currentSettings()
 
     Column(modifier = Modifier.padding(vertical = 24.dp)) {
+        SettingContainer(label = { Text(text = stringResource(Res.string.settings_appearance)) }) {
+            SettingOptionItem(
+                title = stringResource(Res.string.settings_bar_appearance),
+                value = stringResource(SettingBottomBarAppearance.string(settings.homeTab.appearance)),
+                items = TabTokens.settingBottomBarAppearanceItems,
+                onClick = {
+                    onActionEvent(SettingsBarEvent.Action.OnUpdate(settings.homeTab.copy(appearance = it)))
+                }
+            )
+        }
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_bar_boot)) }) {
             val chooseDefaultTabDialogState = rememberAlertDialogState()
             AlertOptionDialog(
@@ -181,4 +195,3 @@ private fun SettingsBarScreenContent(
         }
     }
 }
-

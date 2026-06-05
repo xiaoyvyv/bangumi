@@ -81,6 +81,8 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_slide
 import com.xiaoyv.bangumi.core_resource.resources.settings_proxy_none
+import com.xiaoyv.bangumi.core_resource.resources.settings_bar_appearance_liquid_glass
+import com.xiaoyv.bangumi.core_resource.resources.settings_bar_appearance_material3
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
@@ -122,6 +124,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
@@ -433,6 +436,11 @@ object TabTokens {
         ComposeTextTab(SettingTheme.SYSTEM, Res.string.settings_theme_system),
         ComposeTextTab(SettingTheme.LIGHT, Res.string.settings_theme_light),
         ComposeTextTab(SettingTheme.DARK, Res.string.settings_theme_dark),
+    )
+
+    val settingBottomBarAppearanceItems = persistentListOf(
+        ComposeTextTab(SettingBottomBarAppearance.MATERIAL3, Res.string.settings_bar_appearance_material3),
+        ComposeTextTab(SettingBottomBarAppearance.LIQUID_GLASS, Res.string.settings_bar_appearance_liquid_glass),
     )
 
     val settingTimeoutItems = persistentListOf(

@@ -259,6 +259,9 @@
     <string name="settings_bar_boot">启动</string>
     <string name="settings_bar_boot_default">冷启动默认 Tab</string>
     <string name="settings_bar_tab">底栏</string>
+    <string name="settings_bar_appearance">底栏外观</string>
+    <string name="settings_bar_appearance_material3">质感设计</string>
+    <string name="settings_bar_appearance_liquid_glass">液态玻璃</string>
     <string name="settings_bar_1">首页底栏 Tab-1</string>
     <string name="settings_bar_2">首页底栏 Tab-2</string>
     <string name="settings_bar_3">首页底栏 Tab-3</string>
