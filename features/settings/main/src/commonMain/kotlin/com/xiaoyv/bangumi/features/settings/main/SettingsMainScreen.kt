@@ -72,6 +72,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItem
+import com.xiaoyv.bangumi.features.settings.main.component.BangumiStatusTopBarAction
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
@@ -121,6 +122,9 @@ private fun SettingsMainScreen(
             BgmLargeTopAppBar(
                 title = stringResource(Res.string.settings_title),
                 scrollBehavior = scrollBehavior,
+                actions = {
+                    BangumiStatusTopBarAction()
+                },
                 onNavigationClick = { onUiEvent(SettingsMainEvent.UI.OnNavUp) }
             )
         }
@@ -278,4 +282,3 @@ private fun SettingsMainScreenContent(
         }
     }
 }
-

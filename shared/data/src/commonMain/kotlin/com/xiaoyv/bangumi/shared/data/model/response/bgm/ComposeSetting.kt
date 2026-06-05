@@ -4,6 +4,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.FeatureType
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
@@ -60,6 +61,8 @@ data class ComposeSetting(
     @Serializable
     @Immutable
     data class HomeTabConfig(
+        @field:SettingBottomBarAppearance
+        @SerialName("appearance") val appearance: Int = SettingBottomBarAppearance.MATERIAL3,
         @SerialName("defaultSelected") val defaultSelected: Int = 0,
         @SerialName("tab1") @field:FeatureType val tab1: String = FeatureType.TYPE_HOME,
         @SerialName("tab2") @field:FeatureType val tab2: String = FeatureType.TYPE_TIMELINE,

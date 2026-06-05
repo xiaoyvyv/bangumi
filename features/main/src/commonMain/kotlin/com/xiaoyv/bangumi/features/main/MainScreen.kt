@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -26,6 +25,7 @@ import com.xiaoyv.bangumi.features.main.business.MainState
 import com.xiaoyv.bangumi.features.main.business.MainViewModel
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalHideNavIcon
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.navigation.PagerNavHost
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.current
@@ -66,6 +66,7 @@ fun MainScreen(
     onUiEvent: (MainEvent.UI) -> Unit,
     onActionEvent: (MainEvent.Action) -> Unit,
 ) {
+    val settings = currentSettings()
     val bottomTabs = state.rememberBottomTabs()
     val startDestination = remember(bottomTabs, state.defaultSelected) {
         bottomTabs.getOrNull(state.defaultSelected) ?: bottomTabs.first()
@@ -79,7 +80,8 @@ fun MainScreen(
         ),
     )
 
-    NavigationSuiteScaffold(
+    BgmNavigationSuiteScaffold(
+        appearance = settings.homeTab.appearance,
         navigationSuiteItems = {
             bottomTabs.forEach { item ->
                 val selected = backStack.current == item.first

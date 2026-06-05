@@ -8,9 +8,12 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveComponentOverrideApi
+import androidx.compose.material3.adaptive.navigationsuite.LocalNavigationSuiteScaffoldOverride
 import androidx.compose.material3.adaptive.navigationsuite.NavigationItemIcon
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldOverride
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldOverrideScope
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.material3.adaptive.navigationsuite.rememberStateOfItems
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -24,7 +27,7 @@ import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.catalog.components.LiquidBottomTab
 import com.kyant.backdrop.catalog.components.LiquidBottomTabs
-import com.xiaoyv.bangumi.features.main.DefaultNavigationSuiteScaffoldOverride.NavigationSuiteScaffold
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 
 private val NoWindowInsets = WindowInsets(0, 0, 0, 0)
 
@@ -78,6 +81,30 @@ object DefaultNavigationSuiteScaffoldOverride : NavigationSuiteScaffoldOverride 
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveComponentOverrideApi::class)
+@Composable
+fun BgmNavigationSuiteScaffold(
+    @SettingBottomBarAppearance appearance: Int,
+    navigationSuiteItems: NavigationSuiteScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {},
+) {
+    val scaffoldOverride = when (appearance) {
+        SettingBottomBarAppearance.LIQUID_GLASS -> DefaultNavigationSuiteScaffoldOverride
+        else -> androidx.compose.material3.adaptive.navigationsuite.DefaultNavigationSuiteScaffoldOverride
+    }
+
+    CompositionLocalProvider(
+        LocalNavigationSuiteScaffoldOverride provides scaffoldOverride,
+    ) {
+        NavigationSuiteScaffold(
+            navigationSuiteItems = navigationSuiteItems,
+            modifier = modifier,
+            content = content,
+        )
     }
 }
 

@@ -16,10 +16,11 @@ object WebConstant {
     const val URL_BASE_API_DOUBAN = "https://frodo.douban.com/"
     const val URL_BASE_API_PIXIV = "https://app-api.pixiv.net/"
     const val URL_BASE_WEB = "https://bgm.tv/"
+    const val URL_BGM_STATUS_WEB = "https://bgm-status.ry.mk/"
+    const val URL_BGM_STATUS_API = "https://bgm-status.ry.mk/api/mini"
 }
 
 fun subjectImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/subjects/$id/image?type=$type"
 fun characterImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/characters/$id/image?type=$type"
 fun personImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/persons/$id/image?type=$type"
 fun userImage(username: String, type: String = "large") = "https://api.bgm.tv/v0/users/$username/avatar?type=$type"
-

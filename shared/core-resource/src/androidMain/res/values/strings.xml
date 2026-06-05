@@ -247,10 +247,21 @@
     <string name="settings_indication_ripped">水波纹</string>
     <string name="settings_indication_fade">蒙版</string>
 
+    <string name="settings_bgm_status_title">Bangumi Status</string>
+    <string name="settings_bgm_status_current">当前服务状态</string>
+    <string name="settings_bgm_status_updated_at">更新于 %1$s</string>
+    <string name="settings_bgm_status_view_detail">查看详情</string>
+    <string name="settings_bgm_status_hint_ok">绿色：正常</string>
+    <string name="settings_bgm_status_hint_degraded">橙色：服务降级、延迟很大</string>
+    <string name="settings_bgm_status_hint_down">红色：服务器崩溃、Bangumi不可用</string>
+    <string name="settings_bgm_status_hint_unknown">灰色：未知</string>
 
     <string name="settings_bar_boot">启动</string>
     <string name="settings_bar_boot_default">冷启动默认 Tab</string>
     <string name="settings_bar_tab">底栏</string>
+    <string name="settings_bar_appearance">底栏外观</string>
+    <string name="settings_bar_appearance_material3">质感设计</string>
+    <string name="settings_bar_appearance_liquid_glass">液态玻璃</string>
     <string name="settings_bar_1">首页底栏 Tab-1</string>
     <string name="settings_bar_2">首页底栏 Tab-2</string>
     <string name="settings_bar_3">首页底栏 Tab-3</string>
