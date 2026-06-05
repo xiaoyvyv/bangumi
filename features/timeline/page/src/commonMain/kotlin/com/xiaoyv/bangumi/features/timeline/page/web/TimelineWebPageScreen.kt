@@ -74,9 +74,6 @@ fun TimelineWebPageScreen(
         TimelinePageItem(
             modifier = Modifier.fillMaxWidth(),
             item = item,
-            onClick = {
-                onNavScreen(Screen.TimelineDetail(it.id.toLongValue()))
-            },
             onClickMono = {
                 onNavScreen(Screen.MonoDetail(it.id, it.type))
             },
@@ -96,13 +93,17 @@ private fun TimelinePageItem(
     modifier: Modifier,
     item: ComposeWebTimeline = ComposeWebTimeline.Empty,
     headlineContent: @Composable (() -> Unit)? = null,
-    onClick: (ComposeWebTimeline) -> Unit = {},
+    onClick: ((ComposeWebTimeline) -> Unit)? = null,
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
     onClickMono: (ComposeMonoDisplay) -> Unit = {},
 ) {
     ListItem(
-        modifier = modifier.clickable { onClick(item) },
+        modifier = if (onClick != null) {
+            modifier.clickable { onClick(item) }
+        } else {
+            modifier
+        },
         leadingContent = {
             if (item.user.avatar.displayMediumImage.isBlank()) {
                 Spacer(modifier = Modifier.size(44.dp))

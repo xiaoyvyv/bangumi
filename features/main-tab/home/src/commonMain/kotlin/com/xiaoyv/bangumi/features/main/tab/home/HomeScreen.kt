@@ -110,9 +110,10 @@ private fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
+            onRefresh = { onActionEvent(HomeEvent.Action.OnRefresh(it)) },
             baseState = baseState,
         ) { state ->
-            HomeScreenContent(state, onUiEvent, onActionEvent)
+            HomeScreenContent(baseState, state, onUiEvent, onActionEvent)
         }
     }
 }
@@ -120,6 +121,7 @@ private fun HomeScreen(
 
 @Composable
 private fun HomeScreenContent(
+    baseState: BaseState<HomeState>,
     state: HomeState,
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
@@ -131,7 +133,7 @@ private fun HomeScreenContent(
         tabs = mainHomeTabs,
     ) {
         when (mainHomeTabs[it].type) {
-            HomeTab.HOME -> HomeMainScreen(state, onUiEvent, onActionEvent)
+            HomeTab.HOME -> HomeMainScreen(baseState, onUiEvent, onActionEvent)
             HomeTab.MONO -> HomeMonoScreen(onUiEvent, onActionEvent)
             HomeTab.GROUP -> HomeGroupScreen(state, onUiEvent, onActionEvent)
             HomeTab.INDEX -> HomeIndexScreen(state, onUiEvent, onActionEvent)
@@ -139,4 +141,3 @@ private fun HomeScreenContent(
         }
     }
 }
-

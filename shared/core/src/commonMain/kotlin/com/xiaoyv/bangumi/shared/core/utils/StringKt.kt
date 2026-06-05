@@ -83,17 +83,25 @@ fun String.uppercaseFirstChar(): String {
 }
 
 /**
+ * 把 (start, end) 打包为 Long key
+ */
+private const val LOW_32_MASK: Long = 0xFFFF_FFFFL
+fun packTextRangeKey(start: Int, end: Int): Long {
+    return (start.toLong() shl 32) or (end.toLong() and LOW_32_MASK)
+}
+
+/**
  * 适配 Html 主题
  */
 @Composable
 fun AnnotatedString.applyTheme(
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     linkColor: Color = MaterialTheme.colorScheme.primary,
-    showMaskRanges: Collection<AnnotatedString.Range<String>> = emptySet(),
+    maskAlphaByRange: Map<Long, Float> = emptyMap(),
 ): AnnotatedString {
     val string = this@applyTheme
 
-    return remember(string, showMaskRanges.size) {
+    return remember(string, maskAlphaByRange) {
         buildAnnotatedString {
             append(string.text)
 
@@ -111,15 +119,10 @@ fun AnnotatedString.applyTheme(
                         style.background != Color.Unspecified &&
                         style.color == style.background
 
-                // 判断 mask 是否和任意 show range 有交集
-                val intersects = showMaskRanges.any { r -> span.start < r.end && span.end > r.start }
-                if (isMask && intersects) {
-                    // 清掉色
-                    addStyle(
-                        style.copy(background = Color.Unspecified, color = Color.Unspecified),
-                        span.start,
-                        span.end
-                    )
+                val rangeKey = packTextRangeKey(span.start, span.end)
+                val maskAlpha = maskAlphaByRange[rangeKey] ?: 0f
+                if (isMask && maskAlpha > 0f) {
+                    addStyle(style.copy(color = Color.White.copy(alpha = maskAlpha)), span.start, span.end)
                 } else {
                     addStyle(style, span.start, span.end)
                 }
@@ -132,12 +135,7 @@ fun AnnotatedString.applyTheme(
 
             // Annotations
             string.getStringAnnotations(0, string.length).forEach { ann ->
-                val intersects = showMaskRanges.any { r -> ann.start < r.end && ann.end > r.start }
-                val isMask = ann.tag == "mask"
-
-                if (!(isMask && intersects)) {
-                    addStringAnnotation(ann.tag, ann.item, ann.start, ann.end)
-                }
+                addStringAnnotation(ann.tag, ann.item, ann.start, ann.end)
             }
         }
     }

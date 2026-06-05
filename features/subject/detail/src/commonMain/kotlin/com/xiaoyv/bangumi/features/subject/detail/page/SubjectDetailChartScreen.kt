@@ -264,9 +264,9 @@ private fun SubjectDetailGridInfo(
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .padding(LayoutPaddingHalf),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf, Alignment.CenterVertically)
+                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
                 ) {
                     Text(
                         text = it.title,

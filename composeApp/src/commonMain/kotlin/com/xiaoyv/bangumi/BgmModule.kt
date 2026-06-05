@@ -58,7 +58,6 @@ import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailChartViewMod
 import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageViewModel
 import com.xiaoyv.bangumi.features.tag.detail.business.TagDetailViewModel
 import com.xiaoyv.bangumi.features.tag.page.business.TagPageViewModel
-import com.xiaoyv.bangumi.features.timeline.detail.business.TimelineDetailViewModel
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageViewModel
 import com.xiaoyv.bangumi.features.timeline.page.web.TimelineWebPageViewModel
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailViewModel
@@ -134,7 +133,6 @@ val commonModule = module {
     viewModelOf(::GroupsDetailViewModel)
     viewModelOf(::PreviewTextViewModel)
     viewModelOf(::UserViewModel)
-    viewModelOf(::TimelineDetailViewModel)
     viewModelOf(::CalendarViewModel)
     viewModelOf(::TagDetailViewModel)
     viewModelOf(::SubjectBrowserViewModel)

@@ -48,7 +48,6 @@ import com.xiaoyv.bangumi.features.splash.splashModule
 import com.xiaoyv.bangumi.features.subject.browser.subjectBrowserModule
 import com.xiaoyv.bangumi.features.subject.detail.subjectDetailModule
 import com.xiaoyv.bangumi.features.tag.detail.tagDetailModule
-import com.xiaoyv.bangumi.features.timeline.detail.timelineDetailModule
 import com.xiaoyv.bangumi.features.topic.detail.topicDetailModule
 import com.xiaoyv.bangumi.features.user.userModule
 import com.xiaoyv.bangumi.features.web.webModule
@@ -66,7 +65,6 @@ internal val navigationModule = module {
         mainModule,
         signInModule,
         timelineModule,
-        timelineDetailModule,
         topicModule,
         trackingModule,
         profileModule,
@@ -122,5 +120,4 @@ fun BgmScreenNavGraph(navigator: Navigator) {
         navigator = navigator
     )
 }
-
 

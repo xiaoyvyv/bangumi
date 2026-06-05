@@ -48,6 +48,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_rank
 import com.xiaoyv.bangumi.core_resource.resources.subject_home_calendar
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeState
+import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.FeatureType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
@@ -56,6 +57,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserB
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
+import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
@@ -80,33 +82,40 @@ private const val CONTENT_TYPE_OVERVIEW_ITEM = "CONTENT_TYPE_OVERVIEW_ITEM"
 
 @Composable
 fun HomeMainScreen(
-    state: HomeState,
+    baseState: BaseState<HomeState>,
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .semantics { contentDescription = "home_main_list" },
-        state = rememberCacheWindowLazyListState(),
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
-    ) {
-        item(key = CONTENT_TYPE_BANNER, contentType = CONTENT_TYPE_BANNER) {
-            HomeMainBanner(state, onUiEvent, onActionEvent)
-        }
-        item(key = CONTENT_TYPE_ACTION, contentType = CONTENT_TYPE_ACTION) {
-            HomeMainAction(state, onUiEvent, onActionEvent)
-        }
-        item(key = CONTENT_TYPE_CALENDAR, contentType = CONTENT_TYPE_CALENDAR) {
-            HomeMainCalendar(state, onUiEvent, onActionEvent)
-        }
-
-        items(
-            items = state.sections,
-            contentType = { CONTENT_TYPE_OVERVIEW },
-            key = { it.type }
+    StateLayout(
+        modifier = Modifier.fillMaxSize(),
+        baseState = baseState,
+        enablePullRefresh = true,
+        onRefresh = { onActionEvent(HomeEvent.Action.OnRefresh(it)) },
+    ) { state ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .semantics { contentDescription = "home_main_list" },
+            state = rememberCacheWindowLazyListState(),
+            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
         ) {
-            HomeMainOverview(state, it, onUiEvent, onActionEvent)
+            item(key = CONTENT_TYPE_BANNER, contentType = CONTENT_TYPE_BANNER) {
+                HomeMainBanner(state, onUiEvent, onActionEvent)
+            }
+            item(key = CONTENT_TYPE_ACTION, contentType = CONTENT_TYPE_ACTION) {
+                HomeMainAction(state, onUiEvent, onActionEvent)
+            }
+            item(key = CONTENT_TYPE_CALENDAR, contentType = CONTENT_TYPE_CALENDAR) {
+                HomeMainCalendar(state, onUiEvent, onActionEvent)
+            }
+
+            items(
+                items = state.sections,
+                contentType = { CONTENT_TYPE_OVERVIEW },
+                key = { it.type }
+            ) {
+                HomeMainOverview(state, it, onUiEvent, onActionEvent)
+            }
         }
     }
 }
@@ -367,9 +376,6 @@ fun HomeMainOverview(
         }
     }
 }
-
-
-
 
 
 

@@ -21,7 +21,7 @@ val Throwable?.errMsg: String
             is SocketTimeoutException -> "网络异常，请检查连接"
             is CancellationException -> "请求已取消"
             is NullPointerException -> "空指针异常"
-            is IllegalArgumentException -> "参数错误"
+            is IllegalArgumentException -> message?.trim().takeIf { !it.isNullOrBlank() } ?: "参数错误"
             is ApiException -> message
             else -> this?.message ?: "未知错误"
         }

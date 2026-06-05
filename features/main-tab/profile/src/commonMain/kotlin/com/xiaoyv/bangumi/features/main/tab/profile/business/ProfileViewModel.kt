@@ -2,14 +2,17 @@ package com.xiaoyv.bangumi.features.main.tab.profile.business
 
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.global_blog
 import com.xiaoyv.bangumi.core_resource.resources.global_collection
 import com.xiaoyv.bangumi.core_resource.resources.global_friend
+import com.xiaoyv.bangumi.core_resource.resources.global_timeline
+import com.xiaoyv.bangumi.core_resource.resources.global_blog
 import com.xiaoyv.bangumi.core_resource.resources.global_group
 import com.xiaoyv.bangumi.core_resource.resources.global_index
 import com.xiaoyv.bangumi.core_resource.resources.global_mono
 import com.xiaoyv.bangumi.core_resource.resources.index_my_collection
 import com.xiaoyv.bangumi.core_resource.resources.index_my_create
+import com.xiaoyv.bangumi.core_resource.resources.profile_bio
+import com.xiaoyv.bangumi.core_resource.resources.profile_state
 import com.xiaoyv.bangumi.core_resource.resources.profile_time_machine
 import com.xiaoyv.bangumi.core_resource.resources.type_topic_crt
 import com.xiaoyv.bangumi.core_resource.resources.type_topic_person
@@ -41,6 +44,11 @@ class ProfileViewModel(savedStateHandle: SavedStateHandle) :
         ),
         topBarMenu = persistentListOf(
             ComposeTextTab(ProfileMenu.TIME_MACHINE, label = Res.string.profile_time_machine),
+            ComposeTextTab(ProfileMenu.BIO, label = Res.string.profile_bio),
+            ComposeTextTab(ProfileMenu.COLLECTION, label = Res.string.global_collection),
+            ComposeTextTab(ProfileMenu.TIMELINE, label = Res.string.global_timeline),
+            ComposeTextTab(ProfileMenu.FRIEND, label = Res.string.global_friend),
+            ComposeTextTab(ProfileMenu.STATE, label = Res.string.profile_state),
         ),
         monoTypeFilters = persistentListOf(
             ComposeTextTab(MonoType.CHARACTER, Res.string.type_topic_crt),

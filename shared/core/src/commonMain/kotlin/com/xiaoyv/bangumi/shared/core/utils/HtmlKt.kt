@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.core.utils
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.text.AnnotatedString
@@ -22,13 +23,14 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-//import com.mohamedrejeb.ksoup.entities.KsoupEntities
-//import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlHandler
-//import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlParser
+import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.nodes.Element
+import com.fleeksoft.ksoup.nodes.Node
+import com.fleeksoft.ksoup.nodes.TextNode
 
 internal const val ElementBr = "br"
 internal const val ElementP = "p"
-internal const val ElementDiv = "Div"
+internal const val ElementDiv = "div"
 internal const val ElementSpan = "span"
 internal const val ElementA = "a"
 internal const val ElementB = "b"
@@ -43,6 +45,29 @@ const val TagLink = "link"
 const val TagMask = "mask"
 const val TagImage = "image"
 const val TagCode = "code"
+
+private fun TextLayoutResult.findStringAnnotation(
+    text: AnnotatedString,
+    tag: String,
+    position: Offset,
+): AnnotatedString.Range<String>? {
+    if (text.isEmpty()) return null
+    val offset = getOffsetForPosition(position)
+
+    if (tag != TagImage) {
+        return text.getStringAnnotations(tag, offset, offset).firstOrNull()
+    }
+
+    val hitByBox = text.getStringAnnotations(tag, 0, text.length)
+        .firstOrNull { range ->
+            val start = range.start
+            if (start < 0 || start >= text.length) return@firstOrNull false
+            getBoundingBox(start).contains(position)
+        }
+    if (hitByBox != null) return hitByBox
+
+    return text.getStringAnnotations(tag, offset, offset).firstOrNull()
+}
 
 suspend fun PointerInputScope.awaitHtmlEvent(
     text: AnnotatedString,
@@ -59,7 +84,7 @@ suspend fun PointerInputScope.awaitHtmlEvent(
             val offset = layout.getOffsetForPosition(down.position)
             val linkAnnotation = text.getStringAnnotations(TagLink, offset, offset).firstOrNull()
             val maskAnnotation = text.getStringAnnotations(TagMask, offset, offset).firstOrNull()
-            val imageAnnotation = text.getStringAnnotations(TagImage, offset, offset).firstOrNull()
+            val imageAnnotation = layout.findStringAnnotation(text, TagImage, down.position)
 
             // 检测是否点击了链接
             if (linkAnnotation != null) {
@@ -92,8 +117,7 @@ suspend fun PointerInputScope.awaitHtmlEvent(
             if (imageAnnotation != null) {
                 val up = waitForUpOrCancellation()
                 if (up != null) {
-                    val upOffset = layout.getOffsetForPosition(up.position)
-                    val upAnnotation = text.getStringAnnotations(TagImage, upOffset, upOffset).firstOrNull()
+                    val upAnnotation = layout.findStringAnnotation(text, TagImage, up.position)
                     if (upAnnotation?.item == imageAnnotation.item) {
                         onClickImage(imageAnnotation)
                         up.consume()
@@ -108,196 +132,212 @@ fun String.parseAsHtml(
     linkColor: Color = Color.Blue,
     requiresHtmlDecode: Boolean = true,
 ): AnnotatedString{
-    return AnnotatedString(this)
-}
-/*
-fun String.parseAsHtml(
-    linkColor: Color = Color.Blue,
-    requiresHtmlDecode: Boolean = true,
-): AnnotatedString {
+    if (isBlank()) return AnnotatedString("")
+
     val string = AnnotatedString.Builder()
-    if (isBlank()) return string.toAnnotatedString()
     val spanStylePushedStack = mutableListOf<Boolean>()
     val paragraphStylePushedStack = mutableListOf<Boolean>()
     val maskPushedStack = mutableListOf<Boolean>()
 
-    val handler = KsoupHtmlHandler
-        .Builder()
-        .onOpenTag { name, attributes, _ ->
-            when (name.trim().lowercase()) {
-                ElementImg -> {
-                    val smileId = attributes["smileid"].orEmpty()
-                    val src = attributes["src"].orEmpty()
-                    val alt = attributes["alt"].orEmpty()
-                    if (smileId.isNotBlank()) {
-                        string.appendInlineContent(smileId, alt.ifBlank { smileId })
-                    } else if (src.startsWith("http")) {
-                        // 针对图片，这里直接拼接个内联样式，外套一层 Annotation 可标记点击事件；
-                        // 然后立即 pop()，因为 img 已经为最小，不能包裹内容了，不需要再等待 onCloseTag 再 pop()
-                        string.pushStringAnnotation(TagImage, src)
+    fun traverse(node: Node) {
+        when (node) {
+            is TextNode -> {
+                val text = node.text()
+                if (text.isNotEmpty()) string.append(text)
+            }
+
+            is Element -> {
+                val name = node.tagName().trim().lowercase()
+                when (name) {
+                    ElementImg -> {
+                        val smileId = node.attr("smileid").orEmpty().trim().lowercase()
+                        val src = node.attr("src").orEmpty().trim()
+                        val alt = node.attr("alt").orEmpty()
+
+                        when {
+                            smileId.isNotBlank() && bgmEmojis.containsKey(smileId) -> {
+                                string.appendInlineContent(smileId, alt.ifBlank { smileId })
+                            }
+
+                            src.isNotBlank() -> {
+                                val url = src.sanitizeImageUrl()
+                                string.pushStringAnnotation(TagImage, url)
+                                string.pushStyle(
+                                    ParagraphStyle(
+                                        lineHeightStyle = LineHeightStyle(
+                                            alignment = LineHeightStyle.Alignment.Top,
+                                            trim = LineHeightStyle.Trim.Both
+                                        )
+                                    )
+                                )
+                                string.appendInlineContent(TagImage, url)
+                                string.pop()
+                                string.pop()
+                            }
+
+                            alt.isNotBlank() -> string.append(alt)
+                        }
+                    }
+
+                    ElementPre -> {
+                        string.pushStringAnnotation(TagCode, TagCode)
                         string.pushStyle(
                             ParagraphStyle(
-                                lineHeightStyle = LineHeightStyle(
-                                    alignment = LineHeightStyle.Alignment.Top,
-                                    trim = LineHeightStyle.Trim.Both
-                                )
+                                lineHeight = 24.sp,
+                                textIndent = TextIndent(firstLine = 8.sp, restLine = 8.sp)
                             )
                         )
-                        string.appendInlineContent(TagImage, src)
+                        string.pushStyle(
+                            SpanStyle(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color.White,
+                            )
+                        )
+
+                        node.childNodes().forEach(::traverse)
+
+                        string.pop()
                         string.pop()
                         string.pop()
                     }
-                }
 
-                ElementPre -> {
-                    string.pushStringAnnotation(TagCode, TagCode)
-                    string.pushStyle(
-                        ParagraphStyle(
-                            lineHeight = 24.sp,
-                            textIndent = TextIndent(firstLine = 8.sp, restLine = 8.sp)
-                        )
-                    )
-                    string.pushStyle(
-                        SpanStyle(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 14.sp,
-                            fontFamily = FontFamily.Monospace,
-                            color = Color.White,
-                        )
-                    )
-                }
+                    ElementDiv,
+                    ElementP,
+                        -> {
+                        val style = node.attr("style").orEmpty()
+                        val paragraphStyle = parseParagraphStyleAttributes(style)
+                        if (paragraphStyle != null) {
+                            string.pushStyle(paragraphStyle)
+                            paragraphStylePushedStack.add(true)
+                        } else {
+                            paragraphStylePushedStack.add(false)
+                        }
 
-                ElementDiv,
-                ElementP,
-                    -> {
-                    val style = attributes["style"].orEmpty()
+                        node.childNodes().forEach(::traverse)
 
-                    val paragraphStyle = parseParagraphStyleAttributes(style)
-                    if (paragraphStyle != null) {
-                        string.pushStyle(paragraphStyle)
-                        paragraphStylePushedStack.add(true)
+                        if (paragraphStylePushedStack.removeLastOrNull() == true) {
+                            string.pop()
+                        }
                     }
-                }
 
-                ElementSpan -> {
-                    val className = attributes["class"].orEmpty().trim().lowercase()
-                    val style = attributes["style"].orEmpty()
-                    val spanStyle = parseSpanStyleAttributes(style)
-                    when {
-                        // 自带样式
-                        spanStyle != null -> {
-                            if (className == "text_mask") {
-                                string.pushStringAnnotation(TagMask, "")
-                                maskPushedStack.add(true)
-                            }
+                    ElementSpan -> {
+                        val className = node.attr("class").orEmpty().trim().lowercase()
+                        val style = node.attr("style").orEmpty()
+                        val rawSpanStyle = parseSpanStyleAttributes(style)
+
+                        val isMask = className == "text_mask"
+                        if (isMask) {
+                            string.pushStringAnnotation(TagMask, "")
+                            maskPushedStack.add(true)
+                        } else {
+                            maskPushedStack.add(false)
+                        }
+
+                        val spanStyle = when {
+                            rawSpanStyle != null -> rawSpanStyle
+                            isMask -> SpanStyle(background = Color.Black, color = Color.Black)
+                            className == "keyword" -> SpanStyle(
+                                color = Color.Green.copy(green = 0.8f),
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            else -> null
+                        }
+
+                        if (spanStyle != null) {
                             string.pushStyle(spanStyle)
                             spanStylePushedStack.add(true)
+                        } else {
+                            spanStylePushedStack.add(false)
                         }
-                        // 关键字样式
-                        className == "keyword" -> {
-                            string.pushStyle(SpanStyle(color = Color.Green.copy(green = 0.8f), fontWeight = FontWeight.Medium))
-                            spanStylePushedStack.add(true)
+
+                        node.childNodes().forEach(::traverse)
+
+                        if (spanStylePushedStack.removeLastOrNull() == true) {
+                            string.pop()
+                        }
+                        if (maskPushedStack.removeLastOrNull() == true) {
+                            string.pop()
                         }
                     }
-                }
 
-                ElementB,
-                ElementStrong,
-                    -> string.pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                    ElementB,
+                    ElementStrong,
+                        -> {
+                        string.pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                        node.childNodes().forEach(::traverse)
+                        string.pop()
+                    }
 
-                ElementBr -> {
-                    string.appendLine()
-                }
+                    ElementBr -> {
+                        string.appendLine()
+                    }
 
-                ElementA -> {
-                    string.pushStringAnnotation(TagLink, attributes["href"].orEmpty())
-                    string.pushStyle(
-                        SpanStyle(
-                            color = linkColor,
-                            textDecoration = TextDecoration.Underline
+                    ElementA -> {
+                        val hrefRaw = node.attr("href").orEmpty().trim()
+                        val href = hrefRaw.removePrefix("/")
+                        string.pushStringAnnotation(TagLink, href)
+                        string.pushStyle(
+                            SpanStyle(
+                                color = linkColor,
+                                textDecoration = TextDecoration.Underline
+                            )
                         )
-                    )
+                        node.childNodes().forEach(::traverse)
+                        string.pop()
+                        string.pop()
+                    }
+
+                    ElementU -> {
+                        string.pushStyle(
+                            SpanStyle(
+                                color = Color.Unspecified,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        )
+                        node.childNodes().forEach(::traverse)
+                        string.pop()
+                    }
+
+                    ElementI -> {
+                        string.pushStyle(
+                            SpanStyle(
+                                color = Color.Unspecified,
+                                fontStyle = FontStyle.Italic
+                            )
+                        )
+                        node.childNodes().forEach(::traverse)
+                        string.pop()
+                    }
+
+                    ElementS -> {
+                        string.pushStyle(
+                            SpanStyle(
+                                color = Color.Unspecified,
+                                textDecoration = TextDecoration.LineThrough,
+                            )
+                        )
+                        node.childNodes().forEach(::traverse)
+                        string.pop()
+                    }
+
+                    else -> node.childNodes().forEach(::traverse)
                 }
+            }
 
-                ElementU -> string.pushStyle(
-                    SpanStyle(
-                        color = Color.Unspecified,
-                        textDecoration = TextDecoration.Underline
-                    )
-                )
-
-                ElementI -> string.pushStyle(
-                    SpanStyle(
-                        color = Color.Unspecified,
-                        fontStyle = FontStyle.Italic
-                    )
-                )
-
-                ElementS -> string.pushStyle(
-                    SpanStyle(
-                        color = Color.Unspecified,
-                        textDecoration = TextDecoration.LineThrough,
-                    )
-                )
-
-                else -> debugLog { "onOpenTag: Unhandled $name" }
+            else -> {
+                if (node is Node) node.childNodes().forEach(::traverse)
             }
         }
-        .onCloseTag { name, _ ->
-            when (name.trim().lowercase()) {
-                ElementImg -> {}
+    }
 
-                ElementPre -> {
-                    string.pop()
-                    string.pop()
-                    string.pop()
-                }
-
-                ElementDiv,
-                ElementP,
-                    -> {
-                    if (paragraphStylePushedStack.removeLastOrNull() == true) {
-                        string.pop()
-                    }
-                }
-
-                ElementBr -> {}
-                ElementSpan -> {
-                    if (maskPushedStack.removeLastOrNull() == true) {
-                        string.pop()
-                    }
-                    if (spanStylePushedStack.removeLastOrNull() == true) {
-                        string.pop()
-                    }
-                }
-
-                ElementStrong,
-                ElementB,
-                ElementU,
-                ElementI,
-                ElementS,
-                    -> string.pop()
-
-                ElementA -> {
-                    string.pop() // corresponds to pushStyle
-                    string.pop() // corresponds to pushStringAnnotation
-                }
-
-                else -> debugLog { "onCloseTag: Unhandled $name" }
-            }
-        }
-        .onText { text ->
-            string.append(text.trim())
-        }
-        .build()
-
-    val ksoupHtmlParser = KsoupHtmlParser(handler)
-
-    val html = if (requiresHtmlDecode) KsoupEntities.decodeHtml(this) else this
-    ksoupHtmlParser.write(html.preHandleHtml())
-    ksoupHtmlParser.end()
+    val html = this.preHandleHtml()
+    val document = Ksoup.parse(html)
+    document.body()?.childNodes()?.forEach(::traverse) ?: traverse(document)
     return string.toAnnotatedString()
-}*/
+}
 
 fun parseParagraphStyleAttributes(style: String): ParagraphStyle? {
     if (style.isBlank()) return null
@@ -472,6 +512,7 @@ fun parseSpanStyleAttributes(style: String): SpanStyle? {
 fun String?.preHandleHtml(): String {
     return orEmpty()
         .replace("src=\"//", "src=\"https://")
+        .replace("src=\"/(?!/)".toRegex(), "src=\"https://bgm.tv/")
         .replace("group/topic/350677", "group/topic/391651")
 }
 
@@ -487,10 +528,20 @@ fun bbcodeToHtml(bbcode: String, handleWarp: Boolean): String {
     }
 
     // BBCode 表情替换
-    html = html.replace(Regex("\\(bgm(.+?)\\)", RegexOption.IGNORE_CASE)) {
-        val number = it.groupValues[1]
-        val emoji = bgmEmojis.values.find { emoji -> emoji.number.toString() == number }
-        "<img src=\"\" smileid=\"${emoji?.smileId.orEmpty()}\" class=\"smile\" alt=\"(bgm$number)\">"
+    html = html.replace(
+        Regex("\\(((?:bgm\\d+)|(?:blake_\\d+)|(?:musume_\\d+))\\)", RegexOption.IGNORE_CASE)
+    ) { match ->
+        val rawToken = match.groupValues[1].trim()
+        val token = rawToken.lowercase()
+        val smileId = if (token.startsWith("bgm")) {
+            val number = token.removePrefix("bgm")
+            bgmEmojis.values.find { emoji -> emoji.number.toString() == number }?.smileId.orEmpty()
+        } else {
+            token
+        }
+
+        if (smileId.isBlank()) match.value
+        else "<img src=\"\" smileid=\"$smileId\" class=\"smile\" alt=\"($rawToken)\">"
     }
 
     // 基础样式

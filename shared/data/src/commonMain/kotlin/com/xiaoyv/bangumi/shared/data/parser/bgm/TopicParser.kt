@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.groupValueOne
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
@@ -314,11 +315,51 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
      * 话题全部的贴贴列表
      */
     private fun Element.covertReactions(): SerializeMap<String, SerializeList<ComposeReaction>> {
-        val likeJson = "data_likes_list\\s*=\\s*([\\s\\S]+?);\\s+?</script>"
-            .toRegex()
-            .groupValueOne(html())
+        val text = html()
+        val likeJson = extractJsonFromJs(text, "data_likes_list")
         if (likeJson.isBlank()) return persistentMapOf()
         return ComposeReaction.fromJson(likeJson)
+    }
+
+    private fun extractJsonFromJs(text: String, key: String): String {
+        val keyIndex = text.indexOf(key)
+        if (keyIndex == -1) return ""
+        val eqIndex = text.indexOf('=', startIndex = keyIndex)
+        if (eqIndex == -1) return ""
+
+        var i = eqIndex + 1
+        while (i < text.length && text[i].isWhitespace()) i++
+
+        val start = text.indexOf('{', startIndex = i)
+        if (start == -1) return ""
+
+        var depth = 0
+        var quote: Char? = null
+        var escape = false
+
+        for (pos in start until text.length) {
+            val c = text[pos]
+            if (quote != null) {
+                if (escape) {
+                    escape = false
+                } else if (c == '\\') {
+                    escape = true
+                } else if (c == quote) {
+                    quote = null
+                }
+                continue
+            }
+
+            when (c) {
+                '"', '\'' -> quote = c
+                '{' -> depth++
+                '}' -> {
+                    depth--
+                    if (depth == 0) return text.substring(start, pos + 1).trim()
+                }
+            }
+        }
+        return ""
     }
 
     /**

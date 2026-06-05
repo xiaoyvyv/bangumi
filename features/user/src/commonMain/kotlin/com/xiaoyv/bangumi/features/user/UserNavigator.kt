@@ -12,6 +12,7 @@ val userModule = module {
     navScope {
         navigation<Screen.UserDetail> { key ->
             UserRoute(
+                args = key,
                 viewModel = koinViewModel { parametersOf(key) },
                 onNavScreen = { navigator.navigate(it) },
                 onNavUp = { navigator.goBack() }

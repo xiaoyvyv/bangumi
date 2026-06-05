@@ -109,7 +109,7 @@ private fun TimelinePageItem(
     onActionEvent: (TimelinePageEvent.Action) -> Unit,
 ) {
     ListItem(
-        modifier = modifier.clickable { onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TimelineDetail(item.id))) },
+        modifier = modifier,
         leadingContent = {
             StateImage(
                 modifier = Modifier
@@ -283,4 +283,3 @@ private fun PreviewTimelinePageScreen() {
         )
     }
 }
-
