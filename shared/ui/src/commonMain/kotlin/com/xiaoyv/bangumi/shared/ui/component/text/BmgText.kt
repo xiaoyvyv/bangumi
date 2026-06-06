@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -208,26 +209,29 @@ fun BgmLinkedText(
 
         var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
 
-        BasicText(
-            text = content,
-            modifier = Modifier.pointerInput(content, actionHandler) {
-                awaitHtmlEvent(
-                    text = content,
-                    onTextLayoutResult = { layoutResult },
-                    onClickLink = { range -> actionHandler.openBgmLink(range.item) },
-                    onClickMask = { range ->
-                        val key = packTextRangeKey(range.start, range.end)
-                        if (!targetShowMasks.remove(key)) targetShowMasks.add(key)
-                    },
-                    onClickImage = { range -> actionHandler.openImage(range.item) },
-                )
-            },
-            style = resolvedTextStyle,
-            inlineContent = inlineContent,
-            overflow = TextOverflow.Clip,
-            maxLines = maxLines,
-            minLines = minLines,
-            onTextLayout = { layoutResult = it }
-        )
+        // 文字可选中
+        SelectionContainer {
+            BasicText(
+                text = content,
+                modifier = Modifier.pointerInput(content, actionHandler) {
+                    awaitHtmlEvent(
+                        text = content,
+                        onTextLayoutResult = { layoutResult },
+                        onClickLink = { range -> actionHandler.openBgmLink(range.item) },
+                        onClickMask = { range ->
+                            val key = packTextRangeKey(range.start, range.end)
+                            if (!targetShowMasks.remove(key)) targetShowMasks.add(key)
+                        },
+                        onClickImage = { range -> actionHandler.openImage(range.item) },
+                    )
+                },
+                style = resolvedTextStyle,
+                inlineContent = inlineContent,
+                overflow = TextOverflow.Clip,
+                maxLines = maxLines,
+                minLines = minLines,
+                onTextLayout = { layoutResult = it }
+            )
+        }
     }
 }
