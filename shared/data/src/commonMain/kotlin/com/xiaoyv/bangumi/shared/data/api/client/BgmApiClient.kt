@@ -305,7 +305,7 @@ class BgmApiClient(
         install(Auth) {
             bearer {
                 sendWithoutRequest { builder ->
-                    builder.url.host.equals("api.bgm.tv", true)
+                    builder.url.toString().contains("api.bgm.tv", ignoreCase = true)
                 }
 
                 loadTokens {
@@ -331,6 +331,7 @@ class BgmApiClient(
 
                     if (token == ComposeAuthToken.Empty) {
                         preferenceStore.userInfo = ComposeUser.Empty
+                        preferenceStore.userToken = ComposeAuthToken.Empty
                         null
                     } else {
                         preferenceStore.userToken = token
@@ -368,4 +369,3 @@ class BgmApiClient(
         tokenEntity
     }
 }
-
