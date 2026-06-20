@@ -3,7 +3,7 @@ Bangumi for Android - A full-featured unofficial android native application for 
 
 `main` 分支为原生View实现，已停止维护，请查看最新的 `multiplatform` 分支，使用现代化的 `compose` 实现！ 
 
-`multiplatform` -> [multiplatform](https://github.com/xiaoyvyv/bangumi/tree/multiplatform)
+`multiplatform` -> [multiplatform](https://github.com/xiaoyvyv/bangumi/tree/multiplatform)，multiplatform 测试包请查阅 actions 构建产物 [bangumi actions](https://github.com/xiaoyvyv/bangumi/actions)
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/xiaoyvyv/bangumi/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/bangumi/actions)
