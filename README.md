@@ -1,6 +1,8 @@
 # Bangumi for Android [![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/bangumi.svg)](https://github.com/xiaoyvyv/bangumi)
 Bangumi for Android - A full-featured unofficial android native application for the bangumi.tv
 
+`main` 分支为原生View实现，已停止维护，请查看最新的 `multiplatform` 分支，使用现代化的 `compose` 实现！ 
+
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/xiaoyvyv/bangumi/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/bangumi/actions)
 [![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total)](https://github.com/xiaoyvyv/bangumi)
