@@ -60,6 +60,7 @@ data class MonoDetailState(
         } else {
             persistentListOf(
                 ComposeTextTab(MonoDetailTab.OVERVIEW, Res.string.subject_tab_overview),
+                ComposeTextTab(MonoDetailTab.CASTS, Res.string.global_character),
                 ComposeTextTab(MonoDetailTab.COLLECTIONS, Res.string.global_collection),
                 ComposeTextTab(MonoDetailTab.ALBUM, Res.string.global_album),
                 ComposeTextTab(MonoDetailTab.PIXIV, Res.string.global_pixiv),
