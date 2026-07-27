@@ -33,6 +33,12 @@ data class ComposeMonoInfo(
     @SerialName("actors") val actors: SerializeList<ComposeMono> = persistentListOf(),
 
     /**
+     * 角色详情页内查询出演条目才会填充
+     * 对应 API 中 casts 数组，每项包含 person(声优)、relation、summary
+     */
+    @SerialName("casts") val characterCasts: SerializeList<ComposeMonoCast> = persistentListOf(),
+
+    /**
      * 条目详情页内查询相关人物才会填充
      */
     @SerialName("order") val order: Int = 0,

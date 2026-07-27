@@ -18,6 +18,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeInfobox
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
@@ -63,11 +64,25 @@ class MonoParser(private val commentParser: CommentParser) : BaseParser() {
             )
         }
 
+        // 解析合作者列表 (ul.coversSmall)
+        val collabs = select("ul.coversSmall > li").map { li ->
+            val href = li.select("a.avatar").attr("href")
+            val coverUrl = li.select("span.coverNeue").styleAvatarUrl()
+                .replace("/crt/m/", "/crt/g/")
+            ComposeMonoCollab(
+                id = href.substringAfterLast("/").toLongOrNull() ?: 0,
+                name = li.select("a.l").text(),
+                images = ComposeImages.fromUrl(coverUrl),
+                count = li.select("small").text().replace("(", "").replace(")", ""),
+            )
+        }
+
         return ComposeMonoWebInfo(
             info = info,
             indexList = indexList.toPersistentList(),
             shortInfo = shortInfo,
             comments = comments.toPersistentList(),
+            collabs = collabs.toPersistentList(),
         )
     }
 

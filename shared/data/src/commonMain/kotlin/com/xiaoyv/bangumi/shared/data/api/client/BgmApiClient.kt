@@ -310,7 +310,7 @@ class BgmApiClient(
 
                 loadTokens {
                     val token = preferenceStore.userToken
-                    if (token.accessToken.isBlank() || token.refreshToken.isBlank()) null else {
+                    if (token.accessToken.isBlank() || token.refreshToken.isBlank() || token.isExpire) null else {
                         BearerTokens(accessToken = token.accessToken, refreshToken = token.refreshToken)
                     }
                 }

@@ -14,11 +14,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_collabs
 import com.xiaoyv.bangumi.core_resource.resources.global_detail
 import com.xiaoyv.bangumi.core_resource.resources.global_no_summary
 import com.xiaoyv.bangumi.core_resource.resources.global_related_index
@@ -32,7 +35,9 @@ import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.shared.core.types.MonoDetailTab
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
+import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
@@ -48,6 +53,8 @@ private const val ItemSummary = "KeySummary"
 private const val ItemInfo = "KeyInfo"
 private const val ItemPersonCharacter = "KeyPersonCharacter"
 private const val ItemCharacterSubject = "KeyCharacterSubject"
+private const val ItemCollab = "KeyCollab"
+private const val ItemTitleCollab = "KeyTitleCollab"
 private const val ItemIndex = "ItemIndex"
 private const val ItemTitleComment = "TitleComment"
 private const val ItemTitleCharacterSubject = "KeyTitleCharacterSubject"
@@ -122,6 +129,48 @@ fun MonoDetailMainScreen(
                         onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id)))
                     }
                 )
+            }
+        }
+
+        // 合作者
+        if (state.mono.webInfo.collabs.isNotEmpty()) {
+            itemKey(ItemTitleCollab) {
+                DetailSectionTitle(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = LayoutPadding, bottom = LayoutPaddingHalf),
+                    title = stringResource(Res.string.global_collabs),
+                    action = stringResource(Res.string.subject_action_more),
+                    onActionClick = {
+                        onUiEvent(MonoDetailEvent.UI.OnSelectedPageType(MonoDetailTab.COLLABS))
+                    }
+                )
+            }
+            itemKey(ItemCollab) {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateContentSize(),
+                    contentPadding = PaddingValues(horizontal = LayoutPadding),
+                    horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+                ) {
+                    items(
+                        state.mono.webInfo.collabs,
+                        key = { it.id },
+                        contentType = { "Collab" }
+                    ) { collab ->
+                        MonoDetailCollabPreviewItem(
+                            collab = collab,
+                            onClick = {
+                                onUiEvent(
+                                    MonoDetailEvent.UI.OnNavScreen(
+                                        Screen.MonoDetail(collab.id, MonoType.PERSON)
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
 
@@ -246,6 +295,43 @@ private fun MonoDetailIndexList(
                     }
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun MonoDetailCollabPreviewItem(
+    collab: ComposeMonoCollab,
+    onClick: () -> Unit,
+) {
+    androidx.compose.foundation.layout.Column(
+        modifier = Modifier
+            .clickWithoutRipped(onClick = onClick)
+            .width(80.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+    ) {
+        InfoImage(
+            modifier = Modifier.width(60.dp),
+            model = collab.images.displayMediumImage,
+            onClick = onClick,
+        )
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = collab.name,
+            textAlign = TextAlign.Center,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodySmall,
+        )
+
+        if (collab.count.isNotBlank()) {
+            Text(
+                text = collab.count,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

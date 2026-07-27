@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,17 +68,32 @@ fun MonoDetailCastsScreen(
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
 ) {
     if (LocalInspectionMode.current) return
-    val viewModel = koinMonoDetailCastsViewModel(param = remember {
-        ListPersonCastParam(
-            personId = state.id,
-        )
-    })
 
-    StateLazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        pagingItems = viewModel.casts.collectAsLazyPagingItems()
-    ) { item, index ->
-        MonoCastItem(item, state, onUiEvent)
+    if (state.type == MonoType.CHARACTER) {
+        // 角色类型：数据已在 MonoDetailViewModel 中加载到 state.casts
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(
+                items = state.casts,
+                key = { it.subject.id },
+                contentType = { "CharacterCast" }
+            ) { item ->
+                MonoCastItem(item, state, onUiEvent)
+            }
+        }
+    } else {
+        // 人物类型：使用分页加载
+        val viewModel = koinMonoDetailCastsViewModel(param = remember {
+            ListPersonCastParam(
+                personId = state.id,
+            )
+        })
+
+        StateLazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            pagingItems = viewModel.casts.collectAsLazyPagingItems()
+        ) { item, index ->
+            MonoCastItem(item, state, onUiEvent)
+        }
     }
 }
 
@@ -142,12 +159,12 @@ private fun MonoCharacterCastItem(
             }
         }
 
-        if (item.actors.isNotEmpty()) Column(
+        if (item.characterCasts.isNotEmpty()) Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(LayoutPadding)
         ) {
             // 角色出演对应的CV
-            item.actors.forEach {
+            item.characterCasts.forEach { cast ->
                 Row(horizontalArrangement = Arrangement.spacedBy(LayoutPadding)) {
                     Column(
                         modifier = Modifier.weight(1f),
@@ -156,7 +173,7 @@ private fun MonoCharacterCastItem(
                     ) {
                         Text(
                             modifier = Modifier,
-                            text = it.displayName,
+                            text = cast.person.displayName,
                             textAlign = TextAlign.End,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
@@ -170,9 +187,9 @@ private fun MonoCharacterCastItem(
                     }
                     InfoImage(
                         modifier = Modifier.width(60.dp),
-                        model = it.images.displayMediumImage,
+                        model = cast.person.images.displayMediumImage,
                         onClick = {
-                            onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, MonoType.PERSON)))
+                            onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.MonoDetail(cast.person.id, MonoType.PERSON)))
                         }
                     )
                 }
