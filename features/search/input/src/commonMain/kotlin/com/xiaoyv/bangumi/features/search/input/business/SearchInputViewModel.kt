@@ -55,7 +55,7 @@ class SearchInputViewModel(
     }
 
     private fun refreshHistory() = action {
-        val histories = searchHistory.queryAllHistory(limit = 10).executeAsList()
+        val histories = searchHistory.queryAllHistory().executeAsList()
             .map { it.keyword }
             .filter { it.isNotBlank() }
 
@@ -68,11 +68,17 @@ class SearchInputViewModel(
             is SearchInputEvent.Action.OnQueryChange -> onQueryChange(event.query)
             is SearchInputEvent.Action.OnSearch -> onSearch()
             is SearchInputEvent.Action.OnClearHistory -> onClearHistory()
+            is SearchInputEvent.Action.OnDeleteHistory -> onDeleteHistory(event.keyword)
         }
     }
 
     private fun onClearHistory() = action {
         searchHistory.clearHistory()
+        refreshHistory()
+    }
+
+    private fun onDeleteHistory(keyword: String) = action {
+        searchHistory.deleteHistory(keyword)
         refreshHistory()
     }
 

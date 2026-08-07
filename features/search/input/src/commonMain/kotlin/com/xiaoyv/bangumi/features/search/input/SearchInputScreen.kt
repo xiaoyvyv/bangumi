@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
@@ -33,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -95,12 +95,8 @@ private fun SearchInputScreen(
     onUiEvent: (SearchInputEvent.UI) -> Unit,
     onActionEvent: (SearchInputEvent.Action) -> Unit,
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             Box(
                 modifier = Modifier
@@ -151,7 +147,7 @@ private fun SearchInputScreen(
             onRefresh = { onActionEvent(SearchInputEvent.Action.OnRefresh(it)) },
             baseState = baseState,
         ) { state ->
-            SearchInputScreenContent(state, onUiEvent, onActionEvent)
+            SearchInputScreenContent(state, onActionEvent)
         }
     }
 }
@@ -160,11 +156,10 @@ private fun SearchInputScreen(
 @Composable
 private fun SearchInputScreenContent(
     state: SearchInputState,
-    onUiEvent: (SearchInputEvent.UI) -> Unit,
     onActionEvent: (SearchInputEvent.Action) -> Unit,
 ) {
     when {
-        state.suggestions.isNotEmpty() -> LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        state.suggestions.isNotEmpty() -> LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(state.suggestions) {
                 Text(
                     modifier = Modifier
@@ -184,7 +179,6 @@ private fun SearchInputScreenContent(
 
         state.histories.isNotEmpty() && state.query.text.isBlank() -> SearchInputHistory(
             state = state,
-            onUiEvent = onUiEvent,
             onActionEvent = onActionEvent
         )
     }
@@ -221,10 +215,9 @@ private fun SearchInputBar(
 @Composable
 private fun SearchInputHistory(
     state: SearchInputState,
-    onUiEvent: (SearchInputEvent.UI) -> Unit,
     onActionEvent: (SearchInputEvent.Action) -> Unit,
 ) {
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -249,21 +242,39 @@ private fun SearchInputHistory(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            items(state.histories) {
-                Text(
-                    modifier = Modifier
-                        .clickable {
-                            onActionEvent(SearchInputEvent.Action.OnQueryChange(it.asTextFieldValue()))
-                            onActionEvent(SearchInputEvent.Action.OnSearch)
-                        }
-                        .fillMaxWidth()
-                        .padding(horizontal = contentMargin, vertical = 12.dp),
-                    text = it,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Normal
-                )
+            items(state.histories, key = { it }) { keyword ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable {
+                                onActionEvent(SearchInputEvent.Action.OnQueryChange(keyword.asTextFieldValue()))
+                                onActionEvent(SearchInputEvent.Action.OnSearch)
+                            }
+                            .padding(start = contentMargin, top = 12.dp, bottom = 12.dp),
+                        text = keyword,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Normal,
+                    )
+                    IconButton(
+                        onClick = {
+                            onActionEvent(SearchInputEvent.Action.OnDeleteHistory(keyword))
+                        },
+                    ) {
+                        Icon(
+                            imageVector = BgmIcons.Close,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            contentDescription = stringResource(Res.string.global_clear),
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(contentMargin - 12.dp))
+                }
             }
         }
     }
 }
+

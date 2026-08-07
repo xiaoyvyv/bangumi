@@ -19,6 +19,7 @@ sealed class SearchInputEvent {
         data object OnSearch : Action()
         data class OnRefresh(val loading: Boolean) : Action()
         data object OnClearHistory : Action()
+        data class OnDeleteHistory(val keyword: String) : Action()
         data class OnQueryChange(val query: TextFieldValue) : Action()
     }
 }
