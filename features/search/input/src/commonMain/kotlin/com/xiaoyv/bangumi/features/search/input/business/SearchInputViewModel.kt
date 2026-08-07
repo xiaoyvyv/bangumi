@@ -31,6 +31,7 @@ class SearchInputViewModel(
 ) : BaseViewModel<SearchInputState, SearchInputSideEffect, SearchInputEvent.Action>(savedStateHandle) {
     private val search = mutableStateFlowOf(args.query)
     private val searchHistory = System.database.appSearchHistoryQueries
+    private var searchSubmitted = false
 
     init {
         search
@@ -88,8 +89,11 @@ class SearchInputViewModel(
     }
 
     private fun onSearch() = action {
+        if (searchSubmitted) return@action
+
         val text = state.content.query.text.trim()
         if (text.isNotBlank()) {
+            searchSubmitted = true
             searchHistory.deleteHistory(text)
             searchHistory.saveHistory(
                 keyword = text,

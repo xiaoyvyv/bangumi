@@ -1,7 +1,9 @@
 package com.xiaoyv.bangumi.features.search.input
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Search
@@ -45,13 +49,11 @@ import com.xiaoyv.bangumi.features.search.input.business.SearchInputState
 import com.xiaoyv.bangumi.features.search.input.business.SearchInputViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
-import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
-import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -100,15 +102,46 @@ private fun SearchInputScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BgmTopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                navigationIcon = null,
-                titleContent = {
-                    baseState.content {
-                        SearchInputBar(this, onUiEvent, onActionEvent)
-                    }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .windowInsetsPadding(TopAppBarDefaults.windowInsets)
+                    .height(TopAppBarDefaults.TopAppBarExpandedHeight)
+            ) {
+                baseState.content {
+                    SearchInputBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center),
+                        state = this,
+                        onActionEvent = onActionEvent,
+                    )
                 }
-            )
+
+                IconButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 4.dp),
+                    onClick = { onUiEvent(SearchInputEvent.UI.OnNavUp) },
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                        contentDescription = stringResource(Res.string.global_back),
+                    )
+                }
+
+                IconButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 4.dp),
+                    onClick = { onActionEvent(SearchInputEvent.Action.OnSearch) },
+                ) {
+                    Icon(
+                        imageVector = BgmIcons.Search,
+                        contentDescription = stringResource(Res.string.global_search),
+                    )
+                }
+            }
         }
     ) {
         StateLayout(
@@ -159,14 +192,13 @@ private fun SearchInputScreenContent(
 
 @Composable
 private fun SearchInputBar(
+    modifier: Modifier = Modifier,
     state: SearchInputState,
-    onUiEvent: (SearchInputEvent.UI) -> Unit,
     onActionEvent: (SearchInputEvent.Action) -> Unit,
 ) {
     BmgTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = contentMargin - 12.dp, end = contentMargin),
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 56.dp, vertical = 14.dp),
         value = state.query,
         onValueChange = { onActionEvent(SearchInputEvent.Action.OnQueryChange(it)) },
         shape = CircleShape,
@@ -181,23 +213,7 @@ private fun SearchInputBar(
             disabledIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent
         ),
-        leadingIcon = {
-            IconButton(onClick = { onUiEvent(SearchInputEvent.UI.OnNavUp) }) {
-                Icon(
-                    imageVector = BgmIconsMirrored.ArrowBack,
-                    contentDescription = stringResource(Res.string.global_back)
-                )
-            }
-        },
         textStyle = MaterialTheme.typography.bodyLarge,
-        trailingIcon = {
-            IconButton(onClick = { onActionEvent(SearchInputEvent.Action.OnSearch) }) {
-                Icon(
-                    imageVector = BgmIcons.Search,
-                    contentDescription = stringResource(Res.string.global_search)
-                )
-            }
-        }
     )
 }
 

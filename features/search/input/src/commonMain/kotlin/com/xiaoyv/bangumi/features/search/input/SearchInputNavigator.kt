@@ -17,7 +17,7 @@ val searchInputModule = module {
                 onNavScreen = {
                     navigator.navigate(
                         it,
-                        stackAction = StackAction.PopUpTo(key, inclusive = true)
+                        stackAction = StackAction.PopUpTo(Screen.Main)
                     )
                 },
                 onNavUp = { navigator.goBack() }
