@@ -1,11 +1,12 @@
 package com.kyant.backdrop.highlight
 
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Shader
+import androidx.compose.ui.graphics.asComposeShader
 import com.kyant.backdrop.AmbientHighlightShaderString
 import com.kyant.backdrop.DefaultHighlightShaderString
 import com.kyant.backdrop.getRuntimeShaderCache
 import org.jetbrains.skia.RuntimeShaderBuilder
-import org.jetbrains.skia.Shader
 
 internal actual fun createDefaultAmbientShader(
     size: Size,
@@ -24,7 +25,7 @@ internal actual fun createDefaultAmbientShader(
         uniform("angle", angle)
         uniform("falloff", falloff)
     }
-    return shaderBuilder.makeShader()
+    return shaderBuilder.makeShader().asComposeShader()
 }
 
 internal actual fun createHighlightAmbientShader(
@@ -44,5 +45,5 @@ internal actual fun createHighlightAmbientShader(
         uniform("angle", angle)
         uniform("falloff", falloff)
     }
-    return shaderBuilder.makeShader()
+    return shaderBuilder.makeShader().asComposeShader()
 }

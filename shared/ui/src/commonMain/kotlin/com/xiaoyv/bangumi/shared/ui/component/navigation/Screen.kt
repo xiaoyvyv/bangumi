@@ -198,7 +198,7 @@ sealed class Screen(
     data class SearchInput(val query: String = "") : Screen(SCREEN_ROUTE_SEARCH_INPUT)
 
     @Serializable
-    data class SearchResult(val query: String) : Screen(SCREEN_ROUTE_SEARCH_RESULT)
+    data class SearchResult(val query: String) : Screen(SCREEN_ROUTE_SEARCH_RESULT, LaunchMode.SINGLE_TOP)
 
     @Serializable
     data class MikanResources(val mikanId: String, val groupId: String, val groupName: String) :
