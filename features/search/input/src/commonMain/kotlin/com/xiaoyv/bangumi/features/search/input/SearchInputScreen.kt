@@ -42,6 +42,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_back
 import com.xiaoyv.bangumi.core_resource.resources.global_clear
 import com.xiaoyv.bangumi.core_resource.resources.global_search
+import com.xiaoyv.bangumi.core_resource.resources.search_clear_history_confirm
 import com.xiaoyv.bangumi.core_resource.resources.search_history
 import com.xiaoyv.bangumi.features.search.input.business.SearchInputEvent
 import com.xiaoyv.bangumi.features.search.input.business.SearchInputSideEffect
@@ -49,6 +50,8 @@ import com.xiaoyv.bangumi.features.search.input.business.SearchInputState
 import com.xiaoyv.bangumi.features.search.input.business.SearchInputViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
@@ -217,17 +220,24 @@ private fun SearchInputHistory(
     state: SearchInputState,
     onActionEvent: (SearchInputEvent.Action) -> Unit,
 ) {
+    val clearHistoryDialogState = rememberAlertDialogState()
+
+    BgmAlertDialog(
+        state = clearHistoryDialogState,
+        text = stringResource(Res.string.search_clear_history_confirm),
+        onConfirm = { onActionEvent(SearchInputEvent.Action.OnClearHistory) },
+    )
+
     Column(modifier = Modifier.fillMaxSize()) {
-        Spacer(modifier = Modifier.height(24.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                modifier = Modifier.padding(vertical = 16.dp, horizontal = contentMargin),
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = contentMargin),
                 text = stringResource(Res.string.search_history),
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { onActionEvent(SearchInputEvent.Action.OnClearHistory) }) {
+            IconButton(onClick = { clearHistoryDialogState.show() }) {
                 Icon(
                     imageVector = BgmIcons.Delete,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
