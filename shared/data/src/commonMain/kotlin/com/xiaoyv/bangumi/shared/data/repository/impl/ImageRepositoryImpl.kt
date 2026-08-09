@@ -117,28 +117,32 @@ class ImageRepositoryImpl(
                 }
             }
 
-            ListAlbumType.SUBJECT_PREVIEW -> client.requestDouBanApi {
-                client.dbApi
-                    .queryDouBanPhotoList(param.doubanId, param.doubanType, page.toApiOffset(size), size)
-                    .copy(doubanMediaId = param.doubanId)
-                    .photos.map {
-                        val hexColor = parseHtmlHexColor(it.image.primaryColor.orEmpty()) ?: Color.LightGray
-                        val largeImage = it.displayLargeImage
+            ListAlbumType.SUBJECT_PREVIEW -> {
+                if (param.doubanId.isBlank() || param.doubanType.isBlank()) {
+                    Result.success(emptyList())
+                } else client.requestDouBanApi {
+                    client.dbApi
+                        .queryDouBanPhotoList(param.doubanId, param.doubanType, page.toApiOffset(size), size)
+                        .copy(doubanMediaId = param.doubanId)
+                        .photos.map {
+                            val hexColor = parseHtmlHexColor(it.image.primaryColor.orEmpty()) ?: Color.LightGray
+                            val largeImage = it.displayLargeImage
 
-                        ComposeGallery(
-                            id = largeImage.url.orEmpty(),
-                            type = param.type,
-                            width = largeImage.width,
-                            height = largeImage.height,
-                            image = largeImage.url.orEmpty(),
-                            original = largeImage.url.orEmpty(),
-                            color = listOf(
-                                (hexColor.red * 255).roundToInt().coerceIn(0, 255),
-                                (hexColor.green * 255).roundToInt().coerceIn(0, 255),
-                                (hexColor.blue * 255).roundToInt().coerceIn(0, 255),
+                            ComposeGallery(
+                                id = largeImage.url.orEmpty(),
+                                type = param.type,
+                                width = largeImage.width,
+                                height = largeImage.height,
+                                image = largeImage.url.orEmpty(),
+                                original = largeImage.url.orEmpty(),
+                                color = listOf(
+                                    (hexColor.red * 255).roundToInt().coerceIn(0, 255),
+                                    (hexColor.green * 255).roundToInt().coerceIn(0, 255),
+                                    (hexColor.blue * 255).roundToInt().coerceIn(0, 255),
+                                )
                             )
-                        )
-                    }
+                        }
+                }
             }
 
             else -> error("not support")

@@ -19,5 +19,8 @@ DELETE FROM SqlSerializable WHERE key = ?;
 deleteAll:
 DELETE FROM SqlSerializable;
 
+deleteSubjectPreviewMappings:
+DELETE FROM SqlSerializable WHERE key LIKE 'DB6-%';
+
 deleteExpired:
 DELETE FROM SqlSerializable WHERE createdAt < ?;

@@ -14,7 +14,6 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListTagType
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.runResult
-import com.xiaoyv.bangumi.shared.core.utils.substringBeforeSymbol
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
@@ -32,7 +31,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectS
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.chineseNames
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggestCard
@@ -48,6 +46,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlin.math.abs
 
 /**
  * [SubjectRepositoryImpl]
@@ -133,42 +132,29 @@ class SubjectRepositoryImpl(
 
     override suspend fun fetchSubjectPreview(subject: ComposeSubject): Result<ComposeDoubanPhoto> = runResult {
         val key = "DB6-${subject.id}"
-        val chineseNames = subject.infobox.chineseNames(subject.nameCn)
-
         var suggestCard = databaseRepository.get(key, ComposeDoubanSuggestCard.Empty, ComposeDoubanSuggestCard.serializer())
-        if (suggestCard == ComposeDoubanSuggestCard.Empty) {
-            val cards = coroutineScope {
-                awaitAll(
-                    *chineseNames
-                        .flatMap {
-                            if (it.length > 10) listOf(it, it.substringBeforeSymbol(), it.dropLast(2))
-                            else listOf(it, it.substringBeforeSymbol())
-                        }
-                        .map {
-                            async {
-                                runCatching { client.dbApi.queryDouBanSuggestion(q = it).cards }.getOrNull().orEmpty()
-                            }
-                        }
-                        .toTypedArray()
-                ).flatMap { it }
-            }
 
-            val mediaCards = cards
-                .filter { it.targetType == "tv" || it.targetType == "movie" }
-                .sortedBy {
-                    if (subject.type == SubjectType.REAL) {
-                        if (it.target.hasLinewatch) 0 else 1
-                    } else {
-                        if (it.target.hasLinewatch) 1 else 0
-                    }
-                }
-            val card = mediaCards.find { chineseNames.contains(it.target.title) }
-                ?: mediaCards.firstOrNull()
+        if (suggestCard == ComposeDoubanSuggestCard.Empty) {
+            val subjectYear = subject.airtime.year
+            val searchItems = coroutineScope {
+                awaitAll(
+                    async { client.dbApi.queryDouBanSubjects(q = subject.nameCn) },
+                    async { client.dbApi.queryDouBanSubjects(q = subject.name) },
+                ).flatMap { searchResponse ->
+                    searchResponse.items.ifEmpty { searchResponse.subjects.items }
+                }.distinctBy { it.targetType to it.targetId }
+            }
+            val mediaCards = searchItems.filter { it.targetType == "tv" || it.targetType == "movie" }
+            val card = mediaCards.firstOrNull { it.target.year.toIntOrNull() == subjectYear }
+                ?: mediaCards.minByOrNull { abs((it.target.year.toIntOrNull() ?: Int.MAX_VALUE) - subjectYear) }
 
             if (card != null) databaseRepository.put(key, card, ComposeDoubanSuggestCard.serializer())
             suggestCard = card ?: ComposeDoubanSuggestCard.Empty
         }
-        if (suggestCard == ComposeDoubanSuggestCard.Empty) ComposeDoubanPhoto.Empty else {
+
+        if (suggestCard == ComposeDoubanSuggestCard.Empty) {
+            ComposeDoubanPhoto.Empty
+        } else {
             client.dbApi
                 .queryDouBanPhotoList(suggestCard.targetId, suggestCard.targetType)
                 .copy(doubanMediaId = suggestCard.targetId, doubanMediaType = suggestCard.targetType)

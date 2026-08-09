@@ -34,4 +34,7 @@ interface DatabaseRepository {
     fun put(key: String, value: Int)
     fun put(key: String, value: Float)
     fun <T> put(key: String, data: T, serializable: KSerializer<T>)
+
+    /** 清理 BGM 条目与豆瓣条目的预览关联缓存。 */
+    fun clearSubjectPreviewMappings()
 }

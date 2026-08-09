@@ -28,6 +28,8 @@ import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -129,21 +131,33 @@ class SubjectDetailViewModel(
      * 刷新豆瓣预览和巡礼图片
      */
     private suspend fun onRefreshParadeAndPhoto() = subAction {
-        awaitAll(
-            block1 = { subjectRepository.fetchSubjectParade(args.subjectId).recover { ComposeParade.Empty } },
-            block2 = { subjectRepository.fetchSubjectPreview(stateRaw.subject).recover { ComposeDoubanPhoto.Empty } },
-            block3 = { subjectRepository.fetchMySubjectTags(args.subjectId).recover { emptyList() } },
-        ).onSuccess {
+        val subject = stateRaw.subject
+        reduceContent { state.copy(previewLoading = LoadingState.Loading) }
+
+        coroutineScope {
+            val parade = async { subjectRepository.fetchSubjectParade(args.subjectId).recover { ComposeParade.Empty } }
+            val photo = async { subjectRepository.fetchSubjectPreview(subject).recover { ComposeDoubanPhoto.Empty } }
+            val myTags = async { subjectRepository.fetchMySubjectTags(args.subjectId).recover { emptyList() } }
+
+            val preview = photo.await().getOrThrow()
             reduceContent {
                 state.copy(
-                    parade = it.data1,
-                    photo = it.data2,
-                    myTags = it.data3.toPersistentList(),
+                    photo = preview,
+                    previewLoading = LoadingState.NotLoading,
                 )
             }
 
-            personalStateStore.updateSubject(args.subjectId, stateRaw.subject)
+            val refreshedParade = parade.await().getOrThrow()
+            val refreshedTags = myTags.await().getOrThrow()
+            reduceContent {
+                state.copy(
+                    parade = refreshedParade,
+                    myTags = refreshedTags.toPersistentList(),
+                )
+            }
         }
+
+        personalStateStore.updateSubject(args.subjectId, subject)
     }
 
     private fun onUpdateEpisodeCollection(episodes: List<ComposeEpisode>, type: Int) = action {

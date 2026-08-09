@@ -92,6 +92,10 @@ class DatabaseRepositoryImpl(val json: Json) : DatabaseRepository {
         put(key, json.encodeToString(serializable, data))
     }
 
+    override fun clearSubjectPreviewMappings() {
+        database.appSerializableQueries.deleteSubjectPreviewMappings()
+    }
+
     override fun put(key: String, value: String) {
         database.appSerializableQueries.insertOrReplace(
             key = key,
