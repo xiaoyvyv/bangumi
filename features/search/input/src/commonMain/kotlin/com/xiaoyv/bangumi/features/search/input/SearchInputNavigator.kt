@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.search.input
 
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.navigation.StackAction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
 import org.koin.compose.viewmodel.koinViewModel
@@ -13,7 +14,12 @@ val searchInputModule = module {
         navigation<Screen.SearchInput> { key ->
             SearchInputRoute(
                 viewModel = koinViewModel { parametersOf(key) },
-                onNavScreen = { navigator.navigate(it) },
+                onNavScreen = {
+                    navigator.navigate(
+                        it,
+                        stackAction = StackAction.PopUpTo(Screen.Main)
+                    )
+                },
                 onNavUp = { navigator.goBack() }
             )
         }

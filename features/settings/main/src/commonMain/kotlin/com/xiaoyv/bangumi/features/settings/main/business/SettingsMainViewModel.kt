@@ -6,7 +6,9 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_clean_cache_success
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
+import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
 import org.jetbrains.compose.resources.getString
 
 /**
@@ -18,6 +20,7 @@ import org.jetbrains.compose.resources.getString
 class SettingsMainViewModel(
     savedStateHandle: SavedStateHandle,
     private val userManager: UserManager,
+    private val databaseRepository: DatabaseRepository,
 ) : BaseViewModel<SettingsMainState, SettingsMainSideEffect, SettingsMainEvent.Action>(savedStateHandle) {
 
     override fun initSate(onCreate: Boolean) = SettingsMainState()
@@ -39,9 +42,13 @@ class SettingsMainViewModel(
     }
 
     private fun onCleanCache() = action {
-        withActionLoading { System.cleanCache() }
-            .onSuccess {
-                postToast { getString(Res.string.settings_clean_cache_success) }
+        withActionLoading {
+            runResult {
+                System.cleanCache().getOrThrow()
+                databaseRepository.clearSubjectPreviewMappings()
             }
+        }.onSuccess {
+            postToast { getString(Res.string.settings_clean_cache_success) }
+        }
     }
 }

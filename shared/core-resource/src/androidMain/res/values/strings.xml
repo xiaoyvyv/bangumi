@@ -279,6 +279,7 @@
     <string name="settings_live2d_voice">触摸语音</string>
 
     <string name="search_history">搜索历史</string>
+    <string name="search_clear_history_confirm">确定删除所有历史记录吗？</string>
 
     <string name="subject_rate_count">（%1$d人评分）</string>
     <string name="subject_locked">条目已锁定</string>

@@ -4,6 +4,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shader
+import androidx.compose.ui.graphics.asComposeShader
 import androidx.compose.ui.util.fastCoerceIn
 import com.kyant.backdrop.getRuntimeShaderCache
 import org.jetbrains.skia.RuntimeShaderBuilder
@@ -23,7 +24,7 @@ internal actual fun createInteractiveHighlightShader(
         uniform("radius", radius)
         uniform("position", position.x.fastCoerceIn(0f, size.width), position.y.fastCoerceIn(0f, size.height))
     }
-    return shaderBuilder.makeShader()
+    return shaderBuilder.makeShader().asComposeShader()
 }
 
 internal const val InteractiveHighlightShaderString = """

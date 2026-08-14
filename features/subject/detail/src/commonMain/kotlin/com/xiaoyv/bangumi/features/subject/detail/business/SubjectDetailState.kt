@@ -56,6 +56,8 @@ data class SubjectDetailState(
 
     @Transient
     val loading: LoadingState = LoadingState.NotLoading,
+    @Transient
+    val previewLoading: LoadingState = LoadingState.Loading,
 ) {
 
     fun magnetQuery(episode: ComposeEpisode = ComposeEpisode.Empty): String {
@@ -91,7 +93,7 @@ data class SubjectDetailState(
             )
         }
         // 动画和三次元 才显示预览 TAB
-        if (photo.doubanMediaId.isNotBlank() && (subject.type == SubjectType.REAL || subject.type == SubjectType.ANIME)) {
+        if (subject.type == SubjectType.REAL || subject.type == SubjectType.ANIME) {
             items.add(ComposeTextTab(SubjectDetailTab.PREVIEW, Res.string.subject_tab_preview))
         }
         items.add(ComposeTextTab(SubjectDetailTab.CHARACTER, Res.string.subject_tab_character))

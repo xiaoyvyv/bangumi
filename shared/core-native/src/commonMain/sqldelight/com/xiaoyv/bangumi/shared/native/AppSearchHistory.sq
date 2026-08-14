@@ -12,8 +12,7 @@ VALUES (:keyword, :timestamp);
 -- 查询所有搜索历史，按时间倒序
 queryAllHistory:
 SELECT * FROM SqlHistory
-ORDER BY timestamp DESC
-LIMIT :limit;
+ORDER BY timestamp DESC;
 
 -- 查询某个关键词是否存在
 queryHistory:
