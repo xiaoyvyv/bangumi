@@ -33,7 +33,7 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.goBack
 import com.xiaoyv.bangumi.shared.ui.component.navigation.moveTop
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigate
 import com.xiaoyv.bangumi.shared.ui.component.navigation.stateConfiguration
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.kts.isWideScreen
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -73,6 +73,7 @@ fun MainScreen(
     }
     val backStack = rememberNavBackStack(stateConfiguration, startDestination.first)
     val isWideScreen = isWideScreen
+    val navigationContentMargin = contentMargin
     val indicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
     val bottomNavItemColors = NavigationSuiteDefaults.itemColors(
         navigationBarItemColors = NavigationBarItemDefaults.colors(
@@ -86,7 +87,7 @@ fun MainScreen(
             bottomTabs.forEach { item ->
                 val selected = backStack.current == item.first
                 item(
-                    modifier = Modifier.padding(bottom = if (isWideScreen) LayoutPadding else 0.dp),
+                    modifier = Modifier.padding(bottom = if (isWideScreen) navigationContentMargin else 0.dp),
                     label = {
                         Text(
                             text = stringResource(item.second.label),

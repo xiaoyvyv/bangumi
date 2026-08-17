@@ -69,7 +69,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -159,7 +159,7 @@ private fun ProfileScreen(
                             }
                         }
                     )
-                    Spacer(Modifier.width(LayoutPaddingHalf))
+                    Spacer(Modifier.width(contentMarginHalf))
                     BadgedBox(
                         badge = {
                             if (sharedState.unreadMessage > 0) {
@@ -175,7 +175,7 @@ private fun ProfileScreen(
                             }
                         }
                     )
-                    Spacer(Modifier.width(LayoutPaddingHalf))
+                    Spacer(Modifier.width(contentMarginHalf))
                     IconButton(onClick = { onUiEvent(ProfileEvent.UI.OnNavScreen(Screen.SettingsMain)) }) {
                         Icon(
                             imageVector = BgmIcons.Settings,
@@ -235,7 +235,7 @@ private fun ProfileScreenHeader(
                 .fillMaxSize()
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf, Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf, Alignment.CenterVertically)
         ) {
             Box(modifier = Modifier.clickWithoutRipped { onUiEvent(ProfileEvent.UI.OnNavScreen(Screen.SettingsAccount)) }) {
                 StateImage(
@@ -256,7 +256,7 @@ private fun ProfileScreenHeader(
                 )
             }
             Text(
-                modifier = Modifier.padding(top = LayoutPaddingHalf),
+                modifier = Modifier.padding(top = contentMarginHalf),
                 text = currentUser.nickname.ifBlank { stringResource(Res.string.login_first_tip) },
                 style = MaterialTheme.typography.titleLarge.copy(
                     color = imageColorState.contentColor

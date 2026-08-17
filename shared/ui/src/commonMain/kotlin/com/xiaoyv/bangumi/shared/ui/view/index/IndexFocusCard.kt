@@ -32,7 +32,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.usecase.ImageRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import org.koin.compose.currentKoinScope
 import kotlin.math.sqrt
 
@@ -71,7 +71,7 @@ fun IndexFocusCard(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
-                .padding(LayoutPaddingHalf),
+                .padding(contentMarginHalf),
             text = item.title,
             maxLines = 2,
             style = MaterialTheme.typography.bodySmall,

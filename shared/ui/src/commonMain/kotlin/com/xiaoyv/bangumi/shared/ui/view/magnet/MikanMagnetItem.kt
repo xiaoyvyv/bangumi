@@ -38,8 +38,8 @@ import com.xiaoyv.bangumi.shared.core.utils.magnetHash
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -91,10 +91,10 @@ fun MikanMagnetItem(
         modifier = modifier,
         onClick = { if (checkMode) onCheckedChange(!checked) else actionDialog.show() }
     ) {
-        Row(modifier = Modifier.padding(LayoutPadding)) {
+        Row(modifier = Modifier.padding(contentMargin)) {
             Column(
                 modifier = modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 Text(
                     text = item.titleHtml,
@@ -105,8 +105,8 @@ fun MikanMagnetItem(
                 )
 
                 if (item.tags.isNotEmpty()) FlowRow(
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     item.tags.fastForEach {
                         Text(
@@ -149,11 +149,10 @@ fun MikanMagnetItem(
             if (checkMode) Checkbox(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(start = LayoutPadding),
+                    .padding(start = contentMargin),
                 checked = checked,
                 onCheckedChange = onCheckedChange
             )
         }
     }
 }
-

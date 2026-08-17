@@ -30,7 +30,7 @@ import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.features.subject.page.SubjectPageRoute
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
@@ -57,8 +57,8 @@ fun MonoDetailWorksScreen(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
                 .horizontalScroll(rememberScrollState())
-                .padding(vertical = LayoutPaddingHalf, horizontal = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                .padding(vertical = contentMarginHalf, horizontal = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             DropMenuChip(
                 options = TabTokens.subjectTypeAllTabs,

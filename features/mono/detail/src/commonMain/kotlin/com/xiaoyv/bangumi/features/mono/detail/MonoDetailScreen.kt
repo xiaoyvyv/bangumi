@@ -74,8 +74,8 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -260,10 +260,10 @@ private fun MonoDetailScreenHeader(
             StateImage(
                 modifier = Modifier
                     .padding(
-                        top = LayoutPaddingHalf,
-                        bottom = LayoutPadding,
-                        start = LayoutPadding,
-                        end = LayoutPaddingHalf
+                        top = contentMarginHalf,
+                        bottom = contentMargin,
+                        start = contentMargin,
+                        end = contentMarginHalf
                     )
                     .fillMaxHeight()
                     .aspectRatio(3 / 4f)
@@ -279,12 +279,12 @@ private fun MonoDetailScreenHeader(
                     .weight(1f)
                     .fillMaxHeight()
                     .padding(
-                        top = LayoutPaddingHalf,
-                        bottom = LayoutPadding,
-                        start = LayoutPaddingHalf,
-                        end = LayoutPadding
+                        top = contentMarginHalf,
+                        bottom = contentMargin,
+                        start = contentMarginHalf,
+                        end = contentMargin
                     ),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 Text(
                     text = state.mono.displayName,
@@ -400,4 +400,3 @@ private fun MonoDetailScreenContent(
         }
     }
 }
-

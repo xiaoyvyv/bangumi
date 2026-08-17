@@ -24,8 +24,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -73,7 +73,7 @@ private fun HomeMonoScreenContent(
         columns = gridCells,
         contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
     ) {
         items(
             items = state.sections,
@@ -100,7 +100,7 @@ private fun HomeMonoScreenSection(
         SectionTitle(
             modifier = Modifier
                 .ignoreLazyGridContentPadding(12.dp)
-                .padding(horizontal = LayoutPadding, vertical = LayoutPadding),
+                .padding(horizontal = contentMargin, vertical = contentMargin),
             text = item.header.title,
             action = item.header.more,
             onClick = {

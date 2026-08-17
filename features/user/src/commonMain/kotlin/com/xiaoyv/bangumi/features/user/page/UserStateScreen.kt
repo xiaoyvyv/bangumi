@@ -45,7 +45,7 @@ import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsAverage
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsCollect
@@ -67,8 +67,8 @@ fun UserStateScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(LayoutPadding),
-        verticalArrangement = Arrangement.spacedBy(LayoutPadding)
+            .padding(contentMargin),
+        verticalArrangement = Arrangement.spacedBy(contentMargin)
     ) {
         var current by remember { mutableStateOf(SubjectType.UNKNOWN) }
 
@@ -102,10 +102,11 @@ fun UserStateScreen(
             else -> state.user.stats.subject.all to state.user.stats.rating.all
         }
 
+        val gridSpacing = contentMargin
         Grid(
             config = {
                 repeat(3) { column(minmax(0.dp, 1.fr)) }
-                gap(LayoutPadding)
+                gap(gridSpacing)
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -199,7 +200,7 @@ private fun CardInfo(
     Card(modifier = modifier, colors = colors) {
         Column(
             modifier = Modifier.padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(LayoutPadding)
+            verticalArrangement = Arrangement.spacedBy(contentMargin)
         ) {
             Text(
                 text = value,

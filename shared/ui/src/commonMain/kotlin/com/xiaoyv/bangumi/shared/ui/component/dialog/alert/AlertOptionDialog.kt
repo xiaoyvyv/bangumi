@@ -20,9 +20,11 @@ import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmAppTheme
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 
 /**
  * [AlertOptionDialog]
@@ -33,6 +35,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmAppTheme
 fun <Key : Any> AlertOptionDialog(
     state: AlertDialogState,
     title: String,
+    message: String? = null,
     items: SerializeList<ComposeTextTab<Key>>,
     onClick: (ComposeTextTab<Key>, Int) -> Unit,
 ) {
@@ -47,10 +50,21 @@ fun <Key : Any> AlertOptionDialog(
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    modifier = Modifier.padding(20.dp),
+                    modifier = Modifier.padding(contentMargin),
                     text = title,
                     style = MaterialTheme.typography.titleLarge
                 )
+
+                if (message != null) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = contentMargin)
+                            .padding(vertical = contentMarginHalf),
+                        text = title,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
 
                 items.fastForEachIndexed { i, tab ->
                     Text(
@@ -60,9 +74,9 @@ fun <Key : Any> AlertOptionDialog(
                                 onClick(tab, i)
                                 state.dismiss()
                             }
-                            .padding(horizontal = 20.dp, vertical = LayoutPadding),
+                            .padding(horizontal = contentMargin, vertical = contentMargin),
                         text = tab.displayText(),
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

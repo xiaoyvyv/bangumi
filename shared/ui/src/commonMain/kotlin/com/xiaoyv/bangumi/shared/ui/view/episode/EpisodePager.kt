@@ -57,8 +57,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.ui.component.button.episodeCollectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmGridPager
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
@@ -109,13 +109,13 @@ fun EpisodeGrid(
     modifier: Modifier = Modifier,
     minItemSize: Dp = 38.dp,
     @IntRange(from = 1) maxRows: Int = 5,
-    verticalSpacing: Dp = LayoutPaddingHalf,
-    horizontalSpacing: Dp = LayoutPaddingHalf,
+    verticalSpacing: Dp = contentMarginHalf,
+    horizontalSpacing: Dp = contentMarginHalf,
     contentPadding: PaddingValues = PaddingValues(
-        start = LayoutPadding,
-        top = LayoutPaddingHalf,
-        end = LayoutPadding,
-        bottom = LayoutPadding
+        start = contentMargin,
+        top = contentMarginHalf,
+        end = contentMargin,
+        bottom = contentMargin
     ),
     onEpisodeChange: (List<ComposeEpisode>, Int) -> Unit = { _, _ -> },
     onClickEpisode: (ComposeEpisode) -> Unit = {},
@@ -205,7 +205,7 @@ fun EpisodePager(
         items = episodes,
         key = { episodes[it].key },
         maxRows = maxRows,
-        contentPadding = PaddingValues(start = LayoutPadding, top = LayoutPaddingHalf, end = LayoutPadding, bottom = LayoutPadding)
+        contentPadding = PaddingValues(start = contentMargin, top = contentMarginHalf, end = contentMargin, bottom = contentMargin)
     ) {
         val buttonColors = episodeCollectionButtonColors(it.collection.status, it.isAiring, it.isAired)
         var expanded by remember { mutableStateOf(false) }

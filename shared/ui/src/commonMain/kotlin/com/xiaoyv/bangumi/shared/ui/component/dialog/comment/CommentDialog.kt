@@ -116,8 +116,8 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
@@ -239,7 +239,7 @@ fun CommentDialogContent(
             InputActionBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(LayoutPaddingHalf),
+                    .padding(contentMarginHalf),
                 value = state.comment,
                 onValueChange = { onEvent(CommentEvent.OnTextChange(it)) },
                 onPickImage = { launcher.launch() },
@@ -261,15 +261,15 @@ fun CommentDialogContent(
 
             Row(
                 modifier = Modifier
-                    .padding(horizontal = LayoutPaddingHalf)
+                    .padding(horizontal = contentMarginHalf)
                     .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small),
-                horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
             ) {
                 BmgTextField(
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
-                    contentPadding = PaddingValues(LayoutPaddingHalf),
+                    contentPadding = PaddingValues(contentMarginHalf),
                     value = state.comment,
                     onValueChange = { onEvent(CommentEvent.OnTextChange(it)) },
                     shape = MaterialTheme.shapes.small,
@@ -313,7 +313,7 @@ fun CommentDialogContent(
                 Button(
                     modifier = Modifier
                         .align(Alignment.Bottom)
-                        .padding(bottom = LayoutPaddingHalf, end = LayoutPaddingHalf)
+                        .padding(bottom = contentMarginHalf, end = contentMarginHalf)
                         .resetSize(),
                     enabled = state.comment.text.isNotBlank() && !state.sending,
                     onClick = {
@@ -361,8 +361,8 @@ private fun InputActionBar(
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
         FlowRow(
             modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf / 2),
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf / 2),
             itemVerticalAlignment = Alignment.CenterVertically
         ) {
             InputActionBarButton(BgmDefaultIcons.FormatBold, size = 24.dp, bbCode = bbcodeBold) {
@@ -460,9 +460,9 @@ private fun CommentDialogPanel(
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxSize(),
                     columns = GridCells.Adaptive(40.dp),
-                    contentPadding = PaddingValues(LayoutPaddingHalf),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    contentPadding = PaddingValues(contentMarginHalf),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     val emojis = when (it) {
                         0 -> tvEmojis
@@ -477,7 +477,7 @@ private fun CommentDialogPanel(
                                 .fillMaxWidth()
                                 .aspectRatio(1f)
                                 .clickable { onValueChange(value.insertEmoji(emoji)) }
-                                .padding(LayoutPaddingHalf),
+                                .padding(contentMarginHalf),
                             model = remember(emoji.smileId) {
                                 ImageRequest.Builder(context)
                                     .data(emoji.image.toComposeUri())
@@ -501,7 +501,7 @@ private fun CommentDialogPanel(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
-                        .padding(LayoutPadding)
+                        .padding(contentMargin)
                 ) {
                     var previewText by remember { mutableStateOf("") }
 

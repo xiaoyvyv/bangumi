@@ -2,11 +2,8 @@ package com.xiaoyv.bangumi.shared.ui.component.space
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-val LayoutPadding: Dp = 16.dp
-val LayoutPaddingHalf: Dp = 8.dp
 val LayoutGridWidth = 125.dp
 
 val BrushVerticalTransparentToHalfBlack = Brush.verticalGradient(
@@ -30,4 +27,3 @@ val BrushVerticalTransparentToHalfRed = Brush.verticalGradient(
         Color.Red.copy(1f),
     )
 )
-

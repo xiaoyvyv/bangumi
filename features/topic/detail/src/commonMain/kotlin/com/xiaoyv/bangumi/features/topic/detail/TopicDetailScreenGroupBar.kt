@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_group
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -29,7 +29,7 @@ internal fun TopicDetailScreenGroupBar(
     OutlinedCard(onClick = { onClick(group) }) {
         Row(
             modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             StateImage(
                 modifier = Modifier

@@ -21,7 +21,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexDialogItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -77,7 +77,7 @@ fun IndexDialogContent(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(LayoutPadding),
+                .padding(contentMargin),
             text = target.displayName,
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
             textAlign = TextAlign.Center,
@@ -86,7 +86,7 @@ fun IndexDialogContent(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(LayoutPadding),
+                .padding(contentMargin),
             text = "收集至我的目录",
             style = MaterialTheme.typography.bodyLarge,
         )

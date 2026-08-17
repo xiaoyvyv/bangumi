@@ -27,7 +27,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
@@ -152,11 +152,10 @@ private fun SubjectPageScreenContent(
         ) { item, _ ->
             SubjectLineItem(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = LayoutPadding, vertical = 12.dp),
+                contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
                 display = item,
                 onClick = { onUiEvent(SubjectPageEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id))) }
             )
         }
     }
 }
-

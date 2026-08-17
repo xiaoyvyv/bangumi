@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -46,7 +47,6 @@ import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.settingIndicationItems
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.settingNavigationAnimationItems
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -118,6 +118,7 @@ private fun SettingsUiScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_appearance)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_theme),
+                shape = ListItemDefaults.segmentedShapes(0, 2),
                 value = stringResource(SettingTheme.string(settings.ui.theme)),
                 items = TabTokens.settingThemeItems,
                 onClick = {
@@ -127,6 +128,7 @@ private fun SettingsUiScreenContent(
 
             SettingOptionItem(
                 title = stringResource(Res.string.settings_indication),
+                shape = ListItemDefaults.segmentedShapes(1, 2),
                 items = settingIndicationItems,
                 value = stringResource(SettingIndication.string(settings.ui.indication)),
                 onClick = {
@@ -138,6 +140,7 @@ private fun SettingsUiScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_performance)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_time_machine_grid_limit),
+                shape = ListItemDefaults.segmentedShapes(0, 3),
                 value = settings.ui.timeMachineGridLimit.toString(),
                 items = TabTokens.settingTimeMachineGridLimitItems,
                 onClick = {
@@ -147,6 +150,7 @@ private fun SettingsUiScreenContent(
 
             SettingOptionItem(
                 title = stringResource(Res.string.settings_navigation_animation),
+                shape = ListItemDefaults.segmentedShapes(1, 3),
                 value = stringResource(SettingNavigationAnimation.string(settings.ui.navigationAnimation)),
                 items = settingNavigationAnimationItems,
                 onClick = {
@@ -156,7 +160,8 @@ private fun SettingsUiScreenContent(
 
             SettingSwitchItem(
                 title = stringResource(Res.string.settings_cache_state),
-                desc = stringResource(Res.string.settings_cache_state_desc),
+                shape = ListItemDefaults.segmentedShapes(2, 3),
+                description = stringResource(Res.string.settings_cache_state_desc),
                 value = settings.ui.cacheState,
                 onValueChange = {
                     onActionEvent(SettingsUiEvent.Action.OnUpdate(settings.ui.copy(cacheState = it)))
@@ -168,6 +173,7 @@ private fun SettingsUiScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_content)) }) {
             SettingItem(
                 title = stringResource(Res.string.settings_deeplink),
+                shape = ListItemDefaults.segmentedShapes(0, 1),
                 onClick = {
                     System.launchDeeplinkSettings()
                 }

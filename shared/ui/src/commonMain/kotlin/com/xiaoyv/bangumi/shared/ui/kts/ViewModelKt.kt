@@ -9,12 +9,12 @@ import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.popup.PopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.PopupTipState
-import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.OrbitContainerHost
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 
 @Composable
-fun <STATE : Any, SIDE_EFFECT : Any> ContainerHost<BaseState<STATE>, BaseSideEffect<SIDE_EFFECT>>.collectBaseSideEffect(
+fun <STATE : Any, SIDE_EFFECT : Any> OrbitContainerHost<BaseState<STATE>, BaseState<STATE>, BaseSideEffect<SIDE_EFFECT>>.collectBaseSideEffect(
     lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
     onToastEffect: suspend (PopupTipState, BaseSideEffect.Toast<SIDE_EFFECT>) -> Unit = { state, effect ->
         state.showToast(effect.message)

@@ -124,16 +124,18 @@ fun BgmAppTheme(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val contentMargins = rememberContentMargins()
+    val settings = currentSettings()
+    val rippleIndication = LocalIndication.current
+
     SideEffectForStatusBar(darkTheme)
 
     MaterialTheme(
         colorScheme = if (darkTheme) darkScheme else lightScheme,
         typography = rememberAppTypography(),
         content = {
-            val rippleIndication = LocalIndication.current
-            val settings = currentSettings()
-
             CompositionLocalProvider(
+                LocalContentMargins provides contentMargins,
                 LocalMinimumInteractiveComponentSize provides 20.dp,
                 LocalContentColor provides if (darkTheme) darkScheme.onSurface else lightScheme.onSurface,
                 LocalIndication provides when (settings.ui.indication) {

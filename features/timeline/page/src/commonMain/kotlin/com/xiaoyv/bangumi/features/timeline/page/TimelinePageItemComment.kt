@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 
 @Composable
@@ -33,12 +33,12 @@ internal fun TimelinePageItemComment(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(contentPaddings),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             if (rate > 0) {
                 Row(
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     RatingBar(
                         value = rate,

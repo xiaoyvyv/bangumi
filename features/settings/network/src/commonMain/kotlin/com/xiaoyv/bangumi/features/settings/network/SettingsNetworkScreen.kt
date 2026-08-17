@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -114,6 +115,7 @@ private fun SettingsNetworkScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.global_domain)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_domain_bgm),
+                shape = ListItemDefaults.segmentedShapes(0, 2),
                 value = settings.network.bgmHost,
                 items = TabTokens.settingBangumiHosts,
                 onClick = {
@@ -123,6 +125,7 @@ private fun SettingsNetworkScreenContent(
 
             SettingOptionItem(
                 title = stringResource(Res.string.settings_proxy_bgm),
+                shape = ListItemDefaults.segmentedShapes(1, 2),
                 value = TabTokens.settingBangumiProxyItems
                     .find { it.type == settings.network.bgmProxy }?.displayText()
                     ?: if (settings.network.bgmProxy.isBlank()) stringResource(Res.string.settings_proxy_none) else settings.network.bgmProxy,
@@ -136,6 +139,7 @@ private fun SettingsNetworkScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.global_req_timeout)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_timeout_request),
+                shape = ListItemDefaults.segmentedShapes(0, 2),
                 value = (settings.network.connectTimeoutMillis / 1000).toString() + "s",
                 items = TabTokens.settingTimeoutItems,
                 onClick = {
@@ -144,6 +148,7 @@ private fun SettingsNetworkScreenContent(
             )
             SettingOptionItem(
                 title = stringResource(Res.string.settings_timeout_socket),
+                shape = ListItemDefaults.segmentedShapes(1, 2),
                 value = (settings.network.socketTimeoutMillis / 1000).toString() + "s",
                 items = TabTokens.settingTimeoutItems,
                 onClick = {
@@ -155,6 +160,7 @@ private fun SettingsNetworkScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.global_pixiv)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_domain_pixiv),
+                shape = ListItemDefaults.segmentedShapes(0, 5),
                 value = TabTokens.settingPixivImgHosts
                     .find { it.type == settings.network.pixivImageHost }?.displayText()
                     ?: settings.network.pixivImageHost,
@@ -166,6 +172,7 @@ private fun SettingsNetworkScreenContent(
 
             SettingInputItem(
                 title = "Client Id",
+                shape = ListItemDefaults.segmentedShapes(1, 5),
                 value = settings.network.pixivClientId,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(pixivClientId = it)))
@@ -174,6 +181,7 @@ private fun SettingsNetworkScreenContent(
 
             SettingInputItem(
                 title = "Client Secret",
+                shape = ListItemDefaults.segmentedShapes(2, 5),
                 value = settings.network.pixivClientSecret,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(pixivClientSecret = it)))
@@ -182,6 +190,7 @@ private fun SettingsNetworkScreenContent(
 
             SettingInputItem(
                 title = "Version",
+                shape = ListItemDefaults.segmentedShapes(3, 5),
                 value = settings.network.pixivVersion,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(pixivVersion = it)))
@@ -190,6 +199,7 @@ private fun SettingsNetworkScreenContent(
 
             SettingInputItem(
                 title = "Time Hash Secret",
+                shape = ListItemDefaults.segmentedShapes(4, 5),
                 value = settings.network.pixivTimeHashSecret,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(pixivTimeHashSecret = it)))
@@ -200,6 +210,7 @@ private fun SettingsNetworkScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_dou_ban)) }) {
             SettingInputItem(
                 title = "Secret",
+                shape = ListItemDefaults.segmentedShapes(0, 2),
                 value = settings.network.douBanKey,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(douBanKey = it)))
@@ -208,6 +219,7 @@ private fun SettingsNetworkScreenContent(
 
             SettingInputItem(
                 title = "UA",
+                shape = ListItemDefaults.segmentedShapes(1, 2),
                 value = settings.network.douBanUA,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(douBanUA = it)))
@@ -218,6 +230,7 @@ private fun SettingsNetworkScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.global_update)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_update_channel),
+                shape = ListItemDefaults.segmentedShapes(0, 1),
                 value = SettingUpdateChannel.string(settings.network.updateChannel),
                 items = TabTokens.settingUpdateChannels,
                 onClick = {

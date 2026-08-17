@@ -59,8 +59,8 @@ import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -175,7 +175,7 @@ private fun TopicDetailScreen(
                 FloatingActionButton(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(LayoutPadding),
+                        .padding(contentMargin),
                     onClick = { commentDialogState.show() }
                 ) {
                     Icon(imageVector = BgmIcons.EditNote, contentDescription = null)
@@ -205,8 +205,8 @@ fun TopicDetailScreenHeader(
     Column(
         modifier = modifier
             .padding(insets)
-            .padding(start = LayoutPadding, end = LayoutPaddingHalf, top = LayoutPaddingHalf, bottom = LayoutPadding),
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            .padding(start = contentMargin, end = contentMarginHalf, top = contentMarginHalf, bottom = contentMargin),
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
     ) {
         Text(
             text = state.displayTitle,
@@ -220,7 +220,7 @@ fun TopicDetailScreenHeader(
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             when (state.type) {
                 // 小组贴
@@ -445,8 +445,8 @@ private fun ArticleScreenCommentHeader(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
             .onGloballyPositioned { stickHeaderHeight = it.size.height }
-            .padding(LayoutPadding, LayoutPaddingHalf),
-        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+            .padding(contentMargin, contentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -517,6 +517,5 @@ private fun ArticleScreenRecationButton(
         }
     }
 }
-
 
 

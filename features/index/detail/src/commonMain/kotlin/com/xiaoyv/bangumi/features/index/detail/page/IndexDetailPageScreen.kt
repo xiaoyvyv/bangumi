@@ -29,8 +29,8 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodeItem
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoLineItem
@@ -68,8 +68,8 @@ private fun IndexDetailPageScreenContent(
                 OutlinedCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = LayoutPadding)
-                        .padding(vertical = LayoutPaddingHalf),
+                        .padding(horizontal = contentMargin)
+                        .padding(vertical = contentMarginHalf),
                     shape = MaterialTheme.shapes.small
                 ) {
                     Text(
@@ -92,7 +92,7 @@ fun IndexDetailPageRelatedContent(
             SubjectLineItem(
                 modifier = Modifier.fillMaxWidth(),
                 display = ComposeSubjectDisplay(subject = item.subject),
-                contentPadding = PaddingValues(horizontal = LayoutPadding, vertical = 12.dp),
+                contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
                 onClick = {
                     onNavScreen(Screen.SubjectDetail(item.subject.id))
                 }
@@ -130,7 +130,7 @@ fun IndexDetailPageRelatedContent(
                 modifier = Modifier.fillMaxWidth(),
                 subjectType = item.type,
                 item = item.episode,
-                contentPadding = PaddingValues(horizontal = LayoutPadding, vertical = 12.dp),
+                contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
                 onClick = {
                     onNavScreen(Screen.Article(item.episode.id, TopicDetailType.TYPE_EP))
                 }

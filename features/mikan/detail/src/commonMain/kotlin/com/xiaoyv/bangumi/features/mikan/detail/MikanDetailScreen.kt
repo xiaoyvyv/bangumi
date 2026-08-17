@@ -44,7 +44,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.view.magnet.MikanMagnetItem
@@ -131,7 +131,7 @@ private fun MikanDetailScreen(
                         actions = {
                             TextButton(onClick = { onActionEvent(MikanDetailEvent.Action.OnCopy) }) {
                                 Icon(BgmIcons.ContentCopy, stringResource(Res.string.global_copy))
-                                Spacer(modifier = Modifier.width(LayoutPaddingHalf / 2))
+                                Spacer(modifier = Modifier.width(contentMarginHalf / 2))
                                 Text(text = stringResource(Res.string.global_copy))
                             }
                         },

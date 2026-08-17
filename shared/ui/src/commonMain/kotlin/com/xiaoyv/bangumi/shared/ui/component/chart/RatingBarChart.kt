@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -32,8 +33,8 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.subject_score_empty
 import com.xiaoyv.bangumi.core_resource.resources.subject_score_format
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.isMediumScreen
 import com.xiaoyv.bangumi.shared.ui.kts.isSmallScreen
 import org.jetbrains.compose.resources.stringResource
@@ -47,9 +48,9 @@ fun RatingBarChart(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
             when {
-                isSmallScreen -> LayoutPadding
-                isMediumScreen -> LayoutPadding * 2
-                else -> LayoutPadding * 4
+                isSmallScreen -> contentMargin
+                isMediumScreen -> contentMargin * 2
+                else -> contentMargin * 4
             }
         ),
         verticalAlignment = Alignment.Bottom
@@ -78,17 +79,17 @@ fun RatingBarChart(
             ) {
                 TooltipBox(
                     state = tooltipState,
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above, 4.dp),
                     tooltip = {
                         PlainTooltip(
-                            modifier = Modifier.padding(horizontal = LayoutPadding),
+                            modifier = Modifier.padding(horizontal = contentMargin),
                             contentColor = MaterialTheme.colorScheme.onSurface,
                             containerColor = MaterialTheme.colorScheme.surfaceContainer,
                             shape = MaterialTheme.shapes.small,
                             shadowElevation = 1.dp
                         ) {
                             Text(
-                                modifier = Modifier.padding(LayoutPaddingHalf),
+                                modifier = Modifier.padding(contentMarginHalf),
                                 text = tipText,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant

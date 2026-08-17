@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.ic_bgm_character
 import com.xiaoyv.bangumi.shared.data.parser.RobotSpeech
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.roundToInt
@@ -47,7 +47,7 @@ fun BgmCharacterPlaceHolder(
     Column(
         modifier = modifier.padding(top = 80.dp, bottom = 120.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(LayoutPadding)
+        verticalArrangement = Arrangement.spacedBy(contentMargin)
     ) {
         // 无限往复动画
         val infiniteTransition = rememberInfiniteTransition(label = "shake")
@@ -82,7 +82,7 @@ fun BgmCharacterPlaceHolder(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(horizontal = LayoutPadding),
+                .padding(horizontal = contentMargin),
             text = text,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium.copy(

@@ -58,7 +58,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -203,7 +203,7 @@ private fun IndexDetailScreenHeader(
         ListItem(
             modifier = Modifier
                 .padding(padding)
-                .padding(vertical = LayoutPaddingHalf),
+                .padding(vertical = contentMarginHalf),
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
                 headlineColor = imageColorState.contentColor,
@@ -229,7 +229,7 @@ private fun IndexDetailScreenHeader(
             supportingContent = {
                 Column {
                     Text(
-                        modifier = Modifier.padding(vertical = LayoutPaddingHalf),
+                        modifier = Modifier.padding(vertical = contentMarginHalf),
                         text = buildString {
                             append(state.index.total)
                             append("个收录 ")
@@ -299,4 +299,3 @@ private fun PreviewIndexDetailScreen() {
         )
     }
 }
-

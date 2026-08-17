@@ -25,6 +25,7 @@ import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Source
 import androidx.compose.material.icons.rounded.TableBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -154,16 +155,19 @@ private fun SettingsMainScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_account)) }) {
             SettingItem(
                 title = stringResource(Res.string.settings_account_info),
+                shape = ListItemDefaults.segmentedShapes(0, 3),
                 icon = BgmIcons.ManageAccounts,
                 onClick = { onUiEvent(SettingsMainEvent.UI.OnNavScreen(Screen.SettingsAccount)) }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_privacy),
+                shape = ListItemDefaults.segmentedShapes(1, 3),
                 icon = BgmIcons.PrivacyTip,
                 onClick = { onUiEvent(SettingsMainEvent.UI.OnNavScreen(Screen.SettingsPrivacy)) }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_block_user),
+                shape = ListItemDefaults.segmentedShapes(2, 3),
                 icon = BgmIcons.Block,
                 onClick = { onUiEvent(SettingsMainEvent.UI.OnNavScreen(Screen.SettingsBlock)) }
             )
@@ -172,26 +176,31 @@ private fun SettingsMainScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_common)) }) {
             SettingItem(
                 title = stringResource(Res.string.settings_live2d),
+                shape = ListItemDefaults.segmentedShapes(0, 5),
                 icon = BgmIcons.Person,
                 onClick = { onUiEvent(SettingsMainEvent.UI.OnNavScreen(Screen.SettingsLive2d)) }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_ui),
+                shape = ListItemDefaults.segmentedShapes(1, 5),
                 icon = BgmIcons.DisplaySettings,
                 onClick = { onUiEvent(SettingsMainEvent.UI.OnNavScreen(Screen.SettingsUi)) }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_bar),
+                shape = ListItemDefaults.segmentedShapes(2, 5),
                 icon = BgmIcons.TableBar,
                 onClick = { onUiEvent(SettingsMainEvent.UI.OnNavScreen(Screen.SettingsBar)) }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_network),
+                shape = ListItemDefaults.segmentedShapes(3, 5),
                 icon = BgmIcons.NetworkCheck,
                 onClick = { onUiEvent(SettingsMainEvent.UI.OnNavScreen(Screen.SettingsNetwork)) }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_clean_cache),
+                shape = ListItemDefaults.segmentedShapes(4, 5),
                 icon = BgmIcons.Cached,
                 trailingContent = null,
                 onClick = {
@@ -203,24 +212,28 @@ private fun SettingsMainScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_relate)) }) {
             SettingItem(
                 title = stringResource(Res.string.settings_feedback),
+                shape = ListItemDefaults.segmentedShapes(0, 4),
                 icon = BgmIcons.Feedback,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://github.com/xiaoyvyv/bangumi/issues") }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_donate),
+                shape = ListItemDefaults.segmentedShapes(1, 4),
                 icon = BgmIcons.Money,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://lain.bgm.tv/pic/photo/l/47/7e/837364_do644.jpg") }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_qq_group),
+                shape = ListItemDefaults.segmentedShapes(2, 4),
                 icon = BgmIcons.Groups,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://qm.qq.com/q/YomiSMeyUs") }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_source),
+                shape = ListItemDefaults.segmentedShapes(3, 4),
                 icon = BgmIcons.Source,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://github.com/xiaoyvyv/bangumi") }
@@ -230,24 +243,28 @@ private fun SettingsMainScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_about)) }) {
             SettingItem(
                 title = stringResource(Res.string.settings_user_argument),
+                shape = ListItemDefaults.segmentedShapes(0, 4),
                 icon = BgmIcons.Security,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://xiaoyvyv.github.io/bangumi/lib-doc/build/argument.html?_=${Random.nextLong()}") }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_user_privacy),
+                shape = ListItemDefaults.segmentedShapes(1, 4),
                 icon = BgmIcons.PrivacyTip,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://xiaoyvyv.github.io/bangumi/lib-doc/build/starter.html?_=${Random.nextLong()}") }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_about_author),
+                shape = ListItemDefaults.segmentedShapes(2, 4),
                 icon = BgmIcons.Info,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://github.com/xiaoyvyv") }
             )
             SettingItem(
                 title = stringResource(Res.string.settings_about_app),
+                shape = ListItemDefaults.segmentedShapes(3, 4),
                 icon = BgmIcons.Apps,
                 trailingContent = null,
                 onClick = { actionHandler.openInBrowser("https://github.com/xiaoyvyv/bangumi") }
@@ -270,6 +287,7 @@ private fun SettingsMainScreenContent(
             SettingContainer {
                 SettingItem(
                     title = stringResource(Res.string.settings_logout),
+                    shape = ListItemDefaults.segmentedShapes(0, 1),
                     divider = false,
                     trailingContent = null,
                     textStyle = MaterialTheme.typography.bodyLarge.copy(

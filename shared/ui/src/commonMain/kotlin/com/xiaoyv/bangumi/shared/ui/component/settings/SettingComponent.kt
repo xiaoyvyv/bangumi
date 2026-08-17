@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.ui.component.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,11 +13,12 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.ListItemShapes
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,10 +36,11 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertInputDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertInputDialogState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 
 /**
  * [SettingContainer]
@@ -66,12 +67,11 @@ fun SettingContainer(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = contentMargin)
-                .padding(top = contentMargin, bottom = contentMargin / 2),
+                .padding(top = contentMargin, bottom = contentMarginHalf),
             content = {
                 CompositionLocalProvider(
-                    value = LocalTextStyle provides MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    ),
+                    value = LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                        .copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
                     content = label
                 )
             }
@@ -81,7 +81,7 @@ fun SettingContainer(
                 .fillMaxWidth()
                 .padding(horizontal = contentMargin),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Column(
@@ -98,13 +98,14 @@ fun SettingContainer(
 fun SettingItem(
     modifier: Modifier = Modifier,
     title: String,
+    shape: ListItemShapes,
     icon: ImageVector? = null,
     leadingContent: @Composable (() -> Unit)? = icon?.let {
         {
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.85f)
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     },
@@ -113,27 +114,30 @@ fun SettingItem(
     },
     supportingContent: @Composable (() -> Unit)? = null,
     divider: Boolean = false,
-    colors: ListItemColors = ListItemDefaults.colors(containerColor = Color.Transparent),
+    colors: ListItemColors = ListItemDefaults.segmentedColors(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer
+    ),
     textStyle: TextStyle = LocalTextStyle.current,
     onClick: () -> Unit = {},
 ) {
-    ListItem(
+    SegmentedListItem(
         modifier = Modifier
-            .clickable(onClick = onClick)
-            .padding(vertical = LayoutPaddingHalf / 2)
+            .padding(vertical = 1.dp)
             .fillMaxWidth()
             .then(modifier),
-        headlineContent = {
+        onClick = onClick,
+        shapes = shape,
+        colors = colors,
+        leadingContent = leadingContent,
+        trailingContent = trailingContent,
+        supportingContent = supportingContent,
+        content = {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = title,
                 style = textStyle,
             )
         },
-        leadingContent = leadingContent,
-        trailingContent = trailingContent,
-        supportingContent = supportingContent,
-        colors = colors
     )
     if (divider) {
         BgmHorizontalDivider()
@@ -143,6 +147,8 @@ fun SettingItem(
 @Composable
 fun <T : Any> SettingOptionItem(
     title: String,
+    shape: ListItemShapes,
+    description: String? = null,
     value: String,
     items: SerializeList<ComposeTextTab<T>>,
     onClick: (T) -> Unit,
@@ -151,14 +157,17 @@ fun <T : Any> SettingOptionItem(
 
     AlertOptionDialog(
         title = title,
+        message = description,
         state = dialogState,
         items = items,
-        onClick = { tab, index ->
+        onClick = { tab, _ ->
             onClick(tab.type)
         }
     )
+
     SettingItem(
         title = title,
+        shape = shape,
         trailingContent = { SettingItemTrailing(text = value) },
         onClick = { dialogState.show() }
     )
@@ -167,15 +176,22 @@ fun <T : Any> SettingOptionItem(
 @Composable
 fun SettingSwitchItem(
     title: String,
-    desc: String? = null,
+    shape: ListItemShapes,
+    description: String? = null,
     value: Boolean,
     onValueChange: (Boolean) -> Unit,
 ) {
     SettingItem(
         title = title,
-        trailingContent = { Switch(checked = value, onCheckedChange = onValueChange) },
-        supportingContent = if (desc == null) null else {
-            { Text(text = desc) }
+        shape = shape,
+        trailingContent = {
+            Switch(
+                checked = value,
+                onCheckedChange = onValueChange
+            )
+        },
+        supportingContent = if (description == null) null else {
+            { Text(text = description) }
         },
         onClick = { onValueChange(!value) }
     )
@@ -184,6 +200,7 @@ fun SettingSwitchItem(
 @Composable
 fun SettingInputItem(
     title: String,
+    shape: ListItemShapes,
     value: String,
     onClick: (String) -> Unit,
 ) {
@@ -198,6 +215,7 @@ fun SettingInputItem(
 
     SettingItem(
         title = title,
+        shape = shape,
         trailingContent = { SettingItemTrailing(text = value) },
         onClick = { dialogState.show { it.copy(value = value, title = title) } }
     )
@@ -211,7 +229,7 @@ fun SettingItemTrailing(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (!text.isNullOrBlank()) {

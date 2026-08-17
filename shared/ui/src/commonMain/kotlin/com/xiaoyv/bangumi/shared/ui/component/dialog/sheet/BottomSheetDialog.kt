@@ -30,7 +30,7 @@ fun BottomSheetDialog(
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
     sheetGesturesEnabled: Boolean = true,
     dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
-    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
+    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.modalWindowInsets },
     content: @Composable ColumnScope.() -> Unit,
 ) {
     if (state.showing) {

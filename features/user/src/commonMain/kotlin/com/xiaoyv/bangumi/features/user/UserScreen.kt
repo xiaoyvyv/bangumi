@@ -51,7 +51,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.coroutines.launch
@@ -179,7 +179,7 @@ private fun UserScreenHeader(
                 .fillMaxSize()
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf, Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf, Alignment.CenterVertically)
         ) {
             Box {
                 StateImage(
@@ -194,7 +194,7 @@ private fun UserScreenHeader(
             }
 
             Text(
-                modifier = Modifier.padding(top = LayoutPaddingHalf),
+                modifier = Modifier.padding(top = contentMarginHalf),
                 text = state.user.nickname + "@" + state.user.username,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = imageColorState.contentColor

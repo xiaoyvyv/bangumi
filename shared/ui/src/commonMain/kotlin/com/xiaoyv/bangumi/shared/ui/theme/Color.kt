@@ -5,17 +5,17 @@ import androidx.compose.ui.graphics.Color
 // ===================
 // Light Theme
 // ===================
-val primaryLight = Color(0xFF9C4666)
+val primaryLight = Color(0xFFE56C6C)
 val onPrimaryLight = Color(0xFFFFFFFF)
-val primaryContainerLight = Color(0xFFFFD9E2)
-val onPrimaryContainerLight = Color(0xFF3F001F)
+val primaryContainerLight = Color(0xFFFFDADB)
+val onPrimaryContainerLight = Color(0xFF72333A)
 
 val secondaryLight = Color(0xFF74565F)
 val onSecondaryLight = Color(0xFFFFFFFF)
 val secondaryContainerLight = Color(0xFFF3F3F3)
 val onSecondaryContainerLight = Color(0xFF1D1B1C)
 
-val tertiaryLight = Color(0xFF666666)
+val tertiaryLight = Color(0xFF5C8890)
 val onTertiaryLight = Color(0xFFFFFFFF)
 val tertiaryContainerLight = Color(0xFFF5F5F5)
 val onTertiaryContainerLight = Color(0xFF222222)
@@ -30,11 +30,11 @@ val onBackgroundLight = Color(0xFF222222)
 val surfaceLight = Color(0xFFFFFFFF)
 val onSurfaceLight = Color(0xFF222222)
 
-val surfaceVariantLight = Color(0xFFF5F5F5)
-val onSurfaceVariantLight = Color(0xFF555555)
+val surfaceVariantLight = Color(0xFFF0F0F0)
+val onSurfaceVariantLight = Color(0xFF666666)
 
-val outlineLight = Color(0xFFE0E0E0)
-val outlineVariantLight = Color(0xFFF0F0F0)
+val outlineLight = Color(0xFFCCCCCC)
+val outlineVariantLight = Color(0xFFEEEEEE)
 val scrimLight = Color(0xFF000000)
 
 val inverseSurfaceLight = Color(0xFF382E2E)
@@ -96,7 +96,6 @@ val surfaceContainerLowDark = Color(0xFF1D1D1D)
 val surfaceContainerDark = Color(0xFF212121)
 val surfaceContainerHighDark = Color(0xFF262626)
 val surfaceContainerHighestDark = Color(0xFF2A2A2A)
-
 
 
 /**

@@ -42,7 +42,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
@@ -124,8 +124,8 @@ private fun TimelinePageItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = LayoutPaddingHalf),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    .padding(vertical = contentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),

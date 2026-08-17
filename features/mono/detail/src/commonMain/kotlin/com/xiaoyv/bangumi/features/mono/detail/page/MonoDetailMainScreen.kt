@@ -40,8 +40,8 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.view.comment.CommentItem
@@ -85,7 +85,7 @@ fun MonoDetailMainScreen(
                 DetailSectionTitle(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = LayoutPadding, bottom = LayoutPaddingHalf),
+                        .padding(top = contentMargin, bottom = contentMarginHalf),
                     title = stringResource(Res.string.mono_recently_character),
                     action = stringResource(Res.string.subject_action_more),
                     onActionClick = {
@@ -109,7 +109,7 @@ fun MonoDetailMainScreen(
                 DetailSectionTitle(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = LayoutPadding, bottom = LayoutPaddingHalf),
+                        .padding(top = contentMargin, bottom = contentMarginHalf),
                     title = stringResource(Res.string.mono_recently_work),
                     action = stringResource(Res.string.subject_action_more),
                     onActionClick = {
@@ -123,7 +123,7 @@ fun MonoDetailMainScreen(
                 contentType = { ItemCharacterSubject }
             ) {
                 SubjectWorkItem(
-                    modifier = Modifier.padding(horizontal = LayoutPadding, vertical = LayoutPaddingHalf),
+                    modifier = Modifier.padding(horizontal = contentMargin, vertical = contentMarginHalf),
                     display = it,
                     onClick = {
                         onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id)))
@@ -138,7 +138,7 @@ fun MonoDetailMainScreen(
                 DetailSectionTitle(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = LayoutPadding, bottom = LayoutPaddingHalf),
+                        .padding(top = contentMargin, bottom = contentMarginHalf),
                     title = stringResource(Res.string.global_collabs),
                     action = stringResource(Res.string.subject_action_more),
                     onActionClick = {
@@ -151,8 +151,8 @@ fun MonoDetailMainScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .animateContentSize(),
-                    contentPadding = PaddingValues(horizontal = LayoutPadding),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+                    contentPadding = PaddingValues(horizontal = contentMargin),
+                    horizontalArrangement = Arrangement.spacedBy(contentMargin)
                 ) {
                     items(
                         state.mono.webInfo.collabs,
@@ -185,7 +185,7 @@ fun MonoDetailMainScreen(
                 DetailSectionTitle(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = LayoutPadding, bottom = LayoutPaddingHalf),
+                        .padding(top = contentMargin, bottom = contentMarginHalf),
                     title = stringResource(Res.string.global_spit_out),
                 )
             }
@@ -213,7 +213,7 @@ private fun MonoDetailSummary(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = LayoutPadding),
+            .padding(vertical = contentMargin),
         title = stringResource(Res.string.global_summary),
         onActionClick = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.summary))) }
     ) {
@@ -221,7 +221,7 @@ private fun MonoDetailSummary(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.summary))) }
-                .padding(horizontal = LayoutPadding),
+                .padding(horizontal = contentMargin),
             text = state.mono.summary.ifBlank { stringResource(Res.string.global_no_summary) },
             style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 28.sp),
             color = MaterialTheme.colorScheme.onSurface,
@@ -240,7 +240,7 @@ private fun MonoDetailInfo(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = LayoutPadding),
+            .padding(vertical = contentMargin),
         title = stringResource(Res.string.global_detail),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.webInfo.info))) }
@@ -249,7 +249,7 @@ private fun MonoDetailInfo(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.webInfo.info))) }
-                .padding(horizontal = LayoutPadding),
+                .padding(horizontal = contentMargin),
             text = state.mono.webInfo.shortInfo,
             maxLines = 10,
             minLines = 5,
@@ -266,7 +266,7 @@ private fun MonoDetailIndexList(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = LayoutPadding),
+            .padding(vertical = contentMargin),
         title = stringResource(Res.string.global_related_index),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = {
@@ -277,8 +277,8 @@ private fun MonoDetailIndexList(
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
-            contentPadding = PaddingValues(horizontal = LayoutPadding),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+            contentPadding = PaddingValues(horizontal = contentMargin),
+            horizontalArrangement = Arrangement.spacedBy(contentMargin)
         ) {
             items(
                 state.mono.webInfo.indexList,
@@ -309,7 +309,7 @@ private fun MonoDetailCollabPreviewItem(
             .clickWithoutRipped(onClick = onClick)
             .width(80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
     ) {
         InfoImage(
             modifier = Modifier.width(60.dp),

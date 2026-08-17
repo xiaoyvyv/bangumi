@@ -16,7 +16,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 
 @Composable
 internal fun TimelinePageItemMono(
@@ -26,7 +26,7 @@ internal fun TimelinePageItemMono(
     OutlinedCard {
         LazyRow(
             modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
         ) {
             if (item.memo.mono.persons.isNotEmpty()) {
                 items(

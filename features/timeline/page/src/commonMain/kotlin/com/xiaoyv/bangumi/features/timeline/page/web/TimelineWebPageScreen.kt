@@ -44,7 +44,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -121,8 +121,8 @@ private fun TimelinePageItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = LayoutPaddingHalf),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    .padding(vertical = contentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 if (item.title.isNotBlank()) {
                     BgmLinkedText(
@@ -222,12 +222,12 @@ private fun TimelinePageItemCollection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             if (item.rate > 0) {
                 Row(
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     RatingBar(
                         value = item.rate.toDouble(),
@@ -270,7 +270,7 @@ private fun TimelinePageItemSubject(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     InfoImage(
                         modifier = Modifier.width(80.dp),
@@ -315,7 +315,7 @@ private fun TimelinePageItemSubject(
         item.subjects.size > 1 -> {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
             ) {
                 items(
                     items = item.subjects,
@@ -340,7 +340,7 @@ private fun TimelinePageItemMono(
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
     ) {
         items(items = item.monos, contentType = { CONTENT_TYPE_TIMELINE_MONO }) { display ->
             InfoImage(

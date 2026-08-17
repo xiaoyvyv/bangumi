@@ -83,8 +83,8 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfRed
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -279,10 +279,10 @@ private fun SubjectDetailScreenHeader(
             Box(
                 modifier = Modifier
                     .padding(
-                        top = LayoutPaddingHalf,
-                        bottom = LayoutPadding,
-                        start = LayoutPadding,
-                        end = LayoutPaddingHalf
+                        top = contentMarginHalf,
+                        bottom = contentMargin,
+                        start = contentMargin,
+                        end = contentMarginHalf
                     )
                     .fillMaxHeight()
                     .aspectRatio(3 / 4f),
@@ -302,13 +302,13 @@ private fun SubjectDetailScreenHeader(
                 // 排名
                 if (state.subject.rating.rank != 0) Text(
                     modifier = Modifier
-                        .padding(top = LayoutPaddingHalf)
+                        .padding(top = contentMarginHalf)
                         .align(Alignment.TopStart)
                         .background(
                             MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
                             RoundedCornerShape(topEnd = 6.dp, bottomEnd = 6.dp),
                         )
-                        .padding(LayoutPaddingHalf, 4.dp),
+                        .padding(contentMarginHalf, 4.dp),
                     text = stringResource(Res.string.global_rank_no) + " " + state.subject.rating.rank,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
@@ -327,8 +327,8 @@ private fun SubjectDetailScreenHeader(
                                 topEnd = CornerSize(0.dp)
                             )
                         )
-                        .padding(bottom = LayoutPaddingHalf, top = LayoutPadding * 2)
-                        .padding(horizontal = LayoutPaddingHalf),
+                        .padding(bottom = contentMarginHalf, top = contentMargin * 2)
+                        .padding(horizontal = contentMarginHalf),
                     text = stringResource(Res.string.subject_locked),
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.SemiBold,
@@ -341,12 +341,12 @@ private fun SubjectDetailScreenHeader(
                     .weight(1f)
                     .fillMaxHeight()
                     .padding(
-                        top = LayoutPaddingHalf,
-                        bottom = LayoutPadding,
-                        start = LayoutPaddingHalf,
-                        end = LayoutPadding
+                        top = contentMarginHalf,
+                        bottom = contentMargin,
+                        start = contentMarginHalf,
+                        end = contentMargin
                     ),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 Text(
                     text = state.subject.displayName,

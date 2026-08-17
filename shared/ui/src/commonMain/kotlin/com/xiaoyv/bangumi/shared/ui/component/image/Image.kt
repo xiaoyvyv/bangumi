@@ -44,8 +44,8 @@ import com.xiaoyv.bangumi.shared.core.utils.KotlinThumbHash
 import com.xiaoyv.bangumi.shared.core.utils.noNull
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.io.encoding.Base64
@@ -182,7 +182,7 @@ fun InfoImage(
     model: Any?,
     text: String? = null,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
-    textPadding: Dp = LayoutPaddingHalf,
+    textPadding: Dp = contentMarginHalf,
     textMaxLines: Int = 1,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,

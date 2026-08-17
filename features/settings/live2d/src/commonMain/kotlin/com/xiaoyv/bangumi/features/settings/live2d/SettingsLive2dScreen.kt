@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -100,6 +101,7 @@ private fun SettingsLive2dScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_live2d)) }) {
             SettingSwitchItem(
                 title = stringResource(Res.string.settings_live2d),
+                shape = ListItemDefaults.segmentedShapes(0, 2),
                 value = settings.live2d.enable,
                 onValueChange = {
                     onActionEvent(SettingsLive2dEvent.Action.OnUpdate(settings.live2d.copy(enable = it)))
@@ -107,6 +109,7 @@ private fun SettingsLive2dScreenContent(
             )
             SettingSwitchItem(
                 title = stringResource(Res.string.settings_live2d_voice),
+                shape = ListItemDefaults.segmentedShapes(1, 2),
                 value = settings.live2d.voiceEnable,
                 onValueChange = {
                     onActionEvent(SettingsLive2dEvent.Action.OnUpdate(settings.live2d.copy(voiceEnable = it)))

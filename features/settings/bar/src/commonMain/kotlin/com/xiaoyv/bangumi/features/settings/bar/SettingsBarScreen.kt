@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -119,6 +120,7 @@ private fun SettingsBarScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_appearance)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_bar_appearance),
+                shape = ListItemDefaults.segmentedShapes(0, 1),
                 value = stringResource(SettingBottomBarAppearance.string(settings.homeTab.appearance)),
                 items = TabTokens.settingBottomBarAppearanceItems,
                 onClick = {
@@ -138,6 +140,7 @@ private fun SettingsBarScreenContent(
             )
             SettingItem(
                 title = stringResource(Res.string.settings_bar_boot_default),
+                shape = ListItemDefaults.segmentedShapes(0, 1),
                 trailingContent = {
                     SettingItemTrailing(
                         text = TabTokens.mainTabIndex.getOrNull(settings.homeTab.defaultSelected)?.displayText().orEmpty()
@@ -181,6 +184,7 @@ private fun SettingsBarScreenContent(
             tabs.forEachIndexed { index, tab ->
                 SettingItem(
                     title = stringResource(tab.second),
+                    shape = ListItemDefaults.segmentedShapes(index, tabs.size),
                     trailingContent = {
                         SettingItemTrailing(
                             text = TabTokens.mainTabFeatures.find { it.type == tab.first }?.displayText().orEmpty()

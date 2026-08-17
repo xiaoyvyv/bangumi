@@ -49,8 +49,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectD
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.view.tag.TagItems
@@ -68,7 +68,7 @@ fun SubjectCardItem(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
     ) {
         Box(
             Modifier
@@ -174,7 +174,7 @@ fun SubjectLineItem(
             modifier = Modifier
                 .weight(1f)
                 .heightIn(min = 140.dp),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             Text(
                 text = display.subject.displayName,
@@ -211,7 +211,7 @@ fun SubjectLineItem(
                         color = Color(0xFFFFAA00)
                     )
 
-                    Spacer(modifier = Modifier.width(LayoutPaddingHalf))
+                    Spacer(modifier = Modifier.width(contentMarginHalf))
 
                     // 总评人数
                     if (display.subject.displayRateTotalCount > 0) {
@@ -232,7 +232,7 @@ fun SubjectLineItem(
             if (collection != ComposeCollection.Empty) {
                 Row(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val buttonColors = collectionButtonColors(collection.type)
@@ -278,13 +278,13 @@ private fun SubjectLineCollectionItem(collection: ComposeCollection, onClick: ()
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             // 评分
             if (collection.rate > 0) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     RatingBar(
                         value = collection.rate.toDouble(),
@@ -304,8 +304,8 @@ private fun SubjectLineCollectionItem(collection: ComposeCollection, onClick: ()
             if (collection.tags.isNotEmpty()) {
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
                 ) {
                     TagItems(collection.tags, color = MaterialTheme.colorScheme.primary)
                 }
@@ -337,11 +337,11 @@ fun SubjectWorkItem(
 ) {
     Row(
         modifier = Modifier.clickable(onClick = onClick).then(modifier),
-        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
     ) {
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+            horizontalArrangement = Arrangement.spacedBy(contentMargin)
         ) {
             InfoImage(
                 modifier = Modifier.width(80.dp),
@@ -351,7 +351,7 @@ fun SubjectWorkItem(
                 onClick = onClick
             )
 
-            Column(Modifier.weight(1f), Arrangement.spacedBy(LayoutPaddingHalf)) {
+            Column(Modifier.weight(1f), Arrangement.spacedBy(contentMarginHalf)) {
                 Text(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -373,8 +373,8 @@ fun SubjectWorkItem(
                 // 参与作品中的职位
                 if (display.positions.isNotEmpty()) FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
                 ) {
                     display.positions.forEach { item ->
                         Text(

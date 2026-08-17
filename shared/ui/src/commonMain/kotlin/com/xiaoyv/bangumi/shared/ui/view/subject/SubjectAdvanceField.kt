@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.TextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -40,7 +40,7 @@ fun SubjectAdvanceFilterTextField(
     )
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -57,7 +57,7 @@ fun SubjectAdvanceFilterTextField(
         )
 
         HighlightedText(
-            modifier = Modifier.padding(bottom = LayoutPaddingHalf),
+            modifier = Modifier.padding(bottom = contentMarginHalf),
             text = description,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -72,4 +72,3 @@ fun String.splitValue(): SerializeList<String>? {
         .toPersistentList()
         .takeIf { it.isNotEmpty() }
 }
-

@@ -40,7 +40,7 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -139,7 +139,7 @@ private fun MonoDetailPictureItem(
         if (item.count > 1) Text(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(LayoutPaddingHalf)
+                .padding(contentMarginHalf)
                 .clip(RoundedCornerShape(2.dp))
                 .background(Color.Black.copy(0.5f))
                 .padding(horizontal = 4.dp, vertical = 2.dp),
@@ -152,7 +152,7 @@ private fun MonoDetailPictureItem(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .background(BrushVerticalTransparentToHalfBlack)
-                .padding(LayoutPaddingHalf),
+                .padding(contentMarginHalf),
             style = MaterialTheme.typography.bodySmall.copy(
                 shadow = Shadow(
                     color = if (item.uiColor != Color.Unspecified) item.uiColor else Color.White,

@@ -23,7 +23,7 @@ import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 
 
@@ -56,7 +56,7 @@ internal fun TimelinePageItemSubject(
             OutlinedCard {
                 LazyRow(
                     modifier = Modifier.padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
                 ) {
                     items(
                         items = item.memo.subject,
@@ -95,7 +95,7 @@ internal fun TimelinePageItemSubjectItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             InfoImage(
                 modifier = Modifier.width(65.dp),

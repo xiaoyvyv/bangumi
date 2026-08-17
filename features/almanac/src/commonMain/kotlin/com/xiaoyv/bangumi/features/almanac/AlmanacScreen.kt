@@ -29,8 +29,8 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -97,12 +97,12 @@ private fun AlmanacScreenContent(
     LazyVerticalGrid(
         modifier = Modifier.fillMaxWidth(),
         columns = GridCells.Adaptive(300.dp),
-        verticalArrangement = Arrangement.spacedBy(LayoutPadding),
-        horizontalArrangement = Arrangement.spacedBy(LayoutPadding),
-        contentPadding = PaddingValues(LayoutPadding)
+        verticalArrangement = Arrangement.spacedBy(contentMargin),
+        horizontalArrangement = Arrangement.spacedBy(contentMargin),
+        contentPadding = PaddingValues(contentMargin)
     ) {
         items(state.almanacs, key = { it.first }, contentType = { "Image" }) {
-            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)) {
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(contentMarginHalf)) {
                 Text(
                     text = it.first.toString(),
                     style = MaterialTheme.typography.titleLarge
@@ -123,4 +123,3 @@ private fun AlmanacScreenContent(
         }
     }
 }
-

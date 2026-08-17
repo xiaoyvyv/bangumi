@@ -82,7 +82,7 @@ fun RatingBar(
                         contentDescription = null,
                         tint = activeColor,
                         modifier = Modifier.size(starSize).run {
-                            if (fillRatio == 1f) this else clip(HalfCutoutShape(fillRatio.toFloat()))
+                            if (fillRatio == 1f) this else clip(HalfCutoutShape(fillRatio))
                         },
                     )
                 }

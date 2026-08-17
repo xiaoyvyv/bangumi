@@ -36,7 +36,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.coroutines.launch
@@ -123,7 +123,7 @@ private fun MikanStudioScreenContent(
                             )
                         )
                     }
-                    .padding(vertical = LayoutPaddingHalf / 2f),
+                    .padding(vertical = contentMarginHalf / 2f),
                 headlineContent = {
                     Text(text = it.name.orEmpty())
                 },
@@ -136,7 +136,7 @@ private fun MikanStudioScreenContent(
                 },
                 supportingContent = {
                     Text(
-                        modifier = Modifier.padding(vertical = LayoutPaddingHalf / 2f),
+                        modifier = Modifier.padding(vertical = contentMarginHalf / 2f),
                         text = it.time.orEmpty()
                     )
                 },
@@ -164,4 +164,3 @@ private fun MikanStudioScreenContent(
         }
     }
 }
-

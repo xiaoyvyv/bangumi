@@ -22,7 +22,7 @@ import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import org.jetbrains.compose.resources.stringResource
 
@@ -37,7 +37,7 @@ internal fun TimelinePageItemBlog(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(contentPaddings),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             Text(
                 text = item.memo.blog.title,

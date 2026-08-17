@@ -25,8 +25,8 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 
 /**
  * [MonoDetailCollabsScreen]
@@ -48,7 +48,7 @@ fun MonoDetailCollabsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(LayoutPadding),
+                .padding(contentMargin),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -64,9 +64,9 @@ fun MonoDetailCollabsScreen(
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Adaptive(minSize = 100.dp),
-        contentPadding = PaddingValues(LayoutPadding),
-        horizontalArrangement = Arrangement.spacedBy(LayoutPadding),
-        verticalArrangement = Arrangement.spacedBy(LayoutPadding),
+        contentPadding = PaddingValues(contentMargin),
+        horizontalArrangement = Arrangement.spacedBy(contentMargin),
+        verticalArrangement = Arrangement.spacedBy(contentMargin),
     ) {
         items(
             items = collabs,
@@ -96,9 +96,9 @@ private fun CollabItem(
         modifier = Modifier
             .clickWithoutRipped(onClick = onClick)
             .width(100.dp)
-            .padding(vertical = LayoutPaddingHalf),
+            .padding(vertical = contentMarginHalf),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
     ) {
         InfoImage(
             modifier = Modifier

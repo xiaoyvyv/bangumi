@@ -52,8 +52,8 @@ import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.rememberSheetDialogState
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.filterNsfw
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.subjectTypeTabs
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectAdvanceFilterTextField
@@ -79,7 +79,7 @@ fun SearchResultSubject(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(vertical = LayoutPaddingHalf, horizontal = 12.dp),
+                .padding(vertical = contentMarginHalf, horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             val advanceDialogState = rememberSheetDialogState()
@@ -192,8 +192,8 @@ fun SearchResultSubjectAdvanceFilter(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = LayoutPadding)
-                .padding(bottom = LayoutPadding),
+                .padding(horizontal = contentMargin)
+                .padding(bottom = contentMargin),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -219,7 +219,7 @@ fun SearchResultSubjectAdvanceFilter(
                         )
                     )
                 },
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = LayoutPaddingHalf),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = contentMarginHalf),
                 shape = MaterialTheme.shapes.small,
             ) {
                 Text(text = stringResource(Res.string.global_done))
@@ -247,9 +247,9 @@ fun SearchResultSubjectAdvanceFilter(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
-                    .padding(horizontal = LayoutPadding)
+                    .padding(horizontal = contentMargin)
                     .padding(bottom = 60.dp),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 SubjectAdvanceFilterTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -328,7 +328,7 @@ fun SearchResultSubjectAdvanceFilter(
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surfaceBright)
-                    .padding(horizontal = LayoutPadding)
+                    .padding(horizontal = contentMargin)
                     .imePadding(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -354,7 +354,7 @@ fun SearchResultSubjectAdvanceFilter(
                                     )
                                 }
                             }
-                            .padding(LayoutPaddingHalf),
+                            .padding(contentMarginHalf),
                         text = op,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge

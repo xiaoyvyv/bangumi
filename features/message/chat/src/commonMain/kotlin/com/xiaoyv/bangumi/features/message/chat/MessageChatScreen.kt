@@ -49,7 +49,7 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.text.textFieldTransparentColors
@@ -185,13 +185,13 @@ private fun MessageChatBottomBar(
     Row(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
-            .padding(LayoutPaddingHalf)
+            .padding(contentMarginHalf)
             .background(MaterialTheme.colorScheme.surfaceBright, MaterialTheme.shapes.small),
-        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
     ) {
         BmgTextField(
             modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(LayoutPaddingHalf),
+            contentPadding = PaddingValues(contentMarginHalf),
             value = state.input,
             onValueChange = { onActionEvent(MessageChatEvent.Action.OnTextChange(it)) },
             shape = MaterialTheme.shapes.small,
@@ -213,7 +213,7 @@ private fun MessageChatBottomBar(
         if (state.message.canReply) Button(
             modifier = Modifier
                 .align(Alignment.Bottom)
-                .padding(bottom = LayoutPaddingHalf, end = LayoutPaddingHalf)
+                .padding(bottom = contentMarginHalf, end = contentMarginHalf)
                 .resetSize(),
             enabled = state.input.text.isNotBlank() && state.sending != LoadingState.Loading,
             onClick = { onActionEvent(MessageChatEvent.Action.OnSendReply(state.input.text)) },
@@ -246,7 +246,7 @@ private fun MessageChatScreenPageItem(
     OutlinedCard(modifier = Modifier.fillMaxWidth(), onClick = {}) {
         Row(
             modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
         ) {
             val currentUser = currentUser()
             val isSelf = item.user.username == currentUser.username
@@ -256,11 +256,11 @@ private fun MessageChatScreenPageItem(
                 shape = MaterialTheme.shapes.small,
             )
 
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(contentMarginHalf)) {
                 Row(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     if (isSelf) Text(
                         text = item.time,
@@ -310,4 +310,3 @@ private fun MessageChatScreenPageItem(
         }
     }
 }
-

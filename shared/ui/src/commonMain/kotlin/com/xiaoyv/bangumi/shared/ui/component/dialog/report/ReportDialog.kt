@@ -41,8 +41,8 @@ import com.xiaoyv.bangumi.shared.core.types.ReportValueType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
@@ -73,11 +73,11 @@ fun ReportDialog(
         state = state,
         title = { Text(text = stringResource(Res.string.action_report)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(LayoutPadding)) {
+            Column(verticalArrangement = Arrangement.spacedBy(contentMargin)) {
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
                     itemVerticalAlignment = Alignment.CenterVertically
                 ) {
                     options.forEach { tab ->

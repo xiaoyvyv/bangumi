@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
@@ -41,8 +41,8 @@ fun <T> BgmGridPager(
     modifier: Modifier = Modifier,
     minItemSize: Dp = 38.dp,
     @IntRange(from = 1) maxRows: Int = 5,
-    verticalSpacing: Dp = LayoutPaddingHalf,
-    horizontalSpacing: Dp = LayoutPaddingHalf,
+    verticalSpacing: Dp = contentMarginHalf,
+    horizontalSpacing: Dp = contentMarginHalf,
     contentPadding: PaddingValues = PaddingValues(),
     onInitialPage: (Int, Int) -> Int = { _, _ -> 0 },
     empty: @Composable () -> Unit = {},

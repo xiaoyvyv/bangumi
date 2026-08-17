@@ -29,8 +29,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
 
@@ -48,8 +48,8 @@ fun SubjectBlogItem(
 ) {
     Column(modifier = Modifier.clickable(onClick = onClick).then(modifier)) {
         Row(
-            modifier = Modifier.padding(LayoutPadding),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+            modifier = Modifier.padding(contentMargin),
+            horizontalArrangement = Arrangement.spacedBy(contentMargin)
         ) {
             InfoImage(
                 modifier = Modifier.width(80.dp),
@@ -60,12 +60,12 @@ fun SubjectBlogItem(
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 Row(
                     modifier = Modifier.clickWithoutRipped { onClickUser(item.user) },
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     StateImage(
                         modifier = Modifier.size(24.dp),
@@ -105,7 +105,7 @@ fun SubjectBlogItem(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     if (item.blog.replies > 0) Text(
                         text = buildString {

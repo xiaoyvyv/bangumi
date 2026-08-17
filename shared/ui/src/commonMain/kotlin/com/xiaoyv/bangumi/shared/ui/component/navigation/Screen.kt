@@ -6,14 +6,13 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.koin.core.module.KoinDslMarker
 import org.koin.core.module.Module
 import org.koin.core.qualifier.TypeQualifier
 import org.koin.core.scope.Scope
@@ -22,7 +21,6 @@ val Scope.navigator get() = get<Navigator>()
 
 val NavKeyScopeArchetype = TypeQualifier(NavKey::class)
 
-@KoinDslMarker
 inline fun Module.navScope(scopeSet: Module.() -> Unit) {
     scopeSet()
 }

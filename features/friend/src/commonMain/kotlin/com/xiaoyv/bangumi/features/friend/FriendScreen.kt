@@ -54,7 +54,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.coroutines.launch
@@ -214,7 +214,7 @@ private fun FriendScreenContent(
                         onDragEnd = { selectedKey = null }
                     )
                 }
-                .padding(vertical = LayoutPaddingHalf)
+                .padding(vertical = contentMarginHalf)
         ) {
             state.keys.fastForEachIndexed { index, it ->
                 Text(

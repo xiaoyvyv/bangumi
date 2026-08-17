@@ -21,7 +21,7 @@ import com.xiaoyv.bangumi.features.subject.page.SubjectPageRoute
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.collections.immutable.toPersistentList
@@ -46,8 +46,8 @@ fun ProfileCollectionScreen(
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
                         .horizontalScroll(rememberScrollState())
-                        .padding(vertical = LayoutPaddingHalf, horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                        .padding(vertical = contentMarginHalf, horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     DropMenuChip(
                         options = TabTokens.collectionSortFilters,

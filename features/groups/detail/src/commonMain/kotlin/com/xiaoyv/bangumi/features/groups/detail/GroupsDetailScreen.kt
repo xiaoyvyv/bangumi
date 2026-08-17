@@ -62,8 +62,8 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -198,7 +198,7 @@ private fun GroupsDetailScreenHeader(
         ListItem(
             modifier = Modifier
                 .padding(padding)
-                .padding(vertical = LayoutPaddingHalf),
+                .padding(vertical = contentMarginHalf),
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
                 headlineColor = imageColorState.contentColor,
@@ -222,7 +222,7 @@ private fun GroupsDetailScreenHeader(
             supportingContent = {
                 Column {
                     Text(
-                        modifier = Modifier.padding(vertical = LayoutPaddingHalf),
+                        modifier = Modifier.padding(vertical = contentMarginHalf),
                         text = buildString {
                             append(state.group.members)
                             append(" 位成员")
@@ -333,7 +333,7 @@ private fun GroupsDetailScreenSummary(
         }
 
         BgmLinkedText(
-            modifier = Modifier.padding(LayoutPadding),
+            modifier = Modifier.padding(contentMargin),
             text = text,
             textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface)
         )

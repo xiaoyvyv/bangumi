@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -144,6 +145,7 @@ private fun SettingsAccountScreenContent(
             SettingItem(
                 modifier = Modifier.padding(vertical = 16.dp),
                 title = stringResource(Res.string.settings_change_avatar),
+                shape = ListItemDefaults.segmentedShapes(0, state.items.size + 1),
                 trailingContent = null,
                 leadingContent = {
                     AsyncImage(
@@ -158,9 +160,10 @@ private fun SettingsAccountScreenContent(
                 onClick = { onUiEvent(SettingsAccountEvent.UI.OnPickAvatar) }
             )
 
-            state.items.entries.forEach { data ->
+            state.items.entries.forEachIndexed { index, data ->
                 SettingItem(
                     title = stringResource(EditInfoType.string(data.key)),
+                    shape = ListItemDefaults.segmentedShapes(index + 1, state.items.size + 1),
                     leadingContent = null,
                     trailingContent = null,
                     supportingContent = { Text(text = data.value.orNotSet()) },
@@ -181,9 +184,10 @@ private fun SettingsAccountScreenContent(
         }
 
         SettingContainer(label = { Text(text = stringResource(Res.string.global_network_service)) }) {
-            state.networkItems.entries.forEach { data ->
+            state.networkItems.entries.forEachIndexed { index, data ->
                 SettingItem(
                     title = stringResource(EditInfoType.string(data.key)),
+                    shape = ListItemDefaults.segmentedShapes(index, state.networkItems.size),
                     leadingContent = null,
                     trailingContent = null,
                     supportingContent = { Text(text = data.value.orNotSet()) },

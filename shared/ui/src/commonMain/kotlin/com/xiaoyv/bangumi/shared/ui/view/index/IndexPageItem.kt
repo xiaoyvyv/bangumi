@@ -31,7 +31,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_timeline
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
 
@@ -46,7 +46,7 @@ fun IndexCardItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             Text(
                 text = item.title,
@@ -59,7 +59,7 @@ fun IndexCardItem(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 StateImage(
                     modifier = Modifier.size(24.dp),
@@ -103,7 +103,7 @@ fun IndexPageItem(
             overlineContent = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     if (item.creator.avatar.displayMediumImage.isNotBlank()) StateImage(
                         modifier = Modifier.size(24.dp),
@@ -125,8 +125,8 @@ fun IndexPageItem(
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .padding(vertical = LayoutPaddingHalf),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                        .padding(vertical = contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
@@ -152,7 +152,7 @@ fun IndexPageItem(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     if (item.total > 0) Text(
                         text = "收录：${item.total}",

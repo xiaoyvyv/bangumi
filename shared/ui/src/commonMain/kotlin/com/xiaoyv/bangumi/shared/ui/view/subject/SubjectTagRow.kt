@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.utils.formatShort
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 
 @Composable
 fun SubjectTagRow(
@@ -36,10 +36,10 @@ fun SubjectTagRow(
     var itemHeight by rememberSaveable { mutableStateOf(32f) }
 
     LazyHorizontalStaggeredGrid(
-        modifier = modifier.height(itemHeight.dp * maxLines + LayoutPaddingHalf * (maxLines - 1)),
+        modifier = modifier.height(itemHeight.dp * maxLines + contentMarginHalf * (maxLines - 1)),
         rows = StaggeredGridCells.Fixed(maxLines),
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-        horizontalItemSpacing = LayoutPaddingHalf
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        horizontalItemSpacing = contentMarginHalf
     ) {
         items(tags) {
             SuggestionChip(

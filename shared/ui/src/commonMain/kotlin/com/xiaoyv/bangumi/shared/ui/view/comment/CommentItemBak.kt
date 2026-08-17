@@ -43,7 +43,7 @@ import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -89,14 +89,14 @@ fun CommentItem(
         overlineContent = {
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-                horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
                 itemVerticalAlignment = Alignment.CenterVertically
             ) {
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf / 2),
-                    horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf / 2),
+                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
                     itemVerticalAlignment = Alignment.CenterVertically
                 ) {
                     // 子评论使用小头像
@@ -165,7 +165,7 @@ fun CommentItem(
                 if (item.star > 0) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
                     ) {
                         RatingBar(value = item.star, starSize = 16.dp)
                         Text(
@@ -183,8 +183,8 @@ fun CommentItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = LayoutPaddingHalf),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                    .padding(vertical = contentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 if (item.replyQuote.isNotBlank()) {
                     val colorScheme = MaterialTheme.colorScheme
@@ -201,8 +201,8 @@ fun CommentItem(
                                     strokeWidth = strokeWidth
                                 )
                             }
-                            .padding(vertical = LayoutPaddingHalf)
-                            .padding(start = 12.dp, end = LayoutPaddingHalf),
+                            .padding(vertical = contentMarginHalf)
+                            .padding(start = 12.dp, end = contentMarginHalf),
                         text = item.replyQuote,
                         style = MaterialTheme.typography.labelSmall.copy(
                             color = colorScheme.primary,

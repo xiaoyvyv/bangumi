@@ -52,8 +52,8 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -153,13 +153,13 @@ private fun DollarsScreenContent(
         Row(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                .padding(LayoutPaddingHalf)
+                .padding(contentMarginHalf)
                 .background(MaterialTheme.colorScheme.surfaceBright, MaterialTheme.shapes.small),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
         ) {
             BmgTextField(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(LayoutPaddingHalf),
+                contentPadding = PaddingValues(contentMarginHalf),
                 value = state.value,
                 onValueChange = { onActionEvent(DollarsEvent.Action.OnValueChange(it)) },
                 shape = MaterialTheme.shapes.small,
@@ -180,7 +180,7 @@ private fun DollarsScreenContent(
             Button(
                 modifier = Modifier
                     .align(Alignment.Bottom)
-                    .padding(bottom = LayoutPaddingHalf, end = LayoutPaddingHalf)
+                    .padding(bottom = contentMarginHalf, end = contentMarginHalf)
                     .resetSize(),
                 enabled = state.value.text.isNotBlank() && state.sending != LoadingState.Loading,
                 onClick = { onActionEvent(DollarsEvent.Action.OnSendMessage) },
@@ -217,7 +217,7 @@ private fun DollarsScreenContentItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(LayoutPadding),
+            .padding(contentMargin),
         horizontalArrangement = Arrangement.spacedBy(12.dp, if (isSelf) Alignment.End else Alignment.Start)
     ) {
         if (isSelf) {
@@ -244,7 +244,7 @@ private fun DollarsScreenContentItem(
             )
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 Text(
                     text = item.nickname,
@@ -266,4 +266,3 @@ private fun DollarsScreenContentItem(
         }
     }
 }
-

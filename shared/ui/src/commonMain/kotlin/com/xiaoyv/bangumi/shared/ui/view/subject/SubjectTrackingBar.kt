@@ -29,8 +29,8 @@ import com.xiaoyv.bangumi.core_resource.resources.subject_track_input_disable_ti
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertInputDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertInputDialogState
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDoneContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDoneText
 import org.jetbrains.compose.resources.stringResource
@@ -118,7 +118,7 @@ fun SubjectTrackingBar(
 
         Box(
             modifier = Modifier
-                .padding(start = LayoutPadding)
+                .padding(start = contentMargin)
                 .height(strokeWidth)
                 .border(ButtonDefaults.outlinedButtonBorder(), shape = MaterialTheme.shapes.small)
                 .clip(MaterialTheme.shapes.small)
@@ -129,7 +129,7 @@ fun SubjectTrackingBar(
             Text(
                 text = button,
                 maxLines = 1,
-                modifier = Modifier.basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(LayoutPaddingHalf)),
+                modifier = Modifier.basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(contentMarginHalf)),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.primary
                 )

@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_more_tag
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import org.jetbrains.compose.resources.stringResource
 
@@ -37,7 +37,7 @@ fun SectionTitle(
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)) {
+        Column(verticalArrangement = Arrangement.spacedBy(contentMarginHalf)) {
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleLarge,

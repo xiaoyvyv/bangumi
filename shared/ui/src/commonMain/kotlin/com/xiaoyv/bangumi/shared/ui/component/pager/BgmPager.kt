@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -239,9 +239,9 @@ fun <Key : Any> BgmChipHorizontalPager(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(vertical = LayoutPaddingHalf, horizontal = 12.dp),
+                .padding(vertical = contentMarginHalf, horizontal = 12.dp),
             state = listState,
-            horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             itemsIndexed(tabs) { index, tab ->
                 FilterChip(

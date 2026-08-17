@@ -42,7 +42,7 @@ import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -103,8 +103,8 @@ fun TopicPageItemHeadline(item: ComposeTopic) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = LayoutPaddingHalf),
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            .padding(vertical = contentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
     ) {
         val title = when (item.topicType) {
             TopicDetailType.TYPE_GROUP,
@@ -222,8 +222,8 @@ private fun TopicPageItemOverline(
 ) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
         itemVerticalAlignment = Alignment.CenterVertically
     ) {
         when (item.topicType) {

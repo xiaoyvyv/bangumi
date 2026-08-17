@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalGridApi
-import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -64,10 +62,11 @@ import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats.GridState
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
+import com.xiaoyv.bangumi.shared.ui.component.layout.adaptive.AdaptiveGrid
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import kotlinx.collections.immutable.persistentListOf
@@ -152,8 +151,8 @@ private fun SubjectDetailChartContent(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         state = rememberCacheWindowLazyListState(),
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
-        contentPadding = PaddingValues(vertical = LayoutPadding)
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        contentPadding = PaddingValues(vertical = contentMargin)
     ) {
         item(key = "1", contentType = CONTENT_CHART_ITEM) {
             SubjectDetailChartContentItem(
@@ -204,18 +203,18 @@ private fun SubjectDetailChartContentItem(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(LayoutPadding)
+        verticalArrangement = Arrangement.spacedBy(contentMargin)
     ) {
         SectionTitle(
             text = stats.title,
-            modifier = Modifier.padding(horizontal = LayoutPadding),
+            modifier = Modifier.padding(horizontal = contentMargin),
             subtitle = stats.desc,
             showMore = false
         )
 
         if (gridState.isNotEmpty()) {
             SubjectDetailGridInfo(
-                modifier = Modifier.padding(horizontal = LayoutPadding),
+                modifier = Modifier.padding(horizontal = contentMargin),
                 gridState = gridState
             )
         }
@@ -224,7 +223,7 @@ private fun SubjectDetailChartContentItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
-                .padding(horizontal = LayoutPadding),
+                .padding(horizontal = contentMargin),
             stats = stats,
         )
     }
@@ -243,7 +242,6 @@ private val columnColors = listOf(
 )
 
 @Composable
-@OptIn(ExperimentalGridApi::class)
 private fun SubjectDetailGridInfo(
     modifier: Modifier = Modifier,
     gridState: SerializeList<GridState>,
@@ -251,18 +249,10 @@ private fun SubjectDetailGridInfo(
     val useThreeColumns = isExtraSmallScreen
     val spacing = 12.dp
 
-    Grid(
-        config = {
-            val columnCount = if (useThreeColumns) {
-                3
-            } else {
-                val spacingPx = spacing.roundToPx()
-                ((constraints.maxWidth + spacingPx) / (100.dp.roundToPx() + spacingPx))
-                    .coerceAtLeast(1)
-            }
-            repeat(columnCount) { column(minmax(0.dp, 1.fr)) }
-            gap(spacing)
-        },
+    AdaptiveGrid(
+        minColumnWidth = 100.dp,
+        horizontalSpacing = spacing,
+        fixedColumnCount = if (useThreeColumns) 3 else null,
         modifier = modifier,
     ) {
         gridState.forEach {
@@ -275,8 +265,8 @@ private fun SubjectDetailGridInfo(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(LayoutPaddingHalf),
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                        .padding(contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
                 ) {
                     Text(
                         text = it.title,
@@ -334,7 +324,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
     ) {
         Text(
             buildAnnotatedString {
@@ -362,7 +352,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
                             rememberLineComponent(fill = Fill(color), thickness = 16.dp)
                         }
                     ),
-                    columnCollectionSpacing = LayoutPaddingHalf,
+                    columnCollectionSpacing = contentMarginHalf,
                     mergeMode = { ColumnCartesianLayer.MergeMode.Stacked },
                 ),
                 startAxis = VerticalAxis.rememberStart(),
@@ -385,7 +375,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
             stats.seriesSet.onEachIndexed { index, entry ->
                 Column(
                     modifier = Modifier
-                        .padding(LayoutPaddingHalf)
+                        .padding(contentMarginHalf)
                         .clickWithoutRipped {
                             if (showSeriesKeys.contains(entry.value)) {
                                 showSeriesKeys.remove(entry.value)
@@ -393,7 +383,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
                                 showSeriesKeys.add(entry.value)
                             }
                         },
-                    verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf),
+                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(

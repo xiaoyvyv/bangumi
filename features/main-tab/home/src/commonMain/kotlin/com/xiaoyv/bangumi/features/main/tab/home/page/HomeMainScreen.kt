@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class, ExperimentalGridApi::class)
+@file:OptIn(ExperimentalFoundationApi::class)
 
 package com.xiaoyv.bangumi.features.main.tab.home.page
 
@@ -8,8 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalGridApi
-import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -57,12 +55,13 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserB
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
+import com.xiaoyv.bangumi.shared.ui.component.layout.adaptive.AdaptiveGrid
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPadding
-import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeActions
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
@@ -97,7 +96,7 @@ fun HomeMainScreen(
                 .fillMaxSize()
                 .semantics { contentDescription = "home_main_list" },
             state = rememberCacheWindowLazyListState(),
-            verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
         ) {
             item(key = CONTENT_TYPE_BANNER, contentType = CONTENT_TYPE_BANNER) {
                 HomeMainBanner(state, onUiEvent, onActionEvent)
@@ -155,24 +154,15 @@ fun HomeMainAction(
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
     val space = if (isExtraSmallScreen) 16.dp else 24.dp
-    val useFiveColumns = isExtraSmallScreen
     val scope = rememberCoroutineScope()
 
-    Grid(
-        config = {
-            val columnCount = if (useFiveColumns) {
-                5
-            } else {
-                val spacingPx = space.roundToPx()
-                ((constraints.maxWidth + spacingPx) / (50.dp.roundToPx() + spacingPx))
-                    .coerceAtLeast(1)
-            }
-            repeat(columnCount) { column(minmax(0.dp, 1.fr)) }
-            gap(space)
-        },
+    AdaptiveGrid(
+        minColumnWidth = 50.dp,
+        horizontalSpacing = space,
+        fixedColumnCount = if (isExtraSmallScreen) 5 else null,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(LayoutPadding),
+            .padding(contentMargin),
     ) {
         mainHomeActions.forEach {
             val label = stringResource(it.label)
@@ -180,15 +170,15 @@ fun HomeMainAction(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
+                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
                 Box(
                     modifier = Modifier
                         .semantics { contentDescription = label }
-                        .clip(CircleShape)
+                        .clip(MaterialTheme.shapes.large)
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                        .background(MaterialTheme.colorScheme.primaryContainer)
                         .clickable {
                             when (it.type) {
                                 FeatureType.TYPE_DETECT_ANIME -> onUiEvent(
@@ -233,7 +223,7 @@ fun HomeMainAction(
                         modifier = Modifier.fillMaxSize(1f / 2.25f),
                         painter = painterResource(it.icon),
                         contentDescription = label,
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
                 Text(
@@ -257,7 +247,7 @@ fun HomeMainCalendar(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         SectionTitle(
-            modifier = Modifier.padding(horizontal = LayoutPadding, vertical = LayoutPaddingHalf),
+            modifier = Modifier.padding(horizontal = contentMargin, vertical = contentMarginHalf),
             text = stringResource(Res.string.calendar_today_title),
             onClick = {
                 onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Calendar(true)))
@@ -265,7 +255,7 @@ fun HomeMainCalendar(
         )
 
         Text(
-            modifier = Modifier.padding(horizontal = LayoutPadding),
+            modifier = Modifier.padding(horizontal = contentMargin),
             text = stringResource(
                 Res.string.subject_home_calendar,
                 state.todayCalendar.size,
@@ -279,8 +269,8 @@ fun HomeMainCalendar(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = "calendar_card_row_today" },
-            contentPadding = PaddingValues(LayoutPadding, LayoutPaddingHalf),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+            contentPadding = PaddingValues(contentMargin, contentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(contentMargin)
         ) {
             items(
                 items = state.todayCalendar,
@@ -298,10 +288,10 @@ fun HomeMainCalendar(
             }
         }
 
-        Spacer(modifier = Modifier.height(LayoutPaddingHalf))
+        Spacer(modifier = Modifier.height(contentMarginHalf))
 
         SectionTitle(
-            modifier = Modifier.padding(horizontal = LayoutPadding, vertical = LayoutPaddingHalf),
+            modifier = Modifier.padding(horizontal = contentMargin, vertical = contentMarginHalf),
             text = stringResource(Res.string.calendar_tomorrow_title),
             onClick = {
                 onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Calendar(false)))
@@ -312,8 +302,8 @@ fun HomeMainCalendar(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = "calendar_card_row_tomorrow" },
-            contentPadding = PaddingValues(LayoutPadding, LayoutPaddingHalf),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+            contentPadding = PaddingValues(contentMargin, contentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(contentMargin)
         ) {
             items(
                 state.tomorrowCalendar,
@@ -342,7 +332,7 @@ fun HomeMainOverview(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         SectionTitle(
-            modifier = Modifier.padding(horizontal = LayoutPadding, vertical = LayoutPaddingHalf),
+            modifier = Modifier.padding(horizontal = contentMargin, vertical = contentMarginHalf),
             text = entity.title,
             onClick = {
                 // 跳转注目的条目流量
@@ -364,8 +354,8 @@ fun HomeMainOverview(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = "overview_card_row" },
-            contentPadding = PaddingValues(LayoutPadding, LayoutPaddingHalf),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding)
+            contentPadding = PaddingValues(contentMargin, contentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(contentMargin)
         ) {
             items(
                 entity.subjects,
@@ -384,4 +374,3 @@ fun HomeMainOverview(
         }
     }
 }
-
