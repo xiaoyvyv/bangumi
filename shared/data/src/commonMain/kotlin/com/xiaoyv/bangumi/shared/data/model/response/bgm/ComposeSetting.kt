@@ -9,6 +9,8 @@ import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -83,6 +85,7 @@ data class ComposeSetting(
         @SerialName("updateChannel") @field:SettingUpdateChannel val updateChannel: Int = SettingUpdateChannel.RELEASE,
         @SerialName("connectTimeoutMillis") val connectTimeoutMillis: Long = 15_000,
         @SerialName("socketTimeoutMillis") val socketTimeoutMillis: Long = 15_000,
+        @SerialName("hosts") val hosts: SerializeMap<String, List<String>> = DefaultHosts,
 
         @SerialName("pixivImageHost") val pixivImageHost: String = "https://xget.xiaoyv.com.cn/pximg/",
         @SerialName("pixivClientId") val pixivClientId: String = "MOBrBDS8blbauoSck0ZfDbtuzpyT",
@@ -95,6 +98,14 @@ data class ComposeSetting(
     ) {
 
         companion object {
+            val DefaultHosts = persistentMapOf(
+                "bangumi.tv" to listOf("178.79.181.137"),
+                "bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
+                "api.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
+                "next.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
+                "lain.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
+                "chii.in" to listOf("104.21.93.3", "172.67.201.187"),
+            )
             val Default = NetworkConfig()
         }
     }

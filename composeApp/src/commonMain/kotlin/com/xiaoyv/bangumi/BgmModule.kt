@@ -52,6 +52,7 @@ import com.xiaoyv.bangumi.features.settings.privacy.business.SettingsPrivacyView
 import com.xiaoyv.bangumi.features.settings.translate.business.SettingsTranslateViewModel
 import com.xiaoyv.bangumi.features.settings.ui.business.SettingsUiViewModel
 import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInViewModel
+import com.xiaoyv.bangumi.features.splash.business.SplashViewModel
 import com.xiaoyv.bangumi.features.subject.browser.business.SubjectBrowserViewModel
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailViewModel
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailChartViewModel
@@ -93,6 +94,7 @@ fun KoinApplication.initializeKoin() = modules(
 
 val commonModule = module {
     viewModelOf(::SharedViewModel)
+    viewModelOf(::SplashViewModel)
 
     viewModelOf(::MainViewModel)
     viewModelOf(::AlmanacViewModel)

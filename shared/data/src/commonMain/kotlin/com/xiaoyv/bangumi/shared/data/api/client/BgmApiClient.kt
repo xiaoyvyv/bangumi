@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.uppercaseFirstChar
 import com.xiaoyv.bangumi.shared.data.api.BgmJsonApi
 import com.xiaoyv.bangumi.shared.data.api.BgmWebApi
+import com.xiaoyv.bangumi.shared.data.api.CloudflareDnsApi
 import com.xiaoyv.bangumi.shared.data.api.DouBanApi
 import com.xiaoyv.bangumi.shared.data.api.ImageApi
 import com.xiaoyv.bangumi.shared.data.api.PixivApi
@@ -23,6 +24,7 @@ import com.xiaoyv.bangumi.shared.data.api.client.plugin.DouBanPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.PixivProxyPlugin
 import com.xiaoyv.bangumi.shared.data.api.createBgmJsonApi
 import com.xiaoyv.bangumi.shared.data.api.createBgmWebApi
+import com.xiaoyv.bangumi.shared.data.api.createCloudflareDnsApi
 import com.xiaoyv.bangumi.shared.data.api.createDouBanApi
 import com.xiaoyv.bangumi.shared.data.api.createImageApi
 import com.xiaoyv.bangumi.shared.data.api.createPixivApi
@@ -149,6 +151,12 @@ class BgmApiClient(
         converterFactories(HttpDocumentConverterFactory(), HttpCodeConverterFactory())
     }
 
+    private val cloudflareDnsApiRetrofit = ktorfit {
+        httpClient(createHttpClient(config, enableJsonContentNegotiation = false))
+        baseUrl("https://cloudflare-dns.com/")
+        converterFactories(HttpCodeConverterFactory())
+    }
+
     private val dbApiRetrofit = ktorfit {
         httpClient(createHttpClient(config) { installDbAuth() })
         baseUrl(WebConstant.URL_BASE_API_DOUBAN)
@@ -186,11 +194,14 @@ class BgmApiClient(
     val mikanApi: MikanApi = appApiRetrofit.createMikanApi()
     val appApi: AppApi = appApiRetrofit.createAppApi()
     val traceApi: TraceApi = appApiRetrofit.createTraceApi()
+    val cloudflareDnsApi: CloudflareDnsApi = cloudflareDnsApiRetrofit.createCloudflareDnsApi()
     val imageApi: ImageApi = appApiRetrofit.createImageApi()
     val pixivApi: PixivApi = pixivApiRetrofit.createPixivApi()
     val dbApi: DouBanApi = dbApiRetrofit.createDouBanApi()
 
     suspend fun <R> requestTraceApi(block: suspend TraceApi.() -> R) = requestApi(traceApi, block = block)
+    suspend fun <R> requestCloudflareDnsApi(block: suspend CloudflareDnsApi.() -> R) =
+        requestApi(cloudflareDnsApi, block = block)
     suspend fun <R> requestImageApi(block: suspend ImageApi.() -> R) = requestApi(imageApi, block = block)
     suspend fun <R> requestDouBanApi(block: suspend DouBanApi.() -> R) = requestApi(dbApi, block = block)
     suspend fun <R> requestPixivApi(block: suspend PixivApi.() -> R) = requestApi(pixivApi, block = block)

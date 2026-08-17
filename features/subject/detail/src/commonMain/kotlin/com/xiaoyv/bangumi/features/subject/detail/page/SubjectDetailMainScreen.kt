@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -38,8 +40,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_message
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_title
@@ -678,6 +678,7 @@ private fun SubjectDetailScore(
 }
 
 @Composable
+@OptIn(ExperimentalGridApi::class)
 private fun SubjectDetailCharacter(
     state: SubjectDetailState,
     onUiEvent: (SubjectDetailEvent.UI) -> Unit,
@@ -694,13 +695,14 @@ private fun SubjectDetailCharacter(
         val column = if (isSmallScreen) 3 else if (isMediumScreen) 5 else 7
         val row = if (isSmallScreen) 3 else if (isMediumScreen) 2 else 1
 
-        VerticalGrid(
+        Grid(
+            config = {
+                repeat(column) { column(minmax(0.dp, 1.fr)) }
+                gap(LayoutPadding)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = LayoutPadding),
-            columns = SimpleGridCells.Fixed(column),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding),
-            verticalArrangement = Arrangement.spacedBy(LayoutPadding),
         ) {
             val items = remember(column, state.characters) {
                 state.characters.take(column * row)

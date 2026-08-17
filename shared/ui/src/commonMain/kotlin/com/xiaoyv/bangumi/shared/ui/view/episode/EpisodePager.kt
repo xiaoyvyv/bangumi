@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -43,8 +45,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_topic
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
@@ -103,6 +103,7 @@ val episodeOptions: Map<Int, ImmutableList<ComposeTextTab<Int>>> =
     )
 
 @Composable
+@OptIn(ExperimentalGridApi::class)
 fun EpisodeGrid(
     episodes: SerializeList<ComposeEpisode>,
     modifier: Modifier = Modifier,
@@ -132,13 +133,14 @@ fun EpisodeGrid(
         val itemSize = (screenWidth - horizontalSpacing * horizontalSpacingCount) / columns
         val items = episodes.take(columns * maxRows)
 
-        VerticalGrid(
-            columns = SimpleGridCells.Fixed(columns),
+        Grid(
+            config = {
+                repeat(columns) { column(minmax(0.dp, 1.fr)) }
+                gap(row = verticalSpacing, column = horizontalSpacing)
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(verticalSpacing),
-            horizontalArrangement = Arrangement.spacedBy(horizontalSpacing)
         ) {
             items.forEach {
                 Box(modifier = Modifier.size(itemSize)) {

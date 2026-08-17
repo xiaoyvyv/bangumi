@@ -5,7 +5,8 @@ plugins {
 }
 
 ktorfit {
-    compilerPluginVersion.set("2.3.3")
+    // see https://github.com/Foso/Ktorfit/tree/master/ktorfit-compiler-plugin
+    compilerPluginVersion.set("2.3.5")
 }
 
 kotlin {

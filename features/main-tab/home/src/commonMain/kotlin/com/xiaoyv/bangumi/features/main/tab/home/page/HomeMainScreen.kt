@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalGridApi::class)
 
 package com.xiaoyv.bangumi.features.main.tab.home.page
 
@@ -6,8 +6,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -39,8 +41,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.calendar_today_title
 import com.xiaoyv.bangumi.core_resource.resources.calendar_tomorrow_title
@@ -155,16 +155,24 @@ fun HomeMainAction(
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
     val space = if (isExtraSmallScreen) 16.dp else 24.dp
-    val columns = if (isExtraSmallScreen) SimpleGridCells.Fixed(5) else SimpleGridCells.Adaptive(50.dp)
+    val useFiveColumns = isExtraSmallScreen
     val scope = rememberCoroutineScope()
 
-    VerticalGrid(
+    Grid(
+        config = {
+            val columnCount = if (useFiveColumns) {
+                5
+            } else {
+                val spacingPx = space.roundToPx()
+                ((constraints.maxWidth + spacingPx) / (50.dp.roundToPx() + spacingPx))
+                    .coerceAtLeast(1)
+            }
+            repeat(columnCount) { column(minmax(0.dp, 1.fr)) }
+            gap(space)
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(LayoutPadding),
-        columns = columns,
-        horizontalArrangement = Arrangement.spacedBy(space),
-        verticalArrangement = Arrangement.spacedBy(space),
     ) {
         mainHomeActions.forEach {
             val label = stringResource(it.label)
@@ -174,7 +182,7 @@ fun HomeMainAction(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(LayoutPaddingHalf)
             ) {
-                BoxWithConstraints(
+                Box(
                     modifier = Modifier
                         .semantics { contentDescription = label }
                         .clip(CircleShape)
@@ -222,7 +230,7 @@ fun HomeMainAction(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        modifier = Modifier.size(maxWidth / 2.25f),
+                        modifier = Modifier.fillMaxSize(1f / 2.25f),
                         painter = painterResource(it.icon),
                         contentDescription = label,
                         tint = MaterialTheme.colorScheme.primary
@@ -376,7 +384,4 @@ fun HomeMainOverview(
         }
     }
 }
-
-
-
 

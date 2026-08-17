@@ -4,6 +4,8 @@ import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,8 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import com.patrykandpatrick.vico.multiplatform.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.multiplatform.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.multiplatform.cartesian.axis.Axis
@@ -57,6 +57,7 @@ import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
 @Composable
+@OptIn(ExperimentalGridApi::class)
 fun UserStateScreen(
     state: UserState,
     onUiEvent: (UserEvent.UI) -> Unit,
@@ -101,11 +102,12 @@ fun UserStateScreen(
             else -> state.user.stats.subject.all to state.user.stats.rating.all
         }
 
-        VerticalGrid(
+        Grid(
+            config = {
+                repeat(3) { column(minmax(0.dp, 1.fr)) }
+                gap(LayoutPadding)
+            },
             modifier = Modifier.fillMaxWidth(),
-            columns = SimpleGridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(LayoutPadding),
-            verticalArrangement = Arrangement.spacedBy(LayoutPadding)
         ) {
             CardInfo(
                 modifier = Modifier.fillMaxWidth(),

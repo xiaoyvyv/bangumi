@@ -30,5 +30,8 @@ expect object System {
 
     fun shareText(text: String)
 
-    fun createHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient
+    fun createHttpClient(
+        hosts: Map<String, List<String>>,
+        block: HttpClientConfig<*>.() -> Unit
+    ): HttpClient
 }

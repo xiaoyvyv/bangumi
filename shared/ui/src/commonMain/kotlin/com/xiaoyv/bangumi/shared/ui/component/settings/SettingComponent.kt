@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemColors
@@ -22,9 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
@@ -66,14 +70,27 @@ fun SettingContainer(
             content = {
                 CompositionLocalProvider(
                     value = LocalTextStyle provides MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.SemiBold
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     ),
-                    content = { label() }
+                    content = label
                 )
             }
         )
-        content()
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = contentMargin),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = verticalArrangement,
+                horizontalAlignment = horizontalAlignment,
+                content = content
+            )
+        }
     }
 }
 
@@ -84,7 +101,11 @@ fun SettingItem(
     icon: ImageVector? = null,
     leadingContent: @Composable (() -> Unit)? = icon?.let {
         {
-            Icon(imageVector = icon, contentDescription = title)
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.85f)
+            )
         }
     },
     trailingContent: @Composable (() -> Unit)? = {
@@ -92,7 +113,7 @@ fun SettingItem(
     },
     supportingContent: @Composable (() -> Unit)? = null,
     divider: Boolean = false,
-    colors: ListItemColors = ListItemDefaults.colors(),
+    colors: ListItemColors = ListItemDefaults.colors(containerColor = Color.Transparent),
     textStyle: TextStyle = LocalTextStyle.current,
     onClick: () -> Unit = {},
 ) {
@@ -200,11 +221,15 @@ fun SettingItemTrailing(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
-                overflow = androidx.compose.ui.text.style.TextOverflow.MiddleEllipsis
+                overflow = TextOverflow.MiddleEllipsis
             )
         }
         if (imageVector != null) {
-            Icon(imageVector, text.orEmpty())
+            Icon(
+                imageVector = imageVector,
+                contentDescription = text.orEmpty(),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
+            )
         }
     }
 }

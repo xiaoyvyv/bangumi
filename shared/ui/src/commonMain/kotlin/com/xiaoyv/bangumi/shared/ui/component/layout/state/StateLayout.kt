@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -99,8 +98,7 @@ fun <T> StateLayout(
                 isRefreshing = true
                 onRefresh(false)
             },
-            enabled = LocalCollapsingPullRefresh.current
-            ,
+            enabled = LocalCollapsingPullRefresh.current,
             indicator = {
                 Indicator(
                     modifier = Modifier

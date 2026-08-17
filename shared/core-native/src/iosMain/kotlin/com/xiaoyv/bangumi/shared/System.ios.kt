@@ -14,10 +14,12 @@ import com.xiaoyv.bangumi.shared.avif.AvifFrame
 import com.xiaoyv.bangumi.shared.avif.IosAvifDecoder
 import com.xiaoyv.bangumi.shared.avif.PlatformBitmap
 import com.xiaoyv.bangumi.shared.database.DatabaseDriverFactory
+import com.xiaoyv.bangumi.shared.gif.LocalHostsProxy
 import com.xiaoyv.bangumi.shared.native.AppDatabase
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.Darwin
+import kotlinx.cinterop.interpretObjCPointer
 import kotlinx.coroutines.Dispatchers
 import okio.Path.Companion.toPath
 import okio.use
@@ -25,8 +27,16 @@ import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.ColorAlphaType
 import org.jetbrains.skia.ColorType
 import org.jetbrains.skia.ImageInfo
+import platform.CFNetwork.kCFStreamPropertyHTTPProxyHost
+import platform.CFNetwork.kCFStreamPropertyHTTPProxyPort
+import platform.CFNetwork.kCFStreamPropertyHTTPSProxyHost
+import platform.CFNetwork.kCFStreamPropertyHTTPSProxyPort
+import platform.CoreFoundation.CFStringRef
+import platform.Foundation.NSCopyingProtocol
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
+import platform.Foundation.NSMutableDictionary
+import platform.Foundation.NSURLSessionConfiguration
 import platform.Foundation.NSUserDomainMask
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
@@ -58,6 +68,10 @@ fun PlatformBitmap.asImageBitmap(): ImageBitmap {
 }
 
 actual object System {
+    val hostsMap = hashMapOf<String, String>()
+    val proxy = LocalHostsProxy(hostsMap)
+    val localPort = proxy.start()
+
     @OptIn(ExperimentalNativeApi::class)
     actual val isDebugType: Boolean = Platform.isDebugBinary
 
@@ -121,8 +135,23 @@ actual object System {
         }
     }
 
-    actual fun createHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient {
+    actual fun createHttpClient(
+        hosts: Map<String, List<String>>,
+        block: HttpClientConfig<*>.() -> Unit
+    ): HttpClient {
         return HttpClient(Darwin) {
+            engine {
+                configureSession {
+                    setConnectionProxyDictionary(
+                        mapOf(
+                            kCFStreamPropertyHTTPProxyHost to "127.0.0.1",
+                            kCFStreamPropertyHTTPProxyPort to localPort,
+                            kCFStreamPropertyHTTPSProxyHost to "127.0.0.1",
+                            kCFStreamPropertyHTTPSProxyPort to localPort
+                        )
+                    )
+                }
+            }
             block()
         }
     }

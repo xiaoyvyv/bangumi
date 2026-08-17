@@ -6,7 +6,7 @@ target 'iosApp' do
   use_frameworks!
 
   # Pods for iosApp
-  pod 'core_native', :path => '../shared/core_native'
+  pod 'core_native', :path => '../shared/core-native'
 end
 
 post_install do |installer|

@@ -33,6 +33,14 @@ fun String.substringBeforeSymbol(): String {
     return regex.find(this)?.value.orEmpty().ifBlank { this }
 }
 
+
+fun String.isIpv4Address(): Boolean {
+    val parts = split('.')
+    return parts.size == 4 && parts.all { part ->
+        part.isNotEmpty() && part.toIntOrNull() in 0..255
+    }
+}
+
 fun List<String>.withChinese(): List<String> {
     val regex = Regex("[\\u4e00-\\u9fff]")
     return this.filter { regex.containsMatchIn(it) }
@@ -122,7 +130,11 @@ fun AnnotatedString.applyTheme(
                 val rangeKey = packTextRangeKey(span.start, span.end)
                 val maskAlpha = maskAlphaByRange[rangeKey] ?: 0f
                 if (isMask && maskAlpha > 0f) {
-                    addStyle(style.copy(color = Color.White.copy(alpha = maskAlpha)), span.start, span.end)
+                    addStyle(
+                        style.copy(color = Color.White.copy(alpha = maskAlpha)),
+                        span.start,
+                        span.end
+                    )
                 } else {
                     addStyle(style, span.start, span.end)
                 }
@@ -169,7 +181,15 @@ fun <T> Iterable<T>.joinToString(
     truncated: CharSequence = "...",
     transform: ((T) -> CharSequence)? = null
 ): String {
-    return joinTo(StringBuilder(), separator, prefix, postfix, limit, truncated, transform).toString()
+    return joinTo(
+        StringBuilder(),
+        separator,
+        prefix,
+        postfix,
+        limit,
+        truncated,
+        transform
+    ).toString()
 }
 
 fun AnnotatedString.Builder.addUrl(

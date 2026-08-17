@@ -96,7 +96,7 @@ private fun SettingsLive2dScreenContent(
 ) {
     val settings = currentSettings()
 
-    Column(modifier = Modifier.padding(vertical = 24.dp)) {
+    Column(modifier = Modifier.padding(vertical = 16.dp)) {
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_live2d)) }) {
             SettingSwitchItem(
                 title = stringResource(Res.string.settings_live2d),
@@ -115,4 +115,3 @@ private fun SettingsLive2dScreenContent(
         }
     }
 }
-

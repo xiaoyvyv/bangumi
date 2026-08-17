@@ -512,56 +512,45 @@ private fun <T : Any> LazyListScope.listStateLayout(
     val lazyRefreshState = pagingItems.loadState.refresh
     val lazyAppendState = pagingItems.loadState.append
 
-    when {
-        // Show loading view only when refreshing and no cached data
-        lazyRefreshState is LoadState.Loading && !refreshing -> {
+    // Show loading view only when refreshing and no cached data
+    when (lazyRefreshState) {
+        is LoadState.Loading if !refreshing -> {
             if (showContentLoadingWhenRefresh || pagingItems.itemCount == 0) {
                 item(
                     key = REFRESH_LOADING,
                     contentType = REFRESH_LOADING,
                     content = {
-//                        loadLayout()
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 240.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            BgmProgressIndicator(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .size(32.dp),
-                                strokeWidth = 2.dp
-                            )
-                        }
+                        loadLayout()
                     }
                 )
             }
         }
         // Refresh failed
-        lazyRefreshState is LoadState.Error && pagingItems.itemCount == 0 -> item(
+        is LoadState.Error if pagingItems.itemCount == 0 -> item(
             key = REFRESH_ERROR,
             contentType = REFRESH_ERROR,
             content = { errorLayout(lazyRefreshState) }
         )
         // Not loading and data count is 0
-        lazyRefreshState is LoadState.NotLoading && pagingItems.itemCount == 0 -> item(
+        is LoadState.NotLoading if pagingItems.itemCount == 0 -> item(
             key = REFRESH_EMPTY,
             contentType = REFRESH_EMPTY,
             content = { emptyLayout() }
         )
+
+        else -> Unit
     }
 
-    when {
+    when (lazyAppendState) {
         // Loading more
-        lazyAppendState is LoadState.Loading -> item(
+        is LoadState.Loading -> item(
             key = LOAD_MORE,
             contentType = LOAD_MORE,
             content = { loadingFooter() }
         )
 
         // No More
-        lazyAppendState is LoadState.NotLoading && lazyAppendState.endOfPaginationReached && pagingItems.itemCount != 0 -> item(
+        is LoadState.NotLoading if lazyAppendState.endOfPaginationReached && pagingItems.itemCount != 0 -> item(
             key = LOAD_MORE,
             contentType = LOAD_MORE,
             content = {
@@ -575,6 +564,8 @@ private fun <T : Any> LazyListScope.listStateLayout(
                 )
             }
         )
+
+        else -> Unit
     }
 }
 

@@ -1,10 +1,11 @@
 package com.xiaoyv.bangumi.shared.ui.component.pager
 
 import androidx.annotation.IntRange
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -22,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutPaddingHalf
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -36,6 +35,7 @@ import kotlin.math.roundToInt
  * @since 2025/5/8
  */
 @Composable
+@OptIn(ExperimentalGridApi::class)
 fun <T> BgmGridPager(
     items: List<T>,
     modifier: Modifier = Modifier,
@@ -75,13 +75,14 @@ fun <T> BgmGridPager(
             val endIndex = min(startIndex + itemsPerPage, items.size)
             val pageItems = items.subList(startIndex, endIndex)
 
-            VerticalGrid(
-                columns = SimpleGridCells.Fixed(columns),
+            Grid(
+                config = {
+                    repeat(columns) { column(minmax(0.dp, 1.fr)) }
+                    gap(row = verticalSpacing, column = horizontalSpacing)
+                },
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(contentPadding),
-                verticalArrangement = Arrangement.spacedBy(verticalSpacing),
-                horizontalArrangement = Arrangement.spacedBy(horizontalSpacing)
             ) {
                 pageItems.forEachIndexed { index, item ->
                     key(if (key != null) key(startIndex + index) else index) {

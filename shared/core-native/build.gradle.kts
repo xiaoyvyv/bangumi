@@ -15,6 +15,7 @@ plugins {
 kotlin {
     android {
         namespace = "com.xiaoyv.bangumi.shared.libnative"
+
     }
 
     jvm {
@@ -32,8 +33,8 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.compilations.getByName("main") {
-            val myInterop by cinterops.creating {
-                definitionFile.set(project.file("src/iosMain/cinterop/BridgeSwift.def"))
+            val myInterop = cinterops.create("myInterop") {
+                defFile(project.file("src/iosMain/cinterop/BridgeSwift.def"))
                 includeDirs(project.file("headers"))
             }
         }

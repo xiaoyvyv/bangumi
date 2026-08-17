@@ -110,7 +110,7 @@ private fun SettingsNetworkScreenContent(
 ) {
     val settings = currentSettings()
 
-    Column(modifier = Modifier.padding(vertical = 24.dp)) {
+    Column(modifier = Modifier.padding(vertical = 16.dp)) {
         SettingContainer(label = { Text(text = stringResource(Res.string.global_domain)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_domain_bgm),
@@ -227,4 +227,3 @@ private fun SettingsNetworkScreenContent(
         }
     }
 }
-

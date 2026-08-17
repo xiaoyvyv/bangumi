@@ -19,7 +19,6 @@ import cocoapods.libavif.avifVersion
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CValuesRef
-import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.allocArray
 import kotlinx.cinterop.convert
@@ -35,7 +34,6 @@ import platform.posix.snprintf
 import platform.posix.sprintf
 import platform.posix.uint8_tVar
 
-@OptIn(ExperimentalForeignApi::class)
 class IosAvifDecoder private constructor(
     private val decoderPtr: CPointer<avifDecoder>,
 ) : Closeable {

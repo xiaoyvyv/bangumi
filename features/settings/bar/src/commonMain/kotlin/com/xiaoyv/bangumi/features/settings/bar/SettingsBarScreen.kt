@@ -115,7 +115,7 @@ private fun SettingsBarScreenContent(
 ) {
     val settings = currentSettings()
 
-    Column(modifier = Modifier.padding(vertical = 24.dp)) {
+    Column(modifier = Modifier.padding(vertical = 16.dp)) {
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_appearance)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_bar_appearance),

@@ -1,8 +1,11 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
+import com.xiaoyv.bangumi.shared.core.utils.isIpv4Address
+import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUploadImage
+import com.xiaoyv.bangumi.shared.data.model.response.chore.CloudflareDnsResponse
 import com.xiaoyv.bangumi.shared.data.model.response.trace.MicrosoftTranslateParam
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import io.github.vinceglb.filekit.FileKit
@@ -20,14 +23,39 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import kotlinx.io.buffered
+import kotlinx.serialization.decodeFromString
 
 class ChoreRepositoryImpl(private val client: BgmApiClient) : ChoreRepository {
     private var cacheTranslateToken = ""
 
-    override suspend fun compressImageAndUpload(file: PlatformFile): Result<ComposeUploadImage> = runResult {
-        val compressFile = compressImage(file).getOrThrow()
-        uploadImage(compressFile).getOrThrow()
+    override suspend fun fetchDns(hostname: String): Result<Pair<String, List<String>>> {
+        val normalizedHostname = hostname.trim().lowercase().removeSuffix(".")
+        return client.requestCloudflareDnsApi {
+            require(normalizedHostname.isNotBlank()) { "Hostname cannot be blank" }
+            val response = defaultJson.decodeFromString<CloudflareDnsResponse>(
+                fetchDns(normalizedHostname).bodyAsText()
+            )
+            require(response.status == 0) { "DNS query failed with status ${response.status}" }
+
+            // 1: DNS_TYPE_A
+            val addresses = response.answers
+                .asSequence()
+                .filter { it.type == 1 }
+                .map { it.data.trim() }
+                .filter { it.isIpv4Address() }
+                .distinct()
+                .toList()
+            require(addresses.isNotEmpty()) { "No IPv4 address found for $normalizedHostname" }
+
+            normalizedHostname to addresses
+        }
     }
+
+    override suspend fun compressImageAndUpload(file: PlatformFile): Result<ComposeUploadImage> =
+        runResult {
+            val compressFile = compressImage(file).getOrThrow()
+            uploadImage(compressFile).getOrThrow()
+        }
 
     override suspend fun compressImage(file: PlatformFile): Result<PlatformFile> {
         val compressedBytes = FileKit.compressImage(
@@ -55,20 +83,21 @@ class ChoreRepositoryImpl(private val client: BgmApiClient) : ChoreRepository {
         client.bgmWebApi.submitUploadImage(multipart)
     }
 
-    override suspend fun translate(text: String, isHtml: Boolean): Result<String> = client.requestTraceApi {
-        val microsoftToken = cacheTranslateToken.ifBlank {
-            queryEdgeAuthToken().bodyAsText().apply {
-                cacheTranslateToken = this
+    override suspend fun translate(text: String, isHtml: Boolean): Result<String> =
+        client.requestTraceApi {
+            val microsoftToken = cacheTranslateToken.ifBlank {
+                queryEdgeAuthToken().bodyAsText().apply {
+                    cacheTranslateToken = this
+                }
             }
-        }
 
-        submitMicrosoftTranslate(
-            authentication = "Bearer $microsoftToken",
-            param = listOf(MicrosoftTranslateParam(text = text))
-        ).joinToString("\n") {
-            it.translations.joinToString(", ") { translation ->
-                translation.text
+            submitMicrosoftTranslate(
+                authentication = "Bearer $microsoftToken",
+                param = listOf(MicrosoftTranslateParam(text = text))
+            ).joinToString("\n") {
+                it.translations.joinToString(", ") { translation ->
+                    translation.text
+                }
             }
         }
-    }
 }

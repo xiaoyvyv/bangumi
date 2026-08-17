@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import coil3.ImageLoader
+import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
 import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
@@ -68,6 +69,7 @@ import org.koin.dsl.koinConfiguration
 import org.orbitmvi.orbit.compose.collectAsState
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun App() = KoinApplication(configuration = koinConfiguration(declaration = { initializeKoin() })) {
     val apiClient: BgmApiClient = koinInject()

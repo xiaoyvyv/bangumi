@@ -17,7 +17,6 @@ plugins {
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll(
-            "-Xcontext-parameters",
             "-Xexpect-actual-classes"
         )
     }
@@ -79,6 +78,9 @@ kotlin {
             implementation(libs.compose.paging.common.android)
 
             implementation(libs.tinypinyin.android)
+
+//            implementation("com.google.android.gms:play-services-cronet:18.0.1") // 依赖 GMS 提供最新版 Chromium 核心
+//            implementation("com.github.vvb2060:okhttp-cronet:1.0.0") // 第三方开源的 Cronet 适配 OkHttp 的桥梁
         }
 
         commonMain.dependencies {

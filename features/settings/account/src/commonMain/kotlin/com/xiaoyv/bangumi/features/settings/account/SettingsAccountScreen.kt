@@ -139,7 +139,7 @@ private fun SettingsAccountScreenContent(
     val scope = rememberCoroutineScope()
     val inputDialogState = rememberAlertInputDialogState()
 
-    Column(modifier = Modifier.padding(bottom = 24.dp)) {
+    Column(modifier = Modifier.padding(bottom = 16.dp)) {
         SettingContainer {
             SettingItem(
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -211,4 +211,3 @@ private fun SettingsAccountScreenContent(
         }
     )
 }
-

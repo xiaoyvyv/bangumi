@@ -150,7 +150,7 @@ private fun SettingsMainScreenContent(
 ) {
     val actionHandler = LocalActionHandler.current
 
-    Column(modifier = Modifier.padding(vertical = 24.dp)) {
+    Column(modifier = Modifier.padding(vertical = 16.dp)) {
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_account)) }) {
             SettingItem(
                 title = stringResource(Res.string.settings_account_info),
@@ -266,19 +266,21 @@ private fun SettingsMainScreenContent(
                 }
             )
 
-            Spacer(Modifier.height(24.dp))
-            SettingItem(
-                title = stringResource(Res.string.settings_logout),
-                divider = false,
-                trailingContent = null,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.error,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center
-                ),
-                onClick = { confirmLogoutDialog.show() }
-            )
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(16.dp))
+            SettingContainer {
+                SettingItem(
+                    title = stringResource(Res.string.settings_logout),
+                    divider = false,
+                    trailingContent = null,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.error,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
+                    ),
+                    onClick = { confirmLogoutDialog.show() }
+                )
+            }
+            Spacer(Modifier.height(16.dp))
         }
     }
 }

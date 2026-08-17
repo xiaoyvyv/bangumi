@@ -12,7 +12,7 @@ kotlin {
             implementation(libs.compose.ui.graphics)
         }
 
-        val skikoMain by creating {
+        val skikoMain = create("skikoMain") {
             dependsOn(commonMain.get())
         }
         iosMain.get().dependsOn(skikoMain)

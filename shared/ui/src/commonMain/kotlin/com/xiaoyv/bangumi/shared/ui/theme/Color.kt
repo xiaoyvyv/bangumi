@@ -5,19 +5,19 @@ import androidx.compose.ui.graphics.Color
 // ===================
 // Light Theme
 // ===================
-val primaryLight = Color(0xFFB44C71)
+val primaryLight = Color(0xFF9C4666)
 val onPrimaryLight = Color(0xFFFFFFFF)
-val primaryContainerLight = Color(0xFFB44C71)
-val onPrimaryContainerLight = Color(0xFFFFFFFF)
+val primaryContainerLight = Color(0xFFFFD9E2)
+val onPrimaryContainerLight = Color(0xFF3F001F)
 
-val secondaryLight = Color(0xFFB44C71)
-val onSecondaryLight = Color(0xFFF5F5F5)
-val secondaryContainerLight = Color(0xFFF5F5F5)
-val onSecondaryContainerLight = Color(0xFFB44C71)
+val secondaryLight = Color(0xFF74565F)
+val onSecondaryLight = Color(0xFFFFFFFF)
+val secondaryContainerLight = Color(0xFFF3F3F3)
+val onSecondaryContainerLight = Color(0xFF1D1B1C)
 
-val tertiaryLight = Color(0xFFFFFFFF)
-val onTertiaryLight = Color(0xFF222222)
-val tertiaryContainerLight = Color(0xFFFFFFFF)
+val tertiaryLight = Color(0xFF666666)
+val onTertiaryLight = Color(0xFFFFFFFF)
+val tertiaryContainerLight = Color(0xFFF5F5F5)
 val onTertiaryContainerLight = Color(0xFF222222)
 
 val errorLight = Color(0xFFBA1A1A)
@@ -39,7 +39,7 @@ val scrimLight = Color(0xFF000000)
 
 val inverseSurfaceLight = Color(0xFF382E2E)
 val inverseOnSurfaceLight = Color(0xFFEDEDED)
-val inversePrimaryLight = Color(0xFFB5B2B8)
+val inversePrimaryLight = Color(0xFFFFB1C8)
 
 val surfaceDimLight = Color(0xFFFDFDFD)
 val surfaceBrightLight = Color(0xFFFFFFFF)
@@ -53,18 +53,18 @@ val surfaceContainerHighestLight = Color(0xFFF2F2F2)
 // ===================
 // Dark Theme
 // ===================
-val primaryDark = Color(0xFFF09199)
-val onPrimaryDark = Color(0xFF561D24)
-val primaryContainerDark = Color(0xFF8F4A50)
-val onPrimaryContainerDark = Color(0xFFFFE6EB)
+val primaryDark = Color(0xFFFFB1C8)
+val onPrimaryDark = Color(0xFF5F1134)
+val primaryContainerDark = Color(0xFF7D2C4C)
+val onPrimaryContainerDark = Color(0xFFFFD9E2)
 
-val secondaryDark = Color(0xFF2A2A2A)
-val onSecondaryDark = Color(0xFFF0F0F0)
+val secondaryDark = Color(0xFFE3BDC8)
+val onSecondaryDark = Color(0xFF422931)
 val secondaryContainerDark = Color(0xFF2A2A2A)
 val onSecondaryContainerDark = Color(0xFFF0F0F0)
 
-val tertiaryDark = Color(0xFF2A2A2A)
-val onTertiaryDark = Color(0xFFF0F0F0)
+val tertiaryDark = Color(0xFFD0D0D0)
+val onTertiaryDark = Color(0xFF2A2A2A)
 val tertiaryContainerDark = Color(0xFF2A2A2A)
 val onTertiaryContainerDark = Color(0xFFF0F0F0)
 
@@ -87,7 +87,7 @@ val scrimDark = Color(0xFF000000)
 
 val inverseSurfaceDark = Color(0xFFF0F0F0)
 val inverseOnSurfaceDark = Color(0xFF121212)
-val inversePrimaryDark = Color(0xFFF09199)
+val inversePrimaryDark = Color(0xFF9C4666)
 
 val surfaceDimDark = Color(0xFF121212)
 val surfaceBrightDark = Color(0xFF1C1C1C)
@@ -144,4 +144,3 @@ val colorFileOffice = Color(0xFFE64A7F)
 val colorFileZip = Color(0xFFEDBB24)
 val colorFileInstall = Color(0xFF9C27B0)
 val colorFileTxt = Color(0xFF673AB7)
-

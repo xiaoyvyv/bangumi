@@ -15,6 +15,9 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.xiaoyv.bangumi.shared.database.DatabaseDriverFactory
 import com.xiaoyv.bangumi.shared.native.AppDatabase
+import com.xiaoyv.bangumi.shared.sni.AntiSniDns
+import com.xiaoyv.bangumi.shared.sni.AntiSniSocketFactory
+import com.xiaoyv.bangumi.shared.sni.DomainTlsFragmentationPolicy
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.okhttp.OkHttp
@@ -82,8 +85,17 @@ actual object System {
         application.startActivity(chooser)
     }
 
-    actual fun createHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient {
+    actual fun createHttpClient(
+        hosts: Map<String, List<String>>,
+        block: HttpClientConfig<*>.() -> Unit
+    ): HttpClient {
         return HttpClient(OkHttp) {
+            engine {
+                config {
+                    socketFactory(AntiSniSocketFactory(DomainTlsFragmentationPolicy(hosts.keys)))
+                    dns(AntiSniDns(hosts))
+                }
+            }
             block()
         }
     }

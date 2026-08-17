@@ -51,7 +51,7 @@ import androidx.compose.material3.WideNavigationRailItemDefaults
 import androidx.compose.material3.WideNavigationRailValue
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveComponentOverrideApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigationsuite.DefaultNavigationSuiteScaffoldOverride.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults.navigationSuiteType
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldStateImpl.Companion.Saver
@@ -1456,7 +1456,7 @@ class NavigationSuiteItemColors(
 )
 
 internal val WindowAdaptiveInfoDefault
-    @Composable get() = currentWindowAdaptiveInfo()
+    @Composable get() = currentWindowAdaptiveInfoV2()
 
 internal val NavigationSuiteScaffoldValue.isVisible
     get() = this == NavigationSuiteScaffoldValue.Visible

@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,8 +37,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.SavedStateHandle
-import com.cheonjaeung.compose.grid.SimpleGridCells
-import com.cheonjaeung.compose.grid.VerticalGrid
 import com.patrykandpatrick.vico.multiplatform.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.multiplatform.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.multiplatform.cartesian.axis.VerticalAxis
@@ -243,17 +243,27 @@ private val columnColors = listOf(
 )
 
 @Composable
+@OptIn(ExperimentalGridApi::class)
 private fun SubjectDetailGridInfo(
     modifier: Modifier = Modifier,
     gridState: SerializeList<GridState>,
 ) {
-    val gridCells = if (isExtraSmallScreen) SimpleGridCells.Fixed(3) else SimpleGridCells.Adaptive(100.dp)
+    val useThreeColumns = isExtraSmallScreen
+    val spacing = 12.dp
 
-    VerticalGrid(
-        columns = gridCells,
+    Grid(
+        config = {
+            val columnCount = if (useThreeColumns) {
+                3
+            } else {
+                val spacingPx = spacing.roundToPx()
+                ((constraints.maxWidth + spacingPx) / (100.dp.roundToPx() + spacingPx))
+                    .coerceAtLeast(1)
+            }
+            repeat(columnCount) { column(minmax(0.dp, 1.fr)) }
+            gap(spacing)
+        },
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         gridState.forEach {
             Card(
