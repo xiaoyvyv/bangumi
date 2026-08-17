@@ -32,7 +32,7 @@ import com.xiaoyv.bangumi.features.settings.account.business.SettingsAccountEven
 import com.xiaoyv.bangumi.features.settings.account.business.SettingsAccountSideEffect
 import com.xiaoyv.bangumi.features.settings.account.business.SettingsAccountState
 import com.xiaoyv.bangumi.features.settings.account.business.SettingsAccountViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.EditInfoType
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.button.LoadingIconButton
@@ -50,7 +50,6 @@ import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -71,7 +70,7 @@ fun SettingsAccountRoute(
     }
 
     SettingsAccountScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -85,7 +84,7 @@ fun SettingsAccountRoute(
 
 @Composable
 private fun SettingsAccountScreen(
-    baseState: BaseState<SettingsAccountState>,
+    uiState: UiState<SettingsAccountState>,
     onUiEvent: (SettingsAccountEvent.UI) -> Unit,
     onActionEvent: (SettingsAccountEvent.Action) -> Unit,
 ) {
@@ -100,7 +99,7 @@ private fun SettingsAccountScreen(
                 title = stringResource(Res.string.settings_account_info),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         LoadingIconButton(
                             loading = loading,
                             enabled = loading.not(),
@@ -123,7 +122,7 @@ private fun SettingsAccountScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(it),
             onRefresh = { onActionEvent(SettingsAccountEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsAccountScreenContent(state, onUiEvent, onActionEvent)
         }

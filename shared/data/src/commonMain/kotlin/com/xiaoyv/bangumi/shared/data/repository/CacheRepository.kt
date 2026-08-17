@@ -11,8 +11,9 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.fromJson
@@ -45,12 +46,10 @@ inline fun <reified T : Any> BaseViewModel<T, *, *>.writeViewModelCache(
     crossinline saveCondition: (T) -> Boolean = { true },
 ) {
     val baseState = container.stateFlow.value
-    if (baseState is BaseState.Success) {
-        viewModelScope.launch {
-            if (saveCondition(baseState.data)) {
+    viewModelScope.launch {
+        if (baseState.status == PageStatus.Idle && saveCondition(baseState.data)) {
 //                cacheRepository.write(cacheKey, defaultProtoBuf.encodeToHexString(baseState.data))
-                cacheRepository.write(cacheKey, baseState.data.toJson())
-            }
+            cacheRepository.write(cacheKey, baseState.data.toJson())
         }
     }
 }
@@ -61,7 +60,7 @@ inline fun <reified T : Any> BaseViewModel<T, *, *>.readViewModelCache(
     loadWhenEmpty: Boolean = false,
     enable: Boolean = true,
     transform: (T) -> T = { it },
-): BaseState<T> {
+): UiState<T> {
     val text = if (enable) measureBlockTimeMillis { cacheRepository.readSync(cacheKey) } else null
     val cacheState = if (enable) measureBlockTimeMillis { text.fromJson<T>()?.let { transform(it) } } else null
 //    val cacheState =
@@ -70,8 +69,11 @@ inline fun <reified T : Any> BaseViewModel<T, *, *>.readViewModelCache(
 //                ?.let { transform(it) }
 //        }
     debugLog { "$cacheState ,loadWhenEmpty=$loadWhenEmpty" }
-    if (cacheState != null) return BaseState.Success(cacheState)
-    return if (loadWhenEmpty) BaseState.Loading() else BaseState.Success(data = initSate(true))
+    if (cacheState != null) return UiState(cacheState)
+    return UiState(
+        data = createInitialState(),
+        status = if (loadWhenEmpty) PageStatus.Loading else PageStatus.Idle,
+    )
 }
 
 

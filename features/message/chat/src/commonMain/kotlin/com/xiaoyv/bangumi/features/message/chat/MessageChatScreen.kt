@@ -40,7 +40,7 @@ import com.xiaoyv.bangumi.core_resource.resources.reply_message_warn
 import com.xiaoyv.bangumi.features.message.chat.business.MessageChatEvent
 import com.xiaoyv.bangumi.features.message.chat.business.MessageChatState
 import com.xiaoyv.bangumi.features.message.chat.business.MessageChatViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
@@ -55,7 +55,6 @@ import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.text.textFieldTransparentColors
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 private const val CONTENT_TYPE_MESSAGE_ITEM = "CONTENT_TYPE_MESSAGE_ITEM"
@@ -73,7 +72,7 @@ fun MessageChatRoute(
     }
 
     MessageChatScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -86,7 +85,7 @@ fun MessageChatRoute(
 
 @Composable
 private fun MessageChatScreen(
-    baseState: BaseState<MessageChatState>,
+    uiState: UiState<MessageChatState>,
     onUiEvent: (MessageChatEvent.UI) -> Unit,
     onActionEvent: (MessageChatEvent.Action) -> Unit,
 ) {
@@ -105,7 +104,7 @@ private fun MessageChatScreen(
                 .fillMaxSize()
                 .padding(top = it.calculateTopPadding()),
             onRefresh = { onActionEvent(MessageChatEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             MessageChatScreenContent(state, onUiEvent, onActionEvent)
         }

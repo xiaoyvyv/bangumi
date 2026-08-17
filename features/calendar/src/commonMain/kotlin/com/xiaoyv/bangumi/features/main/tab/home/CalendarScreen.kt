@@ -28,7 +28,7 @@ import com.xiaoyv.bangumi.core_resource.resources.calendar_tomorrow_title
 import com.xiaoyv.bangumi.features.main.tab.home.business.CalendarEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.CalendarState
 import com.xiaoyv.bangumi.features.main.tab.home.business.CalendarViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.currentWeekDay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
@@ -59,7 +59,7 @@ fun CalendarRoute(
     }
 
     CalendarScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -72,7 +72,7 @@ fun CalendarRoute(
 
 @Composable
 private fun CalendarScreen(
-    baseState: BaseState<CalendarState>,
+    uiState: UiState<CalendarState>,
     onUiEvent: (CalendarEvent.UI) -> Unit,
     onActionEvent: (CalendarEvent.Action) -> Unit,
 ) {
@@ -80,10 +80,10 @@ private fun CalendarScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = baseState.content { if (isToday) stringResource(Res.string.calendar_today_title) else stringResource(Res.string.calendar_tomorrow_title) },
+                title = uiState.data.run { if (isToday) stringResource(Res.string.calendar_today_title) else stringResource(Res.string.calendar_tomorrow_title) },
                 actions = {
                     IconButton(onClick = { onActionEvent(CalendarEvent.Action.OnChangeLayoutMode) }) {
-                        baseState.content {
+                        uiState.data.run {
                             Icon(
                                 imageVector = if (isGrid) BgmIcons.LineStyle else BgmIcons.GridView,
                                 contentDescription = null
@@ -100,7 +100,7 @@ private fun CalendarScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(CalendarEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             CalendarScreenContent(state, onUiEvent, onActionEvent)
         }

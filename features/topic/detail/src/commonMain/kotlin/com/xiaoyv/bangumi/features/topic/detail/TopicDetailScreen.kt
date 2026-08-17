@@ -42,7 +42,7 @@ import com.xiaoyv.bangumi.core_resource.resources.topic_title
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailEvent
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailState
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.utils.animateScrollToItem
@@ -91,13 +91,12 @@ fun TopicDetailRoute(
     }
 
     TopicDetailScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
                 is TopicDetailEvent.UI.OnNavUp -> onNavUp()
                 is TopicDetailEvent.UI.OnNavScreen -> onNavScreen(it.screen)
-                else -> Unit
             }
         }
     )
@@ -105,7 +104,7 @@ fun TopicDetailRoute(
 
 @Composable
 private fun TopicDetailScreen(
-    baseState: BaseState<TopicDetailState>,
+    uiState: UiState<TopicDetailState>,
     onUiEvent: (TopicDetailEvent.UI) -> Unit,
     onActionEvent: (TopicDetailEvent.Action) -> Unit,
 ) {
@@ -115,7 +114,7 @@ private fun TopicDetailScreen(
             BgmTopAppBar(
                 title = stringResource(Res.string.topic_title),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         val actionHandler = LocalActionHandler.current
 
                         DropMenuActionButton(
@@ -155,7 +154,7 @@ private fun TopicDetailScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(TopicDetailEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             TopicDetailScreenContent(state, onUiEvent, onActionEvent)
         }
@@ -164,7 +163,7 @@ private fun TopicDetailScreen(
         modifier = Modifier.fillMaxSize(),
 
         collapse = {
-            baseState.content {
+            baseState.data.run {
 
             }
         },
@@ -517,5 +516,4 @@ private fun ArticleScreenRecationButton(
         }
     }
 }
-
 

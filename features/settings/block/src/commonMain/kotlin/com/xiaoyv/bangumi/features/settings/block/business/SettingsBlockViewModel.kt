@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 class SettingsBlockViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<SettingsBlockState, SettingsBlockSideEffect, SettingsBlockEvent>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SettingsBlockState()
+    override fun createInitialState() = SettingsBlockState()
 
     override fun onEvent(event: SettingsBlockEvent) {
 

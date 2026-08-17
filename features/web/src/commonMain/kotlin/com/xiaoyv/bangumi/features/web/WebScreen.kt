@@ -35,7 +35,7 @@ import com.xiaoyv.bangumi.features.web.business.WebState
 import com.xiaoyv.bangumi.features.web.business.WebViewModel
 import com.xiaoyv.bangumi.features.web.internal.createWebRequestInterceptor
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -70,13 +70,13 @@ fun WebRoute(
 
     viewModel.collectBaseSideEffect {
         when (it) {
-            is WebSideEffect.OnReload -> baseState.content { navigator.loadUrl(url) }
+            is WebSideEffect.OnReload -> baseState.data.run { navigator.loadUrl(url) }
             is WebSideEffect.OnNavUp -> onNavUp()
         }
     }
 
     WebScreen(
-        baseState = baseState,
+        uiState = baseState,
         navigator = navigator,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -90,7 +90,7 @@ fun WebRoute(
 
 @Composable
 private fun WebScreen(
-    baseState: BaseState<WebState>,
+    uiState: UiState<WebState>,
     navigator: WebViewNavigator,
     onUiEvent: (WebEvent.UI) -> Unit,
     onActionEvent: (WebEvent.Action) -> Unit,
@@ -99,7 +99,7 @@ private fun WebScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = baseState.payload?.title ?: stringResource(Res.string.global_loading),
+                title = uiState.data.title ?: stringResource(Res.string.global_loading),
                 onNavigationClick = { onUiEvent(WebEvent.UI.OnNavUp) }
             )
         }
@@ -109,7 +109,7 @@ private fun WebScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { loading -> onActionEvent(WebEvent.Action.OnRefresh(loading)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             WebScreenContent(
                 state = state,

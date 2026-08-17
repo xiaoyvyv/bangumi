@@ -37,7 +37,7 @@ import com.xiaoyv.bangumi.features.garden.business.GardenEvent
 import com.xiaoyv.bangumi.features.garden.business.GardenSideEffect
 import com.xiaoyv.bangumi.features.garden.business.GardenState
 import com.xiaoyv.bangumi.features.garden.business.GardenViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
@@ -58,7 +58,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.view.magnet.MikanMagnetItem
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -78,7 +77,7 @@ fun GardenRoute(
     }
 
     GardenScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -92,7 +91,7 @@ fun GardenRoute(
 
 @Composable
 private fun GardenScreen(
-    baseState: BaseState<GardenState>,
+    uiState: UiState<GardenState>,
     pagingItems: LazyPagingItems<ComposeMikanResource>,
     onUiEvent: (GardenEvent.UI) -> Unit,
     onActionEvent: (GardenEvent.Action) -> Unit,
@@ -126,7 +125,7 @@ private fun GardenScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(GardenEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             GardenScreenContent(state, pagingItems, onUiEvent, onActionEvent)
         }

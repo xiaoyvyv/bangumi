@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.topic.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
@@ -21,7 +22,7 @@ import kotlinx.collections.immutable.persistentListOf
 class TopicViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<TopicState, TopicSideEffect, TopicEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = TopicState(
+    override fun createInitialState() = TopicState(
         tabs = persistentListOf(
             ComposeTextTab(RakuenTab.ALL, Res.string.global_all),
             ComposeTextTab(RakuenTab.GROUP, Res.string.global_group),
@@ -44,7 +45,7 @@ class TopicViewModel(savedStateHandle: SavedStateHandle) :
         }
     }
 
-    private fun onChangeType(type: String) = action {
-        reduceContent { state.copy(type = type) }
+    private fun onChangeType(type: String) = intent {
+        reduceData { state.copy(type = type) }
     }
 }

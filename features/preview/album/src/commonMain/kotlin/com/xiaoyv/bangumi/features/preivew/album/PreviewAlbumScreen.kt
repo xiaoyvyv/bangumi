@@ -28,7 +28,7 @@ import com.xiaoyv.bangumi.features.preivew.album.business.PreviewAlbumEvent
 import com.xiaoyv.bangumi.features.preivew.album.business.PreviewAlbumState
 import com.xiaoyv.bangumi.features.preivew.album.business.PreviewAlbumViewModel
 import com.xiaoyv.bangumi.features.preivew.album.business.rememberPreviewAlbumViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.list.ListAlbumType
 import com.xiaoyv.bangumi.shared.core.utils.formatFileSize
 import com.xiaoyv.bangumi.shared.data.model.request.list.album.ListAlbumParam
@@ -60,7 +60,7 @@ fun PreviewAlbumRoute(
     }
 
     PreviewAlbumScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -73,7 +73,7 @@ fun PreviewAlbumRoute(
 
 @Composable
 private fun PreviewAlbumScreen(
-    baseState: BaseState<PreviewAlbumState>,
+    uiState: UiState<PreviewAlbumState>,
     pagingItems: LazyPagingItems<ComposeGallery>,
     onUiEvent: (PreviewAlbumEvent.UI) -> Unit,
     onActionEvent: (PreviewAlbumEvent.Action) -> Unit,
@@ -81,7 +81,7 @@ private fun PreviewAlbumScreen(
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(PreviewAlbumEvent.Action.OnRefresh(it)) },
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         PreviewAlbumScreenContent(state, pagingItems, onUiEvent, onActionEvent)
     }

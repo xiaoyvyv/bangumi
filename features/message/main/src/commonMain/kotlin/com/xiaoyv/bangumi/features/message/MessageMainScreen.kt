@@ -35,7 +35,7 @@ import com.xiaoyv.bangumi.features.message.business.MessageMainEvent
 import com.xiaoyv.bangumi.features.message.business.MessageMainSideEffect
 import com.xiaoyv.bangumi.features.message.business.MessageMainState
 import com.xiaoyv.bangumi.features.message.business.MessageMainViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
@@ -56,7 +56,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 const val TAB_FRIEND = "TAB_FRIEND"
@@ -85,7 +84,7 @@ fun MessageMainRoute(
     }
 
     MessageMainScreen(
-        baseState = baseState,
+        uiState = baseState,
         inboxLazyItems = inboxLazyItems,
         outboxLazyItems = outboxLazyItems,
         onActionEvent = viewModel::onEvent,
@@ -100,7 +99,7 @@ fun MessageMainRoute(
 
 @Composable
 private fun MessageMainScreen(
-    baseState: BaseState<MessageMainState>,
+    uiState: UiState<MessageMainState>,
     inboxLazyItems: LazyPagingItems<ComposeMessage>,
     outboxLazyItems: LazyPagingItems<ComposeMessage>,
     onUiEvent: (MessageMainEvent.UI) -> Unit,
@@ -112,7 +111,7 @@ private fun MessageMainScreen(
             BgmTopAppBar(
                 title = stringResource(Res.string.global_message),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         if (selectedTabType != TAB_FRIEND) {
                             TextButton(onClick = { onActionEvent(MessageMainEvent.Action.OnToggleEditMode) }) {
                                 if (editMode) {
@@ -132,7 +131,7 @@ private fun MessageMainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             MessageMainScreenContent(
                 state = state,

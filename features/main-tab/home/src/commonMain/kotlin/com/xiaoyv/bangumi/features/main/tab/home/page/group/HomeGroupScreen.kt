@@ -77,7 +77,7 @@ private fun HomeGroupHotScreen(
 
     StateLayout(
         modifier = Modifier.fillMaxSize(),
-        baseState = baseState,
+        uiState = baseState,
         onRefresh = { viewModel.refresh(it) },
         enablePullRefresh = true
     ) {

@@ -1,8 +1,12 @@
 package com.xiaoyv.bangumi.features.gallery.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
@@ -31,15 +35,15 @@ class GalleryViewModel(
         loadWhenEmpty = true
     )
 
-    override fun initSate(onCreate: Boolean) = GalleryState(
+    override fun createInitialState() = GalleryState(
         id = args.id
     )
 
-    override suspend fun BaseSyntax<GalleryState, GallerySideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<GalleryState>, UiSideEffect<GallerySideEffect>>.refreshSync() {
         imageRepoUseCase.fetchPictureGallery(args.id, args.type)
             .onFailure { reduceError { it } }
             .onSuccess {
-                reduceContent { state.copy(images = it) }
+                reduceData { state.copy(images = it) }
             }
             .onSuccess {
                 writeViewModelCache(

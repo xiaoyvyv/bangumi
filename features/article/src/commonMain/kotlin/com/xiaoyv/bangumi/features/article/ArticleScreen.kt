@@ -54,7 +54,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_topic
 import com.xiaoyv.bangumi.features.article.business.ArticleEvent
 import com.xiaoyv.bangumi.features.article.business.ArticleState
 import com.xiaoyv.bangumi.features.article.business.ArticleViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
@@ -116,7 +116,7 @@ fun ArticleRoute(
     }
 
     ArticleScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -130,7 +130,7 @@ fun ArticleRoute(
 
 @Composable
 private fun ArticleScreen(
-    baseState: BaseState<ArticleState>,
+    uiState: UiState<ArticleState>,
     onUiEvent: (ArticleEvent.UI) -> Unit,
     onActionEvent: (ArticleEvent.Action) -> Unit,
 ) {
@@ -140,7 +140,7 @@ private fun ArticleScreen(
             BgmTopAppBar(
                 title = stringResource(Res.string.global_topic),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         val actionHandler = LocalActionHandler.current
 
                         DropMenuActionButton(
@@ -181,7 +181,7 @@ private fun ArticleScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(ArticleEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             ArticleScreenContent(state, onUiEvent, onActionEvent)
 
@@ -625,7 +625,7 @@ private fun ArticleScreenCommentHeader(
 private fun ArticleScreenPreview() {
     PreviewColumn {
         ArticleScreen(
-            baseState = BaseState.Success(
+            uiState = UiState(
                 ArticleState(
                     title = "Sample Article Title",
                     article = ComposeTopicDetail(

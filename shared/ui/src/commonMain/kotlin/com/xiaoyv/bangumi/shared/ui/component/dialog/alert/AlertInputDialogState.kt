@@ -5,12 +5,12 @@ package com.xiaoyv.bangumi.shared.ui.component.dialog.alert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
-import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.koin.mp.KoinPlatform
@@ -30,18 +30,20 @@ fun rememberAlertInputDialogState(
  */
 @Stable
 class AlertInputDialogState(val properties: DialogProperties) {
-    val _showing = mutableStateFlowOf(false)
-    internal val showing = _showing.asStateFlow()
+    @PublishedApi
+    internal var showing by mutableStateOf(false)
 
-    val _data = mutableStateFlowOf(Data())
-    internal val data = _data.asStateFlow()
+    @PublishedApi
+    internal var data by mutableStateOf(Data())
 
     inline fun show(block: (Data) -> Data = { it }) {
-        _data.update { block(_data.value) }
-        _showing.update { true }
+        data = block(data)
+        showing = true
     }
 
-    fun dismiss() = _showing.update { false }
+    fun dismiss() {
+        showing = false
+    }
 
     @Immutable
     @Serializable
@@ -61,11 +63,11 @@ class AlertInputDialogState(val properties: DialogProperties) {
         private val json get() = KoinPlatform.getKoin().get<Json>()
 
         fun Saver(properties: DialogProperties): Saver<AlertInputDialogState, *> = Saver(
-            save = { listOf(it.showing.value, json.encodeToString(it.data.value)) },
+            save = { listOf(it.showing, json.encodeToString(it.data)) },
             restore = {
                 AlertInputDialogState(properties = properties).apply {
-                    _showing.value = it.first() as Boolean
-                    _data.value = json.decodeFromString((it.last() as String))
+                    showing = it.first() as Boolean
+                    data = json.decodeFromString(it.last() as String)
                 }
             }
         )

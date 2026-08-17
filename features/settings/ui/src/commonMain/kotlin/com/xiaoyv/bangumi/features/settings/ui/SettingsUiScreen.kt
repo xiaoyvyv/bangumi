@@ -30,7 +30,7 @@ import com.xiaoyv.bangumi.features.settings.ui.business.SettingsUiEvent
 import com.xiaoyv.bangumi.features.settings.ui.business.SettingsUiState
 import com.xiaoyv.bangumi.features.settings.ui.business.SettingsUiViewModel
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
@@ -62,7 +62,7 @@ fun SettingsUiRoute(
     }
 
     SettingsUiScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -75,7 +75,7 @@ fun SettingsUiRoute(
 
 @Composable
 private fun SettingsUiScreen(
-    baseState: BaseState<SettingsUiState>,
+    uiState: UiState<SettingsUiState>,
     onUiEvent: (SettingsUiEvent.UI) -> Unit,
     onActionEvent: (SettingsUiEvent.Action) -> Unit,
 ) {
@@ -98,7 +98,7 @@ private fun SettingsUiScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsUiScreenContent(state, onUiEvent, onActionEvent)
         }

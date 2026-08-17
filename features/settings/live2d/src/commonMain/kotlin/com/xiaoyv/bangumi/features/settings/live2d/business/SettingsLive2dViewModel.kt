@@ -16,7 +16,7 @@ class SettingsLive2dViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<SettingsLive2dState, SettingsLive2dSideEffect, SettingsLive2dEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SettingsLive2dState()
+    override fun createInitialState() = SettingsLive2dState()
 
     override fun onEvent(event: SettingsLive2dEvent.Action) {
         when (event) {
@@ -25,7 +25,7 @@ class SettingsLive2dViewModel(
         }
     }
 
-    private fun onUpdateConfig(settings: ComposeSetting.Live2dConfig) = action {
+    private fun onUpdateConfig(settings: ComposeSetting.Live2dConfig) = intent {
         userManager.updateSettings {
             it.copy(live2d = settings)
         }

@@ -73,7 +73,7 @@ fun TrackingPageScreen(
 
     viewModel.collectBaseSideEffect { }
 
-    baseState.content {
+    baseState.data.run {
         TrackingPageScreenContent(
             state = this,
             pagingItems = pagingItems,

@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.search.result.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_character
@@ -48,7 +49,7 @@ class SearchResultViewModel(
     savedStateHandle: SavedStateHandle,
     private val args: Screen.SearchResult,
 ) : BaseViewModel<SearchResultState, SearchResultSideEffect, SearchResultEvent.Action>(savedStateHandle) {
-    override fun initSate(onCreate: Boolean) = SearchResultState(
+    override fun createInitialState() = SearchResultState(
         query = args.query,
         tabs = persistentListOf(
             ComposeTextTab(SearchType.SUBJECT, Res.string.global_subject),
@@ -125,8 +126,8 @@ class SearchResultViewModel(
         }
     }
 
-    private fun onUpdateLayout(ui: PageUI) = action {
-        reduceContent {
+    private fun onUpdateLayout(ui: PageUI) = intent {
+        reduceData {
             state.copy(
                 subjectParam = state.subjectParam.copy(ui = ui),
                 characterParam = state.characterParam.copy(ui = ui),
@@ -136,28 +137,28 @@ class SearchResultViewModel(
         }
     }
 
-    private fun onUpdateSearchCharacterParam(body: MonoSearchBody, @MonoType type: Int) = action {
+    private fun onUpdateSearchCharacterParam(body: MonoSearchBody, @MonoType type: Int) = intent {
         if (type == MonoType.CHARACTER) {
-            reduceContent { state.copy(characterParam = state.characterParam.copy(search = body)) }
+            reduceData { state.copy(characterParam = state.characterParam.copy(search = body)) }
         } else {
-            reduceContent { state.copy(personParam = state.personParam.copy(search = body)) }
+            reduceData { state.copy(personParam = state.personParam.copy(search = body)) }
         }
     }
 
-    private fun onUpdateSearchTagParam(body: TagSearchBody) = action {
-        reduceContent { state.copy(tagParam = state.tagParam.copy(search = body)) }
+    private fun onUpdateSearchTagParam(body: TagSearchBody) = intent {
+        reduceData { state.copy(tagParam = state.tagParam.copy(search = body)) }
     }
 
 
-    private fun onUpdateSearchIndexParam(body: IndexSearchBody) = action {
-        reduceContent { state.copy(indexParam = state.indexParam.copy(search = body)) }
+    private fun onUpdateSearchIndexParam(body: IndexSearchBody) = intent {
+        reduceData { state.copy(indexParam = state.indexParam.copy(search = body)) }
     }
 
-    private fun onUpdateSearchTopicParam(body: TopicSearchBody) = action {
-        reduceContent { state.copy(topicParam = state.topicParam.copy(search = body)) }
+    private fun onUpdateSearchTopicParam(body: TopicSearchBody) = intent {
+        reduceData { state.copy(topicParam = state.topicParam.copy(search = body)) }
     }
 
-    private fun onUpdateSearchSubjectParam(body: SubjectSearchBody) = action {
-        reduceContent { state.copy(subjectParam = state.subjectParam.copy(search = body)) }
+    private fun onUpdateSearchSubjectParam(body: SubjectSearchBody) = intent {
+        reduceData { state.copy(subjectParam = state.subjectParam.copy(search = body)) }
     }
 }

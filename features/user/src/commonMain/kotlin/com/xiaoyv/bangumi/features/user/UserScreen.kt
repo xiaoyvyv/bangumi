@@ -36,7 +36,7 @@ import com.xiaoyv.bangumi.features.user.page.UserFriendScreen
 import com.xiaoyv.bangumi.features.user.page.UserMainScreen
 import com.xiaoyv.bangumi.features.user.page.UserStateScreen
 import com.xiaoyv.bangumi.features.user.page.UserTimelineScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
@@ -56,7 +56,6 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -73,7 +72,7 @@ fun UserRoute(
     }
 
     UserScreen(
-        baseState = baseState,
+        uiState = baseState,
         initialTab = args.tab,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -87,7 +86,7 @@ fun UserRoute(
 
 @Composable
 private fun UserScreen(
-    baseState: BaseState<UserState>,
+    uiState: UiState<UserState>,
     @ProfileMenu initialTab: Int,
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
@@ -105,7 +104,7 @@ private fun UserScreen(
                 it
             )
             BgmTopAppBar(
-                title = baseState.payload?.user?.nickname,
+                title = uiState.data.user.nickname,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
@@ -113,7 +112,7 @@ private fun UserScreen(
                     actionIconContentColor = iconColor
                 ),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         val actionHandler = LocalActionHandler.current
 
                         DropMenuActionButton(
@@ -136,14 +135,14 @@ private fun UserScreen(
             )
         },
         collapse = {
-            baseState.content {
+            uiState.data.run {
                 UserScreenHeader(state = this, it, imageColorState, onUiEvent, onActionEvent)
             }
         }
     ) {
         StateLayout(
             modifier = Modifier.fillMaxSize(),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
                 UserScreenContent(state, initialTab, onUiEvent, onActionEvent)

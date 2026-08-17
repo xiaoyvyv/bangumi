@@ -31,7 +31,7 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_update_channel
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkEvent
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkState
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
@@ -43,7 +43,6 @@ import com.xiaoyv.bangumi.shared.ui.component.settings.SettingOptionItem
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -59,7 +58,7 @@ fun SettingsNetworkRoute(
     }
 
     SettingsNetworkScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -72,7 +71,7 @@ fun SettingsNetworkRoute(
 
 @Composable
 private fun SettingsNetworkScreen(
-    baseState: BaseState<SettingsNetworkState>,
+    uiState: UiState<SettingsNetworkState>,
     onUiEvent: (SettingsNetworkEvent.UI) -> Unit,
     onActionEvent: (SettingsNetworkEvent.Action) -> Unit,
 ) {
@@ -95,7 +94,7 @@ private fun SettingsNetworkScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsNetworkScreenContent(state, onUiEvent, onActionEvent)
         }

@@ -31,7 +31,7 @@ class TopicPageViewModel(
 
     internal val topicFlow = topicPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = TopicPageState(
+    override fun createInitialState() = TopicPageState(
         type = type,
     )
 

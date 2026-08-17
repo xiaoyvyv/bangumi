@@ -21,7 +21,7 @@ class CommentViewModel(
     private val dialogAnchor: CommentDialogAnchor,
 ) : BaseMviViewModel<CommentState, CommentSideEffect, CommentEvent>(stateHandle) {
 
-    override fun initSate(onCreate: Boolean): CommentState {
+    override fun createInitialState(): CommentState {
         return CommentState(anchor = dialogAnchor)
     }
 

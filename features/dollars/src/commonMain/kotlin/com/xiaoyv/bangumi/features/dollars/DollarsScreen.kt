@@ -42,7 +42,7 @@ import com.xiaoyv.bangumi.core_resource.resources.type_feature_dollars
 import com.xiaoyv.bangumi.features.dollars.business.DollarsEvent
 import com.xiaoyv.bangumi.features.dollars.business.DollarsState
 import com.xiaoyv.bangumi.features.dollars.business.DollarsViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
@@ -74,7 +74,7 @@ fun DollarsRoute(
     }
 
     DollarsScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -87,7 +87,7 @@ fun DollarsRoute(
 
 @Composable
 private fun DollarsScreen(
-    baseState: BaseState<DollarsState>,
+    uiState: UiState<DollarsState>,
     onUiEvent: (DollarsEvent.UI) -> Unit,
     onActionEvent: (DollarsEvent.Action) -> Unit,
 ) {
@@ -106,7 +106,7 @@ private fun DollarsScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(DollarsEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             DollarsScreenContent(state, onUiEvent, onActionEvent)
         }

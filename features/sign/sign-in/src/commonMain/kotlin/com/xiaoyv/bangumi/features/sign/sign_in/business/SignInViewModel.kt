@@ -1,8 +1,13 @@
 package com.xiaoyv.bangumi.features.sign.sign_in.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
@@ -27,9 +32,9 @@ class SignInViewModel(
     stateHandle: SavedStateHandle,
 ) : BaseViewModel<SignInState, SignInSideEffect, SignInEvent.Action>(stateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SignInState()
+    override fun createInitialState() = SignInState()
 
-    override suspend fun BaseSyntax<SignInState, SignInSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<SignInState>, UiSideEffect<SignInSideEffect>>.refreshSync() {
         onRefreshVerifyCodeImage()
     }
 
@@ -43,20 +48,20 @@ class SignInViewModel(
         }
     }
 
-    private fun onCodeChange(value: TextFieldValue) = action {
-        reduceContent { state.copy(code = value) }
+    private fun onCodeChange(value: TextFieldValue) = intent {
+        reduceData { state.copy(code = value) }
     }
 
-    private fun onPasswordChange(value: TextFieldValue) = action {
-        reduceContent { state.copy(password = value) }
+    private fun onPasswordChange(value: TextFieldValue) = intent {
+        reduceData { state.copy(password = value) }
     }
 
-    private fun onEmailChange(value: TextFieldValue) = action {
-        reduceContent { state.copy(email = value) }
+    private fun onEmailChange(value: TextFieldValue) = intent {
+        reduceData { state.copy(email = value) }
     }
 
-    private fun onRefreshVerifyCodeImage() = action {
-        reduceContent {
+    private fun onRefreshVerifyCodeImage() = intent {
+        reduceData {
             state.copy(
                 codeState = LoadingState.Loading,
                 codeImage = byteArrayOf(),
@@ -69,7 +74,7 @@ class SignInViewModel(
             .onFailure {
                 postToast { it.errMsg }
 
-                reduceContent {
+                reduceData {
                     state.copy(
                         codeState = LoadingState.Error(it),
                         codeImage = byteArrayOf(),
@@ -80,13 +85,13 @@ class SignInViewModel(
             .onSuccess { loginForm ->
                 // 当前用户已经登录成功，无需再登录
                 if (loginForm.hasLogin && loginForm.loginInfo != ComposeLoginResult.Empty && loginForm.loginInfo.success) {
-                    reduceContent { state.copy(codeState = LoadingState.NotLoading) }
+                    reduceData { state.copy(codeState = LoadingState.NotLoading) }
 
                     onSaveUser(loginForm.loginInfo)
                 } else {
                     signRepo.fetchVerifyCodeImage()
                         .onFailure {
-                            reduceContent {
+                            reduceData {
                                 state.copy(
                                     codeState = LoadingState.Error(it),
                                     codeImage = byteArrayOf(),
@@ -95,7 +100,7 @@ class SignInViewModel(
                             }
                         }
                         .onSuccess {
-                            reduceContent {
+                            reduceData {
                                 state.copy(
                                     codeState = LoadingState.NotLoading,
                                     codeImage = it,
@@ -108,11 +113,11 @@ class SignInViewModel(
             }
     }
 
-    private fun onSignIn() = action {
-        reduceContent { state.copy(loggingRunning = true) }
+    private fun onSignIn() = intent {
+        reduceData { state.copy(loggingRunning = true) }
 
         signRepo.sendLogin(
-            param = state.content.let {
+            param = state.data.let {
                 LoginParam(
                     email = it.email.text,
                     password = it.password.text,
@@ -123,7 +128,7 @@ class SignInViewModel(
         ).onFailure {
             postToast { it.errMsg }
 
-            reduceContent {
+            reduceData {
                 state.copy(
                     loggingRunning = false,
                     loginResult = ComposeLoginResult.Empty,
@@ -141,7 +146,7 @@ class SignInViewModel(
                 onRefreshVerifyCodeImage()
 
                 // 登录失败了
-                reduceContent {
+                reduceData {
                     state.copy(
                         loggingRunning = false,
                         code = TextFieldValue(),
@@ -158,14 +163,14 @@ class SignInViewModel(
     /**
      * 获取授权，保存用户信息
      */
-    private fun onSaveUser(loginInfo: ComposeLoginResult) = action {
+    private fun onSaveUser(loginInfo: ComposeLoginResult) = intent {
         runCatching {
             val user = loginInfo.composeUser
             val token = userRepository.submitRequestToken(user.formHash).getOrThrow()
             val info = userRepository.fetchUserInfo(user.username).getOrThrow()
             user.copy(id = info.id, group = info.group, sign = info.sign) to token
         }.onFailure {
-            reduceContent { state.copy(loggingRunning = false, loginResult = ComposeLoginResult.Empty) }
+            reduceData { state.copy(loggingRunning = false, loginResult = ComposeLoginResult.Empty) }
             postToast { it.errMsg }
         }.onSuccess {
             val (userInfo, userToken) = it
@@ -173,7 +178,7 @@ class SignInViewModel(
             // 保存用户信息
             userManager.login(userInfo, userToken)
 
-            reduceContent { state.copy(loggingRunning = false, loginResult = loginInfo) }
+            reduceData { state.copy(loggingRunning = false, loginResult = loginInfo) }
 
             postEffect { SignInSideEffect.OnLoginResult(loginInfo) }
 

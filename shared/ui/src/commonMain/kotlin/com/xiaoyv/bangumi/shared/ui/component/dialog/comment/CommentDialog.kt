@@ -71,7 +71,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
@@ -152,8 +151,7 @@ fun CommentDialog(
     anchor: CommentDialogAnchor,
     onSendCommentSuccess: (ComposeNewReply) -> Unit = {},
 ) {
-    val showing by dialogState.showing.collectAsStateWithLifecycle()
-    if (showing) TransparentDialog(
+    if (dialogState.showing) TransparentDialog(
         onDismissRequest = { dialogState.dismiss() },
         properties = commentDialogProperties,
         content = {

@@ -1,5 +1,10 @@
 package com.xiaoyv.bangumi.features.index.detail.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
@@ -15,8 +20,9 @@ import com.xiaoyv.bangumi.core_resource.resources.global_music
 import com.xiaoyv.bangumi.core_resource.resources.global_person
 import com.xiaoyv.bangumi.core_resource.resources.global_real
 import com.xiaoyv.bangumi.core_resource.resources.global_subject_topic
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
@@ -43,9 +49,9 @@ class IndexDetailViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<IndexDetailState, IndexDetailSideEffect, IndexDetailEvent.Action>(savedStateHandle) {
 
-    override fun initBaseState(): BaseState<IndexDetailState> = BaseState.Loading()
+    override fun initBaseState(): UiState<IndexDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = IndexDetailState()
+    override fun createInitialState() = IndexDetailState()
 
     override fun onEvent(event: IndexDetailEvent.Action) {
         when (event) {
@@ -54,7 +60,7 @@ class IndexDetailViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<IndexDetailState, IndexDetailSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<IndexDetailState>, UiSideEffect<IndexDetailSideEffect>>.refreshSync() {
         awaitAll(
             block1 = { indexRepository.fetchIndexDetail(args.id) },
             block2 = { if (userManager.isLogin) indexRepository.fetchIndexIsBookmarked(args.id) else Result.success(false) },
@@ -63,7 +69,7 @@ class IndexDetailViewModel(
         }.onSuccess {
             val tabs = createTabs(it.data1)
 
-            reduceContent(forceRefresh = true) {
+            reduceData(forceRefresh = true) {
                 state.copy(
                     index = it.data1.copy(isBookmarked = it.data2),
                     tabs = tabs
@@ -72,14 +78,14 @@ class IndexDetailViewModel(
         }
     }
 
-    private fun onToggleBookmarkIndex() = action {
-        val isBookmarked = stateRaw.index.isBookmarked
+    private fun onToggleBookmarkIndex() = intent {
+        val isBookmarked = state.data.index.isBookmarked
         val toast = if (isBookmarked) getString(Res.string.collect_cancel_success) else getString(Res.string.collect_success)
 
         withActionLoading { indexRepository.submitBookmarkOrCancelIndex(args.id, !isBookmarked) }
             .onFailure { postToast { it.errMsg } }
             .onSuccess {
-                reduceContent { state.copy(index = state.index.copy(isBookmarked = it)) }
+                reduceData { state.copy(index = state.index.copy(isBookmarked = it)) }
 
                 postToast { toast }
             }

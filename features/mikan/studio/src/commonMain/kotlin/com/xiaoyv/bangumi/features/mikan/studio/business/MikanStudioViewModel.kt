@@ -1,8 +1,12 @@
 package com.xiaoyv.bangumi.features.mikan.studio.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.printTrace
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
@@ -31,18 +35,18 @@ class MikanStudioViewModel(
         loadWhenEmpty = true
     )
 
-    override fun initSate(onCreate: Boolean) = MikanStudioState(
+    override fun createInitialState() = MikanStudioState(
         mikanId = args.mikanId
     )
 
-    override suspend fun BaseSyntax<MikanStudioState, MikanStudioSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<MikanStudioState>, UiSideEffect<MikanStudioSideEffect>>.refreshSync() {
         mikanRepository.fetchMikanGroup(args.mikanId)
             .onFailure {
                 it.printTrace()
                 reduceError { it }
             }
             .onSuccess {
-                reduceContent { state.copy(groupInfo = it) }
+                reduceData { state.copy(groupInfo = it) }
 
                 writeViewModelCache(
                     cacheRepository = cacheRepository,

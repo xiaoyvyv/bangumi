@@ -15,13 +15,12 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_privacy
 import com.xiaoyv.bangumi.features.settings.privacy.business.SettingsPrivacyEvent
 import com.xiaoyv.bangumi.features.settings.privacy.business.SettingsPrivacyState
 import com.xiaoyv.bangumi.features.settings.privacy.business.SettingsPrivacyViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -37,7 +36,7 @@ fun SettingsPrivacyRoute(
     }
 
     SettingsPrivacyScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -50,7 +49,7 @@ fun SettingsPrivacyRoute(
 
 @Composable
 private fun SettingsPrivacyScreen(
-    baseState: BaseState<SettingsPrivacyState>,
+    uiState: UiState<SettingsPrivacyState>,
     onUiEvent: (SettingsPrivacyEvent.UI) -> Unit,
     onActionEvent: (SettingsPrivacyEvent.Action) -> Unit,
 ) {
@@ -73,7 +72,7 @@ private fun SettingsPrivacyScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsPrivacyScreenContent(state, onUiEvent, onActionEvent)
         }

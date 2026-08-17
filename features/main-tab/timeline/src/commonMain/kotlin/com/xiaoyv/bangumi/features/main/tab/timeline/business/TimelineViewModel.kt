@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.timeline.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
@@ -22,7 +23,7 @@ class TimelineViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<TimelineState, TimelineSideEffect, TimelineEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = TimelineState(
+    override fun createInitialState() = TimelineState(
         actions = persistentListOf(
             ComposeTextTab(TimelineTarget.WHOLE, Res.string.timeline_title),
             ComposeTextTab(TimelineTarget.FRIEND, Res.string.timeline_friend_title),
@@ -37,11 +38,11 @@ class TimelineViewModel(
         }
     }
 
-    private fun onChangeTarget(@TimelineTarget target: String) = action {
+    private fun onChangeTarget(@TimelineTarget target: String) = intent {
         if (target == TimelineTarget.USER) {
-            reduceContent { state.copy(target = target, username = userManager.userInfo.username) }
+            reduceData { state.copy(target = target, username = userManager.userInfo.username) }
         } else {
-            reduceContent { state.copy(target = target, username = "") }
+            reduceData { state.copy(target = target, username = "") }
         }
     }
 }

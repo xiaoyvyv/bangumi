@@ -12,15 +12,12 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmAppTheme
 import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
@@ -39,8 +36,7 @@ fun <Key : Any> AlertOptionDialog(
     items: SerializeList<ComposeTextTab<Key>>,
     onClick: (ComposeTextTab<Key>, Int) -> Unit,
 ) {
-    val showing by state.showing.collectAsStateWithLifecycle()
-    if (showing) BasicAlertDialog(onDismissRequest = { state.dismiss() }) {
+    if (state.showing) BasicAlertDialog(onDismissRequest = { state.dismiss() }) {
         BgmAppTheme(
             modifier = Modifier
                 .height(IntrinsicSize.Min)
@@ -91,8 +87,7 @@ fun AlertContentDialog(
     properties: DialogProperties = DialogProperties(),
     content: @Composable () -> Unit,
 ) {
-    val showing by state.showing.collectAsStateWithLifecycle()
-    if (showing) BasicAlertDialog(
+    if (state.showing) BasicAlertDialog(
         modifier = modifier,
         properties = properties,
         onDismissRequest = { state.dismiss() }

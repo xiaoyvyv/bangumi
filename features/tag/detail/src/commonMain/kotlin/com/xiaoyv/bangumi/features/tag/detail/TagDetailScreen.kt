@@ -17,7 +17,7 @@ import com.xiaoyv.bangumi.features.tag.detail.business.TagDetailEvent
 import com.xiaoyv.bangumi.features.tag.detail.business.TagDetailState
 import com.xiaoyv.bangumi.features.tag.detail.business.TagDetailViewModel
 import com.xiaoyv.bangumi.features.tag.page.TagPageRoute
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.list.ListTagType
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -28,7 +28,6 @@ import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.subjectTypeTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -44,7 +43,7 @@ fun TagDetailRoute(
     }
 
     TagDetailScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -57,7 +56,7 @@ fun TagDetailRoute(
 
 @Composable
 private fun TagDetailScreen(
-    baseState: BaseState<TagDetailState>,
+    uiState: UiState<TagDetailState>,
     onUiEvent: (TagDetailEvent.UI) -> Unit,
     onActionEvent: (TagDetailEvent.Action) -> Unit,
 ) {
@@ -84,7 +83,7 @@ private fun TagDetailScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(TagDetailEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             TagDetailScreenContent(state, onUiEvent, onActionEvent)
         }

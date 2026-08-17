@@ -57,8 +57,8 @@ import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailPersonScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailPreviewScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailRelatedScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailTopicScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.interceptEvent
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.rememberInterceptEvent
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
@@ -92,7 +92,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 
@@ -109,7 +108,7 @@ fun SubjectDetailRoute(
     }
 
     SubjectDetailScreen(
-        baseState = baseState,
+        uiState = baseState,
         commentPagingItems = commentPagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -124,7 +123,7 @@ fun SubjectDetailRoute(
 
 @Composable
 private fun SubjectDetailScreen(
-    baseState: BaseState<SubjectDetailState>,
+    uiState: UiState<SubjectDetailState>,
     commentPagingItems: LazyPagingItems<ComposeComment>,
     onUiEvent: (SubjectDetailEvent.UI) -> Unit,
     onActionEvent: (SubjectDetailEvent.Action) -> Unit,
@@ -141,7 +140,7 @@ private fun SubjectDetailScreen(
             )
             BgmTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = baseState.payload?.subject?.displayName.orEmpty(),
+                title = uiState.data.subject.displayName,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
@@ -149,7 +148,7 @@ private fun SubjectDetailScreen(
                     actionIconContentColor = iconColor
                 ),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         val mikanId by currentMikanId(id)
 
                         IconButton(
@@ -218,7 +217,7 @@ private fun SubjectDetailScreen(
             )
         },
         collapse = {
-            baseState.content {
+            uiState.data.run {
                 SubjectDetailScreenHeader(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -236,7 +235,7 @@ private fun SubjectDetailScreen(
             StateLayout(
                 modifier = Modifier.fillMaxSize(),
                 onRefresh = { onActionEvent(SubjectDetailEvent.Action.OnRefresh(it)) },
-                baseState = baseState,
+                uiState = uiState,
             ) { state ->
                 CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
                     SubjectDetailScreenContent(
@@ -416,7 +415,7 @@ fun SubjectDetailScreenContent(
             SubjectDetailTab.OVERVIEW -> SubjectDetailMainScreen(
                 state = state,
                 commentPagingItems = commentPagingItems,
-                onUiEvent = interceptEvent(onUiEvent) { event ->
+                onUiEvent = rememberInterceptEvent(onUiEvent) { event ->
                     if (event is SubjectDetailEvent.UI.OnSelectedPageType) {
                         scope.launch { pagerState.animateScrollToPage(tabs.indexOfFirst { tab -> tab.type == event.tab }) }
                     }

@@ -76,7 +76,7 @@ fun SplashRoute(
     }
 
     SplashScreen(
-        state = baseState.payload ?: SplashState(),
+        state = baseState.data,
         onLaunch = { viewModel.onEvent(SplashEvent.Action.OnLaunch) },
     )
 }

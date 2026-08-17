@@ -23,7 +23,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
@@ -43,10 +42,9 @@ fun BgmAlertInputDialog(
     onCancel: () -> Unit = { },
 ) {
     val scope = rememberCoroutineScope()
-    val showing by state.showing.collectAsStateWithLifecycle()
-    if (showing) {
+    if (state.showing) {
         val focusRequester = remember { FocusRequester() }
-        val data by state.data.collectAsStateWithLifecycle()
+        val data = state.data
         var text by remember(data) {
             mutableStateOf(TextFieldValue(data.value, TextRange(data.value.length)))
         }

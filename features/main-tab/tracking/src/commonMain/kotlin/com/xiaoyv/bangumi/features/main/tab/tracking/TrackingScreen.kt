@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingEvent
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingState
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingViewModel
 import com.xiaoyv.bangumi.features.main.tab.tracking.page.TrackingPageScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -39,7 +39,7 @@ fun TrackingRoute(
     viewModel.collectBaseSideEffect { }
 
     TrackingScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -52,7 +52,7 @@ fun TrackingRoute(
 
 @Composable
 private fun TrackingScreen(
-    baseState: BaseState<TrackingState>,
+    uiState: UiState<TrackingState>,
     onUiEvent: (TrackingEvent.UI) -> Unit,
     onActionEvent: (TrackingEvent.Action) -> Unit,
 ) {
@@ -77,7 +77,7 @@ private fun TrackingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             TrackingScreenContent(state, onUiEvent, onActionEvent)
         }
@@ -109,7 +109,7 @@ private fun TrackingScreenContent(
 private fun PreviewTrackingScreen() {
     PreviewColumn(modifier = Modifier.fillMaxSize()) {
         TrackingScreen(
-            baseState = BaseState.Success(
+            uiState = UiState(
                 TrackingState(
 
                 )

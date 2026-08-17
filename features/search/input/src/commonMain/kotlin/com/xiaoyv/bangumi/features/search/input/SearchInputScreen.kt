@@ -48,7 +48,7 @@ import com.xiaoyv.bangumi.features.search.input.business.SearchInputEvent
 import com.xiaoyv.bangumi.features.search.input.business.SearchInputSideEffect
 import com.xiaoyv.bangumi.features.search.input.business.SearchInputState
 import com.xiaoyv.bangumi.features.search.input.business.SearchInputViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
@@ -59,7 +59,6 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -81,7 +80,7 @@ fun SearchInputRoute(
     }
 
     SearchInputScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -94,7 +93,7 @@ fun SearchInputRoute(
 
 @Composable
 private fun SearchInputScreen(
-    baseState: BaseState<SearchInputState>,
+    uiState: UiState<SearchInputState>,
     onUiEvent: (SearchInputEvent.UI) -> Unit,
     onActionEvent: (SearchInputEvent.Action) -> Unit,
 ) {
@@ -107,7 +106,7 @@ private fun SearchInputScreen(
                     .windowInsetsPadding(TopAppBarDefaults.windowInsets)
                     .height(TopAppBarDefaults.TopAppBarExpandedHeight)
             ) {
-                baseState.content {
+                uiState.data.run {
                     SearchInputBar(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -148,7 +147,7 @@ private fun SearchInputScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(SearchInputEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SearchInputScreenContent(state, onActionEvent)
         }

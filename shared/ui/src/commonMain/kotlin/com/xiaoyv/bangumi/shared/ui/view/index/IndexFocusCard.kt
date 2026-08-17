@@ -26,17 +26,19 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.size.Size
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.usecase.ImageRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
 import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.currentKoinScope
 import kotlin.math.sqrt
 
-typealias ImageData = BaseState<SerializeList<ComposeImages>>
+typealias ImageData = UiState<SerializeList<ComposeImages>>
 
 @Composable
 fun IndexFocusCard(
@@ -44,10 +46,14 @@ fun IndexFocusCard(
     modifier: Modifier = Modifier,
 ) {
     val koinScope = currentKoinScope()
-    val images by produceState(BaseState.Loading(), item.id, koinScope) {
-        value = BaseState.Success(koinScope.get<ImageRepoUseCase>().fetchIndexBlogCover(item.id))
+    val images by produceState(
+        UiState(data = persistentListOf(), status = PageStatus.Loading),
+        item.id,
+        koinScope,
+    ) {
+        value = UiState(koinScope.get<ImageRepoUseCase>().fetchIndexBlogCover(item.id))
     }
-    val payload = images.payload
+    val payload = images.data
 
     Box(
         modifier = modifier

@@ -1,10 +1,14 @@
 package com.xiaoyv.bangumi.features.message.chat.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.limit
@@ -36,9 +40,9 @@ class MessageChatViewModel(
         }
     }
 
-    override fun initBaseState(): BaseState<MessageChatState> = BaseState.Loading()
+    override fun initBaseState(): UiState<MessageChatState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = MessageChatState()
+    override fun createInitialState() = MessageChatState()
 
     override fun onEvent(event: MessageChatEvent.Action) {
         when (event) {
@@ -48,24 +52,24 @@ class MessageChatViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<MessageChatState, MessageChatSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<MessageChatState>, UiSideEffect<MessageChatSideEffect>>.refreshSync() {
         userRepository.fetchUserMessageDetail(args.id)
             .onFailure { reduceError { it } }
-            .onSuccess { reduceContent { state.copy(message = it) } }
+            .onSuccess { reduceData { state.copy(message = it) } }
     }
 
-    private fun onTextChange(text: TextFieldValue) = action {
-        reduceContent { state.copy(input = text.limit(1000)) }
+    private fun onTextChange(text: TextFieldValue) = intent {
+        reduceData { state.copy(input = text.limit(1000)) }
     }
 
     /**
      * related=374261&msg_receivers=whystart&current_msg_id=374261&formhash=4ed0c8cf&msg_title=Re%3Awhystart&msg_body=%E4%BD%A0%E5%A5%BD&chat=on&submit=%E5%9B%9E%E5%A4%8D
      *
      */
-    private fun onSendReply(text: String) = action {
-        val message = stateRaw.message
+    private fun onSendReply(text: String) = intent {
+        val message = state.data.message
 
-        reduceContent { state.copy(sending = LoadingState.Loading) }
+        reduceData { state.copy(sending = LoadingState.Loading) }
 
         userRepository.submitSendMessage(
             relatedId = message.related,
@@ -75,9 +79,9 @@ class MessageChatViewModel(
             text = text,
             newChat = false
         ).onCompletion {
-            reduceContent { state.copy(sending = LoadingState.NotLoading) }
+            reduceData { state.copy(sending = LoadingState.NotLoading) }
         }.onSuccess {
-            reduceContent { state.copy(message = it, input = TextFieldValue()) }
+            reduceData { state.copy(message = it, input = TextFieldValue()) }
         }
     }
 }

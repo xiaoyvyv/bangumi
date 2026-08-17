@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.main.tab.tracking.page
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -60,7 +62,7 @@ class TrackingPageViewModel(
         }
         .cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean): TrackingPageState = TrackingPageState()
+    override fun createInitialState(): TrackingPageState = TrackingPageState()
 
     override fun onEvent(event: TrackingPageEvent.Action) {
         when (event) {
@@ -80,7 +82,7 @@ class TrackingPageViewModel(
     private fun onUpdateSubjectCollection(
         subject: ComposeSubject,
         update: CollectionSubjectUpdate,
-    ) = action {
+    ) = intent {
         withActionLoading {
             collectionRepository.submitUpdateUserSubject(subject.id, update)
         }.onFailure {
@@ -94,7 +96,7 @@ class TrackingPageViewModel(
         subject: ComposeSubject,
         episodes: List<ComposeEpisode>,
         @CollectionEpisodeType type: Int,
-    ) = action {
+    ) = intent {
         withActionLoading {
             collectionRepository.submitUpdateUserEpisode(subject.id, episodes, type)
         }.onFailure {

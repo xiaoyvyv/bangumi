@@ -45,7 +45,7 @@ fun MainRoute(
 ) {
     val state by viewModel.collectAsState()
 
-    state.content {
+    state.data.run {
         MainScreen(
             state = this,
             onUiEvent = {

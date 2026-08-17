@@ -33,7 +33,7 @@ class PreviewAlbumViewModel(
 
     val album = albumPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = PreviewAlbumState(
+    override fun createInitialState() = PreviewAlbumState(
         type = param.type
     )
 

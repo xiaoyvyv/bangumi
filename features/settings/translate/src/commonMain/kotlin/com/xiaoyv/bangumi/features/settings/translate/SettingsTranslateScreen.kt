@@ -15,13 +15,12 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_translate
 import com.xiaoyv.bangumi.features.settings.translate.business.SettingsTranslateEvent
 import com.xiaoyv.bangumi.features.settings.translate.business.SettingsTranslateState
 import com.xiaoyv.bangumi.features.settings.translate.business.SettingsTranslateViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -37,7 +36,7 @@ fun SettingsTranslateRoute(
     }
 
     SettingsTranslateScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -50,7 +49,7 @@ fun SettingsTranslateRoute(
 
 @Composable
 private fun SettingsTranslateScreen(
-    baseState: BaseState<SettingsTranslateState>,
+    uiState: UiState<SettingsTranslateState>,
     onUiEvent: (SettingsTranslateEvent.UI) -> Unit,
     onActionEvent: (SettingsTranslateEvent.Action) -> Unit,
 ) {
@@ -73,7 +72,7 @@ private fun SettingsTranslateScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsTranslateScreenContent(state, onUiEvent, onActionEvent)
         }

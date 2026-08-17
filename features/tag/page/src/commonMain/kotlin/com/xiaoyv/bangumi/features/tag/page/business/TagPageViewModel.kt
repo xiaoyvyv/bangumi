@@ -33,7 +33,7 @@ class TagPageViewModel(
 
     val tags = tagPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = TagPageState(
+    override fun createInitialState() = TagPageState(
         keyword = param.search.keyword
     )
 

@@ -51,8 +51,7 @@ import com.xiaoyv.bangumi.features.main.tab.profile.page.ProfileFriendScreen
 import com.xiaoyv.bangumi.features.main.tab.profile.page.ProfileGroupScreen
 import com.xiaoyv.bangumi.features.main.tab.profile.page.ProfileIndexScreen
 import com.xiaoyv.bangumi.features.main.tab.profile.page.ProfileMonoScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ProfileTab
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
@@ -73,7 +72,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -91,7 +89,7 @@ fun ProfileRoute(
     }
 
     ProfileScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -104,7 +102,7 @@ fun ProfileRoute(
 
 @Composable
 private fun ProfileScreen(
-    baseState: BaseState<ProfileState>,
+    uiState: UiState<ProfileState>,
     onUiEvent: (ProfileEvent.UI) -> Unit,
     onActionEvent: (ProfileEvent.Action) -> Unit,
 ) {
@@ -133,7 +131,7 @@ private fun ProfileScreen(
                 navigationIcon = {
                     DropMenuActionButton(
                         imageVector = BgmIcons.Menu,
-                        options = baseState.payload?.topBarMenu ?: persistentListOf()
+                        options = uiState.data.topBarMenu
                     ) { item ->
                         val target = if (sharedState.isLogin) {
                             Screen.UserDetail(user.username, tab = item.type)
@@ -186,14 +184,14 @@ private fun ProfileScreen(
             )
         },
         collapse = {
-            baseState.content {
+            uiState.data.run {
                 ProfileScreenHeader(state = this, it, imageColorState, onUiEvent, onActionEvent)
             }
         }
     ) {
         StateLayout(
             modifier = Modifier.fillMaxSize(),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
                 val scope = rememberCoroutineScope()
@@ -306,7 +304,7 @@ private fun ProfileScreenContent(
 private fun PreviewProfileScreen() {
     PreviewColumn(modifier = Modifier.fillMaxSize()) {
         ProfileScreen(
-            baseState = BaseState.Success(
+            uiState = UiState(
                 ProfileState()
             ),
             onUiEvent = {},

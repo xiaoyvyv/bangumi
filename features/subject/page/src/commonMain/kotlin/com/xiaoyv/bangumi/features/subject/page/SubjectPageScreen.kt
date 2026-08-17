@@ -17,7 +17,7 @@ import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageEvent
 import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageState
 import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageViewModel
 import com.xiaoyv.bangumi.features.subject.page.business.koinSubjectPageViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
@@ -53,7 +53,7 @@ fun SubjectPageRoute(
     }
 
     SubjectPageScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         header = header,
         headerSticky = headerSticky,
@@ -68,7 +68,7 @@ fun SubjectPageRoute(
 
 @Composable
 private fun SubjectPageScreen(
-    baseState: BaseState<SubjectPageState>,
+    uiState: UiState<SubjectPageState>,
     pagingItems: LazyPagingItems<ComposeSubjectDisplay>,
     header: (@Composable () -> Unit)? = null,
     headerSticky: Boolean = false,
@@ -78,7 +78,7 @@ private fun SubjectPageScreen(
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(SubjectPageEvent.Action.OnRefresh(it)) },
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         SubjectPageScreenContent(
             state = state,

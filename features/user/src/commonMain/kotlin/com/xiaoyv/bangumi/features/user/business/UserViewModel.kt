@@ -1,9 +1,13 @@
 package com.xiaoyv.bangumi.features.user.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -65,7 +69,7 @@ class UserViewModel(
         }
     )
 
-    override fun initSate(onCreate: Boolean) = UserState(
+    override fun createInitialState() = UserState(
         username = args.username
     )
 
@@ -84,33 +88,33 @@ class UserViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<UserState, UserSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<UserState>, UiSideEffect<UserSideEffect>>.refreshSync() {
         userRepository.fetchUserInfo(args.username)
             .onFailure { reduceError { it } }
             .onSuccess {
-                reduceContent { state.copy(user = it) }
+                reduceData { state.copy(user = it) }
 
                 refreshTimeMachine()
             }
     }
 
-    private fun onChangeCollectionSortFilter(type: String) = action {
-        reduceContent { state.copy(selectedCollectSort = type) }
+    private fun onChangeCollectionSortFilter(type: String) = intent {
+        reduceData { state.copy(selectedCollectSort = type) }
         saveCache()
     }
 
-    private fun onChangeCollectionTypeFilter(type: Int) = action {
-        reduceContent { state.copy(selectedCollectType = type) }
+    private fun onChangeCollectionTypeFilter(type: Int) = intent {
+        reduceData { state.copy(selectedCollectType = type) }
         saveCache()
     }
 
-    private fun onChangeSubjectTypeFilter(type: Int) = action {
-        reduceContent { state.copy(selectedSubjectType = type) }
+    private fun onChangeSubjectTypeFilter(type: Int) = intent {
+        reduceData { state.copy(selectedSubjectType = type) }
         saveCache()
     }
 
-    private suspend fun refreshTimeMachine() = action {
-        val user = stateRaw.user
+    private suspend fun refreshTimeMachine() = intent {
+        val user = state.data.user
         val batchSize = userManager.settings.ui.timeMachineGridLimit
 
         awaitAll(
@@ -124,7 +128,7 @@ class UserViewModel(
         }.onFailure {
             reduceError { it }
         }.onSuccess {
-            reduceContent { state.copy(timeMachine = it.toImmutableList()) }
+            reduceData { state.copy(timeMachine = it.toImmutableList()) }
         }
 
         saveCache()

@@ -27,7 +27,7 @@ class IndexDetailPageViewModel(
 
     val indexRelated = indexRelatedPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean): IndexDetailPageState {
+    override fun createInitialState(): IndexDetailPageState {
         return IndexDetailPageState()
     }
 

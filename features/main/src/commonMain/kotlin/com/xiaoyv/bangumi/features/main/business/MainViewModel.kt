@@ -14,7 +14,7 @@ class MainViewModel(
     stateHandle: SavedStateHandle,
     private val userManager: UserManager,
 ) : BaseViewModel<MainState, MainSideEffect, MainEvent>(stateHandle) {
-    override fun initSate(onCreate: Boolean) = MainState(
+    override fun createInitialState() = MainState(
         defaultSelected = userManager.settings.homeTab.defaultSelected
     )
 

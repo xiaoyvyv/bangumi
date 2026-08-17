@@ -1,8 +1,14 @@
 package com.xiaoyv.bangumi.features.groups.detail.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupMemberRole
@@ -24,9 +30,9 @@ class GroupsDetailViewModel(
     private val groupRepository: GroupRepository,
 ) : BaseViewModel<GroupsDetailState, GroupsDetailSideEffect, GroupsDetailEvent.Action>(savedStateHandle) {
 
-    override fun initBaseState(): BaseState<GroupsDetailState> = BaseState.Loading()
+    override fun initBaseState(): UiState<GroupsDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = GroupsDetailState(
+    override fun createInitialState() = GroupsDetailState(
         tabs = persistentListOf(
             ComposeTextTab(0, labelText = "简介"),
             ComposeTextTab(1, labelText = "最新讨论"),
@@ -47,16 +53,16 @@ class GroupsDetailViewModel(
         }
     }
 
-    private fun onToggleJoinGroup() = action {
-        val currentJoined = stateRaw.group.membership != ComposeMembership.Empty
+    private fun onToggleJoinGroup() = intent {
+        val currentJoined = state.data.group.membership != ComposeMembership.Empty
         withActionLoading { groupRepository.submitJoinOrExitGroup(args.name, !currentJoined) }
             .onFailure { postToast { it.errMsg } }
-            .onSuccess { reduceContent { state.copy(group = it) } }
+            .onSuccess { reduceData { state.copy(group = it) } }
     }
 
-    override suspend fun BaseSyntax<GroupsDetailState, GroupsDetailSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<GroupsDetailState>, UiSideEffect<GroupsDetailSideEffect>>.refreshSync() {
         groupRepository.fetchGroupDetail(args.name)
             .onFailure { reduceError { it } }
-            .onSuccess { reduceContent { state.copy(group = it) } }
+            .onSuccess { reduceData { state.copy(group = it) } }
     }
 }

@@ -39,7 +39,8 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_refresh
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.refresh.PullToRefreshBox
@@ -70,7 +71,7 @@ fun rememberCacheWindowLazyGridState(
 @Composable
 fun <T> StateLayout(
     modifier: Modifier = Modifier,
-    baseState: BaseState<T>,
+    uiState: UiState<T>,
     contentAlignment: Alignment = Alignment.TopStart,
     propagateMinConstraints: Boolean = false,
     enablePullRefresh: Boolean = false,
@@ -83,12 +84,8 @@ fun <T> StateLayout(
         var isRefreshing by rememberSaveable { mutableStateOf(false) }
         val pullRefreshState = rememberPullToRefreshState()
 
-        LaunchedEffect(baseState) {
-            when (baseState) {
-                is BaseState.Error<*> -> isRefreshing = false
-                is BaseState.Loading<*> -> {}
-                is BaseState.Success<*> -> isRefreshing = false
-            }
+        LaunchedEffect(uiState) {
+            if (uiState.status !is PageStatus.Loading) isRefreshing = false
         }
         PullToRefreshBox(
             modifier = modifier,
@@ -111,7 +108,7 @@ fun <T> StateLayout(
         ) {
             StateLayoutImpl(
                 modifier = Modifier.fillMaxSize(),
-                baseState = baseState,
+                uiState = uiState,
                 containerColor = containerColor,
                 contentAlignment = contentAlignment,
                 propagateMinConstraints = propagateMinConstraints,
@@ -122,7 +119,7 @@ fun <T> StateLayout(
     } else {
         StateLayoutImpl(
             modifier = modifier,
-            baseState = baseState,
+            uiState = uiState,
             containerColor = containerColor,
             contentAlignment = contentAlignment,
             propagateMinConstraints = propagateMinConstraints,
@@ -135,28 +132,29 @@ fun <T> StateLayout(
 @Composable
 private fun <T> StateLayoutImpl(
     modifier: Modifier = Modifier,
-    baseState: BaseState<T>,
+    uiState: UiState<T>,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     contentAlignment: Alignment = Alignment.TopStart,
     propagateMinConstraints: Boolean = false,
     onRefresh: (Boolean) -> Unit = {},
     content: @Composable BoxScope.(T) -> Unit,
 ) {
-    when (baseState) {
-        is BaseState.Loading -> StateLoadingLayout()
-        is BaseState.Error -> StateErrorLayout(
-            throwable = baseState.error ?: IllegalStateException(),
+    when (val status = uiState.status) {
+        PageStatus.Loading -> StateLoadingLayout()
+        is PageStatus.Error -> StateErrorLayout(
+            message = status.message,
+            throwable = status.throwable,
             onRefresh = onRefresh
         )
 
-        is BaseState.Success -> Box(
+        PageStatus.Idle -> Box(
             modifier = Modifier
                 .background(containerColor)
                 .then(modifier),
             contentAlignment = contentAlignment,
             propagateMinConstraints = propagateMinConstraints
         ) {
-            content(baseState.data)
+            content(uiState.data)
         }
     }
 }
@@ -201,7 +199,8 @@ fun StateEmptyLayout(onRefresh: () -> Unit) {
 
 @Composable
 fun StateErrorLayout(
-    throwable: Throwable,
+    message: String = "",
+    throwable: Throwable? = null,
     bias: Float = 0.4f,
     onRefresh: (Boolean) -> Unit,
 ) {
@@ -223,7 +222,11 @@ fun StateErrorLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(contentMargin * 2),
-            text = throwable.errMsg,
+            text = if (System.isDebugType && throwable != null) {
+                throwable.errMsg
+            } else {
+                message.ifBlank { throwable?.errMsg.orEmpty() }
+            },
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center,
             maxLines = if (System.isDebugType) 10 else 3,

@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.profile.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_collection
@@ -33,7 +34,7 @@ import kotlinx.collections.immutable.persistentListOf
 class ProfileViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<ProfileState, ProfileSideEffect, ProfileEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = ProfileState(
+    override fun createInitialState() = ProfileState(
         tabs = persistentListOf(
             ComposeTextTab(ProfileTab.COLLECTION, label = Res.string.global_collection),
             ComposeTextTab(ProfileTab.MONO, label = Res.string.global_mono),
@@ -68,15 +69,15 @@ class ProfileViewModel(savedStateHandle: SavedStateHandle) :
         }
     }
 
-    private fun onChangeCollectionSortFilter(type: String) = action {
-        reduceContent { state.copy(selectedCollectSort = type) }
+    private fun onChangeCollectionSortFilter(type: String) = intent {
+        reduceData { state.copy(selectedCollectSort = type) }
     }
 
-    private fun onChangeCollectionTypeFilter(type: Int) = action {
-        reduceContent { state.copy(selectedCollectType = type) }
+    private fun onChangeCollectionTypeFilter(type: Int) = intent {
+        reduceData { state.copy(selectedCollectType = type) }
     }
 
-    private fun onChangeSubjectTypeFilter(type: Int) = action {
-        reduceContent { state.copy(selectedSubjectType = type) }
+    private fun onChangeSubjectTypeFilter(type: Int) = intent {
+        reduceData { state.copy(selectedSubjectType = type) }
     }
 }

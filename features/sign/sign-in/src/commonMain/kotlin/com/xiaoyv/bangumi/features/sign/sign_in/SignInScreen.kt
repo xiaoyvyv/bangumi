@@ -74,7 +74,7 @@ import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInEvent
 import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInSideEffect
 import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInState
 import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.button.LoadingButton
@@ -113,7 +113,7 @@ fun SignInRoute(
     }
 
     SignInScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -122,7 +122,7 @@ fun SignInRoute(
         },
     )
 
-    baseState.content {
+    baseState.data.run {
         SignInDialogs(
             state = this,
             loginSuccessDialogState = loginSuccessDialogState,
@@ -155,7 +155,7 @@ private fun SignInDialogs(
 
 @Composable
 private fun SignInScreen(
-    baseState: BaseState<SignInState>,
+    uiState: UiState<SignInState>,
     onUiEvent: (SignInEvent.UI) -> Unit,
     onActionEvent: (SignInEvent.Action) -> Unit,
 ) {
@@ -178,7 +178,7 @@ private fun SignInScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             AdaptiveLayout(
                 compat = {

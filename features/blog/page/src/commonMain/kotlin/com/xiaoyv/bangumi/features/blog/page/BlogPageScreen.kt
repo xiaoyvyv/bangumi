@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.features.blog.page.business.BlogPageEvent
 import com.xiaoyv.bangumi.features.blog.page.business.BlogPageState
 import com.xiaoyv.bangumi.features.blog.page.business.BlogPageViewModel
 import com.xiaoyv.bangumi.features.blog.page.business.koinBlogPageViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
@@ -40,7 +40,7 @@ fun BlogPageRoute(
     }
 
     BlogPageScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -53,7 +53,7 @@ fun BlogPageRoute(
 
 @Composable
 private fun BlogPageScreen(
-    baseState: BaseState<BlogPageState>,
+    uiState: UiState<BlogPageState>,
     pagingItems: LazyPagingItems<ComposeBlogDisplay>,
     onUiEvent: (BlogPageEvent.UI) -> Unit,
     onActionEvent: (BlogPageEvent.Action) -> Unit,
@@ -61,7 +61,7 @@ private fun BlogPageScreen(
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(BlogPageEvent.Action.OnRefresh(it)) },
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         BlogPageScreenContent(state, pagingItems, onUiEvent, onActionEvent)
     }

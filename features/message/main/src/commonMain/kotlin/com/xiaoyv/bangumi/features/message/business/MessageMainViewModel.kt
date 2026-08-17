@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.features.message.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -32,7 +35,7 @@ class MessageMainViewModel(
     val messageInbox = messageInboxPager.flow.cachedIn(viewModelScope)
     val messageOutbox = messageOutboxPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = MessageMainState(
+    override fun createInitialState() = MessageMainState(
         tabs = persistentListOf(
             ComposeTextTab(MessageBoxType.TYPE_INBOX, Res.string.global_inbox),
             ComposeTextTab(MessageBoxType.TYPE_OUTBOX, Res.string.global_outbox),
@@ -50,16 +53,16 @@ class MessageMainViewModel(
         }
     }
 
-    private fun onTabSelected(type: String) = action {
-        reduceContent { state.copy(selectedTabType = type) }
+    private fun onTabSelected(type: String) = intent {
+        reduceData { state.copy(selectedTabType = type) }
     }
 
-    private fun onDeleteMessage(@MessageBoxType type: String) = action {
-        val ids = if (type == MessageBoxType.TYPE_INBOX) stateRaw.selectedInboxIds else stateRaw.selectedOutboxIds
+    private fun onDeleteMessage(@MessageBoxType type: String) = intent {
+        val ids = if (type == MessageBoxType.TYPE_INBOX) state.data.selectedInboxIds else state.data.selectedOutboxIds
 
         withActionLoading { userRepository.submitDeleteMessage(ids = ids, type = type) }
             .onSuccess {
-                reduceContent {
+                reduceData {
                     if (type == MessageBoxType.TYPE_INBOX) {
                         state.copy(
                             selectedInboxIds = persistentListOf(),
@@ -76,23 +79,23 @@ class MessageMainViewModel(
             }
     }
 
-    private fun onItemCheckChanged(@MessageBoxType type: String, id: Long, checked: Boolean) = action {
+    private fun onItemCheckChanged(@MessageBoxType type: String, id: Long, checked: Boolean) = intent {
         if (type == MessageBoxType.TYPE_INBOX) {
             if (checked) {
-                reduceContent { state.copy(selectedInboxIds = state.selectedInboxIds.plus(id).toPersistentList()) }
+                reduceData { state.copy(selectedInboxIds = state.selectedInboxIds.plus(id).toPersistentList()) }
             } else {
-                reduceContent { state.copy(selectedInboxIds = state.selectedInboxIds.minus(id).toPersistentList()) }
+                reduceData { state.copy(selectedInboxIds = state.selectedInboxIds.minus(id).toPersistentList()) }
             }
         } else {
             if (checked) {
-                reduceContent { state.copy(selectedOutboxIds = state.selectedOutboxIds.plus(id).toPersistentList()) }
+                reduceData { state.copy(selectedOutboxIds = state.selectedOutboxIds.plus(id).toPersistentList()) }
             } else {
-                reduceContent { state.copy(selectedOutboxIds = state.selectedOutboxIds.minus(id).toPersistentList()) }
+                reduceData { state.copy(selectedOutboxIds = state.selectedOutboxIds.minus(id).toPersistentList()) }
             }
         }
     }
 
-    private fun onToggleEditMode() = action {
-        reduceContent { state.copy(editMode = !state.editMode) }
+    private fun onToggleEditMode() = intent {
+        reduceData { state.copy(editMode = !state.editMode) }
     }
 }

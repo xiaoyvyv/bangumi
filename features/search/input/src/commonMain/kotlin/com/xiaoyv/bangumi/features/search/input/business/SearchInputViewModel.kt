@@ -1,10 +1,14 @@
 package com.xiaoyv.bangumi.features.search.input.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.limit
@@ -39,27 +43,27 @@ class SearchInputViewModel(
             .flatMapLatest { query -> subjectRepository.fetchSearchSuggestion(query) }
             .onEach {
                 it.onSuccess { suggestion ->
-                    action {
-                        reduceContent { state.copy(suggestions = suggestion.words.orEmpty()) }
+                    intent {
+                        reduceData { state.copy(suggestions = suggestion.words.orEmpty()) }
                     }
                 }
             }
             .launchIn(viewModelScope)
     }
 
-    override fun initSate(onCreate: Boolean) =
+    override fun createInitialState() =
         SearchInputState(query = args.query.asTextFieldValue())
 
-    override suspend fun BaseSyntax<SearchInputState, SearchInputSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<SearchInputState>, UiSideEffect<SearchInputSideEffect>>.refreshSync() {
         refreshHistory()
     }
 
-    private fun refreshHistory() = action {
+    private fun refreshHistory() = intent {
         val histories = searchHistory.queryAllHistory().executeAsList()
             .map { it.keyword }
             .filter { it.isNotBlank() }
 
-        reduceContent { state.copy(histories = histories) }
+        reduceData { state.copy(histories = histories) }
     }
 
     override fun onEvent(event: SearchInputEvent.Action) {
@@ -72,19 +76,19 @@ class SearchInputViewModel(
         }
     }
 
-    private fun onClearHistory() = action {
+    private fun onClearHistory() = intent {
         searchHistory.clearHistory()
         refreshHistory()
     }
 
-    private fun onDeleteHistory(keyword: String) = action {
+    private fun onDeleteHistory(keyword: String) = intent {
         searchHistory.deleteHistory(keyword)
         refreshHistory()
     }
 
-    private fun onQueryChange(value: TextFieldValue) = action {
+    private fun onQueryChange(value: TextFieldValue) = intent {
         val fieldValue = value.limit(50)
-        reduceContent { state.copy(query = fieldValue) }
+        reduceData { state.copy(query = fieldValue) }
 
         search.update { fieldValue.text.trim() }
 
@@ -94,10 +98,10 @@ class SearchInputViewModel(
         }
     }
 
-    private fun onSearch() = action {
-        if (searchSubmitted) return@action
+    private fun onSearch() = intent {
+        if (searchSubmitted) return@intent
 
-        val text = state.content.query.text.trim()
+        val text = state.data.query.text.trim()
         if (text.isNotBlank()) {
             searchSubmitted = true
             searchHistory.deleteHistory(text)

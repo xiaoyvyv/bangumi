@@ -56,7 +56,7 @@ fun IndexDialog(
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
             onRefresh = { loading -> viewModel.onEvent(IndexDialogEvent.Action.OnRefresh(loading)) },
-            baseState = baseState,
+            uiState = baseState,
         ) { state ->
             IndexDialogContent(
                 state = state,

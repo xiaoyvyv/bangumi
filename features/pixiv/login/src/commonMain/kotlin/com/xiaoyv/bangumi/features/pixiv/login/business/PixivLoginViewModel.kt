@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 class PixivLoginViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<PixivLoginState, PixivLoginSideEffect, PixivLoginEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = PixivLoginState()
+    override fun createInitialState() = PixivLoginState()
 
     override fun onEvent(event: PixivLoginEvent.Action) {
         when (event) {

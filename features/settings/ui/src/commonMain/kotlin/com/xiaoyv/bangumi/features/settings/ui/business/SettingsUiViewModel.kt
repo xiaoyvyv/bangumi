@@ -16,7 +16,7 @@ class SettingsUiViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<SettingsUiState, SettingsUiSideEffect, SettingsUiEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SettingsUiState()
+    override fun createInitialState() = SettingsUiState()
 
     override fun onEvent(event: SettingsUiEvent.Action) {
         when (event) {
@@ -25,7 +25,7 @@ class SettingsUiViewModel(
         }
     }
 
-    private fun onUpdateConfig(settings: ComposeSetting.UIConfig) = action {
+    private fun onUpdateConfig(settings: ComposeSetting.UIConfig) = intent {
         userManager.updateSettings {
             it.copy(ui = settings)
         }

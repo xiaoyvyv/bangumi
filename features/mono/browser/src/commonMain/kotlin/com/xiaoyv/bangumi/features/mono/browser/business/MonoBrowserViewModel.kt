@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.mono.browser.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.mono_character_list
@@ -29,7 +30,7 @@ class MonoBrowserViewModel(
     private val args: Screen.MonoBrowser,
 ) : BaseViewModel<MonoBrowserState, MonoBrowserSideEffect, MonoBrowserEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = MonoBrowserState(
+    override fun createInitialState() = MonoBrowserState(
         title = if (args.type == MonoType.CHARACTER) Res.string.mono_character_list else Res.string.mono_person_list,
         param = initParam(),
         typeFilters = createTypeFilters(args.type),
@@ -77,12 +78,12 @@ class MonoBrowserViewModel(
         }
     }
 
-    private fun onChangeFilterOrderBy(orderBy: String) = action {
-        reduceContent { state.copy(param = state.param.copy(orderBy = orderBy)) }
+    private fun onChangeFilterOrderBy(orderBy: String) = intent {
+        reduceData { state.copy(param = state.param.copy(orderBy = orderBy)) }
     }
 
-    private fun onChangeFilterType(type: String) = action {
-        reduceContent {
+    private fun onChangeFilterType(type: String) = intent {
+        reduceData {
             if (state.param.mutexParam.type == type) {
                 state.copy(param = state.param.copy(mutexParam = MonoBrowserBody.BrowserMonoMutexParam.Empty))
             } else {
@@ -91,8 +92,8 @@ class MonoBrowserViewModel(
         }
     }
 
-    private fun onChangeFilterGender(gender: String) = action {
-        reduceContent {
+    private fun onChangeFilterGender(gender: String) = intent {
+        reduceData {
             if (state.param.mutexParam.gender == gender) {
                 state.copy(param = state.param.copy(mutexParam = MonoBrowserBody.BrowserMonoMutexParam.Empty))
             } else {
@@ -101,8 +102,8 @@ class MonoBrowserViewModel(
         }
     }
 
-    private fun onChangeFilterBloodType(bloodType: String) = action {
-        reduceContent {
+    private fun onChangeFilterBloodType(bloodType: String) = intent {
+        reduceData {
             if (state.param.mutexParam.bloodType == bloodType) {
                 state.copy(param = state.param.copy(mutexParam = MonoBrowserBody.BrowserMonoMutexParam.Empty))
             } else {
@@ -111,8 +112,8 @@ class MonoBrowserViewModel(
         }
     }
 
-    private fun onChangeFilterMonth(month: String) = action {
-        reduceContent {
+    private fun onChangeFilterMonth(month: String) = intent {
+        reduceData {
             if (state.param.mutexParam.month == month) {
                 state.copy(param = state.param.copy(mutexParam = MonoBrowserBody.BrowserMonoMutexParam.Empty))
             } else {

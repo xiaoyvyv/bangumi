@@ -34,13 +34,12 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_copy
 import com.xiaoyv.bangumi.core_resource.resources.global_share
-import com.xiaoyv.bangumi.core_resource.resources.mikan_resource_detail
 import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailEvent
 import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailSideEffect
 import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailState
 import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailViewModel
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -49,7 +48,6 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.view.magnet.MikanMagnetItem
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -74,7 +72,7 @@ fun MikanDetailRoute(
     }
 
     MikanDetailScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -87,7 +85,7 @@ fun MikanDetailRoute(
 
 @Composable
 private fun MikanDetailScreen(
-    baseState: BaseState<MikanDetailState>,
+    uiState: UiState<MikanDetailState>,
     onUiEvent: (MikanDetailEvent.UI) -> Unit,
     onActionEvent: (MikanDetailEvent.Action) -> Unit,
 ) {
@@ -99,11 +97,10 @@ private fun MikanDetailScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BgmLargeTopAppBar(
-                title = baseState.payload?.groupName
-                    ?: stringResource(Res.string.mikan_resource_detail),
+                title = uiState.data.groupName,
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         if (checkMode) {
                             IconButton(onClick = { onActionEvent(MikanDetailEvent.Action.OnToggleSelectAll) }) {
                                 Icon(
@@ -124,7 +121,7 @@ private fun MikanDetailScreen(
             )
         },
         bottomBar = {
-            baseState.content {
+            uiState.data.run {
                 AnimatedVisibility(modifier = Modifier.fillMaxWidth(), visible = checkMode) {
                     BottomAppBar(
                         modifier = Modifier.fillMaxWidth(),
@@ -153,7 +150,7 @@ private fun MikanDetailScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(MikanDetailEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             MikanDetailScreenContent(state, onUiEvent, onActionEvent)
         }

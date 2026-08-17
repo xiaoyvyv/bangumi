@@ -1,8 +1,15 @@
 package com.xiaoyv.bangumi.features.notification.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
@@ -19,9 +26,9 @@ class NotificationViewModel(
     savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
 ) : BaseViewModel<NotificationState, NotificationSideEffect, NotificationEvent.Action>(savedStateHandle) {
-    override fun initBaseState(): BaseState<NotificationState> = BaseState.Loading()
+    override fun initBaseState(): UiState<NotificationState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = NotificationState()
+    override fun createInitialState() = NotificationState()
 
     override fun onEvent(event: NotificationEvent.Action) {
         when (event) {
@@ -31,32 +38,32 @@ class NotificationViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<NotificationState, NotificationSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<NotificationState>, UiSideEffect<NotificationSideEffect>>.refreshSync() {
         userRepository.fetchUserAllNotification()
             .onFailure { reduceError { it } }
-            .onSuccess { reduceContent { state.copy(notifications = it.toPersistentList()) } }
+            .onSuccess { reduceData { state.copy(notifications = it.toPersistentList()) } }
     }
 
-    private fun onAgreeFriendRequest(item: ComposeNotification) = action {
+    private fun onAgreeFriendRequest(item: ComposeNotification) = intent {
         withActionLoading {
             userRepository.submitMarkNotificationRead(item.id)
             userRepository.fetchUserAllNotification()
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            reduceContent { state.copy(notifications = it.toPersistentList()) }
+            reduceData { state.copy(notifications = it.toPersistentList()) }
             postEffect { NotificationSideEffect.OnRefreshNotificationCount }
         }
     }
 
-    private fun onMarkRead(item: ComposeNotification) = action {
+    private fun onMarkRead(item: ComposeNotification) = intent {
         withActionLoading {
             userRepository.submitMarkNotificationRead(item.id)
             userRepository.fetchUserAllNotification()
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            reduceContent { state.copy(notifications = it.toPersistentList()) }
+            reduceData { state.copy(notifications = it.toPersistentList()) }
             postEffect { NotificationSideEffect.OnRefreshNotificationCount }
         }
     }

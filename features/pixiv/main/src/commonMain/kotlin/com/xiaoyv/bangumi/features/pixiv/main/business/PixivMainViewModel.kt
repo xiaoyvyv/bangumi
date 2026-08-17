@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 class PixivMainViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<PixivMainState, PixivMainSideEffect, PixivMainEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = PixivMainState()
+    override fun createInitialState() = PixivMainState()
 
     override fun onEvent(event: PixivMainEvent.Action) {
         when (event) {

@@ -47,7 +47,7 @@ fun HomeMonoScreen(
 
     StateLayout(
         modifier = Modifier.fillMaxSize(),
-        baseState = baseState,
+        uiState = baseState,
         enablePullRefresh = true,
         onRefresh = { viewModel.refresh(it) }
     ) {

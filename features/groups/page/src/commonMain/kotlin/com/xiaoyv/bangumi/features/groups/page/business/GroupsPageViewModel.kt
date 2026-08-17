@@ -32,7 +32,7 @@ class GroupsPageViewModel(
     private val groupPager = groupRepository.fetchGroupPager(param)
     val group = groupPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = GroupsPageState()
+    override fun createInitialState() = GroupsPageState()
 
     override fun onEvent(event: GroupsPageEvent.Action) {
 

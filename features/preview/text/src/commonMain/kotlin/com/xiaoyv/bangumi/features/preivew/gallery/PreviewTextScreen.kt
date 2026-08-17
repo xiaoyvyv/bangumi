@@ -22,7 +22,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_detail
 import com.xiaoyv.bangumi.features.preivew.gallery.business.PreviewTextEvent
 import com.xiaoyv.bangumi.features.preivew.gallery.business.PreviewTextState
 import com.xiaoyv.bangumi.features.preivew.gallery.business.PreviewTextViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -33,7 +33,6 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -49,7 +48,7 @@ fun PreviewTextRoute(
     }
 
     PreviewTextScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -62,7 +61,7 @@ fun PreviewTextRoute(
 
 @Composable
 private fun PreviewTextScreen(
-    baseState: BaseState<PreviewTextState>,
+    uiState: UiState<PreviewTextState>,
     onUiEvent: (PreviewTextEvent.UI) -> Unit,
     onActionEvent: (PreviewTextEvent.Action) -> Unit,
 ) {
@@ -72,7 +71,7 @@ private fun PreviewTextScreen(
             BgmTopAppBar(
                 title = stringResource(Res.string.global_detail),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         IconButton(
                             enabled = loading != LoadingState.Loading,
                             onClick = { onActionEvent(PreviewTextEvent.Action.OnToggleTranslate) }
@@ -97,7 +96,7 @@ private fun PreviewTextScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(PreviewTextEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             PreviewTextScreenContent(state, onUiEvent, onActionEvent)
         }

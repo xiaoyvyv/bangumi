@@ -20,7 +20,7 @@ class TrackingViewModel(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TrackingState, TrackingSideEffect, TrackingEvent>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = TrackingState(
+    override fun createInitialState() = TrackingState(
         tabs = persistentListOf(
             ComposeTextTab(SubjectType.ANIME, Res.string.global_anime),
             ComposeTextTab(SubjectType.BOOK, Res.string.global_book),

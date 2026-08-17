@@ -29,7 +29,7 @@ import com.xiaoyv.bangumi.features.mikan.studio.business.MikanStudioEvent
 import com.xiaoyv.bangumi.features.mikan.studio.business.MikanStudioState
 import com.xiaoyv.bangumi.features.mikan.studio.business.MikanStudioViewModel
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
@@ -42,7 +42,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -58,7 +57,7 @@ fun MikanStudioRoute(
     }
 
     MikanStudioScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -71,7 +70,7 @@ fun MikanStudioRoute(
 
 @Composable
 private fun MikanStudioScreen(
-    baseState: BaseState<MikanStudioState>,
+    uiState: UiState<MikanStudioState>,
     onUiEvent: (MikanStudioEvent.UI) -> Unit,
     onActionEvent: (MikanStudioEvent.Action) -> Unit,
 ) {
@@ -94,7 +93,7 @@ private fun MikanStudioScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(MikanStudioEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             MikanStudioScreenContent(state, onUiEvent, onActionEvent)
         }

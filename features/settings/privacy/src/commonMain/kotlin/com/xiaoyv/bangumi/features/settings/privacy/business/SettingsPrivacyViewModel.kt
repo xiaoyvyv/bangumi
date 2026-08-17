@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 class SettingsPrivacyViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<SettingsPrivacyState, SettingsPrivacySideEffect, SettingsPrivacyEvent>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SettingsPrivacyState()
+    override fun createInitialState() = SettingsPrivacyState()
 
     override fun onEvent(event: SettingsPrivacyEvent) {
 

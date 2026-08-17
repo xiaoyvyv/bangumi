@@ -36,7 +36,7 @@ class AlmanacViewModel(
         2024 to "https://lain.bgm.tv/pic/photo/l/47/7e/837364_37r4N.jpg",
     )
 
-    override fun initSate(onCreate: Boolean) = AlmanacState(
+    override fun createInitialState() = AlmanacState(
         bgmHost = userManager.settings.network.bgmHost,
         almanacs = buildList { for (year in 2010..currentYear()) add(year to banners[year].orEmpty()) }
             .reversed()

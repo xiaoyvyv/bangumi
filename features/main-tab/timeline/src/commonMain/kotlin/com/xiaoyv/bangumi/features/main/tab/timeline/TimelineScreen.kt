@@ -19,7 +19,7 @@ import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineEvent
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
 import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
@@ -48,7 +48,7 @@ fun TimelineRoute(
     }
 
     TimelineScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -61,13 +61,13 @@ fun TimelineRoute(
 
 @Composable
 private fun TimelineScreen(
-    baseState: BaseState<TimelineState>,
+    uiState: UiState<TimelineState>,
     onUiEvent: (TimelineEvent.UI) -> Unit,
     onActionEvent: (TimelineEvent.Action) -> Unit,
 ) {
     StateLayout(
         modifier = Modifier.fillMaxSize(),
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -139,7 +139,7 @@ private fun TimelineScreenContent(
 fun Test() {
     PreviewColumn {
         TimelineScreen(
-            baseState = BaseState.Success(TimelineState()),
+            uiState = UiState(TimelineState()),
             onActionEvent = {},
             onUiEvent = {}
         )

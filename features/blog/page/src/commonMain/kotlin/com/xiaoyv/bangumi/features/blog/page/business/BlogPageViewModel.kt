@@ -34,7 +34,7 @@ class BlogPageViewModel(
 
     val blog = blogPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = BlogPageState()
+    override fun createInitialState() = BlogPageState()
 
     override fun onEvent(event: BlogPageEvent.Action) {
 

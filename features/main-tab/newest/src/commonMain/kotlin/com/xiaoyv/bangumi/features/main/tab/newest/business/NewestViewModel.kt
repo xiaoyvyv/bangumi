@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.newest.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.currentTime
@@ -16,7 +17,7 @@ import kotlinx.collections.immutable.toImmutableList
 class NewestViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<NewestState, NewestSideEffect, NewestEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = NewestState(
+    override fun createInitialState() = NewestState(
         tabs = createTabs(currentTime().year),
         year = currentTime().year,
         defaultMonth = currentTime().month.ordinal + 1,
@@ -29,8 +30,8 @@ class NewestViewModel(savedStateHandle: SavedStateHandle) :
         }
     }
 
-    private fun onChangeYear(year: Int) = action {
-        reduceContent {
+    private fun onChangeYear(year: Int) = intent {
+        reduceData {
             state.copy(tabs = createTabs(year), year = year)
         }
     }

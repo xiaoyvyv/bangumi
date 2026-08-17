@@ -4,10 +4,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
@@ -31,8 +29,7 @@ fun BgmAlertDialog(
     title: @Composable (() -> Unit)? = null,
     text: @Composable (() -> Unit)? = null,
 ) {
-    val showing by state.showing.collectAsStateWithLifecycle()
-    if (showing) {
+    if (state.showing) {
         AlertDialog(
             modifier = modifier,
             onDismissRequest = { state.dismiss() },
@@ -60,8 +57,7 @@ fun BgmAlertDialog(
     onCancel: () -> Unit = { },
 ) {
     val scope = rememberCoroutineScope()
-    val showing by state.showing.collectAsStateWithLifecycle()
-    if (showing) {
+    if (state.showing) {
         AlertDialog(
             modifier = modifier,
             onDismissRequest = { state.dismiss() },
@@ -98,4 +94,3 @@ fun BgmAlertDialog(
         )
     }
 }
-

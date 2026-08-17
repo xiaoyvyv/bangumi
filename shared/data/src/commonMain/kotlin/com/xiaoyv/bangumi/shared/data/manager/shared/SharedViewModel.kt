@@ -13,10 +13,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.Container
-import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.container
-
+import org.orbitmvi.orbit.OrbitContainer
+import org.orbitmvi.orbit.OrbitContainerHost
+import org.orbitmvi.orbit.orbitContainer
 
 /**
  * [SharedViewModel]
@@ -28,11 +27,12 @@ class SharedViewModel(
     private val userManager: UserManager,
     private val mikanRepository: MikanRepository,
     private val userRepository: UserRepository,
-) : ContainerHost<SharedState, SharedEvent>, ViewModel() {
+) : OrbitContainerHost<SharedState, SharedState, SharedEvent>, ViewModel() {
 
-    override val container: Container<SharedState, SharedEvent> by lazy {
-        viewModelScope.container(
+    override val container: OrbitContainer<SharedState, SharedState, SharedEvent> by lazy {
+        viewModelScope.orbitContainer(
             initialState = initAppState(),
+            transformState = { it },
             onCreate = { onCreate() }
         )
     }

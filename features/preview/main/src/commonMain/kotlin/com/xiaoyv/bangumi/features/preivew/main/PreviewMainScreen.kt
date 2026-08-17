@@ -19,13 +19,12 @@ import com.xiaoyv.bangumi.core_resource.resources.global_image
 import com.xiaoyv.bangumi.features.preivew.main.business.PreviewMainEvent
 import com.xiaoyv.bangumi.features.preivew.main.business.PreviewMainState
 import com.xiaoyv.bangumi.features.preivew.main.business.PreviewMainViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -41,7 +40,7 @@ fun PreviewMainRoute(
     }
 
     PreviewMainScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -54,7 +53,7 @@ fun PreviewMainRoute(
 
 @Composable
 private fun PreviewMainScreen(
-    baseState: BaseState<PreviewMainState>,
+    uiState: UiState<PreviewMainState>,
     onUiEvent: (PreviewMainEvent.UI) -> Unit,
     onActionEvent: (PreviewMainEvent.Action) -> Unit,
 ) {
@@ -62,7 +61,7 @@ private fun PreviewMainScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = baseState.content { "${index + 1}/${items.size}" },
+                title = uiState.data.run { "${index + 1}/${items.size}" },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     navigationIconContentColor = MaterialTheme.colorScheme.surface,
@@ -77,7 +76,7 @@ private fun PreviewMainScreen(
                 .fillMaxSize()
                 .background(Color.Black),
             onRefresh = { onActionEvent(PreviewMainEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             PreviewMainScreenContent(state, onUiEvent, onActionEvent)
         }

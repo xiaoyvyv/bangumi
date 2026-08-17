@@ -24,7 +24,7 @@ import com.xiaoyv.bangumi.core_resource.resources.type_feature_almanac
 import com.xiaoyv.bangumi.features.almanac.business.AlmanacEvent
 import com.xiaoyv.bangumi.features.almanac.business.AlmanacState
 import com.xiaoyv.bangumi.features.almanac.business.AlmanacViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -33,7 +33,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -49,7 +48,7 @@ fun AlmanacRoute(
     }
 
     AlmanacScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -62,7 +61,7 @@ fun AlmanacRoute(
 
 @Composable
 private fun AlmanacScreen(
-    baseState: BaseState<AlmanacState>,
+    uiState: UiState<AlmanacState>,
     onUiEvent: (AlmanacEvent.UI) -> Unit,
     onActionEvent: (AlmanacEvent.Action) -> Unit,
 ) {
@@ -80,7 +79,7 @@ private fun AlmanacScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(AlmanacEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             AlmanacScreenContent(state, onUiEvent, onActionEvent)
         }

@@ -1,10 +1,15 @@
 package com.xiaoyv.bangumi.features.dollars.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
@@ -35,9 +40,9 @@ class DollarsViewModel(
         }
     }
 
-    override fun initBaseState(): BaseState<DollarsState> = BaseState.Loading()
+    override fun initBaseState(): UiState<DollarsState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = DollarsState()
+    override fun createInitialState() = DollarsState()
 
     override fun onEvent(event: DollarsEvent.Action) {
         when (event) {
@@ -47,30 +52,30 @@ class DollarsViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<DollarsState, DollarsSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<DollarsState>, UiSideEffect<DollarsSideEffect>>.refreshSync() {
         refreshChats()
     }
 
-    private suspend fun refreshChats() = subAction {
+    private suspend fun refreshChats() = subIntent {
         ugcRepository.fetchDollarsChat()
             .onFailure { reduceError { it } }
-            .onSuccess { reduceContent { state.copy(items = it.toPersistentList()) } }
+            .onSuccess { reduceData { state.copy(items = it.toPersistentList()) } }
     }
 
-    private fun onValueChange(value: TextFieldValue) = action {
-        reduceContent { state.copy(value = value.limit(1000)) }
+    private fun onValueChange(value: TextFieldValue) = intent {
+        reduceData { state.copy(value = value.limit(1000)) }
     }
 
-    private fun onSendMessage() = action {
-        reduceContent { state.copy(sending = LoadingState.Loading) }
+    private fun onSendMessage() = intent {
+        reduceData { state.copy(sending = LoadingState.Loading) }
 
-        ugcRepository.summitDollarsChat(stateRaw.value.text.trim())
+        ugcRepository.summitDollarsChat(state.data.value.text.trim())
             .onFailure {
                 postToast { it.errMsg }
-                reduceContent { state.copy(sending = LoadingState.NotLoading) }
+                reduceData { state.copy(sending = LoadingState.NotLoading) }
             }
             .onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         value = TextFieldValue(),
                         sending = LoadingState.NotLoading

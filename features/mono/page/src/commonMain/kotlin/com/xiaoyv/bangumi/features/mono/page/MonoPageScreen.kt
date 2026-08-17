@@ -15,7 +15,7 @@ import com.xiaoyv.bangumi.features.mono.page.business.MonoPageEvent
 import com.xiaoyv.bangumi.features.mono.page.business.MonoPageState
 import com.xiaoyv.bangumi.features.mono.page.business.MonoPageViewModel
 import com.xiaoyv.bangumi.features.mono.page.business.koinMonoPageViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
@@ -49,7 +49,7 @@ fun MonoPageRoute(
     viewModel.collectBaseSideEffect {}
 
     MonoPageScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         headerSticky = headerSticky,
         header = header,
@@ -65,7 +65,7 @@ fun MonoPageRoute(
 
 @Composable
 private fun MonoPageScreen(
-    baseState: BaseState<MonoPageState>,
+    uiState: UiState<MonoPageState>,
     pagingItems: LazyPagingItems<ComposeMonoDisplay>,
     onUiEvent: (MonoPageEvent.UI) -> Unit,
     onActionEvent: (MonoPageEvent.Action) -> Unit,
@@ -75,7 +75,7 @@ private fun MonoPageScreen(
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(MonoPageEvent.Action.OnRefresh(it)) },
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         if (state.param.ui.gridLayout) {
             MonoPageGridLayout(pagingItems, header, headerSticky, onUiEvent)

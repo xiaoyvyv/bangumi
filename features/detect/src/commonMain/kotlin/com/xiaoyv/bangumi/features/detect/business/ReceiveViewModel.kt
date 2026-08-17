@@ -1,5 +1,9 @@
 package com.xiaoyv.bangumi.features.detect.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.lifecycle.SavedStateHandle
 import com.attafitamim.krop.core.crop.CropResult
 import com.attafitamim.krop.filekit.encodeToByteArray
@@ -19,7 +23,7 @@ import com.xiaoyv.bangumi.core_resource.resources.image_detect_failed
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject_subtitle
 import com.xiaoyv.bangumi.shared.component.DetectType
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.repository.TraceRepository
@@ -48,7 +52,7 @@ class ReceiveViewModel(
 ) : BaseViewModel<ReceiveState, ReceiveSideEffect, ReceiveEvent.Action>(savedStateHandle) {
     internal val imageCropper = imageCropperCompat()
 
-    override fun initSate(onCreate: Boolean) =
+    override fun createInitialState() =
         if (args.type == DetectType.SOURCE) ReceiveState(
             path = args.path,
             title = Res.string.image_detect_subject,
@@ -75,7 +79,7 @@ class ReceiveViewModel(
             )
         )
 
-    override suspend fun BaseSyntax<ReceiveState, ReceiveSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<ReceiveState>, UiSideEffect<ReceiveSideEffect>>.refreshSync() {
         coroutineScope {
             launch { onLoadCropImage(PlatformFile(args.path)) }
             launch { onLoadAniTitleList() }
@@ -92,12 +96,12 @@ class ReceiveViewModel(
         }
     }
 
-    private fun onChangeModel(model: String) = action {
-        reduceContent { state.copy(currentModel = model) }
+    private fun onChangeModel(model: String) = intent {
+        reduceData { state.copy(currentModel = model) }
     }
 
-    private fun onDismissResultDialog() = action {
-        reduceContent {
+    private fun onDismissResultDialog() = intent {
+        reduceData {
             state.copy(
                 resultSubject = persistentListOf(),
                 resultCharacter = persistentListOf()
@@ -112,19 +116,19 @@ class ReceiveViewModel(
         }
     }
 
-    private suspend fun onLoadAniTitleList() = subAction {
+    private suspend fun onLoadAniTitleList() = subIntent {
         traceRepository.fetchAniTitleMapByEmbed().onSuccess { localMap ->
-            reduceContent { state.copy(titles = localMap.toPersistentList()) }
+            reduceData { state.copy(titles = localMap.toPersistentList()) }
 
             traceRepository.fetchAniTitleMapByJsdelivr()
                 .onFailure {
                     traceRepository.fetchAniTitleMapByGithub()
                         .onSuccess {
-                            reduceContent { state.copy(titles = localMap.toPersistentList()) }
+                            reduceData { state.copy(titles = localMap.toPersistentList()) }
                         }
                 }
                 .onSuccess {
-                    reduceContent { state.copy(titles = localMap.toPersistentList()) }
+                    reduceData { state.copy(titles = localMap.toPersistentList()) }
                 }
         }
     }
@@ -133,7 +137,7 @@ class ReceiveViewModel(
     /**
      * 载入图片
      */
-    private fun onLoadCropImage(file: PlatformFile) = action {
+    private fun onLoadCropImage(file: PlatformFile) = intent {
         if (file.exists()) {
             imageCropper.load {
                 file.toImageSrc()
@@ -144,8 +148,8 @@ class ReceiveViewModel(
     /**
      * 识别动漫来源
      */
-    private fun onRecognizingImageSource() = action {
-        reduceContent {
+    private fun onRecognizingImageSource() = intent {
+        reduceData {
             state.copy(
                 isRecognizing = true,
                 currentImageBitmap = null,
@@ -155,18 +159,18 @@ class ReceiveViewModel(
 
         val result = imageCropper.save()
         if (result !is CropResult.Success) {
-            reduceContent { state.copy(isRecognizing = false) }
+            reduceData { state.copy(isRecognizing = false) }
             postToast { getString(Res.string.image_detect_failed) }
-            return@action
+            return@intent
         }
 
         traceRepository.fetchSubjectInfoFromImage(result.bitmap.encodeToByteArray())
             .onFailure {
-                reduceContent { state.copy(isRecognizing = false) }
+                reduceData { state.copy(isRecognizing = false) }
                 postToast { it.errMsg }
             }
             .onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         isRecognizing = false,
                         resultSubject = it.result.orEmpty().toPersistentList(),
@@ -179,8 +183,8 @@ class ReceiveViewModel(
     /**
      * 识别动漫人物
      */
-    private fun onRecognizingImageCharacter() = action {
-        reduceContent {
+    private fun onRecognizingImageCharacter() = intent {
+        reduceData {
             state.copy(
                 isRecognizing = true,
                 resultCharacter = persistentListOf(),
@@ -190,22 +194,22 @@ class ReceiveViewModel(
 
         val result = imageCropper.save()
         if (result !is CropResult.Success) {
-            reduceContent { state.copy(isRecognizing = false) }
+            reduceData { state.copy(isRecognizing = false) }
             postToast { getString(Res.string.image_detect_failed) }
-            return@action
+            return@intent
         }
 
         traceRepository
             .fetchCharacterInfoFromImage(
                 byteArray = result.bitmap.encodeToByteArray(),
-                model = state.content.currentModel
+                model = state.data.currentModel
             )
             .onFailure {
-                reduceContent { state.copy(isRecognizing = false) }
+                reduceData { state.copy(isRecognizing = false) }
                 postToast { it.errMsg }
             }
             .onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         isRecognizing = false,
                         resultCharacter = it.data.orEmpty().toPersistentList(),

@@ -83,7 +83,7 @@ import com.xiaoyv.bangumi.features.detect.business.ReceiveEvent
 import com.xiaoyv.bangumi.features.detect.business.ReceiveState
 import com.xiaoyv.bangumi.features.detect.business.ReceiveViewModel
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatHMS
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
@@ -110,7 +110,6 @@ import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import kotlin.math.roundToLong
 
@@ -129,7 +128,7 @@ fun ReceiveRoute(
 
     CompositionLocalProvider(LocalCropperState provides cropState) {
         ReceiveScreen(
-            baseState = baseState,
+            uiState = baseState,
             onActionEvent = viewModel::onEvent,
             onUiEvent = {
                 when (it) {
@@ -143,14 +142,14 @@ fun ReceiveRoute(
 
 @Composable
 private fun ReceiveScreen(
-    baseState: BaseState<ReceiveState>,
+    uiState: UiState<ReceiveState>,
     onUiEvent: (ReceiveEvent.UI) -> Unit,
     onActionEvent: (ReceiveEvent.Action) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            baseState.content {
+            uiState.data.run {
                 val launcher = rememberFilePickerLauncher(type = FileKitType.Image) {
                     if (it != null) {
                         onActionEvent(ReceiveEvent.Action.OnSelectedFile(it))
@@ -174,7 +173,7 @@ private fun ReceiveScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(ReceiveEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             ReceiveScreenContent(
                 state = state,

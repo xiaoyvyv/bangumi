@@ -16,12 +16,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,7 +44,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_rank
 import com.xiaoyv.bangumi.core_resource.resources.subject_home_calendar
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.FeatureType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
@@ -81,13 +79,13 @@ private const val CONTENT_TYPE_OVERVIEW_ITEM = "CONTENT_TYPE_OVERVIEW_ITEM"
 
 @Composable
 fun HomeMainScreen(
-    baseState: BaseState<HomeState>,
+    uiState: UiState<HomeState>,
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
     StateLayout(
         modifier = Modifier.fillMaxSize(),
-        baseState = baseState,
+        uiState = uiState,
         enablePullRefresh = true,
         onRefresh = { onActionEvent(HomeEvent.Action.OnRefresh(it)) },
     ) { state ->

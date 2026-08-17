@@ -26,7 +26,7 @@ import com.xiaoyv.bangumi.features.tag.page.business.TagPageEvent
 import com.xiaoyv.bangumi.features.tag.page.business.TagPageState
 import com.xiaoyv.bangumi.features.tag.page.business.TagPageViewModel
 import com.xiaoyv.bangumi.features.tag.page.business.koinTagPageViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.formatShort
@@ -64,7 +64,7 @@ fun TagPageRoute(
     }
 
     TagPageScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -77,7 +77,7 @@ fun TagPageRoute(
 
 @Composable
 private fun TagPageScreen(
-    baseState: BaseState<TagPageState>,
+    uiState: UiState<TagPageState>,
     pagingItems: LazyPagingItems<ComposeTag>,
     onUiEvent: (TagPageEvent.UI) -> Unit,
     onActionEvent: (TagPageEvent.Action) -> Unit,
@@ -85,7 +85,7 @@ private fun TagPageScreen(
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(TagPageEvent.Action.OnRefresh(it)) },
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         TagPageScreenContent(state, pagingItems, onUiEvent, onActionEvent)
     }

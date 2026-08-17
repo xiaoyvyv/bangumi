@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.subject.browser.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -40,7 +41,7 @@ class SubjectBrowserViewModel(
         )
     }
 
-    override fun initSate(onCreate: Boolean) = SubjectBrowserState(
+    override fun createInitialState() = SubjectBrowserState(
         title = args.title,
         param = ListSubjectParam(
             type = ListSubjectType.BROWSER,
@@ -61,8 +62,8 @@ class SubjectBrowserViewModel(
         }
     }
 
-    private fun onChangeLayoutMode() = action {
-        reduceContent {
+    private fun onChangeLayoutMode() = intent {
+        reduceData {
             state.copy(
                 param = state.param.copy(
                     ui = state.param.ui.copy(
@@ -75,8 +76,8 @@ class SubjectBrowserViewModel(
         saveCache()
     }
 
-    private fun onUpdateBrowserSubjectParam(body: SubjectBrowserBody) = action {
-        reduceContent { state.copy(param = state.param.copy(browser = body)) }
+    private fun onUpdateBrowserSubjectParam(body: SubjectBrowserBody) = intent {
+        reduceData { state.copy(param = state.param.copy(browser = body)) }
         saveCache()
     }
 }

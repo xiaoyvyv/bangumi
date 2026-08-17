@@ -1,5 +1,10 @@
 package com.xiaoyv.bangumi.features.article.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -12,13 +17,14 @@ import com.xiaoyv.bangumi.core_resource.resources.global_oldest
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.global_self
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.CommentFilterType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SortType
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
+import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
@@ -62,10 +68,10 @@ class ArticleViewModel(
         cacheRepository = cacheRepository,
         cacheKey = cacheKey,
         loadWhenEmpty = true,
-        transform = { initSate(true).copy(title = it.title, article = it.article) }
+        transform = { createInitialState().copy(title = it.title, article = it.article) }
     )
 
-    override fun initSate(onCreate: Boolean) = ArticleState(
+    override fun createInitialState() = ArticleState(
         commentTypeFilters = persistentListOf(
             ComposeTextTab(CommentFilterType.ALL, label = Res.string.global_all),
             ComposeTextTab(CommentFilterType.REACTION, label = Res.string.global_reaction),
@@ -90,35 +96,35 @@ class ArticleViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<ArticleState, ArticleSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<ArticleState>, UiSideEffect<ArticleSideEffect>>.refreshSync() {
         ugcRepository.fetchTopicDetail(args.id, args.type).fold(
             onFailure = { reduceError { it } },
             onSuccess = {
                 rawComments.clear()
                 rawComments.addAll(it.comments)
 
-                stateRaw.refreshComments(article = it)
+                state.data.refreshComments(article = it)
                     .copy(lastViewed = System.currentTimeMillis())
-                    .let { state -> reduceContent { state } }
+                    .let { state -> reduceData { state } }
             }
         )
     }
 
-    private fun onCommentTypeChange(@CommentFilterType type: Int) = action {
-        stateRaw.refreshComments(selectedCommentTypeFilter = type)
-            .let { state -> reduceContent { state } }
+    private fun onCommentTypeChange(@CommentFilterType type: Int) = intent {
+        state.data.refreshComments(selectedCommentTypeFilter = type)
+            .let { state -> reduceData { state } }
     }
 
-    private fun onCommentSortChange(@SortType type: Int) = action {
-        stateRaw.refreshComments(selectedCommentSortFilter = type)
-            .let { state -> reduceContent { state } }
+    private fun onCommentSortChange(@SortType type: Int) = intent {
+        state.data.refreshComments(selectedCommentSortFilter = type)
+            .let { state -> reduceData { state } }
     }
 
-    private fun onReactionClick(@CommentType type: Int, id: String, value: String) = action {
-        val authorId = if (args.type == TopicDetailType.TYPE_BLOG && stateRaw.article.user.id == 0L) {
-            userRepository.fetchUserInfo(stateRaw.article.user.username).map { it.id }.getOrDefault(0)
+    private fun onReactionClick(@CommentType type: Int, id: String, value: String) = intent {
+        val authorId = if (args.type == TopicDetailType.TYPE_BLOG && state.data.article.user.id == 0L) {
+            userRepository.fetchUserInfo(state.data.article.user.username).map { it.id }.getOrDefault(0)
         } else {
-            stateRaw.article.user.id
+            state.data.article.user.id
         }
 
         ugcRepository.submitReaction(
@@ -126,8 +132,10 @@ class ArticleViewModel(
             type = type,
             id = id,
             value = value
-        ).onSuccessWithErrorToast { data ->
-            reduceContent {
+        ).onFailure {
+            postToast { it.errMsg }
+        }.onSuccess { data ->
+            reduceData {
                 val reactions = state.article.reactions
                 val newMap = if (reactions.containsKey(id)) {
                     reactions
@@ -147,8 +155,8 @@ class ArticleViewModel(
     /**
      * 评论发送成功，向 UI 添加评论
      */
-    private fun onAppendComment(comment: ComposeNewReply) = action {
-        val article = stateRaw.article
+    private fun onAppendComment(comment: ComposeNewReply) = intent {
+        val article = state.data.article
         val mains = comment.posts.main
         val subs = comment.posts.sub
 
@@ -193,15 +201,15 @@ class ArticleViewModel(
 
         // 若是主评论有变动则修改一下排序，让其置顶显示自己刚刚发布的评论
         if (mains.isNotEmpty()) {
-            stateRaw.refreshComments(
+            state.data.refreshComments(
                 selectedCommentTypeFilter = CommentFilterType.ALL,
                 selectedCommentSortFilter = SortType.NEWEST,
                 lastViewed = System.currentTimeMillis()
             )
         } else {
-            stateRaw.refreshComments(lastViewed = System.currentTimeMillis())
+            state.data.refreshComments(lastViewed = System.currentTimeMillis())
         }.let { state ->
-            reduceContent { state }
+            reduceData { state }
         }
     }
 

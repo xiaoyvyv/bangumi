@@ -33,7 +33,7 @@ class SubjectPageViewModel(
     private val subjectPager = subjectRepository.fetchSubjectPager(param)
     internal val subjects = subjectPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = SubjectPageState(
+    override fun createInitialState() = SubjectPageState(
         param = param
     )
 

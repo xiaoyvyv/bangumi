@@ -17,7 +17,7 @@ import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginEvent
 import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginState
 import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginViewModel
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
@@ -28,7 +28,6 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -44,7 +43,7 @@ fun PixivLoginRoute(
     }
 
     PixivLoginScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -57,7 +56,7 @@ fun PixivLoginRoute(
 
 @Composable
 private fun PixivLoginScreen(
-    baseState: BaseState<PixivLoginState>,
+    uiState: UiState<PixivLoginState>,
     onUiEvent: (PixivLoginEvent.UI) -> Unit,
     onActionEvent: (PixivLoginEvent.Action) -> Unit,
 ) {
@@ -76,7 +75,7 @@ private fun PixivLoginScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(PixivLoginEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             PixivLoginScreenContent(state, onUiEvent, onActionEvent)
         }

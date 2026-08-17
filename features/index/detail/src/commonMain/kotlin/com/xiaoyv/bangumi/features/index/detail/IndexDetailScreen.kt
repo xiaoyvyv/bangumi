@@ -41,7 +41,7 @@ import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailEvent
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailState
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailViewModel
 import com.xiaoyv.bangumi.features.index.detail.page.IndexDetailPageScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
@@ -67,7 +67,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -83,7 +82,7 @@ fun IndexDetailRoute(
     }
 
     IndexDetailScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -96,7 +95,7 @@ fun IndexDetailRoute(
 
 @Composable
 private fun IndexDetailScreen(
-    baseState: BaseState<IndexDetailState>,
+    uiState: UiState<IndexDetailState>,
     onUiEvent: (IndexDetailEvent.UI) -> Unit,
     onActionEvent: (IndexDetailEvent.Action) -> Unit,
 ) {
@@ -111,7 +110,7 @@ private fun IndexDetailScreen(
                 it
             )
             BgmTopAppBar(
-                title = baseState.content { index.title },
+                title = uiState.data.run { index.title },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
@@ -119,7 +118,7 @@ private fun IndexDetailScreen(
                     actionIconContentColor = iconColor
                 ),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         val actionHandler = LocalActionHandler.current
                         IconButton(onClick = { onActionEvent(IndexDetailEvent.Action.OnToggleBookmarkIndex) }) {
                             Icon(
@@ -149,7 +148,7 @@ private fun IndexDetailScreen(
             )
         },
         collapse = {
-            baseState.content {
+            uiState.data.run {
                 IndexDetailScreenHeader(
                     state = this,
                     padding = it,
@@ -163,7 +162,7 @@ private fun IndexDetailScreen(
         StateLayout(
             modifier = Modifier.fillMaxSize(),
             onRefresh = { loading -> onActionEvent(IndexDetailEvent.Action.OnRefresh(loading)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
                 IndexDetailScreenContent(state, onUiEvent, onActionEvent)
@@ -287,7 +286,7 @@ private fun IndexDetailScreenContent(
 private fun PreviewIndexDetailScreen() {
     PreviewColumn(modifier = Modifier.fillMaxSize()) {
         IndexDetailScreen(
-            baseState = BaseState.Success(
+            uiState = UiState(
                 IndexDetailState(
                     tabs = persistentListOf(
                         ComposeTextTab(IndexCatWebTabType.ALL, Res.string.global_all)

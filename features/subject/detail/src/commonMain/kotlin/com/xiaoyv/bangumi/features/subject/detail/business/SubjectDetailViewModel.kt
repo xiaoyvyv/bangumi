@@ -1,5 +1,11 @@
 package com.xiaoyv.bangumi.features.subject.detail.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -7,7 +13,7 @@ import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_firstly
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
@@ -62,8 +68,8 @@ class SubjectDetailViewModel(
             .drop(1)
             .onEach {
                 val subject = it.subjects[args.subjectId]
-                if (subject != null) action {
-                    reduceContent { state.copy(subject = subject) }
+                if (subject != null) intent {
+                    reduceData { state.copy(subject = subject) }
                     saveCache()
                 }
             }
@@ -77,7 +83,7 @@ class SubjectDetailViewModel(
         enable = userManager.settings.ui.cacheState,
     )
 
-    override fun initSate(onCreate: Boolean): SubjectDetailState {
+    override fun createInitialState(): SubjectDetailState {
         return SubjectDetailState(
             id = args.subjectId,
             subject = ComposeSubject.Empty,
@@ -101,7 +107,7 @@ class SubjectDetailViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<SubjectDetailState, SubjectDetailSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<SubjectDetailState>, UiSideEffect<SubjectDetailSideEffect>>.refreshSync() {
         awaitAll(
             block1 = { subjectRepository.fetchSubjectDetail(args.subjectId) },
             block2 = { subjectRepository.fetchSubjectDetailByWeb(args.subjectId).recover { ComposeSubjectWebInfo.Empty } },
@@ -111,7 +117,7 @@ class SubjectDetailViewModel(
         ).onFailure {
             reduceError { it }
         }.onSuccess {
-            reduceContent {
+            reduceData {
                 state.copy(
                     subject = it.data1.copy(
                         episodes = it.data3.toPersistentList(),
@@ -130,9 +136,9 @@ class SubjectDetailViewModel(
     /**
      * 刷新豆瓣预览和巡礼图片
      */
-    private suspend fun onRefreshParadeAndPhoto() = subAction {
-        val subject = stateRaw.subject
-        reduceContent { state.copy(previewLoading = LoadingState.Loading) }
+    private suspend fun onRefreshParadeAndPhoto() = subIntent {
+        val subject = state.data.subject
+        reduceData { state.copy(previewLoading = LoadingState.Loading) }
 
         coroutineScope {
             val parade = async { subjectRepository.fetchSubjectParade(args.subjectId).recover { ComposeParade.Empty } }
@@ -140,7 +146,7 @@ class SubjectDetailViewModel(
             val myTags = async { subjectRepository.fetchMySubjectTags(args.subjectId).recover { emptyList() } }
 
             val preview = photo.await().getOrThrow()
-            reduceContent {
+            reduceData {
                 state.copy(
                     photo = preview,
                     previewLoading = LoadingState.NotLoading,
@@ -149,7 +155,7 @@ class SubjectDetailViewModel(
 
             val refreshedParade = parade.await().getOrThrow()
             val refreshedTags = myTags.await().getOrThrow()
-            reduceContent {
+            reduceData {
                 state.copy(
                     parade = refreshedParade,
                     myTags = refreshedTags.toPersistentList(),
@@ -160,43 +166,43 @@ class SubjectDetailViewModel(
         personalStateStore.updateSubject(args.subjectId, subject)
     }
 
-    private fun onUpdateEpisodeCollection(episodes: List<ComposeEpisode>, type: Int) = action {
-        if (stateRaw.subject.interest.type == CollectionType.UNKNOWN) {
+    private fun onUpdateEpisodeCollection(episodes: List<ComposeEpisode>, type: Int) = intent {
+        if (state.data.subject.interest.type == CollectionType.UNKNOWN) {
             postToast { getString(Res.string.collect_firstly) }
-            return@action
+            return@intent
         }
 
         withActionLoading { collectionRepository.submitUpdateUserEpisode(args.subjectId, episodes, type) }
             .onFailure { postToast { it.errMsg } }
             .onSuccess {
-                personalStateStore.updateCollectionEpisode(stateRaw.subject, episodes.map { it.id }, type)
+                personalStateStore.updateCollectionEpisode(state.data.subject, episodes.map { it.id }, type)
             }
     }
 
-    private fun onUpdateSubjectCollection(update: CollectionSubjectUpdate, showLoadingDialog: Boolean) = action {
-        reduceContent { state.copy(loading = LoadingState.Loading) }
+    private fun onUpdateSubjectCollection(update: CollectionSubjectUpdate, showLoadingDialog: Boolean) = intent {
+        reduceData { state.copy(loading = LoadingState.Loading) }
 
         withActionLoading(showLoading = showLoadingDialog) { collectionRepository.submitUpdateUserSubject(args.subjectId, update) }
             .onFailure {
                 postToast { it.errMsg }
 
-                reduceContent { state.copy(loading = LoadingState.Error(it)) }
+                reduceData { state.copy(loading = LoadingState.Error(it)) }
             }
             .onSuccess {
                 postToast { getString(Res.string.collect_success) }
-                reduceContent { state.copy(loading = LoadingState.NotLoading) }
+                reduceData { state.copy(loading = LoadingState.NotLoading) }
 
-                personalStateStore.updateSubject(args.subjectId, stateRaw.run {
+                personalStateStore.updateSubject(args.subjectId, state.data.run {
                     subject.copy(interest = subject.interest.updateFrom(update))
                 })
 
             }
     }
 
-    private fun onDeleteCollection() = action {
+    private fun onDeleteCollection() = intent {
         withActionLoading { collectionRepository.submitRemoveSubjectCollection(args.subjectId) }
             .onSuccess {
-                personalStateStore.updateSubject(args.subjectId, stateRaw.run {
+                personalStateStore.updateSubject(args.subjectId, state.data.run {
                     subject.copy(interest = subject.interest.copy(type = CollectionType.UNKNOWN))
                 })
             }

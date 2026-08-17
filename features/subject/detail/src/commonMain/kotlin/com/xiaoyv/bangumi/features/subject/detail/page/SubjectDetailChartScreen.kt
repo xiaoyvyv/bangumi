@@ -1,6 +1,8 @@
 package com.xiaoyv.bangumi.features.subject.detail.page
 
-
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,8 +52,9 @@ import com.patrykandpatrick.vico.multiplatform.common.component.rememberLineComp
 import com.patrykandpatrick.vico.multiplatform.common.data.ExtraStore
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
@@ -97,17 +100,17 @@ class SubjectDetailChartViewModel(
     private val subjectRepository: SubjectRepository,
     private val subjectId: Long,
 ) : BaseViewModel<SubjectDetailChartState, Any, Any>(savedStateHandle) {
-    override fun initBaseState(): BaseState<SubjectDetailChartState> = BaseState.Loading()
+    override fun initBaseState(): UiState<SubjectDetailChartState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = SubjectDetailChartState()
+    override fun createInitialState() = SubjectDetailChartState()
 
     override fun onEvent(event: Any) = Unit
 
-    override suspend fun BaseSyntax<SubjectDetailChartState, Any>.refreshSync() {
+    override suspend fun Syntax<UiState<SubjectDetailChartState>, UiSideEffect<Any>>.refreshSync() {
         subjectRepository.fetchSubjectStats(subjectId)
             .onFailure { reduceError { it } }
             .onSuccess {
-                reduceContent(forceRefresh = true) { state.copy(stats = it) }
+                reduceData(forceRefresh = true) { state.copy(stats = it) }
             }
     }
 }
@@ -129,7 +132,7 @@ fun SubjectDetailChartScreen(
 
     StateLayout(
         modifier = Modifier.fillMaxSize(),
-        baseState = baseState,
+        uiState = baseState,
         onRefresh = { viewModel.refresh(it) },
         enablePullRefresh = true
     ) {

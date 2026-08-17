@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.features.friend.FriendRoute
 import com.xiaoyv.bangumi.features.settings.block.business.SettingsBlockEvent
 import com.xiaoyv.bangumi.features.settings.block.business.SettingsBlockState
 import com.xiaoyv.bangumi.features.settings.block.business.SettingsBlockViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
@@ -22,7 +22,6 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -38,7 +37,7 @@ fun SettingsBlockRoute(
     }
 
     SettingsBlockScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -51,7 +50,7 @@ fun SettingsBlockRoute(
 
 @Composable
 private fun SettingsBlockScreen(
-    baseState: BaseState<SettingsBlockState>,
+    uiState: UiState<SettingsBlockState>,
     onUiEvent: (SettingsBlockEvent.UI) -> Unit,
     onActionEvent: (SettingsBlockEvent.Action) -> Unit,
 ) {
@@ -68,7 +67,7 @@ private fun SettingsBlockScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsBlockScreenContent(state, onUiEvent, onActionEvent)
         }

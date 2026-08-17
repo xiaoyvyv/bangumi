@@ -1,10 +1,16 @@
 package com.xiaoyv.bangumi.features.settings.account.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_ok
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.EditInfoType
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
@@ -31,15 +37,15 @@ class SettingsAccountViewModel(
 ) : BaseViewModel<SettingsAccountState, SettingsAccountSideEffect, SettingsAccountEvent.Action>(
     savedStateHandle
 ) {
-    override fun initBaseState(): BaseState<SettingsAccountState> = BaseState.Loading()
+    override fun initBaseState(): UiState<SettingsAccountState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = SettingsAccountState()
+    override fun createInitialState() = SettingsAccountState()
 
-    override suspend fun BaseSyntax<SettingsAccountState, SettingsAccountSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<SettingsAccountState>, UiSideEffect<SettingsAccountSideEffect>>.refreshSync() {
         userRepository.fetchUserEditInfo()
             .onFailure { reduceError { it } }
             .onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         avatar = it.avatar,
                         items = mapOf(
@@ -66,27 +72,27 @@ class SettingsAccountViewModel(
     override fun onEvent(event: SettingsAccountEvent.Action) {
         when (event) {
             is SettingsAccountEvent.Action.OnEditInfo -> onEditInfo(event.type, event.data)
-            is SettingsAccountEvent.Action.OnRefresh -> TODO()
+            is SettingsAccountEvent.Action.OnRefresh -> refresh(false)
             is SettingsAccountEvent.Action.OnSave -> onSaveInfo()
             is SettingsAccountEvent.Action.OnPickAvatar -> onPickAvatarResult(event.file)
         }
     }
 
-    private fun onPickAvatarResult(file: PlatformFile) = action {
+    private fun onPickAvatarResult(file: PlatformFile) = intent {
         val avatarBytes = withContext(Dispatchers.IO) {
             file.readBytes()
         }
-        reduceContent { state.copy(avatarBytes = avatarBytes) }
+        reduceData { state.copy(avatarBytes = avatarBytes) }
     }
 
-    private fun onEditInfo(type: String, data: String) = action {
-        val items = state.content.items.toMutableMap()
+    private fun onEditInfo(type: String, data: String) = intent {
+        val items = state.data.items.toMutableMap()
         if (items.contains(type)) items[type] = data
 
-        val networkItems = state.content.networkItems.toMutableMap()
+        val networkItems = state.data.networkItems.toMutableMap()
         if (networkItems.contains(type)) networkItems[type] = data
 
-        reduceContent {
+        reduceData {
             state.copy(
                 avatar = if (type == EditInfoType.TYPE_AVATAR) data else state.avatar,
                 items = items.toImmutableMap(),
@@ -95,20 +101,20 @@ class SettingsAccountViewModel(
         }
     }
 
-    private fun onSaveInfo() = action {
-        val data = (state.content.items + state.content.networkItems).toMutableMap()
+    private fun onSaveInfo() = intent {
+        val data = (state.data.items + state.data.networkItems).toMutableMap()
         data[EditInfoType.TYPE_FORM_HASH] = userManager.userInfo.formHash
         data[EditInfoType.TYPE_SUBMIT] = "submit"
 
-        reduceContent { state.copy(loading = true) }
+        reduceData { state.copy(loading = true) }
 
-        userRepository.submitUserInfoUpdate(state.content.avatarBytes, data.toImmutableMap())
+        userRepository.submitUserInfoUpdate(state.data.avatarBytes, data.toImmutableMap())
             .onFailure {
-                reduceContent { state.copy(loading = false) }
+                reduceData { state.copy(loading = false) }
                 postToast { it.errMsg }
             }
             .onSuccess {
-                reduceContent { state.copy(loading = false) }
+                reduceData { state.copy(loading = false) }
                 postToast { getString(Res.string.global_ok) }
                 postEffect { SettingsAccountSideEffect.OnNavUp }
             }

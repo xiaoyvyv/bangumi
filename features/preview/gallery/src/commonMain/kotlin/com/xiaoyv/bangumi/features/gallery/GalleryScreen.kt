@@ -28,7 +28,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_resolution
 import com.xiaoyv.bangumi.features.gallery.business.GalleryEvent
 import com.xiaoyv.bangumi.features.gallery.business.GalleryState
 import com.xiaoyv.bangumi.features.gallery.business.GalleryViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.formatFileSize
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -39,7 +39,6 @@ import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHa
 import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -55,7 +54,7 @@ fun GalleryRoute(
     }
 
     GalleryScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -68,7 +67,7 @@ fun GalleryRoute(
 
 @Composable
 private fun GalleryScreen(
-    baseState: BaseState<GalleryState>,
+    uiState: UiState<GalleryState>,
     onUiEvent: (GalleryEvent.UI) -> Unit,
     onActionEvent: (GalleryEvent.Action) -> Unit,
 ) {
@@ -76,10 +75,7 @@ private fun GalleryScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = baseState.payload.let {
-                    if (it == null) stringResource(Res.string.global_artwork)
-                    else stringResource(Res.string.global_artwork) + "：${it.id}"
-                },
+                title = stringResource(Res.string.global_artwork) + "：${uiState.data.id}",
                 onNavigationClick = { onUiEvent(GalleryEvent.UI.OnNavUp) }
             )
         }
@@ -89,7 +85,7 @@ private fun GalleryScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(GalleryEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             GalleryScreenContent(state, onUiEvent, onActionEvent)
         }

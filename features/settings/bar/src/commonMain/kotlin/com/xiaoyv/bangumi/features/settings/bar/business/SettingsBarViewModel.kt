@@ -16,7 +16,7 @@ class SettingsBarViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<SettingsBarState, SettingsBarSideEffect, SettingsBarEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SettingsBarState()
+    override fun createInitialState() = SettingsBarState()
 
     override fun onEvent(event: SettingsBarEvent.Action) {
         when (event) {
@@ -25,7 +25,7 @@ class SettingsBarViewModel(
         }
     }
 
-    private fun onUpdateConfig(settings: ComposeSetting.HomeTabConfig) = action {
+    private fun onUpdateConfig(settings: ComposeSetting.HomeTabConfig) = intent {
         userManager.updateSettings {
             it.copy(homeTab = settings)
         }

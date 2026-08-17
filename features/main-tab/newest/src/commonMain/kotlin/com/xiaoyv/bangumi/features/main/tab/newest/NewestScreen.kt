@@ -14,7 +14,7 @@ import com.xiaoyv.bangumi.features.main.tab.newest.business.NewestEvent
 import com.xiaoyv.bangumi.features.main.tab.newest.business.NewestState
 import com.xiaoyv.bangumi.features.main.tab.newest.business.NewestViewModel
 import com.xiaoyv.bangumi.features.subject.page.SubjectPageRoute
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
@@ -41,7 +41,7 @@ fun NewestRoute(
     }
 
     NewestScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -54,7 +54,7 @@ fun NewestRoute(
 
 @Composable
 private fun NewestScreen(
-    baseState: BaseState<NewestState>,
+    uiState: UiState<NewestState>,
     onUiEvent: (NewestEvent.UI) -> Unit,
     onActionEvent: (NewestEvent.Action) -> Unit,
 ) {
@@ -62,9 +62,7 @@ private fun NewestScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = baseState.payload.let {
-                    if (it == null) stringResource(Res.string.yuc_title) else stringResource(Res.string.yuc_title) + "（${it.year}）"
-                },
+                title = stringResource(Res.string.yuc_title) + "（${uiState.data.year}）",
                 onNavigationClick = { onUiEvent(NewestEvent.UI.OnNavUp) }
             )
         }
@@ -74,7 +72,7 @@ private fun NewestScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(NewestEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             NewestScreenContent(state, onUiEvent, onActionEvent)
         }
@@ -111,4 +109,3 @@ private fun NewestScreenContent(
         }
     }
 }
-

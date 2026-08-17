@@ -1,5 +1,11 @@
 package com.xiaoyv.bangumi.features.mono.detail.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -8,7 +14,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
@@ -78,8 +84,8 @@ class MonoDetailViewModel(
             .drop(1)
             .onEach {
                 val mono = it.monos[args.id]
-                if (mono != null) action {
-                    reduceContent { state.copy(mono = mono) }
+                if (mono != null) intent {
+                    reduceData { state.copy(mono = mono) }
                     saveCache()
                 }
             }
@@ -95,7 +101,7 @@ class MonoDetailViewModel(
         }
     )
 
-    override fun initSate(onCreate: Boolean) = MonoDetailState(
+    override fun createInitialState() = MonoDetailState(
         id = args.id,
         type = args.type,
     )
@@ -114,7 +120,7 @@ class MonoDetailViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<MonoDetailState, MonoDetailSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<MonoDetailState>, UiSideEffect<MonoDetailSideEffect>>.refreshSync() {
         if (args.type == MonoType.CHARACTER) {
             awaitAll(
                 block1 = { monoRepoUseCase.fetchMonoDetail(args.id, args.type) },
@@ -122,7 +128,7 @@ class MonoDetailViewModel(
             ).onFailure {
                 reduceError { it }
             }.onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         mono = it.data1,
                         casts = it.data2.toPersistentList()
@@ -137,7 +143,7 @@ class MonoDetailViewModel(
             ).onFailure {
                 reduceError { it }
             }.onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         mono = it.data1,
                         casts = it.data2.toPersistentList(),
@@ -147,15 +153,15 @@ class MonoDetailViewModel(
             }
         }
 
-        personalStateStore.updateMono(args.id, stateRaw.mono)
+        personalStateStore.updateMono(args.id, state.data.mono)
 
-        fetchSearchImageTags(stateRaw.mono)
+        fetchSearchImageTags(state.data.mono)
 
         if (args.type == MonoType.PERSON) fetchPersonWorkPosition()
     }
 
-    private fun onToggleBookmarkMono() = action {
-        val isBookmarked = stateRaw.mono.collectedAt > 0
+    private fun onToggleBookmarkMono() = intent {
+        val isBookmarked = state.data.mono.collectedAt > 0
         val toast = if (isBookmarked) getString(Res.string.collect_cancel_success) else getString(Res.string.collect_success)
 
         withActionLoading { collectionRepository.submitBookmarkOrCancelMono(args.id, args.type, !isBookmarked) }
@@ -163,21 +169,21 @@ class MonoDetailViewModel(
                 postToast { toast }
 
                 // 更新
-                personalStateStore.updateMono(args.id, stateRaw.mono.copy(collectedAt = if (it) System.currentTimeMillis() else 0))
+                personalStateStore.updateMono(args.id, state.data.mono.copy(collectedAt = if (it) System.currentTimeMillis() else 0))
             }
     }
 
-    private fun fetchPersonWorkPosition() = action {
+    private fun fetchPersonWorkPosition() = intent {
         monoRepository.fetchPersonWorkPosition(args.id)
             .onSuccess {
-                reduceContent { state.copy(positions = it.toPersistentList()) }
+                reduceData { state.copy(positions = it.toPersistentList()) }
             }
     }
 
     /**
      * 获取搜索TAG
      */
-    private fun fetchSearchImageTags(data: ComposeMono) = action {
+    private fun fetchSearchImageTags(data: ComposeMono) = intent {
         pixivTag.update { data.name }
 
         imageRepository.fetchAnimePictureTag(data)

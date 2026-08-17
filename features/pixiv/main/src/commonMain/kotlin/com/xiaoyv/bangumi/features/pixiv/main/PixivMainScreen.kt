@@ -11,13 +11,12 @@ import com.xiaoyv.bangumi.core_resource.resources.login_title
 import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainEvent
 import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainState
 import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -33,7 +32,7 @@ fun PixivMainRoute(
     }
 
     PixivMainScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -46,7 +45,7 @@ fun PixivMainRoute(
 
 @Composable
 private fun PixivMainScreen(
-    baseState: BaseState<PixivMainState>,
+    uiState: UiState<PixivMainState>,
     onUiEvent: (PixivMainEvent.UI) -> Unit,
     onActionEvent: (PixivMainEvent.Action) -> Unit,
 ) {
@@ -65,7 +64,7 @@ private fun PixivMainScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(PixivMainEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             PixivMainScreenContent(state, onUiEvent, onActionEvent)
         }

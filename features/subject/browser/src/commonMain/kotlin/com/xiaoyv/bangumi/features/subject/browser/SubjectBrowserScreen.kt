@@ -35,7 +35,7 @@ import com.xiaoyv.bangumi.features.subject.browser.business.SubjectBrowserEvent
 import com.xiaoyv.bangumi.features.subject.browser.business.SubjectBrowserState
 import com.xiaoyv.bangumi.features.subject.browser.business.SubjectBrowserViewModel
 import com.xiaoyv.bangumi.features.subject.page.SubjectPageRoute
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalHideNavIcon
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -52,7 +52,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -68,7 +67,7 @@ fun SubjectBrowserRoute(
     }
 
     SubjectBrowserScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -81,7 +80,7 @@ fun SubjectBrowserRoute(
 
 @Composable
 private fun SubjectBrowserScreen(
-    baseState: BaseState<SubjectBrowserState>,
+    uiState: UiState<SubjectBrowserState>,
     onUiEvent: (SubjectBrowserEvent.UI) -> Unit,
     onActionEvent: (SubjectBrowserEvent.Action) -> Unit,
 ) {
@@ -89,7 +88,7 @@ private fun SubjectBrowserScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = baseState.content {
+                title = uiState.data.run {
                     buildString {
                         if (title.isNotBlank()) {
                             append(title)
@@ -106,7 +105,7 @@ private fun SubjectBrowserScreen(
                 },
                 actions = {
                     IconButton(onClick = { onActionEvent(SubjectBrowserEvent.Action.OnChangeLayoutMode) }) {
-                        baseState.content {
+                        uiState.data.run {
                             Icon(
                                 imageVector = if (param.ui.gridLayout) BgmIcons.LineStyle else BgmIcons.GridView,
                                 contentDescription = null
@@ -138,7 +137,7 @@ private fun SubjectBrowserScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(SubjectBrowserEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SubjectBrowserScreenContent(state, onUiEvent, onActionEvent)
         }

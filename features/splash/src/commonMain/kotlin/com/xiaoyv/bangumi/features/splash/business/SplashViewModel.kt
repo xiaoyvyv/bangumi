@@ -1,7 +1,11 @@
 package com.xiaoyv.bangumi.features.splash.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
@@ -20,7 +24,7 @@ class SplashViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<SplashState, SplashSideEffect, SplashEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean): SplashState {
+    override fun createInitialState(): SplashState {
         val configuredHosts = userManager.settings.network.hosts
         return SplashState(
             nodes = ComposeSetting.NetworkConfig.DefaultHosts.keys.map { hostname ->
@@ -35,13 +39,13 @@ class SplashViewModel(
 
     override fun onEvent(event: SplashEvent.Action) {
         when (event) {
-            SplashEvent.Action.OnLaunch -> action {
-                if (stateRaw.isComplete) postEffect { SplashSideEffect.NavigateMain }
+            SplashEvent.Action.OnLaunch -> intent {
+                if (state.data.isComplete) postEffect { SplashSideEffect.NavigateMain }
             }
         }
     }
 
-    override suspend fun BaseSyntax<SplashState, SplashSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<SplashState>, UiSideEffect<SplashSideEffect>>.refreshSync() {
         val fallbackHosts = ComposeSetting.NetworkConfig.DefaultHosts.builder().apply {
             putAll(userManager.settings.network.hosts)
         }.build()
@@ -50,7 +54,7 @@ class SplashViewModel(
         val hostnames = ComposeSetting.NetworkConfig.DefaultHosts.keys.toList()
         val pendingHostnames = hostnames.toMutableSet()
 
-        reduceContent {
+        reduceData {
             state.copy(
                 activeHostname = hostnames.firstOrNull().orEmpty(),
                 nodes = state.nodes.map { it.copy(status = DnsNodeStatus.Resolving) }.toPersistentList(),
@@ -94,7 +98,7 @@ class SplashViewModel(
                     }
                 )
 
-                reduceContent {
+                reduceData {
                     state.copy(
                         activeHostname = pendingHostnames.firstOrNull().orEmpty(),
                         completedCount = index + 1,
@@ -110,7 +114,7 @@ class SplashViewModel(
                 network = settings.network.copy(hosts = refreshedHosts.build())
             )
         }
-        reduceContent {
+        reduceData {
             state.copy(
                 activeHostname = "",
                 isComplete = true,
@@ -118,11 +122,11 @@ class SplashViewModel(
         }
     }
 
-    private suspend fun BaseSyntax<SplashState, SplashSideEffect>.updateNode(
+    private suspend fun Syntax<UiState<SplashState>, UiSideEffect<SplashSideEffect>>.updateNode(
         hostname: String,
         transform: DnsNodeState.() -> DnsNodeState,
     ) {
-        reduceContent {
+        reduceData {
             state.copy(
                 nodes = state.nodes.map { node ->
                     if (node.hostname == hostname) node.transform() else node

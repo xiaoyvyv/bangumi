@@ -26,7 +26,7 @@ import com.xiaoyv.bangumi.features.mono.browser.business.MonoBrowserEvent
 import com.xiaoyv.bangumi.features.mono.browser.business.MonoBrowserState
 import com.xiaoyv.bangumi.features.mono.browser.business.MonoBrowserViewModel
 import com.xiaoyv.bangumi.features.mono.page.MonoPageRoute
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
@@ -37,7 +37,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -53,7 +52,7 @@ fun MonoBrowserRoute(
     }
 
     MonoBrowserScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -66,7 +65,7 @@ fun MonoBrowserRoute(
 
 @Composable
 private fun MonoBrowserScreen(
-    baseState: BaseState<MonoBrowserState>,
+    uiState: UiState<MonoBrowserState>,
     onUiEvent: (MonoBrowserEvent.UI) -> Unit,
     onActionEvent: (MonoBrowserEvent.Action) -> Unit,
 ) {
@@ -74,7 +73,7 @@ private fun MonoBrowserScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = baseState.payload?.title?.let { stringResource(it) },
+                title = uiState.data.title?.let { stringResource(it) },
                 onNavigationClick = { onUiEvent(MonoBrowserEvent.UI.OnNavUp) }
             )
         }
@@ -84,7 +83,7 @@ private fun MonoBrowserScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(MonoBrowserEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             MonoPageRoute(
                 param = remember(state.param) {

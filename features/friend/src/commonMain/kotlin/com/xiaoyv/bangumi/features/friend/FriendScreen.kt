@@ -43,7 +43,7 @@ import com.xiaoyv.bangumi.features.friend.business.FriendItem
 import com.xiaoyv.bangumi.features.friend.business.FriendState
 import com.xiaoyv.bangumi.features.friend.business.FriendViewModel
 import com.xiaoyv.bangumi.features.friend.business.koinFriendViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
@@ -78,7 +78,7 @@ fun FriendRoute(
     }
 
     FriendScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -91,7 +91,7 @@ fun FriendRoute(
 
 @Composable
 private fun FriendScreen(
-    baseState: BaseState<FriendState>,
+    uiState: UiState<FriendState>,
     pagingItems: LazyPagingItems<ComposeUserDisplay>,
     onUiEvent: (FriendEvent.UI) -> Unit,
     onActionEvent: (FriendEvent.Action) -> Unit,
@@ -100,7 +100,7 @@ private fun FriendScreen(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(FriendEvent.Action.OnRefresh(it)) },
         enablePullRefresh = true,
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         if (state.param.ui.pageMode) {
             FriendScreenPage(pagingItems, onUiEvent, onActionEvent)

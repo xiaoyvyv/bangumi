@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.features.topic.page.business.TopicPageEvent
 import com.xiaoyv.bangumi.features.topic.page.business.TopicPageState
 import com.xiaoyv.bangumi.features.topic.page.business.TopicPageViewModel
 import com.xiaoyv.bangumi.features.topic.page.business.rememberTopicPageViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
@@ -38,7 +38,7 @@ fun TopicPageRoute(
     }
 
     TopicPageScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -51,7 +51,7 @@ fun TopicPageRoute(
 
 @Composable
 private fun TopicPageScreen(
-    baseState: BaseState<TopicPageState>,
+    uiState: UiState<TopicPageState>,
     pagingItems: LazyPagingItems<ComposeTopic>,
     onUiEvent: (TopicPageEvent.UI) -> Unit,
     onActionEvent: (TopicPageEvent.Action) -> Unit,
@@ -59,7 +59,7 @@ private fun TopicPageScreen(
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(TopicPageEvent.Action.OnRefresh(it)) },
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         TopicPageScreenContent(state, pagingItems, onUiEvent, onActionEvent)
     }

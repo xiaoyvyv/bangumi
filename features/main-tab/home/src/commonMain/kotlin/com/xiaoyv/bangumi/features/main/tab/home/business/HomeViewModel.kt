@@ -1,9 +1,13 @@
 package com.xiaoyv.bangumi.features.main.tab.home.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -66,9 +70,9 @@ class HomeViewModel(
         loadWhenEmpty = true,
     )
 
-    override fun initSate(onCreate: Boolean) = HomeState()
+    override fun createInitialState() = HomeState()
 
-    override suspend fun BaseSyntax<HomeState, HomeSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<HomeState>, UiSideEffect<HomeSideEffect>>.refreshSync() {
         com.xiaoyv.bangumi.shared.core.utils.awaitAll(
             block1 = {
                 subjectRepository.fetchSubjectList(
@@ -103,7 +107,7 @@ class HomeViewModel(
                 it.data7.toHomeSectionCard(SubjectType.REAL),
             )
 
-            reduceContent(forceRefresh = true) {
+            reduceData(forceRefresh = true) {
                 state.copy(
                     hotSubjects = it.data1.toPersistentList(),
                     todayCalendar = toadyItems.toPersistentList(),
@@ -127,9 +131,9 @@ class HomeViewModel(
         }
     }
 
-    private fun onRefreshIndexHomepage() = action {
+    private fun onRefreshIndexHomepage() = intent {
         ugcRepository.fetchIndexFocus().onSuccess {
-            reduceContent(forceRefresh = true) { state.copy(indexFocus = it.toPersistentList()) }
+            reduceData(forceRefresh = true) { state.copy(indexFocus = it.toPersistentList()) }
         }
     }
 

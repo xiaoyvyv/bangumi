@@ -20,7 +20,7 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_voice
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dEvent
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dState
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -29,7 +29,6 @@ import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingSwitchItem
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -45,7 +44,7 @@ fun SettingsLive2dRoute(
     }
 
     SettingsLive2dScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -58,7 +57,7 @@ fun SettingsLive2dRoute(
 
 @Composable
 private fun SettingsLive2dScreen(
-    baseState: BaseState<SettingsLive2dState>,
+    uiState: UiState<SettingsLive2dState>,
     onUiEvent: (SettingsLive2dEvent.UI) -> Unit,
     onActionEvent: (SettingsLive2dEvent.Action) -> Unit,
 ) {
@@ -81,7 +80,7 @@ private fun SettingsLive2dScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsLive2dScreenContent(state, onUiEvent, onActionEvent)
         }

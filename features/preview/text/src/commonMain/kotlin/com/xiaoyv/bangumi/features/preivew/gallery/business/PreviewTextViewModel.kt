@@ -1,13 +1,16 @@
 package com.xiaoyv.bangumi.features.preivew.gallery.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
@@ -22,9 +25,9 @@ class PreviewTextViewModel(
     private val args: Screen.PreviewText,
     private val choreRepository: ChoreRepository,
 ) : BaseViewModel<PreviewTextState, PreviewTextSideEffect, PreviewTextEvent.Action>(savedStateHandle) {
-    override fun initBaseState(): BaseState<PreviewTextState> = BaseState.Loading()
+    override fun initBaseState(): UiState<PreviewTextState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = PreviewTextState()
+    override fun createInitialState() = PreviewTextState()
 
     override fun onEvent(event: PreviewTextEvent.Action) {
         when (event) {
@@ -33,27 +36,27 @@ class PreviewTextViewModel(
         }
     }
 
-    private fun onToggleTranslate() = action {
-        if (stateRaw.showOrigin) {
-            if (stateRaw.translateText.isBlank()) {
-                reduceContent { state.copy(loading = LoadingState.Loading) }
+    private fun onToggleTranslate() = intent {
+        if (state.data.showOrigin) {
+            if (state.data.translateText.isBlank()) {
+                reduceData { state.copy(loading = LoadingState.Loading) }
                 choreRepository.translate(text = args.text, true)
-                    .onCompletion { reduceContent { state.copy(loading = LoadingState.NotLoading) } }
+                    .onCompletion { reduceData { state.copy(loading = LoadingState.NotLoading) } }
                     .onFailure { postToast { it.errMsg } }
                     .onSuccess {
-                        reduceContent {
+                        reduceData {
                             state.copy(translateText = it, showOrigin = false)
                         }
                     }
             } else {
-                reduceContent { state.copy(showOrigin = false) }
+                reduceData { state.copy(showOrigin = false) }
             }
         } else {
-            reduceContent { state.copy(showOrigin = true) }
+            reduceData { state.copy(showOrigin = true) }
         }
     }
 
-    override suspend fun BaseSyntax<PreviewTextState, PreviewTextSideEffect>.refreshSync() {
-        reduceContent { state.copy(originText = args.text) }
+    override suspend fun Syntax<UiState<PreviewTextState>, UiSideEffect<PreviewTextSideEffect>>.refreshSync() {
+        reduceData { state.copy(originText = args.text) }
     }
 }

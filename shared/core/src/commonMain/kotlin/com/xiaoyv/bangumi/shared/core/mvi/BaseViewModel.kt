@@ -4,66 +4,48 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import org.orbitmvi.orbit.Container
-import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.SettingsBuilder
-import org.orbitmvi.orbit.annotation.OrbitDsl
-import org.orbitmvi.orbit.container
+import kotlinx.coroutines.CancellationException
+import org.orbitmvi.orbit.OrbitContainerHost
+import org.orbitmvi.orbit.orbitContainer
 import org.orbitmvi.orbit.syntax.Syntax
 
-
 abstract class BaseViewModel<STATE : Any, SIDE_EFFECT : Any, EVENT : Any>(val stateHandle: SavedStateHandle) :
-    ContainerHost<BaseState<STATE>, BaseSideEffect<SIDE_EFFECT>>, ViewModel() {
+    OrbitContainerHost<UiState<STATE>, UiState<STATE>, UiSideEffect<SIDE_EFFECT>>, ViewModel() {
 
-    override val container: Container<BaseState<STATE>, BaseSideEffect<SIDE_EFFECT>> by lazy {
-        viewModelScope.container(
+    override val container by lazy {
+        viewModelScope.orbitContainer(
             initialState = initBaseState(),
-            buildSettings = { buildSettings() },
+            transformState = { it },
             onCreate = { onCreate() }
         )
     }
 
-    val BaseState<STATE>.content: STATE
-        get() = payload ?: initSate(onCreate = false)
+    open fun initBaseState(): UiState<STATE> = UiState(data = createInitialState())
 
-    open fun initBaseState(): BaseState<STATE> = BaseState.Success(initSate(onCreate = true))
-
-    abstract fun initSate(onCreate: Boolean): STATE
+    abstract fun createInitialState(): STATE
 
     abstract fun onEvent(event: EVENT)
 
-    open fun SettingsBuilder.buildSettings() {}
-
-    open suspend fun Syntax<BaseState<STATE>, BaseSideEffect<SIDE_EFFECT>>.onCreate() {
-        createBaseSyntaxWrap().refreshSync()
+    open suspend fun Syntax<UiState<STATE>, UiSideEffect<SIDE_EFFECT>>.onCreate() {
+        runRefresh()
     }
 
-    open suspend fun BaseSyntax<STATE, SIDE_EFFECT>.refreshSync() {}
+    open suspend fun Syntax<UiState<STATE>, UiSideEffect<SIDE_EFFECT>>.refreshSync() {}
 
-    fun Syntax<BaseState<STATE>, BaseSideEffect<SIDE_EFFECT>>.createBaseSyntaxWrap() = BaseSyntax(
-        syntax = { this },
-        onCreateState = { initSate(false) }
-    )
-
-    @OrbitDsl
-    inline fun action(
-        registerIdling: Boolean = true,
-        crossinline transformer: suspend BaseSyntax<STATE, SIDE_EFFECT>.() -> Unit,
-    ): Job = intent(registerIdling) {
-        transformer(createBaseSyntaxWrap())
+    open fun refresh(loading: Boolean) = intent {
+        if (loading) reduceStatus { PageStatus.Loading }
+        runRefresh()
     }
 
-    @OrbitDsl
-    suspend fun subAction(
-        transformer: suspend BaseSyntax<STATE, SIDE_EFFECT>.() -> Unit,
-    ) = subIntent {
-        transformer(createBaseSyntaxWrap())
-    }
-
-    open fun refresh(loading: Boolean) = action {
-        if (loading) reduceLoading { true }
-        refreshSync()
+    private suspend fun Syntax<UiState<STATE>, UiSideEffect<SIDE_EFFECT>>.runRefresh() {
+        try {
+            refreshSync()
+            if (state.status == PageStatus.Loading) reduceStatus { PageStatus.Idle }
+        } catch (throwable: CancellationException) {
+            throw throwable
+        } catch (throwable: Throwable) {
+            reduceError { throwable }
+        }
     }
 
     @CallSuper

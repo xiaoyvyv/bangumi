@@ -29,7 +29,7 @@ import com.xiaoyv.bangumi.features.main.tab.home.page.HomeIndexScreen
 import com.xiaoyv.bangumi.features.main.tab.home.page.HomeMainScreen
 import com.xiaoyv.bangumi.features.main.tab.home.page.group.HomeGroupScreen
 import com.xiaoyv.bangumi.features.main.tab.home.page.mono.HomeMonoScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.HomeTab
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -56,7 +56,7 @@ fun HomeRoute(
     }
 
     HomeScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -69,7 +69,7 @@ fun HomeRoute(
 
 @Composable
 private fun HomeScreen(
-    baseState: BaseState<HomeState>,
+    uiState: UiState<HomeState>,
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
@@ -111,9 +111,9 @@ private fun HomeScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(HomeEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
-            HomeScreenContent(baseState, state, onUiEvent, onActionEvent)
+            HomeScreenContent(uiState, state, onUiEvent, onActionEvent)
         }
     }
 }
@@ -121,7 +121,7 @@ private fun HomeScreen(
 
 @Composable
 private fun HomeScreenContent(
-    baseState: BaseState<HomeState>,
+    uiState: UiState<HomeState>,
     state: HomeState,
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
@@ -133,7 +133,7 @@ private fun HomeScreenContent(
         tabs = mainHomeTabs,
     ) {
         when (mainHomeTabs[it].type) {
-            HomeTab.HOME -> HomeMainScreen(baseState, onUiEvent, onActionEvent)
+            HomeTab.HOME -> HomeMainScreen(uiState, onUiEvent, onActionEvent)
             HomeTab.MONO -> HomeMonoScreen(onUiEvent, onActionEvent)
             HomeTab.GROUP -> HomeGroupScreen(state, onUiEvent, onActionEvent)
             HomeTab.INDEX -> HomeIndexScreen(state, onUiEvent, onActionEvent)

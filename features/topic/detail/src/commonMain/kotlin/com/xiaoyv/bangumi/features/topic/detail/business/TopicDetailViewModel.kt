@@ -1,8 +1,13 @@
 package com.xiaoyv.bangumi.features.topic.detail.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
@@ -39,9 +44,9 @@ class TopicDetailViewModel(
     private val userManager: UserManager
 ) : BaseViewModel<TopicDetailState, TopicDetailSideEffect, TopicDetailEvent.Action>(savedStateHandle) {
 
-    override fun initBaseState(): BaseState<TopicDetailState> = BaseState.Loading()
+    override fun initBaseState(): UiState<TopicDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
-    override fun initSate(onCreate: Boolean) = TopicDetailState(
+    override fun createInitialState() = TopicDetailState(
         type = args.type,
         id = args.id
     )
@@ -53,7 +58,7 @@ class TopicDetailViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.refreshSync() {
         when (args.type) {
             TopicDetailType.TYPE_EP -> onLoadEpisodeTopicDetail()
             TopicDetailType.TYPE_GROUP -> onLoadGroupTopicDetail()
@@ -65,17 +70,17 @@ class TopicDetailViewModel(
         }
     }
 
-    suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.onLoadEpisodeTopicDetail() {
+    suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadEpisodeTopicDetail() {
         subjectRepository.fetchSubjectEpisode(args.id)
             .onSuccess {
-                reduceContent { state.copy(episode = it) }
+                reduceData { state.copy(episode = it) }
             }
     }
 
-    suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.onLoadGroupTopicDetail() {
+    suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadGroupTopicDetail() {
         topicRepository.fetchTopicDetail(args.id, TopicDetailType.TYPE_GROUP)
             .onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         topic = it,
                         comments = it.replies.subList(1, it.replies.size).toImmutableList()
@@ -84,10 +89,10 @@ class TopicDetailViewModel(
             }
     }
 
-    suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.onLoadSubjectTopicDetail() {
+    suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadSubjectTopicDetail() {
         topicRepository.fetchTopicDetail(args.id, TopicDetailType.TYPE_SUBJECT)
             .onSuccess {
-                reduceContent {
+                reduceData {
                     state.copy(
                         topic = it,
                         comments = it.replies.subList(1, it.replies.size).toImmutableList()
@@ -96,38 +101,38 @@ class TopicDetailViewModel(
             }
     }
 
-    suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.onLoadPersonTopicDetail() {
+    suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadPersonTopicDetail() {
         monoRepository.fetchMonoDetail(args.id, MonoType.PERSON)
             .onSuccess {
-                reduceContent { state.copy(mono = ComposeMonoDisplay.from(MonoType.PERSON, it)) }
+                reduceData { state.copy(mono = ComposeMonoDisplay.from(MonoType.PERSON, it)) }
             }
     }
 
-    suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.onLoadCharacterTopicDetail() {
+    suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadCharacterTopicDetail() {
         monoRepository.fetchMonoDetail(args.id, MonoType.CHARACTER)
             .onSuccess {
-                reduceContent { state.copy(mono = ComposeMonoDisplay.from(MonoType.CHARACTER, it)) }
+                reduceData { state.copy(mono = ComposeMonoDisplay.from(MonoType.CHARACTER, it)) }
             }
     }
 
 
-    suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.onLoadIndexTopicDetail() {
+    suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadIndexTopicDetail() {
         indexRepository.fetchIndexDetail(args.id)
             .onSuccess {
-                reduceContent { state.copy(index = it) }
+                reduceData { state.copy(index = it) }
             }
     }
 
-    suspend fun BaseSyntax<TopicDetailState, TopicDetailSideEffect>.onLoadBlogTopicDetail() {
+    suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadBlogTopicDetail() {
         awaitAll(
             { blogRepository.fetchBlogDetail(args.id) },
             { blogRepository.fetchBlogRelateSubjects(args.id) }
         ).onSuccess {
-            reduceContent { state.copy(blog = it.data1.copy(subjects = it.data2.toImmutableList())) }
+            reduceData { state.copy(blog = it.data1.copy(subjects = it.data2.toImmutableList())) }
         }
     }
 
-    private fun onReactionClick(commentId: Long, reaction: ComposeReaction) = action {
+    private fun onReactionClick(commentId: Long, reaction: ComposeReaction) = intent {
         val isLiked = reaction.users.any { it.id == userManager.userInfo.id }
 
         withActionLoading {
@@ -163,7 +168,7 @@ class TopicDetailViewModel(
                 reaction.copy(users = users.also { it.add(userManager.userInfo) }.toImmutableList())
             }
 
-            reduceContent {
+            reduceData {
                 state.copy(
                     topic = state.topic.copy(
                         replies = state.topic.replies.refreshReaction(commentId, result)

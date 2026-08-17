@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 class SettingsTranslateViewModel(savedStateHandle: SavedStateHandle) :
     BaseViewModel<SettingsTranslateState, SettingsTranslateSideEffect, SettingsTranslateEvent>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SettingsTranslateState()
+    override fun createInitialState() = SettingsTranslateState()
 
     override fun onEvent(event: SettingsTranslateEvent) {
 

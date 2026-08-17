@@ -23,7 +23,7 @@ import com.xiaoyv.bangumi.features.search.result.page.SearchResultPerson
 import com.xiaoyv.bangumi.features.search.result.page.SearchResultSubject
 import com.xiaoyv.bangumi.features.search.result.page.SearchResultTag
 import com.xiaoyv.bangumi.features.search.result.page.SearchResultTopic
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.SearchType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -33,7 +33,6 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -49,7 +48,7 @@ fun SearchResultRoute(
     }
 
     SearchResultScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -62,14 +61,14 @@ fun SearchResultRoute(
 
 @Composable
 private fun SearchResultScreen(
-    baseState: BaseState<SearchResultState>,
+    uiState: UiState<SearchResultState>,
     onUiEvent: (SearchResultEvent.UI) -> Unit,
     onActionEvent: (SearchResultEvent.Action) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            baseState.content {
+            uiState.data.run {
                 SearchResultTopBar(
                     state = this,
                     onUiEvent = onUiEvent,
@@ -82,7 +81,7 @@ private fun SearchResultScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(SearchResultEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SearchResultScreenContent(state, onUiEvent, onActionEvent)
         }

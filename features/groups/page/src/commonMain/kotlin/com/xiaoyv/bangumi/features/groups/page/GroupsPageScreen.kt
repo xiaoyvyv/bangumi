@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.features.groups.page.business.GroupsPageEvent
 import com.xiaoyv.bangumi.features.groups.page.business.GroupsPageState
 import com.xiaoyv.bangumi.features.groups.page.business.GroupsPageViewModel
 import com.xiaoyv.bangumi.features.groups.page.business.koinGroupsPageViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.model.request.list.group.ListGroupParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
@@ -37,7 +37,7 @@ fun GroupsPageRoute(
     }
 
     GroupsPageScreen(
-        baseState = baseState,
+        uiState = baseState,
         pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
@@ -50,7 +50,7 @@ fun GroupsPageRoute(
 
 @Composable
 private fun GroupsPageScreen(
-    baseState: BaseState<GroupsPageState>,
+    uiState: UiState<GroupsPageState>,
     pagingItems: LazyPagingItems<ComposeGroup>,
     onUiEvent: (GroupsPageEvent.UI) -> Unit,
     onActionEvent: (GroupsPageEvent.Action) -> Unit,
@@ -58,7 +58,7 @@ private fun GroupsPageScreen(
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         onRefresh = { onActionEvent(GroupsPageEvent.Action.OnRefresh(it)) },
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         GroupsPageScreenContent(state, pagingItems, onUiEvent, onActionEvent)
     }

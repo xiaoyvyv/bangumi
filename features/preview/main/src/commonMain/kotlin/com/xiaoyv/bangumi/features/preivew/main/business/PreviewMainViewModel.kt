@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.preivew.main.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -16,7 +17,7 @@ class PreviewMainViewModel(
     private val args: Screen.PreviewMain,
 ) : BaseViewModel<PreviewMainState, PreviewMainSideEffect, PreviewMainEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = PreviewMainState(
+    override fun createInitialState() = PreviewMainState(
         items = args.items.toPersistentList(),
         index = args.index,
     )
@@ -28,7 +29,7 @@ class PreviewMainViewModel(
         }
     }
 
-    private fun onPageSelected(index: Int) = action {
-        reduceContent { state.copy(index = index) }
+    private fun onPageSelected(index: Int) = intent {
+        reduceData { state.copy(index = index) }
     }
 }

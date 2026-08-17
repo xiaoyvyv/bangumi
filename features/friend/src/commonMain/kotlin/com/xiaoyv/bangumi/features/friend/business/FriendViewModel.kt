@@ -1,13 +1,17 @@
 package com.xiaoyv.bangumi.features.friend.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
@@ -40,13 +44,13 @@ class FriendViewModel(
     private val userPager = userRepository.fetchUserPager(param)
     val users = userPager.flow.cachedIn(viewModelScope)
 
-    override fun initBaseState(): BaseState<FriendState> = if (param.ui.pageMode) {
-        BaseState.Success(initSate(true))
+    override fun initBaseState(): UiState<FriendState> = if (param.ui.pageMode) {
+        UiState(createInitialState())
     } else {
-        BaseState.Loading()
+        UiState(data = createInitialState(), status = PageStatus.Loading)
     }
 
-    override fun initSate(onCreate: Boolean) = FriendState(param = param)
+    override fun createInitialState() = FriendState(param = param)
 
     override fun onEvent(event: FriendEvent.Action) {
         when (event) {
@@ -54,13 +58,13 @@ class FriendViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<FriendState, FriendSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<FriendState>, UiSideEffect<FriendSideEffect>>.refreshSync() {
         if (!param.ui.pageMode) userRepository.fetchUserList(param)
             .onFailure { reduceError { it } }
             .onSuccess {
                 val (keys, items) = it.grouped()
 
-                reduceContent(forceRefresh = true) {
+                reduceData(forceRefresh = true) {
                     state.copy(keys = keys, friends = items)
                 }
             }

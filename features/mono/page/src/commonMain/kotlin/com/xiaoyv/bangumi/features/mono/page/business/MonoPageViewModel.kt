@@ -35,7 +35,7 @@ class MonoPageViewModel(
 
     val monos = monoPager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = MonoPageState(param = param)
+    override fun createInitialState() = MonoPageState(param = param)
 
     override fun onEvent(event: MonoPageEvent.Action) {
 

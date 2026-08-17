@@ -15,7 +15,7 @@ class TagDetailViewModel(
     private val args: Screen.TagDetail,
 ) : BaseViewModel<TagDetailState, TagDetailSideEffect, TagDetailEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = TagDetailState(
+    override fun createInitialState() = TagDetailState(
         type = args.type
     )
 

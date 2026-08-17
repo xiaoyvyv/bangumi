@@ -2,12 +2,12 @@ package com.xiaoyv.bangumi.shared.ui.component.dialog.alert
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
-import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
 @Composable
 fun rememberAlertDialogState(
@@ -24,18 +24,23 @@ fun rememberAlertDialogState(
  */
 @Stable
 class AlertDialogState(val properties: DialogProperties) {
-    private val _showing = mutableStateFlowOf(false)
-    internal val showing = _showing.asStateFlow()
+    internal var showing by mutableStateOf(false)
+        private set
 
-    fun show() = _showing.update { true }
-    fun dismiss() = _showing.update { false }
+    fun show() {
+        showing = true
+    }
+
+    fun dismiss() {
+        showing = false
+    }
 
     companion object {
-        fun Saver(properties: DialogProperties): Saver<AlertDialogState, *> = Saver(
-            save = { listOf(it.showing.value) },
+        fun Saver(properties: DialogProperties): Saver<AlertDialogState, Boolean> = Saver(
+            save = { it.showing },
             restore = {
                 AlertDialogState(properties = properties).apply {
-                    _showing.value = it.first()
+                    showing = it
                 }
             }
         )

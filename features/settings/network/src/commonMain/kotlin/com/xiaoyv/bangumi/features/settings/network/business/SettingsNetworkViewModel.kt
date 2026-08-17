@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.settings.network.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.settings_reboot_active
@@ -19,7 +20,7 @@ class SettingsNetworkViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<SettingsNetworkState, SettingsNetworkSideEffect, SettingsNetworkEvent.Action>(savedStateHandle) {
 
-    override fun initSate(onCreate: Boolean) = SettingsNetworkState()
+    override fun createInitialState() = SettingsNetworkState()
 
     override fun onEvent(event: SettingsNetworkEvent.Action) {
         when (event) {
@@ -29,7 +30,7 @@ class SettingsNetworkViewModel(
     }
 
 
-    private fun onUpdateConfig(settings: ComposeSetting.NetworkConfig) = action {
+    private fun onUpdateConfig(settings: ComposeSetting.NetworkConfig) = intent {
         userManager.updateSettings {
             it.copy(network = settings)
         }

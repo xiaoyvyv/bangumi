@@ -29,7 +29,7 @@ import com.xiaoyv.bangumi.features.notification.business.NotificationEvent
 import com.xiaoyv.bangumi.features.notification.business.NotificationSideEffect
 import com.xiaoyv.bangumi.features.notification.business.NotificationState
 import com.xiaoyv.bangumi.features.notification.business.NotificationViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.data.manager.shared.shareViewModel
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
@@ -43,7 +43,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -62,7 +61,7 @@ fun NotificationRoute(
     }
 
     NotificationScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -75,7 +74,7 @@ fun NotificationRoute(
 
 @Composable
 private fun NotificationScreen(
-    baseState: BaseState<NotificationState>,
+    uiState: UiState<NotificationState>,
     onUiEvent: (NotificationEvent.UI) -> Unit,
     onActionEvent: (NotificationEvent.Action) -> Unit,
 ) {
@@ -93,7 +92,7 @@ private fun NotificationScreen(
                 .fillMaxSize()
                 .padding(it),
             onRefresh = { onActionEvent(NotificationEvent.Action.OnRefresh(it)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             NotificationScreenContent(state, onUiEvent, onActionEvent)
         }

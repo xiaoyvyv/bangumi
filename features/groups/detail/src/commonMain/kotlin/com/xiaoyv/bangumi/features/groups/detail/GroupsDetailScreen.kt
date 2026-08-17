@@ -39,7 +39,7 @@ import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailEvent
 import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailState
 import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailViewModel
 import com.xiaoyv.bangumi.features.topic.page.TopicPageRoute
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
@@ -84,7 +84,7 @@ fun GroupsDetailRoute(
     }
 
     GroupsDetailScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -97,7 +97,7 @@ fun GroupsDetailRoute(
 
 @Composable
 private fun GroupsDetailScreen(
-    baseState: BaseState<GroupsDetailState>,
+    uiState: UiState<GroupsDetailState>,
     onUiEvent: (GroupsDetailEvent.UI) -> Unit,
     onActionEvent: (GroupsDetailEvent.Action) -> Unit,
 ) {
@@ -112,7 +112,7 @@ private fun GroupsDetailScreen(
                 it
             )
             BgmTopAppBar(
-                title = baseState.content { group.title },
+                title = uiState.data.run { group.title },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
@@ -120,7 +120,7 @@ private fun GroupsDetailScreen(
                     actionIconContentColor = iconColor
                 ),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         val actionHandler = LocalActionHandler.current
 
                         DropMenuActionButton(
@@ -143,7 +143,7 @@ private fun GroupsDetailScreen(
             )
         },
         collapse = {
-            baseState.content {
+            uiState.data.run {
                 GroupsDetailScreenHeader(
                     state = this,
                     padding = it,
@@ -157,7 +157,7 @@ private fun GroupsDetailScreen(
         StateLayout(
             modifier = Modifier.fillMaxSize(),
             onRefresh = { loading -> onActionEvent(GroupsDetailEvent.Action.OnRefresh(loading)) },
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
                 GroupsDetailScreenContent(state, onUiEvent, onActionEvent)

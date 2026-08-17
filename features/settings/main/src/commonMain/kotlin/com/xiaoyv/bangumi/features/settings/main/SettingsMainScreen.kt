@@ -63,7 +63,7 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_user_privacy
 import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainEvent
 import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainState
 import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
@@ -77,7 +77,6 @@ import com.xiaoyv.bangumi.features.settings.main.component.BangumiStatusTopBarAc
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import kotlin.random.Random
 
@@ -94,7 +93,7 @@ fun SettingsMainRoute(
     }
 
     SettingsMainScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -107,7 +106,7 @@ fun SettingsMainRoute(
 
 @Composable
 private fun SettingsMainScreen(
-    baseState: BaseState<SettingsMainState>,
+    uiState: UiState<SettingsMainState>,
     onUiEvent: (SettingsMainEvent.UI) -> Unit,
     onActionEvent: (SettingsMainEvent.Action) -> Unit,
 ) {
@@ -135,7 +134,7 @@ private fun SettingsMainScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            baseState = baseState,
+            uiState = uiState,
         ) { state ->
             SettingsMainScreenContent(state, onUiEvent, onActionEvent)
         }

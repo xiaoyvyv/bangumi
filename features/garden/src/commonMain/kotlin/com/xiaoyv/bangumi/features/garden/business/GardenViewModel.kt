@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.garden.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -32,7 +33,7 @@ class GardenViewModel(
         .flatMapLatest { mikanRepository.fetchGardenResourcePager(param = it).flow }
         .cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = GardenState(
+    override fun createInitialState() = GardenState(
         query = args.query.asTextFieldValue(),
         param = argsParam
     )
@@ -46,17 +47,17 @@ class GardenViewModel(
         }
     }
 
-    private fun onTextChanged(value: TextFieldValue) = action {
-        reduceContent { state.copy(query = value) }
+    private fun onTextChanged(value: TextFieldValue) = intent {
+        reduceData { state.copy(query = value) }
     }
 
-    private fun onChangeParamBody(param: SearchMagnetBody) = action {
-        reduceContent { state.copy(param = param) }
+    private fun onChangeParamBody(param: SearchMagnetBody) = intent {
+        reduceData { state.copy(param = param) }
         queryParam.update { param }
     }
 
-    private fun onSearch() = action {
-        reduceContent { state.copy(param = state.param.copy(keyword = state.query.text.trim())) }
-        queryParam.update { stateRaw.param }
+    private fun onSearch() = intent {
+        reduceData { state.copy(param = state.param.copy(keyword = state.query.text.trim())) }
+        queryParam.update { state.data.param }
     }
 }

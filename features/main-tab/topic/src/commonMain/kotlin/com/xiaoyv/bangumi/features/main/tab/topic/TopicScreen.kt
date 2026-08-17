@@ -16,7 +16,7 @@ import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicEvent
 import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicState
 import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicViewModel
 import com.xiaoyv.bangumi.features.main.tab.topic.page.TopicPageScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -41,7 +41,7 @@ fun TopicRoute(
     }
 
     TopicScreen(
-        baseState = baseState,
+        uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -54,13 +54,13 @@ fun TopicRoute(
 
 @Composable
 private fun TopicScreen(
-    baseState: BaseState<TopicState>,
+    uiState: UiState<TopicState>,
     onUiEvent: (TopicEvent.UI) -> Unit,
     onActionEvent: (TopicEvent.Action) -> Unit,
 ) {
     StateLayout(
         modifier = Modifier.fillMaxSize(),
-        baseState = baseState,
+        uiState = uiState,
     ) { state ->
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -120,7 +120,7 @@ private fun TopicScreenContent(
 fun Test() {
     PreviewColumn {
         TopicScreen(
-            baseState = BaseState.Success(TopicState()),
+            uiState = UiState(TopicState()),
             onActionEvent = {},
             onUiEvent = {}
         )

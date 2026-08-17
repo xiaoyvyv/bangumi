@@ -49,8 +49,8 @@ import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailIndexScreen
 import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailMainScreen
 import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailPicturesScreen
 import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailWorksScreen
-import com.xiaoyv.bangumi.shared.core.mvi.BaseState
-import com.xiaoyv.bangumi.shared.core.mvi.interceptEvent
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.rememberInterceptEvent
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.MonoDetailTab
@@ -83,7 +83,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -101,7 +100,7 @@ fun MonoDetailRoute(
     }
 
     MonoDetailScreen(
-        baseState = baseState,
+        uiState = baseState,
         pixivImageItems = pixivImageItems,
         animePicImageItems = animePicImageItems,
         onActionEvent = viewModel::onEvent,
@@ -117,7 +116,7 @@ fun MonoDetailRoute(
 
 @Composable
 private fun MonoDetailScreen(
-    baseState: BaseState<MonoDetailState>,
+    uiState: UiState<MonoDetailState>,
     pixivImageItems: LazyPagingItems<ComposeGallery>,
     animePicImageItems: LazyPagingItems<ComposeGallery>,
     onUiEvent: (MonoDetailEvent.UI) -> Unit,
@@ -135,7 +134,7 @@ private fun MonoDetailScreen(
             )
             BgmTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = baseState.payload?.mono?.displayName,
+                title = uiState.data.mono.displayName,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
@@ -143,7 +142,7 @@ private fun MonoDetailScreen(
                     actionIconContentColor = iconColor
                 ),
                 actions = {
-                    baseState.content {
+                    uiState.data.run {
                         val actionHandler = LocalActionHandler.current
                         val sharedState = LocalSharedState.current
                         val sheetDialogState = rememberSheetDialogState()
@@ -200,7 +199,7 @@ private fun MonoDetailScreen(
             )
         },
         collapse = {
-            baseState.content {
+            uiState.data.run {
                 MonoDetailScreenHeader(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -218,7 +217,7 @@ private fun MonoDetailScreen(
             StateLayout(
                 modifier = Modifier.fillMaxSize(),
                 onRefresh = { onActionEvent(MonoDetailEvent.Action.OnRefresh(it)) },
-                baseState = baseState,
+                uiState = uiState,
             ) { state ->
                 CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
                     MonoDetailScreenContent(
@@ -337,7 +336,7 @@ private fun MonoDetailScreenContent(
         when (tabs[it].type) {
             MonoDetailTab.OVERVIEW -> MonoDetailMainScreen(
                 state = state,
-                onUiEvent = interceptEvent(onUiEvent) { event ->
+                onUiEvent = rememberInterceptEvent(onUiEvent) { event ->
                     if (event is MonoDetailEvent.UI.OnSelectedPageType) {
                         scope.launch {
                             pagerState.animateScrollToPage(tabs.indexOfFirst { tab -> tab.type == event.page })

@@ -1,8 +1,12 @@
 package com.xiaoyv.bangumi.features.main.tab.home.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.BaseSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
@@ -34,7 +38,7 @@ class CalendarViewModel(
         transform = { it.copy(isToday = args.isToday) }
     )
 
-    override fun initSate(onCreate: Boolean) = CalendarState(
+    override fun createInitialState() = CalendarState(
         isToday = args.isToday
     )
 
@@ -53,18 +57,18 @@ class CalendarViewModel(
         }
     }
 
-    override suspend fun BaseSyntax<CalendarState, CalendarSideEffect>.refreshSync() {
+    override suspend fun Syntax<UiState<CalendarState>, UiSideEffect<CalendarSideEffect>>.refreshSync() {
         subjectRepository.fetchCalendar()
             .onFailure { reduceError { it } }
             .onSuccess {
-                reduceContent { state.copy(calendarMap = it.toPersistentMap()) }
+                reduceData { state.copy(calendarMap = it.toPersistentMap()) }
             }
 
         saveCache()
     }
 
-    private fun onChangeLayoutMode() = action {
-        reduceContent { state.copy(isGrid = !state.isGrid) }
+    private fun onChangeLayoutMode() = intent {
+        reduceData { state.copy(isGrid = !state.isGrid) }
 
         saveCache()
     }

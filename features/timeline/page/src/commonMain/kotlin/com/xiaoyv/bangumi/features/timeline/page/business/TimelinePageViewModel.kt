@@ -35,7 +35,7 @@ class TimelinePageViewModel(
 
     internal val timelines = timelinePager.flow.cachedIn(viewModelScope)
 
-    override fun initSate(onCreate: Boolean) = TimelinePageState()
+    override fun createInitialState() = TimelinePageState()
 
     override fun onEvent(event: TimelinePageEvent.Action) {
         when (event) {
