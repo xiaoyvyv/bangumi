@@ -1,14 +1,12 @@
 package com.xiaoyv.bangumi.features.topic.detail.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
@@ -26,6 +24,7 @@ import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [TopicDetailViewModel]
@@ -34,7 +33,6 @@ import kotlinx.collections.immutable.toImmutableList
  * @since 2025/1/12
  */
 class TopicDetailViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.TopicDetail,
     private val subjectRepository: SubjectRepository,
     private val monoRepository: MonoRepository,
@@ -42,7 +40,7 @@ class TopicDetailViewModel(
     private val indexRepository: IndexRepository,
     private val topicRepository: TopicRepository,
     private val userManager: UserManager
-) : BaseViewModel<TopicDetailState, TopicDetailSideEffect, TopicDetailEvent.Action>(savedStateHandle) {
+) : BaseViewModel<TopicDetailState, TopicDetailSideEffect, TopicDetailEvent.Action>() {
 
     override fun initBaseState(): UiState<TopicDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 

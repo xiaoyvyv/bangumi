@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.topic.page.business
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -25,10 +24,9 @@ fun rememberTopicPageViewModel(param: ListTopicParam): TopicPageViewModel {
  * @since 2025/1/12
  */
 class TopicPageViewModel(
-    savedStateHandle: SavedStateHandle,
     private val param: ListTopicParam,
     private val topicRepository: TopicRepository,
-) : BaseViewModel<TopicPageState, TopicPageSideEffect, TopicPageEvent.Action>(savedStateHandle) {
+) : BaseViewModel<TopicPageState, TopicPageSideEffect, TopicPageEvent.Action>() {
     private val topicPager = topicRepository.fetchTopicPager(param)
     val topic = topicPager.flow.cachedIn(viewModelScope)
 

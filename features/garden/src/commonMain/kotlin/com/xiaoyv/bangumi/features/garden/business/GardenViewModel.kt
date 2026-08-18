@@ -1,11 +1,10 @@
 package com.xiaoyv.bangumi.features.garden.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
 import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
@@ -21,10 +20,9 @@ import kotlinx.coroutines.flow.update
  * @since 2025/1/12
  */
 class GardenViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.Garden,
     private val mikanRepository: MikanRepository,
-) : BaseViewModel<GardenState, GardenSideEffect, GardenEvent.Action>(savedStateHandle) {
+) : BaseViewModel<GardenState, GardenSideEffect, GardenEvent.Action>() {
     private val argsParam = SearchMagnetBody(keyword = args.query)
 
     private val queryParam = mutableStateFlowOf(argsParam)

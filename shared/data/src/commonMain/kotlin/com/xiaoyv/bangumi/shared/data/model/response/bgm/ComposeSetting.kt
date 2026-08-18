@@ -104,7 +104,6 @@ data class ComposeSetting(
                 "api.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "next.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "lain.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
-                "chii.in" to listOf("104.21.93.3", "172.67.201.187"),
             )
             val Default = NetworkConfig()
         }

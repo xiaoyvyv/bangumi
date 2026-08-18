@@ -1,15 +1,13 @@
 package com.xiaoyv.bangumi.features.main.tab.profile.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_blog
 import com.xiaoyv.bangumi.core_resource.resources.global_collection
 import com.xiaoyv.bangumi.core_resource.resources.global_friend
-import com.xiaoyv.bangumi.core_resource.resources.global_timeline
-import com.xiaoyv.bangumi.core_resource.resources.global_blog
 import com.xiaoyv.bangumi.core_resource.resources.global_group
 import com.xiaoyv.bangumi.core_resource.resources.global_index
 import com.xiaoyv.bangumi.core_resource.resources.global_mono
+import com.xiaoyv.bangumi.core_resource.resources.global_timeline
 import com.xiaoyv.bangumi.core_resource.resources.index_my_collection
 import com.xiaoyv.bangumi.core_resource.resources.index_my_create
 import com.xiaoyv.bangumi.core_resource.resources.profile_bio
@@ -18,6 +16,7 @@ import com.xiaoyv.bangumi.core_resource.resources.profile_time_machine
 import com.xiaoyv.bangumi.core_resource.resources.type_topic_crt
 import com.xiaoyv.bangumi.core_resource.resources.type_topic_person
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
 import com.xiaoyv.bangumi.shared.core.types.ProfileTab
@@ -31,8 +30,8 @@ import kotlinx.collections.immutable.persistentListOf
  * @author why
  * @since 2025/1/12
  */
-class ProfileViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<ProfileState, ProfileSideEffect, ProfileEvent.Action>(savedStateHandle) {
+class ProfileViewModel :
+    BaseViewModel<ProfileState, ProfileSideEffect, ProfileEvent.Action>() {
 
     override fun createInitialState() = ProfileState(
         tabs = persistentListOf(

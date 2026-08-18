@@ -1,18 +1,17 @@
 package com.xiaoyv.bangumi.features.gallery.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.SavedStateHandle
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.data.usecase.ImageRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [GalleryViewModel]
@@ -21,11 +20,10 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
  * @since 2025/1/12
  */
 class GalleryViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.Gallery,
     private val imageRepoUseCase: ImageRepoUseCase,
     private val cacheRepository: CacheRepository,
-) : BaseViewModel<GalleryState, GallerySideEffect, GalleryEvent.Action>(savedStateHandle) {
+) : BaseViewModel<GalleryState, GallerySideEffect, GalleryEvent.Action>() {
 
     private val cacheKey = stringPreferencesKey(name = "gallery_${args.type}_" + args.id)
 

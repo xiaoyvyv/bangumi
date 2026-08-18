@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.almanac.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.utils.currentYear
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
@@ -14,9 +13,8 @@ import kotlinx.collections.immutable.toPersistentList
  * @since 2025/1/12
  */
 class AlmanacViewModel(
-    savedStateHandle: SavedStateHandle,
     val userManager: UserManager,
-) : BaseViewModel<AlmanacState, AlmanacSideEffect, AlmanacEvent.Action>(savedStateHandle) {
+) : BaseViewModel<AlmanacState, AlmanacSideEffect, AlmanacEvent.Action>() {
 
     private val banners = persistentMapOf(
         2010 to "https://lain.bgm.tv/pic/photo/l/47/7e/837364_01L41.jpg",

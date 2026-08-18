@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.index.detail.page
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseMviViewModel
@@ -19,10 +18,9 @@ fun koinIndexDetailPageViewModel(param: ListIndexRelatedParam): IndexDetailPageV
 }
 
 class IndexDetailPageViewModel(
-    savedStateHandle: SavedStateHandle,
     param: ListIndexRelatedParam,
     ugcRepository: UgcRepository,
-) : BaseMviViewModel<IndexDetailPageState, Any, Any>(savedStateHandle) {
+) : BaseMviViewModel<IndexDetailPageState, Any, Any>() {
     private val indexRelatedPager = ugcRepository.fetchIndexRelatePager(param)
 
     val indexRelated = indexRelatedPager.flow.cachedIn(viewModelScope)

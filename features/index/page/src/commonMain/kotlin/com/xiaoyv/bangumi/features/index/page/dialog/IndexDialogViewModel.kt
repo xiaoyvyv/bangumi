@@ -1,19 +1,17 @@
 package com.xiaoyv.bangumi.features.index.page.dialog
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postEffect
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.index_add_related_success
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
@@ -21,6 +19,7 @@ import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import org.orbitmvi.orbit.syntax.Syntax
 
 @Composable
 fun koinIndexDialogViewModel(
@@ -39,11 +38,10 @@ fun koinIndexDialogViewModel(
  * @since 2025/1/12
  */
 class IndexDialogViewModel(
-    savedStateHandle: SavedStateHandle,
     private val indexRepository: IndexRepository,
     private val target: IndexTarget,
     private val userManager: UserManager,
-) : BaseViewModel<IndexDialogState, IndexDialogSideEffect, IndexDialogEvent.Action>(savedStateHandle) {
+) : BaseViewModel<IndexDialogState, IndexDialogSideEffect, IndexDialogEvent.Action>() {
     override fun initBaseState(): UiState<IndexDialogState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
     override fun createInitialState() = IndexDialogState()

@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.preivew.album.business
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -25,10 +24,9 @@ fun rememberPreviewAlbumViewModel(param: ListAlbumParam): PreviewAlbumViewModel 
  * @since 2025/1/12
  */
 class PreviewAlbumViewModel(
-    savedStateHandle: SavedStateHandle,
     private val param: ListAlbumParam,
     private val imageRepository: ImageRepository,
-) : BaseViewModel<PreviewAlbumState, PreviewAlbumSideEffect, PreviewAlbumEvent.Action>(savedStateHandle) {
+) : BaseViewModel<PreviewAlbumState, PreviewAlbumSideEffect, PreviewAlbumEvent.Action>() {
     private val albumPager = imageRepository.fetchAlbumPager(param)
 
     val album = albumPager.flow.cachedIn(viewModelScope)

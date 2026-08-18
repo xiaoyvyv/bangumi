@@ -4,7 +4,6 @@ package com.xiaoyv.bangumi.features.main.tab.home.page
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,13 +21,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -44,8 +43,8 @@ import com.xiaoyv.bangumi.core_resource.resources.global_rank
 import com.xiaoyv.bangumi.core_resource.resources.subject_home_calendar
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeState
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.component.DetectType
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.FeatureType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -58,11 +57,11 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeActions
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -170,59 +169,65 @@ fun HomeMainAction(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
             ) {
-                Box(
+                OutlinedCard(
                     modifier = Modifier
                         .semantics { contentDescription = label }
-                        .clip(MaterialTheme.shapes.large)
                         .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .clickable {
-                            when (it.type) {
-                                FeatureType.TYPE_DETECT_ANIME -> onUiEvent(
-                                    HomeEvent.UI.OnNavScreen(Screen.DetectImage(type = DetectType.SOURCE))
-                                )
+                        .aspectRatio(1f),
+                    shape = MaterialTheme.shapes.large,
+                    onClick = {
+                        when (it.type) {
+                            FeatureType.TYPE_DETECT_ANIME -> onUiEvent(
+                                HomeEvent.UI.OnNavScreen(Screen.DetectImage(type = DetectType.SOURCE))
+                            )
 
-                                FeatureType.TYPE_DETECT_CHARACTER -> onUiEvent(
-                                    HomeEvent.UI.OnNavScreen(Screen.DetectImage(type = DetectType.CHARACTER))
-                                )
+                            FeatureType.TYPE_DETECT_CHARACTER -> onUiEvent(
+                                HomeEvent.UI.OnNavScreen(Screen.DetectImage(type = DetectType.CHARACTER))
+                            )
 
-                                FeatureType.TYPE_ALMANAC -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Almanac))
-                                FeatureType.TYPE_PIXIV -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.PixivLogin))
-                                FeatureType.TYPE_SUBJECT_BROWSER -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectBrowser()))
-                                FeatureType.TYPE_TAG -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.TagDetail()))
-                                FeatureType.TYPE_SCHEDULE -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Calendar(true)))
-                                FeatureType.TYPE_RANK -> scope.launch {
-                                    onUiEvent(
-                                        HomeEvent.UI.OnNavScreen(
-                                            Screen.SubjectBrowser(
-                                                body = SubjectBrowserBody(
-                                                    sort = SubjectSortBrowserType.RANK,
-                                                    subjectType = SubjectType.ANIME,
-                                                    hideSortFilter = true
-                                                ),
-                                                title = getString(Res.string.global_rank),
-                                            )
+                            FeatureType.TYPE_ALMANAC -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Almanac))
+                            FeatureType.TYPE_PIXIV -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.PixivLogin))
+                            FeatureType.TYPE_SUBJECT_BROWSER -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectBrowser()))
+                            FeatureType.TYPE_TAG -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.TagDetail()))
+                            FeatureType.TYPE_SCHEDULE -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Calendar(true)))
+                            FeatureType.TYPE_RANK -> scope.launch {
+                                onUiEvent(
+                                    HomeEvent.UI.OnNavScreen(
+                                        Screen.SubjectBrowser(
+                                            body = SubjectBrowserBody(
+                                                sort = SubjectSortBrowserType.RANK,
+                                                subjectType = SubjectType.ANIME,
+                                                hideSortFilter = true
+                                            ),
+                                            title = getString(Res.string.global_rank),
                                         )
                                     )
-                                }
-
-                                FeatureType.TYPE_TRACKING -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Tracking))
-                                FeatureType.TYPE_NEWEST -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Newest))
-                                FeatureType.TYPE_DOLLARS -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Dollars))
-                                FeatureType.TYPE_TIMELINE -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Timeline))
-                                FeatureType.TYPE_RAKUEN -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Topic))
-                                FeatureType.TYPE_MAGNET -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Garden()))
+                                )
                             }
-                        },
-                    contentAlignment = Alignment.Center
+
+                            FeatureType.TYPE_TRACKING -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Tracking))
+                            FeatureType.TYPE_NEWEST -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Newest))
+                            FeatureType.TYPE_DOLLARS -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Dollars))
+                            FeatureType.TYPE_TIMELINE -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Timeline))
+                            FeatureType.TYPE_RAKUEN -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.RaKuen))
+                            FeatureType.TYPE_MAGNET -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Garden()))
+                        }
+                    }
                 ) {
-                    Icon(
-                        modifier = Modifier.fillMaxSize(1f / 2.25f),
-                        painter = painterResource(it.icon),
-                        contentDescription = label,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxSize(1f / 1.5f)
+                                .background(MaterialTheme.colorScheme.surfaceContainer, MaterialTheme.shapes.large)
+                                .padding(8.dp),
+                            painter = painterResource(it.icon),
+                            contentDescription = label,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
                 Text(
                     text = label,

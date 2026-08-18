@@ -1,15 +1,13 @@
 package com.xiaoyv.bangumi.features.groups.detail.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupMemberRole
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMembership
@@ -17,6 +15,7 @@ import com.xiaoyv.bangumi.shared.data.repository.GroupRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [GroupsDetailViewModel]
@@ -25,10 +24,9 @@ import kotlinx.collections.immutable.persistentListOf
  * @since 2025/1/12
  */
 class GroupsDetailViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.GroupDetail,
     private val groupRepository: GroupRepository,
-) : BaseViewModel<GroupsDetailState, GroupsDetailSideEffect, GroupsDetailEvent.Action>(savedStateHandle) {
+) : BaseViewModel<GroupsDetailState, GroupsDetailSideEffect, GroupsDetailEvent.Action>() {
 
     override fun initBaseState(): UiState<GroupsDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 

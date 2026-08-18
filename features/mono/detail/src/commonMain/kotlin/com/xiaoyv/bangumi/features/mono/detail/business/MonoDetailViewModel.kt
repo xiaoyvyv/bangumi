@@ -1,21 +1,19 @@
 package com.xiaoyv.bangumi.features.mono.detail.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
 import com.xiaoyv.bangumi.shared.System
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
@@ -37,6 +35,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.getString
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [MonoDetailViewModel]
@@ -45,7 +44,6 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/1/12
  */
 class MonoDetailViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.MonoDetail,
     private val monoRepoUseCase: MonoRepoUseCase,
     private val cacheRepository: CacheRepository,
@@ -53,7 +51,7 @@ class MonoDetailViewModel(
     private val monoRepository: MonoRepository,
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
-) : BaseViewModel<MonoDetailState, MonoDetailSideEffect, MonoDetailEvent.Action>(savedStateHandle) {
+) : BaseViewModel<MonoDetailState, MonoDetailSideEffect, MonoDetailEvent.Action>() {
 
     private val cacheKey = stringPreferencesKey(name = "mono_detail_${args.type}_" + args.id)
 

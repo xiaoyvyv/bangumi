@@ -1,7 +1,5 @@
-package com.xiaoyv.bangumi.features.main.tab.topic.business
+package com.xiaoyv.bangumi.features.main.tab.rakuen.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.core_resource.resources.global_episode
@@ -9,20 +7,21 @@ import com.xiaoyv.bangumi.core_resource.resources.global_group
 import com.xiaoyv.bangumi.core_resource.resources.global_mono
 import com.xiaoyv.bangumi.core_resource.resources.global_subject
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.RakuenTab
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 
 /**
- * [TopicViewModel]
+ * [RaKuenViewModel]
  *
  * @author why
  * @since 2025/1/12
  */
-class TopicViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<TopicState, TopicSideEffect, TopicEvent.Action>(savedStateHandle) {
+class RaKuenViewModel :
+    BaseViewModel<RaKuenState, RaKuenSideEffect, RaKuenEvent.Action>() {
 
-    override fun createInitialState() = TopicState(
+    override fun createInitialState() = RaKuenState(
         tabs = persistentListOf(
             ComposeTextTab(RakuenTab.ALL, Res.string.global_all),
             ComposeTextTab(RakuenTab.GROUP, Res.string.global_group),
@@ -38,10 +37,10 @@ class TopicViewModel(savedStateHandle: SavedStateHandle) :
         )
     )
 
-    override fun onEvent(event: TopicEvent.Action) {
+    override fun onEvent(event: RaKuenEvent.Action) {
         when (event) {
-            is TopicEvent.Action.OnRefresh -> refresh(loading = event.loading)
-            is TopicEvent.Action.OnChangeType -> onChangeType(event.type)
+            is RaKuenEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is RaKuenEvent.Action.OnChangeType -> onChangeType(event.type)
         }
     }
 

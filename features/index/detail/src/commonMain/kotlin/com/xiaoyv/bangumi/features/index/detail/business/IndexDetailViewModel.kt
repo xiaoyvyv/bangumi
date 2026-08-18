@@ -1,11 +1,5 @@
 package com.xiaoyv.bangumi.features.index.detail.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
@@ -20,10 +14,14 @@ import com.xiaoyv.bangumi.core_resource.resources.global_music
 import com.xiaoyv.bangumi.core_resource.resources.global_person
 import com.xiaoyv.bangumi.core_resource.resources.global_real
 import com.xiaoyv.bangumi.core_resource.resources.global_subject_topic
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
@@ -35,6 +33,7 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import org.jetbrains.compose.resources.getString
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [IndexDetailViewModel]
@@ -43,11 +42,10 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/1/12
  */
 class IndexDetailViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.IndexDetail,
     private val indexRepository: IndexRepository,
     private val userManager: UserManager,
-) : BaseViewModel<IndexDetailState, IndexDetailSideEffect, IndexDetailEvent.Action>(savedStateHandle) {
+) : BaseViewModel<IndexDetailState, IndexDetailSideEffect, IndexDetailEvent.Action>() {
 
     override fun initBaseState(): UiState<IndexDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 

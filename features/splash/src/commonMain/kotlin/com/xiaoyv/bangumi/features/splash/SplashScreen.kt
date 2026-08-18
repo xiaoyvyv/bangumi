@@ -1,9 +1,6 @@
 package com.xiaoyv.bangumi.features.splash
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.scaleIn
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -40,20 +37,37 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.splash_address_pending
+import com.xiaoyv.bangumi.core_resource.resources.splash_enter_home
+import com.xiaoyv.bangumi.core_resource.resources.splash_node_queued
+import com.xiaoyv.bangumi.core_resource.resources.splash_node_resolved
+import com.xiaoyv.bangumi.core_resource.resources.splash_node_resolving
+import com.xiaoyv.bangumi.core_resource.resources.splash_node_safe_cache
+import com.xiaoyv.bangumi.core_resource.resources.splash_online
+import com.xiaoyv.bangumi.core_resource.resources.splash_route_initializer
+import com.xiaoyv.bangumi.core_resource.resources.splash_route_sync
+import com.xiaoyv.bangumi.core_resource.resources.splash_secure_dns_description
+import com.xiaoyv.bangumi.core_resource.resources.splash_status_connecting
+import com.xiaoyv.bangumi.core_resource.resources.splash_status_resolving
+import com.xiaoyv.bangumi.core_resource.resources.splash_status_route_updated
+import com.xiaoyv.bangumi.core_resource.resources.splash_status_safe_cache
+import com.xiaoyv.bangumi.core_resource.resources.splash_title
 import com.xiaoyv.bangumi.features.splash.business.DnsNodeState
 import com.xiaoyv.bangumi.features.splash.business.DnsNodeStatus
 import com.xiaoyv.bangumi.features.splash.business.SplashEvent
 import com.xiaoyv.bangumi.features.splash.business.SplashSideEffect
 import com.xiaoyv.bangumi.features.splash.business.SplashState
 import com.xiaoyv.bangumi.features.splash.business.SplashViewModel
+import com.xiaoyv.bangumi.shared.ui.component.layout.refresh.PullToRefreshBox
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 private val SpaceBlack = Color(0xFF03090D)
@@ -78,6 +92,7 @@ fun SplashRoute(
     SplashScreen(
         state = baseState.data,
         onLaunch = { viewModel.onEvent(SplashEvent.Action.OnLaunch) },
+        onRefresh = { viewModel.onEvent(SplashEvent.Action.OnRefresh) },
     )
 }
 
@@ -85,6 +100,7 @@ fun SplashRoute(
 fun SplashScreen(
     state: SplashState,
     onLaunch: () -> Unit,
+    onRefresh: () -> Unit,
 ) {
     val transition = rememberInfiniteTransition(label = "network-scan")
     val scanProgress by transition.animateFloat(
@@ -118,104 +134,44 @@ fun SplashScreen(
     ) {
         TechGrid(scanProgress)
 
-        Column(
+        PullToRefreshBox(
+            isRefreshing = state.isResolving,
+            onRefresh = onRefresh,
+            enabled = !state.isResolving,
             modifier = Modifier
                 .fillMaxSize()
-                .systemBarsPadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 22.dp, vertical = 30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .systemBarsPadding(),
         ) {
-            ProtocolHeader()
-            Spacer(Modifier.height(22.dp))
-            ResolverCore(progress = state.progress, pulse = pulse)
-            Spacer(Modifier.height(20.dp))
-            ResolveSummary(state)
-            Spacer(Modifier.height(16.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 22.dp, vertical = 30.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                ProtocolHeader()
+                Spacer(Modifier.height(22.dp))
+                ResolverCore(progress = state.progress, pulse = pulse)
+                Spacer(Modifier.height(20.dp))
+                ResolveSummary(state = state, onLaunch = onLaunch)
+                Spacer(Modifier.height(16.dp))
 
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                state.nodes.forEach { node ->
-                    DnsNodeCard(node)
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    state.nodes.forEach { node ->
+                        DnsNodeCard(node)
+                    }
                 }
+
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    text = stringResource(Res.string.splash_secure_dns_description),
+                    color = MutedText.copy(alpha = 0.7f),
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 9.sp,
+                    letterSpacing = 1.4.sp,
+                )
+                Spacer(Modifier.height(30.dp))
             }
-
-            Spacer(Modifier.height(20.dp))
-            Text(
-                text = "DNS OVER HTTPS  /  TLS RECORD SHAPING",
-                color = MutedText.copy(alpha = 0.7f),
-                fontFamily = FontFamily.Monospace,
-                fontSize = 9.sp,
-                letterSpacing = 1.4.sp,
-            )
-            Spacer(Modifier.height(108.dp))
-        }
-
-        AnimatedVisibility(
-            visible = state.isComplete,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .systemBarsPadding()
-                .padding(end = 22.dp, bottom = 22.dp),
-            enter = fadeIn(tween(350)) + scaleIn(
-                initialScale = 0.72f,
-                animationSpec = tween(450),
-            ),
-        ) {
-            LaunchFab(pulse = pulse, onClick = onLaunch)
-        }
-    }
-}
-
-@Composable
-private fun LaunchFab(
-    pulse: Float,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .size(84.dp)
-            .border(
-                width = 1.dp,
-                color = SignalCyan.copy(alpha = 0.15f + pulse * 0.45f),
-                shape = CircleShape,
-            )
-            .clickable(onClick = onClick)
-            .padding(6.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .shadow(
-                    elevation = 20.dp,
-                    shape = CircleShape,
-                    ambientColor = SignalCyan.copy(alpha = 0.45f),
-                    spotColor = SignalCyan.copy(alpha = 0.65f),
-                )
-                .background(
-                    brush = Brush.linearGradient(listOf(SignalCyan, SignalBlue)),
-                    shape = CircleShape,
-                )
-                .border(1.dp, Color.White.copy(alpha = 0.55f), CircleShape),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = "启动",
-                color = SpaceBlack,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Black,
-                letterSpacing = 1.sp,
-            )
-            Text(
-                text = "ENTER  >",
-                color = DeepTeal.copy(alpha = 0.82f),
-                fontFamily = FontFamily.Monospace,
-                fontSize = 8.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.4.sp,
-            )
         }
     }
 }
@@ -229,14 +185,14 @@ private fun ProtocolHeader() {
     ) {
         Column {
             Text(
-                text = "BANGUMI",
+                text = stringResource(Res.string.splash_title),
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Black,
-                letterSpacing = 4.sp,
+                letterSpacing = 2.sp,
             )
             Text(
-                text = "SECURE ROUTE INITIALIZER",
+                text = stringResource(Res.string.splash_route_initializer),
                 color = SignalCyan,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 10.sp,
@@ -254,7 +210,7 @@ private fun ProtocolHeader() {
         ) {
             Box(Modifier.size(6.dp).background(SignalCyan, CircleShape))
             Text(
-                text = "LIVE",
+                text = stringResource(Res.string.splash_online),
                 color = SignalCyan,
                 fontFamily = FontFamily.Monospace,
                 fontWeight = FontWeight.Bold,
@@ -308,7 +264,7 @@ private fun ResolverCore(progress: Float, pulse: Float) {
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "ROUTE SYNC",
+                text = stringResource(Res.string.splash_route_sync),
                 color = SignalCyan,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 9.sp,
@@ -319,12 +275,19 @@ private fun ResolverCore(progress: Float, pulse: Float) {
 }
 
 @Composable
-private fun ResolveSummary(state: SplashState) {
+private fun ResolveSummary(
+    state: SplashState,
+    onLaunch: () -> Unit,
+) {
     val status = when {
-        state.isComplete && state.failureCount > 0 -> "SAFE ROUTES COMMITTED"
-        state.isComplete -> "ROUTE TABLE COMMITTED"
-        state.activeHostname.isNotBlank() -> "QUERYING  ${state.activeHostname.uppercase()}"
-        else -> "ESTABLISHING SECURE CHANNEL"
+        state.isComplete && state.failureCount > 0 -> stringResource(Res.string.splash_status_safe_cache)
+        state.isComplete -> stringResource(Res.string.splash_status_route_updated)
+        state.activeHostname.isNotBlank() -> stringResource(
+            Res.string.splash_status_resolving,
+            state.activeHostname,
+        )
+
+        else -> stringResource(Res.string.splash_status_connecting)
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -354,7 +317,40 @@ private fun ResolveSummary(state: SplashState) {
             trackColor = Color.White.copy(alpha = 0.08f),
             strokeCap = StrokeCap.Round,
         )
+        Spacer(Modifier.height(12.dp))
+        LaunchButton(
+            enabled = state.isComplete,
+            onClick = onLaunch,
+            modifier = Modifier.align(Alignment.End),
+        )
     }
+}
+
+@Composable
+private fun LaunchButton(
+    enabled: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = stringResource(Res.string.splash_enter_home),
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = SignalCyan.copy(alpha = if (enabled) 0.48f else 0.15f),
+                shape = RoundedCornerShape(50),
+            )
+            .background(
+                color = if (enabled) SignalCyan else SignalCyan.copy(alpha = 0.03f),
+                shape = RoundedCornerShape(50),
+            )
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = 15.dp, vertical = 8.dp),
+        color = if (enabled) SpaceBlack else MutedText.copy(alpha = 0.55f),
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.4.sp,
+    )
 }
 
 @Composable
@@ -370,10 +366,10 @@ private fun DnsNodeCard(node: DnsNodeState) {
         label = "node-accent",
     )
     val statusText = when (node.status) {
-        DnsNodeStatus.Queued -> "QUEUED"
-        DnsNodeStatus.Resolving -> "SCANNING"
-        DnsNodeStatus.Resolved -> "RESOLVED"
-        DnsNodeStatus.Fallback -> "SAFE CACHE"
+        DnsNodeStatus.Queued -> stringResource(Res.string.splash_node_queued)
+        DnsNodeStatus.Resolving -> stringResource(Res.string.splash_node_resolving)
+        DnsNodeStatus.Resolved -> stringResource(Res.string.splash_node_resolved)
+        DnsNodeStatus.Fallback -> stringResource(Res.string.splash_node_safe_cache)
     }
 
     Row(
@@ -404,7 +400,9 @@ private fun DnsNodeCard(node: DnsNodeState) {
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = node.addresses.joinToString("  ·  ").ifBlank { "awaiting address" },
+                text = node.addresses.joinToString("  ·  ").ifBlank {
+                    stringResource(Res.string.splash_address_pending)
+                },
                 color = MutedText,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 9.sp,

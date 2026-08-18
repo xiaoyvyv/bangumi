@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.settings.translate.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 
 /**
@@ -9,8 +8,8 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
  * @author why
  * @since 2025/1/12
  */
-class SettingsTranslateViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<SettingsTranslateState, SettingsTranslateSideEffect, SettingsTranslateEvent>(savedStateHandle) {
+class SettingsTranslateViewModel :
+    BaseViewModel<SettingsTranslateState, SettingsTranslateSideEffect, SettingsTranslateEvent>() {
 
     override fun createInitialState() = SettingsTranslateState()
 

@@ -19,7 +19,6 @@ import com.xiaoyv.bangumi.shared.native.AppDatabase
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.Darwin
-import kotlinx.cinterop.interpretObjCPointer
 import kotlinx.coroutines.Dispatchers
 import okio.Path.Companion.toPath
 import okio.use
@@ -31,12 +30,8 @@ import platform.CFNetwork.kCFStreamPropertyHTTPProxyHost
 import platform.CFNetwork.kCFStreamPropertyHTTPProxyPort
 import platform.CFNetwork.kCFStreamPropertyHTTPSProxyHost
 import platform.CFNetwork.kCFStreamPropertyHTTPSProxyPort
-import platform.CoreFoundation.CFStringRef
-import platform.Foundation.NSCopyingProtocol
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
-import platform.Foundation.NSMutableDictionary
-import platform.Foundation.NSURLSessionConfiguration
 import platform.Foundation.NSUserDomainMask
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
@@ -137,6 +132,7 @@ actual object System {
 
     actual fun createHttpClient(
         hosts: Map<String, List<String>>,
+        tlsFragmentationDomains: Set<String>,
         block: HttpClientConfig<*>.() -> Unit
     ): HttpClient {
         return HttpClient(Darwin) {

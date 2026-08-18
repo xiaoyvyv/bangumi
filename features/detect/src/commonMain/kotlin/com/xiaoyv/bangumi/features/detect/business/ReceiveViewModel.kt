@@ -1,10 +1,5 @@
 package com.xiaoyv.bangumi.features.detect.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import androidx.lifecycle.SavedStateHandle
 import com.attafitamim.krop.core.crop.CropResult
 import com.attafitamim.krop.filekit.encodeToByteArray
 import com.attafitamim.krop.filekit.toImageSrc
@@ -23,8 +18,11 @@ import com.xiaoyv.bangumi.core_resource.resources.image_detect_failed
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject_subtitle
 import com.xiaoyv.bangumi.shared.component.DetectType
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.repository.TraceRepository
 import com.xiaoyv.bangumi.shared.ui.component.image.cropper.imageCropperCompat
@@ -38,6 +36,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [ReceiveViewModel]
@@ -46,10 +45,9 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/1/12
  */
 class ReceiveViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.DetectImage,
     private val traceRepository: TraceRepository,
-) : BaseViewModel<ReceiveState, ReceiveSideEffect, ReceiveEvent.Action>(savedStateHandle) {
+) : BaseViewModel<ReceiveState, ReceiveSideEffect, ReceiveEvent.Action>() {
     internal val imageCropper = imageCropperCompat()
 
     override fun createInitialState() =

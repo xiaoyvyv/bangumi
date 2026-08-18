@@ -1,13 +1,12 @@
 package com.xiaoyv.bangumi.features.main.tab.tracking.page
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -15,14 +14,13 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.collections.map
 
 @Composable
 fun koinTrackingPageViewModel(@SubjectType type: Int): TrackingPageViewModel {
@@ -34,11 +32,10 @@ fun koinTrackingPageViewModel(@SubjectType type: Int): TrackingPageViewModel {
 
 
 class TrackingPageViewModel(
-    stateHandle: SavedStateHandle,
     @SubjectType type: Int,
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
-) : BaseViewModel<TrackingPageState, Any, TrackingPageEvent.Action>(stateHandle) {
+) : BaseViewModel<TrackingPageState, Any, TrackingPageEvent.Action>() {
 
     private val userCollectionPager = collectionRepository.fetchMyCollectionSubjectPager(
         subjectType = type,

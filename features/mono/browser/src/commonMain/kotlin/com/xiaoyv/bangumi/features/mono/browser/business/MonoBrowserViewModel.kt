@@ -1,7 +1,5 @@
 package com.xiaoyv.bangumi.features.mono.browser.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.mono_character_list
 import com.xiaoyv.bangumi.core_resource.resources.mono_person_list
@@ -10,6 +8,7 @@ import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_comment
 import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_dateline
 import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_title
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.MonoOrderByType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -26,9 +25,8 @@ import kotlinx.collections.immutable.persistentListOf
  * @since 2025/1/12
  */
 class MonoBrowserViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.MonoBrowser,
-) : BaseViewModel<MonoBrowserState, MonoBrowserSideEffect, MonoBrowserEvent.Action>(savedStateHandle) {
+) : BaseViewModel<MonoBrowserState, MonoBrowserSideEffect, MonoBrowserEvent.Action>() {
 
     override fun createInitialState() = MonoBrowserState(
         title = if (args.type == MonoType.CHARACTER) Res.string.mono_character_list else Res.string.mono_person_list,

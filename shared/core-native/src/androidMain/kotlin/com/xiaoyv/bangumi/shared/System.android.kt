@@ -87,12 +87,13 @@ actual object System {
 
     actual fun createHttpClient(
         hosts: Map<String, List<String>>,
+        tlsFragmentationDomains: Set<String>,
         block: HttpClientConfig<*>.() -> Unit
     ): HttpClient {
         return HttpClient(OkHttp) {
             engine {
                 config {
-                    socketFactory(AntiSniSocketFactory(DomainTlsFragmentationPolicy(hosts.keys)))
+                    socketFactory(AntiSniSocketFactory(DomainTlsFragmentationPolicy(tlsFragmentationDomains)))
                     dns(AntiSniDns(hosts))
                 }
             }

@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.main.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 
@@ -11,9 +10,8 @@ import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
  * @since 2025/1/12
  */
 class MainViewModel(
-    stateHandle: SavedStateHandle,
     private val userManager: UserManager,
-) : BaseViewModel<MainState, MainSideEffect, MainEvent>(stateHandle) {
+) : BaseViewModel<MainState, MainSideEffect, MainEvent>() {
     override fun createInitialState() = MainState(
         defaultSelected = userManager.settings.homeTab.defaultSelected
     )

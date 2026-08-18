@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.main.tab.topic.business
+package com.xiaoyv.bangumi.features.main.tab.rakuen.business
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.RakuenTab
@@ -7,13 +7,13 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 
 /**
- * [TopicState]
+ * [RaKuenState]
  *
  * @author why
  * @since 2025/1/12
  */
 @Immutable
-data class TopicState(
+data class RaKuenState(
     @field:RakuenTab
     val type: String = RakuenTab.ALL,
     val tabs: SerializeList<ComposeTextTab<String>> = persistentListOf(),

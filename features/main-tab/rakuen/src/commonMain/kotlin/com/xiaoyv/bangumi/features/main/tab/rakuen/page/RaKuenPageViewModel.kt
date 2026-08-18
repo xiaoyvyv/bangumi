@@ -1,11 +1,10 @@
-package com.xiaoyv.bangumi.features.main.tab.topic.page
+package com.xiaoyv.bangumi.features.main.tab.rakuen.page
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicEvent
-import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicSideEffect
+import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenEvent
+import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.RakuenTab
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
@@ -23,19 +22,18 @@ fun koinTopicPageViewModel(
 }
 
 class TopicPageViewModel(
-    savedStateHandle: SavedStateHandle,
     ugcRepository: UgcRepository,
     @field:RakuenTab private val type: String,
-) : BaseViewModel<TopicPageState, TopicSideEffect, TopicEvent>(savedStateHandle) {
+) : BaseViewModel<RaKuenPageState, RaKuenSideEffect, RaKuenEvent>() {
     private val topicPager = ugcRepository.fetchTopicPager(type = type)
 
     internal val topicFlow = topicPager.flow.cachedIn(viewModelScope)
 
-    override fun createInitialState() = TopicPageState(
+    override fun createInitialState() = RaKuenPageState(
         type = type,
     )
 
-    override fun onEvent(event: TopicEvent) {
+    override fun onEvent(event: RaKuenEvent) {
 
     }
 }

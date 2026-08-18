@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.pixiv.login.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 
 /**
@@ -9,8 +8,8 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
  * @author why
  * @since 2025/1/12
  */
-class PixivLoginViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<PixivLoginState, PixivLoginSideEffect, PixivLoginEvent.Action>(savedStateHandle) {
+class PixivLoginViewModel :
+    BaseViewModel<PixivLoginState, PixivLoginSideEffect, PixivLoginEvent.Action>() {
 
     override fun createInitialState() = PixivLoginState()
 

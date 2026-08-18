@@ -1,20 +1,18 @@
 package com.xiaoyv.bangumi.features.subject.detail.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_firstly
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
@@ -40,6 +38,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.getString
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [SubjectDetailViewModel]
@@ -48,14 +47,13 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/1/12
  */
 class SubjectDetailViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.SubjectDetail,
     private val subjectRepository: SubjectRepository,
     private val cacheRepository: CacheRepository,
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
     private val userManager: UserManager,
-) : BaseViewModel<SubjectDetailState, SubjectDetailSideEffect, SubjectDetailEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SubjectDetailState, SubjectDetailSideEffect, SubjectDetailEvent.Action>() {
     private val subjectCommentPager = subjectRepository.fetchSubjectCommentPager(args.subjectId)
 
     internal val subjectComments = subjectCommentPager.flow

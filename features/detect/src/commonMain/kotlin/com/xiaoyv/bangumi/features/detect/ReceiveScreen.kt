@@ -44,6 +44,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -99,12 +100,12 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.AdaptiveTwoPanel
 import com.xiaoyv.bangumi.shared.ui.component.layout.TransparentBackground
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.composition.LocalCropperState
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import kotlinx.collections.immutable.toPersistentList
@@ -440,7 +441,10 @@ private fun ReceiveScreenSubjectDialog(
     onUiEvent: (ReceiveEvent.UI) -> Unit,
     onActionEvent: (ReceiveEvent.Action) -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState(true) { it != SheetValue.Hidden }
+    val bottomSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    ) { it != SheetValue.Hidden }
     val scope = rememberCoroutineScope()
     if (state.resultSubject.isNotEmpty()) {
         ModalBottomSheet(

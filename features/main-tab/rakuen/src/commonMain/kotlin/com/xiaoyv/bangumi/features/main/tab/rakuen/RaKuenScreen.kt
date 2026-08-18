@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.main.tab.topic
+package com.xiaoyv.bangumi.features.main.tab.rakuen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_community
-import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicEvent
-import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicState
-import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicViewModel
-import com.xiaoyv.bangumi.features.main.tab.topic.page.TopicPageScreen
+import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenEvent
+import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenState
+import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenViewModel
+import com.xiaoyv.bangumi.features.main.tab.rakuen.page.RaKuenPageScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -29,8 +29,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
-fun TopicRoute(
-    viewModel: TopicViewModel,
+fun RaKuenRoute(
+    viewModel: RaKuenViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -40,23 +40,23 @@ fun TopicRoute(
 
     }
 
-    TopicScreen(
+    RaKuenScreen(
         uiState = baseState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
-                is TopicEvent.UI.OnNavUp -> onNavUp()
-                is TopicEvent.UI.OnNavScreen -> onNavScreen(it.screen)
+                is RaKuenEvent.UI.OnNavUp -> onNavUp()
+                is RaKuenEvent.UI.OnNavScreen -> onNavScreen(it.screen)
             }
         },
     )
 }
 
 @Composable
-private fun TopicScreen(
-    uiState: UiState<TopicState>,
-    onUiEvent: (TopicEvent.UI) -> Unit,
-    onActionEvent: (TopicEvent.Action) -> Unit,
+private fun RaKuenScreen(
+    uiState: UiState<RaKuenState>,
+    onUiEvent: (RaKuenEvent.UI) -> Unit,
+    onActionEvent: (RaKuenEvent.Action) -> Unit,
 ) {
     StateLayout(
         modifier = Modifier.fillMaxSize(),
@@ -67,9 +67,9 @@ private fun TopicScreen(
             topBar = {
                 BgmTopAppBar(
                     title = stringResource(Res.string.global_community),
-                    onNavigationClick = { onUiEvent(TopicEvent.UI.OnNavUp) },
+                    onNavigationClick = { onUiEvent(RaKuenEvent.UI.OnNavUp) },
                     actions = {
-                        IconButton(onClick = { onUiEvent(TopicEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
+                        IconButton(onClick = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
                             Icon(
                                 BgmIcons.Search,
                                 contentDescription = null
@@ -78,14 +78,14 @@ private fun TopicScreen(
                         DropMenuActionButton(
                             options = state.actions,
                             onOptionClick = {
-                                onActionEvent(TopicEvent.Action.OnChangeType(it.type))
+                                onActionEvent(RaKuenEvent.Action.OnChangeType(it.type))
                             }
                         )
                     }
                 )
             }
         ) {
-            TopicScreenContent(
+            RaKuenScreenContent(
                 modifier = Modifier.padding(it),
                 state = state,
                 onUiEvent = onUiEvent,
@@ -97,17 +97,17 @@ private fun TopicScreen(
 
 
 @Composable
-private fun TopicScreenContent(
+private fun RaKuenScreenContent(
     modifier: Modifier,
-    state: TopicState,
-    onUiEvent: (TopicEvent.UI) -> Unit,
-    onActionEvent: (TopicEvent.Action) -> Unit,
+    state: RaKuenState,
+    onUiEvent: (RaKuenEvent.UI) -> Unit,
+    onActionEvent: (RaKuenEvent.Action) -> Unit,
 ) {
     BgmTabHorizontalPager(
         modifier = modifier.fillMaxSize(),
         tabs = state.tabs
     ) {
-        TopicPageScreen(
+        RaKuenPageScreen(
             type = state.tabs[it].type,
             onUiEvent = onUiEvent,
             onActionEvent = onActionEvent
@@ -119,8 +119,8 @@ private fun TopicScreenContent(
 @Composable
 fun Test() {
     PreviewColumn {
-        TopicScreen(
-            uiState = UiState(TopicState()),
+        RaKuenScreen(
+            uiState = UiState(RaKuenState()),
             onActionEvent = {},
             onUiEvent = {}
         )

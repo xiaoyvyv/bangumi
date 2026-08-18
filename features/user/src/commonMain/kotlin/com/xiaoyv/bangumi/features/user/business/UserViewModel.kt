@@ -1,14 +1,12 @@
 package com.xiaoyv.bangumi.features.user.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.viewModelScope
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
@@ -33,6 +31,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.getString
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [UserViewModel]
@@ -41,13 +40,12 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/1/12
  */
 class UserViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.UserDetail,
     private val cacheRepository: CacheRepository,
     private val userRepository: UserRepository,
     private val personalStateStore: PersonalStateStore,
     private val userManager: UserManager,
-) : BaseViewModel<UserState, UserSideEffect, UserEvent.Action>(savedStateHandle) {
+) : BaseViewModel<UserState, UserSideEffect, UserEvent.Action>() {
     private val cacheKey = stringPreferencesKey(name = "user_detail_" + args.username)
 
     init {

@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.shared.ui.component.dialog.comment
 
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseMviViewModel
 import com.xiaoyv.bangumi.shared.core.utils.BBCode
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
@@ -15,11 +14,10 @@ import io.github.vinceglb.filekit.PlatformFile
 
 
 class CommentViewModel(
-    stateHandle: SavedStateHandle,
     private val ugcRepository: UgcRepository,
     private val choreRepository: ChoreRepository,
     private val dialogAnchor: CommentDialogAnchor,
-) : BaseMviViewModel<CommentState, CommentSideEffect, CommentEvent>(stateHandle) {
+) : BaseMviViewModel<CommentState, CommentSideEffect, CommentEvent>() {
 
     override fun createInitialState(): CommentState {
         return CommentState(anchor = dialogAnchor)

@@ -1,18 +1,16 @@
 package com.xiaoyv.bangumi.features.friend.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.util.fastForEach
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
@@ -20,6 +18,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import org.orbitmvi.orbit.syntax.Syntax
 
 
 @Composable
@@ -37,10 +36,9 @@ fun koinFriendViewModel(param: ListUserParam): FriendViewModel {
  * @since 2025/1/12
  */
 class FriendViewModel(
-    savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
     private val param: ListUserParam,
-) : BaseViewModel<FriendState, FriendSideEffect, FriendEvent.Action>(savedStateHandle) {
+) : BaseViewModel<FriendState, FriendSideEffect, FriendEvent.Action>() {
     private val userPager = userRepository.fetchUserPager(param)
     val users = userPager.flow.cachedIn(viewModelScope)
 

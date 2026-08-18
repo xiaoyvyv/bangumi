@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.blog.page.business
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -25,10 +24,9 @@ fun koinBlogPageViewModel(param: ListBlogParam): BlogPageViewModel {
  * @since 2025/1/12
  */
 class BlogPageViewModel(
-    savedStateHandle: SavedStateHandle,
     param: ListBlogParam,
     ugcRepository: UgcRepository,
-) : BaseViewModel<BlogPageState, BlogPageSideEffect, BlogPageEvent.Action>(savedStateHandle) {
+) : BaseViewModel<BlogPageState, BlogPageSideEffect, BlogPageEvent.Action>() {
 
     private val blogPager = ugcRepository.fetchBlogPager(param)
 

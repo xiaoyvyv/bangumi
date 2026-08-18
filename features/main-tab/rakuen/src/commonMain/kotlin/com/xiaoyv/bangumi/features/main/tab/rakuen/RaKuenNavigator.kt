@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.main.tab.topic
+package com.xiaoyv.bangumi.features.main.tab.rakuen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,9 +15,9 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
-val topicModule = module {
+val raKuenModule = module {
     navScope {
-        navigation<Screen.Topic>(
+        navigation<Screen.RaKuen>(
             metadata = ListDetailSceneStrategy.listPane(
                 detailPlaceholder = {
                     Column(
@@ -29,7 +29,7 @@ val topicModule = module {
                 }
             )
         ) { key ->
-            TopicRoute(
+            RaKuenRoute(
                 viewModel = koinViewModel { parametersOf(key) },
                 onNavScreen = { navigator.navigate(it) },
                 onNavUp = { navigator.goBack() }

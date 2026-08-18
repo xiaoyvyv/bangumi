@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.mono.page.business
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -26,10 +25,9 @@ fun koinMonoPageViewModel(param: ListMonoParam): MonoPageViewModel {
  * @since 2025/1/12
  */
 class MonoPageViewModel(
-    savedStateHandle: SavedStateHandle,
     monoRepository: MonoRepository,
     val param: ListMonoParam,
-) : BaseViewModel<MonoPageState, MonoPageSideEffect, MonoPageEvent.Action>(savedStateHandle) {
+) : BaseViewModel<MonoPageState, MonoPageSideEffect, MonoPageEvent.Action>() {
 
     private val monoPager = monoRepository.fetchMonoListPager(param)
 

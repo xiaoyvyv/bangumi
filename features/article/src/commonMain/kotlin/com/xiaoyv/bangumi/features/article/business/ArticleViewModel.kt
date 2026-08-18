@@ -1,12 +1,6 @@
 package com.xiaoyv.bangumi.features.article.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.core_resource.resources.global_friend
@@ -17,12 +11,16 @@ import com.xiaoyv.bangumi.core_resource.resources.global_oldest
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.global_self
 import com.xiaoyv.bangumi.shared.System
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.types.CommentFilterType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SortType
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -45,6 +43,7 @@ import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [ArticleViewModel]
@@ -53,13 +52,12 @@ import kotlinx.coroutines.withContext
  * @since 2025/1/12
  */
 class ArticleViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.Article,
     private val ugcRepository: UgcRepository,
     private val userManager: UserManager,
     private val cacheRepository: CacheRepository,
     private val userRepository: UserRepository,
-) : BaseViewModel<ArticleState, ArticleSideEffect, ArticleEvent.Action>(savedStateHandle) {
+) : BaseViewModel<ArticleState, ArticleSideEffect, ArticleEvent.Action>() {
     private val rawComments: MutableList<ComposeComment> = mutableListOf()
 
     private val cacheKey = stringPreferencesKey(name = "article_detail_" + args.id + "_" + args.type)

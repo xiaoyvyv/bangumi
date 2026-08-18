@@ -1,9 +1,5 @@
 package com.xiaoyv.bangumi.features.message.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postEffect
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -12,6 +8,9 @@ import com.xiaoyv.bangumi.core_resource.resources.global_inbox
 import com.xiaoyv.bangumi.core_resource.resources.global_outbox
 import com.xiaoyv.bangumi.features.message.TAB_FRIEND
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
@@ -25,9 +24,8 @@ import kotlinx.collections.immutable.toPersistentList
  * @since 2025/1/12
  */
 class MessageMainViewModel(
-    savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
-) : BaseViewModel<MessageMainState, MessageMainSideEffect, MessageMainEvent.Action>(savedStateHandle) {
+) : BaseViewModel<MessageMainState, MessageMainSideEffect, MessageMainEvent.Action>() {
 
     private val messageInboxPager = userRepository.fetchUserMessagePager(MessageBoxType.TYPE_INBOX)
     private val messageOutboxPager = userRepository.fetchUserMessagePager(MessageBoxType.TYPE_OUTBOX)

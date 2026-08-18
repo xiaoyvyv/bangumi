@@ -1,8 +1,5 @@
 package com.xiaoyv.bangumi.features.subject.detail.page
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,7 +33,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.SavedStateHandle
 import com.patrykandpatrick.vico.multiplatform.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.multiplatform.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.multiplatform.cartesian.axis.VerticalAxis
@@ -52,10 +48,12 @@ import com.patrykandpatrick.vico.multiplatform.common.component.rememberLineComp
 import com.patrykandpatrick.vico.multiplatform.common.data.ExtraStore
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -68,15 +66,16 @@ import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.ui.component.layout.adaptive.AdaptiveGrid
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
+import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.syntax.Syntax
 import kotlin.math.roundToInt
 
 private const val CONTENT_CHART_ITEM = "CONTENT_CHART_ITEM"
@@ -96,10 +95,9 @@ fun koinSubjectDetailChartViewModel(subjectId: Long): SubjectDetailChartViewMode
 
 
 class SubjectDetailChartViewModel(
-    savedStateHandle: SavedStateHandle,
     private val subjectRepository: SubjectRepository,
     private val subjectId: Long,
-) : BaseViewModel<SubjectDetailChartState, Any, Any>(savedStateHandle) {
+) : BaseViewModel<SubjectDetailChartState, Any, Any>() {
     override fun initBaseState(): UiState<SubjectDetailChartState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
     override fun createInitialState() = SubjectDetailChartState()

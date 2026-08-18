@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.main.tab.tracking.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_anime
 import com.xiaoyv.bangumi.core_resource.resources.global_book
@@ -16,9 +15,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @author why
  * @since 2025/1/12
  */
-class TrackingViewModel(
-    savedStateHandle: SavedStateHandle,
-) : BaseViewModel<TrackingState, TrackingSideEffect, TrackingEvent>(savedStateHandle) {
+class TrackingViewModel : BaseViewModel<TrackingState, TrackingSideEffect, TrackingEvent>() {
 
     override fun createInitialState() = TrackingState(
         tabs = persistentListOf(

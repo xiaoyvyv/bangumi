@@ -1,19 +1,18 @@
 package com.xiaoyv.bangumi.features.settings.main.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
-import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.settings_clean_cache_success
 import com.xiaoyv.bangumi.shared.System
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
 import org.jetbrains.compose.resources.getString
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [SettingsMainViewModel]
@@ -22,10 +21,9 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/1/12
  */
 class SettingsMainViewModel(
-    savedStateHandle: SavedStateHandle,
     private val userManager: UserManager,
     private val databaseRepository: DatabaseRepository,
-) : BaseViewModel<SettingsMainState, SettingsMainSideEffect, SettingsMainEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SettingsMainState, SettingsMainSideEffect, SettingsMainEvent.Action>() {
 
     override fun createInitialState() = SettingsMainState()
 

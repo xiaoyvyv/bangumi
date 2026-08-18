@@ -1,9 +1,8 @@
 package com.xiaoyv.bangumi.features.subject.browser.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
@@ -21,10 +20,9 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
  * @since 2025/1/12
  */
 class SubjectBrowserViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.SubjectBrowser,
     private val cacheRepository: CacheRepository,
-) : BaseViewModel<SubjectBrowserState, SubjectBrowserSideEffect, SubjectBrowserEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SubjectBrowserState, SubjectBrowserSideEffect, SubjectBrowserEvent.Action>() {
 
     private val cacheKey = stringPreferencesKey(name = "subject_browser_${args.body.uniqueKey}")
 

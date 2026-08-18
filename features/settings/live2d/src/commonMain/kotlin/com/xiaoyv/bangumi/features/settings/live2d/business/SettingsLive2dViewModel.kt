@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.settings.live2d.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
@@ -12,9 +11,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
  * @since 2025/1/12
  */
 class SettingsLive2dViewModel(
-    savedStateHandle: SavedStateHandle,
     private val userManager: UserManager,
-) : BaseViewModel<SettingsLive2dState, SettingsLive2dSideEffect, SettingsLive2dEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SettingsLive2dState, SettingsLive2dSideEffect, SettingsLive2dEvent.Action>() {
 
     override fun createInitialState() = SettingsLive2dState()
 

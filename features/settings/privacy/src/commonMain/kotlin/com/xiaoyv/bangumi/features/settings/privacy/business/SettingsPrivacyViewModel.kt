@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.settings.privacy.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 
 /**
@@ -9,8 +8,8 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
  * @author why
  * @since 2025/1/12
  */
-class SettingsPrivacyViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<SettingsPrivacyState, SettingsPrivacySideEffect, SettingsPrivacyEvent>(savedStateHandle) {
+class SettingsPrivacyViewModel :
+    BaseViewModel<SettingsPrivacyState, SettingsPrivacySideEffect, SettingsPrivacyEvent>() {
 
     override fun createInitialState() = SettingsPrivacyState()
 

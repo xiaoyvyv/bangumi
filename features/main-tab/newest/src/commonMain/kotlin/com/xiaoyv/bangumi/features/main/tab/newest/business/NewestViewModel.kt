@@ -1,8 +1,7 @@
 package com.xiaoyv.bangumi.features.main.tab.newest.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.utils.currentTime
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
@@ -14,8 +13,8 @@ import kotlinx.collections.immutable.toImmutableList
  * @author why
  * @since 2025/1/12
  */
-class NewestViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<NewestState, NewestSideEffect, NewestEvent.Action>(savedStateHandle) {
+class NewestViewModel :
+    BaseViewModel<NewestState, NewestSideEffect, NewestEvent.Action>() {
 
     override fun createInitialState() = NewestState(
         tabs = createTabs(currentTime().year),

@@ -1,15 +1,13 @@
 package com.xiaoyv.bangumi.features.message.chat.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.limit
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
@@ -18,6 +16,7 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [MessageChatViewModel]
@@ -26,10 +25,9 @@ import kotlinx.coroutines.launch
  * @since 2025/1/12
  */
 class MessageChatViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.MessageChat,
     private val userRepository: UserRepository,
-) : BaseViewModel<MessageChatState, MessageChatSideEffect, MessageChatEvent.Action>(savedStateHandle) {
+) : BaseViewModel<MessageChatState, MessageChatSideEffect, MessageChatEvent.Action>() {
 
     init {
         viewModelScope.launch {

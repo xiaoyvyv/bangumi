@@ -1,7 +1,5 @@
 package com.xiaoyv.bangumi.features.search.result.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_character
 import com.xiaoyv.bangumi.core_resource.resources.global_index
@@ -14,6 +12,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_subject
 import com.xiaoyv.bangumi.core_resource.resources.global_tag
 import com.xiaoyv.bangumi.core_resource.resources.global_topic
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.SearchType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortSearchType
@@ -46,9 +45,8 @@ import kotlinx.collections.immutable.persistentListOf
  * @since 2025/1/12
  */
 class SearchResultViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.SearchResult,
-) : BaseViewModel<SearchResultState, SearchResultSideEffect, SearchResultEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SearchResultState, SearchResultSideEffect, SearchResultEvent.Action>() {
     override fun createInitialState() = SearchResultState(
         query = args.query,
         tabs = persistentListOf(

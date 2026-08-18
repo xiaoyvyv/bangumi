@@ -1,14 +1,12 @@
 package com.xiaoyv.bangumi.features.sign.sign_in.business
 
+import androidx.compose.ui.text.input.TextFieldValue
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.SavedStateHandle
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
@@ -18,6 +16,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginResult
 import com.xiaoyv.bangumi.shared.data.repository.SignRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import kotlinx.collections.immutable.toImmutableMap
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [SignInViewModel]
@@ -29,8 +28,7 @@ class SignInViewModel(
     private val signRepo: SignRepository,
     private val userManager: UserManager,
     private val userRepository: UserRepository,
-    stateHandle: SavedStateHandle,
-) : BaseViewModel<SignInState, SignInSideEffect, SignInEvent.Action>(stateHandle) {
+) : BaseViewModel<SignInState, SignInSideEffect, SignInEvent.Action>() {
 
     override fun createInitialState() = SignInState()
 

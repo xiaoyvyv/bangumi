@@ -1,16 +1,14 @@
 package com.xiaoyv.bangumi.features.web.business
 
+import com.multiplatform.webview.request.WebRequest
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import androidx.lifecycle.SavedStateHandle
-import com.multiplatform.webview.request.WebRequest
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
@@ -20,6 +18,7 @@ import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.ktor.http.Url
 import kotlinx.collections.immutable.toPersistentList
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [WebViewModel]
@@ -28,11 +27,10 @@ import kotlinx.collections.immutable.toPersistentList
  * @since 2025/1/12
  */
 class WebViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.Web,
     private val pixivRepoUseCase: PixivRepoUseCase,
     private val cookieStorage: BgmCookieStorage,
-) : BaseViewModel<WebState, WebSideEffect, WebEvent.Action>(savedStateHandle) {
+) : BaseViewModel<WebState, WebSideEffect, WebEvent.Action>() {
 
     override fun initBaseState(): UiState<WebState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 

@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.tag.page.business
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -25,10 +24,9 @@ fun koinTagPageViewModel(param: ListTagParam): TagPageViewModel {
  * @since 2025/1/12
  */
 class TagPageViewModel(
-    savedStateHandle: SavedStateHandle,
     private val param: ListTagParam,
     private val subjectRepository: SubjectRepository,
-) : BaseViewModel<TagPageState, TagPageSideEffect, TagPageEvent.Action>(savedStateHandle) {
+) : BaseViewModel<TagPageState, TagPageSideEffect, TagPageEvent.Action>() {
     private val tagPager = subjectRepository.fetchSubjectTagPager(param)
 
     val tags = tagPager.flow.cachedIn(viewModelScope)

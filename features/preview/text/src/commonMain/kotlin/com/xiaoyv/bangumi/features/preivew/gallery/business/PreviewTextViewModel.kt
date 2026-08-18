@@ -1,18 +1,17 @@
 package com.xiaoyv.bangumi.features.preivew.gallery.business
 
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [PreviewTextViewModel]
@@ -21,10 +20,9 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
  * @since 2025/1/12
  */
 class PreviewTextViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.PreviewText,
     private val choreRepository: ChoreRepository,
-) : BaseViewModel<PreviewTextState, PreviewTextSideEffect, PreviewTextEvent.Action>(savedStateHandle) {
+) : BaseViewModel<PreviewTextState, PreviewTextSideEffect, PreviewTextEvent.Action>() {
     override fun initBaseState(): UiState<PreviewTextState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
     override fun createInitialState() = PreviewTextState()

@@ -1,12 +1,11 @@
 package com.xiaoyv.bangumi.features.main.tab.timeline.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_mine_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_title
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
@@ -19,9 +18,8 @@ import kotlinx.collections.immutable.persistentListOf
  * @since 2025/1/12
  */
 class TimelineViewModel(
-    savedStateHandle: SavedStateHandle,
     private val userManager: UserManager,
-) : BaseViewModel<TimelineState, TimelineSideEffect, TimelineEvent.Action>(savedStateHandle) {
+) : BaseViewModel<TimelineState, TimelineSideEffect, TimelineEvent.Action>() {
 
     override fun createInitialState() = TimelineState(
         actions = persistentListOf(

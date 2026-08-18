@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.groups.page.business
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -25,10 +24,9 @@ fun koinGroupsPageViewModel(param: ListGroupParam): GroupsPageViewModel {
  * @since 2025/1/12
  */
 class GroupsPageViewModel(
-    savedStateHandle: SavedStateHandle,
     val param: ListGroupParam,
     val groupRepository: GroupRepository,
-) : BaseViewModel<GroupsPageState, GroupsPageSideEffect, GroupsPageEvent.Action>(savedStateHandle) {
+) : BaseViewModel<GroupsPageState, GroupsPageSideEffect, GroupsPageEvent.Action>() {
     private val groupPager = groupRepository.fetchGroupPager(param)
     val group = groupPager.flow.cachedIn(viewModelScope)
 

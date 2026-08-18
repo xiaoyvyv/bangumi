@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.timeline.page.web
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -19,10 +18,9 @@ fun koinTimelineWebPageViewModel(param: ListTimelineParam): TimelineWebPageViewM
 }
 
 class TimelineWebPageViewModel(
-    savedStateHandle: SavedStateHandle,
     param: ListTimelineParam,
     ugcRepository: UgcRepository,
-) : BaseViewModel<Any, Any, Any>(savedStateHandle) {
+) : BaseViewModel<Any, Any, Any>() {
     private val timelinePager = ugcRepository.fetchTimelinePager(
         target = param.browserWeb.target,
         type = param.browserWeb.type,

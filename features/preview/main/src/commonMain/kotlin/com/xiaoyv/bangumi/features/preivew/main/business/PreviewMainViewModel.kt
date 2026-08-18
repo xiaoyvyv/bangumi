@@ -1,8 +1,7 @@
 package com.xiaoyv.bangumi.features.preivew.main.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toPersistentList
 
@@ -13,9 +12,8 @@ import kotlinx.collections.immutable.toPersistentList
  * @since 2025/1/12
  */
 class PreviewMainViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.PreviewMain,
-) : BaseViewModel<PreviewMainState, PreviewMainSideEffect, PreviewMainEvent.Action>(savedStateHandle) {
+) : BaseViewModel<PreviewMainState, PreviewMainSideEffect, PreviewMainEvent.Action>() {
 
     override fun createInitialState() = PreviewMainState(
         items = args.items.toPersistentList(),

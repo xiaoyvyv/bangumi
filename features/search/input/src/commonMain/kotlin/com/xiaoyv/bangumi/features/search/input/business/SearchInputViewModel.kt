@@ -1,15 +1,13 @@
 package com.xiaoyv.bangumi.features.search.input.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.postEffect
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.shared.System
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.limit
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
@@ -21,6 +19,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [SearchInputViewModel]
@@ -29,10 +28,9 @@ import kotlinx.coroutines.flow.update
  * @since 2025/1/12
  */
 class SearchInputViewModel(
-    savedStateHandle: SavedStateHandle,
     private val args: Screen.SearchInput,
     private val subjectRepository: SubjectRepository,
-) : BaseViewModel<SearchInputState, SearchInputSideEffect, SearchInputEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SearchInputState, SearchInputSideEffect, SearchInputEvent.Action>() {
     private val search = mutableStateFlowOf(args.query)
     private val searchHistory = System.database.appSearchHistoryQueries
     private var searchSubmitted = false

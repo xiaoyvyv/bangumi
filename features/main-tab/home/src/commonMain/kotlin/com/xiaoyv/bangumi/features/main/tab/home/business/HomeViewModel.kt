@@ -1,14 +1,12 @@
 package com.xiaoyv.bangumi.features.main.tab.home.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.viewModelScope
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
@@ -30,6 +28,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.getString
+import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [HomeViewModel]
@@ -38,12 +37,11 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/1/12
  */
 class HomeViewModel(
-    savedStateHandle: SavedStateHandle,
     private val subjectRepository: SubjectRepository,
     private val cacheRepository: CacheRepository,
     private val ugcRepository: UgcRepository,
     personalStateStore: PersonalStateStore,
-) : BaseViewModel<HomeState, HomeSideEffect, HomeEvent.Action>(savedStateHandle) {
+) : BaseViewModel<HomeState, HomeSideEffect, HomeEvent.Action>() {
 
     private val cacheKey = stringPreferencesKey(name = "home_main")
 

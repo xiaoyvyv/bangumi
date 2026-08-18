@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.xiaoyv.bangumi.features.main.tab.topic"
+        namespace = "com.xiaoyv.bangumi.features.main.tab.rakuen"
     }
 
     sourceSets {

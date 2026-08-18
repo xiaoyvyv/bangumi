@@ -34,7 +34,7 @@ kotlin {
             implementation(projects.features.main)
             implementation(projects.features.mainTab.home)
             implementation(projects.features.mainTab.timeline)
-            implementation(projects.features.mainTab.topic)
+            implementation(projects.features.mainTab.rakuen)
             implementation(projects.features.mainTab.tracking)
             implementation(projects.features.mainTab.profile)
             implementation(projects.features.mainTab.newest)

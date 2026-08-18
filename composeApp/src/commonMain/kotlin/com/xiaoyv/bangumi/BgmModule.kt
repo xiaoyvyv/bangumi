@@ -21,9 +21,9 @@ import com.xiaoyv.bangumi.features.main.tab.home.page.group.HomeGroupViewModel
 import com.xiaoyv.bangumi.features.main.tab.home.page.mono.HomeMonoViewModel
 import com.xiaoyv.bangumi.features.main.tab.newest.business.NewestViewModel
 import com.xiaoyv.bangumi.features.main.tab.profile.business.ProfileViewModel
+import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenViewModel
+import com.xiaoyv.bangumi.features.main.tab.rakuen.page.TopicPageViewModel
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
-import com.xiaoyv.bangumi.features.main.tab.topic.business.TopicViewModel
-import com.xiaoyv.bangumi.features.main.tab.topic.page.TopicPageViewModel
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingViewModel
 import com.xiaoyv.bangumi.features.main.tab.tracking.page.TrackingPageViewModel
 import com.xiaoyv.bangumi.features.message.business.MessageMainViewModel
@@ -101,7 +101,7 @@ val commonModule = module {
     viewModelOf(::SignInViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::TimelineViewModel)
-    viewModelOf(::TopicViewModel)
+    viewModelOf(::RaKuenViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::TrackingViewModel)
     viewModelOf(::MessageMainViewModel)
@@ -146,7 +146,6 @@ val commonModule = module {
 
     viewModel { (type: Int) ->
         TrackingPageViewModel(
-            stateHandle = get(),
             type = type,
             collectionRepository = get(),
             personalStateStore = get()
@@ -155,7 +154,6 @@ val commonModule = module {
 
     viewModel { (anchor: CommentDialogAnchor) ->
         CommentViewModel(
-            stateHandle = get(),
             ugcRepository = get(),
             choreRepository = get(),
             dialogAnchor = anchor
@@ -164,7 +162,6 @@ val commonModule = module {
 
     viewModel { (type: String) ->
         TopicPageViewModel(
-            savedStateHandle = get(),
             ugcRepository = get(),
             type = type
         )
@@ -172,7 +169,6 @@ val commonModule = module {
 
     viewModel { (param: ListTimelineParam) ->
         TimelineWebPageViewModel(
-            savedStateHandle = get(),
             ugcRepository = get(),
             param = param,
         )
@@ -180,7 +176,6 @@ val commonModule = module {
 
     viewModel { (param: ListTimelineParam) ->
         TimelinePageViewModel(
-            savedStateHandle = get(),
             ugcRepository = get(),
             param = param,
         )
@@ -188,7 +183,6 @@ val commonModule = module {
 
     viewModel { (param: ListSubjectParam) ->
         SubjectPageViewModel(
-            savedStateHandle = get(),
             subjectRepository = get(),
             param = param
         )
@@ -196,7 +190,6 @@ val commonModule = module {
 
     viewModel { (param: ListMonoParam) ->
         MonoPageViewModel(
-            savedStateHandle = get(),
             monoRepository = get(),
             param = param
         )
@@ -204,7 +197,6 @@ val commonModule = module {
 
     viewModel { (param: ListBlogParam) ->
         BlogPageViewModel(
-            savedStateHandle = get(),
             ugcRepository = get(),
             param = param
         )
@@ -219,7 +211,6 @@ val commonModule = module {
 
     viewModel { (target: IndexTarget) ->
         IndexDialogViewModel(
-            savedStateHandle = get(),
             indexRepository = get(),
             userManager = get(),
             target = target
@@ -228,7 +219,6 @@ val commonModule = module {
 
     viewModel { (param: ListUserParam) ->
         FriendViewModel(
-            savedStateHandle = get(),
             userRepository = get(),
             param = param
         )
@@ -236,7 +226,6 @@ val commonModule = module {
 
     viewModel { (param: ListGroupParam) ->
         GroupsPageViewModel(
-            savedStateHandle = get(),
             groupRepository = get(),
             param = param
         )
@@ -244,7 +233,6 @@ val commonModule = module {
 
     viewModel { (param: ListTopicParam) ->
         com.xiaoyv.bangumi.features.topic.page.business.TopicPageViewModel(
-            savedStateHandle = get(),
             param = param,
             topicRepository = get()
         )
@@ -252,7 +240,6 @@ val commonModule = module {
 
     viewModel { (param: ListAlbumParam) ->
         PreviewAlbumViewModel(
-            savedStateHandle = get(),
             param = param,
             imageRepository = get()
         )
@@ -266,7 +253,6 @@ val commonModule = module {
     }
     viewModel { (subjectId: Long) ->
         SubjectDetailChartViewModel(
-            savedStateHandle = get(),
             subjectRepository = get(),
             subjectId = subjectId
         )
@@ -274,7 +260,6 @@ val commonModule = module {
 
     viewModel { (param: ListTagParam) ->
         TagPageViewModel(
-            savedStateHandle = get(),
             subjectRepository = get(),
             param = param,
         )
@@ -283,7 +268,6 @@ val commonModule = module {
     viewModel { (param: ListIndexRelatedParam) ->
         IndexDetailPageViewModel(
             param = param,
-            savedStateHandle = get(),
             ugcRepository = get()
         )
     }

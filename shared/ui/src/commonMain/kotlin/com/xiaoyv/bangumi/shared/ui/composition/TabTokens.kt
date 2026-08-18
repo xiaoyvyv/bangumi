@@ -74,6 +74,8 @@ import com.xiaoyv.bangumi.core_resource.resources.search_sort_date
 import com.xiaoyv.bangumi.core_resource.resources.search_sort_date_create
 import com.xiaoyv.bangumi.core_resource.resources.search_sort_date_update
 import com.xiaoyv.bangumi.core_resource.resources.search_sort_relation
+import com.xiaoyv.bangumi.core_resource.resources.settings_bar_appearance_liquid_glass
+import com.xiaoyv.bangumi.core_resource.resources.settings_bar_appearance_material3
 import com.xiaoyv.bangumi.core_resource.resources.settings_indication_fade
 import com.xiaoyv.bangumi.core_resource.resources.settings_indication_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_indication_ripped
@@ -81,20 +83,9 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_slide
 import com.xiaoyv.bangumi.core_resource.resources.settings_proxy_none
-import com.xiaoyv.bangumi.core_resource.resources.settings_bar_appearance_liquid_glass
-import com.xiaoyv.bangumi.core_resource.resources.settings_bar_appearance_material3
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
-import com.xiaoyv.bangumi.core_resource.resources.timeline_blog
-import com.xiaoyv.bangumi.core_resource.resources.timeline_daily
-import com.xiaoyv.bangumi.core_resource.resources.timeline_index
-import com.xiaoyv.bangumi.core_resource.resources.timeline_mono
-import com.xiaoyv.bangumi.core_resource.resources.timeline_progress
-import com.xiaoyv.bangumi.core_resource.resources.timeline_status
-import com.xiaoyv.bangumi.core_resource.resources.timeline_subject
-import com.xiaoyv.bangumi.core_resource.resources.timeline_wiki
-import com.xiaoyv.bangumi.core_resource.resources.timeline_window
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_discover
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_hidden
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_pm
@@ -261,7 +252,7 @@ object TabTokens {
             label = Res.string.type_feature_subject_browser,
             icon = BgmIcons.Explore
         ),
-        Screen.Topic to ComposeVectorTab(
+        Screen.RaKuen to ComposeVectorTab(
             type = FeatureType.TYPE_RAKUEN,
             label = Res.string.type_feature_rakuen,
             icon = BgmIcons.Forum
@@ -403,7 +394,6 @@ object TabTokens {
     val settingBangumiHosts = persistentListOf(
         ComposeTextTab("https://bgm.tv/", labelText = "bgm.tv"),
         ComposeTextTab("https://bangumi.tv/", labelText = "bangumi.tv"),
-        ComposeTextTab("https://chii.in/", labelText = "chii.in"),
     )
 
     val settingBangumiProxyHosts = persistentListOf(

@@ -14,6 +14,9 @@ data class SplashState(
 ) {
     val progress: Float
         get() = if (nodes.isEmpty()) 0f else completedCount.toFloat() / nodes.size
+
+    val isResolving: Boolean
+        get() = !isComplete && nodes.any { it.status == DnsNodeStatus.Resolving }
 }
 
 @Immutable

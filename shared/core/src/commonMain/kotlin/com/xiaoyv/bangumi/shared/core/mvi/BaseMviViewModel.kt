@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.core.mvi
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import org.orbitmvi.orbit.OrbitContainer
@@ -9,7 +8,7 @@ import org.orbitmvi.orbit.SettingsBuilder
 import org.orbitmvi.orbit.orbitContainer
 import org.orbitmvi.orbit.syntax.Syntax
 
-abstract class BaseMviViewModel<STATE : Any, SIDE_EFFECT : Any, EVENT : Any>(val stateHandle: SavedStateHandle) :
+abstract class BaseMviViewModel<STATE : Any, SIDE_EFFECT : Any, EVENT : Any> :
     ViewModel(), OrbitContainerHost<STATE, STATE, SIDE_EFFECT> {
 
     override val container: OrbitContainer<STATE, STATE, SIDE_EFFECT> by lazy {

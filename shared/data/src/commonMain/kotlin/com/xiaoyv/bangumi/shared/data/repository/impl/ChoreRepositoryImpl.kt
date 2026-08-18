@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import com.xiaoyv.bangumi.shared.core.utils.isIpv4Address
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
+import com.xiaoyv.bangumi.shared.core.utils.isIpv4Address
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUploadImage
@@ -19,36 +19,46 @@ import io.github.vinceglb.filekit.write
 import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import kotlinx.io.buffered
-import kotlinx.serialization.decodeFromString
 
 class ChoreRepositoryImpl(private val client: BgmApiClient) : ChoreRepository {
     private var cacheTranslateToken = ""
 
-    override suspend fun fetchDns(hostname: String): Result<Pair<String, List<String>>> {
+    override suspend fun fetchDns(hostname: String): Result<Pair<String, List<String>>> = runResult {
         val normalizedHostname = hostname.trim().lowercase().removeSuffix(".")
-        return client.requestCloudflareDnsApi {
-            require(normalizedHostname.isNotBlank()) { "Hostname cannot be blank" }
-            val response = defaultJson.decodeFromString<CloudflareDnsResponse>(
-                fetchDns(normalizedHostname).bodyAsText()
-            )
-            require(response.status == 0) { "DNS query failed with status ${response.status}" }
+        require(normalizedHostname.isNotBlank()) { "Hostname cannot be blank" }
 
-            // 1: DNS_TYPE_A
-            val addresses = response.answers
-                .asSequence()
-                .filter { it.type == 1 }
-                .map { it.data.trim() }
-                .filter { it.isIpv4Address() }
-                .distinct()
-                .toList()
-            require(addresses.isNotEmpty()) { "No IPv4 address found for $normalizedHostname" }
-
-            normalizedHostname to addresses
+        val httpResponse = client.dnsHttpClient.get(CLOUDFLARE_DNS_ENDPOINT) {
+            parameter("name", normalizedHostname)
+            parameter("type", "A")
+            header(HttpHeaders.Accept, "application/dns-json")
         }
+        require(httpResponse.status.value in 200..299) {
+            "Cloudflare DNS returned HTTP ${httpResponse.status.value}"
+        }
+
+        val response = defaultJson.decodeFromString<CloudflareDnsResponse>(httpResponse.bodyAsText())
+        require(response.status == 0) { "DNS query failed with status ${response.status}" }
+
+        val addresses = response.answers
+            .asSequence()
+            .filter { it.type == 1 }
+            .map { it.data.trim() }
+            .filter { it.isIpv4Address() }
+            .distinct()
+            .toList()
+        require(addresses.isNotEmpty()) { "No IPv4 address found for $normalizedHostname" }
+        normalizedHostname to addresses
+    }
+
+    private companion object {
+        const val CLOUDFLARE_DNS_ENDPOINT = "https://cloudflare-dns.com/dns-query"
     }
 
     override suspend fun compressImageAndUpload(file: PlatformFile): Result<ComposeUploadImage> =

@@ -11,9 +11,9 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModelWithUiState
 import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.fromJson
@@ -40,7 +40,7 @@ interface CacheRepository {
     suspend fun <T : Any> write(key: Preferences.Key<T>, value: T)
 }
 
-inline fun <reified T : Any> BaseViewModel<T, *, *>.writeViewModelCache(
+inline fun <reified T : Any> BaseViewModelWithUiState<T, *, *, *>.writeViewModelCache(
     cacheRepository: CacheRepository,
     cacheKey: Preferences.Key<String>,
     crossinline saveCondition: (T) -> Boolean = { true },
@@ -54,7 +54,7 @@ inline fun <reified T : Any> BaseViewModel<T, *, *>.writeViewModelCache(
     }
 }
 
-inline fun <reified T : Any> BaseViewModel<T, *, *>.readViewModelCache(
+inline fun <reified T : Any> BaseViewModelWithUiState<T, *, *, *>.readViewModelCache(
     cacheRepository: CacheRepository,
     cacheKey: Preferences.Key<String>,
     loadWhenEmpty: Boolean = false,

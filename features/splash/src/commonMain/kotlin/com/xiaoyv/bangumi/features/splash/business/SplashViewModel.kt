@@ -1,12 +1,10 @@
 package com.xiaoyv.bangumi.features.splash.business
 
-import com.xiaoyv.bangumi.shared.core.mvi.postEffect
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import androidx.lifecycle.SavedStateHandle
-import org.orbitmvi.orbit.syntax.Syntax
-import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
@@ -17,23 +15,25 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withTimeoutOrNull
+import org.orbitmvi.orbit.syntax.Syntax
+import kotlin.time.Duration.Companion.milliseconds
 
 class SplashViewModel(
-    savedStateHandle: SavedStateHandle,
     private val choreRepository: ChoreRepository,
     private val userManager: UserManager,
-) : BaseViewModel<SplashState, SplashSideEffect, SplashEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SplashState, SplashSideEffect, SplashEvent.Action>() {
 
     override fun createInitialState(): SplashState {
         val configuredHosts = userManager.settings.network.hosts
         return SplashState(
-            nodes = ComposeSetting.NetworkConfig.DefaultHosts.keys.map { hostname ->
-                DnsNodeState(
-                    hostname = hostname,
-                    addresses = configuredHosts[hostname]
-                        ?: ComposeSetting.NetworkConfig.DefaultHosts.getValue(hostname),
-                )
-            }.toPersistentList()
+            nodes = ComposeSetting.NetworkConfig.DefaultHosts.keys
+                .map { hostname ->
+                    DnsNodeState(
+                        hostname = hostname,
+                        addresses = configuredHosts[hostname]
+                            ?: ComposeSetting.NetworkConfig.DefaultHosts.getValue(hostname),
+                    )
+                }.toPersistentList()
         )
     }
 
@@ -42,13 +42,18 @@ class SplashViewModel(
             SplashEvent.Action.OnLaunch -> intent {
                 if (state.data.isComplete) postEffect { SplashSideEffect.NavigateMain }
             }
+
+            SplashEvent.Action.OnRefresh -> intent {
+                if (!state.data.isResolving) refreshSync()
+            }
         }
     }
 
     override suspend fun Syntax<UiState<SplashState>, UiSideEffect<SplashSideEffect>>.refreshSync() {
-        val fallbackHosts = ComposeSetting.NetworkConfig.DefaultHosts.builder().apply {
-            putAll(userManager.settings.network.hosts)
-        }.build()
+        val fallbackHosts = ComposeSetting.NetworkConfig.DefaultHosts.builder()
+            .apply { putAll(userManager.settings.network.hosts) }
+            .build()
+
         val refreshedHosts = fallbackHosts.builder()
         var failedCount = 0
         val hostnames = ComposeSetting.NetworkConfig.DefaultHosts.keys.toList()
@@ -57,6 +62,9 @@ class SplashViewModel(
         reduceData {
             state.copy(
                 activeHostname = hostnames.firstOrNull().orEmpty(),
+                completedCount = 0,
+                failureCount = 0,
+                isComplete = false,
                 nodes = state.nodes.map { it.copy(status = DnsNodeStatus.Resolving) }.toPersistentList(),
             )
         }
@@ -67,7 +75,7 @@ class SplashViewModel(
             hostnames.forEach { hostname ->
                 launch {
                     val result = querySemaphore.withPermit {
-                        withTimeoutOrNull(DNS_QUERY_TIMEOUT_MILLIS) {
+                        withTimeoutOrNull(DNS_QUERY_TIMEOUT_MILLIS.milliseconds) {
                             choreRepository.fetchDns(hostname)
                         } ?: Result.failure(
                             IllegalStateException("DNS query timed out for $hostname")

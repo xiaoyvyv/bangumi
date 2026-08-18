@@ -18,8 +18,8 @@ import com.xiaoyv.bangumi.features.main.tab.home.calendarModule
 import com.xiaoyv.bangumi.features.main.tab.home.homeModule
 import com.xiaoyv.bangumi.features.main.tab.newest.newestModule
 import com.xiaoyv.bangumi.features.main.tab.profile.profileModule
+import com.xiaoyv.bangumi.features.main.tab.rakuen.raKuenModule
 import com.xiaoyv.bangumi.features.main.tab.timeline.timelineModule
-import com.xiaoyv.bangumi.features.main.tab.topic.topicModule
 import com.xiaoyv.bangumi.features.main.tab.tracking.trackingModule
 import com.xiaoyv.bangumi.features.message.chat.messageChatModule
 import com.xiaoyv.bangumi.features.message.messageMainModule
@@ -65,7 +65,7 @@ internal val navigationModule = module {
         mainModule,
         signInModule,
         timelineModule,
-        topicModule,
+        raKuenModule,
         trackingModule,
         profileModule,
         homeModule,

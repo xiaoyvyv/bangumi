@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.settings.bar.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
@@ -12,9 +11,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
  * @since 2025/1/12
  */
 class SettingsBarViewModel(
-    savedStateHandle: SavedStateHandle,
     private val userManager: UserManager,
-) : BaseViewModel<SettingsBarState, SettingsBarSideEffect, SettingsBarEvent.Action>(savedStateHandle) {
+) : BaseViewModel<SettingsBarState, SettingsBarSideEffect, SettingsBarEvent.Action>() {
 
     override fun createInitialState() = SettingsBarState()
 

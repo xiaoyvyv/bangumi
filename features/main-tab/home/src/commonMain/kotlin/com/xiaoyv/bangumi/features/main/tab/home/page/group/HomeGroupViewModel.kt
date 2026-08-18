@@ -1,19 +1,17 @@
 package com.xiaoyv.bangumi.features.main.tab.home.page.group
 
-import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import androidx.lifecycle.SavedStateHandle
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
-import org.orbitmvi.orbit.syntax.Syntax
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
+import org.orbitmvi.orbit.syntax.Syntax
 
 class HomeGroupViewModel(
-    stateHandle: SavedStateHandle,
     private val ugcRepository: UgcRepository,
-) : BaseViewModel<HomeGroupState, Any, Any>(stateHandle) {
+) : BaseViewModel<HomeGroupState, Any, Any>() {
     override fun initBaseState(): UiState<HomeGroupState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
     override fun createInitialState(): HomeGroupState {

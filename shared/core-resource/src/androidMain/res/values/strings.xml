@@ -664,6 +664,23 @@
     <string name="calendar_sunday">周日</string>
 
 
+    <!-- 启动页 -->
+    <string name="splash_title">番组计划</string>
+    <string name="splash_route_initializer">安全路由初始化</string>
+    <string name="splash_online">在线</string>
+    <string name="splash_route_sync">路由同步</string>
+    <string name="splash_status_safe_cache">已启用安全缓存</string>
+    <string name="splash_status_route_updated">路由表已更新</string>
+    <string name="splash_status_resolving">正在解析 %1$s</string>
+    <string name="splash_status_connecting">正在建立安全连接</string>
+    <string name="splash_enter_home">进入主页</string>
+    <string name="splash_node_queued">等待中</string>
+    <string name="splash_node_resolving">解析中</string>
+    <string name="splash_node_resolved">已解析</string>
+    <string name="splash_node_safe_cache">安全缓存</string>
+    <string name="splash_address_pending">等待解析地址</string>
+    <string name="splash_secure_dns_description">加密 DNS  /  TLS 记录分片</string>
+
     <!-- 各个枚举类型名称 -->
     <string name="type_unknown">未知</string>
     <string name="type_topic_ep">章节</string>

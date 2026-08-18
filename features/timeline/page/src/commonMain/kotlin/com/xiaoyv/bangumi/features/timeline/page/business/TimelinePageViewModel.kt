@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.timeline.page.business
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -23,10 +22,9 @@ fun koinTimelinePageViewModel(param: ListTimelineParam) = koinViewModel<Timeline
  * @since 2025/1/12
  */
 class TimelinePageViewModel(
-    savedStateHandle: SavedStateHandle,
     param: ListTimelineParam,
     ugcRepository: UgcRepository,
-) : BaseViewModel<TimelinePageState, TimelinePageSideEffect, TimelinePageEvent.Action>(savedStateHandle) {
+) : BaseViewModel<TimelinePageState, TimelinePageSideEffect, TimelinePageEvent.Action>() {
     private val timelinePager = ugcRepository.fetchTimelineDisplayPager(
         target = param.timlineMode,
         type = param.timelineCat,

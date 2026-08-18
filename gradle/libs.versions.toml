@@ -272,4 +272,3 @@ markdown = [
 googleKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinKtorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
-

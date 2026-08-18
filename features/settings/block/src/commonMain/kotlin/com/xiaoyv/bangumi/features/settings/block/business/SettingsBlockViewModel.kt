@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.settings.block.business
 
-import androidx.lifecycle.SavedStateHandle
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 
 /**
@@ -9,8 +8,8 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
  * @author why
  * @since 2025/1/12
  */
-class SettingsBlockViewModel(savedStateHandle: SavedStateHandle) :
-    BaseViewModel<SettingsBlockState, SettingsBlockSideEffect, SettingsBlockEvent>(savedStateHandle) {
+class SettingsBlockViewModel :
+    BaseViewModel<SettingsBlockState, SettingsBlockSideEffect, SettingsBlockEvent>() {
 
     override fun createInitialState() = SettingsBlockState()
 
