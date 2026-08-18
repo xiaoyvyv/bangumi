@@ -3,10 +3,8 @@ package com.xiaoyv.bangumi.features.timeline.page
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -17,13 +15,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.timeline_reply_cnt
-import com.xiaoyv.bangumi.shared.core.utils.formatAgo
-import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
-import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -37,7 +31,7 @@ internal fun TimelinePageItemBlog(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(contentPaddings),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             Text(
                 text = item.memo.blog.title,

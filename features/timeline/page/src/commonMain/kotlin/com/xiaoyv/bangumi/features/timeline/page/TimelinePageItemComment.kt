@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 
 @Composable
@@ -33,12 +31,12 @@ internal fun TimelinePageItemComment(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(contentPaddings),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             if (rate > 0) {
                 Row(
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     RatingBar(
                         value = rate,

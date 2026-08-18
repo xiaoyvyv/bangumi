@@ -1,12 +1,13 @@
 package com.xiaoyv.bangumi.shared.ui.component.image
 
 import androidx.annotation.IntRange
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,8 +45,7 @@ import com.xiaoyv.bangumi.shared.core.utils.KotlinThumbHash
 import com.xiaoyv.bangumi.shared.core.utils.noNull
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.io.encoding.Base64
@@ -117,13 +117,15 @@ fun StateImage(
     contentScale: ContentScale = ContentScale.Crop,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
+    border: BorderStroke? = null,
     filterQuality: FilterQuality = FilterQuality.High,
     clipToBounds: Boolean = true,
 ) {
     SubcomposeAsyncImage(
         modifier = modifier
-            .clip(shape)
             .fillMaxSize()
+            .clip(shape)
+            .let { if (border != null) it.border(border, shape) else it }
             .background(MaterialTheme.colorScheme.surfaceContainer),
         model = model,
         contentDescription = contentDescription,
@@ -182,7 +184,7 @@ fun InfoImage(
     model: Any?,
     text: String? = null,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
-    textPadding: Dp = contentMarginHalf,
+    textPadding: Dp = ContentMarginHalf,
     textMaxLines: Int = 1,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,

@@ -2,13 +2,15 @@ package com.xiaoyv.bangumi.features.main.tab.rakuen.business
 
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
+import com.xiaoyv.bangumi.core_resource.resources.global_character
 import com.xiaoyv.bangumi.core_resource.resources.global_episode
 import com.xiaoyv.bangumi.core_resource.resources.global_group
 import com.xiaoyv.bangumi.core_resource.resources.global_mono
+import com.xiaoyv.bangumi.core_resource.resources.global_person
 import com.xiaoyv.bangumi.core_resource.resources.global_subject
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
-import com.xiaoyv.bangumi.shared.core.types.RakuenTab
+import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 
@@ -23,12 +25,13 @@ class RaKuenViewModel :
 
     override fun createInitialState() = RaKuenState(
         tabs = persistentListOf(
-            ComposeTextTab(RakuenTab.ALL, Res.string.global_all),
-            ComposeTextTab(RakuenTab.GROUP, Res.string.global_group),
+            ComposeTextTab(RakuenType.ALL, Res.string.global_all),
+            ComposeTextTab(RakuenType.GROUP, Res.string.global_group),
 //            ComposeTextTab(RakuenType.TYPE_MY_GROUP, Res.string.global_group),
-            ComposeTextTab(RakuenTab.SUBJECT, Res.string.global_subject),
-            ComposeTextTab(RakuenTab.EP, Res.string.global_episode),
-            ComposeTextTab(RakuenTab.MONO, Res.string.global_mono),
+            ComposeTextTab(RakuenType.SUBJECT, Res.string.global_subject),
+            ComposeTextTab(RakuenType.EP, Res.string.global_episode),
+            ComposeTextTab(RakuenType.CHARACTER, Res.string.global_character),
+            ComposeTextTab(RakuenType.PERSON, Res.string.global_person),
         ),
         actions = persistentListOf(
 //            ComposeTextTab(TimelineTarget.WHOLE, Res.string.timeline_title),

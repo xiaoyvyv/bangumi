@@ -21,7 +21,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_back
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalHideNavIcon
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -74,7 +74,7 @@ fun BgmLargeTopAppBar(
         if (title != null) {
             val progress = scrollBehavior?.state?.collapsedFraction ?: 0f
             Text(
-                modifier = Modifier.padding(horizontal = (contentMargin - 16.dp) * (1 - progress)),
+                modifier = Modifier.padding(horizontal = (ContentMargin - 16.dp) * (1 - progress)),
                 text = title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

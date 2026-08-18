@@ -1,10 +1,10 @@
 package com.xiaoyv.bangumi.features.main.tab.rakuen.page
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.core.types.RakuenTab
+import com.xiaoyv.bangumi.shared.core.types.RakuenType
 
 @Immutable
 data class RaKuenPageState(
-    @field:RakuenTab
-    val type: String = RakuenTab.ALL,
+    @field:RakuenType
+    val type: String = RakuenType.ALL,
 )

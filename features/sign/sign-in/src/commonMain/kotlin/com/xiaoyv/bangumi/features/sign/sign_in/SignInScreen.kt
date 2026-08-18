@@ -86,7 +86,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -216,7 +216,7 @@ private fun SignInScreenContent(
                 .focusRequester(emailFocusRequester)
                 .fillMaxWidth()
                 .padding(top = 24.dp)
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
             value = state.email,
             onValueChange = { onActionEvent(SignInEvent.Action.OnEmailChange(it)) },
             singleLine = true,
@@ -229,7 +229,7 @@ private fun SignInScreenContent(
             modifier = Modifier
                 .semantics { contentDescription = "password" }
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
             value = state.password,
             onValueChange = { onActionEvent(SignInEvent.Action.OnPasswordChange(it)) },
             singleLine = true,
@@ -253,7 +253,7 @@ private fun SignInScreenContent(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
             value = state.code,
             onValueChange = { onActionEvent(SignInEvent.Action.OnCodeChange(it)) },
             singleLine = true,
@@ -308,14 +308,14 @@ private fun SignInScreenContent(
             Text(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = contentMargin)
+                    .padding(horizontal = ContentMargin)
                     .padding(top = 16.dp, bottom = 8.dp),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 text = stringResource(Res.string.login_no_account)
             )
 
-            Row(modifier = Modifier.padding(horizontal = contentMargin)) {
+            Row(modifier = Modifier.padding(horizontal = ContentMargin)) {
                 TextButton(
                     modifier = Modifier.offset(x = (-12).dp),
                     onClick = { onActionEvent(SignInEvent.Action.OnSignIn) }

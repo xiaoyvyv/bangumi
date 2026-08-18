@@ -36,11 +36,11 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.calendarWeekDays
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectLineItem
 import org.jetbrains.compose.resources.stringResource
@@ -162,7 +162,7 @@ private fun CalendarScreenPage(
             items(sections) {
                 SubjectLineItem(
                     modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
+                    contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
                     display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
                     onClick = { onUiEvent(CalendarEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) }
                 )

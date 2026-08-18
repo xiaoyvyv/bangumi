@@ -33,8 +33,8 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.subject_score_empty
 import com.xiaoyv.bangumi.core_resource.resources.subject_score_format
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.isMediumScreen
 import com.xiaoyv.bangumi.shared.ui.kts.isSmallScreen
 import org.jetbrains.compose.resources.stringResource
@@ -48,9 +48,9 @@ fun RatingBarChart(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
             when {
-                isSmallScreen -> contentMargin
-                isMediumScreen -> contentMargin * 2
-                else -> contentMargin * 4
+                isSmallScreen -> ContentMargin
+                isMediumScreen -> ContentMargin * 2
+                else -> ContentMargin * 4
             }
         ),
         verticalAlignment = Alignment.Bottom
@@ -82,14 +82,14 @@ fun RatingBarChart(
                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above, 4.dp),
                     tooltip = {
                         PlainTooltip(
-                            modifier = Modifier.padding(horizontal = contentMargin),
+                            modifier = Modifier.padding(horizontal = ContentMargin),
                             contentColor = MaterialTheme.colorScheme.onSurface,
                             containerColor = MaterialTheme.colorScheme.surfaceContainer,
                             shape = MaterialTheme.shapes.small,
                             shadowElevation = 1.dp
                         ) {
                             Text(
-                                modifier = Modifier.padding(contentMarginHalf),
+                                modifier = Modifier.padding(ContentMarginHalf),
                                 text = tipText,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant

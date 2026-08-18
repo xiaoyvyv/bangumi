@@ -35,7 +35,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.shared.core.utils.currentYear
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -172,7 +172,7 @@ fun MonthPicker(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(wheelHeight),
-                horizontalArrangement = Arrangement.spacedBy(contentMargin),
+                horizontalArrangement = Arrangement.spacedBy(ContentMargin),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 WheelPicker(

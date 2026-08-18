@@ -31,8 +31,8 @@ import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import kotlinx.coroutines.launch
@@ -51,15 +51,15 @@ fun UserBioScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = contentMarginHalf)
+            .padding(vertical = ContentMarginHalf)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(contentMargin)
+        verticalArrangement = Arrangement.spacedBy(ContentMargin)
     ) {
         if (state.user.networkServices.isNotEmpty()) {
             SectionTitle(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = contentMargin, vertical = contentMarginHalf),
+                    .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
                 text = stringResource(Res.string.profile_network_service),
                 showMore = false
             )
@@ -67,9 +67,9 @@ fun UserBioScreen(
             FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = contentMargin),
-                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    .padding(horizontal = ContentMargin),
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 val actionHandler = LocalActionHandler.current
                 val clipboard = LocalClipboard.current
@@ -109,7 +109,7 @@ fun UserBioScreen(
         BgmLinkedText(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentMargin),
+                .padding(ContentMargin),
             text = summary
         )
     }

@@ -68,8 +68,8 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import org.koin.compose.viewmodel.koinViewModel
@@ -152,8 +152,8 @@ private fun SubjectDetailChartContent(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         state = rememberCacheWindowLazyListState(),
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
-        contentPadding = PaddingValues(vertical = contentMargin)
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+        contentPadding = PaddingValues(vertical = ContentMargin)
     ) {
         item(key = "1", contentType = CONTENT_CHART_ITEM) {
             SubjectDetailChartContentItem(
@@ -204,18 +204,18 @@ private fun SubjectDetailChartContentItem(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(contentMargin)
+        verticalArrangement = Arrangement.spacedBy(ContentMargin)
     ) {
         SectionTitle(
             text = stats.title,
-            modifier = Modifier.padding(horizontal = contentMargin),
+            modifier = Modifier.padding(horizontal = ContentMargin),
             subtitle = stats.desc,
             showMore = false
         )
 
         if (gridState.isNotEmpty()) {
             SubjectDetailGridInfo(
-                modifier = Modifier.padding(horizontal = contentMargin),
+                modifier = Modifier.padding(horizontal = ContentMargin),
                 gridState = gridState
             )
         }
@@ -224,7 +224,7 @@ private fun SubjectDetailChartContentItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
             stats = stats,
         )
     }
@@ -266,8 +266,8 @@ private fun SubjectDetailGridInfo(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(contentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                        .padding(ContentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     Text(
                         text = it.title,
@@ -325,7 +325,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
         Text(
             buildAnnotatedString {
@@ -353,7 +353,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
                             rememberLineComponent(fill = Fill(color), thickness = 16.dp)
                         }
                     ),
-                    columnCollectionSpacing = contentMarginHalf,
+                    columnCollectionSpacing = ContentMarginHalf,
                     mergeMode = { ColumnCartesianLayer.MergeMode.Stacked },
                 ),
                 startAxis = VerticalAxis.rememberStart(),
@@ -376,7 +376,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
             stats.seriesSet.onEachIndexed { index, entry ->
                 Column(
                     modifier = Modifier
-                        .padding(contentMarginHalf)
+                        .padding(ContentMarginHalf)
                         .clickWithoutRipped {
                             if (showSeriesKeys.contains(entry.value)) {
                                 showSeriesKeys.remove(entry.value)
@@ -384,7 +384,7 @@ private fun ComposeMultiplatformDailyDigitalMediaUse(
                                 showSeriesKeys.add(entry.value)
                             }
                         },
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(

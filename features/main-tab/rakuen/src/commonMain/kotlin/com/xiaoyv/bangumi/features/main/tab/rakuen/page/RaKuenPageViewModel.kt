@@ -6,26 +6,26 @@ import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenEvent
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.types.RakuenTab
+import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun koinTopicPageViewModel(
-    @RakuenTab type: String,
-): TopicPageViewModel {
-    return koinViewModel<TopicPageViewModel>(
+fun koinRaKuenPageViewModel(
+    @RakuenType type: String,
+): RaKuenPageViewModel {
+    return koinViewModel<RaKuenPageViewModel>(
         key = type,
         parameters = { parametersOf(type) }
     )
 }
 
-class TopicPageViewModel(
+class RaKuenPageViewModel(
     ugcRepository: UgcRepository,
-    @field:RakuenTab private val type: String,
+    @field:RakuenType private val type: String,
 ) : BaseViewModel<RaKuenPageState, RaKuenSideEffect, RaKuenEvent>() {
-    private val topicPager = ugcRepository.fetchTopicPager(type = type)
+    private val topicPager = ugcRepository.fetchRaKuenPager(type = type)
 
     internal val topicFlow = topicPager.flow.cachedIn(viewModelScope)
 

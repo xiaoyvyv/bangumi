@@ -22,11 +22,11 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.TAB_GROUP_HOMEPAGE
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeGroupFilters
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.group.GroupPageItem
 import com.xiaoyv.bangumi.shared.ui.view.topic.TopicPageItem
 import org.jetbrains.compose.resources.stringResource
@@ -103,7 +103,7 @@ private fun HomeGroupHotScreenContent(
             SectionTitle(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(horizontal = contentMargin, vertical = contentMarginHalf),
+                    .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
                 text = stringResource(Res.string.group_hot),
                 showMore = false
             )
@@ -120,7 +120,7 @@ private fun HomeGroupHotScreenContent(
             SectionTitle(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(horizontal = contentMargin, vertical = contentMarginHalf),
+                    .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
                 text = stringResource(Res.string.group_newest),
                 showMore = false
             )
@@ -137,7 +137,7 @@ private fun HomeGroupHotScreenContent(
             SectionTitle(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(horizontal = contentMargin, vertical = contentMarginHalf),
+                    .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
                 text = stringResource(Res.string.group_newest_topic),
                 showMore = false
             )

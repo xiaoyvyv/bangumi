@@ -52,11 +52,11 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -153,13 +153,13 @@ private fun DollarsScreenContent(
         Row(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                .padding(contentMarginHalf)
+                .padding(ContentMarginHalf)
                 .background(MaterialTheme.colorScheme.surfaceBright, MaterialTheme.shapes.small),
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         ) {
             BmgTextField(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(contentMarginHalf),
+                contentPadding = PaddingValues(ContentMarginHalf),
                 value = state.value,
                 onValueChange = { onActionEvent(DollarsEvent.Action.OnValueChange(it)) },
                 shape = MaterialTheme.shapes.small,
@@ -180,7 +180,7 @@ private fun DollarsScreenContent(
             Button(
                 modifier = Modifier
                     .align(Alignment.Bottom)
-                    .padding(bottom = contentMarginHalf, end = contentMarginHalf)
+                    .padding(bottom = ContentMarginHalf, end = ContentMarginHalf)
                     .resetSize(),
                 enabled = state.value.text.isNotBlank() && state.sending != LoadingState.Loading,
                 onClick = { onActionEvent(DollarsEvent.Action.OnSendMessage) },
@@ -217,7 +217,7 @@ private fun DollarsScreenContentItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(contentMargin),
+            .padding(ContentMargin),
         horizontalArrangement = Arrangement.spacedBy(12.dp, if (isSelf) Alignment.End else Alignment.Start)
     ) {
         if (isSelf) {
@@ -244,7 +244,7 @@ private fun DollarsScreenContentItem(
             )
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 Text(
                     text = item.nickname,

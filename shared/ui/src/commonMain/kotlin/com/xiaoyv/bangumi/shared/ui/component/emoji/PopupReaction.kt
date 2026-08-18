@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.xiaoyv.bangumi.shared.core.utils.bgmReactionKey
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.imageResource
 
 @Composable
@@ -53,9 +53,9 @@ fun PopupReaction(
         properties = properties,
     ) {
         FlowRow(
-            modifier = Modifier.padding(horizontal = contentMarginHalf),
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            modifier = Modifier.padding(horizontal = ContentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             itemVerticalAlignment = Alignment.CenterVertically,
             maxItemsInEachRow = 4,
         ) {

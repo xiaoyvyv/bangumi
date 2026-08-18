@@ -48,14 +48,14 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.text.textFieldTransparentColors
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.magnet.MikanMagnetItem
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -147,7 +147,7 @@ private fun GardenScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
-            contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
+            contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
             colors = textFieldTransparentColors().copy(
                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -169,7 +169,7 @@ private fun GardenScreenContent(
             autoFocus = true,
             trailingIcon = {
                 IconButton(
-                    modifier = Modifier.padding(end = contentMarginHalf),
+                    modifier = Modifier.padding(end = ContentMarginHalf),
                     onClick = {
                         keyboardController?.hide()
                         onActionEvent(GardenEvent.Action.OnSearch)
@@ -189,8 +189,8 @@ private fun GardenScreenContent(
                 .background(MaterialTheme.colorScheme.surface)
                 .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 12.dp)
-                .padding(bottom = contentMarginHalf, top = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+                .padding(bottom = ContentMarginHalf, top = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             DropMenuChip(
                 options = TabTokens.magnetGardenTypes,
@@ -225,7 +225,7 @@ private fun GardenScreenContent(
                 .fillMaxWidth()
                 .weight(1f),
             pagingItems = pagingItems,
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = contentMarginHalf),
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = ContentMarginHalf),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) { item, index ->
             MikanMagnetItem(

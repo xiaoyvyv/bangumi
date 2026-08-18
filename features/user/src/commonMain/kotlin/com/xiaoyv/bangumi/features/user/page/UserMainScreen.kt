@@ -37,8 +37,8 @@ import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 
@@ -57,7 +57,7 @@ fun UserMainScreen(
         state = rememberCacheWindowLazyGridState(),
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 40.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         items(
             items = state.timeMachine,
@@ -87,7 +87,7 @@ private fun UserMainScreenSection(
         SectionTitle(
             modifier = Modifier
                 .ignoreLazyGridContentPadding(12.dp)
-                .padding(horizontal = contentMargin, vertical = contentMargin),
+                .padding(horizontal = ContentMargin, vertical = ContentMargin),
             text = item.header.title,
             subtitle = item.header.subtitle,
             action = item.header.more,
@@ -97,7 +97,7 @@ private fun UserMainScreenSection(
             }
         )
     } else {
-        Column(verticalArrangement = Arrangement.spacedBy(contentMarginHalf)) {
+        Column(verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)) {
             Box {
                 StateImage(
                     modifier = Modifier

@@ -29,12 +29,10 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.navigation.PagerNavHost
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.current
-import com.xiaoyv.bangumi.shared.ui.component.navigation.goBack
 import com.xiaoyv.bangumi.shared.ui.component.navigation.moveTop
-import com.xiaoyv.bangumi.shared.ui.component.navigation.navigate
 import com.xiaoyv.bangumi.shared.ui.component.navigation.stateConfiguration
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
 import com.xiaoyv.bangumi.shared.ui.kts.isWideScreen
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -73,7 +71,7 @@ fun MainScreen(
     }
     val backStack = rememberNavBackStack(stateConfiguration, startDestination.first)
     val isWideScreen = isWideScreen
-    val navigationContentMargin = contentMargin
+    val navigationContentMargin = ContentMargin
     val indicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
     val bottomNavItemColors = NavigationSuiteDefaults.itemColors(
         navigationBarItemColors = NavigationBarItemDefaults.colors(

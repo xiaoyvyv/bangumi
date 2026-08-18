@@ -74,8 +74,8 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -259,10 +259,10 @@ private fun MonoDetailScreenHeader(
             StateImage(
                 modifier = Modifier
                     .padding(
-                        top = contentMarginHalf,
-                        bottom = contentMargin,
-                        start = contentMargin,
-                        end = contentMarginHalf
+                        top = ContentMarginHalf,
+                        bottom = ContentMargin,
+                        start = ContentMargin,
+                        end = ContentMarginHalf
                     )
                     .fillMaxHeight()
                     .aspectRatio(3 / 4f)
@@ -278,12 +278,12 @@ private fun MonoDetailScreenHeader(
                     .weight(1f)
                     .fillMaxHeight()
                     .padding(
-                        top = contentMarginHalf,
-                        bottom = contentMargin,
-                        start = contentMarginHalf,
-                        end = contentMargin
+                        top = ContentMarginHalf,
+                        bottom = ContentMargin,
+                        start = ContentMarginHalf,
+                        end = ContentMargin
                     ),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 Text(
                     text = state.mono.displayName,

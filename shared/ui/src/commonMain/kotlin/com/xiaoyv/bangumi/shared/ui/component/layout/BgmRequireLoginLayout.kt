@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_login
 import com.xiaoyv.bangumi.core_resource.resources.login_first
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -25,7 +25,7 @@ fun BgmRequireLoginLayout(
     if (isLogin) content() else {
         Column(
             modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(contentMargin, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(ContentMargin, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = stringResource(Res.string.login_first))

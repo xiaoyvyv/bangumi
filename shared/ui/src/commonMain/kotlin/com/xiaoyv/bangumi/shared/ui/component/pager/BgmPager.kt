@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,8 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.MinTabWidth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -82,6 +82,7 @@ fun <Key : Any> BgmTabHorizontalPager(
         initialPage = initialPage.coerceAtLeast(0),
         pageCount = { tabs.size }
     ),
+    minTabWidth: Dp = MinTabWidth,
     divider: @Composable () -> Unit = @Composable { BgmHorizontalDivider() },
     pageContent: @Composable (page: Int) -> Unit,
 ) {
@@ -98,6 +99,7 @@ fun <Key : Any> BgmTabHorizontalPager(
                 selectedTabIndex = currentPage,
                 edgePadding = edgePadding,
                 divider = {},
+                minTabWidth = minTabWidth,
                 indicator = {
                     val indicatorHeight = 4.dp
                     val currentPage by remember { derivedStateOf { pagerState.currentPage } }
@@ -153,7 +155,6 @@ fun <Key : Any> BgmTabHorizontalPager(
                 tabs = {
                     tabs.forEachIndexed { index, tab ->
                         val text = tab.displayText()
-
                         Tab(
                             modifier = Modifier.semantics { contentDescription = text },
                             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -239,9 +240,9 @@ fun <Key : Any> BgmChipHorizontalPager(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(vertical = contentMarginHalf, horizontal = 12.dp),
+                .padding(vertical = ContentMarginHalf, horizontal = 12.dp),
             state = listState,
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             itemsIndexed(tabs) { index, tab ->
                 FilterChip(

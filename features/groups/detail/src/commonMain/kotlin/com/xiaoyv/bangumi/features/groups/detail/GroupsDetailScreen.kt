@@ -62,12 +62,12 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -198,7 +198,7 @@ private fun GroupsDetailScreenHeader(
         ListItem(
             modifier = Modifier
                 .padding(padding)
-                .padding(vertical = contentMarginHalf),
+                .padding(vertical = ContentMarginHalf),
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
                 headlineColor = imageColorState.contentColor,
@@ -222,7 +222,7 @@ private fun GroupsDetailScreenHeader(
             supportingContent = {
                 Column {
                     Text(
-                        modifier = Modifier.padding(vertical = contentMarginHalf),
+                        modifier = Modifier.padding(vertical = ContentMarginHalf),
                         text = buildString {
                             append(state.group.members)
                             append(" 位成员")
@@ -333,7 +333,7 @@ private fun GroupsDetailScreenSummary(
         }
 
         BgmLinkedText(
-            modifier = Modifier.padding(contentMargin),
+            modifier = Modifier.padding(ContentMargin),
             text = text,
             textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface)
         )

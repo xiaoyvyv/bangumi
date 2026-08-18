@@ -25,8 +25,8 @@ import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.view.tag.TagItem
 
@@ -46,7 +46,7 @@ fun MonoLineItemPerson(
     ) {
         InfoImage(
             modifier = Modifier
-                .padding(contentMargin)
+                .padding(ContentMargin)
                 .width(100.dp),
             model = item.mono.images.displayMediumImage,
             onClick = { onClick(item.mono.id, MonoType.PERSON) }
@@ -54,9 +54,9 @@ fun MonoLineItemPerson(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = contentMargin)
-                .padding(end = contentMargin),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                .padding(vertical = ContentMargin)
+                .padding(end = ContentMargin),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             Text(
                 text = buildAnnotatedString {
@@ -92,8 +92,8 @@ fun MonoLineItemPerson(
                 // 信息
                 item.mono.infobox.isNotEmpty() -> FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                 ) {
                     item.mono.infobox.forEach { info ->
                         TagItem(tag = remember(info.key) { info.displayInfo })
@@ -113,8 +113,8 @@ fun MonoLineItemPerson(
             if (item.positions.isNotEmpty()) {
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                 ) {
                     item.positions.forEach {
                         Text(
@@ -148,7 +148,7 @@ fun MonoCardItemPerson(
             onClick = { onClick(item.mono.id, MonoType.PERSON) }
         )
 
-        Spacer(modifier = Modifier.height(contentMarginHalf))
+        Spacer(modifier = Modifier.height(ContentMarginHalf))
 
         Text(
             text = item.mono.displayName,

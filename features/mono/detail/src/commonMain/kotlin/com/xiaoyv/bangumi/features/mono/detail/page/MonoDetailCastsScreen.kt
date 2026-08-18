@@ -37,8 +37,8 @@ import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -121,12 +121,12 @@ private fun MonoCharacterCastItem(
         modifier = Modifier
             .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id))) }
             .fillMaxWidth()
-            .padding(contentMargin),
-        horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            .padding(ContentMargin),
+        horizontalArrangement = Arrangement.spacedBy(ContentMargin)
     ) {
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             // 角色出演
             InfoImage(
@@ -139,7 +139,7 @@ private fun MonoCharacterCastItem(
                 }
             )
 
-            Column(Modifier.weight(1f), Arrangement.spacedBy(contentMarginHalf)) {
+            Column(Modifier.weight(1f), Arrangement.spacedBy(ContentMarginHalf)) {
                 Text(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -161,14 +161,14 @@ private fun MonoCharacterCastItem(
 
         if (item.characterCasts.isNotEmpty()) Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(contentMargin)
+            verticalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             // 角色出演对应的CV
             item.characterCasts.forEach { cast ->
-                Row(horizontalArrangement = Arrangement.spacedBy(contentMargin)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(ContentMargin)) {
                     Column(
                         modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(
@@ -207,12 +207,12 @@ private fun MonoPersonCastItem(
         modifier = Modifier
             .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.MonoDetail(item.mono.id, MonoType.CHARACTER))) }
             .fillMaxWidth()
-            .padding(contentMargin),
-        horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            .padding(ContentMargin),
+        horizontalArrangement = Arrangement.spacedBy(ContentMargin)
     ) {
         Row(
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             // 人物出演
             InfoImage(
@@ -244,14 +244,14 @@ private fun MonoPersonCastItem(
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(contentMargin)
+            verticalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             // 人物出演对应的条目
             item.relations.forEach {
-                Row(horizontalArrangement = Arrangement.spacedBy(contentMargin)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(ContentMargin)) {
                     Column(
                         modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(

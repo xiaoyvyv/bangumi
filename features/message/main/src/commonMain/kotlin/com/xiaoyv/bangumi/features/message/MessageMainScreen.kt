@@ -51,8 +51,8 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
@@ -225,7 +225,7 @@ private fun MessageMainScreenPage(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onActionEvent(MessageMainEvent.Action.OnDeleteMessage(type)) }
-                .padding(contentMargin),
+                .padding(ContentMargin),
             text = stringResource(Res.string.global_delete),
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.error,
@@ -281,7 +281,7 @@ private fun MessageMainScreenPageItem(
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
@@ -298,7 +298,7 @@ private fun MessageMainScreenPageItem(
         headlineContent = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(

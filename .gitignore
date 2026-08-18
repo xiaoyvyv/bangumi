@@ -30,3 +30,4 @@ captures
 /DefaultApi.kt
 /actions-runner/
 /internal/SniShaper/
+/internal/bgm-ktor-client/

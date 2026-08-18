@@ -2,16 +2,17 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
+import com.xiaoyv.bangumi.shared.core.types.RakuenType
+import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
-import com.xiaoyv.bangumi.shared.core.types.TimelineCat
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
@@ -23,16 +24,16 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry.Companion.optImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroupHomepage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeWebTimeline
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeWebTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.BlogParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.GroupParser
@@ -45,6 +46,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetL
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
 import io.ktor.client.statement.bodyAsText
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.json.jsonObject
 
 class UgcRepositoryImpl(
@@ -139,17 +141,69 @@ class UgcRepositoryImpl(
     }
 
 
-    override fun fetchTopicPager(type: String, filter: String?): Pager<Int, ComposeTopic> {
+    override fun fetchRaKuenPager(@RakuenType type: String, filter: String?): Pager<Int, ComposeRakuenTopic> {
         return createNetworkPageLimitPagingPager(
             pagingConfig = pagingConfig,
             onlyOnePage = true,
-            keySelector = { it.id },
+            keySelector = { it.key },
             onLoadData = {
-                with(topicParser) {
-                    client.bgmWebApi
-                        .fetchRakuenTopic(type = type, filter = filter)
-                        .fetchRakuenTopicConverted()
-                }
+                client.requestNextTopicApi {
+                    val rakuenTopics = getRakuenTopicList(type, 200).result
+
+                    val groupTopicIds = rakuenTopics
+                        .filter { item -> item.type == RakuenType.GROUP || item.type == RakuenType.MY_GROUP }
+                        .map { it.id }
+
+                    val maxGroupTopicId = groupTopicIds.maxOrNull()
+                    val newGroupTopicIds = groupTopicIds.sortedDescending().take(5)
+
+                    val subjectTopicIds = rakuenTopics
+                        .filter { item -> item.type == RakuenType.SUBJECT }
+                        .map { it.id }
+
+                    val maxSubjectTopicId = subjectTopicIds.maxOrNull()
+                    val newSubjectTopicIds = subjectTopicIds.sortedDescending().take(5)
+
+                    rakuenTopics.map { item ->
+                        val flags = mutableListOf<String>()
+
+                        val id = item.id
+
+                        // 小组话题：坟贴、新帖、火标记
+                        if ((item.type == RakuenType.GROUP || item.type == RakuenType.MY_GROUP) && maxGroupTopicId != null) {
+                            if (id < maxGroupTopicId - 10000) {
+                                flags.add(RakuenFlagType.TYPE_OLDEST)
+                            } else if (id < maxGroupTopicId - 4000) {
+                                flags.add(RakuenFlagType.TYPE_OLD)
+                            }
+
+                            if (newGroupTopicIds.contains(id)) {
+                                flags.add(RakuenFlagType.TYPE_NEW)
+                            }
+                            if (item.replyCount >= 100) {
+                                flags.add(RakuenFlagType.TYPE_HOT)
+                            }
+                        }
+
+                        // 条目话题：坟贴、新帖、火标记
+                        if (item.type == RakuenType.SUBJECT && maxSubjectTopicId != null) {
+                            if (id < maxSubjectTopicId - 5000) {
+                                flags.add(RakuenFlagType.TYPE_OLDEST)
+                            } else if (id < maxSubjectTopicId - 1000) {
+                                flags.add(RakuenFlagType.TYPE_OLD)
+                            }
+
+                            if (newSubjectTopicIds.contains(id)) {
+                                flags.add(RakuenFlagType.TYPE_NEW)
+                            }
+                            if (item.replyCount >= 50) {
+                                flags.add(RakuenFlagType.TYPE_HOT)
+                            }
+                        }
+
+                        item.copy(flags = flags.toPersistentList())
+                    }
+                }.getOrThrow()
             }
         )
     }

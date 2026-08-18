@@ -76,7 +76,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingSeekBar
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.text.textFieldTransparentColors
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
@@ -136,8 +136,8 @@ fun SubjectCollectionDialogContent(
             .fillMaxWidth()
             .verticalScroll(scrollState,overscrollEffect = null)
             .windowInsetsPadding(WindowInsets.safeContent.only(WindowInsetsSides.Bottom))
-            .padding(contentMargin),
-        verticalArrangement = Arrangement.spacedBy(contentMargin),
+            .padding(ContentMargin),
+        verticalArrangement = Arrangement.spacedBy(ContentMargin),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -165,7 +165,7 @@ fun SubjectCollectionDialogContent(
                 .fillMaxWidth()
                 .animateContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(contentMargin),
+            verticalArrangement = Arrangement.spacedBy(ContentMargin),
         ) {
             // 评分组件
             if (type != CollectionType.WISH && type != CollectionType.UNKNOWN) {
@@ -283,8 +283,8 @@ fun SubjectCollectionDialogContent(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(bottom = contentMargin),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+                .padding(bottom = ContentMargin),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             OutlinedButton(
                 modifier = Modifier.weight(1f),

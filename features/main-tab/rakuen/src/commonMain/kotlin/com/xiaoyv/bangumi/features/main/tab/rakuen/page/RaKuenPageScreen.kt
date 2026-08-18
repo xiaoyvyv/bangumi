@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenEvent
-import com.xiaoyv.bangumi.shared.core.types.RakuenTab
+import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
@@ -15,14 +15,15 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import com.xiaoyv.bangumi.shared.ui.view.rakuen.RakuenPageItem
 import com.xiaoyv.bangumi.shared.ui.view.topic.TopicPageItem
 
 private const val CONTENT_TYPE_RAKUEN = "CONTENT_TYPE_RAKUEN"
 
 @Composable
 fun RaKuenPageScreen(
-    @RakuenTab type: String,
-    viewModel: TopicPageViewModel = koinTopicPageViewModel(type),
+    @RakuenType type: String,
+    viewModel: RaKuenPageViewModel = koinRaKuenPageViewModel(type),
     onUiEvent: (RaKuenEvent.UI) -> Unit,
     onActionEvent: (RaKuenEvent.Action) -> Unit,
 ) {
@@ -30,13 +31,14 @@ fun RaKuenPageScreen(
         modifier = Modifier.fillMaxSize(),
         pagingItems = viewModel.topicFlow.collectAsLazyPagingItems(),
         showScrollUpBtn = true,
-        key = { item, _ -> item.id },
+        key = { item, _ -> item.key },
         contentType = { CONTENT_TYPE_RAKUEN }
     ) { item, _ ->
-        TopicPageItem(
+        RakuenPageItem(
             modifier = Modifier.fillMaxWidth(),
             item = item,
-            onClick = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType))) },
+            showCategory = type == RakuenType.ALL,
+            onClick = { /*onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType)))*/ },
             onClickUser = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.UserDetail(it.username))) },
             onClickSubject = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
             onClickMono = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, it.type))) },
@@ -54,9 +56,7 @@ fun PreviewRaKuenPageItem() {
         TopicPageItem(
             modifier = Modifier.fillMaxWidth(),
             item = ComposeTopic(
-                creator = ComposeUser(
-                    nickname = "小夜",
-                ),
+                creator = ComposeUser(nickname = "小夜"),
                 replyCount = 100,
                 title = "葬送的芙莉莲",
                 topicType = TopicDetailType.TYPE_GROUP

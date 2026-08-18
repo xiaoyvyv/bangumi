@@ -90,8 +90,8 @@ import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalHalfBlackToTransparent
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.isMediumScreen
@@ -227,7 +227,7 @@ private fun SubjectDetailCollection(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_collection),
         action = if (state.subject.interest.type == CollectionType.UNKNOWN) null else stringResource(Res.string.subject_action_deleted),
         onActionClick = { deleteConfirmDialogState.show() }
@@ -235,8 +235,8 @@ private fun SubjectDetailCollection(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin),
-            verticalArrangement = Arrangement.spacedBy(contentMargin)
+                .padding(horizontal = ContentMargin),
+            verticalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             val sharedState = LocalSharedState.current
 
@@ -274,7 +274,7 @@ private fun SubjectDetailEpisode(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin)
+            .padding(vertical = ContentMargin)
             .animateContentSize(),
         title = stringResource(Res.string.global_episode),
         onActionClick = {}
@@ -292,7 +292,7 @@ private fun SubjectDetailEpisode(
                     SubjectTrackingBar(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = contentMargin),
+                            .padding(horizontal = ContentMargin),
                         status = subject.interest.epStatus,
                         total = subject.eps,
                         button = buildString {
@@ -323,7 +323,7 @@ private fun SubjectDetailEpisode(
                     SubjectTrackingBar(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = contentMargin),
+                            .padding(horizontal = ContentMargin),
                         status = subject.interest.epStatus,
                         total = subject.eps,
                         button = buildString {
@@ -356,7 +356,7 @@ private fun SubjectDetailEpisode(
                     SubjectTrackingBar(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = contentMargin),
+                            .padding(horizontal = ContentMargin),
                         status = subject.interest.volStatus,
                         total = subject.volumes,
                         button = buildString {
@@ -411,7 +411,7 @@ private fun SubjectDetailSummary(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_summary),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.summary))) }
@@ -419,7 +419,7 @@ private fun SubjectDetailSummary(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin)
+                .padding(horizontal = ContentMargin)
                 .clickWithoutRipped { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.summary))) },
             text = state.subject.summary.ifBlank { stringResource(Res.string.global_no_summary) },
             style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 28.sp),
@@ -440,14 +440,14 @@ private fun SubjectDetailTag(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_tag),
         onActionClick = {}
     ) {
         SubjectTagColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
             subject = state.subject,
             onClick = {
                 onUiEvent(
@@ -475,7 +475,7 @@ private fun SubjectDetailPreview(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_preview),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnSelectedPageType(SubjectDetailTab.INDEX)) }
@@ -484,8 +484,8 @@ private fun SubjectDetailPreview(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
-            contentPadding = PaddingValues(horizontal = contentMargin),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            contentPadding = PaddingValues(horizontal = ContentMargin),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             itemsIndexed(state.photo.photos) { index, item ->
                 StateImage(
@@ -520,7 +520,7 @@ private fun SubjectDetailParade(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_parade),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = {
@@ -533,8 +533,8 @@ private fun SubjectDetailParade(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
-            contentPadding = PaddingValues(horizontal = contentMargin),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            contentPadding = PaddingValues(horizontal = ContentMargin),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             items(photos) { item ->
                 Box(
@@ -553,8 +553,8 @@ private fun SubjectDetailParade(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BrushVerticalHalfBlackToTransparent)
-                            .padding(horizontal = contentMarginHalf)
-                            .padding(top = contentMarginHalf, bottom = contentMarginHalf * 2),
+                            .padding(horizontal = ContentMarginHalf)
+                            .padding(top = ContentMarginHalf, bottom = ContentMarginHalf * 2),
                         text = item.displayEp,
                         textAlign = TextAlign.End,
                         color = Color.White,
@@ -567,8 +567,8 @@ private fun SubjectDetailParade(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BrushVerticalTransparentToHalfBlack)
-                            .padding(horizontal = contentMarginHalf)
-                            .padding(bottom = contentMarginHalf, top = contentMarginHalf * 2)
+                            .padding(horizontal = ContentMarginHalf)
+                            .padding(bottom = ContentMarginHalf, top = ContentMarginHalf * 2)
                             .align(Alignment.BottomCenter),
                         text = item.cn.orEmpty().ifBlank { item.name.orEmpty() },
                         color = Color.White,
@@ -591,7 +591,7 @@ private fun SubjectDetailInfo(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_detail),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.webInfo.info))) }
@@ -599,7 +599,7 @@ private fun SubjectDetailInfo(
         BgmLinkedText(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin)
+                .padding(horizontal = ContentMargin)
                 .clickWithoutRipped { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.webInfo.info))) },
             text = state.subject.webInfo.shortInfo,
             maxLines = 10,
@@ -617,7 +617,7 @@ private fun SubjectDetailScore(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_score),
         action = stringResource(Res.string.subject_action_score),
         onActionClick = {
@@ -628,19 +628,19 @@ private fun SubjectDetailScore(
         if (standardDeviation > 0) {
             val tooltipState = rememberTooltipState(isPersistent = true)
             TooltipBox(
-                modifier = Modifier.padding(horizontal = contentMargin),
+                modifier = Modifier.padding(horizontal = ContentMargin),
                 state = tooltipState,
                 positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Below, 4.dp),
                 tooltip = {
                     PlainTooltip(
-                        modifier = Modifier.padding(horizontal = contentMargin),
+                        modifier = Modifier.padding(horizontal = ContentMargin),
                         contentColor = MaterialTheme.colorScheme.onSurface,
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         shape = MaterialTheme.shapes.small,
                         shadowElevation = 1.dp
                     ) {
                         Text(
-                            modifier = Modifier.padding(contentMarginHalf),
+                            modifier = Modifier.padding(ContentMarginHalf),
                             text = stringResource(Res.string.subject_standard_deviation_tip),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -669,8 +669,8 @@ private fun SubjectDetailScore(
         RatingBarChart(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin)
-                .padding(top = contentMargin)
+                .padding(horizontal = ContentMargin)
+                .padding(top = ContentMargin)
                 .height(200.dp),
             rating = state.subject.displayRateCountMap
         )
@@ -687,7 +687,7 @@ private fun SubjectDetailCharacter(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_character),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnSelectedPageType(SubjectDetailTab.CHARACTER)) }
@@ -695,7 +695,7 @@ private fun SubjectDetailCharacter(
         val column = if (isSmallScreen) 3 else if (isMediumScreen) 5 else 7
         val row = if (isSmallScreen) 3 else if (isMediumScreen) 2 else 1
 
-        val gridSpacing = contentMargin
+        val gridSpacing = ContentMargin
         Grid(
             config = {
                 repeat(column) { column(minmax(0.dp, 1.fr)) }
@@ -703,7 +703,7 @@ private fun SubjectDetailCharacter(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
         ) {
             val items = remember(column, state.characters) {
                 state.characters.take(column * row)
@@ -731,7 +731,7 @@ private fun SubjectDetailRelated(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_related_subject),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = {
@@ -742,8 +742,8 @@ private fun SubjectDetailRelated(
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
-            contentPadding = PaddingValues(horizontal = contentMargin),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            contentPadding = PaddingValues(horizontal = ContentMargin),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             items(state.related, key = { it.subject.id }, contentType = { "Subject" }) {
                 SubjectCardItem(
@@ -767,7 +767,7 @@ private fun SubjectDetailIndexList(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = contentMargin),
+            .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_related_index),
         action = stringResource(Res.string.subject_action_more),
         onActionClick = {
@@ -778,8 +778,8 @@ private fun SubjectDetailIndexList(
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
-            contentPadding = PaddingValues(horizontal = contentMargin),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            contentPadding = PaddingValues(horizontal = ContentMargin),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             items(
                 state.subject.webInfo.indexList,
@@ -809,7 +809,7 @@ private fun SubjectDetailComment(
     DetailSectionTitle(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = contentMargin, bottom = contentMarginHalf),
+            .padding(top = ContentMargin, bottom = ContentMarginHalf),
         title = stringResource(Res.string.global_spit_out),
     )
 }

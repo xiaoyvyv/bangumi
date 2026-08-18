@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.timeline.page
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -16,7 +15,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 @Composable
 internal fun TimelinePageItemMono(
@@ -26,7 +25,7 @@ internal fun TimelinePageItemMono(
     OutlinedCard {
         LazyRow(
             modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         ) {
             if (item.memo.mono.persons.isNotEmpty()) {
                 items(

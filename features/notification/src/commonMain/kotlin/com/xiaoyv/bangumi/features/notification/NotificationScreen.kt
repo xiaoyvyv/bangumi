@@ -38,8 +38,8 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
@@ -169,11 +169,11 @@ private fun NotificationActionButton(
     item: ComposeNotification,
     onActionEvent: (NotificationEvent.Action) -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(contentMarginHalf)) {
+    Column(verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)) {
         if (item.message.contains("请求与你成为好友")) {
             OutlinedButton(
                 modifier = Modifier.resetSize(),
-                contentPadding = PaddingValues(contentMargin, contentMarginHalf),
+                contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
                 shape = MaterialTheme.shapes.small,
                 onClick = { onActionEvent(NotificationEvent.Action.OnMarkRead(item)) }
             ) {
@@ -181,7 +181,7 @@ private fun NotificationActionButton(
             }
             OutlinedButton(
                 modifier = Modifier.resetSize(),
-                contentPadding = PaddingValues(contentMargin, contentMarginHalf),
+                contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
                 shape = MaterialTheme.shapes.small,
                 onClick = { onActionEvent(NotificationEvent.Action.OnAgreeFriendRequest(item)) }
             ) {
@@ -190,7 +190,7 @@ private fun NotificationActionButton(
         } else {
             OutlinedButton(
                 modifier = Modifier.resetSize(),
-                contentPadding = PaddingValues(contentMargin, contentMarginHalf),
+                contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
                 shape = MaterialTheme.shapes.small,
                 onClick = { onActionEvent(NotificationEvent.Action.OnMarkRead(item)) }
             ) {

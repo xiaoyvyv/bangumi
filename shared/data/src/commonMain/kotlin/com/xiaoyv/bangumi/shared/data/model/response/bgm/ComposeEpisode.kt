@@ -39,7 +39,7 @@ data class ComposeEpisode(
     @SerialName("ep") val episodeNumber: Double = 0.0,
     @SerialName("id") val id: Long = 0,
     @SerialName("name") val name: String = "",
-    @SerialName("name_cn") @JsonNames("name_cn", "nameCN") val chineseName: String? = null,
+    @SerialName("name_cn") @JsonNames("name_cn", "nameCN", "nameCn") val chineseName: String? = null,
     @SerialName("sort") val sortOrder: Double = 0.0,
     @SerialName("subject_id") @JsonNames("subjectID", "subject_id") val subjectId: Long = 0,
     @SerialName("subject") val subject: ComposeSubject = ComposeSubject.Empty,

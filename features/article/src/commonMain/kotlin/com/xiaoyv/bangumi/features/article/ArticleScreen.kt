@@ -79,12 +79,12 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCharacterPlaceHolder
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.comment.CommentItem
 import com.xiaoyv.bangumi.shared.ui.view.comment.LocalCommentTargetAuthorUsername
@@ -203,7 +203,7 @@ private fun ArticleScreen(
             FloatingActionButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(contentMargin),
+                    .padding(ContentMargin),
                 onClick = { commentDialogState.show() }
             ) {
                 Icon(imageVector = BgmIcons.EditNote, contentDescription = null)
@@ -248,8 +248,8 @@ private fun ArticleScreenContent(
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.surface)
                         .fillMaxWidth()
-                        .padding(vertical = contentMargin)
-                        .padding(start = contentMargin, end = contentMarginHalf),
+                        .padding(vertical = ContentMargin)
+                        .padding(start = ContentMargin, end = ContentMarginHalf),
                     state = state,
                     onUiEvent = onUiEvent,
                     onActionEvent = onActionEvent
@@ -324,7 +324,7 @@ private fun ArticleScreenContentHeader(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
         Text(
             text = state.article.title,
@@ -403,7 +403,7 @@ private fun ArticleScreenContentHeader(
         BgmLinkedText(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = contentMarginHalf),
+                .padding(vertical = ContentMarginHalf),
             text = state.article.content,
         )
 
@@ -443,7 +443,7 @@ private fun ArticleScreenUserBar(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalAlignment = Alignment.CenterVertically
     ) {
         StateImage(
@@ -535,8 +535,8 @@ private fun ArticleScreenAttachBar(
 ) {
     FlowRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         itemVerticalAlignment = Alignment.CenterVertically
     ) {
         Row(
@@ -544,9 +544,9 @@ private fun ArticleScreenAttachBar(
                 .clip(MaterialTheme.shapes.small)
                 .clickable(onClick = onClick)
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(contentMarginHalf),
+                .padding(ContentMarginHalf),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         ) {
             StateImage(
                 modifier = Modifier.size(avatarSize),
@@ -581,8 +581,8 @@ private fun ArticleScreenCommentHeader(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
             .onGloballyPositioned { stickHeaderHeight = it.size.height }
-            .padding(contentMargin, contentMarginHalf),
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            .padding(ContentMargin, ContentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

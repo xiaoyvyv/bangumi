@@ -1,21 +1,25 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
+import androidx.annotation.IntRange
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
+import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateSubjectTopicRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
-import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
+import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.statement.HttpResponse
 
 @AppJsonApiDsl
@@ -142,4 +146,13 @@ interface TopicApi {
         @Path("topicID") topicID: Long,
         @Body updateSubjectTopicRequest: UpdateSubjectTopicRequest
     ): HttpResponse
+
+    /**
+     * 获取超展开聚合
+     */
+    @GET("p1/rakuen/topics")
+    suspend fun getRakuenTopicList(
+        @Query("type") @RakuenType type: String,
+        @Query("limit") @IntRange(from = 0, to = 200) limit: Int
+    ): ComposePage<ComposeRakuenTopic>
 }

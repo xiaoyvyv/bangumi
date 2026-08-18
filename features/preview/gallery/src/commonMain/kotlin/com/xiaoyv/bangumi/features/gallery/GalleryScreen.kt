@@ -36,8 +36,8 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -137,7 +137,7 @@ private fun GalleryPictureItem(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .background(BrushVerticalTransparentToHalfBlack)
-                .padding(contentMarginHalf),
+                .padding(ContentMarginHalf),
             style = MaterialTheme.typography.bodySmall.copy(
                 shadow = Shadow(
                     color = if (item.uiColor != Color.Unspecified) item.uiColor else Color.White,

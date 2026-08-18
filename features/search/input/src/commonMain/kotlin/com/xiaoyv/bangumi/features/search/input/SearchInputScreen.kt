@@ -57,7 +57,7 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -170,7 +170,7 @@ private fun SearchInputScreenContent(
                             onActionEvent(SearchInputEvent.Action.OnSearch)
                         }
                         .fillMaxWidth()
-                        .padding(horizontal = contentMargin, vertical = 12.dp),
+                        .padding(horizontal = ContentMargin, vertical = 12.dp),
                     text = it,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -231,7 +231,7 @@ private fun SearchInputHistory(
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                modifier = Modifier.padding(vertical = 12.dp, horizontal = contentMargin),
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = ContentMargin),
                 text = stringResource(Res.string.search_history),
                 style = MaterialTheme.typography.titleLarge
             )
@@ -243,7 +243,7 @@ private fun SearchInputHistory(
                     contentDescription = stringResource(Res.string.global_clear)
                 )
             }
-            Spacer(modifier = Modifier.width(contentMargin - 12.dp))
+            Spacer(modifier = Modifier.width(ContentMargin - 12.dp))
         }
 
         LazyColumn(
@@ -263,7 +263,7 @@ private fun SearchInputHistory(
                                 onActionEvent(SearchInputEvent.Action.OnQueryChange(keyword.asTextFieldValue()))
                                 onActionEvent(SearchInputEvent.Action.OnSearch)
                             }
-                            .padding(start = contentMargin, top = 12.dp, bottom = 12.dp),
+                            .padding(start = ContentMargin, top = 12.dp, bottom = 12.dp),
                         text = keyword,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -280,7 +280,7 @@ private fun SearchInputHistory(
                             contentDescription = stringResource(Res.string.global_clear),
                         )
                     }
-                    Spacer(modifier = Modifier.width(contentMargin - 12.dp))
+                    Spacer(modifier = Modifier.width(ContentMargin - 12.dp))
                 }
             }
         }

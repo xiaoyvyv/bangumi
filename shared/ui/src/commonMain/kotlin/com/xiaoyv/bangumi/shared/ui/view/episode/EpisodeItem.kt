@@ -29,8 +29,8 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.ui.component.button.episodeCollectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.colorStateAiredContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorStateAiredText
 import org.jetbrains.compose.resources.stringResource
@@ -47,11 +47,11 @@ fun EpisodeItem(
         modifier = modifier
             .clickable(onClick = onClick)
             .padding(contentPadding),
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(

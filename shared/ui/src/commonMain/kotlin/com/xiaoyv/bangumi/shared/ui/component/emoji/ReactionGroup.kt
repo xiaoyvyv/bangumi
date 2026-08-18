@@ -44,7 +44,7 @@ import androidx.compose.ui.window.Popup
 import com.xiaoyv.bangumi.shared.core.utils.bgmReactionKey
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
@@ -60,8 +60,8 @@ import kotlin.random.Random
 fun ReactionGroup(
     reactions: SerializeList<ComposeReaction>,
     modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(contentMarginHalf),
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(contentMarginHalf),
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(ContentMarginHalf),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(ContentMarginHalf),
     itemVerticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     onClick: (ComposeReaction) -> Unit = {},
 ) {

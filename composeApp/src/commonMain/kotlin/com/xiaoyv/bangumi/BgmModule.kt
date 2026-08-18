@@ -22,7 +22,7 @@ import com.xiaoyv.bangumi.features.main.tab.home.page.mono.HomeMonoViewModel
 import com.xiaoyv.bangumi.features.main.tab.newest.business.NewestViewModel
 import com.xiaoyv.bangumi.features.main.tab.profile.business.ProfileViewModel
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenViewModel
-import com.xiaoyv.bangumi.features.main.tab.rakuen.page.TopicPageViewModel
+import com.xiaoyv.bangumi.features.main.tab.rakuen.page.RaKuenPageViewModel
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingViewModel
 import com.xiaoyv.bangumi.features.main.tab.tracking.page.TrackingPageViewModel
@@ -161,7 +161,7 @@ val commonModule = module {
     }
 
     viewModel { (type: String) ->
-        TopicPageViewModel(
+        RaKuenPageViewModel(
             ugcRepository = get(),
             type = type
         )

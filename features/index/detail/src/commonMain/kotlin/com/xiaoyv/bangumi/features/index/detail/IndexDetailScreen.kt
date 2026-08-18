@@ -58,12 +58,12 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
@@ -202,7 +202,7 @@ private fun IndexDetailScreenHeader(
         ListItem(
             modifier = Modifier
                 .padding(padding)
-                .padding(vertical = contentMarginHalf),
+                .padding(vertical = ContentMarginHalf),
             colors = ListItemDefaults.colors(
                 containerColor = Color.Transparent,
                 headlineColor = imageColorState.contentColor,
@@ -228,7 +228,7 @@ private fun IndexDetailScreenHeader(
             supportingContent = {
                 Column {
                     Text(
-                        modifier = Modifier.padding(vertical = contentMarginHalf),
+                        modifier = Modifier.padding(vertical = ContentMarginHalf),
                         text = buildString {
                             append(state.index.total)
                             append("个收录 ")

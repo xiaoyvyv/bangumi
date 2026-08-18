@@ -20,7 +20,7 @@ import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.collections.immutable.toPersistentList
@@ -44,8 +44,8 @@ fun UserCollectionScreen(
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
                         .horizontalScroll(rememberScrollState())
-                        .padding(vertical = contentMarginHalf, horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                        .padding(vertical = ContentMarginHalf, horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     DropMenuChip(
                         options = TabTokens.collectionSortFilters,

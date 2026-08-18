@@ -44,7 +44,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.refresh.PullToRefreshBox
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -221,7 +221,7 @@ fun StateErrorLayout(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentMargin * 2),
+                .padding(ContentMargin * 2),
             text = if (System.isDebugType && throwable != null) {
                 throwable.errMsg
             } else {

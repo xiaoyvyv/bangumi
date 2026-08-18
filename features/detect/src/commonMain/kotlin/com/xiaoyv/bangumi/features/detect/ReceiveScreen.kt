@@ -104,8 +104,8 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.composition.LocalCropperState
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import kotlinx.collections.immutable.toPersistentList
@@ -242,7 +242,7 @@ private fun ReceiveScreenContent(
             Column(
                 modifier = Modifier
                     .matchParentSize()
-                    .padding(vertical = contentMarginHalf, horizontal = contentMargin),
+                    .padding(vertical = ContentMarginHalf, horizontal = ContentMargin),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -285,7 +285,7 @@ private fun ReceiveScreenContent(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
                         .clickable { uriHandler.openUri(state.helpLink) }
-                        .padding(vertical = contentMarginHalf),
+                        .padding(vertical = ContentMarginHalf),
                     text = stringResource(Res.string.image_detect_engine, state.helpLink),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Normal,
@@ -454,8 +454,8 @@ private fun ReceiveScreenSubjectDialog(
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(contentMargin),
-                    contentPadding = PaddingValues(contentMargin)
+                    verticalArrangement = Arrangement.spacedBy(ContentMargin),
+                    contentPadding = PaddingValues(ContentMargin)
                 ) {
                     items(state.resultSubject) {
                         DetectSubjectItem(it, state, onUiEvent, onActionEvent)
@@ -465,7 +465,7 @@ private fun ReceiveScreenSubjectDialog(
                 FloatingActionButton(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(contentMargin)
+                        .padding(ContentMargin)
                         .navigationBarsPadding(),
                     onClick = {
                         scope.launch {
@@ -503,8 +503,8 @@ private fun ReceiveScreenCharacterDialog(
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(contentMargin),
-                    contentPadding = PaddingValues(contentMargin)
+                    verticalArrangement = Arrangement.spacedBy(ContentMargin),
+                    contentPadding = PaddingValues(ContentMargin)
                 ) {
                     items(state.resultCharacter) {
                         DetectCharacterItem(it, state, onUiEvent, onActionEvent)
@@ -514,7 +514,7 @@ private fun ReceiveScreenCharacterDialog(
                 FloatingActionButton(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(contentMargin)
+                        .padding(ContentMargin)
                         .navigationBarsPadding(),
                     onClick = {
                         scope.launch {
@@ -541,30 +541,30 @@ private fun DetectSubjectItem(
         modifier = Modifier.fillMaxWidth(),
         onClick = { onUiEvent(ReceiveEvent.UI.OnNavScreen(Screen.SearchResult(item.anilist.title.displayName))) }
     ) {
-        Spacer(Modifier.height(contentMargin))
+        Spacer(Modifier.height(ContentMargin))
 
         Text(
-            modifier = Modifier.padding(horizontal = contentMargin),
+            modifier = Modifier.padding(horizontal = ContentMargin),
             text = item.anilist.title.displayName,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Medium
         )
-        Spacer(Modifier.height(contentMarginHalf))
+        Spacer(Modifier.height(ContentMarginHalf))
         Text(
-            modifier = Modifier.padding(horizontal = contentMargin),
+            modifier = Modifier.padding(horizontal = ContentMargin),
             text = item.filename,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(Modifier.height(contentMargin))
+        Spacer(Modifier.height(ContentMargin))
 
         HorizontalDivider()
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentMargin)
+                .padding(ContentMargin)
         ) {
             StateImage(
                 modifier = Modifier
@@ -576,8 +576,8 @@ private fun DetectSubjectItem(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = contentMargin, vertical = contentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf, Alignment.CenterVertically)
+                    .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
             ) {
                 CompositionLocalProvider(
                     LocalTextStyle provides MaterialTheme.typography.bodySmall.copy(
@@ -607,9 +607,9 @@ private inline fun DetectCharacterItem(
                 MaterialTheme.colorScheme.surfaceContainer,
                 MaterialTheme.shapes.small
             )
-            .padding(horizontal = contentMargin)
-            .padding(bottom = contentMargin, top = contentMarginHalf),
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            .padding(horizontal = ContentMargin)
+            .padding(bottom = ContentMargin, top = ContentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
         ClippedImage(
             modifier = Modifier
@@ -620,7 +620,7 @@ private inline fun DetectCharacterItem(
             source = state.currentImageBitmap,
             rect = item.rememberRect(state.currentImageBitmap)
         )
-        Column(verticalArrangement = Arrangement.spacedBy(contentMarginHalf)) {
+        Column(verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)) {
             val spanStyle = SpanStyle(color = MaterialTheme.colorScheme.primary)
 
             item.character?.fastForEach { character ->
@@ -634,7 +634,7 @@ private inline fun DetectCharacterItem(
                             .fillMaxWidth()
                             .clip(MaterialTheme.shapes.small)
                             .clickable { expanded = true }
-                            .padding(contentMarginHalf),
+                            .padding(ContentMarginHalf),
                         text = buildAnnotatedString {
                             withStyle(spanStyle) { append("人物：") }
                             append(character.character.orEmpty())

@@ -33,8 +33,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.view.tag.TagItem
 
@@ -55,7 +55,7 @@ fun MonoLineItemCharacter(
     ) {
         InfoImage(
             modifier = Modifier
-                .padding(contentMargin)
+                .padding(ContentMargin)
                 .width(100.dp),
             model = item.mono.images.displayMediumImage,
             text = MonoCastType.string(item.type),
@@ -64,9 +64,9 @@ fun MonoLineItemCharacter(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = contentMargin)
-                .padding(end = contentMargin),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                .padding(vertical = ContentMargin)
+                .padding(end = ContentMargin),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             Text(
                 text = buildAnnotatedString {
@@ -102,8 +102,8 @@ fun MonoLineItemCharacter(
                 // 信息
                 item.mono.infobox.isNotEmpty() -> FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                 ) {
                     item.mono.infobox.forEach { info ->
                         TagItem(tag = remember(info.key) { info.displayInfo })
@@ -127,7 +127,7 @@ fun MonoLineItemCharacter(
                             .fillMaxWidth()
                             .clickWithoutRipped { onClick(it.id, MonoType.PERSON) },
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                     ) {
                         StateImage(
                             modifier = Modifier.size(44.dp),
@@ -137,7 +137,7 @@ fun MonoLineItemCharacter(
                         )
                         Column(
                             modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                         ) {
                             Text(
                                 text = it.nameCN.ifBlank { it.name },
@@ -174,17 +174,17 @@ fun MonoCardItemCharacter(
             onClick = { onClick(item.mono.id, MonoType.CHARACTER) }
         )
 
-        Spacer(modifier = Modifier.height(contentMarginHalf))
+        Spacer(modifier = Modifier.height(ContentMarginHalf))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf / 2)
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
         ) {
             Text(
                 modifier = Modifier
                     .weight(1f, false)
-                    .basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(contentMarginHalf)),
+                    .basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(ContentMarginHalf)),
                 text = item.mono.name,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,

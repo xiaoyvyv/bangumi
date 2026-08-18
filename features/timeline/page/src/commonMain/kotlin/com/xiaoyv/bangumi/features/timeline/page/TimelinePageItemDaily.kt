@@ -21,7 +21,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -33,7 +33,7 @@ internal fun TimelinePageItemDaily(
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         if (item.memo.daily.users.isNotEmpty()) {
             items(
@@ -43,7 +43,7 @@ internal fun TimelinePageItemDaily(
                 OutlinedCard(onClick = { onClickUser(user) }) {
                     Row(
                         modifier = Modifier.padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                     ) {
                         StateImage(
                             modifier = Modifier
@@ -75,7 +75,7 @@ internal fun TimelinePageItemDaily(
                 OutlinedCard(onClick = { onClickGroup(group) }) {
                     Row(
                         modifier = Modifier.padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                     ) {
                         StateImage(
                             modifier = Modifier

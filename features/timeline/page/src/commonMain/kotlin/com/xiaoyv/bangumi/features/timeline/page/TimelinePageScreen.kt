@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.timeline.page
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,7 +41,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
@@ -124,8 +123,8 @@ private fun TimelinePageItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = contentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    .padding(vertical = ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),

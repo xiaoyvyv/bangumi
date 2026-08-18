@@ -38,8 +38,8 @@ import com.xiaoyv.bangumi.shared.core.utils.magnetHash
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -91,10 +91,10 @@ fun MikanMagnetItem(
         modifier = modifier,
         onClick = { if (checkMode) onCheckedChange(!checked) else actionDialog.show() }
     ) {
-        Row(modifier = Modifier.padding(contentMargin)) {
+        Row(modifier = Modifier.padding(ContentMargin)) {
             Column(
                 modifier = modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 Text(
                     text = item.titleHtml,
@@ -105,8 +105,8 @@ fun MikanMagnetItem(
                 )
 
                 if (item.tags.isNotEmpty()) FlowRow(
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     item.tags.fastForEach {
                         Text(
@@ -149,7 +149,7 @@ fun MikanMagnetItem(
             if (checkMode) Checkbox(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(start = contentMargin),
+                    .padding(start = ContentMargin),
                 checked = checked,
                 onCheckedChange = onCheckedChange
             )

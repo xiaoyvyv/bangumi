@@ -38,7 +38,7 @@ import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodeDropMenu
@@ -78,7 +78,7 @@ fun SubjectDetailEpisodeScreen(
                     DetailSectionTitle(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = contentMargin),
+                            .padding(top = ContentMargin),
                         title = episode.splitter.orEmpty(),
                         divider = true
                     )
@@ -91,7 +91,7 @@ fun SubjectDetailEpisodeScreen(
                             modifier = Modifier.fillMaxWidth(),
                             subjectType = state.subject.type,
                             item = episode,
-                            contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
+                            contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
                             onClick = { expanded = true }
                         )
 
@@ -171,7 +171,7 @@ private fun BoxScope.EpisodeBottomSlider(
         val coroutineScope = rememberCoroutineScope()
 
         Slider(
-            modifier = Modifier.padding(horizontal = contentMargin),
+            modifier = Modifier.padding(horizontal = ContentMargin),
             value = sliderValue.toFloat(),
             onValueChange = { newValue ->
                 isUserDragging = true

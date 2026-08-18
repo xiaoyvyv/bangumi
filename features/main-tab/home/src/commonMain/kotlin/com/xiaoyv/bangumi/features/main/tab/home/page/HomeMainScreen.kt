@@ -60,8 +60,8 @@ import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeActions
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -93,7 +93,7 @@ fun HomeMainScreen(
                 .fillMaxSize()
                 .semantics { contentDescription = "home_main_list" },
             state = rememberCacheWindowLazyListState(),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             item(key = CONTENT_TYPE_BANNER, contentType = CONTENT_TYPE_BANNER) {
                 HomeMainBanner(state, onUiEvent, onActionEvent)
@@ -159,7 +159,7 @@ fun HomeMainAction(
         fixedColumnCount = if (isExtraSmallScreen) 5 else null,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(contentMargin),
+            .padding(ContentMargin),
     ) {
         mainHomeActions.forEach {
             val label = stringResource(it.label)
@@ -167,7 +167,7 @@ fun HomeMainAction(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 OutlinedCard(
                     modifier = Modifier
@@ -250,7 +250,7 @@ fun HomeMainCalendar(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         SectionTitle(
-            modifier = Modifier.padding(horizontal = contentMargin, vertical = contentMarginHalf),
+            modifier = Modifier.padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
             text = stringResource(Res.string.calendar_today_title),
             onClick = {
                 onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Calendar(true)))
@@ -258,7 +258,7 @@ fun HomeMainCalendar(
         )
 
         Text(
-            modifier = Modifier.padding(horizontal = contentMargin),
+            modifier = Modifier.padding(horizontal = ContentMargin),
             text = stringResource(
                 Res.string.subject_home_calendar,
                 state.todayCalendar.size,
@@ -272,8 +272,8 @@ fun HomeMainCalendar(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = "calendar_card_row_today" },
-            contentPadding = PaddingValues(contentMargin, contentMarginHalf),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             items(
                 items = state.todayCalendar,
@@ -291,10 +291,10 @@ fun HomeMainCalendar(
             }
         }
 
-        Spacer(modifier = Modifier.height(contentMarginHalf))
+        Spacer(modifier = Modifier.height(ContentMarginHalf))
 
         SectionTitle(
-            modifier = Modifier.padding(horizontal = contentMargin, vertical = contentMarginHalf),
+            modifier = Modifier.padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
             text = stringResource(Res.string.calendar_tomorrow_title),
             onClick = {
                 onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Calendar(false)))
@@ -305,8 +305,8 @@ fun HomeMainCalendar(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = "calendar_card_row_tomorrow" },
-            contentPadding = PaddingValues(contentMargin, contentMarginHalf),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             items(
                 state.tomorrowCalendar,
@@ -335,7 +335,7 @@ fun HomeMainOverview(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         SectionTitle(
-            modifier = Modifier.padding(horizontal = contentMargin, vertical = contentMarginHalf),
+            modifier = Modifier.padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
             text = entity.title,
             onClick = {
                 // 跳转注目的条目流量
@@ -357,8 +357,8 @@ fun HomeMainOverview(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = "overview_card_row" },
-            contentPadding = PaddingValues(contentMargin, contentMarginHalf),
-            horizontalArrangement = Arrangement.spacedBy(contentMargin)
+            contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
+            horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             items(
                 entity.subjects,

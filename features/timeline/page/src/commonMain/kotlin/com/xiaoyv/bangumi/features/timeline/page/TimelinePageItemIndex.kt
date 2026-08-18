@@ -17,7 +17,7 @@ import com.xiaoyv.bangumi.core_resource.resources.timeline_index_content_update
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -31,7 +31,7 @@ internal fun TimelinePageItemIndex(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(contentPaddings),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             Text(
                 text = item.memo.index.title,

@@ -9,13 +9,12 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionWebSortType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
-import com.xiaoyv.bangumi.shared.core.types.RakuenTab
 import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.ReportValueType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
+import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
@@ -393,14 +392,6 @@ interface BgmWebApi {
     @GET("index/{id}")
     suspend fun fetchIndexDetail(@Path("id") id: Long, @Query("cat") @IndexCatWebTabType cat: String): Document
 
-    /**
-     * 超展开
-     */
-    @GET("rakuen/topiclist")
-    suspend fun fetchRakuenTopic(
-        @Query("type") @RakuenTab type: String,
-        @Query("filter") filter: String? = null,
-    ): Document
 
     /**
      * Topic 详情

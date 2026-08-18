@@ -61,7 +61,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -100,7 +99,6 @@ import com.xiaoyv.bangumi.shared.core.utils.bbcodeUnderline
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
 import com.xiaoyv.bangumi.shared.core.utils.insertEmoji
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.rememberBgmEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberImePanelState
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvEmojis
@@ -115,13 +113,13 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
@@ -237,7 +235,7 @@ fun CommentDialogContent(
             InputActionBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(contentMarginHalf),
+                    .padding(ContentMarginHalf),
                 value = state.comment,
                 onValueChange = { onEvent(CommentEvent.OnTextChange(it)) },
                 onPickImage = { launcher.launch() },
@@ -259,15 +257,15 @@ fun CommentDialogContent(
 
             Row(
                 modifier = Modifier
-                    .padding(horizontal = contentMarginHalf)
+                    .padding(horizontal = ContentMarginHalf)
                     .background(MaterialTheme.colorScheme.surfaceContainerLow, MaterialTheme.shapes.small),
-                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             ) {
                 BmgTextField(
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
-                    contentPadding = PaddingValues(contentMarginHalf),
+                    contentPadding = PaddingValues(ContentMarginHalf),
                     value = state.comment,
                     onValueChange = { onEvent(CommentEvent.OnTextChange(it)) },
                     shape = MaterialTheme.shapes.small,
@@ -311,7 +309,7 @@ fun CommentDialogContent(
                 Button(
                     modifier = Modifier
                         .align(Alignment.Bottom)
-                        .padding(bottom = contentMarginHalf, end = contentMarginHalf)
+                        .padding(bottom = ContentMarginHalf, end = ContentMarginHalf)
                         .resetSize(),
                     enabled = state.comment.text.isNotBlank() && !state.sending,
                     onClick = {
@@ -359,8 +357,8 @@ private fun InputActionBar(
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
         FlowRow(
             modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf / 2),
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2),
             itemVerticalAlignment = Alignment.CenterVertically
         ) {
             InputActionBarButton(BgmDefaultIcons.FormatBold, size = 24.dp, bbCode = bbcodeBold) {
@@ -458,9 +456,9 @@ private fun CommentDialogPanel(
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxSize(),
                     columns = GridCells.Adaptive(40.dp),
-                    contentPadding = PaddingValues(contentMarginHalf),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    contentPadding = PaddingValues(ContentMarginHalf),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     val emojis = when (it) {
                         0 -> tvEmojis
@@ -475,7 +473,7 @@ private fun CommentDialogPanel(
                                 .fillMaxWidth()
                                 .aspectRatio(1f)
                                 .clickable { onValueChange(value.insertEmoji(emoji)) }
-                                .padding(contentMarginHalf),
+                                .padding(ContentMarginHalf),
                             model = remember(emoji.smileId) {
                                 ImageRequest.Builder(context)
                                     .data(emoji.image.toComposeUri())
@@ -499,7 +497,7 @@ private fun CommentDialogPanel(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
-                        .padding(contentMargin)
+                        .padding(ContentMargin)
                 ) {
                     var previewText by remember { mutableStateOf("") }
 

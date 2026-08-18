@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.features.search.result.business.SearchResultEvent
 import com.xiaoyv.bangumi.features.search.result.business.SearchResultState
 import com.xiaoyv.bangumi.features.tag.page.TagPageRoute
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.subjectTypeTabs
 import org.jetbrains.compose.resources.stringResource
 
@@ -35,7 +35,7 @@ fun SearchResultTag(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(vertical = contentMarginHalf, horizontal = 12.dp),
+                .padding(vertical = ContentMarginHalf, horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             DropMenuChip(

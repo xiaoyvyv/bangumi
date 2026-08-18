@@ -20,6 +20,7 @@ data class ComposeMono(
     @SerialName("name") val name: String = "",
     @SerialName("nameCN") val nameCN: String = "",
     @SerialName("nsfw") val nsfw: Boolean = false,
+    @SerialName("updatedAt") val updatedAt: SerializeDateLong = 0,
     @SerialName("collectedAt") val collectedAt: SerializeDateLong = 0,
     @SerialName("collects") val collects: Int = 0,
     @SerialName("redirect") val redirect: Int = 0,

@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 
 @Composable
 fun DetailSectionTitle(
@@ -22,14 +22,14 @@ fun DetailSectionTitle(
     modifier: Modifier = Modifier,
     divider: Boolean = false,
     onActionClick: () -> Unit = {},
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(contentMargin),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(ContentMargin),
     content: @Composable (ColumnScope.() -> Unit)? = null,
 ) {
     Column(modifier = modifier, verticalArrangement = verticalArrangement) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(

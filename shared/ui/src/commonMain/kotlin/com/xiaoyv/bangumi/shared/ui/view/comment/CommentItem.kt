@@ -32,10 +32,10 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 /**
  * [CommentItem]
@@ -72,14 +72,14 @@ fun CommentReplyItem(
         overlineContent = {
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                 itemVerticalAlignment = Alignment.CenterVertically
             ) {
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(contentMarginHalf / 2),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                     itemVerticalAlignment = Alignment.CenterVertically
                 ) {
                     // 子评论使用小头像
@@ -132,8 +132,8 @@ fun CommentReplyItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = contentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    .padding(vertical = ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 if (item.displayQuote.isNotBlank()) {
                     val colorScheme = MaterialTheme.colorScheme
@@ -150,8 +150,8 @@ fun CommentReplyItem(
                                     strokeWidth = strokeWidth
                                 )
                             }
-                            .padding(vertical = contentMarginHalf)
-                            .padding(start = 12.dp, end = contentMarginHalf),
+                            .padding(vertical = ContentMarginHalf)
+                            .padding(start = 12.dp, end = ContentMarginHalf),
                         text = item.displayQuote,
                         style = MaterialTheme.typography.labelSmall.copy(
                             color = colorScheme.primary,

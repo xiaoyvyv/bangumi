@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
-import com.xiaoyv.bangumi.shared.core.utils.toLongValue
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
@@ -44,7 +42,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -121,8 +119,8 @@ private fun TimelinePageItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = contentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    .padding(vertical = ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 if (item.title.isNotBlank()) {
                     BgmLinkedText(
@@ -222,12 +220,12 @@ private fun TimelinePageItemCollection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             if (item.rate > 0) {
                 Row(
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     RatingBar(
                         value = item.rate.toDouble(),
@@ -270,7 +268,7 @@ private fun TimelinePageItemSubject(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     InfoImage(
                         modifier = Modifier.width(80.dp),
@@ -315,7 +313,7 @@ private fun TimelinePageItemSubject(
         item.subjects.size > 1 -> {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             ) {
                 items(
                     items = item.subjects,
@@ -340,7 +338,7 @@ private fun TimelinePageItemMono(
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         items(items = item.monos, contentType = { CONTENT_TYPE_TIMELINE_MONO }) { display ->
             InfoImage(

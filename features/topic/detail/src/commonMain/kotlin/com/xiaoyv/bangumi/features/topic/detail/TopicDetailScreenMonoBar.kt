@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 @Composable
 internal fun TopicDetailScreenMonoBar(
@@ -27,7 +27,7 @@ internal fun TopicDetailScreenMonoBar(
     OutlinedCard(onClick = { onClick(mono.mono, mono.type) }) {
         Row(
             modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             StateImage(
                 modifier = Modifier

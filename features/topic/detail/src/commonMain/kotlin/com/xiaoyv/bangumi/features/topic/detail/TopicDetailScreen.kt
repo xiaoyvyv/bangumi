@@ -59,8 +59,8 @@ import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -204,8 +204,8 @@ fun TopicDetailScreenHeader(
     Column(
         modifier = modifier
             .padding(insets)
-            .padding(start = contentMargin, end = contentMarginHalf, top = contentMarginHalf, bottom = contentMargin),
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            .padding(start = ContentMargin, end = ContentMarginHalf, top = ContentMarginHalf, bottom = ContentMargin),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
         Text(
             text = state.displayTitle,
@@ -219,7 +219,7 @@ fun TopicDetailScreenHeader(
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             when (state.type) {
                 // 小组贴
@@ -444,8 +444,8 @@ private fun ArticleScreenCommentHeader(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
             .onGloballyPositioned { stickHeaderHeight = it.size.height }
-            .padding(contentMargin, contentMarginHalf),
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+            .padding(ContentMargin, ContentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

@@ -22,7 +22,7 @@ import com.xiaoyv.bangumi.features.search.result.business.SearchResultState
 import com.xiaoyv.bangumi.shared.core.types.LayoutType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.filterNsfw
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.layoutTabs
 import org.jetbrains.compose.resources.stringResource
@@ -40,7 +40,7 @@ fun SearchResultCharacter(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(vertical = contentMarginHalf, horizontal = 12.dp),
+                .padding(vertical = ContentMarginHalf, horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             DropMenuChip(

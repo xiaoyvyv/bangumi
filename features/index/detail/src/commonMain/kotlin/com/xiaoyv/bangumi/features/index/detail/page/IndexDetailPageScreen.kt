@@ -21,16 +21,16 @@ import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeIndexRelatedLazyItems
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodeItem
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoLineItem
@@ -68,8 +68,8 @@ private fun IndexDetailPageScreenContent(
                 OutlinedCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = contentMargin)
-                        .padding(vertical = contentMarginHalf),
+                        .padding(horizontal = ContentMargin)
+                        .padding(vertical = ContentMarginHalf),
                     shape = MaterialTheme.shapes.small
                 ) {
                     Text(
@@ -92,7 +92,7 @@ fun IndexDetailPageRelatedContent(
             SubjectLineItem(
                 modifier = Modifier.fillMaxWidth(),
                 display = ComposeSubjectDisplay(subject = item.subject),
-                contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
+                contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
                 onClick = {
                     onNavScreen(Screen.SubjectDetail(item.subject.id))
                 }
@@ -130,7 +130,7 @@ fun IndexDetailPageRelatedContent(
                 modifier = Modifier.fillMaxWidth(),
                 subjectType = item.type,
                 item = item.episode,
-                contentPadding = PaddingValues(horizontal = contentMargin, vertical = 12.dp),
+                contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
                 onClick = {
                     onNavScreen(Screen.Article(item.episode.id, TopicDetailType.TYPE_EP))
                 }

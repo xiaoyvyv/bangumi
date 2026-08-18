@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 @Composable
 internal fun TopicDetailScreenUserBar(
@@ -31,7 +31,7 @@ internal fun TopicDetailScreenUserBar(
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(contentMarginHalf)
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             StateImage(
                 modifier = Modifier

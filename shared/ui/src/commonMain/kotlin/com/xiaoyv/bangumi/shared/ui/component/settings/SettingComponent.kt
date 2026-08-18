@@ -36,11 +36,10 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertInputDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertInputDialogState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 
 /**
  * [SettingContainer]
@@ -66,8 +65,8 @@ fun SettingContainer(
         if (label != null) Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin)
-                .padding(top = contentMargin, bottom = contentMarginHalf),
+                .padding(horizontal = ContentMargin)
+                .padding(top = ContentMargin, bottom = ContentMarginHalf),
             content = {
                 CompositionLocalProvider(
                     value = LocalTextStyle provides MaterialTheme.typography.bodyMedium
@@ -79,7 +78,7 @@ fun SettingContainer(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = contentMargin),
+                .padding(horizontal = ContentMargin),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.Transparent),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -229,7 +228,7 @@ fun SettingItemTrailing(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (!text.isNullOrBlank()) {

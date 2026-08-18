@@ -25,8 +25,8 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 /**
  * [MonoDetailCollabsScreen]
@@ -48,7 +48,7 @@ fun MonoDetailCollabsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentMargin),
+                .padding(ContentMargin),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -64,9 +64,9 @@ fun MonoDetailCollabsScreen(
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Adaptive(minSize = 100.dp),
-        contentPadding = PaddingValues(contentMargin),
-        horizontalArrangement = Arrangement.spacedBy(contentMargin),
-        verticalArrangement = Arrangement.spacedBy(contentMargin),
+        contentPadding = PaddingValues(ContentMargin),
+        horizontalArrangement = Arrangement.spacedBy(ContentMargin),
+        verticalArrangement = Arrangement.spacedBy(ContentMargin),
     ) {
         items(
             items = collabs,
@@ -96,9 +96,9 @@ private fun CollabItem(
         modifier = Modifier
             .clickWithoutRipped(onClick = onClick)
             .width(100.dp)
-            .padding(vertical = contentMarginHalf),
+            .padding(vertical = ContentMarginHalf),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         InfoImage(
             modifier = Modifier

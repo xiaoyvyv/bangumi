@@ -44,7 +44,7 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogSt
 import com.xiaoyv.bangumi.shared.ui.component.dialog.date.MonthPicker
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.subjectBrowserSortTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -158,7 +158,7 @@ private fun SubjectBrowserScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(vertical = contentMarginHalf, horizontal = 12.dp),
+                .padding(vertical = ContentMarginHalf, horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             DropMenuChip(

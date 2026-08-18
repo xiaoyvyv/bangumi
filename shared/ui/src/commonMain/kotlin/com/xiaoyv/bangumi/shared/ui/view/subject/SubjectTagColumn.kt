@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 @Composable
 fun SubjectTagColumn(
@@ -24,8 +24,8 @@ fun SubjectTagColumn(
 ) {
     FlowRow(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
-        horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         maxLines = maxLines
     ) {
         subject.tags.fastForEach {

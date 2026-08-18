@@ -51,7 +51,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLa
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -100,7 +100,7 @@ private fun TrackingPageScreenContent(
         OutlinedCard(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentMarginHalf)
+                .padding(ContentMarginHalf)
                 .animateContentSize()
         ) {
             TrackingPageScreenContentItem(
@@ -137,7 +137,7 @@ private fun TrackingPageScreenContentItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(item.id))) }
-            .padding(top = contentMarginHalf),
+            .padding(top = ContentMarginHalf),
         leadingContent = {
             Box(
                 modifier = Modifier
@@ -152,13 +152,13 @@ private fun TrackingPageScreenContentItem(
 
                 if (item.rating.rank != 0) Text(
                     modifier = Modifier
-                        .padding(top = contentMarginHalf)
+                        .padding(top = ContentMarginHalf)
                         .align(Alignment.TopStart)
                         .background(
                             MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
                             RoundedCornerShape(topEnd = 6.dp, bottomEnd = 6.dp),
                         )
-                        .padding(contentMarginHalf, 4.dp),
+                        .padding(ContentMarginHalf, 4.dp),
                     text = stringResource(Res.string.global_rank_no) + " " + item.rating.rank,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
@@ -187,8 +187,8 @@ private fun TrackingPageScreenContentItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = contentMarginHalf / 2),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf / 2)
+                    .padding(vertical = ContentMarginHalf / 2),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
             ) {
                 Text(
                     text = "${item.collection.doing}人在看",
@@ -298,8 +298,8 @@ private fun TrackingPageScreenContentItem(
                     .fillMaxWidth()
                     .padding(top = 4.dp)
                     .offset(x = (-4).dp),
-                horizontalArrangement = Arrangement.spacedBy(contentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 TextButton(
                     modifier = Modifier.resetSize(),

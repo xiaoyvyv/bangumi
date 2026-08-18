@@ -20,8 +20,8 @@ import androidx.compose.ui.window.DialogProperties
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmAppTheme
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 /**
  * [AlertOptionDialog]
@@ -46,7 +46,7 @@ fun <Key : Any> AlertOptionDialog(
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    modifier = Modifier.padding(contentMargin),
+                    modifier = Modifier.padding(ContentMargin),
                     text = title,
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -54,8 +54,8 @@ fun <Key : Any> AlertOptionDialog(
                 if (message != null) {
                     Text(
                         modifier = Modifier
-                            .padding(horizontal = contentMargin)
-                            .padding(vertical = contentMarginHalf),
+                            .padding(horizontal = ContentMargin)
+                            .padding(vertical = ContentMarginHalf),
                         text = title,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -70,7 +70,7 @@ fun <Key : Any> AlertOptionDialog(
                                 onClick(tab, i)
                                 state.dismiss()
                             }
-                            .padding(horizontal = contentMargin, vertical = contentMargin),
+                            .padding(horizontal = ContentMargin, vertical = ContentMargin),
                         text = tab.displayText(),
                         color = MaterialTheme.colorScheme.onSurface
                     )

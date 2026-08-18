@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.shared.ui.view.episode
 import androidx.annotation.IntRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ColumnScope
@@ -57,12 +56,12 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.ui.component.button.episodeCollectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmGridPager
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDoneContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDroppedContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionWishContainer
@@ -109,13 +108,13 @@ fun EpisodeGrid(
     modifier: Modifier = Modifier,
     minItemSize: Dp = 38.dp,
     @IntRange(from = 1) maxRows: Int = 5,
-    verticalSpacing: Dp = contentMarginHalf,
-    horizontalSpacing: Dp = contentMarginHalf,
+    verticalSpacing: Dp = ContentMarginHalf,
+    horizontalSpacing: Dp = ContentMarginHalf,
     contentPadding: PaddingValues = PaddingValues(
-        start = contentMargin,
-        top = contentMarginHalf,
-        end = contentMargin,
-        bottom = contentMargin
+        start = ContentMargin,
+        top = ContentMarginHalf,
+        end = ContentMargin,
+        bottom = ContentMargin
     ),
     onEpisodeChange: (List<ComposeEpisode>, Int) -> Unit = { _, _ -> },
     onClickEpisode: (ComposeEpisode) -> Unit = {},
@@ -205,7 +204,7 @@ fun EpisodePager(
         items = episodes,
         key = { episodes[it].key },
         maxRows = maxRows,
-        contentPadding = PaddingValues(start = contentMargin, top = contentMarginHalf, end = contentMargin, bottom = contentMargin)
+        contentPadding = PaddingValues(start = ContentMargin, top = ContentMarginHalf, end = ContentMargin, bottom = ContentMargin)
     ) {
         val buttonColors = episodeCollectionButtonColors(it.collection.status, it.isAiring, it.isAired)
         var expanded by remember { mutableStateOf(false) }

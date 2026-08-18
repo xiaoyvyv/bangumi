@@ -25,7 +25,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoCardItem
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoLineItem
@@ -143,9 +143,9 @@ private fun MonoPageGridLayout(
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = contentMarginHalf),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = ContentMarginHalf),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         header = {
             if (header != null) {
                 if (headerSticky) stickyHeader(

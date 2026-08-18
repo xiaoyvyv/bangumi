@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.TextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -40,7 +40,7 @@ fun SubjectAdvanceFilterTextField(
     )
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(contentMarginHalf)
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -57,7 +57,7 @@ fun SubjectAdvanceFilterTextField(
         )
 
         HighlightedText(
-            modifier = Modifier.padding(bottom = contentMarginHalf),
+            modifier = Modifier.padding(bottom = ContentMarginHalf),
             text = description,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.shared.ui.view.topic
+package com.xiaoyv.bangumi.shared.ui.view.rakuen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,10 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
@@ -35,26 +33,31 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ThinBorderStrokeVariant
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * 超展开的条目
+ */
 @Composable
-fun TopicPageItem(
-    modifier: Modifier,
-    item: ComposeTopic = ComposeTopic.Empty,
-    onClick: (ComposeTopic) -> Unit = {},
+fun RakuenPageItem(
+    item: ComposeRakuenTopic,
+    modifier: Modifier = Modifier,
+    showCategory: Boolean = true,
+    onClick: (ComposeRakuenTopic) -> Unit = {},
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
     onClickMono: (ComposeMonoDisplay) -> Unit = {},
@@ -73,6 +76,7 @@ fun TopicPageItem(
         overlineContent = {
             TopicPageItemOverline(
                 item = item,
+                showCategory = showCategory,
                 onClickUser = onClickUser,
                 onClickMono = onClickMono,
                 onClickSubject = onClickSubject
@@ -99,23 +103,94 @@ fun TopicPageItem(
 }
 
 @Composable
-fun TopicPageItemHeadline(item: ComposeTopic) {
+private fun TopicPageItemOverline(
+    item: ComposeRakuenTopic,
+    showCategory: Boolean,
+    onClickUser: (ComposeUser) -> Unit,
+    onClickMono: (ComposeMonoDisplay) -> Unit,
+    onClickSubject: (ComposeSubject) -> Unit,
+) {
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+        itemVerticalAlignment = Alignment.CenterVertically
+    ) {
+        when (item.type) {
+            // 展示用户名称
+            RakuenType.GROUP, RakuenType.MY_GROUP -> {
+                Text(
+                    modifier = Modifier.clickWithoutRipped { onClickUser(item.creator) },
+                    text = item.creator.nickname,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+            // 展示条目名称
+            RakuenType.SUBJECT,
+            RakuenType.EP -> {
+                Text(
+                    modifier = Modifier.clickWithoutRipped {
+                        if (item.subject != ComposeSubject.Empty) {
+                            onClickSubject(item.subject)
+                        } else if (item.creator != ComposeUser.Empty) {
+                            onClickUser(item.creator)
+                        }
+                    },
+                    text = item.subject.displayName.ifBlank { item.creator.nickname },
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+            // 展示人物名称
+            RakuenType.CHARACTER,
+            RakuenType.PERSON -> {
+                Text(
+                    modifier = Modifier.clickWithoutRipped { onClickMono(item.toMono()) },
+                    text = item.name,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+        }
+
+        if (showCategory) Text(
+            text = stringResource(RakuenType.string(item.type)),
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.tertiary, MaterialTheme.shapes.extraSmall)
+                .padding(vertical = 2.dp, horizontal = 4.dp),
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.onTertiary
+            )
+        )
+
+        TopicPageFlag(item)
+    }
+}
+
+@Composable
+fun TopicPageItemHeadline(item: ComposeRakuenTopic) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = ContentMarginHalf),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
-        val title = when (item.topicType) {
-            TopicDetailType.TYPE_GROUP,
-            TopicDetailType.TYPE_EP,
-            TopicDetailType.TYPE_SUBJECT,
-            TopicDetailType.TYPE_BLOG,
-                -> item.title
+        val title = when (item.type) {
+            RakuenType.GROUP,
+            RakuenType.MY_GROUP,
+            RakuenType.SUBJECT -> item.title
 
-            TopicDetailType.TYPE_PERSON,
-            TopicDetailType.TYPE_CRT,
-                -> item.mono.info.mono.displayName
+            RakuenType.EP -> "Ep" + item.episode.displayTitle
+
+            RakuenType.CHARACTER,
+            RakuenType.PERSON -> item.displayName
 
             else -> ""
         }
@@ -140,35 +215,18 @@ fun TopicPageItemHeadline(item: ComposeTopic) {
             highlights = remember(keyword) { persistentListOf(keyword) },
             highlightColor = Color.Green.copy(green = 0.8f)
         )
-
-        // 搜索的条目会填充
-        if (item.summary.isNotBlank() && param.ui.showSummary) {
-            OutlinedCard(Modifier.fillMaxWidth()) {
-                HighlightedText(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    text = item.summary,
-                    highlights = remember(keyword) { persistentListOf(keyword) },
-                    highlightColor = Color.Green.copy(green = 0.8f),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    lineHeight = 20.sp
-                )
-            }
-        }
     }
 }
 
 @Composable
 private fun TopicPageItemTrailing(
-    item: ComposeTopic,
+    item: ComposeRakuenTopic,
     onReport: (ReportParam) -> Unit,
 ) {
-    when (item.topicType) {
-        TopicDetailType.TYPE_SUBJECT,
-        TopicDetailType.TYPE_GROUP,
-        TopicDetailType.TYPE_BLOG,
+    when (item.type) {
+        RakuenType.GROUP,
+        RakuenType.MY_GROUP,
+        RakuenType.SUBJECT
             -> {
             val reportDialogState = rememberAlertDialogState()
             val user = LocalSharedState.current.user
@@ -194,10 +252,9 @@ private fun TopicPageItemTrailing(
             )
         }
 
-        TopicDetailType.TYPE_EP,
-        TopicDetailType.TYPE_PERSON,
-        TopicDetailType.TYPE_CRT,
-            -> {
+        RakuenType.EP,
+        RakuenType.PERSON,
+        RakuenType.CHARACTER -> {
             DropMenuActionButton(
                 modifier = Modifier.size(20.dp),
                 imageVector = BgmIcons.MoreHoriz,
@@ -213,82 +270,9 @@ private fun TopicPageItemTrailing(
     }
 }
 
-@Composable
-private fun TopicPageItemOverline(
-    item: ComposeTopic,
-    onClickUser: (ComposeUser) -> Unit,
-    onClickMono: (ComposeMonoDisplay) -> Unit,
-    onClickSubject: (ComposeSubject) -> Unit,
-) {
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-        itemVerticalAlignment = Alignment.CenterVertically
-    ) {
-        when (item.topicType) {
-            // 展示用户名称
-            TopicDetailType.TYPE_GROUP -> {
-                Text(
-                    modifier = Modifier.clickWithoutRipped { onClickUser(item.creator) },
-                    text = item.creator.nickname,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-            }
-            // 展示条目名称
-            TopicDetailType.TYPE_BLOG,
-            TopicDetailType.TYPE_SUBJECT,
-            TopicDetailType.TYPE_EP,
-                -> {
-                Text(
-                    modifier = Modifier.clickWithoutRipped {
-                        if (item.subject != ComposeSubject.Empty) {
-                            onClickSubject(item.subject)
-                        } else if (item.creator != ComposeUser.Empty) {
-                            onClickUser(item.creator)
-                        }
-                    },
-                    text = item.subject.displayName.ifBlank { item.creator.nickname },
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-            }
-            // 展示人物名称
-            TopicDetailType.TYPE_PERSON,
-            TopicDetailType.TYPE_CRT,
-                -> {
-                Text(
-                    modifier = Modifier.clickWithoutRipped { onClickMono(item.mono) },
-                    text = item.mono.mono.displayName,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-            }
-        }
-
-        Text(
-            text = stringResource(TopicDetailType.string(item.topicType)),
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.extraSmall)
-                .padding(vertical = 2.dp, horizontal = 4.dp),
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        )
-
-        TopicPageFlag(item)
-    }
-}
 
 @Composable
-private fun TopicPageFlag(item: ComposeTopic) {
+private fun TopicPageFlag(item: ComposeRakuenTopic) {
     item.flags.forEach {
         when (it) {
             RakuenFlagType.TYPE_HOT -> Text(
@@ -336,13 +320,13 @@ private fun TopicPageFlag(item: ComposeTopic) {
 
 @Composable
 private fun TopicPageItemAvatar(
-    item: ComposeTopic,
+    item: ComposeRakuenTopic,
     onClickUser: (ComposeUser) -> Unit,
     onClickMono: (ComposeMonoDisplay) -> Unit,
     onClickSubject: (ComposeSubject) -> Unit,
 ) {
-    when (item.topicType) {
-        TopicDetailType.TYPE_SUBJECT -> {
+    when (item.type) {
+        RakuenType.SUBJECT -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
@@ -351,57 +335,46 @@ private fun TopicPageItemAvatar(
                         else if (item.creator != ComposeUser.Empty) onClickUser(item.creator)
                     },
                 shape = MaterialTheme.shapes.small,
+                border = ThinBorderStrokeVariant,
                 model = item.creator.avatar.displayMediumImage
             )
         }
 
-        TopicDetailType.TYPE_GROUP -> {
+        RakuenType.GROUP, RakuenType.MY_GROUP -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
                     .clickWithoutRipped { onClickUser(item.creator) },
                 shape = MaterialTheme.shapes.small,
+                border = ThinBorderStrokeVariant,
                 model = item.creator.avatar.displayMediumImage
             )
         }
 
-        TopicDetailType.TYPE_BLOG -> {
-            StateImage(
-                modifier = Modifier
-                    .size(44.dp)
-                    .clickWithoutRipped { onClickUser(item.creator) },
-                shape = MaterialTheme.shapes.small,
-                model = item.creator.avatar.displayMediumImage
-            )
-        }
-
-        TopicDetailType.TYPE_EP -> {
+        RakuenType.EP -> {
             StateImage(
                 modifier = Modifier
                     .width(44.dp)
                     .aspectRatio(3 / 4f)
                     .clickWithoutRipped { onClickSubject(item.subject) },
                 shape = MaterialTheme.shapes.small,
+                border = ThinBorderStrokeVariant,
                 model = item.subject.images.displayMediumImage
             )
         }
 
-        TopicDetailType.TYPE_PERSON,
-        TopicDetailType.TYPE_CRT,
-            -> {
+        RakuenType.PERSON,
+        RakuenType.CHARACTER -> {
             StateImage(
                 modifier = Modifier
                     .width(44.dp)
-                    .aspectRatio(3 / 4f)
-                    .clickWithoutRipped { onClickMono(item.mono) },
+                    .aspectRatio(1f)
+                    .clickWithoutRipped { onClickMono(item.toMono()) },
                 shape = MaterialTheme.shapes.small,
-                model = item.mono.mono.images.displayMediumImage,
+                border = ThinBorderStrokeVariant,
+                model = item.images.displayMediumImage,
                 alignment = Alignment.TopCenter
             )
-        }
-
-        TopicDetailType.TYPE_INDEX -> {
-            Spacer(modifier = Modifier.size(44.dp))
         }
 
         else -> {

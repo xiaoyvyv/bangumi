@@ -38,8 +38,8 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.contentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.contentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
@@ -105,7 +105,7 @@ private fun TagPageScreenContent(
         columns = if (isExtraSmallScreen) GridCells.Fixed(4) else GridCells.Adaptive(80.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = contentMarginHalf, horizontal = contentMargin),
+        contentPadding = PaddingValues(vertical = ContentMarginHalf, horizontal = ContentMargin),
         contentType = { CONTENT_TAG_ITEM },
         key = { item, _ -> item.name },
         showScrollUpBtn = true
@@ -131,8 +131,8 @@ private fun TagPageScreenContent(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(contentMarginHalf, Alignment.CenterVertically),
+                    .padding(ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HighlightedText(
