@@ -6,9 +6,10 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
+import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -58,75 +59,119 @@ class TopicDetailViewModel(
 
     override suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.refreshSync() {
         when (args.type) {
-            TopicDetailType.TYPE_EP -> onLoadEpisodeTopicDetail()
-            TopicDetailType.TYPE_GROUP -> onLoadGroupTopicDetail()
-            TopicDetailType.TYPE_PERSON -> onLoadPersonTopicDetail()
-            TopicDetailType.TYPE_CRT -> onLoadCharacterTopicDetail()
-            TopicDetailType.TYPE_SUBJECT -> onLoadSubjectTopicDetail()
-            TopicDetailType.TYPE_INDEX -> onLoadIndexTopicDetail()
-            TopicDetailType.TYPE_BLOG -> onLoadBlogTopicDetail()
+            TopicType.TYPE_EP -> onLoadEpisodeTopicDetail()
+            TopicType.TYPE_GROUP -> onLoadGroupTopicDetail()
+            TopicType.TYPE_PERSON -> onLoadPersonTopicDetail()
+            TopicType.TYPE_CRT -> onLoadCharacterTopicDetail()
+            TopicType.TYPE_SUBJECT -> onLoadSubjectTopicDetail()
+            TopicType.TYPE_INDEX -> onLoadIndexTopicDetail()
+            TopicType.TYPE_BLOG -> onLoadBlogTopicDetail()
         }
     }
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadEpisodeTopicDetail() {
-        subjectRepository.fetchSubjectEpisode(args.id)
-            .onSuccess {
-                reduceData { state.copy(episode = it) }
+        awaitAll(
+            block1 = { subjectRepository.fetchSubjectEpisode(args.id) },
+            block2 = { subjectRepository.fetchSubjectEpisodeComments(args.id) }
+        ).onFailure {
+            reduceError { it }
+        }.onSuccess {
+            reduceData {
+                state.copy(
+                    episode = it.data1,
+                    replies = it.data2.toImmutableList()
+                )
             }
+        }
     }
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadGroupTopicDetail() {
-        topicRepository.fetchTopicDetail(args.id, TopicDetailType.TYPE_GROUP)
+        topicRepository.fetchTopicDetail(args.id, TopicType.TYPE_GROUP)
             .onSuccess {
                 reduceData {
                     state.copy(
                         topic = it,
-                        comments = it.replies.subList(1, it.replies.size).toImmutableList()
+                        replies = it.replies.subList(1, it.replies.size).toImmutableList()
                     )
                 }
             }
     }
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadSubjectTopicDetail() {
-        topicRepository.fetchTopicDetail(args.id, TopicDetailType.TYPE_SUBJECT)
+        topicRepository.fetchTopicDetail(args.id, TopicType.TYPE_SUBJECT)
             .onSuccess {
                 reduceData {
                     state.copy(
                         topic = it,
-                        comments = it.replies.subList(1, it.replies.size).toImmutableList()
+                        replies = it.replies.subList(1, it.replies.size).toImmutableList()
                     )
                 }
             }
     }
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadPersonTopicDetail() {
-        monoRepository.fetchMonoDetail(args.id, MonoType.PERSON)
-            .onSuccess {
-                reduceData { state.copy(mono = ComposeMonoDisplay.from(MonoType.PERSON, it)) }
+        awaitAll(
+            block1 = { monoRepository.fetchMonoDetail(args.id, MonoType.PERSON) },
+            block2 = { monoRepository.fetchMonoComments(args.id, MonoType.PERSON) }
+        ).onFailure {
+            reduceError { it }
+        }.onSuccess {
+            reduceData {
+                state.copy(
+                    mono = ComposeMonoDisplay.from(MonoType.PERSON, it.data1),
+                    replies = it.data2.toImmutableList()
+                )
             }
+        }
     }
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadCharacterTopicDetail() {
-        monoRepository.fetchMonoDetail(args.id, MonoType.CHARACTER)
-            .onSuccess {
-                reduceData { state.copy(mono = ComposeMonoDisplay.from(MonoType.CHARACTER, it)) }
+        awaitAll(
+            block1 = { monoRepository.fetchMonoDetail(args.id, MonoType.CHARACTER) },
+            block2 = { monoRepository.fetchMonoComments(args.id, MonoType.CHARACTER) }
+        ).onFailure {
+            reduceError { it }
+        }.onSuccess {
+            reduceData {
+                state.copy(
+                    mono = ComposeMonoDisplay.from(MonoType.CHARACTER, it.data1),
+                    replies = it.data2.toImmutableList()
+                )
             }
+        }
     }
 
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadIndexTopicDetail() {
-        indexRepository.fetchIndexDetail(args.id)
-            .onSuccess {
-                reduceData { state.copy(index = it) }
+        awaitAll(
+            block1 = { indexRepository.fetchIndexDetail(args.id) },
+            block2 = { indexRepository.fetchIndexComments(args.id) }
+        ).onFailure {
+            reduceError { it }
+        }.onSuccess {
+            reduceData {
+                state.copy(
+                    index = it.data1,
+                    replies = it.data2.toImmutableList()
+                )
             }
+        }
     }
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadBlogTopicDetail() {
         awaitAll(
-            { blogRepository.fetchBlogDetail(args.id) },
-            { blogRepository.fetchBlogRelateSubjects(args.id) }
-        ).onSuccess {
-            reduceData { state.copy(blog = it.data1.copy(subjects = it.data2.toImmutableList())) }
+            block1 = { blogRepository.fetchBlogDetail(args.id) },
+            block2 = { blogRepository.fetchBlogComments(args.id) },
+            block3 = { blogRepository.fetchBlogRelateSubjects(args.id) },
+        ).onFailure {
+            reduceError { it }
+        }.onSuccess {
+            reduceData {
+                state.copy(
+                    blog = it.data1.copy(subjects = it.data3.toImmutableList()),
+                    replies = it.data2.toImmutableList(),
+                )
+            }
         }
     }
 
@@ -135,19 +180,19 @@ class TopicDetailViewModel(
 
         withActionLoading {
             when (args.type) {
-                TopicDetailType.TYPE_GROUP -> {
+                TopicType.TYPE_GROUP -> {
                     topicRepository.submitGroupReaction(commentId, if (isLiked) null else reaction.value)
                 }
 
-                TopicDetailType.TYPE_SUBJECT -> {
+                TopicType.TYPE_SUBJECT -> {
                     topicRepository.submitSubjectReaction(commentId, if (isLiked) null else reaction.value)
                 }
 
-                TopicDetailType.TYPE_BLOG -> {
+                TopicType.TYPE_BLOG -> {
                     blogRepository.submitBlogReaction(commentId, if (isLiked) null else reaction.value)
                 }
 
-                TopicDetailType.TYPE_EP -> {
+                TopicType.TYPE_EP -> {
                     subjectRepository.submitEpisodeReaction(commentId, if (isLiked) null else reaction.value)
                 }
 
@@ -171,7 +216,7 @@ class TopicDetailViewModel(
                     topic = state.topic.copy(
                         replies = state.topic.replies.refreshReaction(commentId, result)
                     ),
-                    comments = state.comments.refreshReaction(commentId, result)
+                    replies = state.replies.refreshReaction(commentId, result)
                 )
             }
         }

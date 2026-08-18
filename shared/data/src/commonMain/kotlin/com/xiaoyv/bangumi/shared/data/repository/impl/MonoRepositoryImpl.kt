@@ -17,6 +17,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.parser.bgm.MonoParser
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
@@ -202,9 +203,9 @@ class MonoRepositoryImpl(
 
     override suspend fun fetchMonoDetail(monoId: Long, type: Int): Result<ComposeMono> =
         if (type == MonoType.CHARACTER) {
-            client.requestNextCharacterApi { getCharacter(monoId) }
+            client.requestNextCharacterApi { getCharacter(monoId).normalized() }
         } else {
-            client.requestNextPersonApi { getPerson(monoId) }
+            client.requestNextPersonApi { getPerson(monoId).normalized() }
         }
 
     override suspend fun fetchMonoDetailByWeb(monoId: Long, type: Int): Result<ComposeMonoWebInfo> = client.requestWebApi {
@@ -218,6 +219,13 @@ class MonoRepositoryImpl(
             }
         }
     }
+
+    override suspend fun fetchMonoComments(monoId: Long, @MonoType type: Int): Result<List<ComposeReply>> =
+        if (type == MonoType.CHARACTER) {
+            client.requestNextCharacterApi { getCharacterComments(monoId).map { it.normalized() } }
+        } else {
+            client.requestNextPersonApi { getPersonComments(monoId).map { it.normalized() } }
+        }
 
     override suspend fun fetchMonoHomepage(): Result<List<ComposeSection<ComposeMonoDisplay>>> = client.requestWebApi {
         with(monoParser) {

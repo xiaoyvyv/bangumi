@@ -20,29 +20,29 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageEvent
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageViewModel
 import com.xiaoyv.bangumi.features.timeline.page.business.koinTimelinePageViewModel
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineSubjectAction
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineBatch
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineDaily
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineMemo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineSingle
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
 
@@ -139,10 +139,10 @@ private fun TimelinePageItem(
                             onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id)))
                         },
                         onEpisodeClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.Article(it.id, TopicDetailType.TYPE_EP)))
+                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_EP)))
                         },
                         onBlogClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.Article(it.id, TopicDetailType.TYPE_BLOG)))
+                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_BLOG)))
                         },
                         onIndexClickListener = {
                             onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.IndexDetail(it.id)))
@@ -206,7 +206,7 @@ private fun TimelinePageItem(
                     TimelineCat.BLOG -> TimelinePageItemBlog(
                         item = item,
                         onClick = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.Article(it.id, TopicDetailType.TYPE_BLOG)))
+                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_BLOG)))
                         }
                     )
 

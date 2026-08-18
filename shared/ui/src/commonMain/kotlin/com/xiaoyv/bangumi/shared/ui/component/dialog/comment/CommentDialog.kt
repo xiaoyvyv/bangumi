@@ -107,7 +107,7 @@ import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend2Emojis
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.resource.toComposeUri
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
@@ -523,7 +523,7 @@ fun PreviewCommentDialogContent() {
             dialogState = rememberAlertDialogState(),
             state = CommentState(
                 anchor = CommentDialogAnchor(
-                    article = ComposeTopicDetail.Empty,
+                    article = ComposeTopic.Empty,
                     reply = ComposeComment.Empty,
                     lastViewedInMillis = 0
                 )

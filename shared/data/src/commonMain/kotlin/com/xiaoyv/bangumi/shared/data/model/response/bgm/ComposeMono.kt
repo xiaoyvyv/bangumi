@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
+import com.xiaoyv.library.BBCodeToHtml
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -56,6 +57,10 @@ data class ComposeMono(
         } else {
             WebConstant.URL_BASE_WEB + "character/$id"
         }
+    }
+
+    fun normalized(): ComposeMono {
+        return copy(summary = BBCodeToHtml.convert(summary))
     }
 
     companion object {

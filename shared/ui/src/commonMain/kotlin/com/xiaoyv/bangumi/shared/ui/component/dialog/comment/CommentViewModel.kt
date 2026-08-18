@@ -59,8 +59,10 @@ class CommentViewModel(
         val comment = state.comment.text.trim()
         val isSubComment = reply != ComposeComment.Empty
 
-        val replyArticleParam = article.replyParam
-        val params = replyArticleParam.inputs.toMutableMap()
+//        val replyArticleParam = article.replyParam
+//        val params = replyArticleParam.inputs.toMutableMap()
+
+        val params = mutableMapOf<String, Any>()
 
         params["content"] = if (!isSubComment) comment else {
             buildString {
@@ -84,7 +86,7 @@ class CommentViewModel(
             params["post_uid"] = subReplyParam.postUid.toString()
         }
 
-        ugcRepository.submitNewReply(replyArticleParam.action, params = params)
+        ugcRepository.submitNewReply("replyArticleParam.action", params = params)
             .onFailure { reduce { state.copy(sending = false) } }
             .onSuccess {
                 reduce { state.copy(sending = false, comment = TextFieldValue()) }

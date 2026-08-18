@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
@@ -42,11 +42,11 @@ import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 
@@ -107,14 +107,14 @@ fun TopicPageItemHeadline(item: ComposeTopic) {
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
     ) {
         val title = when (item.topicType) {
-            TopicDetailType.TYPE_GROUP,
-            TopicDetailType.TYPE_EP,
-            TopicDetailType.TYPE_SUBJECT,
-            TopicDetailType.TYPE_BLOG,
+            TopicType.TYPE_GROUP,
+            TopicType.TYPE_EP,
+            TopicType.TYPE_SUBJECT,
+            TopicType.TYPE_BLOG,
                 -> item.title
 
-            TopicDetailType.TYPE_PERSON,
-            TopicDetailType.TYPE_CRT,
+            TopicType.TYPE_PERSON,
+            TopicType.TYPE_CRT,
                 -> item.mono.info.mono.displayName
 
             else -> ""
@@ -166,9 +166,9 @@ private fun TopicPageItemTrailing(
     onReport: (ReportParam) -> Unit,
 ) {
     when (item.topicType) {
-        TopicDetailType.TYPE_SUBJECT,
-        TopicDetailType.TYPE_GROUP,
-        TopicDetailType.TYPE_BLOG,
+        TopicType.TYPE_SUBJECT,
+        TopicType.TYPE_GROUP,
+        TopicType.TYPE_BLOG,
             -> {
             val reportDialogState = rememberAlertDialogState()
             val user = LocalSharedState.current.user
@@ -194,9 +194,9 @@ private fun TopicPageItemTrailing(
             )
         }
 
-        TopicDetailType.TYPE_EP,
-        TopicDetailType.TYPE_PERSON,
-        TopicDetailType.TYPE_CRT,
+        TopicType.TYPE_EP,
+        TopicType.TYPE_PERSON,
+        TopicType.TYPE_CRT,
             -> {
             DropMenuActionButton(
                 modifier = Modifier.size(20.dp),
@@ -228,7 +228,7 @@ private fun TopicPageItemOverline(
     ) {
         when (item.topicType) {
             // 展示用户名称
-            TopicDetailType.TYPE_GROUP -> {
+            TopicType.TYPE_GROUP -> {
                 Text(
                     modifier = Modifier.clickWithoutRipped { onClickUser(item.creator) },
                     text = item.creator.nickname,
@@ -239,9 +239,9 @@ private fun TopicPageItemOverline(
                 )
             }
             // 展示条目名称
-            TopicDetailType.TYPE_BLOG,
-            TopicDetailType.TYPE_SUBJECT,
-            TopicDetailType.TYPE_EP,
+            TopicType.TYPE_BLOG,
+            TopicType.TYPE_SUBJECT,
+            TopicType.TYPE_EP,
                 -> {
                 Text(
                     modifier = Modifier.clickWithoutRipped {
@@ -259,8 +259,8 @@ private fun TopicPageItemOverline(
                 )
             }
             // 展示人物名称
-            TopicDetailType.TYPE_PERSON,
-            TopicDetailType.TYPE_CRT,
+            TopicType.TYPE_PERSON,
+            TopicType.TYPE_CRT,
                 -> {
                 Text(
                     modifier = Modifier.clickWithoutRipped { onClickMono(item.mono) },
@@ -274,7 +274,7 @@ private fun TopicPageItemOverline(
         }
 
         Text(
-            text = stringResource(TopicDetailType.string(item.topicType)),
+            text = stringResource(TopicType.string(item.topicType)),
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.extraSmall)
                 .padding(vertical = 2.dp, horizontal = 4.dp),
@@ -342,7 +342,7 @@ private fun TopicPageItemAvatar(
     onClickSubject: (ComposeSubject) -> Unit,
 ) {
     when (item.topicType) {
-        TopicDetailType.TYPE_SUBJECT -> {
+        TopicType.TYPE_SUBJECT -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
@@ -355,7 +355,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        TopicDetailType.TYPE_GROUP -> {
+        TopicType.TYPE_GROUP -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
@@ -365,7 +365,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        TopicDetailType.TYPE_BLOG -> {
+        TopicType.TYPE_BLOG -> {
             StateImage(
                 modifier = Modifier
                     .size(44.dp)
@@ -375,7 +375,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        TopicDetailType.TYPE_EP -> {
+        TopicType.TYPE_EP -> {
             StateImage(
                 modifier = Modifier
                     .width(44.dp)
@@ -386,8 +386,8 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        TopicDetailType.TYPE_PERSON,
-        TopicDetailType.TYPE_CRT,
+        TopicType.TYPE_PERSON,
+        TopicType.TYPE_CRT,
             -> {
             StateImage(
                 modifier = Modifier
@@ -400,7 +400,7 @@ private fun TopicPageItemAvatar(
             )
         }
 
-        TopicDetailType.TYPE_INDEX -> {
+        TopicType.TYPE_INDEX -> {
             Spacer(modifier = Modifier.size(44.dp))
         }
 

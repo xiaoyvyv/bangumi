@@ -11,11 +11,11 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
@@ -63,6 +63,7 @@ interface SubjectRepository {
         @EpisodeType type: Int? = null,
     ): Result<List<ComposeEpisode>>
 
+    suspend fun fetchSubjectEpisodeComments(episodeId: Long): Result<List<ComposeReply>>
 
     suspend fun fetchSubjectStats(id: Long): Result<ComposeSubjectStats>
 

@@ -4,9 +4,8 @@ import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
-import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
@@ -22,14 +21,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeWebTimeline
 
 interface UgcRepository {
-    fun fetchTimelinePager(
-        @TimelineTarget target: String,
-        @TimelineTab type: String,
-        username: String = "",
-    ): Pager<Int, ComposeWebTimeline>
+
 
     fun fetchTimelineDisplayPager(
         @TimelineTarget target: String,
@@ -47,7 +41,7 @@ interface UgcRepository {
 
     suspend fun fetchIndexFocus(): Result<List<ComposeIndexFocus>>
 
-    suspend fun fetchTopicDetail(id: Long, @TopicDetailType type: String): Result<ComposeTopicDetail>
+    suspend fun fetchTopicDetail(id: Long, @TopicType type: String): Result<ComposeTopicDetail>
 
     suspend fun fetchDollarsChat(): Result<List<ComposeDollarItem>>
 

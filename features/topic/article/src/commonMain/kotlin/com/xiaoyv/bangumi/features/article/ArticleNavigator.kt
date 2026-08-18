@@ -11,11 +11,11 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
-val articleModule = module {
+val topicDetailModule = module {
     viewModelOf(::ArticleViewModel)
 
     navScope {
-        navigation<Screen.Article>(metadata = ListDetailSceneStrategy.detailPane()) { key ->
+        navigation<Screen.TopicDetail>(metadata = ListDetailSceneStrategy.detailPane()) { key ->
             ArticleRoute(
                 viewModel = koinViewModel { parametersOf(key) },
                 onNavScreen = { navigator.navigate(it) },

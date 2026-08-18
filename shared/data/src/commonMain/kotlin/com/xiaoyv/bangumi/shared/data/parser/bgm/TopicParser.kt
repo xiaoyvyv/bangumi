@@ -6,15 +6,12 @@ import com.fleeksoft.ksoup.nodes.Element
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
-import com.xiaoyv.bangumi.shared.core.utils.debugLog
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
-import com.xiaoyv.bangumi.shared.core.utils.groupValueOne
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
 import com.xiaoyv.bangumi.shared.core.utils.hrefLongId
 import com.xiaoyv.bangumi.shared.core.utils.lastTextNode
 import com.xiaoyv.bangumi.shared.core.utils.parseAgoToTimestamp
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmojiParam
@@ -24,9 +21,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.persistentListOf
@@ -55,21 +52,21 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
             val attachTitle = item.select(".inner .row a").text()
 
             val idType = when {
-                key.contains(TopicDetailType.TYPE_SUBJECT) -> TopicDetailType.TYPE_SUBJECT
-                key.contains(TopicDetailType.TYPE_EP) -> TopicDetailType.TYPE_EP
-                key.contains(TopicDetailType.TYPE_GROUP) -> TopicDetailType.TYPE_GROUP
-                key.contains(TopicDetailType.TYPE_PERSON) -> TopicDetailType.TYPE_PERSON
-                key.contains(TopicDetailType.TYPE_CRT) -> TopicDetailType.TYPE_CRT
-                key.contains(TopicDetailType.TYPE_INDEX) -> TopicDetailType.TYPE_INDEX
-                key.contains(TopicDetailType.TYPE_BLOG) -> TopicDetailType.TYPE_BLOG
-                else -> TopicDetailType.TYPE_UNKNOWN
+                key.contains(TopicType.TYPE_SUBJECT) -> TopicType.TYPE_SUBJECT
+                key.contains(TopicType.TYPE_EP) -> TopicType.TYPE_EP
+                key.contains(TopicType.TYPE_GROUP) -> TopicType.TYPE_GROUP
+                key.contains(TopicType.TYPE_PERSON) -> TopicType.TYPE_PERSON
+                key.contains(TopicType.TYPE_CRT) -> TopicType.TYPE_CRT
+                key.contains(TopicType.TYPE_INDEX) -> TopicType.TYPE_INDEX
+                key.contains(TopicType.TYPE_BLOG) -> TopicType.TYPE_BLOG
+                else -> TopicType.TYPE_UNKNOWN
             }
 
             // 用户能发帖的条目
             val user = when (idType) {
-                TopicDetailType.TYPE_SUBJECT,
-                TopicDetailType.TYPE_GROUP,
-                TopicDetailType.TYPE_BLOG,
+                TopicType.TYPE_SUBJECT,
+                TopicType.TYPE_GROUP,
+                TopicType.TYPE_BLOG,
                     -> ComposeUser(
                     id = avatarUrl.avatarUrlId(username),
                     username = username,
@@ -82,9 +79,9 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
 
             // 附带条目名称的条目
             val subject = when (idType) {
-                TopicDetailType.TYPE_SUBJECT,
-                TopicDetailType.TYPE_EP,
-                TopicDetailType.TYPE_BLOG,
+                TopicType.TYPE_SUBJECT,
+                TopicType.TYPE_EP,
+                TopicType.TYPE_BLOG,
                     -> {
                     ComposeSubject(
                         id = attachLongId,
@@ -99,7 +96,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
 
             // 虚拟人物和现实人物条目
             val mono = when (idType) {
-                TopicDetailType.TYPE_PERSON -> {
+                TopicType.TYPE_PERSON -> {
                     ComposeMonoDisplay(
                         type = MonoType.PERSON,
                         info = ComposeMonoInfo(
@@ -112,7 +109,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
                     )
                 }
 
-                TopicDetailType.TYPE_CRT -> {
+                TopicType.TYPE_CRT -> {
                     ComposeMonoDisplay(
                         type = MonoType.CHARACTER,
                         info = ComposeMonoInfo(
@@ -136,7 +133,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
                 replyCount = commentCount,
                 creator = user,
                 subject = subject,
-                group = if (idType == TopicDetailType.TYPE_GROUP) ComposeGroup(
+                group = if (idType == TopicType.TYPE_GROUP) ComposeGroup(
                     name = attachId,
                     title = attachTitle
                 ) else ComposeGroup.Empty,
@@ -181,7 +178,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
 
         return ComposeTopicDetail(
             id = id,
-            type = TopicDetailType.TYPE_BLOG,
+            type = TopicType.TYPE_BLOG,
             contentId = id.toString(),
             title = title,
             subjects = subjects.toPersistentList(),
@@ -199,15 +196,15 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
      */
     suspend fun Element.fetchRakuenTopicDetailConverted(
         id: Long,
-        @TopicDetailType type: String,
+        @TopicType type: String,
     ): ComposeTopicDetail {
         requireNoError()
         val pageHeader = select("#pageHeader")
         val title = pageHeader.select("h1").lastTextNode()
 
         val subject = when (type) {
-            TopicDetailType.TYPE_SUBJECT,
-            TopicDetailType.TYPE_EP,
+            TopicType.TYPE_SUBJECT,
+            TopicType.TYPE_EP,
                 -> {
                 ComposeSubject(
                     id = pageHeader.select("a.avatar").hrefLongId(),
@@ -221,7 +218,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
         }
 
         val group = when (type) {
-            TopicDetailType.TYPE_GROUP -> {
+            TopicType.TYPE_GROUP -> {
                 ComposeGroup(
                     name = pageHeader.select("a.avatar").hrefId(),
                     title = pageHeader.select("a.avatar").text().trim(),
@@ -233,8 +230,8 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
         }
 
         val mono = when (type) {
-            TopicDetailType.TYPE_PERSON,
-            TopicDetailType.TYPE_CRT,
+            TopicType.TYPE_PERSON,
+            TopicType.TYPE_CRT,
                 -> {
                 ComposeMonoDisplay(
                     info = ComposeMonoInfo(
@@ -244,7 +241,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
                             images = ComposeImages.fromUrl(pageHeader.select("img.avatar").src()),
                         )
                     ),
-                    type = if (type == TopicDetailType.TYPE_CRT) MonoType.CHARACTER else MonoType.PERSON
+                    type = if (type == TopicType.TYPE_CRT) MonoType.CHARACTER else MonoType.PERSON
                 )
             }
 
@@ -258,8 +255,8 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
         val contentId: String
 
         when (type) {
-            TopicDetailType.TYPE_SUBJECT,
-            TopicDetailType.TYPE_GROUP,
+            TopicType.TYPE_SUBJECT,
+            TopicType.TYPE_GROUP,
                 -> {
                 val postTopic = select(".postTopic")
                 val userAvatar = postTopic.select("a.avatar > span").styleAvatarUrl()
@@ -373,7 +370,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
 
         // 读取最新的日志ID和小组话题ID
         topics.forEach {
-            if (it.topicType == TopicDetailType.TYPE_GROUP) {
+            if (it.topicType == TopicType.TYPE_GROUP) {
                 val topicId = it.id
                 if (topicId > maxGroupTopicId) {
                     maxGroupTopicId = topicId
@@ -382,7 +379,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
                 groupTopicIds.add(topicId)
             }
 
-            if (it.topicType == TopicDetailType.TYPE_BLOG) {
+            if (it.topicType == TopicType.TYPE_BLOG) {
                 val blogId = it.id
                 if (blogId > maxBlogId) {
                     maxBlogId = blogId
@@ -402,7 +399,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
             val id = item.id
 
             // 小组话题：坟贴、新帖、火标记
-            if (item.topicType == TopicDetailType.TYPE_GROUP && maxGroupTopicId != 0L) {
+            if (item.topicType == TopicType.TYPE_GROUP && maxGroupTopicId != 0L) {
                 if (id < maxGroupTopicId - 10000) {
                     flags.add(RakuenFlagType.TYPE_OLDEST)
                 } else if (id < maxGroupTopicId - 4000) {
@@ -418,7 +415,7 @@ class TopicParser(private val commentParser: CommentParser) : BaseParser() {
             }
 
             // 日志话题：坟贴、新帖、火标记
-            if (item.topicType == TopicDetailType.TYPE_BLOG && maxBlogId != 0L) {
+            if (item.topicType == TopicType.TYPE_BLOG && maxBlogId != 0L) {
                 if (id < maxBlogId - 5000) {
                     flags.add(RakuenFlagType.TYPE_OLDEST)
                 } else if (id < maxBlogId - 1000) {

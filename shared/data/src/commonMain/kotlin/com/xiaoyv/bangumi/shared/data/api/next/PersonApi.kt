@@ -5,10 +5,10 @@ import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
@@ -88,7 +88,7 @@ interface PersonApi {
      * @param personID
      */
     @GET("p1/persons/{personID}/comments")
-    suspend fun getPersonComments(@Path("personID") personID: Int): List<ComposeReply>
+    suspend fun getPersonComments(@Path("personID") personID: Long): List<ComposeReply>
 
     /**
      * 获取人物的参与作品

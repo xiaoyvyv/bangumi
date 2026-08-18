@@ -15,23 +15,23 @@ import com.xiaoyv.bangumi.core_resource.resources.type_unknown
 import org.jetbrains.compose.resources.StringResource
 
 /**
- * Class: [TopicDetailType]
+ * Class: [TopicType]
  *
  * @author why
  * @since 11/25/23
  */
 @StringDef(
-    TopicDetailType.TYPE_UNKNOWN,
-    TopicDetailType.TYPE_EP,
-    TopicDetailType.TYPE_GROUP,
-    TopicDetailType.TYPE_PERSON,
-    TopicDetailType.TYPE_CRT,
-    TopicDetailType.TYPE_SUBJECT,
-    TopicDetailType.TYPE_INDEX,
-    TopicDetailType.TYPE_BLOG,
+    TopicType.TYPE_UNKNOWN,
+    TopicType.TYPE_EP,
+    TopicType.TYPE_GROUP,
+    TopicType.TYPE_PERSON,
+    TopicType.TYPE_CRT,
+    TopicType.TYPE_SUBJECT,
+    TopicType.TYPE_INDEX,
+    TopicType.TYPE_BLOG,
 )
 @Retention(AnnotationRetention.SOURCE)
-annotation class TopicDetailType {
+annotation class TopicType {
     companion object {
         const val TYPE_UNKNOWN = ""
         const val TYPE_EP = "ep"
@@ -42,11 +42,11 @@ annotation class TopicDetailType {
         const val TYPE_INDEX = "index"
         const val TYPE_BLOG = "blog"
 
-        fun isSupportRection(@TopicDetailType type: String): Boolean {
+        fun isSupportRection(@TopicType type: String): Boolean {
             return type == TYPE_BLOG || type == TYPE_GROUP || type == TYPE_SUBJECT
         }
 
-        fun string(@TopicDetailType type: String): StringResource {
+        fun string(@TopicType type: String): StringResource {
             return when (type) {
                 TYPE_EP -> Res.string.type_topic_ep
                 TYPE_GROUP -> Res.string.type_topic_group

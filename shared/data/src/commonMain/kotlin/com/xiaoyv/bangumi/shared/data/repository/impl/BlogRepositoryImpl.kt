@@ -13,7 +13,11 @@ class BlogRepositoryImpl(
 ) : BlogRepository {
 
     override suspend fun fetchBlogDetail(blogId: Long): Result<ComposeBlogEntry> = client.requestNextBlogApi {
-        getBlogEntry(blogId)
+        getBlogEntry(blogId).normalized()
+    }
+
+    override suspend fun fetchBlogComments(blogId: Long): Result<List<ComposeReply>> = client.requestNextBlogApi {
+        getBlogComments(blogId).map { it.normalized() }
     }
 
     override suspend fun fetchBlogRelateSubjects(blogId: Long): Result<List<ComposeSubject>> = client.requestNextBlogApi {

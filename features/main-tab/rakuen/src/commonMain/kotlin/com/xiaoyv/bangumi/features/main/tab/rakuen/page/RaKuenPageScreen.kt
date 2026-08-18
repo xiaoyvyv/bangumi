@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenEvent
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
@@ -38,7 +38,7 @@ fun RaKuenPageScreen(
             modifier = Modifier.fillMaxWidth(),
             item = item,
             showCategory = type == RakuenType.ALL,
-            onClick = { /*onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType)))*/ },
+            onClick = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType))) },
             onClickUser = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.UserDetail(it.username))) },
             onClickSubject = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
             onClickMono = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, it.type))) },
@@ -59,7 +59,7 @@ fun PreviewRaKuenPageItem() {
                 creator = ComposeUser(nickname = "小夜"),
                 replyCount = 100,
                 title = "葬送的芙莉莲",
-                topicType = TopicDetailType.TYPE_GROUP
+                topicType = TopicType.TYPE_GROUP
             )
         )
     }

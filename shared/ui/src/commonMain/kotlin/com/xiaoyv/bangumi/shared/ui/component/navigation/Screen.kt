@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
 import kotlinx.serialization.Serializable
@@ -62,7 +62,6 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.PixivMain::class, Screen.PixivMain.serializer())
             subclass(Screen.PixivLogin::class, Screen.PixivLogin.serializer())
             subclass(Screen.TopicDetail::class, Screen.TopicDetail.serializer())
-            subclass(Screen.Article::class, Screen.Article.serializer())
             subclass(Screen.DetectImage::class, Screen.DetectImage.serializer())
             subclass(Screen.SearchInput::class, Screen.SearchInput.serializer())
             subclass(Screen.SearchResult::class, Screen.SearchResult.serializer())
@@ -188,10 +187,7 @@ sealed class Screen(
     data object PixivLogin : Screen(SCREEN_ROUTE_PIXIV_LOGIN)
 
     @Serializable
-    data class TopicDetail(val id: Long, @field:TopicDetailType val type: String) : Screen(SCREEN_ROUTE_TOPIC)
-
-    @Serializable
-    data class Article(val id: Long, @field:TopicDetailType val type: String) : Screen(SCREEN_ROUTE_ARTICLE)
+    data class TopicDetail(val id: Long, @field:TopicType val type: String) : Screen(SCREEN_ROUTE_TOPIC_DETAIL)
 
     @Serializable
     data class DetectImage(@field:DetectType val type: Int, val path: String = "") : Screen(SCREEN_ROUTE_RECEIVE)

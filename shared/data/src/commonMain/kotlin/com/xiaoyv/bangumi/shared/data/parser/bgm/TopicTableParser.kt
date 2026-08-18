@@ -4,7 +4,7 @@ package com.xiaoyv.bangumi.shared.data.parser.bgm
 
 import com.fleeksoft.ksoup.nodes.Element
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.href
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
 import com.xiaoyv.bangumi.shared.core.utils.hrefLongId
@@ -39,7 +39,7 @@ class TopicTableParser : BaseParser() {
             val type: String
             when {
                 relatedUrl.contains("subject") -> {
-                    type = TopicDetailType.TYPE_SUBJECT
+                    type = TopicType.TYPE_SUBJECT
                     group = ComposeGroup.Empty
                     subject = ComposeSubject(
                         name = relatedTitle,
@@ -48,7 +48,7 @@ class TopicTableParser : BaseParser() {
                 }
 
                 relatedUrl.contains("group") -> {
-                    type = TopicDetailType.TYPE_GROUP
+                    type = TopicType.TYPE_GROUP
                     subject = ComposeSubject.Empty
                     group = ComposeGroup(
                         title = relatedTitle,
@@ -57,7 +57,7 @@ class TopicTableParser : BaseParser() {
                 }
 
                 else -> {
-                    type = TopicDetailType.TYPE_UNKNOWN
+                    type = TopicType.TYPE_UNKNOWN
                     group = ComposeGroup.Empty
                     subject = ComposeSubject.Empty
                 }
@@ -87,7 +87,7 @@ class TopicTableParser : BaseParser() {
             val time = tds.getOrNull(3)?.text().orEmpty()
             ComposeTopic(
                 id = it.select(".subject a").hrefLongId(),
-                topicType = TopicDetailType.TYPE_SUBJECT,
+                topicType = TopicType.TYPE_SUBJECT,
                 title = it.select(".subject").text(),
                 creator = ComposeUser(
                     nickname = tds.getOrNull(1)?.text().orEmpty(),
@@ -108,7 +108,7 @@ class TopicTableParser : BaseParser() {
 
             ComposeTopic(
                 id = tds[0].select("a").hrefLongId(),
-                topicType = TopicDetailType.TYPE_GROUP,
+                topicType = TopicType.TYPE_GROUP,
                 replyCount = tds[0].select("small").text().parseCount(),
                 title = tds[0].select("a").text(),
                 group = ComposeGroup(

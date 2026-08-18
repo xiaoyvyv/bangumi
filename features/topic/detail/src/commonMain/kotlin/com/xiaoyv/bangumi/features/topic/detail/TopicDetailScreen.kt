@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.topic.detail
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -16,9 +18,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,43 +37,58 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_comments
+import com.xiaoyv.bangumi.core_resource.resources.global_no_content
+import com.xiaoyv.bangumi.core_resource.resources.global_no_more
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.topic_title
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailEvent
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailState
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailViewModel
+import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.animateScrollToItem
 import com.xiaoyv.bangumi.shared.core.utils.nodesIndexed
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
+import com.xiaoyv.bangumi.shared.ui.component.dialog.comment.CommentDialog
+import com.xiaoyv.bangumi.shared.ui.component.dialog.comment.CommentDialogAnchor
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
+import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.comment.CommentReplyItem
 import com.xiaoyv.bangumi.shared.ui.view.comment.LocalCommentTargetAuthorUsername
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -125,9 +147,9 @@ private fun TopicDetailScreen(
 
                                 // 仅以下几种话题才显示举报
                                 when (type) {
-                                    TopicDetailType.TYPE_SUBJECT,
-                                    TopicDetailType.TYPE_BLOG,
-                                    TopicDetailType.TYPE_GROUP -> add(ButtonType.Report)
+                                    TopicType.TYPE_SUBJECT,
+                                    TopicType.TYPE_BLOG,
+                                    TopicType.TYPE_GROUP -> add(ButtonType.Report)
                                 }
                             },
                             onOptionClick = {
@@ -148,6 +170,26 @@ private fun TopicDetailScreen(
                 onNavigationClick = { onUiEvent(TopicDetailEvent.UI.OnNavUp) }
             )
         },
+        floatingActionButton = {
+            val commentDialogState = rememberAlertDialogState()
+
+            CommentDialog(
+                dialogState = commentDialogState,
+                anchor = CommentDialogAnchor(
+                    article = uiState.data.topic,
+                    lastViewedInMillis = System.currentTimeMillis()
+                ),
+                onSendCommentSuccess = { comment ->
+//                        onActionEvent(TopicDetailEvent.Action.OnAppendComment(comment))
+                }
+            )
+
+            AnimatedVisibility(visible = uiState.data.topic != ComposeTopic.Empty) {
+                FloatingActionButton(onClick = { commentDialogState.show() }) {
+                    Icon(imageVector = BgmIcons.EditNote, contentDescription = null)
+                }
+            }
+        },
     ) {
         StateLayout(
             modifier = Modifier
@@ -159,38 +201,6 @@ private fun TopicDetailScreen(
             TopicDetailScreenContent(state, onUiEvent, onActionEvent)
         }
     }
-    /*BgmCollapsingScaffold(
-        modifier = Modifier.fillMaxSize(),
-
-        collapse = {
-            baseState.data.run {
-
-            }
-        },
-        overlay = {
-            Box(Modifier.fillMaxSize()) {
-                val commentDialogState = rememberAlertDialogState()
-
-                FloatingActionButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(contentMargin),
-                    onClick = { commentDialogState.show() }
-                ) {
-                    Icon(imageVector = BgmIcons.EditNote, contentDescription = null)
-                }
-            }
-        },
-        content = {
-            StateLayout(
-                modifier = Modifier.fillMaxSize(),
-                onRefresh = { onActionEvent(TopicDetailEvent.Action.OnRefresh(it)) },
-                baseState = baseState,
-            ) { state ->
-                TopicDetailScreenContent(state, onUiEvent, onActionEvent)
-            }
-        }
-    )*/
 }
 
 @Composable
@@ -223,7 +233,7 @@ fun TopicDetailScreenHeader(
         ) {
             when (state.type) {
                 // 小组贴
-                TopicDetailType.TYPE_GROUP -> {
+                TopicType.TYPE_GROUP -> {
                     item {
                         TopicDetailScreenUserBar(
                             user = state.topic.creator,
@@ -242,7 +252,7 @@ fun TopicDetailScreenHeader(
                     }
                 }
                 // 条目贴
-                TopicDetailType.TYPE_SUBJECT -> {
+                TopicType.TYPE_SUBJECT -> {
                     item {
                         TopicDetailScreenUserBar(
                             user = state.topic.creator,
@@ -261,7 +271,7 @@ fun TopicDetailScreenHeader(
                     }
                 }
                 // 章节贴
-                TopicDetailType.TYPE_EP -> {
+                TopicType.TYPE_EP -> {
                     item {
                         TopicDetailScreenSubjectBar(
                             subject = state.episode.subject,
@@ -272,8 +282,8 @@ fun TopicDetailScreenHeader(
                     }
                 }
                 // 人物贴
-                TopicDetailType.TYPE_PERSON,
-                TopicDetailType.TYPE_CRT -> {
+                TopicType.TYPE_PERSON,
+                TopicType.TYPE_CRT -> {
                     item {
                         TopicDetailScreenMonoBar(
                             mono = state.mono,
@@ -284,7 +294,7 @@ fun TopicDetailScreenHeader(
                     }
                 }
 
-                TopicDetailType.TYPE_INDEX -> {
+                TopicType.TYPE_INDEX -> {
                     item {
                         TopicDetailScreenUserBar(
                             user = state.index.creator,
@@ -295,7 +305,7 @@ fun TopicDetailScreenHeader(
                     }
                 }
 
-                TopicDetailType.TYPE_BLOG -> {
+                TopicType.TYPE_BLOG -> {
                     item {
                         TopicDetailScreenUserBar(
                             user = state.blog.user,
@@ -318,11 +328,11 @@ fun TopicDetailScreenHeader(
 
         BgmLinkedText(
             modifier = Modifier.fillMaxWidth(),
-            text = state.displayContentText,
+            text = state.displayContentText.ifBlank { stringResource(Res.string.global_no_content) },
         )
 
         // 支持贴贴表情的话题
-        if (TopicDetailType.isSupportRection(state.type)) {
+        if (TopicType.isSupportRection(state.type)) {
             val displayReactions = state.displayReactions
             if (displayReactions.isNotEmpty()) ReactionGroup(
                 modifier = Modifier.fillMaxWidth(),
@@ -330,14 +340,14 @@ fun TopicDetailScreenHeader(
                 onClick = { reaction ->
                     onActionEvent(
                         TopicDetailEvent.Action.OnReactionClick(
-                            if (state.type == TopicDetailType.TYPE_BLOG) state.id else state.topic.contentPostId,
+                            if (state.type == TopicType.TYPE_BLOG) state.id else state.topic.contentPostId,
                             reaction
                         )
                     )
                 }
             )
 
-            ArticleScreenRecationButton(
+            TopicDetailScreenRecationButton(
                 modifier = Modifier.align(Alignment.End),
                 state = state,
                 onActionEvent = onActionEvent,
@@ -372,7 +382,7 @@ private fun TopicDetailScreenContent(
             }
 
             stickyHeader(key = CONTENT_TYPE_COMMENT_HEADER, contentType = CONTENT_TYPE_COMMENT_HEADER) {
-                ArticleScreenCommentHeader(
+                TopicDetailScreenCommentHeader(
                     state = state,
                     onUiEvent = onUiEvent,
                     onActionEvent = onActionEvent
@@ -380,7 +390,7 @@ private fun TopicDetailScreenContent(
             }
 
             nodesIndexed(
-                nodes = state.comments,
+                nodes = state.replies,
                 key = { it.id },
                 contentType = { CONTENT_TYPE_COMMENT_ITEM }
             ) { item, level, index ->
@@ -413,10 +423,10 @@ private fun TopicDetailScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     item = item,
                     level = level,
-                    isLikeable = state.type == TopicDetailType.TYPE_GROUP ||
-                            state.type == TopicDetailType.TYPE_SUBJECT ||
-                            state.type == TopicDetailType.TYPE_EP ||
-                            state.type == TopicDetailType.TYPE_BLOG,
+                    isLikeable = state.type == TopicType.TYPE_GROUP ||
+                            state.type == TopicType.TYPE_SUBJECT ||
+                            state.type == TopicType.TYPE_EP ||
+                            state.type == TopicType.TYPE_BLOG,
                     onClickUser = { onUiEvent(TopicDetailEvent.UI.OnNavScreen(Screen.UserDetail(it))) },
                     onClick = {
                         scope.launch {
@@ -429,13 +439,17 @@ private fun TopicDetailScreenContent(
                     }
                 )
             }
+
+            itemKey(CONTENT_TYPE_BOTTOM_CHARACTER) {
+                TopicDetailScreenNoDataTip(isEmpty = state.replies.isEmpty())
+            }
         }
     }
 }
 
 
 @Composable
-private fun ArticleScreenCommentHeader(
+private fun TopicDetailScreenCommentHeader(
     state: TopicDetailState,
     onUiEvent: (TopicDetailEvent.UI) -> Unit,
     onActionEvent: (TopicDetailEvent.Action) -> Unit,
@@ -479,7 +493,7 @@ private fun ArticleScreenCommentHeader(
 
 
 @Composable
-private fun ArticleScreenRecationButton(
+private fun TopicDetailScreenRecationButton(
     modifier: Modifier,
     state: TopicDetailState,
     onActionEvent: (TopicDetailEvent.Action) -> Unit,
@@ -493,7 +507,7 @@ private fun ArticleScreenRecationButton(
                 // 针对日志内容部分贴贴，type = 20
                 onActionEvent(
                     TopicDetailEvent.Action.OnReactionClick(
-                        if (state.type == TopicDetailType.TYPE_BLOG) state.id else state.topic.contentPostId,
+                        if (state.type == TopicType.TYPE_BLOG) state.id else state.topic.contentPostId,
                         ComposeReaction(value = value)
                     )
                 )
@@ -517,3 +531,99 @@ private fun ArticleScreenRecationButton(
     }
 }
 
+@Composable
+private fun TopicDetailScreenNoDataTip(
+    isEmpty: Boolean,
+    modifier: Modifier = Modifier
+) {
+    // Bangumi 风格轻量配色（粉蓝渐变）
+    val accentPink = Color(0xFFFFB6C1)
+    val accentBlue = Color(0xFF90CAF9)
+    val softGradient = Brush.linearGradient(
+        colors = listOf(
+            accentPink.copy(alpha = 0.25f),
+            accentBlue.copy(alpha = 0.25f)
+        )
+    )
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // 图标占位容器
+        Box(
+            modifier = Modifier
+                .size(96.dp)
+                .clip(CircleShape)
+                .background(softGradient),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(72.dp)
+                    .clip(CircleShape)
+                    .background(Color.White.copy(alpha = 0.85f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Search,
+                    contentDescription = null,
+                    tint = Color(0xFF64B5F6),
+                    modifier = Modifier.size(36.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        // 主标题
+        Text(
+            text = if (isEmpty) "暂无相关讨论" else "没有更多讨论",
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // 辅助说明文本
+        Text(
+            text = if (isEmpty) "这里目前空空如也，快去探索更多精彩内容吧！" else stringResource(Res.string.global_no_more),
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontSize = 13.sp,
+                lineHeight = 18.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                textAlign = TextAlign.Center
+            ),
+            modifier = Modifier.fillMaxWidth(0.75f)
+        )
+    }
+}
+
+
+@Preview
+@Composable
+private fun ArticleScreenPreview() {
+    PreviewColumn {
+        TopicDetailScreen(
+            uiState = UiState(
+                TopicDetailState(
+                    id = 111,
+                    topic = ComposeTopic(
+                        replies = persistentListOf(
+                            ComposeReply(content = "")
+                        )
+                    )
+                )
+            ),
+            onUiEvent = {},
+            onActionEvent = {},
+        )
+    }
+}

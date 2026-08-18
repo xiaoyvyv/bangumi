@@ -13,8 +13,7 @@ import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.ReportValueType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
-import com.xiaoyv.bangumi.shared.core.types.TimelineTab
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
@@ -281,33 +280,10 @@ interface BgmWebApi {
     ): List<ComposeDollarItem>
 
     /**
-     * 时间胶囊-指定用户
-     *
-     * @param ajax 仅返回嵌套的 html
-     */
-    @GET("user/{username}/timeline")
-    suspend fun fetchTimelineForUser(
-        @Path("username", encoded = true) username: String,
-        @Query("type") @TimelineTab type: String,
-        @Query("page") page: Int? = null,
-        @Query("ajax") ajax: Long = 1,
-    ): Document
-
-    /**
      * 隐私设置页面
      */
     @GET("settings/privacy")
     suspend fun fetchUserPrivacy(): Document
-
-    /**
-     * 时间胶囊-全站
-     */
-    @GET("timeline")
-    suspend fun fetchTimelineForWhole(
-        @Query("type") @TimelineTab type: String,
-        @Query("page") page: Int? = null,
-        @Query("ajax") ajax: Long = 1,
-    ): Document
 
     /**
      * 时间胶囊-吐槽回复内容
@@ -400,7 +376,7 @@ interface BgmWebApi {
     @GET("rakuen/topic/{type}/{id}")
     suspend fun fetchRakuenTopicDetail(
         @Path("id") id: Long,
-        @Path("type", encoded = true) @TopicDetailType type: String,
+        @Path("type", encoded = true) @TopicType type: String,
         @ReqBuilder ext: HttpRequestBuilder.() -> Unit = {},
     ): Document
 

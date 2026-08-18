@@ -12,23 +12,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
-import com.xiaoyv.bangumi.core_resource.resources.timeline_mine_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_title
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineEvent
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
 import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
-import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineCatTabs
+import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -73,25 +69,12 @@ private fun TimelineScreen(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 BgmTopAppBar(
-                    title = when (state.target) {
-                        TimelineTarget.FRIEND -> stringResource(Res.string.timeline_friend_title)
-                        TimelineTarget.USER -> stringResource(Res.string.timeline_mine_title)
-                        else -> stringResource(Res.string.timeline_title)
-                    },
+                    title = stringResource(Res.string.timeline_title),
                     onNavigationClick = { onUiEvent(TimelineEvent.UI.OnNavUp) },
                     actions = {
-                        IconButton(onClick = {}) {
-                            Icon(
-                                BgmIcons.Search,
-                                contentDescription = null
-                            )
+                        IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
+                            Icon(BgmIcons.Search, contentDescription = null)
                         }
-                        DropMenuActionButton(
-                            options = state.actions,
-                            onOptionClick = {
-                                onActionEvent(TimelineEvent.Action.OnChangeTarget(it.type))
-                            }
-                        )
                     }
                 )
             }
@@ -116,14 +99,13 @@ private fun TimelineScreenContent(
 ) {
     BgmTabHorizontalPager(
         modifier = modifier.fillMaxSize(),
-        tabs = timelineCatTabs
+        tabs = timelineTabs
     ) {
         TimelinePageRoute(
-            param = remember(it, state.target) {
+            param = remember(it, state.username) {
                 ListTimelineParam(
-                    type = ListTimelineType.BROWSER_BY_WEB,
-                    timlineMode = state.target,
-                    timelineCat = timelineCatTabs[it].type,
+                    type = ListTimelineType.BROWSER,
+                    timelineMode = timelineTabs[it].type,
                     username = state.username
                 )
             },

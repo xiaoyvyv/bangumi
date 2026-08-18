@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.ui.component.dialog.comment
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 
 
 @Immutable
@@ -16,7 +16,7 @@ data class CommentState(
 @Immutable
 data class CommentDialogAnchor(
     val lastViewedInMillis: Long,
-    val article: ComposeTopicDetail = ComposeTopicDetail.Empty,
+    val article: ComposeTopic = ComposeTopic.Empty,
     val reply: ComposeComment = ComposeComment.Empty,
 ) {
     val key = article.id.toString() + reply.id + lastViewedInMillis

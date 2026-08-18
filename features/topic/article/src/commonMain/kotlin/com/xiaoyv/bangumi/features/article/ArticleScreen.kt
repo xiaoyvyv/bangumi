@@ -57,7 +57,7 @@ import com.xiaoyv.bangumi.features.article.business.ArticleViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.animateScrollToItem
 import com.xiaoyv.bangumi.shared.core.utils.nodesIndexed
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
@@ -151,9 +151,9 @@ private fun ArticleScreen(
 
                                 // 仅以下几种话题才显示举报
                                 when (article.type) {
-                                    TopicDetailType.TYPE_SUBJECT,
-                                    TopicDetailType.TYPE_BLOG,
-                                    TopicDetailType.TYPE_GROUP,
+                                    TopicType.TYPE_SUBJECT,
+                                    TopicType.TYPE_BLOG,
+                                    TopicType.TYPE_GROUP,
                                         -> add(ButtonType.Report)
                                 }
                             },
@@ -335,7 +335,7 @@ private fun ArticleScreenContentHeader(
 
         when (state.article.type) {
             // 小组贴
-            TopicDetailType.TYPE_GROUP -> {
+            TopicType.TYPE_GROUP -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -349,7 +349,7 @@ private fun ArticleScreenContentHeader(
                 )
             }
             // 条目贴
-            TopicDetailType.TYPE_SUBJECT -> {
+            TopicType.TYPE_SUBJECT -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -363,7 +363,7 @@ private fun ArticleScreenContentHeader(
                 )
             }
             // 章节贴
-            TopicDetailType.TYPE_EP -> {
+            TopicType.TYPE_EP -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -377,7 +377,7 @@ private fun ArticleScreenContentHeader(
                 )
             }
             // 人物贴
-            TopicDetailType.TYPE_PERSON, TopicDetailType.TYPE_CRT -> {
+            TopicType.TYPE_PERSON, TopicType.TYPE_CRT -> {
                 ArticleScreenAttachBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -408,7 +408,7 @@ private fun ArticleScreenContentHeader(
         )
 
         // 支持贴贴表情的话题
-        if (TopicDetailType.isSupportRection(state.article.type)) {
+        if (TopicType.isSupportRection(state.article.type)) {
             state.article.reactions[state.article.contentId]?.let {
                 ReactionGroup(
                     modifier = Modifier.fillMaxWidth(),
@@ -417,7 +417,7 @@ private fun ArticleScreenContentHeader(
                         // 针对日志内容部分贴贴，type = 20
                         onActionEvent(
                             ArticleEvent.Action.OnReactionClick(
-                                if (state.article.type == TopicDetailType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
+                                if (state.article.type == TopicType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
                                 state.article.contentId,
                                 reaction.value
                             )
@@ -499,7 +499,7 @@ private fun ArticleScreenRecationButton(
                 // 针对日志内容部分贴贴，type = 20
                 onActionEvent(
                     ArticleEvent.Action.OnReactionClick(
-                        if (state.article.type == TopicDetailType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
+                        if (state.article.type == TopicType.TYPE_BLOG) 20 else CommentType.fromRakuenIdType(state.article.type),
                         state.article.contentId,
                         value
                     )

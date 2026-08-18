@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.features.topic.detail.business
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
@@ -24,8 +24,8 @@ import kotlinx.collections.immutable.toImmutableList
 @Immutable
 data class TopicDetailState(
     val id: Long = 0,
-    @field:TopicDetailType
-    val type: String = TopicDetailType.TYPE_UNKNOWN,
+    @field:TopicType
+    val type: String = TopicType.TYPE_UNKNOWN,
     val topic: ComposeTopic = ComposeTopic.Empty,
     val episode: ComposeEpisode = ComposeEpisode.Empty,
     val mono: ComposeMonoDisplay = ComposeMonoDisplay.Empty,
@@ -36,48 +36,59 @@ data class TopicDetailState(
     val selectedCommentTypeFilter: Int = 0,
     val commentSortFilters: SerializeList<ComposeTextTab<Int>> = persistentListOf(),
     val commentTypeFilters: SerializeList<ComposeTextTab<Int>> = persistentListOf(),
-    val comments: SerializeList<ComposeReply> = persistentListOf()
+
+    /**
+     * 小组话题或条目话题的回复在附加在详情的数据内，其它类型的都是分页加载的评论了
+     */
+    val replies: SerializeList<ComposeReply> = persistentListOf()
 ) {
 
     val displayTitle: String = when (type) {
-        TopicDetailType.TYPE_EP -> "Ep.${episode.sortOrder} ${episode.displayName}"
-        TopicDetailType.TYPE_GROUP -> topic.title
-        TopicDetailType.TYPE_PERSON -> mono.mono.displayName
-        TopicDetailType.TYPE_CRT -> mono.mono.displayName
-        TopicDetailType.TYPE_SUBJECT -> topic.title
-        TopicDetailType.TYPE_INDEX -> index.title
-        TopicDetailType.TYPE_BLOG -> blog.title
+        TopicType.TYPE_EP -> "Ep.${episode.sortOrder} ${episode.displayName}"
+        TopicType.TYPE_GROUP -> topic.title
+        TopicType.TYPE_PERSON -> mono.mono.displayName
+        TopicType.TYPE_CRT -> mono.mono.displayName
+        TopicType.TYPE_SUBJECT -> topic.title
+        TopicType.TYPE_INDEX -> index.title
+        TopicType.TYPE_BLOG -> blog.title
         else -> ""
     }
 
+    /**
+     * 话题的贴贴
+     */
     val displayReactions: ImmutableList<ComposeReaction> = when (type) {
-        TopicDetailType.TYPE_SUBJECT -> topic.replies.firstOrNull()?.reactions.orEmpty().toImmutableList()
-        TopicDetailType.TYPE_GROUP -> topic.replies.firstOrNull()?.reactions.orEmpty().toImmutableList()
-        TopicDetailType.TYPE_BLOG -> blog.reactions
+        TopicType.TYPE_SUBJECT -> topic.replies.firstOrNull()?.reactions.orEmpty().toImmutableList()
+        TopicType.TYPE_GROUP -> topic.replies.firstOrNull()?.reactions.orEmpty().toImmutableList()
+        TopicType.TYPE_BLOG -> blog.reactions
         else -> persistentListOf()
     }
 
+    /**
+     * 话题的主题内容区域
+     */
     val displayContentText: String = when (type) {
-        TopicDetailType.TYPE_EP -> episode.description
-        TopicDetailType.TYPE_SUBJECT,
-        TopicDetailType.TYPE_GROUP -> topic.replies.firstOrNull()?.content.orEmpty()
+        TopicType.TYPE_SUBJECT,
+        TopicType.TYPE_GROUP -> topic.replies.firstOrNull()?.content.orEmpty()
 
-        TopicDetailType.TYPE_CRT,
-        TopicDetailType.TYPE_PERSON -> mono.mono.summary
+        TopicType.TYPE_EP -> episode.description
 
-        TopicDetailType.TYPE_INDEX -> index.desc
-        TopicDetailType.TYPE_BLOG -> blog.content
+        TopicType.TYPE_CRT,
+        TopicType.TYPE_PERSON -> mono.mono.summary
+
+        TopicType.TYPE_INDEX -> index.desc
+        TopicType.TYPE_BLOG -> blog.content
         else -> ""
     }
 
     val shareUrl: String = when (type) {
-        TopicDetailType.TYPE_EP -> "https://bgm.tv/ep/topic/$id"
-        TopicDetailType.TYPE_GROUP -> "https://bgm.tv/group/topic/$id"
-        TopicDetailType.TYPE_PERSON -> "https://bgm.tv/person/$id"
-        TopicDetailType.TYPE_CRT -> "https://bgm.tv/character/$id"
-        TopicDetailType.TYPE_SUBJECT -> "https://bgm.tv/subject/$id"
-        TopicDetailType.TYPE_INDEX -> "https://bgm.tv/index/$id"
-        TopicDetailType.TYPE_BLOG -> "https://bgm.tv/blog/$id"
+        TopicType.TYPE_EP -> "https://bgm.tv/ep/topic/$id"
+        TopicType.TYPE_GROUP -> "https://bgm.tv/group/topic/$id"
+        TopicType.TYPE_PERSON -> "https://bgm.tv/person/$id"
+        TopicType.TYPE_CRT -> "https://bgm.tv/character/$id"
+        TopicType.TYPE_SUBJECT -> "https://bgm.tv/subject/$id"
+        TopicType.TYPE_INDEX -> "https://bgm.tv/index/$id"
+        TopicType.TYPE_BLOG -> "https://bgm.tv/blog/$id"
         else -> "https://bgm.tv"
     }
 }

@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.repository
 
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 
@@ -9,6 +10,8 @@ interface IndexRepository {
     suspend fun fetchUserCreatedIndex(username: String): Result<List<ComposeIndex>>
 
     suspend fun fetchIndexDetail(indexId: Long): Result<ComposeIndex>
+
+    suspend fun fetchIndexComments(indexId: Long): Result<List<ComposeReply>>
 
     suspend fun fetchIndexIsBookmarked(indexId: Long): Result<Boolean>
 

@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
@@ -32,7 +32,7 @@ data class ComposeSearchTopic(
             id = id,
             title = title,
             summary = summary,
-            topicType = TopicDetailType.TYPE_GROUP,
+            topicType = TopicType.TYPE_GROUP,
             createdAt = timeDate,
             updatedAt = timeDate,
             group = ComposeGroup(

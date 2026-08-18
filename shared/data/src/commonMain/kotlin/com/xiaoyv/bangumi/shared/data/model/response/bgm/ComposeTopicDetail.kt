@@ -1,8 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.text.AnnotatedString
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -22,8 +21,8 @@ data class ComposeTopicDetail(
      * 内容区域的ID，不是帖子ID，用于回复、贴贴等
      */
     val contentId: String = "",
-    @field:TopicDetailType
-    val type: String = TopicDetailType.TYPE_UNKNOWN,
+    @field:TopicType
+    val type: String = TopicType.TYPE_UNKNOWN,
     val title: String = "",
     val content: String = "",
     val time: String = "",
@@ -41,13 +40,13 @@ data class ComposeTopicDetail(
 
     val shareUrl: String
         get() = when (type) {
-            TopicDetailType.TYPE_EP -> "https://bgm.tv/ep/topic/$id"
-            TopicDetailType.TYPE_GROUP -> "https://bgm.tv/group/topic/$id"
-            TopicDetailType.TYPE_PERSON -> "https://bgm.tv/person/$id"
-            TopicDetailType.TYPE_CRT -> "https://bgm.tv/character/$id"
-            TopicDetailType.TYPE_SUBJECT -> "https://bgm.tv/subject/$id"
-            TopicDetailType.TYPE_INDEX -> "https://bgm.tv/index/$id"
-            TopicDetailType.TYPE_BLOG -> "https://bgm.tv/blog/$id"
+            TopicType.TYPE_EP -> "https://bgm.tv/ep/topic/$id"
+            TopicType.TYPE_GROUP -> "https://bgm.tv/group/topic/$id"
+            TopicType.TYPE_PERSON -> "https://bgm.tv/person/$id"
+            TopicType.TYPE_CRT -> "https://bgm.tv/character/$id"
+            TopicType.TYPE_SUBJECT -> "https://bgm.tv/subject/$id"
+            TopicType.TYPE_INDEX -> "https://bgm.tv/index/$id"
+            TopicType.TYPE_BLOG -> "https://bgm.tv/blog/$id"
             else -> "https://bgm.tv"
         }
 

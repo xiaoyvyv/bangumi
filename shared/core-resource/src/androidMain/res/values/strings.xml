@@ -159,6 +159,7 @@
     <string name="global_grid">网格</string>
     <string name="global_show">显示</string>
     <string name="global_hide">隐藏</string>
+    <string name="global_no_content">没有内容哦~</string>
 
     <string name="emoji_tv">TV</string>
     <string name="emoji_tv_1">TV-1</string>
@@ -379,9 +380,9 @@
     <string name="sign_up_input_error_email_code">请邮箱激活码</string>
 
     <!-- 时间线页面 -->
-    <string name="timeline_title">时间胶囊-时空管理局</string>
-    <string name="timeline_friend_title">时间胶囊-好友</string>
-    <string name="timeline_mine_title">时间胶囊-自己</string>
+    <string name="timeline_title">时空管理局</string>
+    <string name="timeline_friend_title">好友</string>
+    <string name="timeline_mine_title">自己</string>
     <string name="timeline_daily">日常</string>
     <string name="timeline_wiki">维基</string>
     <string name="timeline_subject">收藏</string>

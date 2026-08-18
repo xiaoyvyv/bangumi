@@ -147,7 +147,7 @@ private fun HomeGroupHotScreenContent(
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
                 item = item,
-                onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Article(it.id, it.topicType))) },
+                onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType))) },
                 onClickUser = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.UserDetail(it.username))) },
                 onClickSubject = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
                 onClickMono = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, it.type))) },

@@ -4,8 +4,8 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import de.jensklingenberg.ktorfit.Response
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -36,7 +36,7 @@ interface BlogApi {
      * 获取日志的吐槽箱
      */
     @GET("p1/blogs/{entryID}/comments")
-    suspend fun getBlogComments(@Path("entryID") entryID: Long): HttpResponse
+    suspend fun getBlogComments(@Path("entryID") entryID: Long): List<ComposeReply>
 
     /**
      * 获取日志详情

@@ -20,7 +20,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.types.CommentFilterType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.SortType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -52,7 +52,7 @@ import org.orbitmvi.orbit.syntax.Syntax
  * @since 2025/1/12
  */
 class ArticleViewModel(
-    private val args: Screen.Article,
+    private val args: Screen.TopicDetail,
     private val ugcRepository: UgcRepository,
     private val userManager: UserManager,
     private val cacheRepository: CacheRepository,
@@ -119,14 +119,14 @@ class ArticleViewModel(
     }
 
     private fun onReactionClick(@CommentType type: Int, id: String, value: String) = intent {
-        val authorId = if (args.type == TopicDetailType.TYPE_BLOG && state.data.article.user.id == 0L) {
+        val authorId = if (args.type == TopicType.TYPE_BLOG && state.data.article.user.id == 0L) {
             userRepository.fetchUserInfo(state.data.article.user.username).map { it.id }.getOrDefault(0)
         } else {
             state.data.article.user.id
         }
 
         ugcRepository.submitReaction(
-            mainId = if (args.type == TopicDetailType.TYPE_BLOG) authorId else args.id,
+            mainId = if (args.type == TopicType.TYPE_BLOG) authorId else args.id,
             type = type,
             id = id,
             value = value

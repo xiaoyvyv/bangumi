@@ -4,10 +4,10 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
@@ -86,7 +86,7 @@ interface CharacterApi {
      * @param characterID
      */
     @GET("p1/characters/{characterID}/comments")
-    suspend fun getCharacterComments(@Path("characterID") characterID: Int): ComposeReply
+    suspend fun getCharacterComments(@Path("characterID") characterID: Long): List<ComposeReply>
 
     /**
      * 编辑角色的吐槽

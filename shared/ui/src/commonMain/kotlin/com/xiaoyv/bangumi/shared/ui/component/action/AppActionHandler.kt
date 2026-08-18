@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.shared.component.ActionHandler
 import com.xiaoyv.bangumi.shared.component.rememberActionHandler
 import com.xiaoyv.bangumi.shared.core.types.BgmPathType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.toLongValue
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
@@ -80,35 +80,35 @@ class AppActionHandler(val actionHandler: ActionHandler?) {
             titleLink.contains(BgmPathType.TYPE_TOPIC) -> {
                 when {
                     // 虚拟人物
-                    titleLink.contains(TopicDetailType.TYPE_CRT) -> {
-                        onNavScreen(Screen.Article(longId, TopicDetailType.TYPE_CRT))
+                    titleLink.contains(TopicType.TYPE_CRT) -> {
+                        onNavScreen(Screen.TopicDetail(longId, TopicType.TYPE_CRT))
                         return true
                     }
                     // 章节
-                    titleLink.contains(TopicDetailType.TYPE_EP) -> {
-                        onNavScreen(Screen.Article(longId, TopicDetailType.TYPE_EP))
+                    titleLink.contains(TopicType.TYPE_EP) -> {
+                        onNavScreen(Screen.TopicDetail(longId, TopicType.TYPE_EP))
                         return true
                     }
                     // 小组
-                    titleLink.contains(TopicDetailType.TYPE_GROUP) -> {
-                        onNavScreen(Screen.Article(longId, TopicDetailType.TYPE_GROUP))
+                    titleLink.contains(TopicType.TYPE_GROUP) -> {
+                        onNavScreen(Screen.TopicDetail(longId, TopicType.TYPE_GROUP))
                         return true
                     }
                     // 现实人物
-                    titleLink.contains(TopicDetailType.TYPE_PERSON) -> {
-                        onNavScreen(Screen.Article(longId, TopicDetailType.TYPE_PERSON))
+                    titleLink.contains(TopicType.TYPE_PERSON) -> {
+                        onNavScreen(Screen.TopicDetail(longId, TopicType.TYPE_PERSON))
                         return true
                     }
                     // 条目
-                    titleLink.contains(TopicDetailType.TYPE_SUBJECT) -> {
-                        onNavScreen(Screen.Article(longId, TopicDetailType.TYPE_SUBJECT))
+                    titleLink.contains(TopicType.TYPE_SUBJECT) -> {
+                        onNavScreen(Screen.TopicDetail(longId, TopicType.TYPE_SUBJECT))
                         return true
                     }
                 }
             }
             // 日志
             titleLink.contains(BgmPathType.TYPE_BLOG) -> {
-                onNavScreen(Screen.Article(longId, TopicDetailType.TYPE_BLOG))
+                onNavScreen(Screen.TopicDetail(longId, TopicType.TYPE_BLOG))
                 return true
             }
             // 标签
@@ -135,8 +135,8 @@ class AppActionHandler(val actionHandler: ActionHandler?) {
             titleLink.contains(BgmPathType.TYPE_SUBJECT) -> {
                 when {
                     // 章节详情
-                    titleLink.contains(TopicDetailType.TYPE_EP) -> {
-                        onNavScreen(Screen.Article(longId, TopicDetailType.TYPE_EP))
+                    titleLink.contains(TopicType.TYPE_EP) -> {
+                        onNavScreen(Screen.TopicDetail(longId, TopicType.TYPE_EP))
                     }
                     // 条目详情
                     else -> onNavScreen(Screen.SubjectDetail(longId))

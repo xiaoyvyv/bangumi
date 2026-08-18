@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeIndexRelatedLazyItems
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
@@ -132,7 +132,7 @@ fun IndexDetailPageRelatedContent(
                 item = item.episode,
                 contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
                 onClick = {
-                    onNavScreen(Screen.Article(item.episode.id, TopicDetailType.TYPE_EP))
+                    onNavScreen(Screen.TopicDetail(item.episode.id, TopicType.TYPE_EP))
                 }
             )
         }
@@ -145,7 +145,7 @@ fun IndexDetailPageRelatedContent(
                     user = item.blog.user,
                 ),
                 onClick = {
-                    onNavScreen(Screen.Article(item.blog.id, TopicDetailType.TYPE_BLOG))
+                    onNavScreen(Screen.TopicDetail(item.blog.id, TopicType.TYPE_BLOG))
                 },
                 onClickUser = {
                     onNavScreen(Screen.UserDetail(item.blog.user.username))
@@ -156,9 +156,9 @@ fun IndexDetailPageRelatedContent(
         IndexCatType.GROUP_TOPIC -> {
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
-                item = item.groupTopic.copy(topicType = TopicDetailType.TYPE_GROUP),
+                item = item.groupTopic.copy(topicType = TopicType.TYPE_GROUP),
                 onClick = {
-                    onNavScreen(Screen.Article(item.groupTopic.id, TopicDetailType.TYPE_GROUP))
+                    onNavScreen(Screen.TopicDetail(item.groupTopic.id, TopicType.TYPE_GROUP))
                 }
             )
         }
@@ -166,9 +166,9 @@ fun IndexDetailPageRelatedContent(
         IndexCatType.SUBJECT_TOPIC -> {
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
-                item = item.subjectTopic.copy(topicType = TopicDetailType.TYPE_SUBJECT),
+                item = item.subjectTopic.copy(topicType = TopicType.TYPE_SUBJECT),
                 onClick = {
-                    onNavScreen(Screen.Article(item.subjectTopic.id, TopicDetailType.TYPE_SUBJECT))
+                    onNavScreen(Screen.TopicDetail(item.subjectTopic.id, TopicType.TYPE_SUBJECT))
                 }
             )
         }

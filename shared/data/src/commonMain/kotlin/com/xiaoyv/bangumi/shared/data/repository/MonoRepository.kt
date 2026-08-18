@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 
 /**
@@ -27,6 +28,8 @@ interface MonoRepository {
     suspend fun fetchMonoDetail(monoId: Long, @MonoType type: Int): Result<ComposeMono>
 
     suspend fun fetchMonoDetailByWeb(monoId: Long, @MonoType type: Int): Result<ComposeMonoWebInfo>
+
+    suspend fun fetchMonoComments(monoId: Long, @MonoType type: Int): Result<List<ComposeReply>>
 
     suspend fun fetchMonoHomepage(): Result<List<ComposeSection<ComposeMonoDisplay>>>
 

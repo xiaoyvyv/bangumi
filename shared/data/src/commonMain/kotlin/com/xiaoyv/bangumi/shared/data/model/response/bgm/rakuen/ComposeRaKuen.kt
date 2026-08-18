@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.ReportValueType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
@@ -50,6 +51,20 @@ data class ComposeRakuenTopic(
     val key get() = "$type-$id"
 
     val displayName: String get() = nameCN.ifBlank { name }
+
+    /**
+     * 对应的话题类型
+     */
+    val topicType: String
+        get() = when (type) {
+            RakuenType.GROUP -> TopicType.TYPE_GROUP
+            RakuenType.MY_GROUP -> TopicType.TYPE_GROUP
+            RakuenType.SUBJECT -> TopicType.TYPE_SUBJECT
+            RakuenType.EP -> TopicType.TYPE_EP
+            RakuenType.CHARACTER -> TopicType.TYPE_CRT
+            RakuenType.PERSON -> TopicType.TYPE_PERSON
+            else -> TopicType.TYPE_UNKNOWN
+        }
 
     /**
      * 举报参数

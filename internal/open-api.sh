@@ -5,4 +5,4 @@ openapi-generator generate \
   -o ./bgm-ktor-client \
   --api-package tv.bgm.client.api \
   --model-package tv.bgm.client.model \
-  --additional-properties=library=multiplatform,serializationLibrary=kotlinx_serialization,dateLibrary=kotlinx-datetime
+  --additional-properties=library=jvm-retrofit2,serializationLibrary=kotlinx_serialization,dateLibrary=kotlinx-datetime

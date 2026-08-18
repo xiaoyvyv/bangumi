@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.core.utils.trimStr
-import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -32,7 +32,7 @@ import org.orbitmvi.orbit.syntax.Syntax
 class WebViewModel(
     private val args: Screen.Web,
     private val pixivRepoUseCase: PixivRepoUseCase,
-    private val cookieStorage: BgmCookieStorage,
+    private val cookieStorage: BgmCookiesStorage,
     private val userManager: UserManager
 ) : BaseViewModel<WebState, WebSideEffect, WebEvent.Action>() {
 

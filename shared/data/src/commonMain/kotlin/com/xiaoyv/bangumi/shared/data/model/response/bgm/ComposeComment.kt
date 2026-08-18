@@ -9,7 +9,9 @@ import com.xiaoyv.bangumi.shared.core.utils.Node
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.library.BBCodeToHtml
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -65,10 +67,11 @@ data class ComposeReply(
     @SerialName("creatorID") val creatorID: Long = 0,
     @SerialName("id") val id: Long = 0,
     @SerialName("mainID") val mainID: Long = 0,
+    @SerialName("relatedPhotoID") val relatedPhotoID: Long = 0,
     @SerialName("relatedID") val relatedID: Long = 0,
     @SerialName("reactions") val reactions: SerializeList<ComposeReaction> = persistentListOf(),
     @SerialName("replies") val replies: SerializeList<ComposeReply> = persistentListOf(),
-    @SerialName("state") val state: Int = 0
+    @SerialName("state") val state: Int = 0,
 ) : Node<ComposeReply> {
 
     @Transient
@@ -83,6 +86,13 @@ data class ComposeReply(
         .substringBefore("[/quote]")
         .substringAfter("[quote]")
         .trim()
+
+    fun normalized(): ComposeReply {
+        return copy(
+            content = BBCodeToHtml.convert(content),
+            replies = replies.map { it.normalized() }.toImmutableList()
+        )
+    }
 
     override val children: SerializeList<ComposeReply> get() = replies
 }

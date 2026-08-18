@@ -6,9 +6,10 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 
 class IndexRepositoryImpl(
@@ -26,6 +27,11 @@ class IndexRepositoryImpl(
     override suspend fun fetchIndexDetail(indexId: Long): Result<ComposeIndex> = client.requestNextIndexApi {
         getIndex(indexId)
     }
+
+    override suspend fun fetchIndexComments(indexId: Long): Result<List<ComposeReply>> = client.requestNextIndexApi {
+        getIndexComments(indexId).map { it.normalized() }
+    }
+
 
     override suspend fun fetchIndexIsBookmarked(indexId: Long): Result<Boolean> = client.requestWebApi {
         // 用 EP 类型查询网页详情页数据，判断是否收藏，一般这个比较条目少，快

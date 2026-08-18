@@ -65,10 +65,10 @@ import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
@@ -90,12 +90,12 @@ import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalHalfBlackToTransparent
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.isMediumScreen
 import com.xiaoyv.bangumi.shared.ui.kts.isSmallScreen
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.comment.CommentItem
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodePager
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexCardItem
@@ -396,7 +396,7 @@ private fun SubjectDetailEpisode(
                 onActionEvent(SubjectDetailEvent.Action.OnUpdateEpisodeCollection(eps, type))
             },
             onClickEpisode = {
-                onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Article(it.id, TopicDetailType.TYPE_EP)))
+                onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_EP)))
             }
         )
     }

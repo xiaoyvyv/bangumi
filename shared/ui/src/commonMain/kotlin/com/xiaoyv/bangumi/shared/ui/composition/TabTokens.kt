@@ -25,9 +25,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.core_resource.resources.global_anime
 import com.xiaoyv.bangumi.core_resource.resources.global_blog
 import com.xiaoyv.bangumi.core_resource.resources.global_book
-import com.xiaoyv.bangumi.core_resource.resources.global_collection
-import com.xiaoyv.bangumi.core_resource.resources.global_dynamic
-import com.xiaoyv.bangumi.core_resource.resources.global_friend
 import com.xiaoyv.bangumi.core_resource.resources.global_game
 import com.xiaoyv.bangumi.core_resource.resources.global_grid
 import com.xiaoyv.bangumi.core_resource.resources.global_group
@@ -37,13 +34,11 @@ import com.xiaoyv.bangumi.core_resource.resources.global_hot
 import com.xiaoyv.bangumi.core_resource.resources.global_hot_group
 import com.xiaoyv.bangumi.core_resource.resources.global_index
 import com.xiaoyv.bangumi.core_resource.resources.global_list
-import com.xiaoyv.bangumi.core_resource.resources.global_mono
 import com.xiaoyv.bangumi.core_resource.resources.global_music
 import com.xiaoyv.bangumi.core_resource.resources.global_newest
 import com.xiaoyv.bangumi.core_resource.resources.global_off
 import com.xiaoyv.bangumi.core_resource.resources.global_on
 import com.xiaoyv.bangumi.core_resource.resources.global_person
-import com.xiaoyv.bangumi.core_resource.resources.global_progress
 import com.xiaoyv.bangumi.core_resource.resources.global_real
 import com.xiaoyv.bangumi.core_resource.resources.global_show
 import com.xiaoyv.bangumi.core_resource.resources.global_sort_bookmark
@@ -53,8 +48,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_sort_rating
 import com.xiaoyv.bangumi.core_resource.resources.global_sort_title
 import com.xiaoyv.bangumi.core_resource.resources.global_sort_trends
 import com.xiaoyv.bangumi.core_resource.resources.global_sort_update
-import com.xiaoyv.bangumi.core_resource.resources.global_spit_out
-import com.xiaoyv.bangumi.core_resource.resources.global_wiki
 import com.xiaoyv.bangumi.core_resource.resources.ic_bottom_rank
 import com.xiaoyv.bangumi.core_resource.resources.ic_calendar
 import com.xiaoyv.bangumi.core_resource.resources.ic_chat
@@ -86,6 +79,8 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
+import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
+import com.xiaoyv.bangumi.core_resource.resources.timeline_mine_title
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_discover
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_hidden
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_pm
@@ -114,7 +109,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
-import com.xiaoyv.bangumi.shared.core.types.TimelineTab
+import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
@@ -347,17 +342,10 @@ object TabTokens {
         ComposeTextTab(CollectionWebSortType.TITLE, Res.string.global_sort_title),
     )
 
-    val timelineWebTabs = persistentListOf(
-        ComposeTextTab(TimelineTab.DYNAMIC, Res.string.global_dynamic),
-        ComposeTextTab(TimelineTab.SPIT_OUT, Res.string.global_spit_out),
-        ComposeTextTab(TimelineTab.BOOKMARK, Res.string.global_collection),
-        ComposeTextTab(TimelineTab.PROGRESS, Res.string.global_progress),
-        ComposeTextTab(TimelineTab.BLOG, Res.string.global_blog),
-        ComposeTextTab(TimelineTab.MONO, Res.string.global_mono),
-        ComposeTextTab(TimelineTab.FRIEND, Res.string.global_friend),
-        ComposeTextTab(TimelineTab.GROUP, Res.string.global_group),
-        ComposeTextTab(TimelineTab.WIKI, Res.string.global_wiki),
-        ComposeTextTab(TimelineTab.INDEX, Res.string.global_index),
+    val timelineTabs = persistentListOf(
+        ComposeTextTab(TimelineTarget.WHOLE, Res.string.global_all),
+        ComposeTextTab(TimelineTarget.FRIEND, Res.string.timeline_friend_title),
+        ComposeTextTab(TimelineTarget.USER, Res.string.timeline_mine_title),
     )
 
     val timelineCatTabs = persistentListOf(

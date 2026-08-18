@@ -26,7 +26,7 @@ class TimelinePageViewModel(
     ugcRepository: UgcRepository,
 ) : BaseViewModel<TimelinePageState, TimelinePageSideEffect, TimelinePageEvent.Action>() {
     private val timelinePager = ugcRepository.fetchTimelineDisplayPager(
-        target = param.timlineMode,
+        target = param.timelineMode,
         type = param.timelineCat,
         username = param.username
     )

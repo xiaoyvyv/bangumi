@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
 import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.ReportValueType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
@@ -13,7 +13,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.library.BBCodeToHtml
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -35,8 +37,8 @@ data class ComposeTopic(
     @SerialName("mono") val mono: ComposeMonoDisplay = ComposeMonoDisplay.Empty,
     @SerialName("replies") val replies: SerializeList<ComposeReply> = persistentListOf(),
 
-    @field:TopicDetailType
-    val topicType: String = TopicDetailType.TYPE_UNKNOWN,
+    @field:TopicType
+    val topicType: String = TopicType.TYPE_UNKNOWN,
 
     /**
      * 本地填充的 flags
@@ -58,7 +60,7 @@ data class ComposeTopic(
         formHash: String,
     ): ReportParam {
         return when (topicType) {
-            TopicDetailType.TYPE_GROUP -> ReportParam(
+            TopicType.TYPE_GROUP -> ReportParam(
                 targetId = id,
                 type = ReportType.GROUP_ARTICLE,
                 value = value,
@@ -66,7 +68,7 @@ data class ComposeTopic(
                 formhash = formHash
             )
 
-            TopicDetailType.TYPE_SUBJECT -> ReportParam(
+            TopicType.TYPE_SUBJECT -> ReportParam(
                 targetId = id,
                 type = ReportType.SUBJECT_ARTICLE,
                 value = value,
@@ -74,7 +76,7 @@ data class ComposeTopic(
                 formhash = formHash
             )
 
-            TopicDetailType.TYPE_BLOG -> ReportParam(
+            TopicType.TYPE_BLOG -> ReportParam(
                 targetId = creator.id,
                 type = ReportType.USER,
                 value = value,
@@ -90,8 +92,12 @@ data class ComposeTopic(
         }
     }
 
-    fun opt(@TopicDetailType topicType: String): ComposeTopic {
-        return copy(topicType = topicType)
+    fun normalized(@TopicType topicType: String): ComposeTopic {
+        return copy(
+            topicType = topicType,
+            summary = BBCodeToHtml.convert(summary),
+            replies = replies.map { it.normalized() }.toImmutableList()
+        )
     }
 
     companion object {

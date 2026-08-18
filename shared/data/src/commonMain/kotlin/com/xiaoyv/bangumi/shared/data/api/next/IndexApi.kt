@@ -3,9 +3,10 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
@@ -19,6 +20,12 @@ interface IndexApi {
      */
     @GET("p1/indexes/{indexID}")
     suspend fun getIndex(@Path("indexID") indexID: Long): ComposeIndex
+
+    /**
+     * 获取目录的评论
+     */
+    @GET("p1/indexes/{indexID}/comments")
+    fun getIndexComments(@Path("indexID") indexID: Long): List<ComposeReply>
 
     /**
      * 获取目录的关联内容

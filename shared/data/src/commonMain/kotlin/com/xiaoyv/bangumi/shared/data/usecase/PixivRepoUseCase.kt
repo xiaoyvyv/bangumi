@@ -1,12 +1,12 @@
 package com.xiaoyv.bangumi.shared.data.usecase
 
-import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 
 class PixivRepoUseCase(
     private val pixivRepository: PixivRepository,
-    private val cookieStorage: BgmCookieStorage,
+    private val cookieStorage: BgmCookiesStorage,
 ) {
 
     suspend fun sendAuthToken(code: String): Result<ComposePixivToken> {

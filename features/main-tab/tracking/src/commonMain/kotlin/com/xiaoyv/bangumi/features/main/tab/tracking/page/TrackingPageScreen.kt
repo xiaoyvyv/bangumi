@@ -36,8 +36,8 @@ import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingEvent
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
@@ -51,9 +51,9 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLa
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodeGrid
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectTrackingBar
@@ -118,7 +118,7 @@ private fun TrackingPageScreenContent(
                         onActionEvent(TrackingPageEvent.Action.OnUpdateEpisodeCollection(item, epIds, type))
                     },
                     onClickEpisode = {
-                        onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.Article(it.id, TopicDetailType.TYPE_EP)))
+                        onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_EP)))
                     }
                 )
             }

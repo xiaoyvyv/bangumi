@@ -4,8 +4,8 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -50,7 +50,7 @@ interface EpisodeApi {
      * @param episodeID
      */
     @GET("p1/episodes/{episodeID}/comments")
-    suspend fun getEpisodeComments(@Path("episodeID") episodeID: Int): List<ComposeReply>
+    suspend fun getEpisodeComments(@Path("episodeID") episodeID: Long): List<ComposeReply>
 
     /**
      * 给条目的剧集吐槽点赞

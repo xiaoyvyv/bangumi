@@ -94,7 +94,7 @@ data class ComposeBlogEntry(
         }
     }
 
-    fun opt(): ComposeBlogEntry {
+    fun normalized(): ComposeBlogEntry {
         if (icon.isBlank()) return this
         return copy(icon = icon.sanitizeImageUrl())
     }
@@ -104,7 +104,7 @@ data class ComposeBlogEntry(
 
         fun List<ComposeBlogDisplay>.optImageUrl(): List<ComposeBlogDisplay> {
             return map {
-                if (it.blog == Empty) it else it.copy(blog = it.blog.opt())
+                if (it.blog == Empty) it else it.copy(blog = it.blog.normalized())
             }
         }
     }

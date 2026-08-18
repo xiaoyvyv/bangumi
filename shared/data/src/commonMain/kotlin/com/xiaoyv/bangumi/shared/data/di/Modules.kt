@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.di
 
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
-import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
@@ -16,7 +16,6 @@ import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.MonoParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.NotificationParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
-import com.xiaoyv.bangumi.shared.data.parser.bgm.TimelineParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicTableParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
@@ -66,7 +65,7 @@ import org.koin.dsl.module
 private val dataModule = module {
     singleOf(::PreferenceStore)
     singleOf(::BgmApiClient)
-    singleOf(::BgmCookieStorage)
+    singleOf(::BgmCookiesStorage)
     singleOf(::UserManager)
     singleOf(::PersonalStateStore)
     single { createPagingConfig(20) }
@@ -84,7 +83,7 @@ private val repositoryModules = module {
     single<SubjectRepository> { SubjectRepositoryImpl(get(), get(), get(), get(), get()) }
     single<MonoRepository> { MonoRepositoryImpl(get(), get(), get()) }
     single<BlogRepository> { BlogRepositoryImpl(get(), get()) }
-    single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get(), get(), get()) }
     single<ChoreRepository> { ChoreRepositoryImpl(get()) }
     single<GroupRepository> { GroupRepositoryImpl(get(), get(), get()) }
     single<TopicRepository> { TopicRepositoryImpl(get(), get()) }
@@ -107,7 +106,6 @@ private val converterModules = module {
     singleOf(::HomeParser)
     singleOf(::MikanParser)
     singleOf(::MonoParser)
-    singleOf(::TimelineParser)
     singleOf(::TopicParser)
     singleOf(::TopicTableParser)
     singleOf(::GroupParser)

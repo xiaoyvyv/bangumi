@@ -19,17 +19,18 @@ import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
@@ -200,6 +201,11 @@ class SubjectRepositoryImpl(
                     limit = limit
                 ).result
             }
+        }
+
+    override suspend fun fetchSubjectEpisodeComments(episodeId: Long): Result<List<ComposeReply>> =
+        client.requestNextEpisodeApi {
+            getEpisodeComments(episodeId).map { it.normalized() }
         }
 
 

@@ -6,7 +6,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.xiaoyv.bangumi.features.almanac.almanacModule
-import com.xiaoyv.bangumi.features.article.articleModule
 import com.xiaoyv.bangumi.features.blog.page.blogPageModule
 import com.xiaoyv.bangumi.features.detect.receiveImageModule
 import com.xiaoyv.bangumi.features.dollars.dollarsModule
@@ -35,23 +34,23 @@ import com.xiaoyv.bangumi.features.mono.page.monoPageModule
 import com.xiaoyv.bangumi.features.notification.notificationModule
 import com.xiaoyv.bangumi.features.pixiv.login.pixivLoginModule
 import com.xiaoyv.bangumi.features.pixiv.main.pixivMainModule
-import com.xiaoyv.bangumi.features.preivew.gallery.previewTextModule
 import com.xiaoyv.bangumi.features.preivew.album.previewAlbumModule
+import com.xiaoyv.bangumi.features.preivew.gallery.previewTextModule
 import com.xiaoyv.bangumi.features.preivew.main.previewMainModule
 import com.xiaoyv.bangumi.features.search.input.searchInputModule
 import com.xiaoyv.bangumi.features.search.result.searchResultModule
 import com.xiaoyv.bangumi.features.settings.account.settingsAccountModule
 import com.xiaoyv.bangumi.features.settings.bar.settingsBarModule
 import com.xiaoyv.bangumi.features.settings.block.settingsBlockModule
+import com.xiaoyv.bangumi.features.settings.dns.settingsDnsResolverModule
 import com.xiaoyv.bangumi.features.settings.live2d.settingsLive2dModule
 import com.xiaoyv.bangumi.features.settings.main.settingsMainModule
 import com.xiaoyv.bangumi.features.settings.network.settingsNetworkModule
 import com.xiaoyv.bangumi.features.settings.privacy.settingsPrivacyModule
-import com.xiaoyv.bangumi.features.settings.dns.settingsDnsResolverModule
+import com.xiaoyv.bangumi.features.settings.splashModule
 import com.xiaoyv.bangumi.features.settings.translate.settingsTranslateModule
 import com.xiaoyv.bangumi.features.settings.ui.settingsUiModule
 import com.xiaoyv.bangumi.features.sign.sign_in.signInModule
-import com.xiaoyv.bangumi.features.settings.splashModule
 import com.xiaoyv.bangumi.features.subject.browser.subjectBrowserModule
 import com.xiaoyv.bangumi.features.subject.detail.subjectDetailModule
 import com.xiaoyv.bangumi.features.subject.page.subjectPageModule
@@ -103,7 +102,6 @@ internal val navigationModule = module {
         pixivMainModule,
         pixivLoginModule,
         topicDetailModule,
-        articleModule,
         blogPageModule,
         friendModule,
         groupsPageModule,
