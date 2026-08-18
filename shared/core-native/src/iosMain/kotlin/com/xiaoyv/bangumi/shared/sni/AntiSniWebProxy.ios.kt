@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.shared.gif
+package com.xiaoyv.bangumi.shared.sni
 
 import kotlinx.atomicfu.atomic
 import kotlinx.cinterop.IntVar
@@ -22,6 +22,7 @@ import platform.darwin.dispatch_source_create
 import platform.darwin.dispatch_source_set_event_handler
 import platform.darwin.dispatch_source_t
 import platform.darwin.inet_pton
+import platform.posix.AF_INET
 import platform.posix.AF_UNSPEC
 import platform.posix.EINTR
 import platform.posix.F_GETFL
@@ -52,7 +53,13 @@ import platform.posix.sockaddr_in
 import platform.posix.socket
 import platform.posix.socklen_tVar
 
-class LocalHostsProxy(hosts: Map<String, String> = emptyMap()) {
+actual class AntiSniWebProxy actual constructor(
+    initialHosts: Map<String, List<String>>,
+    tlsFragmentationDomains: Collection<String>,
+    connectTimeoutMillis: Int,
+    headerTimeoutMillis: Int,
+    errorHandler: (Throwable) -> Unit,
+) : AutoCloseable {
     private data class ConnectTarget(val host: String, val port: Int)
 
     private var serverFd: Int = -1
@@ -60,17 +67,13 @@ class LocalHostsProxy(hosts: Map<String, String> = emptyMap()) {
     var boundPort: Int = 0
         private set
 
-    private val hostsState = atomic(hosts)
+    private val hostsState = atomic(initialHosts)
     private val activeSockets = atomic<Set<Int>>(emptySet())
 
     private val queue = dispatch_queue_create("com.hosts.proxy.queue", DISPATCH_QUEUE_CONCURRENT)
     private var serverSource: dispatch_source_t = null
 
-    fun updateHosts(newHosts: Map<String, String>) {
-        hostsState.value = newHosts
-    }
-
-    fun start(): Int {
+    actual fun start(): Int {
         if (serverFd >= 0) return boundPort
 
         val fd = socketListener() ?: return 0
@@ -105,7 +108,7 @@ class LocalHostsProxy(hosts: Map<String, String> = emptyMap()) {
     }
 
     private fun socketListener(): Int? {
-        val fd = socket(platform.posix.AF_INET, SOCK_STREAM, 0)
+        val fd = socket(AF_INET, SOCK_STREAM, 0)
         if (fd < 0) return null
 
         memScoped {
@@ -118,8 +121,8 @@ class LocalHostsProxy(hosts: Map<String, String> = emptyMap()) {
             }
 
             val serverAddr = alloc<sockaddr_in>().apply {
-                sin_family = platform.posix.AF_INET.toUByte()
-                inet_pton(platform.posix.AF_INET, "127.0.0.1", sin_addr.ptr)
+                sin_family = AF_INET.toUByte()
+                inet_pton(AF_INET, "127.0.0.1", sin_addr.ptr)
                 sin_port = 0u
             }
 
@@ -158,7 +161,7 @@ class LocalHostsProxy(hosts: Map<String, String> = emptyMap()) {
         }
 
         val currentHosts = hostsState.value
-        val resolvedTarget = currentHosts[target.host] ?: target.host
+        val resolvedTarget = currentHosts[target.host]?.firstOrNull() ?: target.host
         val remoteFd = connectRemote(resolvedTarget, target.port) ?: run {
             sendProxyError(clientFd, 502, "Bad Gateway")
             closeSocket(clientFd)
@@ -378,6 +381,8 @@ class LocalHostsProxy(hosts: Map<String, String> = emptyMap()) {
 
         activeSockets.value.forEach(::closeSocket)
     }
+
+    actual override fun close() = stop()
 
     companion object {
         private const val DEFAULT_HTTPS_PORT = 443

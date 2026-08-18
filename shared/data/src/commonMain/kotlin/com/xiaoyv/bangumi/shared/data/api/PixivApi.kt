@@ -1,14 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.api
 
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
-import de.jensklingenberg.ktorfit.Response
-import de.jensklingenberg.ktorfit.http.Field
-import de.jensklingenberg.ktorfit.http.FormUrlEncoded
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.model.SearchIllustrations
 import de.jensklingenberg.ktorfit.http.GET
-import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query
-import io.ktor.client.statement.HttpResponse
 
 /**
  * [PixivApi]
@@ -50,27 +45,5 @@ interface PixivApi {
         @Query("filter") filter: String = "for_ios",
         @Query("search_ai_type") searchAiType: Int? = null,
         @Query("offset") offset: Int? = null,
-    ): Response<HttpResponse>
-
-    @FormUrlEncoded
-    @POST("https://oauth.secure.pixiv.net/auth/token")
-    suspend fun sendAuthToken(
-        @Field("client_id") clientId: String?,
-        @Field("client_secret") clientSecret: String?,
-        @Field("grant_type") grantType: String?,
-        @Field("code") code: String?,
-        @Field("code_verifier") codeVerifier: String?,
-        @Field("redirect_uri") redirectUri: String?,
-        @Field("include_policy") includePolicy: Boolean,
-    ): ComposePixivToken
-
-    @FormUrlEncoded
-    @POST("https://oauth.secure.pixiv.net/auth/token")
-    suspend fun sendAuthTokenRefresh(
-        @Field("client_id") clientId: String?,
-        @Field("client_secret") clientSecret: String?,
-        @Field("refresh_token") refreshToken: String?,
-        @Field("include_policy") includePolicy: Boolean,
-        @Field("grant_type") grantType: String? = "refresh_token",
-    ): ComposePixivToken
+    ): SearchIllustrations
 }

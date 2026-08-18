@@ -25,15 +25,14 @@ import io.ktor.util.appendIfNameAbsent
 
 fun createHttpClient(
     config: ComposeSetting.NetworkConfig,
-    tlsFragmentationDomains: Set<String> = config.hosts.keys,
     redirect: Boolean = true,
     logLevel: LogLevel = LogLevel.BODY,
     cookieStorage: CookiesStorage = AcceptAllCookiesStorage(),
     enableJsonContentNegotiation: Boolean = true,
     block: HttpClientConfig<*>.() -> Unit = {},
 ): HttpClient = System.createHttpClient(
-    hosts = config.hosts,
-    tlsFragmentationDomains = tlsFragmentationDomains,
+    hosts = config.configHosts,
+    tlsFragmentationDomains = config.tlsFragmentationDomains,
 ) {
     if (redirect) install(HttpRedirect) {
         checkHttpMethod = false

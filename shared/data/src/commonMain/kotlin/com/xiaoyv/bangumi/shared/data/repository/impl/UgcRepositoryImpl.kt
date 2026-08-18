@@ -41,10 +41,10 @@ import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TimelineParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicParser
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkKeyLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createStepUniquePagingPager
 import io.ktor.client.statement.bodyAsText
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.json.jsonObject
@@ -66,7 +66,7 @@ class UgcRepositoryImpl(
         @TimelineCat type: Int,
         username: String
     ): Pager<Long, ComposeTimeline> {
-        return createNetworkKeyLimitPagingPager(
+        return createStepUniquePagingPager(
             pagingConfig = pagingConfig,
             keySelector = { it.id },
             onLoadData = {

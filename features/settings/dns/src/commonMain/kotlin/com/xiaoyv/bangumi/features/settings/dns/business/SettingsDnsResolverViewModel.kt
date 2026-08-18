@@ -24,14 +24,14 @@ class SettingsDnsResolverViewModel(
 ) : BaseViewModel<DnsResolverState, SettingsDnsResolverSideEffect, SettingsDnsResolverEvent.Action>() {
 
     override fun createInitialState(): DnsResolverState {
-        val configuredHosts = userManager.settings.network.hosts
+        val configuredHosts = userManager.settings.network.sniHosts
         return DnsResolverState(
-            nodes = ComposeSetting.NetworkConfig.DefaultHosts.keys
+            nodes = ComposeSetting.NetworkConfig.DefaultSniHosts.keys
                 .map { hostname ->
                     DnsNodeState(
                         hostname = hostname,
                         addresses = configuredHosts[hostname]
-                            ?: ComposeSetting.NetworkConfig.DefaultHosts.getValue(hostname),
+                            ?: ComposeSetting.NetworkConfig.DefaultSniHosts.getValue(hostname),
                     )
                 }.toPersistentList()
         )
@@ -50,13 +50,13 @@ class SettingsDnsResolverViewModel(
     }
 
     override suspend fun Syntax<UiState<DnsResolverState>, UiSideEffect<SettingsDnsResolverSideEffect>>.refreshSync() {
-        val fallbackHosts = ComposeSetting.NetworkConfig.DefaultHosts.builder()
-            .apply { putAll(userManager.settings.network.hosts) }
+        val fallbackHosts = ComposeSetting.NetworkConfig.DefaultSniHosts.builder()
+            .apply { putAll(userManager.settings.network.sniHosts) }
             .build()
 
         val refreshedHosts = fallbackHosts.builder()
         var failedCount = 0
-        val hostnames = ComposeSetting.NetworkConfig.DefaultHosts.keys.toList()
+        val hostnames = ComposeSetting.NetworkConfig.DefaultSniHosts.keys.toList()
         val pendingHostnames = hostnames.toMutableSet()
 
         reduceData {
@@ -119,7 +119,7 @@ class SettingsDnsResolverViewModel(
 
         userManager.updateSettings { settings ->
             settings.copy(
-                network = settings.network.copy(hosts = refreshedHosts.build())
+                network = settings.network.copy(sniHosts = refreshedHosts.build())
             )
         }
         reduceData {

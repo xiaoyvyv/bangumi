@@ -5,8 +5,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.list.ListAlbumType
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
-import com.xiaoyv.bangumi.shared.core.utils.pixivNormalUrl
-import com.xiaoyv.bangumi.shared.core.utils.pixivOriginalUrl
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiOffset
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
@@ -16,7 +14,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
 import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
 import com.xiaoyv.bangumi.shared.data.repository.ImageRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createStepUniquePagingPager
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -76,33 +74,33 @@ class ImageRepositoryImpl(
     }
 
     override fun fetchPixivPictures(tag: String): Pager<Int, ComposeGallery> {
-        return createNetworkPageLimitPagingPager(
-            pagingConfig = createPagingConfig(60),
+        return createStepUniquePagingPager(
+            pagingConfig = pagingConfig,
             keySelector = { it.id },
-            onLoadData = { page ->
-                val picture = client.imageApi.fetchPixivPictures(
-                    tag = tag,
-                    page = page,
-                )
-                picture.body?.illust?.data.orEmpty().map {
-                    val pixivOriginalUrl = it.url
-                        .orEmpty()
-                        .ifBlank { it.urls?.regular }
-                        .orEmpty()
-                        .pixivOriginalUrl()
+            onLoadData = { key ->
+                val offset = key ?: 0
+                val illusts = client.requestPixivApi {
+                    searchIllust(
+                        word = tag,
+                        searchTarget = "keyword",
+                        offset = offset
+                    ).illusts.orEmpty()
+                }.getOrThrow()
 
-                    val pixivNormalUrl = pixivOriginalUrl.pixivNormalUrl()
-
+                val items = illusts.map {
                     ComposeGallery(
-                        id = it.id.orEmpty(),
+                        id = it.id.toString(),
                         type = ListAlbumType.PIVIX,
-                        image = pixivNormalUrl,
-                        original = pixivOriginalUrl,
+                        image = it.imageUrls.medium,
+                        original = it.imageUrls.large,
                         width = it.width,
                         height = it.height,
                         count = it.pageCount
                     )
                 }
+                val nextKey = if (items.isEmpty()) null else offset + items.size
+
+                items to nextKey
             }
         )
     }

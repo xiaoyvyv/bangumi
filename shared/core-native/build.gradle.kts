@@ -43,6 +43,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(files("libs/Live2DCubismCore.aar"))
+            implementation(libs.androidx.webkit)
         }
     }
 }

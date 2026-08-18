@@ -44,9 +44,14 @@ fun <T : Any, K> createNetworkOffsetLimitPagingPager(
     }
 )
 
-fun <T : Any, K : Any> createNetworkKeyLimitPagingPager(
+/**
+ * 通用的可以扩展的分页器
+ *
+ * @param onLoadData 返回当页数据和下一页的Key，Key 为空则没有更多了
+ */
+fun <T : Any, K : Any> createStepUniquePagingPager(
     pagingConfig: PagingConfig,
-    keySelector: ((T) -> K)? = null,
+    keySelector: ((T) -> Any)? = null,
     onLoadData: suspend (K?) -> Pair<List<T>, K?>,
 ): Pager<K, T> = Pager(
     config = pagingConfig,
@@ -90,10 +95,10 @@ class PageLimitDataSource<T : Any, K>(
 
 class KeyLimitDataSource<T : Any, K : Any>(
     private val onLoadData: suspend (K?) -> Pair<List<T>, K?>,
-    private val keySelector: ((T) -> K)?,
+    private val keySelector: ((T) -> Any)?,
 ) : PagingSource<K, T>() {
     private val initialKey = null
-    private val seen = mutableSetOf<K>()
+    private val seen = mutableSetOf<Any>()
 
     override fun getRefreshKey(state: PagingState<K, T>) = null
 

@@ -19,7 +19,9 @@ import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginViewModel
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
+import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -28,6 +30,7 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
+import org.koin.mp.KoinPlatform
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -93,20 +96,25 @@ private fun PixivLoginScreenContent(
     val uriHandler = LocalUriHandler.current
     val repo = koinInject<PixivRepository>()
     val scope = rememberCoroutineScope()
+    val settings = currentSettings()
 
     Column {
         Button(
             onClick = {
                 val loginStart = "https://app-api.pixiv.net/web/v1/login?code_challenge="
-                val loginEnd =
-                    "&code_challenge_method=S256&client=pixiv-android&source=pixiv-android"
+                val loginEnd = "&code_challenge_method=S256&client=pixiv-android&source=pixiv-android"
 
                 scope.launch {
                     val login = repo.fetchLoginChallenge().getOrThrow()
                     val challenge = login.codeChallenge
                     val loginUrl = loginStart + challenge + loginEnd
                     debugLog { "Repo:$loginUrl" }
-
+//                    KoinPlatform.getKoin().get<BgmApiClient>().bgmHttpClient
+//                        .get(loginUrl)
+//                        .bodyAsText()
+//                        .apply {
+//                            println(this)
+//                        }
                     onUiEvent(PixivLoginEvent.UI.OnNavScreen(Screen.Web(loginUrl)))
 //                    uriHandler.openUri(loginUrl)
                 }
@@ -118,8 +126,7 @@ private fun PixivLoginScreenContent(
         Button(
             onClick = {
                 val loginStart = "https://app-api.pixiv.net/web/v1/login?code_challenge="
-                val loginEnd =
-                    "&code_challenge_method=S256&client=pixiv-android&source=pixiv-android"
+                val loginEnd = "&code_challenge_method=S256&client=pixiv-android&source=pixiv-android"
 
                 scope.launch {
                     val login = repo.fetchLoginChallenge().getOrThrow()
@@ -146,6 +153,10 @@ private fun PixivLoginScreenContent(
         Button(
             onClick = {
                 scope.launch {
+                    KoinPlatform.getKoin().get<BgmApiClient>()
+                        .requestMikanApi {
+
+                        }
 //                    val result = koinInject.requestGardenApi { fetchGardenResource(1) }
 //                    debugLog { "动漫花园:${result.getOrNull()?.text()}" }
                 }
@@ -159,7 +170,7 @@ private fun PixivLoginScreenContent(
         Button(
             onClick = {
                 scope.launch {
-                    manager.setToken(manager.userToken.copy(accessToken = "a"))
+                    manager.setToken(manager.userToken.copy(accessToken = "a", refreshToken = "xa"))
                 }
             }
         ) {

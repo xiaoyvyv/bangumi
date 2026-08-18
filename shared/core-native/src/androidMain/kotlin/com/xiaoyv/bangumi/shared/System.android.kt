@@ -31,6 +31,7 @@ import kotlin.time.ExperimentalTime
 lateinit var application: Application
 
 actual object System {
+
     actual val isDebugType: Boolean
         get() = (application.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
 
@@ -85,6 +86,12 @@ actual object System {
         application.startActivity(chooser)
     }
 
+    actual suspend fun cleanCache(): Result<Boolean> {
+        return withContext(Dispatchers.IO) {
+            runCatching { application.cacheDir.deleteRecursively() }
+        }
+    }
+
     actual fun createHttpClient(
         hosts: Map<String, List<String>>,
         tlsFragmentationDomains: Set<String>,
@@ -101,9 +108,5 @@ actual object System {
         }
     }
 
-    actual suspend fun cleanCache(): Result<Boolean> {
-        return withContext(Dispatchers.IO) {
-            runCatching { application.cacheDir.deleteRecursively() }
-        }
-    }
+
 }

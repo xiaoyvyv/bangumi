@@ -1,0 +1,3081 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Pixiv App-API (AppPixivAPI Documentation)",
+    "description": "Pixiv App API Swagger/OpenAPI Documentation based on pixivpy3 `aapi.py` and `models.py`.\n\nBase URL: `https://app-api.pixiv.net`\nRequired Headers:\n- `Authorization: Bearer <access_token>`\n- `App-OS: ios`\n- `App-OS-Version: 14.6`\n- `User-Agent: PixivIOSApp/7.13.3 (iOS 14.6; iPhone13,2)`\n\n> **跨域说明**: 调试 API 时，请在 Swagger UI 顶部 Servers 下拉框选择 `http://localhost:8000/proxy`，本地服务会自动转发请求并补全 CORS 响应头与 App 请求头。",
+    "version": "6.x",
+    "contact": {
+      "name": "pixivpy",
+      "url": "https://github.com/upbit/pixivpy"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/proxy",
+      "description": "本地 CORS 代理 (推荐本地调试，自动补全 CORS 与 App 请求头)"
+    },
+    {
+      "url": "https://app-api.pixiv.net",
+      "description": "Pixiv App API 官方直连地址 (浏览器直连受 CORS 限制)"
+    },
+    {
+      "url": "http://app-api.pixivlite.com",
+      "description": "PixivLite 代理地址"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "User",
+      "description": "User profile, followers, followings, and user works"
+    },
+    {
+      "name": "Illust",
+      "description": "Illustrations & Manga search, detail, ranking, recommendation, bookmarks"
+    },
+    {
+      "name": "Novel",
+      "description": "Novel search, detail, series, recommendation, bookmarks, comments"
+    },
+    {
+      "name": "Search",
+      "description": "Search illustrations, novels, and users"
+    },
+    {
+      "name": "Trending",
+      "description": "Trending tags"
+    },
+    {
+      "name": "Ugoira",
+      "description": "Animated illustrations metadata"
+    },
+    {
+      "name": "Showcase",
+      "description": "Pixiv Spotlight/Showcase articles"
+    }
+  ],
+  "paths": {
+    "/v1/user/detail": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "用户详情 (User detail)",
+        "operationId": "user_detail",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "description": "Target User ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoDetailed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/illusts": {
+      "get": {
+        "tags": [
+          "User",
+          "Illust"
+        ],
+        "summary": "用户作品列表 (User illustrations / manga list)",
+        "operationId": "user_illusts",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "Work type filter",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "illust",
+                "manga",
+                ""
+              ],
+              "default": "illust"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIllustrations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/bookmarks/illust": {
+      "get": {
+        "tags": [
+          "User",
+          "Illust"
+        ],
+        "summary": "用户收藏作品列表 (User bookmarked illustrations)",
+        "operationId": "user_bookmarks_illust",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "restrict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private",
+                ""
+              ],
+              "default": "public"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "max_bookmark_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "description": "Bookmark tag",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBookmarksIllustrations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/bookmarks/novel": {
+      "get": {
+        "tags": [
+          "User",
+          "Novel"
+        ],
+        "summary": "用户收藏小说列表 (User bookmarked novels)",
+        "operationId": "user_bookmarks_novel",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "restrict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private",
+                ""
+              ],
+              "default": "public"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "max_bookmark_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBookmarksNovel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/related": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "相关用户推荐 (Related users)",
+        "operationId": "user_related",
+        "parameters": [
+          {
+            "name": "seed_user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/recommended": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "推荐用户 (Recommended users)",
+        "operationId": "user_recommended",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/illust/follow": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "关注用户的新作 (Illustrations from followed users)",
+        "operationId": "illust_follow",
+        "parameters": [
+          {
+            "name": "restrict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private",
+                ""
+              ],
+              "default": "public"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/illust/detail": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "作品详情 (Illustration detail)",
+        "operationId": "illust_detail",
+        "parameters": [
+          {
+            "name": "illust_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "illust": {
+                      "$ref": "#/components/schemas/IllustrationInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/illust/comments": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "作品评论 (Illustration comments)",
+        "operationId": "illust_comments",
+        "parameters": [
+          {
+            "name": "illust_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "include_total_comments",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/illust/related": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "相关作品列表 (Related illustrations)",
+        "operationId": "illust_related",
+        "parameters": [
+          {
+            "name": "illust_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "seed_illust_ids[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "viewed[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/illust/recommended": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "插画推荐 - 已登录 (Recommended illustrations - Logged in)",
+        "operationId": "illust_recommended",
+        "parameters": [
+          {
+            "name": "content_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "illust",
+                "manga",
+                ""
+              ],
+              "default": "illust"
+            }
+          },
+          {
+            "name": "include_ranking_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "max_bookmark_id_for_recommend",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_bookmark_id_for_recent_illust",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "include_ranking_illusts",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "include_privacy_policy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "viewed[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/illust/recommended-nologin": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "插画推荐 - 未登录 (Recommended illustrations - No login required)",
+        "operationId": "illust_recommended_nologin",
+        "security": [],
+        "parameters": [
+          {
+            "name": "content_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "illust",
+                "manga",
+                ""
+              ],
+              "default": "illust"
+            }
+          },
+          {
+            "name": "include_ranking_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "bookmark_illust_ids",
+            "in": "query",
+            "required": false,
+            "description": "Comma separated bookmark illustration IDs",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/novel/comments": {
+      "get": {
+        "tags": [
+          "Novel"
+        ],
+        "summary": "小说作品评论 (Novel comments)",
+        "operationId": "novel_comments",
+        "parameters": [
+          {
+            "name": "novel_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "include_total_comments",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelComments"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/novel/recommended": {
+      "get": {
+        "tags": [
+          "Novel"
+        ],
+        "summary": "小说推荐 (Recommended novels)",
+        "operationId": "novel_recommended",
+        "parameters": [
+          {
+            "name": "include_ranking_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "include_ranking_novels",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "already_recommended",
+            "in": "query",
+            "required": false,
+            "description": "Comma separated novel IDs",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "max_bookmark_id_for_recommend",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/illust/ranking": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "作品排行 (Illustration rankings)",
+        "operationId": "illust_ranking",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "description": "Ranking mode",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "week",
+                "month",
+                "day_male",
+                "day_female",
+                "week_original",
+                "week_rookie",
+                "day_manga",
+                "day_r18",
+                "day_male_r18",
+                "day_female_r18",
+                "week_r18",
+                "week_r18g",
+                ""
+              ],
+              "default": "day"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "description": "Date in YYYY-MM-DD format (e.g. '2023-01-01')",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trending-tags/illust": {
+      "get": {
+        "tags": [
+          "Trending"
+        ],
+        "summary": "趋势标签 (Trending tags for illustrations)",
+        "operationId": "trending_tags_illust",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/search/illust": {
+      "get": {
+        "tags": [
+          "Search",
+          "Illust"
+        ],
+        "summary": "搜索作品 (Search illustrations)",
+        "operationId": "search_illust",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "required": true,
+            "description": "Search keyword / tag",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search_target",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "partial_match_for_tags",
+                "exact_match_for_tags",
+                "title_and_caption",
+                "keyword",
+                ""
+              ],
+              "default": "partial_match_for_tags"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "date_desc",
+                "date_asc",
+                "popular_desc",
+                ""
+              ],
+              "default": "date_desc"
+            }
+          },
+          {
+            "name": "duration",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "within_last_day",
+                "within_last_week",
+                "within_last_month",
+                ""
+              ]
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "search_ai_type",
+            "in": "query",
+            "required": false,
+            "description": "0: Hide AI works, 1: Show AI works",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchIllustrations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/search/novel": {
+      "get": {
+        "tags": [
+          "Search",
+          "Novel"
+        ],
+        "summary": "搜索小说 (Search novels)",
+        "operationId": "search_novel",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search_target",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "partial_match_for_tags",
+                "exact_match_for_tags",
+                "text",
+                "keyword",
+                ""
+              ],
+              "default": "partial_match_for_tags"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "date_desc",
+                "date_asc",
+                ""
+              ],
+              "default": "date_desc"
+            }
+          },
+          {
+            "name": "merge_plain_keyword_results",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ],
+              "default": "true"
+            }
+          },
+          {
+            "name": "include_translated_tag_results",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ],
+              "default": "true"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search_ai_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchNovel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/search/user": {
+      "get": {
+        "tags": [
+          "Search",
+          "User"
+        ],
+        "summary": "搜索用户 (Search users)",
+        "operationId": "search_user",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "date_desc",
+                "date_asc",
+                "popular_desc",
+                ""
+              ],
+              "default": "date_desc"
+            }
+          },
+          {
+            "name": "duration",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/illust/bookmark/detail": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "作品收藏详情 (Bookmark detail for illustration)",
+        "operationId": "illust_bookmark_detail",
+        "parameters": [
+          {
+            "name": "illust_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/illust/bookmark/add": {
+      "post": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "新增收藏 (Add illustration bookmark)",
+        "operationId": "illust_bookmark_add",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "illust_id"
+                ],
+                "properties": {
+                  "illust_id": {
+                    "type": "integer"
+                  },
+                  "restrict": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "private",
+                      ""
+                    ],
+                    "default": "public"
+                  },
+                  "tags[]": {
+                    "type": "string",
+                    "description": "Space separated tag names"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/illust/bookmark/delete": {
+      "post": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "删除收藏 (Delete illustration bookmark)",
+        "operationId": "illust_bookmark_delete",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "illust_id"
+                ],
+                "properties": {
+                  "illust_id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/follow/add": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "关注用户 (Follow user)",
+        "operationId": "user_follow_add",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "user_id"
+                ],
+                "properties": {
+                  "user_id": {
+                    "type": "integer"
+                  },
+                  "restrict": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "private",
+                      ""
+                    ],
+                    "default": "public"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/follow/delete": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "取消关注用户 (Unfollow user)",
+        "operationId": "user_follow_delete",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "user_id"
+                ],
+                "properties": {
+                  "user_id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/ai-show-settings/edit": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "设置用户选项中是否展现AI生成作品 (Edit AI show settings)",
+        "operationId": "user_edit_ai_show_settings",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "show_ai"
+                ],
+                "properties": {
+                  "show_ai": {
+                    "type": "string",
+                    "enum": [
+                      "true",
+                      "false"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/bookmark-tags/illust": {
+      "get": {
+        "tags": [
+          "User",
+          "Illust"
+        ],
+        "summary": "用户收藏标签列表 (User illustration bookmark tags)",
+        "operationId": "user_bookmark_tags_illust",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "restrict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private",
+                ""
+              ],
+              "default": "public"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/following": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Following用户列表 (User following list)",
+        "operationId": "user_following",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "restrict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private",
+                ""
+              ],
+              "default": "public"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserFollowing"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/follower": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Followers用户列表 (User follower list)",
+        "operationId": "user_follower",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/mypixiv": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "好P友 (MyPixiv user list)",
+        "operationId": "user_mypixiv",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/user/list": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "黑名单用户 (Blacklisted user list)",
+        "operationId": "user_list",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ugoira/metadata": {
+      "get": {
+        "tags": [
+          "Ugoira"
+        ],
+        "summary": "获取ugoira信息 (Ugoira animation metadata)",
+        "operationId": "ugoira_metadata",
+        "parameters": [
+          {
+            "name": "illust_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/novels": {
+      "get": {
+        "tags": [
+          "User",
+          "Novel"
+        ],
+        "summary": "用户小说列表 (User novels)",
+        "operationId": "user_novels",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNovels"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/novel/series": {
+      "get": {
+        "tags": [
+          "Novel"
+        ],
+        "summary": "小说系列详情 (Novel series detail)",
+        "operationId": "novel_series",
+        "parameters": [
+          {
+            "name": "series_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "last_order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/novel/detail": {
+      "get": {
+        "tags": [
+          "Novel"
+        ],
+        "summary": "小说详情 (Novel detail)",
+        "operationId": "novel_detail",
+        "parameters": [
+          {
+            "name": "novel_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "novel": {
+                      "$ref": "#/components/schemas/NovelInfo"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/novel/new": {
+      "get": {
+        "tags": [
+          "Novel"
+        ],
+        "summary": "大家的新作小说 (Newest novels)",
+        "operationId": "novel_new",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "max_novel_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/novel/follow": {
+      "get": {
+        "tags": [
+          "Novel"
+        ],
+        "summary": "正在关注的用户的新小说 (Novels from followed users)",
+        "operationId": "novel_follow",
+        "parameters": [
+          {
+            "name": "restrict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private",
+                "all"
+              ],
+              "default": "public"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webview/v2/novel": {
+      "get": {
+        "tags": [
+          "Novel"
+        ],
+        "summary": "小说 (webview) / 小说正文 (Webview novel content & text)",
+        "operationId": "webview_novel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "Novel ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "viewer_version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "20221031_ai"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebviewNovel"
+                }
+              },
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "description": "HTML content when raw=True"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/illust/new": {
+      "get": {
+        "tags": [
+          "Illust"
+        ],
+        "summary": "大家的新作插画 (Newest illustrations)",
+        "operationId": "illust_new",
+        "parameters": [
+          {
+            "name": "content_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "illust",
+                "manga",
+                ""
+              ],
+              "default": "illust"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "for_ios",
+                ""
+              ],
+              "default": "for_ios"
+            }
+          },
+          {
+            "name": "max_illust_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/showcase/article": {
+      "get": {
+        "tags": [
+          "Showcase"
+        ],
+        "summary": "特辑详情 (Showcase article detail)",
+        "operationId": "showcase_article",
+        "security": [],
+        "parameters": [
+          {
+            "name": "article_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Pixiv OAuth2 Bearer Access Token"
+      }
+    },
+    "schemas": {
+      "ProfileImageUrls": {
+        "type": "object",
+        "properties": {
+          "medium": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "account": {
+            "type": "string"
+          },
+          "profile_image_urls": {
+            "$ref": "#/components/schemas/ProfileImageUrls"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_followed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "is_access_blocking_user": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "is_accept_request": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "webpage": {
+            "type": "string",
+            "nullable": true
+          },
+          "gender": {
+            "type": "string"
+          },
+          "birth": {
+            "type": "string"
+          },
+          "birth_day": {
+            "type": "string"
+          },
+          "birth_year": {
+            "type": "integer"
+          },
+          "region": {
+            "type": "string"
+          },
+          "address_id": {
+            "type": "integer"
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "job": {
+            "type": "string"
+          },
+          "job_id": {
+            "type": "integer"
+          },
+          "total_follow_users": {
+            "type": "integer"
+          },
+          "total_mypixiv_users": {
+            "type": "integer"
+          },
+          "total_illusts": {
+            "type": "integer"
+          },
+          "total_manga": {
+            "type": "integer"
+          },
+          "total_novels": {
+            "type": "integer"
+          },
+          "total_illust_bookmarks_public": {
+            "type": "integer"
+          },
+          "total_illust_series": {
+            "type": "integer"
+          },
+          "total_novel_series": {
+            "type": "integer"
+          },
+          "background_image_url": {
+            "type": "string"
+          },
+          "twitter_account": {
+            "type": "string"
+          },
+          "twitter_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "pawoo_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_premium": {
+            "type": "boolean"
+          },
+          "is_using_custom_profile_image": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ProfilePublicity": {
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "birth_day": {
+            "type": "string"
+          },
+          "birth_year": {
+            "type": "string"
+          },
+          "job": {
+            "type": "string"
+          },
+          "pawoo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Workspace": {
+        "type": "object",
+        "properties": {
+          "pc": {
+            "type": "string"
+          },
+          "monitor": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string"
+          },
+          "scanner": {
+            "type": "string"
+          },
+          "tablet": {
+            "type": "string"
+          },
+          "mouse": {
+            "type": "string"
+          },
+          "printer": {
+            "type": "string"
+          },
+          "desktop": {
+            "type": "string"
+          },
+          "music": {
+            "type": "string"
+          },
+          "desk": {
+            "type": "string"
+          },
+          "chair": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "workspace_image_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserInfoDetailed": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile"
+          },
+          "profile_publicity": {
+            "$ref": "#/components/schemas/ProfilePublicity"
+          },
+          "workspace": {
+            "$ref": "#/components/schemas/Workspace"
+          }
+        }
+      },
+      "ImageUrls": {
+        "type": "object",
+        "properties": {
+          "square_medium": {
+            "type": "string",
+            "format": "uri"
+          },
+          "medium": {
+            "type": "string",
+            "format": "uri"
+          },
+          "large": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "IllustrationTag": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "translated_name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "NovelTag": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "translated_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "added_by_uploaded_user": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Series": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "MetaSinglePage": {
+        "type": "object",
+        "properties": {
+          "original_image_url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          }
+        }
+      },
+      "MetaPage": {
+        "type": "object",
+        "properties": {
+          "image_urls": {
+            "$ref": "#/components/schemas/ImageUrls"
+          }
+        }
+      },
+      "IllustrationInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "image_urls": {
+            "$ref": "#/components/schemas/ImageUrls"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "restrict": {
+            "type": "integer"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IllustrationTag"
+            }
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "create_date": {
+            "type": "string"
+          },
+          "page_count": {
+            "type": "integer"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "sanity_level": {
+            "type": "integer"
+          },
+          "x_restrict": {
+            "type": "integer"
+          },
+          "series": {
+            "$ref": "#/components/schemas/Series",
+            "nullable": true
+          },
+          "meta_single_page": {
+            "$ref": "#/components/schemas/MetaSinglePage"
+          },
+          "meta_pages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetaPage"
+            }
+          },
+          "total_view": {
+            "type": "integer"
+          },
+          "total_bookmarks": {
+            "type": "integer"
+          },
+          "is_bookmarked": {
+            "type": "boolean"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "is_muted": {
+            "type": "boolean"
+          },
+          "illust_ai_type": {
+            "type": "integer"
+          },
+          "illust_book_style": {
+            "type": "integer"
+          },
+          "total_comments": {
+            "type": "integer",
+            "nullable": true
+          },
+          "restriction_attributes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "NovelInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "restrict": {
+            "type": "integer"
+          },
+          "x_restrict": {
+            "type": "integer"
+          },
+          "is_original": {
+            "type": "boolean"
+          },
+          "image_urls": {
+            "$ref": "#/components/schemas/ImageUrls"
+          },
+          "create_date": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NovelTag"
+            }
+          },
+          "page_count": {
+            "type": "integer"
+          },
+          "text_length": {
+            "type": "integer"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          },
+          "series": {
+            "$ref": "#/components/schemas/Series"
+          },
+          "is_bookmarked": {
+            "type": "boolean"
+          },
+          "total_bookmarks": {
+            "type": "integer"
+          },
+          "total_view": {
+            "type": "integer"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "total_comments": {
+            "type": "integer"
+          },
+          "is_muted": {
+            "type": "boolean"
+          },
+          "is_mypixiv_only": {
+            "type": "boolean"
+          },
+          "is_x_restricted": {
+            "type": "boolean"
+          },
+          "novel_ai_type": {
+            "type": "integer"
+          },
+          "comment_access_control": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "CommentUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "account": {
+            "type": "string"
+          },
+          "profile_image_urls": {
+            "$ref": "#/components/schemas/ProfileImageUrls"
+          }
+        }
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/CommentUser",
+            "nullable": true
+          }
+        }
+      },
+      "NovelComments": {
+        "type": "object",
+        "properties": {
+          "total_comments": {
+            "type": "integer"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Comment"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment_access_control": {
+            "type": "integer"
+          }
+        }
+      },
+      "NovelNavigationInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "viewable": {
+            "type": "boolean"
+          },
+          "content_order": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "cover_url": {
+            "type": "string"
+          },
+          "viewable_message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "NovelRating": {
+        "type": "object",
+        "properties": {
+          "like": {
+            "type": "integer"
+          },
+          "bookmark": {
+            "type": "integer"
+          },
+          "view": {
+            "type": "integer"
+          }
+        }
+      },
+      "WebviewNovel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "seriesId": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesIsWatched": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string"
+          },
+          "coverUrl": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "caption": {
+            "type": "string"
+          },
+          "cdate": {
+            "type": "string"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/NovelRating"
+          },
+          "text": {
+            "type": "string"
+          },
+          "marker": {
+            "type": "string",
+            "nullable": true
+          },
+          "illusts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "seriesNavigation": {
+            "$ref": "#/components/schemas/NovelNavigationInfo",
+            "nullable": true
+          },
+          "glossaryItems": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "replaceableItemIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "aiType": {
+            "type": "integer"
+          },
+          "isOriginal": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SearchIllustrations": {
+        "type": "object",
+        "properties": {
+          "illusts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IllustrationInfo"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "search_span_limit": {
+            "type": "integer"
+          },
+          "show_ai": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SearchNovel": {
+        "type": "object",
+        "properties": {
+          "novels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NovelInfo"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "search_span_limit": {
+            "type": "integer"
+          },
+          "show_ai": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserBookmarksIllustrations": {
+        "type": "object",
+        "properties": {
+          "illusts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IllustrationInfo"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserBookmarksNovel": {
+        "type": "object",
+        "properties": {
+          "novels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NovelInfo"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserPreview": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          },
+          "illusts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IllustrationInfo"
+            }
+          },
+          "novels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NovelInfo"
+            }
+          },
+          "is_muted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserFollowing": {
+        "type": "object",
+        "properties": {
+          "user_previews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserPreview"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserIllustrations": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          },
+          "illusts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IllustrationInfo"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserNovels": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          },
+          "novels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NovelInfo"
+            }
+          },
+          "next_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

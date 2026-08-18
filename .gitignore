@@ -31,3 +31,4 @@ captures
 /actions-runner/
 /internal/SniShaper/
 /internal/bgm-ktor-client/
+/internal/pixiv/pixiv-client/

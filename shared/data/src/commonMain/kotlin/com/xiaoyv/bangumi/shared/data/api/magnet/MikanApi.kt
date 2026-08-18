@@ -19,7 +19,7 @@ interface MikanApi {
     /**
      * https://share.dmhy.org/topics/list/page/2?keyword=%E8%8A%99%E8%8E%89%E8%8E%B2&sort_id=2&team_id=619&order=date-desc
      */
-    @GET("https://xget.xiaoyv.com.cn/dmhy/topics/list/page/{page}")
+    @GET("https://share.dmhy.org/topics/list/page/{page}")
     suspend fun fetchGardenResource(
         @Path("page") page: Int,
         @Query("keyword") keyword: String,

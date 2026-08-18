@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.component.toPinYin
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
@@ -9,7 +10,9 @@ import com.xiaoyv.bangumi.shared.core.types.EditInfoType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.fromJson
+import com.xiaoyv.bangumi.shared.core.utils.requireNoError
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
@@ -21,13 +24,13 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.transform
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.transform
 import com.xiaoyv.bangumi.shared.data.parser.bgm.NotificationParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
@@ -35,6 +38,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetL
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 
@@ -314,12 +318,32 @@ class UserRepositoryImpl(
 
     override suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken> = client.createBgmToken(formHash)
 
-    override suspend fun submitRefreshToken(refreshToken: String): Result<ComposeAuthToken> = runResult {
-        client.bgmWebApiNoRedirect.sendAuthJsonApiToken(
-            refreshToken = refreshToken,
-            grantType = "refresh_token"
-        )
+    companion object {
+        suspend fun BgmApiClient.createBgmToken(formHash: String) = runResult {
+            val response = bgmWebApiNoRedirect.sendAuthJsonApi(formhash = formHash)
+            if (response.status.value == 200) {
+                Ksoup.parse(response.bodyAsText()).requireNoError()
+            }
+
+            val location = response.headers["Location"].orEmpty()
+            val code = location
+                .substringAfter("code=")
+                .substringBefore("=")
+
+            require(code.isNotBlank()) { "授权失败" }
+
+            // 返回授权结果
+            val tokenEntity = authApi.sendBgmAuthToken(
+                code = code,
+                grantType = "authorization_code"
+            )
+
+            require(tokenEntity.accessToken.isNotBlank())
+            require(tokenEntity.refreshToken.isNotBlank())
+
+            debugLog { "AuthToken ：${tokenEntity}" }
+
+            tokenEntity
+        }
     }
-
-
 }

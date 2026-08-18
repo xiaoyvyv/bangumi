@@ -10,8 +10,7 @@ class PixivRepoUseCase(
 ) {
 
     suspend fun sendAuthToken(code: String): Result<ComposePixivToken> {
-        val param = pixivRepository.cacheChallengeParam.value
-        if (param == null) return Result.failure(Exception("未获取到登录参数"))
+        val param = pixivRepository.cacheChallengeParam.value ?: return Result.failure(Exception("未获取到登录参数"))
         val token = pixivRepository.sendAuthToken(code, param.codeVerifier)
         return token
     }

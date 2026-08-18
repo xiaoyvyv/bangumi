@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -64,6 +65,10 @@ class UserManager(
 
     fun setToken(token: ComposeAuthToken) {
         preferenceStore.userToken = token
+    }
+
+    fun setPixivToken(token: ComposePixivToken) {
+        preferenceStore.pixivToken = token
     }
 
     /**

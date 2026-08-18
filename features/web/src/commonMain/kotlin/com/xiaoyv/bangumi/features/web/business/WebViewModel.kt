@@ -14,6 +14,7 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.core.utils.trimStr
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.ktor.http.Url
@@ -23,6 +24,8 @@ import org.orbitmvi.orbit.syntax.Syntax
 /**
  * [WebViewModel]
  *
+ *  {"access_token":"cAjL_oOtmfuV1YSCTZjMSvO9qoQ_sP3EkM2hiohiyXE","expires_in":3600,"token_type":"bearer","scope":"","refresh_token":"GHnk7yueFv8C7N1hqEk6ZiAm0L_Klm8bbtf2tfN2jE4","user":{"profile_image_urls":{"px_16x16":"https:\/\/s.pximg.net\/common\/images\/no_profile_ss.png","px_50x50":"https:\/\/s.pximg.net\/common\/images\/no_profile_s.png","px_170x170":"https:\/\/s.pximg.net\/common\/images\/no_profile.png"},"id":"101189656","name":"hy w","account":"user_fjgh3423","mail_address":"wanghuaiyv@gmail.com","is_premium":false,"x_restrict":2,"is_mail_authorized":true,"require_policy_agreement":false},"response":{"access_token":"cAjL_oOtmfuV1YSCTZjMSvO9qoQ_sP3EkM2hiohiyXE","expires_in":3600,"token_type":"bearer","scope":"","refresh_token":"GHnk7yueFv8C7N1hqEk6ZiAm0L_Klm8bbtf2tfN2jE4","user":{"profile_image_urls":{"px_16x16":"https:\/\/s.pximg.net\/common\/images\/no_profile_ss.png","px_50x50":"https:\/\/s.pximg.net\/common\/images\/no_profile_s.png","px_170x170":"https:\/\/s.pximg.net\/common\/images\/no_profile.png"},"id":"101189656","name":"hy w","account":"user_fjgh3423","mail_address":"wanghuaiyv@gmail.com","is_premium":false,"x_restrict":2,"is_mail_authorized":true,"require_policy_agreement":false}}}
+ *
  * @author why
  * @since 2025/1/12
  */
@@ -30,6 +33,7 @@ class WebViewModel(
     private val args: Screen.Web,
     private val pixivRepoUseCase: PixivRepoUseCase,
     private val cookieStorage: BgmCookieStorage,
+    private val userManager: UserManager
 ) : BaseViewModel<WebState, WebSideEffect, WebEvent.Action>() {
 
     override fun initBaseState(): UiState<WebState> = UiState(data = createInitialState(), status = PageStatus.Loading)
@@ -86,9 +90,9 @@ class WebViewModel(
                             postEffect { WebSideEffect.OnReload }
                         }
                         .onSuccess {
-                            debugLog {
-                                "PixivUser:$it"
-                            }
+                            userManager.setPixivToken(it)
+
+                            debugLog { "PixivUser:$it" }
 
                             postEffect { WebSideEffect.OnNavUp }
                         }

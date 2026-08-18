@@ -34,8 +34,8 @@ class PixivRepositoryImpl(
         }
     }
 
-    override suspend fun sendAuthToken(code: String, codeVerifier: String) = client.requestPixivApi {
-        sendAuthToken(
+    override suspend fun sendAuthToken(code: String, codeVerifier: String) = client.requestAuthApi {
+        sendPixivAuthToken(
             code = code,
             codeVerifier = codeVerifier,
             grantType = "authorization_code",

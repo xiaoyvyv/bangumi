@@ -85,6 +85,7 @@ data class ComposeSetting(
         @SerialName("connectTimeoutMillis") val connectTimeoutMillis: Long = 15_000,
         @SerialName("socketTimeoutMillis") val socketTimeoutMillis: Long = 15_000,
         @SerialName("hosts") val hosts: SerializeMap<String, List<String>> = DefaultHosts,
+        @SerialName("sniHosts") val sniHosts: SerializeMap<String, List<String>> = DefaultSniHosts,
 
         @SerialName("pixivImageHost") val pixivImageHost: String = "https://xget.xiaoyv.com.cn/pximg/",
         @SerialName("pixivClientId") val pixivClientId: String = "MOBrBDS8blbauoSck0ZfDbtuzpyT",
@@ -95,14 +96,31 @@ data class ComposeSetting(
         @SerialName("douBanUA") val douBanUA: String = "api-client/1 com.douban.frodo/7.65.0(277) Android/33 product/coral vendor/Google model/Pixel 4 XL brand/google  rom/android  network/wifi  udid/0643fa6abfd3eaff076ff3ee603211ded11fc344  platform/mobile nd/1",
         @SerialName("douBanKey") val douBanKey: String = "bf7dddc7c9cfe6f7",
     ) {
+        val configHosts get() = hosts + sniHosts
+        val tlsFragmentationDomains get() = sniHosts.keys
 
         companion object {
+            /**
+             * 默认配置的固定IP的域名
+             */
             val DefaultHosts = persistentMapOf(
+                "www.gstatic.cn" to listOf("120.253.244.235"),
+                "www.recaptcha.net" to listOf("142.251.23.94")
+            )
+
+            /**
+             * 需要通过DOH获取IP然后TLS分片绕过SNI阻断的域
+             */
+            val DefaultSniHosts = persistentMapOf(
                 "bangumi.tv" to listOf("178.79.181.137"),
                 "bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "api.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "next.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "lain.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
+                "share.dmhy.org" to listOf(),
+                "app-api.pixiv.net" to listOf(),
+                "oauth.secure.pixiv.net" to listOf(),
+                "accounts.pixiv.net" to listOf(),
             )
             val Default = NetworkConfig()
         }

@@ -21,7 +21,6 @@ class PreferenceStore(
         get() = databaseRepository.fetchCurrentUser()
         set(value) = databaseRepository.sendSaveUser(value)
 
-    val isLogin get() = userToken != ComposeAuthToken.Empty && userInfo != ComposeUser.Empty
 
     /**
      * 用户是否同意隐私政策

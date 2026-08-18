@@ -16,7 +16,6 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TopicDetailType
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
@@ -462,25 +461,10 @@ interface BgmWebApi {
         @Query("response_type") responseType: String = "code",
         @Query("redirect_uri", encoded = true) redirectUri: String = WebConstant.APP_CALLBACK,
         @Field("formhash") formhash: String,
-        @Field("redirect_uri", encoded = true) filedRedirectUri: String = WebConstant.APP_CALLBACK,
         @Field("client_id") fieldClientId: String = WebConstant.APP_ID,
         @Field("submit") submit: String = "授权",
     ): HttpResponse
 
-    /**
-     * 获取 Token
-     */
-    @FormUrlEncoded
-    @POST("oauth/access_token")
-    suspend fun sendAuthJsonApiToken(
-        @Field("code") code: String? = null,
-        @Field("grant_type") grantType: String,
-        @Field("refresh_token") refreshToken: String? = null,
-        @Field("redirect_uri") redirectUri: String = WebConstant.APP_CALLBACK,
-        @Field("state") state: String = getTimeMillis().toString(),
-        @Field("client_id") clientId: String = WebConstant.APP_ID,
-        @Field("client_secret") clientSecret: String = WebConstant.APP_SECRET,
-    ): ComposeAuthToken
 
     /**
      * 贴贴

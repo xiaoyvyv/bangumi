@@ -2,12 +2,10 @@
 
 package com.xiaoyv.bangumi.shared.data.api.client
 
-import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
-import com.xiaoyv.bangumi.shared.core.utils.requireNoError
-import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.uppercaseFirstChar
+import com.xiaoyv.bangumi.shared.data.api.AuthApi
 import com.xiaoyv.bangumi.shared.data.api.BgmJsonApi
 import com.xiaoyv.bangumi.shared.data.api.BgmWebApi
 import com.xiaoyv.bangumi.shared.data.api.DouBanApi
@@ -19,8 +17,10 @@ import com.xiaoyv.bangumi.shared.data.api.app.createAppApi
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpCodeConverterFactory
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpDocumentConverterFactory
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookieStorage
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthCompat
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.DouBanPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.PixivProxyPlugin
+import com.xiaoyv.bangumi.shared.data.api.createAuthApi
 import com.xiaoyv.bangumi.shared.data.api.createBgmJsonApi
 import com.xiaoyv.bangumi.shared.data.api.createBgmWebApi
 import com.xiaoyv.bangumi.shared.data.api.createDouBanApi
@@ -59,6 +59,8 @@ import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
+import com.xiaoyv.bangumi.shared.data.repository.impl.UserRepositoryImpl.Companion.createBgmToken
 import com.xiaoyv.bangumi.shared.systemDevice
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClientConfig
@@ -66,7 +68,6 @@ import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -87,6 +88,16 @@ class BgmApiClient(
 
     val baseUrl get() = config.bgmHost
 
+    /**
+     * 在 Auth 插件中刷新 Token 用，未安装任何 Auth 避免递归死锁
+     */
+    val authClient by lazy {
+        createHttpClient(
+            config = config,
+            cookieStorage = cookieStorage,
+        )
+    }
+
     val bgmHttpClient by lazy {
         createHttpClient(
             config = config,
@@ -94,7 +105,6 @@ class BgmApiClient(
             block = { installBgmAuth(preferenceStore) }
         )
     }
-
 
     private val bgmHttpClientNoRedirect by lazy {
         createHttpClient(
@@ -110,15 +120,21 @@ class BgmApiClient(
             config = config,
             cookieStorage = cookieStorage,
             logLevel = LogLevel.HEADERS,
+            enableJsonContentNegotiation = false,
         )
     }
 
     val dnsHttpClient by lazy {
         createHttpClient(
             config = config.copy(connectTimeoutMillis = 10_000L, socketTimeoutMillis = 10_000L),
-            tlsFragmentationDomains = setOf("cloudflare-dns.com"),
             enableJsonContentNegotiation = false,
         )
+    }
+
+    private val authRetrofit = ktorfit {
+        httpClient(authClient)
+        baseUrl(baseUrl)
+        converterFactories(HttpCodeConverterFactory())
     }
 
     private val webRetrofit = ktorfit {
@@ -169,6 +185,8 @@ class BgmApiClient(
         converterFactories(HttpCodeConverterFactory())
     }
 
+    val authApi = authRetrofit.createAuthApi()
+
     val bgmWebApi = webRetrofit.createBgmWebApi()
     val bgmWebApiNoRedirect = webRetrofitNoRedirect.createBgmWebApi()
     val bgmWebApiNoCookie = webRetrofitAnonymous.createBgmWebApi()
@@ -197,6 +215,8 @@ class BgmApiClient(
     val imageApi: ImageApi = appApiRetrofit.createImageApi()
     val pixivApi: PixivApi = pixivApiRetrofit.createPixivApi()
     val dbApi: DouBanApi = dbApiRetrofit.createDouBanApi()
+
+    suspend fun <R> requestAuthApi(block: suspend AuthApi.() -> R) = requestApi(authApi, block = block)
 
     suspend fun <R> requestTraceApi(block: suspend TraceApi.() -> R) = requestApi(traceApi, block = block)
     suspend fun <R> requestImageApi(block: suspend ImageApi.() -> R) = requestApi(imageApi, block = block)
@@ -259,6 +279,8 @@ class BgmApiClient(
      * Pixiv Api 自动授权
      */
     private fun HttpClientConfig<*>.installPixivAuth() {
+        install(AuthCompat)
+
         install(PixivProxyPlugin) {
             network = config
             os = systemDevice.os
@@ -272,10 +294,11 @@ class BgmApiClient(
                 append(")")
             }
         }
-
         install(Auth) {
             // Pixiv 自动授权
             bearer {
+                cacheTokens = false
+
                 sendWithoutRequest { request ->
                     request.url.host.contains("app-api.pixiv.net")
                 }
@@ -291,15 +314,20 @@ class BgmApiClient(
                 refreshTokens {
                     val refreshToken = oldTokens?.refreshToken.orEmpty()
                     if (refreshToken.isBlank()) null else {
-                        val newToken = pixivApi.sendAuthTokenRefresh(
-                            grantType = "refresh_token",
-                            clientId = config.pixivClientId,
-                            clientSecret = config.pixivClientSecret,
-                            includePolicy = true,
-                            refreshToken = refreshToken
-                        )
-                        preferenceStore.pixivToken = newToken
-                        BearerTokens(newToken.accessToken, newToken.refreshToken)
+                        try {
+                            val newToken = authApi.sendPixivAuthTokenRefresh(
+                                grantType = "refresh_token",
+                                clientId = config.pixivClientId,
+                                clientSecret = config.pixivClientSecret,
+                                includePolicy = true,
+                                refreshToken = refreshToken
+                            )
+                            preferenceStore.pixivToken = newToken
+                            BearerTokens(newToken.accessToken, newToken.refreshToken)
+                        } catch (_: Exception) {
+                            preferenceStore.pixivToken = ComposePixivToken.Empty
+                            null
+                        }
                     }
                 }
             }
@@ -310,70 +338,51 @@ class BgmApiClient(
      * Bgm Public Api 自动授权
      */
     private fun HttpClientConfig<*>.installBgmAuth(preferenceStore: PreferenceStore) {
+        install(AuthCompat)
+
         install(Auth) {
             bearer {
+                cacheTokens = false
+
                 sendWithoutRequest { builder ->
                     builder.url.toString().contains("api.bgm.tv", ignoreCase = true)
+                            || builder.url.toString().contains("next.bgm.tv", ignoreCase = true)
                 }
 
                 loadTokens {
                     val token = preferenceStore.userToken
-                    if (token.accessToken.isBlank() || token.refreshToken.isBlank() || token.isExpire) null else {
-                        BearerTokens(accessToken = token.accessToken, refreshToken = token.refreshToken)
-                    }
+                    if (token.accessToken.isBlank() || token.refreshToken.isBlank()) null else BearerTokens(
+                        accessToken = token.accessToken,
+                        refreshToken = token.refreshToken
+                    )
                 }
 
                 refreshTokens {
                     val refreshToken = oldTokens?.refreshToken.orEmpty()
-                    var token = ComposeAuthToken.Empty
-                    if (refreshToken.isNotBlank()) {
-                        val authToken = runResult {
-                            bgmWebApi.sendAuthJsonApiToken(refreshToken = refreshToken, grantType = "refresh_token")
+                    if (refreshToken.isBlank()) null else {
+                        try {
+                            val newToken = authApi.sendBgmAuthToken(
+                                grantType = "refresh_token",
+                                refreshToken = refreshToken
+                            )
+                            preferenceStore.userToken = newToken
+                            BearerTokens(newToken.accessToken, newToken.refreshToken)
+                        } catch (_: Exception) {
+                            // 意外情况，Cookie 还有登录信息，但是 Token 和 RefreshToken 都失效了，重新自动授权
+                            if (preferenceStore.userInfo != ComposeUser.Empty) {
+                                val newToken = createBgmToken(preferenceStore.userInfo.formHash).getOrThrow()
+                                // 保存新的 Token
+                                preferenceStore.userToken = newToken
+
+                                BearerTokens(accessToken = newToken.accessToken, refreshToken = newToken.refreshToken)
+                            } else {
+                                preferenceStore.userToken = ComposeAuthToken.Empty
+                                null
+                            }
                         }
-                        if (authToken.isSuccess) token = authToken.getOrThrow()
-                    }
-
-                    if (token == ComposeAuthToken.Empty) {
-                        token = createBgmToken(preferenceStore.userInfo.formHash).getOrThrow()
-                    }
-
-                    if (token == ComposeAuthToken.Empty) {
-                        preferenceStore.userInfo = ComposeUser.Empty
-                        preferenceStore.userToken = ComposeAuthToken.Empty
-                        null
-                    } else {
-                        preferenceStore.userToken = token
-                        BearerTokens(token.accessToken, token.refreshToken)
                     }
                 }
             }
         }
-    }
-
-    suspend fun createBgmToken(formHash: String) = runResult {
-        val response = bgmWebApiNoRedirect.sendAuthJsonApi(formhash = formHash)
-        if (response.status.value == 200) {
-            Ksoup.parse(response.bodyAsText()).requireNoError()
-        }
-
-        val location = response.headers["Location"].orEmpty()
-        val code = location
-            .substringAfter("code=")
-            .substringBefore("=")
-
-        require(code.isNotBlank()) { "授权失败" }
-
-        // 返回授权结果
-        val tokenEntity = bgmWebApiNoRedirect.sendAuthJsonApiToken(
-            code = code,
-            grantType = "authorization_code"
-        )
-
-        require(tokenEntity.accessToken.isNotBlank())
-        require(tokenEntity.refreshToken.isNotBlank())
-
-        debugLog { "AuthToken ：${tokenEntity}" }
-
-        tokenEntity
     }
 }

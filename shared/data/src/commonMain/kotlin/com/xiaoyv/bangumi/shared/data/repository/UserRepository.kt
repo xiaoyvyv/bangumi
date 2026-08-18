@@ -12,8 +12,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
@@ -60,8 +60,6 @@ interface UserRepository {
     ): Result<List<ComposeSubject>>
 
     suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken>
-
-    suspend fun submitRefreshToken(refreshToken: String): Result<ComposeAuthToken>
 
     suspend fun submitUserInfoUpdate(avatarBytes: ByteArray, parts: Map<String, String>): Result<Unit>
 

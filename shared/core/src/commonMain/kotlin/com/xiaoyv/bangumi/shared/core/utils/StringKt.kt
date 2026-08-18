@@ -28,12 +28,6 @@ import io.ktor.http.Url
 
 val infoEpsRegex by lazy { "(\\d+\\s*话)".toRegex() }
 
-fun String.substringBeforeSymbol(): String {
-    val regex = Regex("^[^\\p{Punct}\\s]+")
-    return regex.find(this)?.value.orEmpty().ifBlank { this }
-}
-
-
 fun String.isIpv4Address(): Boolean {
     val parts = split('.')
     return parts.size == 4 && parts.all { part ->
@@ -54,32 +48,6 @@ fun String.substringBeforeAnyPunctuation(): String {
     } else {
         this // 没有标点就返回原字符串
     }
-}
-
-fun String.substringAfterAnyPunctuation(): String {
-    val regex = Regex("\\p{P}") // 匹配任意 Unicode 标点
-    val match = regex.find(this)
-    return if (match != null) {
-        this.substring(match.range.last + 1)
-    } else {
-        this // 没有标点就返回原字符串
-    }
-}
-
-
-fun String?.pixivOriginalUrl(): String {
-    return orEmpty()
-        .replace("""/c/[^/]+/""".toRegex(), "/")
-        .replace("""/(img-master|custom-thumb)/""".toRegex(), "/img-original/")
-        .replace("""_square\d+|_master\d+|_custom\d+""".toRegex(), "")
-}
-
-fun String?.pixivNormalUrl(): String {
-    return pixivOriginalUrl()
-        .replace("/img-original/", "/img-master/")
-        .replace("""\.(jpg|png|gif)$""".toRegex()) {
-            "_master1200.${it.groupValues.getOrNull(1) ?: "jpg"}"
-        }
 }
 
 fun String?.toUrl() = if (isNullOrBlank()) URLBuilder().build() else Url(this)
