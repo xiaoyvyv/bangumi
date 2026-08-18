@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.tag.detail
 
+import com.xiaoyv.bangumi.features.tag.detail.business.TagDetailViewModel
+import org.koin.core.module.dsl.viewModelOf
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
@@ -9,6 +11,8 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val tagDetailModule = module {
+    viewModelOf(::TagDetailViewModel)
+
     navScope {
         navigation<Screen.TagDetail> { key ->
             TagDetailRoute(

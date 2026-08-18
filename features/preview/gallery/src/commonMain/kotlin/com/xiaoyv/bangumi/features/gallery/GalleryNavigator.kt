@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.gallery
 
+import com.xiaoyv.bangumi.features.gallery.business.GalleryViewModel
+import org.koin.core.module.dsl.viewModelOf
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
@@ -9,6 +11,8 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val galleryModule = module {
+    viewModelOf(::GalleryViewModel)
+
     navScope {
         navigation<Screen.Gallery> { key ->
             GalleryRoute(

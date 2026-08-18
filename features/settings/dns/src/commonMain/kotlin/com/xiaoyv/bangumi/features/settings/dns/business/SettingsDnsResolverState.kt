@@ -1,11 +1,11 @@
-package com.xiaoyv.bangumi.features.splash.business
+package com.xiaoyv.bangumi.features.settings.dns.business
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
-data class SplashState(
+data class DnsResolverState(
     val nodes: PersistentList<DnsNodeState> = persistentListOf(),
     val activeHostname: String = "",
     val completedCount: Int = 0,

@@ -40,6 +40,7 @@ kotlin {
             implementation(projects.features.mainTab.newest)
             implementation(projects.features.settings.main)
             implementation(projects.features.settings.account)
+            implementation(projects.features.settings.dns)
             implementation(projects.features.settings.bar)
             implementation(projects.features.settings.block)
             implementation(projects.features.settings.live2d)

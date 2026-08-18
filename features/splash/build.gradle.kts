@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.xiaoyv.bangumi.features.splash"
+        namespace = "com.xiaoyv.bangumi.features.settings"
     }
 
     sourceSets {

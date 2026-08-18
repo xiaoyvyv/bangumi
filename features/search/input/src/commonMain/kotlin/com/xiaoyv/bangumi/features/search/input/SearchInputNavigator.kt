@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.search.input
 
+import com.xiaoyv.bangumi.features.search.input.business.SearchInputViewModel
+import org.koin.core.module.dsl.viewModelOf
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.StackAction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
@@ -10,6 +12,8 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val searchInputModule = module {
+    viewModelOf(::SearchInputViewModel)
+
     navScope {
         navigation<Screen.SearchInput> { key ->
             SearchInputRoute(

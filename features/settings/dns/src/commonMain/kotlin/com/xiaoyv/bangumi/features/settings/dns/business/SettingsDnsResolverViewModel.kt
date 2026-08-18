@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.splash.business
+package com.xiaoyv.bangumi.features.settings.dns.business
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
@@ -18,14 +18,14 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.orbitmvi.orbit.syntax.Syntax
 import kotlin.time.Duration.Companion.milliseconds
 
-class SplashViewModel(
+class SettingsDnsResolverViewModel(
     private val choreRepository: ChoreRepository,
     private val userManager: UserManager,
-) : BaseViewModel<SplashState, SplashSideEffect, SplashEvent.Action>() {
+) : BaseViewModel<DnsResolverState, SettingsDnsResolverSideEffect, SettingsDnsResolverEvent.Action>() {
 
-    override fun createInitialState(): SplashState {
+    override fun createInitialState(): DnsResolverState {
         val configuredHosts = userManager.settings.network.hosts
-        return SplashState(
+        return DnsResolverState(
             nodes = ComposeSetting.NetworkConfig.DefaultHosts.keys
                 .map { hostname ->
                     DnsNodeState(
@@ -37,19 +37,19 @@ class SplashViewModel(
         )
     }
 
-    override fun onEvent(event: SplashEvent.Action) {
+    override fun onEvent(event: SettingsDnsResolverEvent.Action) {
         when (event) {
-            SplashEvent.Action.OnLaunch -> intent {
-                if (state.data.isComplete) postEffect { SplashSideEffect.NavigateMain }
+            SettingsDnsResolverEvent.Action.OnLaunch -> intent {
+                if (state.data.isComplete) postEffect { SettingsDnsResolverSideEffect.NavigateMain }
             }
 
-            SplashEvent.Action.OnRefresh -> intent {
+            SettingsDnsResolverEvent.Action.OnRefresh -> intent {
                 if (!state.data.isResolving) refreshSync()
             }
         }
     }
 
-    override suspend fun Syntax<UiState<SplashState>, UiSideEffect<SplashSideEffect>>.refreshSync() {
+    override suspend fun Syntax<UiState<DnsResolverState>, UiSideEffect<SettingsDnsResolverSideEffect>>.refreshSync() {
         val fallbackHosts = ComposeSetting.NetworkConfig.DefaultHosts.builder()
             .apply { putAll(userManager.settings.network.hosts) }
             .build()
@@ -130,7 +130,7 @@ class SplashViewModel(
         }
     }
 
-    private suspend fun Syntax<UiState<SplashState>, UiSideEffect<SplashSideEffect>>.updateNode(
+    private suspend fun Syntax<UiState<DnsResolverState>, UiSideEffect<SettingsDnsResolverSideEffect>>.updateNode(
         hostname: String,
         transform: DnsNodeState.() -> DnsNodeState,
     ) {

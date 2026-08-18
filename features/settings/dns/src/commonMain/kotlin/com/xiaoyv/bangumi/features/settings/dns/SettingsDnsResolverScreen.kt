@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.splash
+package com.xiaoyv.bangumi.features.settings.dns
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.RepeatMode
@@ -58,12 +58,12 @@ import com.xiaoyv.bangumi.core_resource.resources.splash_status_resolving
 import com.xiaoyv.bangumi.core_resource.resources.splash_status_route_updated
 import com.xiaoyv.bangumi.core_resource.resources.splash_status_safe_cache
 import com.xiaoyv.bangumi.core_resource.resources.splash_title
-import com.xiaoyv.bangumi.features.splash.business.DnsNodeState
-import com.xiaoyv.bangumi.features.splash.business.DnsNodeStatus
-import com.xiaoyv.bangumi.features.splash.business.SplashEvent
-import com.xiaoyv.bangumi.features.splash.business.SplashSideEffect
-import com.xiaoyv.bangumi.features.splash.business.SplashState
-import com.xiaoyv.bangumi.features.splash.business.SplashViewModel
+import com.xiaoyv.bangumi.features.settings.dns.business.DnsNodeState
+import com.xiaoyv.bangumi.features.settings.dns.business.DnsNodeStatus
+import com.xiaoyv.bangumi.features.settings.dns.business.SettingsDnsResolverEvent
+import com.xiaoyv.bangumi.features.settings.dns.business.SettingsDnsResolverSideEffect
+import com.xiaoyv.bangumi.features.settings.dns.business.DnsResolverState
+import com.xiaoyv.bangumi.features.settings.dns.business.SettingsDnsResolverViewModel
 import com.xiaoyv.bangumi.shared.ui.component.layout.refresh.PullToRefreshBox
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -78,27 +78,27 @@ private val SignalAmber = Color(0xFFFFC857)
 private val MutedText = Color(0xFF76969A)
 
 @Composable
-fun SplashRoute(
-    viewModel: SplashViewModel,
+fun SettingsDnsResolverRoute(
+    viewModel: SettingsDnsResolverViewModel,
     onNavScreen: (Screen) -> Unit,
 ) {
     val baseState by viewModel.collectAsState()
     viewModel.collectBaseSideEffect { effect ->
         when (effect) {
-            SplashSideEffect.NavigateMain -> onNavScreen(Screen.Main)
+            SettingsDnsResolverSideEffect.NavigateMain -> onNavScreen(Screen.Main)
         }
     }
 
-    SplashScreen(
+    SettingsDnsResolverScreen(
         state = baseState.data,
-        onLaunch = { viewModel.onEvent(SplashEvent.Action.OnLaunch) },
-        onRefresh = { viewModel.onEvent(SplashEvent.Action.OnRefresh) },
+        onLaunch = { viewModel.onEvent(SettingsDnsResolverEvent.Action.OnLaunch) },
+        onRefresh = { viewModel.onEvent(SettingsDnsResolverEvent.Action.OnRefresh) },
     )
 }
 
 @Composable
-fun SplashScreen(
-    state: SplashState,
+fun SettingsDnsResolverScreen(
+    state: DnsResolverState,
     onLaunch: () -> Unit,
     onRefresh: () -> Unit,
 ) {
@@ -276,7 +276,7 @@ private fun ResolverCore(progress: Float, pulse: Float) {
 
 @Composable
 private fun ResolveSummary(
-    state: SplashState,
+    state: DnsResolverState,
     onLaunch: () -> Unit,
 ) {
     val status = when {

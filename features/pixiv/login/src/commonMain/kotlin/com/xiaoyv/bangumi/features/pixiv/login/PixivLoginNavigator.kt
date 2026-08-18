@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.pixiv.login
 
+import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginViewModel
+import org.koin.core.module.dsl.viewModelOf
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
@@ -10,6 +12,8 @@ import org.koin.dsl.navigation3.navigation
 
 
 val pixivLoginModule = module {
+    viewModelOf(::PixivLoginViewModel)
+
     navScope {
         navigation<Screen.PixivLogin> { key ->
             PixivLoginRoute(

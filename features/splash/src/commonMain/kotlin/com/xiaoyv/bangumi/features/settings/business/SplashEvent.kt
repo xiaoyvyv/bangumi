@@ -1,8 +1,7 @@
-package com.xiaoyv.bangumi.features.splash.business
+package com.xiaoyv.bangumi.features.settings.business
 
 sealed interface SplashEvent {
     sealed interface Action : SplashEvent {
-        data object OnLaunch : Action
         data object OnRefresh : Action
     }
 }

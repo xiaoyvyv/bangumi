@@ -7,12 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.xiaoyv.bangumi.features.almanac.almanacModule
 import com.xiaoyv.bangumi.features.article.articleModule
+import com.xiaoyv.bangumi.features.blog.page.blogPageModule
 import com.xiaoyv.bangumi.features.detect.receiveImageModule
 import com.xiaoyv.bangumi.features.dollars.dollarsModule
+import com.xiaoyv.bangumi.features.friend.friendModule
 import com.xiaoyv.bangumi.features.gallery.galleryModule
 import com.xiaoyv.bangumi.features.garden.gardenModule
 import com.xiaoyv.bangumi.features.groups.detail.groupsDetailModule
+import com.xiaoyv.bangumi.features.groups.page.groupsPageModule
 import com.xiaoyv.bangumi.features.index.detail.indexDetailModule
+import com.xiaoyv.bangumi.features.index.page.indexPageModule
 import com.xiaoyv.bangumi.features.main.mainModule
 import com.xiaoyv.bangumi.features.main.tab.home.calendarModule
 import com.xiaoyv.bangumi.features.main.tab.home.homeModule
@@ -27,10 +31,12 @@ import com.xiaoyv.bangumi.features.mikan.detail.mikanDetailModule
 import com.xiaoyv.bangumi.features.mikan.studio.mikanStudioModule
 import com.xiaoyv.bangumi.features.mono.browser.monoBrowserModule
 import com.xiaoyv.bangumi.features.mono.detail.monoDetailModule
+import com.xiaoyv.bangumi.features.mono.page.monoPageModule
 import com.xiaoyv.bangumi.features.notification.notificationModule
 import com.xiaoyv.bangumi.features.pixiv.login.pixivLoginModule
 import com.xiaoyv.bangumi.features.pixiv.main.pixivMainModule
 import com.xiaoyv.bangumi.features.preivew.gallery.previewTextModule
+import com.xiaoyv.bangumi.features.preivew.album.previewAlbumModule
 import com.xiaoyv.bangumi.features.preivew.main.previewMainModule
 import com.xiaoyv.bangumi.features.search.input.searchInputModule
 import com.xiaoyv.bangumi.features.search.result.searchResultModule
@@ -41,14 +47,19 @@ import com.xiaoyv.bangumi.features.settings.live2d.settingsLive2dModule
 import com.xiaoyv.bangumi.features.settings.main.settingsMainModule
 import com.xiaoyv.bangumi.features.settings.network.settingsNetworkModule
 import com.xiaoyv.bangumi.features.settings.privacy.settingsPrivacyModule
+import com.xiaoyv.bangumi.features.settings.dns.settingsDnsResolverModule
 import com.xiaoyv.bangumi.features.settings.translate.settingsTranslateModule
 import com.xiaoyv.bangumi.features.settings.ui.settingsUiModule
 import com.xiaoyv.bangumi.features.sign.sign_in.signInModule
-import com.xiaoyv.bangumi.features.splash.splashModule
+import com.xiaoyv.bangumi.features.settings.splashModule
 import com.xiaoyv.bangumi.features.subject.browser.subjectBrowserModule
 import com.xiaoyv.bangumi.features.subject.detail.subjectDetailModule
+import com.xiaoyv.bangumi.features.subject.page.subjectPageModule
 import com.xiaoyv.bangumi.features.tag.detail.tagDetailModule
+import com.xiaoyv.bangumi.features.tag.page.tagPageModule
+import com.xiaoyv.bangumi.features.timeline.page.timelinePageModule
 import com.xiaoyv.bangumi.features.topic.detail.topicDetailModule
+import com.xiaoyv.bangumi.features.topic.page.topicPageModule
 import com.xiaoyv.bangumi.features.user.userModule
 import com.xiaoyv.bangumi.features.web.webModule
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator
@@ -74,6 +85,7 @@ internal val navigationModule = module {
         settingsAccountModule,
         settingsBarModule,
         settingsBlockModule,
+        settingsDnsResolverModule,
         settingsLive2dModule,
         settingsNetworkModule,
         settingsPrivacyModule,
@@ -92,6 +104,16 @@ internal val navigationModule = module {
         pixivLoginModule,
         topicDetailModule,
         articleModule,
+        blogPageModule,
+        friendModule,
+        groupsPageModule,
+        indexPageModule,
+        monoPageModule,
+        previewAlbumModule,
+        subjectPageModule,
+        tagPageModule,
+        timelinePageModule,
+        topicPageModule,
         receiveImageModule,
         searchInputModule,
         searchResultModule,
@@ -120,4 +142,3 @@ fun BgmScreenNavGraph(navigator: Navigator) {
         navigator = navigator
     )
 }
-

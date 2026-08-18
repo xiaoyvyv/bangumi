@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.message.chat
 
+import com.xiaoyv.bangumi.features.message.chat.business.MessageChatViewModel
+import org.koin.core.module.dsl.viewModelOf
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
@@ -10,6 +12,8 @@ import org.koin.dsl.navigation3.navigation
 
 
 val messageChatModule = module {
+    viewModelOf(::MessageChatViewModel)
+
     navScope {
         navigation<Screen.MessageChat> { key ->
             MessageChatRoute(

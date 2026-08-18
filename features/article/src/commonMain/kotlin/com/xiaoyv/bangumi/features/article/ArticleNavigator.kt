@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.article
 
+import com.xiaoyv.bangumi.features.article.business.ArticleViewModel
+import org.koin.core.module.dsl.viewModelOf
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
@@ -10,6 +12,8 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val articleModule = module {
+    viewModelOf(::ArticleViewModel)
+
     navScope {
         navigation<Screen.Article>(metadata = ListDetailSceneStrategy.detailPane()) { key ->
             ArticleRoute(

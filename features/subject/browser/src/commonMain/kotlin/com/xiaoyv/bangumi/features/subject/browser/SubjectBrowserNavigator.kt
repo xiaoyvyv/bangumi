@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.subject.browser
 
+import com.xiaoyv.bangumi.features.subject.browser.business.SubjectBrowserViewModel
+import org.koin.core.module.dsl.viewModelOf
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +18,8 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val subjectBrowserModule = module {
+    viewModelOf(::SubjectBrowserViewModel)
+
     navScope {
         navigation<Screen.SubjectBrowser>(
             metadata = ListDetailSceneStrategy.listPane(

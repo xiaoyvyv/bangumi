@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.message
 
+import com.xiaoyv.bangumi.features.message.business.MessageMainViewModel
+import org.koin.core.module.dsl.viewModelOf
 import androidx.navigation3.scene.DialogSceneStrategy
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
@@ -10,6 +12,8 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val messageMainModule = module {
+    viewModelOf(::MessageMainViewModel)
+
     navScope {
         navigation<Screen.MessageMain> { key ->
             MessageMainRoute(

@@ -1,5 +1,9 @@
 package com.xiaoyv.bangumi.features.main.tab.rakuen
 
+import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenViewModel
+import com.xiaoyv.bangumi.features.main.tab.rakuen.page.RaKuenPageViewModel
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +20,11 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val raKuenModule = module {
+    viewModelOf(::RaKuenViewModel)
+    viewModel { (type: String) ->
+        RaKuenPageViewModel(ugcRepository = get(), type = type)
+    }
+
     navScope {
         navigation<Screen.RaKuen>(
             metadata = ListDetailSceneStrategy.listPane(

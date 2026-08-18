@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.sign.sign_in
 
+import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInViewModel
+import org.koin.core.module.dsl.viewModelOf
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
@@ -10,6 +12,8 @@ import org.koin.dsl.navigation3.navigation
 
 
 val signInModule = module {
+    viewModelOf(::SignInViewModel)
+
     navScope {
         navigation<Screen.SignIn> { key ->
             SignInRoute(

@@ -78,6 +78,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.MonoBrowser::class, Screen.MonoBrowser.serializer())
             subclass(Screen.Web::class, Screen.Web.serializer())
             subclass(Screen.Calendar::class, Screen.Calendar.serializer())
+            subclass(Screen.DnsResolver::class, Screen.DnsResolver.serializer())
         }
     }
 }
@@ -95,6 +96,9 @@ sealed class Screen(
 
     @Serializable
     data object Splash : Screen(SCREEN_ROUTE_SPLASH)
+
+    @Serializable
+    data object DnsResolver : Screen(SCREEN_ROUTE_DNS)
 
     @Serializable
     data object Main : Screen(SCREEN_ROUTE_MAIN, LaunchMode.SINGLE_TASK, StackAction.ClearAll)

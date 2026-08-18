@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.garden
 
+import com.xiaoyv.bangumi.features.garden.business.GardenViewModel
+import org.koin.core.module.dsl.viewModelOf
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
@@ -9,6 +11,8 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val gardenModule = module {
+    viewModelOf(::GardenViewModel)
+
     navScope {
         navigation<Screen.Garden> { key ->
             GardenRoute(
