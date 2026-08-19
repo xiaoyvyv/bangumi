@@ -1,6 +1,5 @@
 @file:Suppress("SpellCheckingInspection", "UnstableApiUsage")
 
-import com.android.build.api.dsl.LibraryExtension
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -39,6 +38,7 @@ kotlin {
         minSdk = libs.versions.android.minSdk.get().toInt()
 
         withJava()
+        withHostTest {}
 
         lint {
             targetSdk = libs.versions.android.targetSdk.get().toInt()
@@ -78,9 +78,6 @@ kotlin {
             implementation(libs.compose.paging.common.android)
 
             implementation(libs.tinypinyin.android)
-
-//            implementation("com.google.android.gms:play-services-cronet:18.0.1") // 依赖 GMS 提供最新版 Chromium 核心
-//            implementation("com.github.vvb2060:okhttp-cronet:1.0.0") // 第三方开源的 Cronet 适配 OkHttp 的桥梁
         }
 
         commonMain.dependencies {
@@ -171,237 +168,19 @@ compose.resources {
     packageOfResClass = "com.xiaoyv.bangumi.$composeResourceId.resources"
 }
 
-tasks.register("generateMvi") {
+tasks.register<GenerateMviTask>("generateMvi") {
     group = "bangumi"
 
-    doLast {
-        val parentName = project.parent?.name.orEmpty()
-            .let { if (it == "features") "" else it }
-            .uppercaseFirstChar()
-        val moduleName =
-            parentName + project.name.split("_").joinToString { it.uppercaseFirstChar() }
-        val androidExt =
-            requireNotNull(project.extensions.findByName("android")) as LibraryExtension
-        val namespace = androidExt.namespace.orEmpty()
-        val namespaceDir = layout.projectDirectory
-            .dir("src/commonMain/kotlin/${namespace.replace(".", "/")}")
-            .also { mkdir(it) }
+    val parentName = project.parent?.name.orEmpty()
+        .let { if (it == "features") "" else it }
+        .uppercaseFirstChar()
 
-        if (namespaceDir.asFile.listFiles()?.isNotEmpty() == true) {
-            throw GradleException("Please clean dir：$namespaceDir")
-        }
+    val codeNamespace = requireNotNull(project.kotlin.android.namespace)
+    val codeDir = layout.projectDirectory
+        .dir("src/commonMain/kotlin/${codeNamespace.replace(".", "/")}")
+        .also { mkdir(it) }
 
-        val businessDir = namespaceDir.dir("business").also { mkdir(it) }
-
-        val classFileEvent = businessDir.file("${moduleName}Event.kt")
-        val classFileSideEffect = businessDir.file("${moduleName}SideEffect.kt")
-        val classFileState = businessDir.file("${moduleName}State.kt")
-        val classFileViewModel = businessDir.file("${moduleName}ViewModel.kt")
-        val classFileNavigator = namespaceDir.file("${moduleName}Navigator.kt")
-        val classFileScreen = namespaceDir.file("${moduleName}Screen.kt")
-
-        classFileEvent.asFile.writeText(
-            "package ${namespace}.business\n" +
-                    "\n" +
-                    "import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen\n" +
-                    "\n" +
-                    "/**\n" +
-                    " * [${moduleName}Event]\n" +
-                    " *\n" +
-                    " * @author why\n" +
-                    " * @since 2025/1/12\n" +
-                    " */\n" +
-                    "sealed class ${moduleName}Event {\n" +
-                    "    sealed class UI : ${moduleName}Event() {\n" +
-                    "        data object OnNavUp : UI()\n" +
-                    "        data class OnNavScreen(val screen: Screen) : UI()\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    sealed class Action : ${moduleName}Event() {\n" +
-                    "        data class OnRefresh(val loading : Boolean) : Action()\n" +
-                    "    }\n" +
-                    "}"
-        )
-
-        classFileSideEffect.asFile.writeText(
-            "package ${namespace}.business\n" +
-                    "\n" +
-                    "/**\n" +
-                    " * [${moduleName}SideEffect]\n" +
-                    " *\n" +
-                    " * @author why\n" +
-                    " * @since 2025/1/12\n" +
-                    " */\n" +
-                    "sealed class ${moduleName}SideEffect {\n" +
-                    "\n" +
-                    "}"
-        )
-
-        classFileState.asFile.writeText(
-            "package ${namespace}.business\n" +
-                    "\n" +
-                    "import androidx.compose.runtime.Immutable\n" +
-                    "\n" +
-                    "/**\n" +
-                    " * [${moduleName}State]\n" +
-                    " *\n" +
-                    " * @author why\n" +
-                    " * @since 2025/1/12\n" +
-                    " */\n" +
-                    "@Immutable\n" +
-                    "data class ${moduleName}State(\n" +
-                    "    val title: String = \"\"\n" +
-                    ")\n"
-        )
-
-        classFileNavigator.asFile.writeText(
-            "package ${namespace}\n" +
-                    "\n" +
-                    "import androidx.navigation.NavGraphBuilder\n" +
-                    "import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator\n" +
-                    "import androidx.navigation.compose.composable\n" +
-                    "import com.xiaoyv.bangumi.shared.core.utils.debounce\n" +
-                    "import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen\n" +
-                    "\n" +
-                    "\n" +
-                    "data class ${moduleName}Arguments(val id: Long) {\n" +
-                    "    constructor(savedStateHandle: SavedStateHandle) : this(\n" +
-                    "        id = savedStateHandle.getLong(EXTRA_ID)\n" +
-                    "    )\n" +
-                    "}" +
-                    "\n" +
-                    "fun Navigator.navigate${moduleName}(screen: Screen.${moduleName}) = debounce(screen.route) {\n" +
-                    "    navigate(screen.route)\n" +
-                    "}\n" +
-                    "\n" +
-                    "fun NavGraphBuilder.add${moduleName}Screen(\n" +
-                    "    onNavUp: () -> Unit,\n" +
-                    "    onNavScreen: (Screen) -> Unit\n" +
-                    ") {\n" +
-                    "    composable(route = Screen.${moduleName}.route) {\n" +
-                    "        ${moduleName}Route(\n" +
-                    "            onNavUp = onNavUp,\n" +
-                    "            onNavScreen = onNavScreen\n" +
-                    "        )\n" +
-                    "    }\n" +
-                    "}"
-        )
-
-        classFileViewModel.asFile.writeText(
-            "package ${namespace}.business\n" +
-                    "\n" +
-                    "import androidx.lifecycle.SavedStateHandle\n" +
-                    "import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel\n" +
-                    "\n" +
-                    "/**\n" +
-                    " * [${moduleName}ViewModel]\n" +
-                    " *\n" +
-                    " * @author why\n" +
-                    " * @since 2025/1/12\n" +
-                    " */\n" +
-                    "class ${moduleName}ViewModel(savedStateHandle: SavedStateHandle) :\n" +
-                    "    BaseViewModel<${moduleName}State, ${moduleName}SideEffect, ${moduleName}Event.Action>(savedStateHandle) {\n" +
-                    "\n" +
-                    "    override fun initSate(onCreate: Boolean) = ${moduleName}State()\n" +
-                    "\n" +
-                    "    override fun onEvent(event: ${moduleName}Event.Action) {\n" +
-                    "        when (event) {\n" +
-                    "            is ${moduleName}Event.Action.OnRefresh -> refresh(loading = event.loading)\n" +
-                    "        }\n" +
-                    "    }\n" +
-                    "\n" +
-                    "}"
-        )
-
-        classFileScreen.asFile.writeText(
-            "package ${namespace}\n" +
-                    "\n" +
-                    "import androidx.compose.foundation.layout.fillMaxSize\n" +
-                    "import androidx.compose.foundation.layout.padding\n" +
-                    "import androidx.compose.foundation.rememberScrollState\n" +
-                    "import androidx.compose.foundation.verticalScroll\n" +
-                    "import androidx.compose.material3.Scaffold\n" +
-                    "import androidx.compose.material3.TopAppBarDefaults\n" +
-                    "import androidx.compose.runtime.Composable\n" +
-                    "import androidx.compose.runtime.getValue\n" +
-                    "import androidx.compose.ui.Modifier\n" +
-                    "import androidx.compose.ui.input.nestedscroll.nestedScroll\n" +
-                    "import com.xiaoyv.bangumi.core_resource.resources.Res\n" +
-                    "import com.xiaoyv.bangumi.core_resource.resources.login_title\n" +
-                    "import ${namespace}.business.${moduleName}Event\n" +
-                    "import ${namespace}.business.${moduleName}State\n" +
-                    "import ${namespace}.business.${moduleName}ViewModel\n" +
-                    "import com.xiaoyv.bangumi.shared.core.mvi.BaseState\n" +
-                    "import org.orbitmvi.orbit.compose.collectAsState\n" +
-                    "import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar\n" +
-                    "import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout\n" +
-                    "import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen\n" +
-                    "import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect\n" +
-                    "import org.jetbrains.compose.resources.stringResource\n" +
-                    "import org.koin.compose.viewmodel.koinViewModel\n" +
-                    "\n" +
-                    "@Composable\n" +
-                    "fun ${moduleName}Route(\n" +
-                    "    viewModel: ${moduleName}ViewModel ,\n" +
-                    "    onNavUp: () -> Unit,\n" +
-                    "    onNavScreen: (Screen) -> Unit,\n" +
-                    ") {\n" +
-                    "    val baseState by viewModel.collectAsState()\n" +
-                    "\n" +
-                    "    viewModel.collectBaseSideEffect {\n" +
-                    "\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    ${moduleName}Screen(\n" +
-                    "        baseState = baseState,\n" +
-                    "        onActionEvent = viewModel::onEvent,\n" +
-                    "        onUiEvent = {\n" +
-                    "            when (it) {\n" +
-                    "                is ${moduleName}Event.UI.OnNavUp -> onNavUp()\n" +
-                    "                is ${moduleName}Event.UI.OnNavScreen -> onNavScreen(it.screen)\n" +
-                    "            }\n" +
-                    "        },\n" +
-                    "    )\n" +
-                    "}\n" +
-                    "\n" +
-                    "@Composable\n" +
-                    "private fun ${moduleName}Screen(\n" +
-                    "    baseState: BaseState<${moduleName}State>,\n" +
-                    "    onUiEvent: (${moduleName}Event.UI) -> Unit,\n" +
-                    "    onActionEvent: (${moduleName}Event.Action) -> Unit\n" +
-                    ") {\n" +
-                    "\n" +
-                    "    Scaffold(\n" +
-                    "        modifier = Modifier.fillMaxSize(),\n" +
-                    "        topBar = {\n" +
-                    "            BgmTopAppBar(\n" +
-                    "                title = stringResource(Res.string.login_title),\n" +
-                    "                onNavigationClick = { onUiEvent(${moduleName}Event.UI.OnNavUp) }\n" +
-                    "            )\n" +
-                    "        }\n" +
-                    "    ) {\n" +
-                    "        StateLayout(\n" +
-                    "            modifier = Modifier\n" +
-                    "                .fillMaxSize()\n" +
-                    "                .padding(it),\n" +
-                    "            onRefresh = { onActionEvent(${moduleName}Event.Action.OnRefresh(it)) },\n" +
-                    "            baseState = baseState,\n" +
-                    "        ) { state ->\n" +
-                    "            ${moduleName}ScreenContent(state, onUiEvent, onActionEvent)\n" +
-                    "        }\n" +
-                    "    }\n" +
-                    "}\n" +
-                    "\n" +
-                    "\n" +
-                    "@Composable\n" +
-                    "private fun ${moduleName}ScreenContent(\n" +
-                    "    state: ${moduleName}State,\n" +
-                    "    onUiEvent: (${moduleName}Event.UI) -> Unit,\n" +
-                    "    onActionEvent: (${moduleName}Event.Action) -> Unit\n" +
-                    ") {\n" +
-                    "\n" +
-                    "}\n" +
-                    "\n"
-        )
-    }
+    moduleName.set(parentName + project.name.split("_").joinToString("") { it.uppercaseFirstChar() })
+    namespace.set(codeNamespace)
+    namespaceDir.set(codeDir)
 }

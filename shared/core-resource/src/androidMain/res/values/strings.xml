@@ -401,6 +401,9 @@
     <string name="timeline_member_cnt">%1$s个成员</string>
     <string name="timeline_reply_cnt">%1$s 个回复</string>
 
+    <string name="timeline_add">发布吐槽</string>
+
+
     <string name="topic_title">详情</string>
     <string name="topic_ep_info">时长：%1$s / 首播：%2$s</string>
     <string name="topic_index_info">创建于：%1$s，更新于：%2$s</string>

@@ -14,12 +14,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.koin.core.module.Module
-import org.koin.core.qualifier.TypeQualifier
 import org.koin.core.scope.Scope
 
 val Scope.navigator get() = get<Navigator>()
-
-val NavKeyScopeArchetype = TypeQualifier(NavKey::class)
 
 inline fun Module.navScope(scopeSet: Module.() -> Unit) {
     scopeSet()
@@ -37,6 +34,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.SignIn::class, Screen.SignIn.serializer())
             subclass(Screen.Timeline::class, Screen.Timeline.serializer())
             subclass(Screen.TimelineAdd::class, Screen.TimelineAdd.serializer())
+            subclass(Screen.TimelineDetail::class, Screen.TimelineDetail.serializer())
             subclass(Screen.RaKuen::class, Screen.RaKuen.serializer())
             subclass(Screen.Tracking::class, Screen.Tracking.serializer())
             subclass(Screen.Profile::class, Screen.Profile.serializer())
@@ -111,6 +109,9 @@ sealed class Screen(
 
     @Serializable
     data object TimelineAdd : Screen(SCREEN_ROUTE_TIMELINE_ADD)
+
+    @Serializable
+    data object TimelineDetail : Screen(SCREEN_ROUTE_TIMELINE_DETAIL)
 
     @Serializable
     data object RaKuen : Screen(SCREEN_ROUTE_TOPIC)

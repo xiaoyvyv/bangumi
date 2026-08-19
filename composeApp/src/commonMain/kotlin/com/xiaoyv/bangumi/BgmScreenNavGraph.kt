@@ -56,6 +56,8 @@ import com.xiaoyv.bangumi.features.subject.detail.subjectDetailModule
 import com.xiaoyv.bangumi.features.subject.page.subjectPageModule
 import com.xiaoyv.bangumi.features.tag.detail.tagDetailModule
 import com.xiaoyv.bangumi.features.tag.page.tagPageModule
+import com.xiaoyv.bangumi.features.timeline.add.timelineAddModule
+import com.xiaoyv.bangumi.features.timeline.detail.timelineDetailModule
 import com.xiaoyv.bangumi.features.timeline.page.timelinePageModule
 import com.xiaoyv.bangumi.features.topic.detail.topicDetailModule
 import com.xiaoyv.bangumi.features.topic.page.topicPageModule
@@ -111,6 +113,8 @@ internal val navigationModule = module {
         subjectPageModule,
         tagPageModule,
         timelinePageModule,
+        timelineAddModule,
+        timelineDetailModule,
         topicPageModule,
         receiveImageModule,
         searchInputModule,
