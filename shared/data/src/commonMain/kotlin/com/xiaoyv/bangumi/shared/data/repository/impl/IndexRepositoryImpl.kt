@@ -5,7 +5,9 @@ import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
@@ -70,5 +72,21 @@ class IndexRepositoryImpl(
             limit = limit,
             offset = offset
         ).result
+    }
+
+    override suspend fun submitIndexComment(
+        indexId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?
+    ): Result<ComposeId> = client.requestNextIndexApi {
+        createIndexComment(
+            indexID = indexId,
+            param = CreateCommentParam(
+                content = content,
+                turnstileToken = turnstile,
+                replyTo = replyTo ?: 0
+            )
+        )
     }
 }

@@ -16,9 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -137,34 +135,9 @@ fun CommentReplyItem(
                     .padding(vertical = ContentMarginHalf),
                 verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
-                if (item.displayQuote.isNotBlank()) {
-                    val colorScheme = MaterialTheme.colorScheme
-
-                    Text(
-                        modifier = Modifier
-                            .background(colorScheme.surfaceContainer, MaterialTheme.shapes.extraSmall)
-                            .drawBehind {
-                                val strokeWidth = 4.dp.toPx()
-                                drawLine(
-                                    color = colorScheme.primary,
-                                    start = androidx.compose.ui.geometry.Offset(strokeWidth / 2, 0f),
-                                    end = androidx.compose.ui.geometry.Offset(strokeWidth / 2, size.height),
-                                    strokeWidth = strokeWidth
-                                )
-                            }
-                            .padding(vertical = ContentMarginHalf)
-                            .padding(start = 12.dp, end = ContentMarginHalf),
-                        text = item.displayQuote,
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = colorScheme.primary,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    )
-                }
-
                 BgmLinkedText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = item.displayContent,
+                    text = item.content,
                 )
 
                 if (item.reactions.isNotEmpty()) {

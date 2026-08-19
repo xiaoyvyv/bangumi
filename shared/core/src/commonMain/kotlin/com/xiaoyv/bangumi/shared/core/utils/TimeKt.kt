@@ -87,6 +87,7 @@ fun Long.formatAgo(now: Long = System.currentTimeMillis()): String {
     val year = 365 * day
 
     return when {
+        diff < 10_000 -> "刚刚"
         diff < minute -> "${diff / second}秒前"
         diff < hour -> "${diff / minute}分钟前"
         diff < day -> "${diff / hour}小时前"

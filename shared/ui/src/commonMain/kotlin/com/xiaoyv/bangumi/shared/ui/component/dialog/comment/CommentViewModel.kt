@@ -95,8 +95,8 @@ class CommentViewModel(
             }
 
             TopicType.TYPE_EP -> {
-                topicRepository.submitSubjectComment(
-                    topicId = state.anchor.targetId,
+                topicRepository.submitSubjectEpisodeComment(
+                    episodeId = state.anchor.targetId,
                     content = comment,
                     turnstile = state.turnstile,
                     replyTo = if (hasReplyComment) reply.id else null
@@ -150,7 +150,7 @@ class CommentViewModel(
             .onFailure { reduce { state.copy(sending = false) } }
             .onSuccess {
                 reduce { state.copy(sending = false, comment = TextFieldValue()) }
-                postSideEffect(CommentSideEffect.OnSendCommentSuccess(it))
+                postSideEffect(CommentSideEffect.OnSendCommentSuccess(it.id))
             }
     }
 }

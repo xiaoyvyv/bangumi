@@ -4,6 +4,7 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import de.jensklingenberg.ktorfit.http.Body
@@ -20,13 +21,13 @@ interface EpisodeApi {
      * 创建条目的剧集吐槽
      *
      * @param episodeID
-     * @param createCommentParam  (optional)
+     * @param param (optional)
      */
     @POST("p1/episodes/{episodeID}/comments")
     suspend fun createEpisodeComment(
-        @Path("episodeID") episodeID: Int,
+        @Path("episodeID") episodeID: Long,
         @Body param: CreateCommentParam? = null,
-    ): ComposeReply
+    ): ComposeId
 
     /**
      * 删除条目的剧集吐槽

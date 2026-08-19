@@ -5,6 +5,7 @@ import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
@@ -26,13 +27,13 @@ interface PersonApi {
      * 创建人物的吐槽
      *
      * @param personID
-     * @param createCommentParam  (optional)
+     * @param param (optional)
      */
     @POST("p1/persons/{personID}/comments")
     suspend fun createPersonComment(
-        @Path("personID") personID: Int,
+        @Path("personID") personID: Long,
         @Body param: CreateCommentParam? = null,
-    ): ComposeReply
+    ): ComposeId
 
     /**
      * 删除人物的吐槽

@@ -33,7 +33,7 @@ suspend fun LazyListState.animateScrollToItem(
     index: Int,
     scrollOffset: Int = 0,
     density: Density,
-    animationSpec: AnimationSpec<Float> = tween(500),
+    animationSpec: AnimationSpec<Float> = tween(),
 ) {
     scroll {
         LazyLayoutScrollScope(this@animateScrollToItem, this)

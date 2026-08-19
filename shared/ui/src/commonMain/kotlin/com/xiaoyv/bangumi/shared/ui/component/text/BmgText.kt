@@ -154,9 +154,12 @@ fun BgmLinkedText(
         html = text,
         config = HtmlDefaults.config(
             textStyle = resolvedTextStyle,
+            quoteTextStyle = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
             image = BgmHtmlImageContent,
             onClickImage = {
-                if (it.smileId == null) {
+                if (it.smileId.isNullOrBlank()) {
                     actionHandler.openImage(it.source)
                 }
             },
@@ -165,71 +168,4 @@ fun BgmLinkedText(
             }
         )
     )
-
-//    val html = remember(text) { if (text.contains("[")) bbcodeToHtml(text, true) else text }
-//    val parsed = remember(html) { html.parseAsHtml() }
-//    val targetShowMasks = remember { mutableStateSetOf<Long>() }
-//
-//    BoxWithConstraints(modifier) {
-//        val density = LocalDensity.current
-//        val aspect = 16f / 9f
-//
-//        val imageWidth = with(density) { maxWidth.coerceAtMost(450.dp).toSp() }
-//        val imageHeight = (imageWidth.value / aspect).sp
-//
-//        val inlineContent = remember(imageWidth, imageHeight) {
-//            InlineTextContentMap + mapOf(TagImage to createImageInlineContent(imageWidth, imageHeight))
-//        }
-//
-//        val maskKeys = remember(parsed) {
-//            parsed.getStringAnnotations(TagMask, 0, parsed.length)
-//                .map { range -> packTextRangeKey(range.start, range.end) }
-//                .distinct()
-//                .sorted()
-//        }
-//
-//        val maskAlphaByRange = buildMap {
-//            maskKeys.forEach { key ->
-//                val alpha by animateFloatAsState(
-//                    targetValue = if (targetShowMasks.contains(key)) 1f else 0f,
-//                    animationSpec = tween(220),
-//                    label = "mask-$key"
-//                )
-//                put(key, alpha)
-//            }
-//        }
-//
-//        val content = parsed.applyTheme(
-//            contentColor = resolvedTextStyle.color,
-//            linkColor = MaterialTheme.colorScheme.primary,
-//            maskAlphaByRange = maskAlphaByRange
-//        )
-//
-//        var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
-//
-//        // 文字可选中
-//        SelectionContainer {
-//            BasicText(
-//                text = content,
-//                modifier = Modifier.pointerInput(content, actionHandler) {
-//                    awaitHtmlEvent(
-//                        text = content,
-//                        onTextLayoutResult = { layoutResult },
-//                        onClickLink = { range -> actionHandler.openBgmLink(range.item) },
-//                        onClickMask = { range ->
-//                            val key = packTextRangeKey(range.start, range.end)
-//                            if (!targetShowMasks.remove(key)) targetShowMasks.add(key)
-//                        },
-//                        onClickImage = { range -> actionHandler.openImage(range.item) },
-//                    )
-//                },
-//                style = resolvedTextStyle,
-//                inlineContent = inlineContent,
-//                overflow = TextOverflow.Clip,
-//                maxLines = maxLines,
-//                minLines = minLines,
-//                onTextLayout = { layoutResult = it }
-//            )
-//        }
-//}
 }

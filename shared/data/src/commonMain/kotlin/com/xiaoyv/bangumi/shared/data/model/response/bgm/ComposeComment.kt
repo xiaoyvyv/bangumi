@@ -15,7 +15,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JsonNames
 
 @Immutable
@@ -74,19 +73,6 @@ data class ComposeReply(
     @SerialName("reactions") val reactions: SerializeList<ComposeReaction> = persistentListOf(),
     @SerialName("replies") val replies: SerializeList<ComposeReply> = persistentListOf(),
 ) : Node<ComposeReply> {
-
-    @Transient
-    val displayContent: String = if (content.startsWith("[quote]")) {
-        content.substringAfter("[/quote]").trim()
-    } else {
-        content.trim()
-    }
-
-    @Transient
-    val displayQuote: String = if (!content.startsWith("[quote]")) "" else content
-        .substringBefore("[/quote]")
-        .substringAfter("[quote]")
-        .trim()
 
     fun normalized(): ComposeReply {
         return copy(

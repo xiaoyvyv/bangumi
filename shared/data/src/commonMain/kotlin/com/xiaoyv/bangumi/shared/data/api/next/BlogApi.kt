@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -24,7 +25,7 @@ interface BlogApi {
     suspend fun createBlogComment(
         @Path("entryID") entryID: Long,
         @Body param: CreateCommentParam? = null
-    ): HttpResponse
+    ): ComposeId
 
     /**
      * 删除日志的吐槽

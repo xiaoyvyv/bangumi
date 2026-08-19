@@ -36,6 +36,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.Main::class, Screen.Main.serializer())
             subclass(Screen.SignIn::class, Screen.SignIn.serializer())
             subclass(Screen.Timeline::class, Screen.Timeline.serializer())
+            subclass(Screen.TimelineAdd::class, Screen.TimelineAdd.serializer())
             subclass(Screen.RaKuen::class, Screen.RaKuen.serializer())
             subclass(Screen.Tracking::class, Screen.Tracking.serializer())
             subclass(Screen.Profile::class, Screen.Profile.serializer())
@@ -107,6 +108,9 @@ sealed class Screen(
 
     @Serializable
     data object Timeline : Screen(SCREEN_ROUTE_TIMELINE)
+
+    @Serializable
+    data object TimelineAdd : Screen(SCREEN_ROUTE_TIMELINE_ADD)
 
     @Serializable
     data object RaKuen : Screen(SCREEN_ROUTE_TOPIC)

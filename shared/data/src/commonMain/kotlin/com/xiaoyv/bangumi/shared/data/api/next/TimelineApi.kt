@@ -21,7 +21,7 @@ interface TimelineApi {
      * 创建时间线回复
      *
      * @param timelineID
-     * @param createCommentParam  (optional)
+     * @param param (optional)
      */
     @POST("p1/timeline/{timelineID}/replies")
     suspend fun createTimelineReply(

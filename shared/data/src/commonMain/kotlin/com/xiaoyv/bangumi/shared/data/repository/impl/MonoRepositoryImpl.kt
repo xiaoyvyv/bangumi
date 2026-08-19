@@ -9,8 +9,10 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListPersonCastParam
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
@@ -231,6 +233,36 @@ class MonoRepositoryImpl(
         with(monoParser) {
             fetchMonoHomepage()
                 .fetchMonoHomepageConverted()
+        }
+    }
+
+    override suspend fun submitMonoComment(
+        type: Int,
+        monoId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?,
+    ): Result<ComposeId> = if (type == MonoType.CHARACTER) {
+        client.requestNextCharacterApi {
+            createCharacterComment(
+                characterID = monoId,
+                param = CreateCommentParam(
+                    content = content,
+                    turnstileToken = turnstile,
+                    replyTo = replyTo ?: 0
+                )
+            )
+        }
+    } else {
+        client.requestNextPersonApi {
+            createPersonComment(
+                personID = monoId,
+                param = CreateCommentParam(
+                    content = content,
+                    turnstileToken = turnstile,
+                    replyTo = replyTo ?: 0
+                )
+            )
         }
     }
 

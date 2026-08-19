@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.AddLink
 import androidx.compose.material.icons.filled.Code
@@ -65,6 +66,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,6 +85,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_preview
 import com.xiaoyv.bangumi.core_resource.resources.reply_comment
 import com.xiaoyv.bangumi.core_resource.resources.reply_comment_hint
 import com.xiaoyv.bangumi.core_resource.resources.reply_comment_send
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.BBCode
 import com.xiaoyv.bangumi.shared.core.utils.ImePanelColumn
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeBold
@@ -109,7 +112,6 @@ import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.resource.toComposeUri
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
@@ -150,7 +152,7 @@ expect fun TransparentDialog(
 fun CommentDialog(
     dialogState: AlertDialogState,
     anchor: CommentDialogAnchor,
-    onSendCommentSuccess: (ComposeReply) -> Unit = {},
+    onSendCommentSuccess: (Long) -> Unit = { },
 ) {
     if (dialogState.showing) TransparentDialog(
         onDismissRequest = { dialogState.dismiss() },
@@ -165,7 +167,7 @@ fun CommentDialog(
             viewModel.collectSideEffect {
                 when (it) {
                     is CommentSideEffect.OnSendCommentSuccess -> {
-                        onSendCommentSuccess(it.comment)
+                        onSendCommentSuccess(it.replyId)
                         dialogState.dismiss()
                     }
                 }
@@ -258,17 +260,19 @@ fun CommentDialogContent(
                 }
             )
 
-            if (!LocalInspectionMode.current) BgmTurnstile(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(90.dp)
-                    .padding(horizontal = 8.dp),
-                url = WebConstant.URL_BGM_TURNSTILE,
-                callback = "bangumi://",
-                onToken = {
-                    onEvent(CommentEvent.OnReceiveTurnstileToken(it))
-                }
-            )
+            if (!LocalInspectionMode.current && state.comment.text.isNotBlank()) {
+                BgmTurnstile(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(90.dp)
+                        .padding(horizontal = 8.dp),
+                    url = WebConstant.URL_BGM_TURNSTILE,
+                    callback = "bangumi://",
+                    onToken = {
+                        onEvent(CommentEvent.OnReceiveTurnstileToken(it))
+                    }
+                )
+            }
 
             Row(
                 modifier = Modifier
@@ -282,13 +286,14 @@ fun CommentDialogContent(
                         .focusRequester(focusRequester),
                     contentPadding = PaddingValues(ContentMarginHalf),
                     value = state.comment,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
                     onValueChange = { onEvent(CommentEvent.OnTextChange(it)) },
                     shape = MaterialTheme.shapes.small,
                     autoFocus = true,
                     maxLines = 6,
                     minLines = 3,
                     placeholder = {
-                        if (state.anchor.reply != ComposeComment.Empty) {
+                        if (state.anchor.reply != ComposeReply.Empty) {
                             Text(
                                 text = buildAnnotatedString {
                                     pushStyle(
@@ -535,7 +540,7 @@ fun PreviewCommentDialogContent() {
         CommentDialogContent(
             dialogState = rememberAlertDialogState(),
             state = CommentState(
-                anchor = CommentDialogAnchor(topic = ComposeTopic.Empty)
+                anchor = CommentDialogAnchor(TopicType.TYPE_UNKNOWN, 0)
             ),
             onEvent = {
 

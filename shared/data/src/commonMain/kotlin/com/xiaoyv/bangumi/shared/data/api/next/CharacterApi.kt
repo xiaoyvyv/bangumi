@@ -4,6 +4,7 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
@@ -24,13 +25,13 @@ interface CharacterApi {
      * 创建角色的吐槽
      *
      * @param characterID
-     * @param createCommentParam  (optional)
+     * @param param (optional)
      */
     @POST("p1/characters/{characterID}/comments")
     suspend fun createCharacterComment(
-        @Path("characterID") characterID: Int,
+        @Path("characterID") characterID: Long,
         @Body param: CreateCommentParam? = null,
-    ): ComposeReply
+    ): ComposeId
 
     /**
      * 删除角色的吐槽

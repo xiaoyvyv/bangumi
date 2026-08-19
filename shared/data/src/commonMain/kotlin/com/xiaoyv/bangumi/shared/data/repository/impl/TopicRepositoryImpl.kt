@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
@@ -62,6 +62,7 @@ class TopicRepositoryImpl(
         )
     }
 
+
     override suspend fun fetchTopicDetail(
         topicId: Long,
         @TopicType type: String
@@ -100,14 +101,13 @@ class TopicRepositoryImpl(
         content: String,
         turnstile: String,
         replyTo: Long?
-    ): Result<ComposeReply> = client.requestNextTopicApi {
-        val replyId = createGroupReply(
+    ): Result<ComposeId> = client.requestNextTopicApi {
+        createGroupReply(
             topicID = topicId, param = CreateCommentParam(
                 content = content, turnstileToken = turnstile,
                 replyTo = replyTo ?: 0
             )
-        ).id
-        getGroupPost(replyId)
+        )
     }
 
     override suspend fun submitSubjectComment(
@@ -115,13 +115,28 @@ class TopicRepositoryImpl(
         content: String,
         turnstile: String,
         replyTo: Long?
-    ): Result<ComposeReply> = client.requestNextTopicApi {
-        val replyId = createSubjectReply(
+    ): Result<ComposeId> = client.requestNextTopicApi {
+        createSubjectReply(
             topicID = topicId, param = CreateCommentParam(
                 content = content, turnstileToken = turnstile,
                 replyTo = replyTo ?: 0
             )
-        ).id
-        getSubjectPost(replyId)
+        )
+    }
+
+    override suspend fun submitSubjectEpisodeComment(
+        episodeId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?
+    ): Result<ComposeId> = client.requestNextEpisodeApi {
+        createEpisodeComment(
+            episodeID = episodeId,
+            param = CreateCommentParam(
+                content = content,
+                turnstileToken = turnstile,
+                replyTo = replyTo ?: 0
+            )
+        )
     }
 }

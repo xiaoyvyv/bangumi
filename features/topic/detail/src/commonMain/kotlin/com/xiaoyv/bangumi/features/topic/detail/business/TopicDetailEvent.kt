@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.topic.detail.business
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.SortType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -25,6 +24,6 @@ sealed class TopicDetailEvent {
 
         data class OnCommentTypeChange(@field:CommentType val type: Int) : Action()
         data class OnCommentSortChange(@field:SortType val type: Int) : Action()
-        data class OnAppendComment(val comment: ComposeReply) : Action()
+        data class OnAppendComment(val replyId: Long) : Action()
     }
 }

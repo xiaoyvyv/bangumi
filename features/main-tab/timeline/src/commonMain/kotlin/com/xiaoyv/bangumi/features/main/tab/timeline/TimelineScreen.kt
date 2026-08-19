@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.features.main.tab.timeline
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.rounded.PostAdd
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -74,6 +75,9 @@ private fun TimelineScreen(
                     actions = {
                         IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
                             Icon(BgmIcons.Search, contentDescription = null)
+                        }
+                        IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.TimelineAdd)) }) {
+                            Icon(BgmIcons.PostAdd, contentDescription = null)
                         }
                     }
                 )

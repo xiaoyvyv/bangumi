@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListPersonCastParam
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
@@ -40,4 +41,12 @@ interface MonoRepository {
     suspend fun fetchPersonWorks(monoId: Long, limit: Int): Result<List<ComposeSubjectDisplay>>
 
     suspend fun fetchPersonWorkPosition(monoId: Long): Result<List<ComposePersonPosition>>
+
+    suspend fun submitMonoComment(
+        @MonoType type: Int,
+        monoId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long? = null
+    ): Result<ComposeId>
 }

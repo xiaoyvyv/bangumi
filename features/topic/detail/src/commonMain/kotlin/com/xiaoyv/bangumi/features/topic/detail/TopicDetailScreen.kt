@@ -18,8 +18,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.PostAdd
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -30,6 +30,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -170,18 +171,29 @@ private fun TopicDetailScreen(
 
             CommentDialog(
                 dialogState = commentDialogState,
-                anchor = CommentDialogAnchor(
-                    targetType = uiState.data.type,
-                    targetId = uiState.data.id
-                ),
-                onSendCommentSuccess = { comment ->
-                    onActionEvent(TopicDetailEvent.Action.OnAppendComment(comment))
+                anchor = remember(uiState.data) {
+                    CommentDialogAnchor(
+                        targetType = uiState.data.type,
+                        targetId = when (uiState.data.type) {
+                            TopicType.TYPE_GROUP -> uiState.data.id
+                            TopicType.TYPE_SUBJECT -> uiState.data.id
+                            TopicType.TYPE_EP -> uiState.data.episode.id
+                            TopicType.TYPE_PERSON -> uiState.data.mono.id
+                            TopicType.TYPE_CRT -> uiState.data.mono.mono.id
+                            TopicType.TYPE_INDEX -> uiState.data.index.id
+                            TopicType.TYPE_BLOG -> uiState.data.blog.id
+                            else -> 0
+                        }
+                    )
+                },
+                onSendCommentSuccess = { replyId ->
+                    onActionEvent(TopicDetailEvent.Action.OnAppendComment(replyId))
                 }
             )
 
             if (uiState.data.isLoadSuccess) {
                 FloatingActionButton(onClick = { commentDialogState.show() }) {
-                    Icon(imageVector = BgmIcons.EditNote, contentDescription = null)
+                    Icon(imageVector = BgmIcons.PostAdd, contentDescription = null)
                 }
             }
         },
@@ -329,18 +341,22 @@ fun TopicDetailScreenHeader(
         // 支持贴贴表情的话题
         if (TopicType.isSupportRection(state.type)) {
             val displayReactions = state.displayReactions
-            if (displayReactions.isNotEmpty()) ReactionGroup(
-                modifier = Modifier.fillMaxWidth(),
-                reactions = displayReactions,
-                onClick = { reaction ->
-                    onActionEvent(
-                        TopicDetailEvent.Action.OnReactionClick(
-                            commentId = if (state.type == TopicType.TYPE_BLOG) state.id else state.topic.contentPostId,
-                            reaction = reaction
+            if (displayReactions.isNotEmpty()) {
+                ReactionGroup(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = ContentMargin),
+                    reactions = displayReactions,
+                    onClick = { reaction ->
+                        onActionEvent(
+                            TopicDetailEvent.Action.OnReactionClick(
+                                commentId = if (state.type == TopicType.TYPE_BLOG) state.id else state.topic.contentPostId,
+                                reaction = reaction
+                            )
                         )
-                    )
-                }
-            )
+                    }
+                )
+            }
 
             TopicDetailScreenRecationButton(
                 modifier = Modifier.align(Alignment.End),
@@ -399,20 +415,29 @@ private fun TopicDetailScreenContent(
 
                 val commentDialogState = rememberAlertDialogState()
                 val density = LocalDensity.current
-                /*
-                            CommentDialog(
-                                dialogState = commentDialogState,
-                                anchor = remember(item, state.article, state.lastViewed) {
-                                    CommentDialogAnchor(
-                                        article = state.article,
-                                        reply = item,
-                                        lastViewedInMillis = state.lastViewed
-                                    )
-                                },
-                                onSendCommentSuccess = {
-                                    onActionEvent(ArticleEvent.Action.OnAppendComment(it))
-                                }
-                            )*/
+
+                CommentDialog(
+                    dialogState = commentDialogState,
+                    anchor = remember(state) {
+                        CommentDialogAnchor(
+                            targetType = state.type,
+                            targetId = when (state.type) {
+                                TopicType.TYPE_GROUP -> state.id
+                                TopicType.TYPE_SUBJECT -> state.id
+                                TopicType.TYPE_EP -> state.episode.id
+                                TopicType.TYPE_PERSON -> state.mono.id
+                                TopicType.TYPE_CRT -> state.mono.mono.id
+                                TopicType.TYPE_INDEX -> state.index.id
+                                TopicType.TYPE_BLOG -> state.blog.id
+                                else -> 0
+                            },
+                            reply = item
+                        )
+                    },
+                    onSendCommentSuccess = {
+                        onActionEvent(TopicDetailEvent.Action.OnAppendComment(it))
+                    }
+                )
 
                 CommentReplyItem(
                     modifier = Modifier.fillMaxWidth(),

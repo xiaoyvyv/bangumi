@@ -3,6 +3,8 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -30,5 +32,21 @@ class BlogRepositoryImpl(
         value: String?
     ): Result<Unit> = runResult {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun submitBlogComment(
+        blogId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?
+    ): Result<ComposeId> = client.requestNextBlogApi {
+        createBlogComment(
+            entryID = blogId,
+            param = CreateCommentParam(
+                content = content,
+                turnstileToken = turnstile,
+                replyTo = replyTo ?: 0
+            )
+        )
     }
 }

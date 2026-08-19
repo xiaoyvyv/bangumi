@@ -85,7 +85,7 @@ class TopicDetailViewModel(
 
             is TopicDetailEvent.Action.OnCommentTypeChange -> onCommentTypeChange(event.type)
             is TopicDetailEvent.Action.OnCommentSortChange -> onCommentSortChange(event.type)
-            is TopicDetailEvent.Action.OnAppendComment -> onAppendComment(event.comment)
+            is TopicDetailEvent.Action.OnAppendComment -> onAppendComment(event.replyId)
             else -> Unit
         }
     }
@@ -267,65 +267,79 @@ class TopicDetailViewModel(
 
     /**
      * 评论发送成功，向 UI 添加评论
+     *
+     * @param replyId 评论ID
      */
-    private fun onAppendComment(comment: ComposeReply) = intent {
-        /*val article = state.data.article
-        val mains = comment.posts.main
-        val subs = comment.posts.sub
+    private fun onAppendComment(replyId: Long) = intent {
+        when (args.type) {
+            TopicType.TYPE_GROUP -> onLoadGroupTopicDetail()
+            TopicType.TYPE_SUBJECT -> onLoadSubjectTopicDetail()
+            TopicType.TYPE_PERSON -> {
+                monoRepository.fetchMonoComments(args.id, MonoType.PERSON).onSuccess {
+                    val displayReplies = applyCommentFilters(state.data, it)
 
-        // 子评论
-        subs.forEach { main ->
-            val parentIdx = rawComments.indexOfFirst { it.id == main.key }
-            if (parentIdx != -1) {
-                val parent = rawComments[parentIdx]
-                val comments = parent.children.toMutableList()
-
-                main.value.forEach { item ->
-                    val index = comments.indexOfFirst { it.id == item.pstId }
-                    if (index == -1) {
-                        comments.add(
-                            item.toComposeComment(
-                                parent = parent,
-                                commentType = CommentType.fromRakuenIdType(article.type),
-                                floor = parent.floor + "-${comments.size + 1}",
-                            )
+                    reduceData {
+                        state.copy(
+                            replies = it.toImmutableList(),
+                            displayReplies = displayReplies
                         )
                     }
                 }
+            }
 
-                rawComments[parentIdx] = parent.copy(children = comments.toImmutableList())
+            TopicType.TYPE_EP -> {
+                subjectRepository.fetchSubjectEpisodeComments(args.id).onSuccess {
+                    val displayReplies = applyCommentFilters(state.data, it)
+
+                    reduceData {
+                        state.copy(
+                            replies = it.toImmutableList(),
+                            displayReplies = displayReplies
+                        )
+                    }
+                }
+            }
+
+            TopicType.TYPE_CRT -> {
+                monoRepository.fetchMonoComments(args.id, MonoType.CHARACTER).onSuccess {
+                    val displayReplies = applyCommentFilters(state.data, it)
+
+                    reduceData {
+                        state.copy(
+                            replies = it.toImmutableList(),
+                            displayReplies = displayReplies
+                        )
+                    }
+                }
+            }
+
+            TopicType.TYPE_INDEX -> {
+                indexRepository.fetchIndexComments(args.id).onSuccess {
+                    val displayReplies = applyCommentFilters(state.data, it)
+
+                    reduceData {
+                        state.copy(
+                            replies = it.toImmutableList(),
+                            displayReplies = displayReplies
+                        )
+                    }
+                }
+            }
+
+            TopicType.TYPE_BLOG -> {
+                blogRepository.fetchBlogComments(args.id).onSuccess {
+                    val displayReplies = applyCommentFilters(state.data, it)
+
+                    reduceData {
+                        state.copy(
+                            replies = it.toImmutableList(),
+                            displayReplies = displayReplies
+                        )
+                    }
+                }
             }
         }
-
-        // 主评论
-        mains.forEach { main ->
-            val element = main.value.toComposeComment(
-                parent = null,
-                commentType = CommentType.fromRakuenIdType(article.type),
-                floor = "#${rawComments.size + 1}"
-            )
-            val index = rawComments.indexOfFirst { it.id == main.key }
-            if (index == -1) {
-                debugLog { "添加主评论：${main.value} ${element.replyParam}" }
-
-                rawComments.add(element)
-            }
-        }
-
-        // 若是主评论有变动则修改一下排序，让其置顶显示自己刚刚发布的评论
-        if (mains.isNotEmpty()) {
-            state.data.refreshComments(
-                selectedCommentTypeFilter = CommentFilterType.ALL,
-                selectedCommentSortFilter = SortType.NEWEST,
-                lastViewed = System.currentTimeMillis()
-            )
-        } else {
-            state.data.refreshComments(lastViewed = System.currentTimeMillis())
-        }.let { state ->
-            reduceData { state }
-        }*/
     }
-
 
     private fun onReactionClick(commentId: Long, reaction: ComposeReaction) = intent {
         val isLiked = reaction.users.any { it.username == userManager.userInfo.username }
