@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>BMO - BangumiTV 表情包制作工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f7 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+        }
+
+        a {
+            color: #ff69b4;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #ff9ec6 0%, #ffb8d9 100%);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(255, 158, 198, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .help-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 50px);
+        }
+
+        .preview-area {
+            box-sizing: border-box;
+            flex: 7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 20px 10px 20px;
+            position: relative;
+            overflow: hidden;
+            background: white;
+        }
+
+        .canvas-wrapper {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(255, 158, 198, 0.2);
+            overflow: hidden;
+        }
+
+        #previewCanvas {
+            width: 210px;
+            height: 210px;
+            border: 3px dashed #ffb8d9;
+            border-radius: 15px;
+            background: #fff;
+            display: block;
+            background-image: 
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        #previewCanvas canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-crisp-edges;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .zoom-controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .zoom-btn {
+            padding: 5px 10px;
+            background: white;
+            border: 2px solid #ffb8d9;
+            border-radius: 100px;
+            color: #ff69b4;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            touch-action: manipulation;
+        }
+
+        .zoom-btn:hover {
+            background: #ffe8f0;
+            border-color: #ff69b4;
+        }
+
+        .zoom-info {
+            display: inline;
+            color: #ff9ec6;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 158, 198, 0.4);
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn {
+            background: #f09199;
+        }
+
+        .custom-btn {
+            background: linear-gradient(90deg, #b19cd9 0%, #c9b3e6 100%);
+        }
+
+        .adjust-btn {
+            background: linear-gradient(90deg, #ffa07a 0%, #ffb88c 100%);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 158, 198, 0.6);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .sidebar {
+            box-sizing: border-box;
+            flex: 3;
+            background: white;
+            box-shadow: -2px 0 20px rgba(255, 158, 198, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .category-tabs {
+            display: flex;
+            background: #fff5f7;
+            border-bottom: 2px solid #ffb8d9;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 60px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            background: #fff5f7;
+            color: #ff69b4;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            touch-action: manipulation;
+        }
+
+        .tab:hover {
+            background: #ffe8f0;
+        }
+
+        .tab.active {
+            background: linear-gradient(90deg, #ff9ec6 0%, #ffb8d9 100%);
+            color: white;
+        }
+
+        .items-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 15px;
+            -webkit-overflow-scrolling: touch;
+            min-height: 0;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 12px;
+            padding-bottom: 20px;
+        }
+
+        .bmoji-saved-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 16px;
+            padding-bottom: 20px;
+            align-content: start;
+        }
+
+        .bmoji-saved-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            background: #fff;
+            border: 3px solid #ffe8f0;
+            border-radius: 14px;
+            padding: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(255, 158, 198, 0.15);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .bmoji-saved-card:hover {
+            border-color: #ffb8d9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 158, 198, 0.25);
+        }
+
+        .bmoji-saved-preview {
+            width: 100%;
+            min-height: 40px;
+            /* aspect-ratio: 1 / 1; */
+            /* border: 2px dashed #ffb8d9;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 232, 240, 0.6), rgba(255, 245, 247, 0.9)); */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .bmoji-saved-preview canvas {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+        }
+
+        .bmoji-saved-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bmoji-saved-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff69b4;
+            line-height: 1.3;
+            word-break: break-word;
+            text-align: center;
+        }
+
+        .bmoji-saved-meta {
+            font-size: 12px;
+            color: #ff9ec6;
+        }
+
+        .bmoji-saved-note {
+            font-size: 12px;
+            color: #999;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .bmoji-saved-edit {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 16px;
+            height: 16px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 182, 209, 0.16);
+            color: #ff69b4;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .bmoji-saved-edit:hover {
+            background: rgba(255, 105, 180, 0.2);
+            color: #ff3f99;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.18);
+            transform: scale(1.05);
+        }
+
+        .bmoji-saved-edit:active {
+            transform: scale(0.92);
+        }
+
+        .bmoji-saved-edit:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.25);
+        }
+
+        .bmoji-saved-delete {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 16px;
+            height: 16px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 105, 180, 0.12);
+            color: #ff69b4;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .bmoji-saved-delete:hover {
+            background: #ff69b4;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+            transform: scale(1.05);
+        }
+
+        .bmoji-saved-delete:active {
+            transform: scale(0.92);
+        }
+
+        .bmoji-saved-delete:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.35);
+        }
+
+        .bmoji-saved-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #ffb8d9;
+            font-size: 14px;
+            padding: 40px 20px;
+            border-radius: 12px;
+            background: rgba(255, 232, 240, 0.4);
+        }
+
+        .item-card {
+            aspect-ratio: 1;
+            border: 3px solid #ffe8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        .item-card.add-card {
+            border: 3px dashed #ffb8d9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #ffb8d9;
+            background: #fff5f7;
+        }
+
+        .item-card.add-card:hover {
+            border-color: #ff69b4;
+            background: #ffe8f0;
+            color: #ff69b4;
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-crisp-edges;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .item-card:active {
+            transform: scale(0.95);
+        }
+
+        .item-card:hover {
+            border-color: #ffb8d9;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 158, 198, 0.3);
+        }
+
+        .item-card.selected {
+            border-color: #ff69b4;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe8f0 100%);
+            box-shadow: 0 0 0 3px #ff9ec6;
+        }
+
+        .item-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff69b4;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .item-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .item-card.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 删除按钮样式 */
+        .delete-btn {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .delete-btn:hover {
+            background: #ff3838;
+            transform: scale(1.1);
+        }
+
+        .delete-btn:active {
+            transform: scale(0.9);
+        }
+
+        .items-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .items-container::-webkit-scrollbar-track {
+            background: #fff5f7;
+        }
+
+        .items-container::-webkit-scrollbar-thumb {
+            background: #ffb8d9;
+            border-radius: 3px;
+        }
+
+        .empty-hint {
+            text-align: center;
+            color: #ffb8d9;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        .hint {
+            text-align: center;
+            color: #ff9ec6;
+            font-size: 12px;
+            margin-top: 10px;
+            padding: 0 20px;
+        }
+
+        .code-panel {
+            margin-top: 10px;
+            background: #fff5f7;
+            border: 2px solid #ffb8d9;
+            border-radius: 16px;
+            padding: 10px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 4px 15px rgba(255, 158, 198, 0.25);
+        }
+
+        .code-panel label {
+            display: block;
+            color: #ff69b4;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .code-output {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .code-textarea {
+            flex: 1;
+            border: 2px dashed #ffb8d9;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: 'Fira Code', 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            font-size: 13px;
+            color: #ff69b4;
+            background: white;
+            resize: none;
+            height: 40px;
+            line-height: 1.5;
+        }
+
+        .code-textarea:focus {
+            outline: none;
+            border-color: #ff69b4;
+            box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.1);
+        }
+
+        .copy-code-btn {
+            border: none;
+            border-radius: 100px;
+            background: #02A3FB;
+            color: white;
+            font-weight: 600;
+            padding: 10px 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .copy-code-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(124, 214, 255, 0.4);
+        }
+
+        .copy-code-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .copy-code-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #ff69b4;
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #ffe8f0;
+            color: #ff69b4;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ff69b4;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ffe8f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ffb8d9;
+        }
+
+        .upload-area {
+            border: 3px dashed #ffb8d9;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff5f7;
+        }
+
+        .upload-area:hover {
+            border-color: #ff69b4;
+            background: #ffe8f0;
+        }
+
+        .upload-area.dragover {
+            border-color: #ff69b4;
+            background: #ffe8f0;
+        }
+
+        .preview-img {
+            max-width: 100px;
+            margin: 10px auto;
+            image-rendering: pixelated;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #ff9ec6 0%, #ffb8d9 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 158, 198, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 调整面板 */
+        .adjust-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(255, 158, 198, 0.3);
+            z-index: 10000;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .adjust-panel.show {
+            display: block;
+        }
+
+        .adjust-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffe8f0;
+        }
+
+        .adjust-header h3 {
+            color: #ff69b4;
+            font-size: 18px;
+        }
+
+        .adjust-section {
+            margin-bottom: 20px;
+        }
+
+        .adjust-section h4 {
+            color: #ff9ec6;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .slider-group {
+            margin-bottom: 12px;
+        }
+
+        .slider-group label {
+            display: block;
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .slider-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ffe8f0;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff69b4;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .adjust-btn-small {
+            flex: 1;
+            padding: 10px;
+            background: white;
+            border: 2px solid #ffb8d9;
+            border-radius: 10px;
+            color: #ff69b4;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .adjust-btn-small:hover {
+            background: #ffe8f0;
+            border-color: #ff69b4;
+        }
+
+        .adjust-btn-small:active {
+            transform: scale(0.95);
+        }
+
+        /* 使用说明 */
+        .help-content {
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .help-content h3 {
+            color: #ff69b4;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .help-content p {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .help-content ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .help-content li {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .contact-info {
+            background: #fff5f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #ff69b4;
+        }
+
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            z-index: 99999;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* 手机版适配 */
+        @media (max-width: 768px) {
+            body {
+                position: fixed;
+                overflow: hidden;
+            }
+
+            .header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                padding: 10px 15px;
+            }
+
+            .header h1 {
+                font-size: 16px;
+            }
+
+            .help-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            .container {
+                flex-direction: column;
+                height: calc(100vh - 50px);
+                margin-top: 50px;
+                position: fixed;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            .preview-area {
+                flex: none;
+                height: 60%;
+                padding: 8px 8px 40px 8px;
+                overflow: hidden;
+                overflow-y: scroll;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 5px;
+            }
+
+            .canvas-wrapper {
+                padding: 8px;
+                flex-shrink: 0;
+                overflow: hidden;
+            }
+
+            #previewCanvas {
+                width: 200px;
+                height: 200px;
+                max-width: 200px;
+                max-height: 200px;
+            }
+
+            .zoom-controls {
+                gap: 4px;
+                flex-shrink: 0;
+                margin-top: 5px;
+            }
+
+            .zoom-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+
+            .zoom-info {
+                font-size: 11px;
+                margin-top: 2px;
+            }
+
+            .action-buttons {
+                margin-top: 5px;
+                gap: 6px;
+                flex-shrink: 0;
+            }
+
+            .action-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+                gap: 3px;
+            }
+
+            .hint {
+                font-size: 10px;
+                margin-top: 3px;
+                padding: 0 10px;
+            }
+
+            .code-panel {
+                max-width: 100%;
+                padding: 10px 12px;
+                margin-top: 10px;
+            }
+
+            .code-textarea {
+                min-height: 48px;
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .copy-code-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-width: 64px;
+            }
+
+            .sidebar {
+                flex: none;
+                height: 40%;
+                box-shadow: 0 -2px 20px rgba(255, 158, 198, 0.15);
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                overflow: hidden;
+            }
+
+            .category-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .tab {
+                min-width: 70px;
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+
+            .items-container {
+                padding: 10px;
+                height: calc(42vh - 44px);
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: 8px;
+                padding-bottom: 30px;
+            }
+
+            .bmoji-saved-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: 12px;
+            }
+
+            .bmoji-saved-card {
+                padding: 16px 12px 12px;
+            }
+
+            .bmoji-saved-edit {
+                top: 6px;
+                right: 34px;
+                width: 22px;
+                height: 22px;
+                font-size: 13px;
+            }
+
+            .bmoji-saved-delete {
+                top: 6px;
+                right: 6px;
+                width: 22px;
+                height: 22px;
+                font-size: 14px;
+            }
+
+            .modal-content {
+                padding: 20px;
+                max-height: 80vh;
+            }
+
+            .adjust-panel {
+                max-width: 90%;
+                padding: 20px;
+            }
+
+            .delete-btn {
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #previewCanvas {
+                width: 180px;
+                height: 180px;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+                gap: 6px;
+            }
+
+            .bmoji-saved-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .bmoji-saved-edit {
+                right: 32px;
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            .bmoji-saved-delete {
+                width: 20px;
+                height: 20px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>BMO - Bmoji Fusion</h1>
+    <button class="help-btn" onclick="showHelp()">?</button>
+</div>
+
+<div class="container">
+    <div class="preview-area">
+        <div class="canvas-wrapper">
+            <div id="previewCanvas" class="bmoji-preview" data-code=""></div>
+        </div>
+        <div class="zoom-controls">
+            <button class="zoom-btn" onclick="setZoom(210)">10x</button>
+            <button class="zoom-btn" onclick="setZoom(315)">15x</button>
+            <button class="zoom-btn" onclick="setZoom(420)">20x</button>
+            <button class="zoom-btn" onclick="setZoom(630)">30x</button>
+            <div class="zoom-info" id="zoomInfo">当前: 10x</div>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn adjust-btn" id="adjustBtn" onclick="showAdjustPanel()" disabled>
+                <span>调整</span>
+            </button>
+            <button class="copy-code-btn" id="copyCodeBtn" onclick="copyBmojiCode()" disabled>复制 BMO</button>
+            <button class="copy-code-btn" id="saveCodeBtn" onclick="saveBmojiCode()" disabled>收藏 BMO</button>
+            <button class="action-btn download-btn" onclick="downloadImage()">
+                <span>下载</span>
+            </button>
+        </div>
+        <div class="code-panel">
+            <div class="code-output">
+                <label for="bmojiCodeOutput">BMO 代码</label>
+                <textarea id="bmojiCodeOutput" class="code-textarea" placeholder="选择部件生成 BMO，或粘贴已有 BMO 继续编辑" onclick="this.select()"></textarea>
+            </div>
+        </div>
+        <div class="hint">Based on <a href="/group/topic/437499" target="_blank">Bangumi TV Fusion</a> by <a href="/user/572805" target="_blank">五行行行行行啊</a></div>
+    </div>
+
+    <div class="sidebar">
+        <div class="category-tabs">
+            <button class="tab" data-category="saved" onclick="switchCategory('saved', event)">收藏</button>
+            <button class="tab active" data-category="face" onclick="switchCategory('face', event)">面部</button>
+            <button class="tab" data-category="mouth" onclick="switchCategory('mouth', event)">嘴部</button>
+            <button class="tab" data-category="eyes" onclick="switchCategory('eyes', event)">眼部</button>
+            <button class="tab" data-category="accessories" onclick="switchCategory('accessories', event)">配饰</button>
+            <button class="tab" data-category="others" onclick="switchCategory('others', event)">其他</button>
+        </div>
+        <div class="items-container" id="itemsContainer"></div>
+        <div class="hint">💡 点一次选择 | 点两次取消</div>
+    </div>
+</div>
+
+<!-- 上传模态框 -->
+<div class="modal" id="uploadModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📤 上传自定义部件</h2>
+            <button class="close-btn" onclick="closeUploadModal()">×</button>
+        </div>
+
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+            <p style="color: #ff69b4; font-size: 16px; margin-bottom: 10px;">📁 点击或拖拽上传</p>
+            <p style="color: #999; font-size: 12px;">仅支持 21×21 像素的 PNG/GIF</p>
+            <input type="file" id="fileInput" accept=".png,.gif" style="display: none;" onchange="handleFileSelect(event)">
+            <img id="previewImg" class="preview-img" style="display: none;">
+        </div>
+
+        <div class="form-group" style="margin-top: 20px;">
+            <label>部件名称</label>
+            <input type="text" id="partName" placeholder="例如:自定义眼睛1">
+        </div>
+
+        <div class="form-group">
+            <label>图层层级</label>
+            <select id="partLayer">
+                <option value="1">1 - 面部层</option>
+                <option value="2">2 - 嘴部层</option>
+                <option value="3">3 - 眼部层</option>
+                <option value="4">4 - 配饰层</option>
+                <option value="5">5 - 其他层</option>
+                <option value="6">6 - 最上层</option>
+            </select>
+        </div>
+
+        <button class="submit-btn" id="uploadSubmit" onclick="submitUpload()" disabled>上传部件</button>
+    </div>
+</div>
+
+<!-- 使用说明模态框 -->
+<div class="modal" id="helpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📖 使用说明</h2>
+            <button class="close-btn" onclick="closeHelp()">×</button>
+        </div>
+
+        <div class="help-content">
+            <h3>🎨 基础操作</h3>
+            <ul>
+                <li><strong>选择部件：</strong>点击一次选中，再点击一次取消</li>
+                <li><strong>调整部件：</strong>选中后点击"调整"按钮可以调节颜色、翻转、旋转</li>
+                <li><strong>缩放预览：</strong>使用10x/15x/20x/30x按钮调整预览大小</li>
+                <li><strong>下载图片：</strong>点击"下载"按钮保存为PNG格式</li>
+                <li><strong>BMO 代码：</strong>复制 BMO 代码可以在 Bangumi 站内发贴或回复时使用</li>
+            </ul>
+
+            <!-- <h3>📁 上传自定义部件</h3>
+            <ul>
+                <li>在任意分类的末尾点击"+"号按钮</li>
+                <li>上传21×21像素的PNG或GIF文件</li>
+                <li>设置部件名称和图层层级</li>
+                <li>上传的部件会保存在浏览器本地</li>
+                <li><strong>删除自定义部件：</strong>点击部件左上角的红色"×"按钮</li>
+            </ul> -->
+
+            <h3>⚙️ 调整功能</h3>
+            <ul>
+                <li><strong>颜色调节：</strong>通过色相、明度、饱和度滑动条调整</li>
+                <li><strong>翻转：</strong>支持水平翻转和垂直翻转</li>
+                <li><strong>旋转：</strong>支持顺时针和逆时针90度旋转</li>
+            </ul>
+
+            <h3>📝 分类说明</h3>
+            <ul>
+                <li><strong>面部/嘴部/眼部：</strong>单选模式，只能选择一个</li>
+                <li><strong>配饰/其他：</strong>多选模式，可以叠加多个，最多 5 个</li>
+            </ul>
+
+            <div class="contact-info">
+                <h3 style="margin-top: 0;">💝 投稿说明</h3>
+                <p>如果有自制的零件想要分享的话，可以向我 <strong>@572805</strong> 私信投稿喵，文件格式为 <strong>21×21像素的PNG文件</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 调整面板 -->
+<div class="adjust-panel" id="adjustPanel">
+    <div class="adjust-header">
+        <h3>⚙️ 调整部件</h3>
+        <button class="close-btn" onclick="closeAdjustPanel()">×</button>
+    </div>
+
+    <div class="adjust-section">
+        <h4>🎨 颜色调节</h4>
+        <div class="slider-group">
+            <label>色相 (Hue)</label>
+            <input type="range" id="hueSlider" min="0" max="360" value="0" oninput="applyColorAdjust()">
+        </div>
+        <div class="slider-group">
+            <label>明度 (Lightness)</label>
+            <input type="range" id="lightnessSlider" min="-100" max="100" value="0" oninput="applyColorAdjust()">
+        </div>
+        <div class="slider-group">
+            <label>饱和度 (Saturation)</label>
+            <input type="range" id="saturationSlider" min="-100" max="100" value="0" oninput="applyColorAdjust()">
+        </div>
+    </div>
+
+    <div class="adjust-section">
+        <h4>🔄 翻转</h4>
+        <div class="button-group">
+            <button class="adjust-btn-small" onclick="flipHorizontal()">↔️ 水平翻转</button>
+            <button class="adjust-btn-small" onclick="flipVertical()">↕️ 垂直翻转</button>
+        </div>
+    </div>
+
+    <div class="adjust-section">
+        <h4>🔃 旋转</h4>
+        <div class="button-group">
+            <button class="adjust-btn-small" onclick="rotateLeft()">↶ 逆时针90°</button>
+            <button class="adjust-btn-small" onclick="rotateRight()">↷ 顺时针90°</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="./bmo.js?v3"></script>
+<script>
+    const FEATURE_FLAGS = {
+        enableCustomParts: false
+    };
+
+    const EMPTY_CATEGORIES = {
+        face: { id: 'face', name: '面部', layer: 1, multiSelect: false, maxSelect: 1, items: [] },
+        mouth: { id: 'mouth', name: '嘴部', layer: 2, multiSelect: false, maxSelect: 1, items: [] },
+        eyes: { id: 'eyes', name: '眼部', layer: 3, multiSelect: false, maxSelect: 1, items: [] },
+        accessories: { id: 'accessories', name: '配饰', layer: 4, multiSelect: true, maxSelect: null, items: [] },
+        others: { id: 'others', name: '其他', layer: 5, multiSelect: true, maxSelect: null, items: [] }
+    };
+
+    function normalizeCategoryLimits(category) {
+        if (!category || typeof category !== 'object') {
+            return;
+        }
+        var limit = null;
+        if (typeof category.maxSelect === 'number' && isFinite(category.maxSelect)) {
+            var numeric = Math.floor(category.maxSelect);
+            if (numeric > 0) {
+                limit = numeric;
+            }
+        }
+        if (limit === null) {
+            if (category.maxSelect === 0 || category.maxSelect === null) {
+                limit = null;
+            } else if (category.multiSelect === false) {
+                limit = 1;
+            } else if (category.multiSelect === true) {
+                limit = null;
+            }
+        }
+        if (limit === null && category.maxSelect === undefined && category.multiSelect === undefined) {
+            limit = 1;
+        }
+        category.maxSelect = limit;
+        category.multiSelect = limit === null || limit > 1;
+    }
+
+    function normalizeAllCategoryLimits(source) {
+        if (!source || typeof source !== 'object') {
+            return;
+        }
+        Object.keys(source).forEach(function (key) {
+            normalizeCategoryLimits(source[key]);
+        });
+    }
+
+    function copyTextToClipboard(text) {
+        const value = text === undefined || text === null ? '' : String(text);
+        if (!value) {
+            return Promise.reject(new Error('empty'));
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(value);
+        }
+        return new Promise((resolve, reject) => {
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = value;
+                textarea.style.position = 'fixed';
+                textarea.style.top = '-9999px';
+                textarea.style.left = '0';
+                textarea.style.opacity = '0';
+                textarea.setAttribute('readonly', 'true');
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                textarea.setSelectionRange(0, textarea.value.length);
+                let success = false;
+                try {
+                    success = document.execCommand('copy');
+                } catch (err) {
+                    success = false;
+                }
+                document.body.removeChild(textarea);
+                if (success) {
+                    resolve();
+                } else {
+                    reject(new Error('copyFailed'));
+                }
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    function getCategoryMaxAllowed(categoryKey) {
+        if (!assets || !categoryKey || !assets[categoryKey]) {
+            return 1;
+        }
+        var categoryData = assets[categoryKey];
+        if (typeof categoryData.maxSelect === 'number' && isFinite(categoryData.maxSelect) && categoryData.maxSelect > 0) {
+            return categoryData.maxSelect;
+        }
+        return Infinity;
+    }
+
+    function countSelectionsInCategory(categoryKey) {
+        var count = 0;
+        var keys = Object.keys(selectedItems || {});
+        for (var i = 0; i < keys.length; i++) {
+            var entry = selectedItems[keys[i]];
+            if (entry && entry.category === categoryKey) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    function enforceSelectionLimits() {
+        if (!assets) {
+            return false;
+        }
+        var usage = {};
+        var keys = Object.keys(selectedItems);
+        var changed = false;
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            var item = selectedItems[key];
+            if (!item) {
+                continue;
+            }
+            var limit = getCategoryMaxAllowed(item.category);
+            if (isFinite(limit)) {
+                var used = usage[item.category] || 0;
+                if (used >= limit) {
+                    delete selectedItems[key];
+                    changed = true;
+                    if (lastSelectedItem === key) {
+                        lastSelectedItem = null;
+                    }
+                    continue;
+                }
+                usage[item.category] = used + 1;
+            } else {
+                usage[item.category] = (usage[item.category] || 0) + 1;
+            }
+        }
+        if (!lastSelectedItem) {
+            var adjustBtn = document.getElementById('adjustBtn');
+            if (adjustBtn) {
+                adjustBtn.disabled = true;
+            }
+        }
+        return changed;
+    }
+
+    function cloneAssets(source) {
+        try {
+            return JSON.parse(JSON.stringify(source || {}));
+        } catch (err) {
+            if (window.console && window.console.warn) {
+                window.console.warn('[gen_bmo] Failed to clone assets', err);
+            }
+            return source ? Object.assign({}, source) : {};
+        }
+    }
+
+    let assets = null;
+    let currentCategory = 'face';
+    let selectedItems = {};
+    let currentZoom = 210;
+    let lastSelectedItem = null;
+    let uploadFile = null;
+    let currentUploadCategory = null;
+    let currentBmojiCode = '';
+    let isUpdatingCodeOutput = false;
+    let codeInputTimer = null;
+    let savedBmoRenderer = null;
+
+    function bootstrapAssets() {
+        if (assets) {
+            return assets;
+        }
+        var base = null;
+        if (window.Bmoji && typeof window.Bmoji.getAssets === 'function') {
+            try {
+                base = window.Bmoji.getAssets();
+            } catch (err) {
+                if (window.console && window.console.warn) {
+                    window.console.warn('[gen_bmo] Failed to access Bmoji assets', err);
+                }
+            }
+        }
+        if (base && typeof base === 'object') {
+            assets = cloneAssets(base);
+        } else {
+            assets = cloneAssets(EMPTY_CATEGORIES);
+        }
+        normalizeAllCategoryLimits(assets);
+        return assets;
+    }
+
+    assets = bootstrapAssets();
+    refreshBmojiAssets();
+
+    function refreshBmojiAssets() {
+        if (!assets) {
+            bootstrapAssets();
+        }
+        normalizeAllCategoryLimits(assets);
+        if (window.Bmoji && typeof window.Bmoji.setAssets === 'function' && assets) {
+            window.Bmoji.setAssets(assets);
+        }
+        if (enforceSelectionLimits()) {
+            renderItems();
+            refreshPreview();
+        }
+    }
+
+    function hasSavedBmoSupport() {
+        return !!(window.Bmoji && window.Bmoji.savedBmo && typeof window.Bmoji.savedBmo.list === 'function' && typeof window.Bmoji.savedBmo.create === 'function');
+    }
+
+    function ensureSavedBmoRenderer() {
+        if (!hasSavedBmoSupport()) {
+            return null;
+        }
+        const container = document.getElementById('itemsContainer');
+        if (!container) {
+            return null;
+        }
+        if (savedBmoRenderer && savedBmoRenderer.container === container) {
+            return savedBmoRenderer;
+        }
+        const previewSize = 63;
+        savedBmoRenderer = window.Bmoji.savedBmo.createRenderer(container, {
+            classNames: {
+                root: 'bmoji-saved-grid',
+                card: 'bmoji-saved-card',
+                preview: 'bmoji-saved-preview',
+                body: 'bmoji-saved-body',
+                title: 'bmoji-saved-title',
+                meta: 'bmoji-saved-meta',
+                note: 'bmoji-saved-note',
+                actions: 'bmoji-saved-actions',
+                actionButton: 'bmoji-saved-button',
+                editButton: 'bmoji-saved-edit',
+                deleteButton: 'bmoji-saved-delete',
+                empty: 'bmoji-saved-empty'
+            },
+            previewOptions: {
+                width: previewSize,
+                height: previewSize,
+                devicePixelRatio: window.devicePixelRatio || 1
+            },
+            emptyText: '暂无收藏，快来收藏一个喜欢的 BMO 吧～',
+            primaryActionLabel: '复制',
+            editActionLabel: '编辑',
+            editButtonLabel: '✎',
+            deleteActionLabel: '删除',
+            onSelect: handleSavedBmoSelect,
+            onEdit: handleSavedBmoEdit,
+            onDelete: handleSavedBmoDelete
+        });
+        return savedBmoRenderer;
+    }
+
+    function updateSavedTabCount(count) {
+        const tab = document.querySelector('.tab[data-category="saved"]');
+        if (!tab) {
+            return;
+        }
+        const base = tab.getAttribute('data-label') || tab.textContent.trim() || '收藏';
+        tab.setAttribute('data-label', base);
+        if (count && count > 0) {
+            tab.textContent = `${base} (${count})`;
+        } else {
+            tab.textContent = base;
+        }
+    }
+
+    function renderSavedBmoItems() {
+        const container = document.getElementById('itemsContainer');
+        if (!container) {
+            return;
+        }
+        container.className = 'items-container';
+        if (!hasSavedBmoSupport()) {
+            container.innerHTML = '<div class="empty-hint">⚠️ 当前浏览器不支持收藏功能</div>';
+            return;
+        }
+        const renderer = ensureSavedBmoRenderer();
+        if (!renderer) {
+            container.innerHTML = '<div class="empty-hint">⚠️ 收藏列表加载失败</div>';
+            return;
+        }
+        const entries = window.Bmoji.savedBmo.list();
+        updateSavedTabCount(entries.length);
+        renderer.render(entries);
+    }
+
+    function refreshSavedBmoTab() {
+        if (!hasSavedBmoSupport()) {
+            return;
+        }
+        const entries = window.Bmoji.savedBmo.list();
+        updateSavedTabCount(entries.length);
+        if (currentCategory === 'saved') {
+            const renderer = ensureSavedBmoRenderer();
+            if (renderer) {
+                renderer.render(entries);
+            }
+        }
+    }
+
+    function handleSavedBmoSelect(entry) {
+        if (!entry || !entry.code) {
+            showToast('⚠️ 这个收藏没有可用的 BMO 代码');
+            return;
+        }
+        copyTextToClipboard(entry.code).then(() => {
+            showToast('✅ 已复制 BMO');
+        }).catch(() => {
+            showToast('⚠️ 复制失败，请手动复制');
+        });
+    }
+
+    function handleSavedBmoEdit(entry) {
+        if (!entry || !entry.code) {
+            showToast('⚠️ 这个收藏没有可用的 BMO 代码');
+            return;
+        }
+        const result = importBmojiCode(entry.code, { silent: true });
+        if (!result || !result.success) {
+            showToast('⚠️ 未能应用这个收藏');
+            return;
+        }
+        if (result.unresolved && result.unresolved > 0) {
+            showToast(`⚠️ 已导入，但有 ${result.unresolved} 个部件未识别`);
+        } else {
+            showToast('✅ 已应用收藏到编辑器');
+        }
+    }
+
+    function handleSavedBmoDelete(entry) {
+        if (!entry) {
+            return;
+        }
+        if (!hasSavedBmoSupport()) {
+            showToast('⚠️ 收藏功能不可用');
+            return;
+        }
+        const confirmed = window.confirm('确定要删除这个收藏吗？');
+        if (!confirmed) {
+            return;
+        }
+        const targetId = entry.id || entry.code;
+        if (!targetId) {
+            return;
+        }
+        const removed = window.Bmoji.savedBmo.remove(targetId, { matchByCode: true });
+        if (removed) {
+            showToast('🗑️ 已删除收藏');
+            refreshSavedBmoTab();
+        } else {
+            showToast('⚠️ 删除失败，请重试');
+        }
+    }
+
+    function getSelectionKey(categoryKey, itemId) {
+        return `${categoryKey}::${itemId}`;
+    }
+
+    function getCategoryCode(categoryKey) {
+        const categoryData = assets[categoryKey];
+        if (!categoryData) {
+            return categoryKey;
+        }
+        return categoryData.id || categoryKey;
+    }
+
+    function computeBmoCodeId(categoryKey, item) {
+        if (!item) {
+            return null;
+        }
+        if (item.codeId) {
+            return item.codeId;
+        }
+        const categoryCode = getCategoryCode(categoryKey);
+        const rawId = item.id !== undefined && item.id !== null ? String(item.id) : '';
+        if (!rawId) {
+            return null;
+        }
+        if (categoryCode && /^[0-9]+$/.test(rawId) && !item.custom) {
+            return `${categoryCode}${rawId}`;
+        }
+        return rawId;
+    }
+
+    function resolveSelectionCodeId(itemId, selection) {
+        if (!selection) {
+            return itemId;
+        }
+        if (selection.codeId) {
+            return selection.codeId;
+        }
+        const categoryKey = selection.category;
+        const resolvedId = selection.resolvedId || selection.originalId || itemId;
+        if (categoryKey && assets[categoryKey]) {
+            const source = assets[categoryKey].items.find(i => i.id === resolvedId);
+            const computed = computeBmoCodeId(categoryKey, source);
+            if (computed) {
+                selection.codeId = computed;
+                return computed;
+            }
+        }
+        return resolvedId || itemId;
+    }
+
+    function buildBmojiModifiers(data) {
+        const modifiers = {};
+
+        if (data) {
+            if (data.hue && data.hue !== 0) {
+                modifiers.h = Math.round(data.hue);
+            }
+            if (data.lightness && data.lightness !== 0) {
+                modifiers.l = Math.round(data.lightness);
+            }
+            if (data.saturation && data.saturation !== 0) {
+                modifiers.s = Math.round(data.saturation);
+            }
+            const transform = computeTransformMaskForSelection(data);
+            if (transform) {
+                modifiers.tf = transform.mask;
+                if (!transform.encodedRotation && data.rotation && (data.rotation % 360) !== 0) {
+                    modifiers.rotate = data.rotation;
+                }
+            } else {
+                if (data.rotation && (data.rotation % 360) !== 0) {
+                    modifiers.rotate = data.rotation;
+                }
+                if (data.flipH) {
+                    modifiers.flipH = true;
+                }
+                if (data.flipV) {
+                    modifiers.flipV = true;
+                }
+            }
+        }
+
+        return modifiers;
+    }
+
+    function parseNumericModifier(value) {
+        if (value === null || value === undefined || value === '') {
+            return null;
+        }
+        const num = Number(value);
+        return Number.isNaN(num) ? null : num;
+    }
+
+    function isTruthyModifier(value) {
+        if (value === null || value === undefined) {
+            return false;
+        }
+        if (typeof value === 'boolean') {
+            return value;
+        }
+        if (typeof value === 'number') {
+            return value !== 0;
+        }
+        if (typeof value === 'string') {
+            const lower = value.toLowerCase();
+            return lower === 'true' || lower === '1' || lower === 'yes' || lower === 'y';
+        }
+        return false;
+    }
+
+    function decodeTransformMaskValue(maskValue) {
+        const numeric = parseNumericModifier(maskValue);
+        if (numeric === null) {
+            return null;
+        }
+        let mask = Number(numeric) & 63;
+        if (mask < 0) {
+            mask = (mask + 64) & 63;
+        }
+        return {
+            flipH: !!(mask & 1),
+            flipV: !!(mask & 2),
+            rotation: ((mask >> 2) & 3) * 90
+        };
+    }
+
+    function applyModifiersToSelection(target, modifiers) {
+        if (!target || !modifiers) {
+            return;
+        }
+
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'h')) {
+            const hue = parseNumericModifier(modifiers.h);
+            if (hue !== null) {
+                target.hue = Math.round(hue);
+            }
+        } else if (Object.prototype.hasOwnProperty.call(modifiers, 'hue')) {
+            const hue = parseNumericModifier(modifiers.hue);
+            if (hue !== null) {
+                target.hue = Math.round(hue);
+            }
+        }
+
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'l')) {
+            const light = parseNumericModifier(modifiers.l);
+            if (light !== null) {
+                target.lightness = Math.round(light);
+            }
+        } else if (Object.prototype.hasOwnProperty.call(modifiers, 'lightness')) {
+            const light = parseNumericModifier(modifiers.lightness);
+            if (light !== null) {
+                target.lightness = Math.round(light);
+            }
+        }
+
+        if (Object.prototype.hasOwnProperty.call(modifiers, 's')) {
+            const sat = parseNumericModifier(modifiers.s);
+            if (sat !== null) {
+                target.saturation = Math.round(sat);
+            }
+        } else if (Object.prototype.hasOwnProperty.call(modifiers, 'saturation')) {
+            const sat = parseNumericModifier(modifiers.saturation);
+            if (sat !== null) {
+                target.saturation = Math.round(sat);
+            }
+        }
+
+        let maskInfo = null;
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'tf')) {
+            maskInfo = decodeTransformMaskValue(modifiers.tf);
+        }
+        if (maskInfo) {
+            target.flipH = maskInfo.flipH;
+            target.flipV = maskInfo.flipV;
+            if (maskInfo.rotation !== undefined && maskInfo.rotation !== null) {
+                target.rotation = maskInfo.rotation;
+            }
+        }
+
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'flipH')) {
+            target.flipH = isTruthyModifier(modifiers.flipH);
+        }
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'fliph')) {
+            target.flipH = isTruthyModifier(modifiers.fliph);
+        }
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'mirror')) {
+            target.flipH = isTruthyModifier(modifiers.mirror);
+        }
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'flipV')) {
+            target.flipV = isTruthyModifier(modifiers.flipV);
+        }
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'flipv')) {
+            target.flipV = isTruthyModifier(modifiers.flipv);
+        }
+
+        let rotateValue = null;
+        if (Object.prototype.hasOwnProperty.call(modifiers, 'rotate')) {
+            rotateValue = parseNumericModifier(modifiers.rotate);
+        }
+        if (rotateValue === null && Object.prototype.hasOwnProperty.call(modifiers, 'rotation')) {
+            rotateValue = parseNumericModifier(modifiers.rotation);
+        }
+        if (rotateValue !== null) {
+            target.rotation = rotateValue;
+        }
+    }
+
+    function resolveCategoryForDecodedItem(item) {
+        if (!item) {
+            return null;
+        }
+        if (item.category) {
+            return item.category;
+        }
+        if (item.meta && item.meta.category) {
+            return item.meta.category;
+        }
+
+        const candidates = [];
+        if (item.meta && item.meta.codeId !== undefined && item.meta.codeId !== null) {
+            candidates.push(String(item.meta.codeId));
+        }
+        if (item.meta && item.meta.id !== undefined && item.meta.id !== null) {
+            candidates.push(String(item.meta.id));
+        }
+        if (item.id !== undefined && item.id !== null) {
+            candidates.push(String(item.id));
+        }
+        if (item.alias) {
+            candidates.push(String(item.alias));
+        }
+
+        if (!assets) {
+            bootstrapAssets();
+        }
+
+        const categoryKeys = Object.keys(assets || {});
+        for (let i = 0; i < categoryKeys.length; i++) {
+            const categoryKey = categoryKeys[i];
+            const categoryData = assets[categoryKey];
+            if (!categoryData || !Array.isArray(categoryData.items)) {
+                continue;
+            }
+            for (let j = 0; j < categoryData.items.length; j++) {
+                const entry = categoryData.items[j];
+                const entryId = entry.id !== undefined && entry.id !== null ? String(entry.id) : null;
+                const entryCodeId = computeBmoCodeId(categoryKey, entry);
+                const alias = entry.alias || null;
+                if ((entryId && candidates.indexOf(entryId) !== -1) ||
+                    (entryCodeId && candidates.indexOf(entryCodeId) !== -1) ||
+                    (alias && candidates.indexOf(alias) !== -1)) {
+                    return categoryKey;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    function createSelectionFromDecodedItem(item) {
+        if (!item) {
+            return null;
+        }
+
+        const categoryKey = resolveCategoryForDecodedItem(item);
+        if (!categoryKey) {
+            return null;
+        }
+
+        const categoryData = assets && assets[categoryKey];
+        const resolvedId = item.meta && item.meta.id !== undefined && item.meta.id !== null
+            ? String(item.meta.id)
+            : (item.id !== undefined && item.id !== null ? String(item.id) : null);
+        const codeIdFromItem = item.meta && item.meta.codeId !== undefined && item.meta.codeId !== null
+            ? String(item.meta.codeId)
+            : (item.id !== undefined && item.id !== null ? String(item.id) : null);
+
+        let assetItem = null;
+        if (categoryData && Array.isArray(categoryData.items)) {
+            if (resolvedId !== null) {
+                assetItem = categoryData.items.find(entry => String(entry.id) === resolvedId) || null;
+            }
+            if (!assetItem && codeIdFromItem) {
+                assetItem = categoryData.items.find(entry => computeBmoCodeId(categoryKey, entry) === codeIdFromItem) || null;
+            }
+            if (!assetItem && item.alias) {
+                assetItem = categoryData.items.find(entry => entry.alias === item.alias) || null;
+            }
+            if (!assetItem && item.meta && item.meta.alias) {
+                assetItem = categoryData.items.find(entry => entry.alias === item.meta.alias) || null;
+            }
+        }
+
+        const finalResolvedIdRaw = assetItem && assetItem.id !== undefined && assetItem.id !== null
+            ? assetItem.id
+            : (resolvedId !== null ? resolvedId : (codeIdFromItem || item.id));
+        if (finalResolvedIdRaw === null || finalResolvedIdRaw === undefined) {
+            return null;
+        }
+        const finalResolvedId = String(finalResolvedIdRaw);
+        const selectionKey = getSelectionKey(categoryKey, finalResolvedId);
+        const categoryCode = getCategoryCode(categoryKey);
+        const base = assetItem || item.meta || item;
+        const selection = {
+            src: (base && base.src) || item.src,
+            layer: typeof base.layer === 'number' ? base.layer : (typeof item.layer === 'number' ? item.layer : (categoryData && typeof categoryData.layer === 'number' ? categoryData.layer : 0)),
+            category: categoryKey,
+            categoryCode: categoryCode,
+            alias: (assetItem && assetItem.alias) || (item.meta && item.meta.alias) || item.alias || null,
+            codeId: assetItem ? (computeBmoCodeId(categoryKey, assetItem) || String(assetItem.id)) : (codeIdFromItem || finalResolvedId),
+            resolvedId: finalResolvedId,
+            custom: !!(assetItem && assetItem.custom),
+            selectionKey: selectionKey,
+            hue: 0,
+            lightness: 0,
+            saturation: 0,
+            flipH: false,
+            flipV: false,
+            rotation: 0
+        };
+
+        applyModifiersToSelection(selection, item.modifiers || {});
+
+        return selection;
+    }
+
+    function shouldAttemptImport(value) {
+        if (!value) {
+            return true;
+        }
+        return /^\s*\(?bmo/i.test(value);
+    }
+
+    function importBmojiCode(code, options) {
+        const opts = options || {};
+        const silent = !!opts.silent;
+        const rawValue = typeof code === 'string' ? code : '';
+        const trimmed = rawValue.trim();
+
+        const output = document.getElementById('bmojiCodeOutput');
+        if (output && output.value !== rawValue) {
+            isUpdatingCodeOutput = true;
+            output.value = rawValue;
+            isUpdatingCodeOutput = false;
+        }
+
+        if (!window.Bmoji || typeof window.Bmoji.decode !== 'function') {
+            if (!silent) {
+                showToast('⚠️ 当前无法解析 BMO 代码');
+            }
+            return { success: false, error: 'decoderUnavailable' };
+        }
+
+        if (!trimmed) {
+            selectedItems = {};
+            lastSelectedItem = null;
+            const adjustBtn = document.getElementById('adjustBtn');
+            if (adjustBtn) {
+                adjustBtn.disabled = true;
+            }
+            renderItems();
+            refreshPreview();
+            return { success: true, cleared: true };
+        }
+
+        let parsed;
+        try {
+            parsed = window.Bmoji.decode(trimmed);
+        } catch (err) {
+            if (window.console && window.console.warn) {
+                window.console.warn('[gen_bmo] Failed to decode BMO code', err);
+            }
+            if (!silent) {
+                showToast('⚠️ 未能解析 BMO 代码');
+            }
+            return { success: false, error: 'decodeError' };
+        }
+
+        if (!parsed || !Array.isArray(parsed.items)) {
+            if (!silent) {
+                showToast('⚠️ 未能识别 BMO 代码');
+            }
+            return { success: false, error: 'invalidStructure' };
+        }
+
+        if (!parsed.items.length) {
+            selectedItems = {};
+            lastSelectedItem = null;
+            const adjustBtn = document.getElementById('adjustBtn');
+            if (adjustBtn) {
+                adjustBtn.disabled = true;
+            }
+            renderItems();
+            refreshPreview();
+            if (!silent) {
+                showToast('⚠️ 代码中没有可用的部件');
+            }
+            return { success: false, error: 'emptySelection' };
+        }
+
+        const newSelected = {};
+        let firstKey = null;
+        let firstCategory = null;
+        let unresolved = 0;
+
+        parsed.items.forEach(function (item) {
+            const selection = createSelectionFromDecodedItem(item);
+            if (!selection) {
+                unresolved += 1;
+                return;
+            }
+            newSelected[selection.selectionKey] = selection;
+            if (!firstKey) {
+                firstKey = selection.selectionKey;
+            }
+            if (!firstCategory && selection.category) {
+                firstCategory = selection.category;
+            }
+        });
+
+        if (!Object.keys(newSelected).length) {
+            if (!silent) {
+                showToast('⚠️ 未能匹配任何部件，可能是素材未加载');
+            }
+            return { success: false, error: 'noMatches' };
+        }
+
+        selectedItems = newSelected;
+        lastSelectedItem = firstKey;
+        const adjustBtn = document.getElementById('adjustBtn');
+        if (adjustBtn) {
+            adjustBtn.disabled = !lastSelectedItem;
+        }
+
+        if (firstCategory) {
+            switchCategory(firstCategory);
+        } else {
+            renderItems();
+        }
+        refreshPreview();
+
+        if (unresolved > 0 && !silent) {
+            showToast(`⚠️ 已导入，但有 ${unresolved} 个部件未识别`);
+        }
+
+        return { success: true, unresolved: unresolved };
+    }
+
+    function handleBmojiCodeInput(event) {
+        if (isUpdatingCodeOutput) {
+            return;
+        }
+        const value = event && event.target ? event.target.value : '';
+        if (codeInputTimer) {
+            clearTimeout(codeInputTimer);
+        }
+        codeInputTimer = setTimeout(() => {
+            codeInputTimer = null;
+            if (!value.trim()) {
+                importBmojiCode('', { silent: true });
+                return;
+            }
+            if (!shouldAttemptImport(value)) {
+                return;
+            }
+            importBmojiCode(value, { silent: true });
+        }, 400);
+    }
+
+    function handleBmojiCodePaste(event) {
+        if (codeInputTimer) {
+            clearTimeout(codeInputTimer);
+            codeInputTimer = null;
+        }
+        if (!event) {
+            return;
+        }
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pasted = clipboardData ? clipboardData.getData('text') : '';
+        if (!pasted) {
+            return;
+        }
+        event.preventDefault();
+        const sanitized = pasted.trim();
+        const target = event.target;
+        if (target) {
+            isUpdatingCodeOutput = true;
+            target.value = sanitized;
+            isUpdatingCodeOutput = false;
+        }
+        importBmojiCode(sanitized, { silent: false });
+    }
+
+    function handleBmojiCodeBlur(event) {
+        if (codeInputTimer) {
+            clearTimeout(codeInputTimer);
+            codeInputTimer = null;
+        }
+        if (isUpdatingCodeOutput) {
+            return;
+        }
+        const value = event && event.target ? event.target.value : '';
+        if (!value.trim()) {
+            return;
+        }
+        importBmojiCode(value, { silent: false });
+    }
+
+    function computeTransformMaskForSelection(data) {
+        if (!data) {
+            return null;
+        }
+        const flipH = !!data.flipH;
+        const flipV = !!data.flipV;
+        const rawRotation = typeof data.rotation === 'number' ? data.rotation : 0;
+        const normalized = ((rawRotation % 360) + 360) % 360;
+        const rotationEncodable = normalized % 90 === 0;
+        if (!flipH && !flipV && (!rotationEncodable || normalized === 0)) {
+            return null;
+        }
+        let mask = 0;
+        if (flipH) {
+            mask |= 1;
+        }
+        if (flipV) {
+            mask |= 2;
+        }
+        let encodedRotation = false;
+        if (rotationEncodable && normalized !== 0) {
+            mask |= ((Math.round(normalized / 90) & 3) << 2);
+            encodedRotation = true;
+        }
+        return {
+            mask: mask,
+            encodedRotation: encodedRotation
+        };
+    }
+    function getBmojiSelection() {
+        return Object.keys(selectedItems).map((selectionKey) => {
+            const data = selectedItems[selectionKey];
+            const baseId = data ? (data.resolvedId || data.originalId || selectionKey) : selectionKey;
+            const codeId = resolveSelectionCodeId(baseId, data);
+            return {
+                id: codeId,
+                modifiers: buildBmojiModifiers(data)
+            };
+        });
+    }
+
+    function updateBmojiCode() {
+        const trimmed = enforceSelectionLimits();
+        if (trimmed) {
+            renderItems();
+        }
+        const selection = getBmojiSelection();
+        if (window.Bmoji && typeof window.Bmoji.encode === 'function' && selection.length) {
+            currentBmojiCode = window.Bmoji.encodeCompact(selection, { wrap: true });
+        } else {
+            currentBmojiCode = '';
+        }
+
+        const output = document.getElementById('bmojiCodeOutput');
+        if (output) {
+            isUpdatingCodeOutput = true;
+            output.value = currentBmojiCode;
+            isUpdatingCodeOutput = false;
+        }
+
+        const copyBtn = document.getElementById('copyCodeBtn');
+        if (copyBtn) {
+            copyBtn.disabled = !selection.length;
+        }
+
+        const saveBtn = document.getElementById('saveCodeBtn');
+        if (saveBtn) {
+            const canSave = selection.length && hasSavedBmoSupport();
+            saveBtn.disabled = !canSave;
+        }
+
+        return currentBmojiCode;
+    }
+
+    // 初始化
+    function init() {
+        bootstrapAssets();
+        refreshBmojiAssets();
+        loadCustomParts();
+        switchCategory('face');
+        refreshPreview();
+
+        const codeOutput = document.getElementById('bmojiCodeOutput');
+        if (codeOutput) {
+            codeOutput.addEventListener('input', handleBmojiCodeInput);
+            codeOutput.addEventListener('paste', handleBmojiCodePaste);
+            codeOutput.addEventListener('blur', handleBmojiCodeBlur);
+        }
+
+        const saveBtn = document.getElementById('saveCodeBtn');
+        if (saveBtn && !hasSavedBmoSupport()) {
+            saveBtn.disabled = true;
+            saveBtn.title = '当前浏览器不支持收藏功能';
+        }
+
+        if (hasSavedBmoSupport()) {
+            refreshSavedBmoTab();
+        } else {
+            const savedTab = document.querySelector('.tab[data-category="saved"]');
+            if (savedTab) {
+                savedTab.style.display = 'none';
+            }
+        }
+        if (window.innerWidth <= 768) {
+            setZoom(200);
+        } else {
+            setZoom(currentZoom);
+        }
+
+        if (window.innerWidth <= 768) {
+            document.body.addEventListener('touchmove', function(e) {
+                const target = e.target;
+                const itemsContainer = document.getElementById('itemsContainer');
+
+                if (!itemsContainer.contains(target) && target !== itemsContainer) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
+
+        if (FEATURE_FLAGS.enableCustomParts) {
+            // 拖拽上传
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea) {
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('dragover');
+                });
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleFile(files[0]);
+                    }
+                });
+            }
+        } else {
+            const uploadTrigger = document.querySelector('.add-card');
+            if (uploadTrigger) {
+                uploadTrigger.style.display = 'none';
+            }
+        }
+    }
+
+    // 加载自定义部件
+    function loadCustomParts() {
+        if (!FEATURE_FLAGS.enableCustomParts) {
+            return;
+        }
+        const saved = localStorage.getItem('customParts');
+        if (saved) {
+            const customParts = JSON.parse(saved);
+            Object.keys(customParts).forEach(category => {
+                if (assets[category]) {
+                    customParts[category].forEach(item => {
+                        const exists = assets[category].items.find(i => i.id === item.id);
+                        if (!exists) {
+                            assets[category].items.push(item);
+                        }
+                    });
+                }
+            });
+        }
+        refreshBmojiAssets();
+    }
+
+    // 保存自定义部件
+    function saveCustomParts() {
+        if (!FEATURE_FLAGS.enableCustomParts) {
+            return;
+        }
+        const customParts = {};
+        Object.keys(assets).forEach(category => {
+            customParts[category] = assets[category].items.filter(item => item.custom);
+        });
+        localStorage.setItem('customParts', JSON.stringify(customParts));
+    }
+
+    // 删除自定义部件
+    function deleteCustomPart(itemId, category) {
+        if (!FEATURE_FLAGS.enableCustomParts) {
+            showToast('⚠️ 自定义部件已禁用');
+            return;
+        }
+        if (!confirm('确定要删除这个自定义部件吗？')) {
+            return;
+        }
+
+        // 从assets中移除
+        const index = assets[category].items.findIndex(item => item.id === itemId);
+        if (index !== -1) {
+            assets[category].items.splice(index, 1);
+        }
+
+        // 如果该部件被选中，也要取消选中
+        const selectionKeys = Object.keys(selectedItems);
+        selectionKeys.forEach((key) => {
+            const selected = selectedItems[key];
+            if (selected.category === category && selected.resolvedId === itemId) {
+                delete selectedItems[key];
+                if (lastSelectedItem === key) {
+                    lastSelectedItem = null;
+                    document.getElementById('adjustBtn').disabled = true;
+                }
+            }
+        });
+
+        // 保存到localStorage
+        saveCustomParts();
+        refreshBmojiAssets();
+
+        // 重新渲染
+        renderItems();
+        refreshPreview();
+
+        showToast('✅ 删除成功！');
+    }
+
+    function setZoom(size) {
+        if (typeof size !== 'number') {
+            size = currentZoom;
+        }
+
+        if (window.innerWidth <= 768) {
+            size = Math.min(size, 200);
+        }
+
+        currentZoom = size;
+        applyPreviewSize();
+
+        const zoom = Math.max(1, Math.round(size / 21));
+        const info = document.getElementById('zoomInfo');
+        if (info) {
+            info.textContent = `当前: ${zoom}x`;
+        }
+    }
+
+    function switchCategory(category, evt) {
+        currentCategory = category;
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        if (evt && evt.currentTarget) {
+            evt.currentTarget.classList.add('active');
+        } else {
+            const activeTab = document.querySelector(`.tab[data-category="${category}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+        }
+
+        const sidebarHint = document.querySelector('.sidebar .hint');
+        if (sidebarHint) {
+            if (category === 'saved') {
+                sidebarHint.textContent = '💡 点击收藏可复制代码 | 编辑按钮应用收藏 | 删除按钮移除收藏';
+            } else {
+                sidebarHint.textContent = '💡 点一次选择 | 点两次取消';
+            }
+        }
+
+        renderItems();
+    }
+
+    function renderItems() {
+        const container = document.getElementById('itemsContainer');
+        if (!container) {
+            return;
+        }
+
+        if (currentCategory === 'saved') {
+            renderSavedBmoItems();
+            return;
+        }
+
+        container.className = 'items-container';
+        const categoryData = assets[currentCategory];
+
+        if (!categoryData) {
+            container.innerHTML = '<div class="empty-hint">暂无素材</div>';
+            return;
+        }
+
+        let html = '<div class="items-grid">';
+        const limit = getCategoryMaxAllowed(currentCategory);
+        const currentSelectedCount = countSelectionsInCategory(currentCategory);
+
+        categoryData.items.forEach(item => {
+            const selectionKey = getSelectionKey(currentCategory, item.id);
+            const itemState = selectedItems[selectionKey];
+            const isSelected = itemState ? 'selected' : '';
+            const isDisabled = (!itemState && isFinite(limit) && limit !== 1 && currentSelectedCount >= limit) ? ' disabled' : '';
+            const deleteBtn = (FEATURE_FLAGS.enableCustomParts && item.custom)
+                ? `<button class="delete-btn" onclick="event.stopPropagation(); deleteCustomPart('${item.id}', '${currentCategory}')">×</button>`
+                : '';
+
+            html += `
+                <div class="item-card ${isSelected}${isDisabled}" onclick="toggleItem('${item.id}', '${currentCategory}')">
+                    ${deleteBtn}
+                    <img src="${item.src}" alt="${item.id}">
+                </div>
+            `;
+        });
+
+        // 添加上传按钮
+        if (FEATURE_FLAGS.enableCustomParts) {
+            html += `
+                <div class="item-card add-card" onclick="openUploadModal('${currentCategory}')">
+                    +
+                </div>
+            `;
+        }
+
+        html += '</div>';
+
+        container.innerHTML = html;
+    }
+
+    function toggleItem(itemId, category) {
+        const categoryData = assets[category];
+        const item = categoryData.items.find(i => i.id === itemId);
+
+        if (!item) return;
+
+        const selectionKey = getSelectionKey(category, item.id);
+        const currentState = selectedItems[selectionKey];
+        const limit = getCategoryMaxAllowed(category);
+        const isUnlimited = !isFinite(limit);
+        const currentCount = countSelectionsInCategory(category);
+
+        // 限制处理
+        if (!currentState) {
+            if (limit === 1) {
+                Object.keys(selectedItems).forEach(key => {
+                    const selectedItem = selectedItems[key];
+                    if (selectedItem && selectedItem.category === category) {
+                        delete selectedItems[key];
+                        if (lastSelectedItem === key) {
+                            lastSelectedItem = null;
+                        }
+                    }
+                });
+            } else if (!isUnlimited && currentCount >= limit) {
+                showToast(`⚠️ ${(categoryData && categoryData.name) || '该分类'}最多选择${limit}个`);
+                return;
+            }
+        }
+
+        // 切换选中状态
+        if (!currentState) {
+            const categoryCode = getCategoryCode(category);
+            const codeId = computeBmoCodeId(category, item) || itemId;
+            selectedItems[selectionKey] = {
+                src: item.src,
+                layer: item.layer,
+                category: category,
+                categoryCode: categoryCode,
+                alias: item.alias || null,
+                codeId: codeId,
+                resolvedId: item.id,
+                custom: !!item.custom,
+                selectionKey: selectionKey,
+                hue: 0,
+                lightness: 0,
+                saturation: 0,
+                flipH: false,
+                flipV: false,
+                rotation: 0
+            };
+            lastSelectedItem = selectionKey;
+            document.getElementById('adjustBtn').disabled = false;
+        } else {
+            delete selectedItems[selectionKey];
+            if (lastSelectedItem === selectionKey) {
+                lastSelectedItem = null;
+                document.getElementById('adjustBtn').disabled = true;
+            }
+        }
+
+        renderItems();
+        refreshPreview();
+    }
+
+    function applyPreviewSize() {
+        const container = document.getElementById('previewCanvas');
+        if (!container) {
+            return;
+        }
+
+        container.style.width = currentZoom + 'px';
+        container.style.height = currentZoom + 'px';
+
+        const canvas = container.querySelector('canvas');
+        if (canvas) {
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.imageRendering = 'pixelated';
+        }
+    }
+
+    function refreshPreview() {
+        const preview = document.getElementById('previewCanvas');
+        if (!preview) {
+            updateBmojiCode();
+            return;
+        }
+
+        const code = updateBmojiCode();
+
+        if (!code || !window.Bmoji || typeof window.Bmoji.render !== 'function') {
+            preview.removeAttribute('data-code');
+            preview.innerHTML = '';
+            applyPreviewSize();
+            return;
+        }
+
+        preview.setAttribute('data-code', code);
+
+        try {
+            const renderResult = window.Bmoji.render(preview, { width: 63, height: 63, cache: false, renderAsImage: false });
+            Promise.resolve(renderResult)
+                .then(() => {
+                    applyPreviewSize();
+                })
+                .catch((err) => {
+                    if (window.console && window.console.error) {
+                        window.console.error('[gen_bmo] Failed to render preview', err);
+                    }
+                });
+        } catch (err) {
+            if (window.console && window.console.error) {
+                window.console.error('[gen_bmo] Failed to render preview', err);
+            }
+            applyPreviewSize();
+        }
+    }
+
+    // 调整面板功能
+    function showAdjustPanel() {
+        if (!lastSelectedItem) return;
+
+        const itemData = selectedItems[lastSelectedItem];
+        document.getElementById('hueSlider').value = itemData.hue || 0;
+        document.getElementById('lightnessSlider').value = itemData.lightness || 0;
+        document.getElementById('saturationSlider').value = itemData.saturation || 0;
+
+        document.getElementById('adjustPanel').classList.add('show');
+    }
+
+    function closeAdjustPanel() {
+        document.getElementById('adjustPanel').classList.remove('show');
+    }
+
+    function applyColorAdjust() {
+        if (!lastSelectedItem) return;
+
+        const itemData = selectedItems[lastSelectedItem];
+        itemData.hue = parseInt(document.getElementById('hueSlider').value);
+        itemData.lightness = parseInt(document.getElementById('lightnessSlider').value);
+        itemData.saturation = parseInt(document.getElementById('saturationSlider').value);
+
+        refreshPreview();
+    }
+
+    function flipHorizontal() {
+        if (!lastSelectedItem) return;
+        selectedItems[lastSelectedItem].flipH = !selectedItems[lastSelectedItem].flipH;
+        refreshPreview();
+    }
+
+    function flipVertical() {
+        if (!lastSelectedItem) return;
+        selectedItems[lastSelectedItem].flipV = !selectedItems[lastSelectedItem].flipV;
+        refreshPreview();
+    }
+
+    function rotateLeft() {
+        if (!lastSelectedItem) return;
+        selectedItems[lastSelectedItem].rotation = (selectedItems[lastSelectedItem].rotation - 90) % 360;
+        refreshPreview();
+    }
+
+    function rotateRight() {
+        if (!lastSelectedItem) return;
+        selectedItems[lastSelectedItem].rotation = (selectedItems[lastSelectedItem].rotation + 90) % 360;
+        refreshPreview();
+    }
+
+    // 上传功能
+    function openUploadModal(category) {
+        if (!FEATURE_FLAGS.enableCustomParts) {
+            showToast('⚠️ 自定义部件功能未启用');
+            return;
+        }
+        currentUploadCategory = category;
+        document.getElementById('uploadModal').classList.add('show');
+        document.getElementById('previewImg').style.display = 'none';
+        document.getElementById('fileInput').value = '';
+        document.getElementById('partName').value = '';
+        document.getElementById('partLayer').value = assets[category].layer.toString();
+        document.getElementById('uploadSubmit').disabled = true;
+        uploadFile = null;
+    }
+
+    function closeUploadModal() {
+        document.getElementById('uploadModal').classList.remove('show');
+    }
+
+    function handleFileSelect(event) {
+        if (!FEATURE_FLAGS.enableCustomParts) {
+            return;
+        }
+        const file = event.target.files[0];
+        if (file) {
+            handleFile(file);
+        }
+    }
+
+    function handleFile(file) {
+        if (!FEATURE_FLAGS.enableCustomParts) {
+            return;
+        }
+        if (!file.type.match('image/(png|gif)')) {
+            showToast('❌ 只支持PNG和GIF格式！');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                if (img.width !== 21 || img.height !== 21) {
+                    showToast('❌ 图片必须是21×21像素！');
+                    return;
+                }
+
+                uploadFile = e.target.result;
+                document.getElementById('previewImg').src = uploadFile;
+                document.getElementById('previewImg').style.display = 'block';
+                document.getElementById('uploadSubmit').disabled = false;
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function submitUpload() {
+        if (!FEATURE_FLAGS.enableCustomParts) {
+            showToast('⚠️ 自定义部件功能未启用');
+            return;
+        }
+        const name = document.getElementById('partName').value.trim();
+        if (!name) {
+            showToast('❌ 请输入部件名称！');
+            return;
+        }
+
+        if (!uploadFile) {
+            showToast('❌ 请选择文件！');
+            return;
+        }
+
+        const layer = parseInt(document.getElementById('partLayer').value);
+        const id = `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+        const newItem = {
+            id: id,
+            src: uploadFile,
+            layer: layer,
+            custom: true,
+            name: name
+        };
+
+        assets[currentUploadCategory].items.push(newItem);
+        refreshBmojiAssets();
+        saveCustomParts();
+
+        closeUploadModal();
+        renderItems();
+        showToast('✅ 上传成功！');
+    }
+
+    // 使用说明
+    function showHelp() {
+        document.getElementById('helpModal').classList.add('show');
+    }
+
+    function closeHelp() {
+        document.getElementById('helpModal').classList.remove('show');
+    }
+
+    function customFunction() {
+        showToast('🔧 这是魔改备用按钮\n可自定义添加任何功能！');
+    }
+
+    function downloadImage() {
+        const preview = document.getElementById('previewCanvas');
+        const canvas = preview ? preview.querySelector('canvas') : null;
+        if (!canvas) {
+            showToast('⚠️ 请先生成预览');
+            return;
+        }
+        const link = document.createElement('a');
+        link.download = `bangumi-fusion-${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('✅ 下载成功！');
+    }
+
+    function getDefaultSavedBmoName() {
+        return '我的 BMO';
+    }
+
+    function saveBmojiCode() {
+        if (!currentBmojiCode) {
+            showToast('⚠️ 请先选择部件生成 BMO 代码');
+            return;
+        }
+        if (!hasSavedBmoSupport()) {
+            showToast('⚠️ 当前浏览器不支持收藏功能');
+            return;
+        }
+        const selection = getBmojiSelection();
+        if (!selection.length) {
+            showToast('⚠️ 请先选择部件');
+            return;
+        }
+
+        const defaultName = getDefaultSavedBmoName();
+        let name = window.prompt('为这个收藏取一个名字（可选）', defaultName);
+        if (name === null) {
+            showToast('已取消收藏');
+            return;
+        }
+        name = name.trim();
+        if (!name) {
+            name = defaultName;
+        }
+
+        const savedApi = window.Bmoji.savedBmo;
+        const payload = {
+            code: currentBmojiCode,
+            name: name
+        };
+
+        const existingList = savedApi.list();
+        let updated = null;
+        if (Array.isArray(existingList)) {
+            const existingEntry = existingList.find(item => item && item.code === currentBmojiCode);
+            if (existingEntry) {
+                const updateTarget = existingEntry.id || existingEntry.code;
+                updated = savedApi.update(updateTarget, {
+                    name: name,
+                    code: currentBmojiCode
+                }, { matchByCode: true });
+            }
+        }
+
+        let stored = updated;
+        if (!stored) {
+            stored = savedApi.create(payload);
+        }
+
+        if (stored) {
+            showToast(updated ? '✅ 收藏已更新' : '✅ 已收藏到「收藏」标签');
+            refreshSavedBmoTab();
+        } else {
+            showToast('⚠️ 收藏失败，请重试');
+        }
+    }
+
+    function copyBmojiCode() {
+        if (!currentBmojiCode) {
+            showToast('⚠️ 请先选择部件生成 BMO 代码');
+            return;
+        }
+        copyTextToClipboard(currentBmojiCode).then(() => {
+            showToast('✅ BMO 代码已复制！');
+        }).catch(() => {
+            const output = document.getElementById('bmojiCodeOutput');
+            if (!output) {
+                showToast('⚠️ 复制失败，请手动复制');
+                return;
+            }
+            output.focus();
+            output.select();
+            output.setSelectionRange(0, output.value.length);
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {
+                success = false;
+            }
+            if (window.getSelection) {
+                const sel = window.getSelection();
+                if (sel && sel.removeAllRanges) {
+                    sel.removeAllRanges();
+                }
+            }
+            output.blur();
+            if (success) {
+                showToast('✅ BMO 代码已复制！');
+            } else {
+                showToast('⚠️ 复制失败，请手动复制');
+            }
+        });
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2000);
+    }
+
+    window.onload = init;
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768 && currentZoom > 200) {
+            setZoom(210);
+        }
+    });
+
+    // 点击模态框外部关闭
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.classList.remove('show');
+        }
+    });
+</script>
+</body>
+</html>

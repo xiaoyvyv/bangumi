@@ -121,6 +121,7 @@ data class ComposeSetting(
                 "app-api.pixiv.net" to listOf(),
                 "oauth.secure.pixiv.net" to listOf(),
                 "accounts.pixiv.net" to listOf(),
+                "imgur.la" to listOf()
             )
             val Default = NetworkConfig()
         }

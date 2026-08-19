@@ -19,14 +19,17 @@ import kotlinx.serialization.json.decodeFromJsonElement
 @Immutable
 @Serializable
 data class ComposeReaction(
+    @SerialName("value") val value: String = "",
+    @SerialName("users") val users: SerializeList<ComposeUser> = persistentListOf(),
+
     @SerialName("type") val type: Int = 0,
     @SerialName("main_id") val mainId: Long = 0,
-    @SerialName("value") val value: String = "",
     @SerialName("total") val total: Int = 0,
     @SerialName("emoji") val emoji: String = "",
     @SerialName("selected") val selected: Boolean = false,
-    @SerialName("users") val users: SerializeList<ComposeUser> = persistentListOf(),
 ) {
+    val count get() = if (total != 0) total else users.size
+
     companion object {
         /**
          * 解析贴贴表情数据

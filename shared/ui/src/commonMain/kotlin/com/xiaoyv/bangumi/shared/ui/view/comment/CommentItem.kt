@@ -27,9 +27,8 @@ import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
-import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
-import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
+import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
@@ -50,6 +49,7 @@ fun CommentReplyItem(
     isLikeable: Boolean = false,
     onClickReaction: (ComposeReaction) -> Unit = {},
     onClickUser: (String) -> Unit = {},
+    onClickReport: () -> Unit = {},
     onClick: () -> Unit = {},
 ) {
     ListItem(
@@ -164,18 +164,18 @@ fun CommentReplyItem(
                     modifier = Modifier.fillMaxWidth(),
                     text = item.displayContent,
                 )
+
+                if (item.reactions.isNotEmpty()) {
+                    ReactionGroup(
+                        modifier = Modifier.fillMaxWidth(),
+                        reactions = item.reactions,
+                        onClick = onClickReaction
+                    )
+                }
             }
         },
         trailingContent = {
             val reactionState = rememberPopupReactionState()
-            val reportDialogState = rememberAlertDialogState()
-
-            ReportDialog(
-                state = reportDialogState,
-                onClick = { value, content ->
-
-                }
-            )
 
             PopupReaction(
                 state = reactionState,
@@ -196,7 +196,7 @@ fun CommentReplyItem(
                 },
                 onOptionClick = {
                     when (it.type) {
-                        ButtonType.Report -> reportDialogState.show()
+                        ButtonType.Report -> onClickReport()
                         ButtonType.Reaction -> reactionState.show()
                         else -> Unit
                     }

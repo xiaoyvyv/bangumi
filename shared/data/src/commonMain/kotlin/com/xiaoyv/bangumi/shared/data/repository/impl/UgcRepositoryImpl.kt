@@ -10,12 +10,12 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
-import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
@@ -309,7 +309,7 @@ class UgcRepositoryImpl(
     override suspend fun fetchDollarsChat(): Result<List<ComposeDollarItem>> = client.requestWebApi {
         fetchDollarChat().map {
             it.copy(
-                content = bbcodeToHtml(it.msg, true),
+                content = it.msg.bbcodeToHtml(),
                 avatar = "https://bgm.tv/pic/user/l/" + it.avatar
             )
         }

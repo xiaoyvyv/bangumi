@@ -105,7 +105,6 @@
     <string name="global_not_aired">未放送</string>
     <string name="global_other">其它</string>
     <string name="global_more">更多</string>
-    <string name="global_no_more">没有更多内容了~</string>
     <string name="global_mono">人物</string>
     <string name="global_login_first">请先登录后才能继续进行</string>
     <string name="global_more_tag">更多 &gt;&gt;</string>
@@ -160,6 +159,12 @@
     <string name="global_show">显示</string>
     <string name="global_hide">隐藏</string>
     <string name="global_no_content">没有内容哦~</string>
+    <string name="global_empty_comments_tag">沙发待领取</string>
+    <string name="global_empty_comments_title">还没有讨论</string>
+    <string name="global_empty_comments_subtitle">目前还没有任何回复，暂时静悄悄的。</string>
+    <string name="global_no_more">没有更多内容了~</string>
+    <string name="global_no_more_comments_tag">本页到底</string>
+    <string name="global_no_more_comments_subtitle">这页讨论已经显示完毕，下面暂时没有更多回复了。</string>
 
     <string name="emoji_tv">TV</string>
     <string name="emoji_tv_1">TV-1</string>
@@ -399,6 +404,8 @@
     <string name="topic_title">详情</string>
     <string name="topic_ep_info">时长：%1$s / 首播：%2$s</string>
     <string name="topic_index_info">创建于：%1$s，更新于：%2$s</string>
+    <string name="topic_send">我发表的话题</string>
+    <string name="topic_reply">我回复的话题</string>
 
     <!-- 每日放送页面 -->
     <string name="calendar_title">每日放送</string>

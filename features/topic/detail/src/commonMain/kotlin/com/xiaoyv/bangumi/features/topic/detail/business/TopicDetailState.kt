@@ -36,11 +36,8 @@ data class TopicDetailState(
     val selectedCommentTypeFilter: Int = 0,
     val commentSortFilters: SerializeList<ComposeTextTab<Int>> = persistentListOf(),
     val commentTypeFilters: SerializeList<ComposeTextTab<Int>> = persistentListOf(),
-
-    /**
-     * 小组话题或条目话题的回复在附加在详情的数据内，其它类型的都是分页加载的评论了
-     */
-    val replies: SerializeList<ComposeReply> = persistentListOf()
+    val replies: SerializeList<ComposeReply> = persistentListOf(),
+    val displayReplies: SerializeList<ComposeReply> = persistentListOf(),
 ) {
 
     val displayTitle: String = when (type) {

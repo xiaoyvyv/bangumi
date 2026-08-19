@@ -43,8 +43,8 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
-import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMembership
@@ -329,7 +329,7 @@ private fun GroupsDetailScreenSummary(
             .verticalScroll(rememberScrollState())
     ) {
         val text by produceState("", state.group.description) {
-            value = bbcodeToHtml(state.group.description, true)
+            value = state.group.description.bbcodeToHtml()
         }
 
         BgmLinkedText(

@@ -27,14 +27,14 @@ import com.xiaoyv.bangumi.core_resource.resources.profile_network_service
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
@@ -46,7 +46,7 @@ fun UserBioScreen(
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
     val summary by produceState("个人简介", state.user.bio) {
-        value = bbcodeToHtml(state.user.bio, true)
+        value = state.user.bio.bbcodeToHtml()
     }
     Column(
         modifier = Modifier

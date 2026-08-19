@@ -2,28 +2,19 @@ package com.xiaoyv.bangumi.shared.ui.component.text
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -32,23 +23,12 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.xiaoyv.bangumi.shared.core.utils.TagImage
-import com.xiaoyv.bangumi.shared.core.utils.TagMask
-import com.xiaoyv.bangumi.shared.core.utils.applyTheme
-import com.xiaoyv.bangumi.shared.core.utils.awaitHtmlEvent
-import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
-import com.xiaoyv.bangumi.shared.core.utils.packTextRangeKey
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.ui.component.action.AppActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
+import com.xiaoyv.bangumi.shared.ui.component.image.html.BgmHtmlImageContent
 import com.xiaoyv.library.Html
 import com.xiaoyv.library.HtmlDefaults
 
@@ -162,24 +142,30 @@ fun BgmLinkedText(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    maxLines: Int = Int.MAX_VALUE,
-    minLines: Int = 1,
     actionHandler: AppActionHandler = LocalActionHandler.current,
 ) {
+    // 如果没有显式传文字颜色，则自动回退到 onSurface
+    val resolvedTextStyle = textStyle.copy(
+        color = textStyle.color.takeOrElse { MaterialTheme.colorScheme.onSurface }
+    )
+
     Html(
         modifier = modifier,
         html = text,
         config = HtmlDefaults.config(
-            textStyle = textStyle,
+            textStyle = resolvedTextStyle,
+            image = BgmHtmlImageContent,
+            onClickImage = {
+                if (it.smileId == null) {
+                    actionHandler.openImage(it.source)
+                }
+            },
             onClickUrl = {
-
+                actionHandler.openBgmLink(it)
             }
         )
     )
-//    // 如果没有显式传文字颜色，则自动回退到 onSurface
-//    val resolvedTextStyle = textStyle.copy(
-//        color = textStyle.color.takeOrElse { MaterialTheme.colorScheme.onSurface }
-//    )
+
 //    val html = remember(text) { if (text.contains("[")) bbcodeToHtml(text, true) else text }
 //    val parsed = remember(html) { html.parseAsHtml() }
 //    val targetShowMasks = remember { mutableStateSetOf<Long>() }

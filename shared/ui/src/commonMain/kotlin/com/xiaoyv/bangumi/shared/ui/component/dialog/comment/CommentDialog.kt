@@ -46,9 +46,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -94,7 +94,6 @@ import com.xiaoyv.bangumi.shared.core.utils.bbcodeLink
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeMask
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeQuote
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeStrikethrough
-import com.xiaoyv.bangumi.shared.core.utils.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.core.utils.bbcodeUnderline
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
@@ -105,6 +104,7 @@ import com.xiaoyv.bangumi.shared.core.utils.rememberTvEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend1Emojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend2Emojis
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
@@ -499,10 +499,8 @@ private fun CommentDialogPanel(
                         .verticalScroll(rememberScrollState())
                         .padding(ContentMargin)
                 ) {
-                    var previewText by remember { mutableStateOf("") }
-
-                    LaunchedEffect(value.text) {
-                        previewText = bbcodeToHtml(value.text, true)
+                    val previewText by produceState("", value.text) {
+                        this.value = value.text.bbcodeToHtml()
                     }
 
                     BgmLinkedText(

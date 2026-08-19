@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.features.topic.detail.business
 
+import com.xiaoyv.bangumi.shared.core.types.CommentType
+import com.xiaoyv.bangumi.shared.core.types.SortType
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
@@ -19,5 +22,9 @@ sealed class TopicDetailEvent {
         data class OnRefresh(val loading: Boolean) : Action()
 
         data class OnReactionClick(val commentId: Long, val reaction: ComposeReaction) : Action()
+
+        data class OnCommentTypeChange(@field:CommentType val type: Int) : Action()
+        data class OnCommentSortChange(@field:SortType val type: Int) : Action()
+        data class OnAppendComment(val comment: ComposeNewReply) : Action()
     }
 }

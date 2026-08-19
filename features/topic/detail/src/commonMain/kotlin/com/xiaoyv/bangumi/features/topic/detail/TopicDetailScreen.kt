@@ -18,12 +18,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -37,8 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -46,11 +41,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_comments
+import com.xiaoyv.bangumi.core_resource.resources.global_empty_comments_subtitle
+import com.xiaoyv.bangumi.core_resource.resources.global_empty_comments_title
 import com.xiaoyv.bangumi.core_resource.resources.global_no_content
 import com.xiaoyv.bangumi.core_resource.resources.global_no_more
+import com.xiaoyv.bangumi.core_resource.resources.global_no_more_comments_subtitle
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.topic_title
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailEvent
@@ -340,8 +337,8 @@ fun TopicDetailScreenHeader(
                 onClick = { reaction ->
                     onActionEvent(
                         TopicDetailEvent.Action.OnReactionClick(
-                            if (state.type == TopicType.TYPE_BLOG) state.id else state.topic.contentPostId,
-                            reaction
+                            commentId = if (state.type == TopicType.TYPE_BLOG) state.id else state.topic.contentPostId,
+                            reaction = reaction
                         )
                     )
                 }
@@ -390,7 +387,7 @@ private fun TopicDetailScreenContent(
             }
 
             nodesIndexed(
-                nodes = state.replies,
+                nodes = state.displayReplies,
                 key = { it.id },
                 contentType = { CONTENT_TYPE_COMMENT_ITEM }
             ) { item, level, index ->
@@ -441,7 +438,7 @@ private fun TopicDetailScreenContent(
             }
 
             itemKey(CONTENT_TYPE_BOTTOM_CHARACTER) {
-                TopicDetailScreenNoDataTip(isEmpty = state.replies.isEmpty())
+                TopicDetailScreenNoDataTip(isEmpty = state.displayReplies.isEmpty())
             }
         }
     }
@@ -476,7 +473,7 @@ private fun TopicDetailScreenCommentHeader(
             current = state.selectedCommentTypeFilter,
             trailingIcon = { Icon(BgmIcons.ArrowDropDown, contentDescription = null) },
             onOptionClick = {
-//                onActionEvent(TopicDetailEvent.Action.OnCommentTypeChange(it.type))
+                onActionEvent(TopicDetailEvent.Action.OnCommentTypeChange(it.type))
             }
         )
 
@@ -485,7 +482,7 @@ private fun TopicDetailScreenCommentHeader(
             current = state.selectedCommentSortFilter,
             trailingIcon = { Icon(BgmIcons.ArrowDropDown, contentDescription = null) },
             onOptionClick = {
-//                onActionEvent(TopicDetailEvent.Action.OnCommentSortChange(it.type))
+                onActionEvent(TopicDetailEvent.Action.OnCommentSortChange(it.type))
             }
         )
     }
@@ -536,73 +533,54 @@ private fun TopicDetailScreenNoDataTip(
     isEmpty: Boolean,
     modifier: Modifier = Modifier
 ) {
-    // Bangumi 风格轻量配色（粉蓝渐变）
-    val accentPink = Color(0xFFFFB6C1)
-    val accentBlue = Color(0xFF90CAF9)
-    val softGradient = Brush.linearGradient(
-        colors = listOf(
-            accentPink.copy(alpha = 0.25f),
-            accentBlue.copy(alpha = 0.25f)
-        )
+    val title = stringResource(
+        if (isEmpty) Res.string.global_empty_comments_title
+        else Res.string.global_no_more
     )
+    val subtitle = stringResource(
+        if (isEmpty) Res.string.global_empty_comments_subtitle
+        else Res.string.global_no_more_comments_subtitle
+    )
+
+    if (!isEmpty) BgmHorizontalDivider()
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(400.dp)
-            .padding(horizontal = 24.dp),
+            .let { if (isEmpty) it.height(400.dp) else it.padding(bottom = 200.dp) }
+            .padding(horizontal = ContentMargin),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
     ) {
-        // 图标占位容器
-        Box(
-            modifier = Modifier
-                .size(96.dp)
-                .clip(CircleShape)
-                .background(softGradient),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.85f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Search,
-                    contentDescription = null,
-                    tint = Color(0xFF64B5F6),
-                    modifier = Modifier.size(36.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        // 主标题
-        Text(
-            text = if (isEmpty) "暂无相关讨论" else "没有更多讨论",
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 辅助说明文本
-        Text(
-            text = if (isEmpty) "这里目前空空如也，快去探索更多精彩内容吧！" else stringResource(Res.string.global_no_more),
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontSize = 13.sp,
-                lineHeight = 18.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+        if (isEmpty) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                ),
                 textAlign = TextAlign.Center
-            ),
-            modifier = Modifier.fillMaxWidth(0.75f)
-        )
+            )
+
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                ),
+                modifier = Modifier.fillMaxWidth(0.82f)
+            )
+        } else {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ContentMargin, vertical = 24.dp),
+                text = title,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
 
@@ -616,9 +594,7 @@ private fun ArticleScreenPreview() {
                 TopicDetailState(
                     id = 111,
                     topic = ComposeTopic(
-                        replies = persistentListOf(
-                            ComposeReply(content = "")
-                        )
+                        replies = persistentListOf(ComposeReply(content = ""))
                     )
                 )
             ),

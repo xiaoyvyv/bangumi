@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,10 +41,10 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.comment.CommentItem
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexCardItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectWorkItem
@@ -248,11 +249,10 @@ private fun MonoDetailInfo(
         BgmLinkedText(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(min = 100.dp)
                 .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.webInfo.info))) }
                 .padding(horizontal = ContentMargin),
             text = state.mono.webInfo.shortInfo,
-            maxLines = 10,
-            minLines = 5,
         )
     }
 }

@@ -7,13 +7,13 @@ import com.xiaoyv.bangumi.shared.core.types.ReportValueType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
-import com.xiaoyv.library.BBCodeToHtml
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.SerialName
@@ -95,7 +95,7 @@ data class ComposeTopic(
     fun normalized(@TopicType topicType: String): ComposeTopic {
         return copy(
             topicType = topicType,
-            summary = BBCodeToHtml.convert(summary),
+            summary = summary.bbcodeToHtml(),
             replies = replies.map { it.normalized() }.toImmutableList()
         )
     }

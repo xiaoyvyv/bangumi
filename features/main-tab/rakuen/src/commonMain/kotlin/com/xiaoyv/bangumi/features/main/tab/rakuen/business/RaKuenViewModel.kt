@@ -8,8 +8,9 @@ import com.xiaoyv.bangumi.core_resource.resources.global_group
 import com.xiaoyv.bangumi.core_resource.resources.global_my_group
 import com.xiaoyv.bangumi.core_resource.resources.global_person
 import com.xiaoyv.bangumi.core_resource.resources.global_subject
+import com.xiaoyv.bangumi.core_resource.resources.topic_reply
+import com.xiaoyv.bangumi.core_resource.resources.topic_send
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
@@ -34,20 +35,14 @@ class RaKuenViewModel :
             ComposeTextTab(RakuenType.PERSON, Res.string.global_person),
         ),
         actions = persistentListOf(
-//            ComposeTextTab(TimelineTarget.WHOLE, Res.string.timeline_title),
-//            ComposeTextTab(TimelineTarget.FRIEND, Res.string.timeline_friend_title),
-//            ComposeTextTab(TimelineTarget.ME, Res.string.timeline_mine_title),
+            ComposeTextTab(0, Res.string.topic_send),
+            ComposeTextTab(1, Res.string.topic_reply),
         )
     )
 
     override fun onEvent(event: RaKuenEvent.Action) {
         when (event) {
             is RaKuenEvent.Action.OnRefresh -> refresh(loading = event.loading)
-            is RaKuenEvent.Action.OnChangeType -> onChangeType(event.type)
         }
-    }
-
-    private fun onChangeType(type: String) = intent {
-        reduceData { state.copy(type = type) }
     }
 }

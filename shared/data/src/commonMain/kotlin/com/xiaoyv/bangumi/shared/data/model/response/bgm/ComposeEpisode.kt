@@ -16,6 +16,7 @@ import com.xiaoyv.bangumi.shared.core.utils.isToday
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -72,6 +73,10 @@ data class ComposeEpisode(
     val isAiring: Boolean
         @Composable
         get() = remember(airdate) { airdate.formatMills().isToday() }
+
+    fun normalized(): ComposeEpisode {
+        return copy(description = description.bbcodeToHtml())
+    }
 
     @Composable
     fun rememberDisplaySubtitle(): String {

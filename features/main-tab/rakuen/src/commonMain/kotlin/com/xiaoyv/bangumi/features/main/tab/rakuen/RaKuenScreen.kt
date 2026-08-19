@@ -78,7 +78,15 @@ private fun RaKuenScreen(
                         DropMenuActionButton(
                             options = state.actions,
                             onOptionClick = {
-                                onActionEvent(RaKuenEvent.Action.OnChangeType(it.type))
+                                when (it.type) {
+                                    0 -> {
+//                                        onActionEvent(RaKuenEvent.Action.OnChangeType(it.type))
+                                    }
+
+                                    1 -> {
+//                                        onActionEvent(RaKuenEvent.Action.OnChangeType(it.type))
+                                    }
+                                }
                             }
                         )
                     }

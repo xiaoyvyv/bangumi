@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.manager.shared
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.OrbitContainer
 import org.orbitmvi.orbit.OrbitContainerHost
 import org.orbitmvi.orbit.orbitContainer
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * [SharedViewModel]
@@ -56,7 +58,7 @@ class SharedViewModel(
         viewModelScope.launch {
             while (isActive) {
                 if (userManager.isLogin) onRefreshUserUnreadNotification()
-                delay(10000)
+                delay(10000.milliseconds)
             }
         }
     }
@@ -96,7 +98,11 @@ class SharedViewModel(
         awaitAll(
             block1 = { userRepository.fetchUserUnreadNotification() },
             block2 = { userRepository.fetchUserUnreadMessage() },
-        ).onSuccess {
+        ).onFailure {
+            if (it is ApiHttpException && it.code == 401) {
+                userManager.logout()
+            }
+        }.onSuccess {
             reduce {
                 state.copy(
                     unreadNotification = it.data1.count ?: 0,

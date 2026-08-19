@@ -54,6 +54,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 
 @Composable
@@ -104,7 +105,7 @@ fun ReactionGroup(
                             onClick(item)
                             scope.launch {
                                 targetScale = 1.5f
-                                delay(150)
+                                delay(150.milliseconds)
                                 targetScale = 1f
                             }
                             scope.launch {
@@ -132,7 +133,7 @@ fun ReactionGroup(
                         },
                         label = {
                             Text(
-                                text = item.total.toString(),
+                                text = item.count.toString(),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontWeight = FontWeight.Medium,
                                     color = if (item.selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant

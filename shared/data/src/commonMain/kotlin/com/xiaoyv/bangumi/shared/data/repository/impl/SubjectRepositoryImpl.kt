@@ -174,7 +174,7 @@ class SubjectRepositoryImpl(
     }
 
     override suspend fun fetchSubjectEpisode(episodeId: Long): Result<ComposeEpisode> = client.requestNextEpisodeApi {
-        getEpisode(episodeId)
+        getEpisode(episodeId).normalized()
     }
 
     override suspend fun fetchSubjectEpisodes(

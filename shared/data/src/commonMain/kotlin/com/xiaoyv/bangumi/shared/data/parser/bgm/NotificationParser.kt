@@ -7,7 +7,6 @@ import com.xiaoyv.bangumi.shared.core.exception.ApiException
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.href
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
@@ -53,6 +52,7 @@ class NotificationParser : BaseParser() {
     }
 
     suspend fun Element.fetchUserUnreadMessageConverted(): ComposeUnRead {
+        requireLogin()
         requireNoError()
         return ComposeUnRead(count = select("#pm_sidebar").firsTextNode().parseCount())
     }

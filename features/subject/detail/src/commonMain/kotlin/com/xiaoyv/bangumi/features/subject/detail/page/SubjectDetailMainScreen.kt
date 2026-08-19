@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -599,11 +600,10 @@ private fun SubjectDetailInfo(
         BgmLinkedText(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(min = 100.dp)
                 .padding(horizontal = ContentMargin)
                 .clickWithoutRipped { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.webInfo.info))) },
             text = state.subject.webInfo.shortInfo,
-            maxLines = 10,
-            minLines = 5,
         )
     }
 }

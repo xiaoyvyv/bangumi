@@ -1,16 +1,12 @@
 package com.xiaoyv.bangumi.shared.core.utils
 
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -69,69 +65,8 @@ private fun TextLayoutResult.findStringAnnotation(
     return text.getStringAnnotations(tag, offset, offset).firstOrNull()
 }
 
-suspend fun PointerInputScope.awaitHtmlEvent(
-    text: AnnotatedString,
-    onTextLayoutResult: () -> TextLayoutResult?,
-    onClickLink: (AnnotatedString.Range<String>) -> Unit,
-    onClickMask: (AnnotatedString.Range<String>) -> Unit,
-    onClickImage: (AnnotatedString.Range<String>) -> Unit,
-) {
-    awaitPointerEventScope {
-        while (true) {
-            // 等待第一次按下
-            val down = awaitFirstDown(requireUnconsumed = false)
-            val layout = onTextLayoutResult() ?: continue
-            val offset = layout.getOffsetForPosition(down.position)
-            val linkAnnotation = text.getStringAnnotations(TagLink, offset, offset).firstOrNull()
-            val maskAnnotation = text.getStringAnnotations(TagMask, offset, offset).firstOrNull()
-            val imageAnnotation = layout.findStringAnnotation(text, TagImage, down.position)
 
-            // 检测是否点击了链接
-            if (linkAnnotation != null) {
-                val up = waitForUpOrCancellation()
-                if (up != null) {
-                    val upOffset = layout.getOffsetForPosition(up.position)
-                    val upAnnotation = text.getStringAnnotations(TagLink, upOffset, upOffset).firstOrNull()
-                    if (upAnnotation?.item == linkAnnotation.item) {
-                        onClickLink(linkAnnotation)
-                        up.consume()
-                    }
-                }
-            }
-
-            // 检测是否点击了Mask
-            if (maskAnnotation != null) {
-                val up = waitForUpOrCancellation()
-                if (up != null) {
-                    val upOffset = layout.getOffsetForPosition(up.position)
-                    val upAnnotation = text.getStringAnnotations(TagMask, upOffset, upOffset).firstOrNull()
-                    if (upAnnotation?.item == maskAnnotation.item) {
-                        onClickMask(maskAnnotation)
-                        up.consume()
-                    }
-                }
-            }
-
-
-            // 检测是否点击了图片
-            if (imageAnnotation != null) {
-                val up = waitForUpOrCancellation()
-                if (up != null) {
-                    val upAnnotation = layout.findStringAnnotation(text, TagImage, up.position)
-                    if (upAnnotation?.item == imageAnnotation.item) {
-                        onClickImage(imageAnnotation)
-                        up.consume()
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun String.parseAsHtml(
-    linkColor: Color = Color.Blue,
-    requiresHtmlDecode: Boolean = true,
-): AnnotatedString{
+fun String.parseAsHtml(linkColor: Color = Color.Blue): AnnotatedString {
     if (isBlank()) return AnnotatedString("")
 
     val string = AnnotatedString.Builder()
@@ -150,9 +85,9 @@ fun String.parseAsHtml(
                 val name = node.tagName().trim().lowercase()
                 when (name) {
                     ElementImg -> {
-                        val smileId = node.attr("smileid").orEmpty().trim().lowercase()
-                        val src = node.attr("src").orEmpty().trim()
-                        val alt = node.attr("alt").orEmpty()
+                        val smileId = node.attr("smileid").trim().lowercase()
+                        val src = node.attr("src").trim()
+                        val alt = node.attr("alt")
 
                         when {
                             smileId.isNotBlank() && bgmEmojis.containsKey(smileId) -> {
@@ -223,8 +158,8 @@ fun String.parseAsHtml(
                     }
 
                     ElementSpan -> {
-                        val className = node.attr("class").orEmpty().trim().lowercase()
-                        val style = node.attr("style").orEmpty()
+                        val className = node.attr("class").trim().lowercase()
+                        val style = node.attr("style")
                         val rawSpanStyle = parseSpanStyleAttributes(style)
 
                         val isMask = className == "text_mask"
@@ -328,14 +263,14 @@ fun String.parseAsHtml(
             }
 
             else -> {
-                if (node is Node) node.childNodes().forEach(::traverse)
+                node.childNodes().forEach(::traverse)
             }
         }
     }
 
     val html = this.preHandleHtml()
     val document = Ksoup.parse(html)
-    document.body()?.childNodes()?.forEach(::traverse) ?: traverse(document)
+    document.body().childNodes().forEach(::traverse)
     return string.toAnnotatedString()
 }
 
@@ -514,117 +449,4 @@ fun String?.preHandleHtml(): String {
         .replace("src=\"//", "src=\"https://")
         .replace("src=\"/(?!/)".toRegex(), "src=\"https://bgm.tv/")
         .replace("group/topic/350677", "group/topic/391651")
-}
-
-
-/**
- * BBCode to Html
- */
-fun bbcodeToHtml(bbcode: String, handleWarp: Boolean): String {
-    var html = bbcode
-
-    if (handleWarp) {
-        html = html.trim().replace("\n", "<br>")
-    }
-
-    // BBCode 表情替换
-    html = html.replace(
-        Regex("\\(((?:bgm\\d+)|(?:blake_\\d+)|(?:musume_\\d+))\\)", RegexOption.IGNORE_CASE)
-    ) { match ->
-        val rawToken = match.groupValues[1].trim()
-        val token = rawToken.lowercase()
-        val smileId = if (token.startsWith("bgm")) {
-            val number = token.removePrefix("bgm")
-            bgmEmojis.values.find { emoji -> emoji.number.toString() == number }?.smileId.orEmpty()
-        } else {
-            token
-        }
-
-        if (smileId.isBlank()) match.value
-        else "<img src=\"\" smileid=\"$smileId\" class=\"smile\" alt=\"($rawToken)\">"
-    }
-
-    // 基础样式
-    html = html.replace(Regex("\\[b]([\\s\\S]+?)\\[/b]", RegexOption.IGNORE_CASE), "<b>$1</b>")
-    html = html.replace(Regex("\\[i]([\\s\\S]+?)\\[/i]", RegexOption.IGNORE_CASE), "<i>$1</i>")
-    html = html.replace(Regex("\\[u]([\\s\\S]+?)\\[/u]", RegexOption.IGNORE_CASE), "<u>$1</u>")
-    html = html.replace(Regex("\\[s]([\\s\\S]+?)\\[/s]", RegexOption.IGNORE_CASE), "<s>$1</s>")
-    html = html.replace(Regex("\\[code]([\\s\\S]+?)\\[/code]", RegexOption.IGNORE_CASE), "<pre>$1</pre>")
-    html = html.replace(Regex("\\[center]([\\s\\S]+?)\\[/center]", RegexOption.IGNORE_CASE), "<span style=\"text-align:center\">$1</span>")
-    html = html.replace(Regex("\\[left]([\\s\\S]+?)\\[/left]", RegexOption.IGNORE_CASE), "<span style=\"text-align:left\">$1</span>")
-    html = html.replace(Regex("\\[right]([\\s\\S]+?)\\[/right]", RegexOption.IGNORE_CASE), "<span style=\"text-align:right\">$1</span>")
-
-    // 马赛克 (背景色+前景色一样)
-    html = html.replace(
-        Regex("\\[mask]([\\s\\S]+?)\\[/mask]", RegexOption.IGNORE_CASE),
-        "<span class=\"text_mask\" style=\"background-color:black;color:black\">$1</span>"
-    )
-
-    // 颜色
-    html = html.replace(
-        Regex("\\[color=(.+?)]([\\s\\S]+?)\\[/color]", RegexOption.IGNORE_CASE),
-        "<span style=\"color:$1\">$2</span>"
-    )
-
-    // 字体大小
-    html = html.replace(
-        Regex("\\[size=(\\d+)]([\\s\\S]+?)\\[/size]", RegexOption.IGNORE_CASE),
-        "<span style=\"font-size:$1px;\">$2</span>"
-    )
-
-    // 处理 [quote]
-    html = html.replace(Regex("\\[quote(?:=\\d+)?]([\\s\\S]+?)\\[/quote]", RegexOption.IGNORE_CASE)) { match ->
-        val content = match.groupValues[1]
-        "<span class=\"quote\" style=\"font-size:12px;font-weight:bold;color:blue\">「$content」</span>"
-    }
-
-    // 处理 [user]
-    html = html.replace(Regex("\\[user(?:=\\d+)?]([\\s\\S]+?)\\[/user]", RegexOption.IGNORE_CASE)) { match ->
-        val username = match.groupValues[1]
-        "<span style=\"font-weight:bold;color:blue\">$username</span>"
-    }
-
-    // 链接
-    // [url]xxx[/url]
-    html = html.replace(Regex("\\[url]([\\s\\S]+?)\\[/url]", RegexOption.IGNORE_CASE)) { match ->
-        val inner = match.groupValues[1].trim()
-        if (inner.startsWith("<a", ignoreCase = true)) {
-            inner
-        } else {
-            "<a href=\"$inner\">$inner</a>"
-        }
-    }
-    // [url=xxx]文字[/url]
-    html = html.replace(Regex("\\[url=(.+?)]([\\s\\S]+?)\\[/url]", RegexOption.IGNORE_CASE)) { match ->
-        val target = match.groupValues[1].trim()
-        val text = match.groupValues[2].trim()
-
-        if (target.startsWith("<a", ignoreCase = true)) {
-            // 已经是完整 <a> 标签，尝试提取 href
-            val hrefRegex = Regex("href\\s*=\\s*\"([^\"]+)\"", RegexOption.IGNORE_CASE)
-            val href = hrefRegex.find(target)?.groupValues?.get(1) ?: text
-            "<a href=\"$href\">$text</a>"
-        } else {
-            // 普通 [url=http://xxx]文字[/url]
-            "<a href=\"$target\">$text</a>"
-        }
-    }
-
-
-    // 图片
-    // [img]xxx[/img]
-    html = html.replace(Regex("\\[img]([\\s\\S]+?)\\[/img]", RegexOption.IGNORE_CASE)) { match ->
-        val inner = match.groupValues[1].trim()
-        if (inner.startsWith("<a", ignoreCase = true)) {
-            // 提取 href
-            val hrefRegex = Regex("href\\s*=\\s*\"([^\"]+)\"", RegexOption.IGNORE_CASE)
-            val href = hrefRegex.find(inner)?.groupValues?.get(1)
-            if (href != null) "<img src=\"$href\">" else ""
-        } else {
-            // 普通情况
-            "<img src=\"$inner\">"
-        }
-    }
-
-    return html
 }

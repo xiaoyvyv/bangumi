@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.main.tab.rakuen.business
 
-import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -17,6 +16,5 @@ sealed class RaKuenEvent {
 
     sealed class Action : RaKuenEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
-        data class OnChangeType(@field:RakuenType val type: String) : Action()
     }
 }

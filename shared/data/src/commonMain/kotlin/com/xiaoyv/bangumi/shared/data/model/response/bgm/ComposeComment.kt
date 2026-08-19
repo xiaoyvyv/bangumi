@@ -8,8 +8,8 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.Node
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
-import com.xiaoyv.library.BBCodeToHtml
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -89,7 +89,7 @@ data class ComposeReply(
 
     fun normalized(): ComposeReply {
         return copy(
-            content = BBCodeToHtml.convert(content),
+            content = content.bbcodeToHtml(),
             replies = replies.map { it.normalized() }.toImmutableList()
         )
     }

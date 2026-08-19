@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
-import com.xiaoyv.library.BBCodeToHtml
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -60,7 +60,7 @@ data class ComposeMono(
     }
 
     fun normalized(): ComposeMono {
-        return copy(summary = BBCodeToHtml.convert(summary))
+        return copy(summary = summary.bbcodeToHtml())
     }
 
     companion object {

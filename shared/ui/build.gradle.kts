@@ -15,6 +15,10 @@ kotlin {
             api(projects.shared.uiLiquid)
             api(projects.shared.uiMaterial3)
         }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
     }
 }
 

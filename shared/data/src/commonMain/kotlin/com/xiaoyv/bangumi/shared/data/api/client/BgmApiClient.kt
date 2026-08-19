@@ -19,6 +19,7 @@ import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpDocumentConverter
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.EmptyCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthCompat
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.BmoPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.DouBanPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.PixivProxyPlugin
 import com.xiaoyv.bangumi.shared.data.api.createAuthApi
@@ -122,6 +123,7 @@ class BgmApiClient(
             cookieStorage = cookieStorage,
             logLevel = LogLevel.HEADERS,
             enableJsonContentNegotiation = false,
+            block = { install(BmoPlugin) }
         )
     }
 
@@ -346,8 +348,7 @@ class BgmApiClient(
                 cacheTokens = false
 
                 sendWithoutRequest { builder ->
-                    builder.url.toString().contains("api.bgm.tv", ignoreCase = true)
-                            || builder.url.toString().contains("next.bgm.tv", ignoreCase = true)
+                    builder.url.host == "api.bgm.tv" || builder.url.host == "next.bgm.tv"
                 }
 
                 loadTokens {

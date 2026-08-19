@@ -1,0 +1,938 @@
+{
+  "face": {
+    "id": "f",
+    "name": "面部",
+    "layer": 1,
+    "multiSelect": false,
+    "items": [
+      {
+        "id": "1",
+        "alias": "face1",
+        "src": "./assets/f1_v2.png",
+        "layer": 1
+      },
+      {
+        "id": "2",
+        "alias": "faceCat",
+        "src": "./assets/f2.png",
+        "layer": 1
+      },
+      {
+        "id": "3",
+        "alias": "faceFire",
+        "src": "./assets/f3.png",
+        "layer": 1
+      },
+      {
+        "id": "4",
+        "alias": "faceFireCat",
+        "src": "./assets/f4.png",
+        "layer": 1
+      },
+      {
+        "id": "5",
+        "alias": "faceHuDieJie",
+        "src": "./assets/f5.png",
+        "layer": 1
+      },
+      {
+        "id": "6",
+        "alias": "face0",
+        "src": "./assets/f6.png",
+        "layer": 1,
+        "version": 2
+      },
+      {
+        "id": "8",
+        "alias": "face8",
+        "src": "./assets/f8.png",
+        "layer": 1,
+        "version": 4
+      },
+      {
+        "id": "9",
+        "alias": "face9",
+        "src": "./assets/f9.png",
+        "layer": 1,
+        "version": 4
+      }
+    ]
+  },
+  "mouth": {
+    "id": "m",
+    "name": "嘴部",
+    "layer": 2,
+    "multiSelect": false,
+    "items": [
+      {
+        "id": "1",
+        "alias": "jianMouth",
+        "src": "./assets/m1.png",
+        "layer": 2
+      },
+      {
+        "id": "2",
+        "alias": "nMouth",
+        "src": "./assets/m2.png",
+        "layer": 2
+      },
+      {
+        "id": "3",
+        "alias": "nGaoMouth",
+        "src": "./assets/m3.png",
+        "layer": 2
+      },
+      {
+        "id": "4",
+        "alias": "vMouth",
+        "src": "./assets/m4.png",
+        "layer": 2
+      },
+      {
+        "id": "5",
+        "alias": "xiaovMouth",
+        "src": "./assets/m5.png",
+        "layer": 2
+      },
+      {
+        "id": "6",
+        "alias": "wMouth",
+        "src": "./assets/m6.png",
+        "layer": 2
+      },
+      {
+        "id": "7",
+        "alias": "jingMouth",
+        "src": "./assets/m7.png",
+        "layer": 2
+      },
+      {
+        "id": "8",
+        "alias": "laLianMouth",
+        "src": "./assets/m8.png",
+        "layer": 2
+      },
+      {
+        "id": "9",
+        "alias": "liuKouShui",
+        "src": "./assets/m9.png",
+        "layer": 2
+      },
+      {
+        "id": "10",
+        "alias": "qinMouth",
+        "src": "./assets/m10.png",
+        "layer": 2
+      },
+      {
+        "id": "11",
+        "alias": "tuCaiHong",
+        "src": "./assets/m11.png",
+        "layer": 2
+      },
+      {
+        "id": "12",
+        "alias": "tuLe",
+        "src": "./assets/m12.png",
+        "layer": 2
+      },
+      {
+        "id": "13",
+        "alias": "dianMouth",
+        "src": "./assets/m13.png",
+        "layer": 2
+      },
+      {
+        "id": "14",
+        "alias": "waiMouth",
+        "src": "./assets/m14.png",
+        "layer": 2
+      },
+      {
+        "id": "15",
+        "alias": "XiaoMouth",
+        "src": "./assets/m15.png",
+        "layer": 2
+      },
+      {
+        "id": "16",
+        "alias": "daXiaoMouth",
+        "src": "./assets/m16.png",
+        "layer": 2
+      },
+      {
+        "id": "17",
+        "alias": "tuShe",
+        "src": "./assets/m17.png",
+        "layer": 2
+      },
+      {
+        "id": "18",
+        "alias": "weiXiao",
+        "src": "./assets/m18.png",
+        "layer": 2
+      },
+      {
+        "id": "19",
+        "alias": "ciYa",
+        "src": "./assets/m19.png",
+        "layer": 2
+      },
+      {
+        "id": "20",
+        "alias": "tuXie",
+        "src": "./assets/m20.png",
+        "layer": 4
+      },
+      {
+        "id": "21",
+        "alias": "jueMouth",
+        "src": "./assets/m21.png",
+        "layer": 2
+      },
+      {
+        "id": "22",
+        "alias": "xcMouth",
+        "src": "./assets/m22.png",
+        "layer": 2
+      },
+      {
+        "id": "23",
+        "alias": "siKaoMouth",
+        "src": "./assets/m23.png",
+        "layer": 2
+      },
+      {
+        "id": "24",
+        "alias": "mouth24",
+        "src": "./assets/m24.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "25",
+        "alias": "mouth25",
+        "src": "./assets/m25.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "26",
+        "alias": "mouth26",
+        "src": "./assets/m26.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "27",
+        "alias": "mouth27",
+        "src": "./assets/m27.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "28",
+        "alias": "mouth28",
+        "src": "./assets/m28.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "29",
+        "alias": "mouth29",
+        "src": "./assets/m29.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "30",
+        "alias": "mouth30",
+        "src": "./assets/m30.png",
+        "layer": 2,
+        "version": 4
+      }
+    ]
+  },
+  "eyes": {
+    "id": "e",
+    "name": "眼部",
+    "layer": 3,
+    "multiSelect": false,
+    "items": [
+      {
+        "id": "1",
+        "alias": "eyes8",
+        "src": "./assets/e1.png",
+        "layer": 3
+      },
+      {
+        "id": "2",
+        "alias": "aBaEyes",
+        "src": "./assets/e2.png",
+        "layer": 3
+      },
+      {
+        "id": "3",
+        "alias": "eyesBai",
+        "src": "./assets/e3.png",
+        "layer": 3
+      },
+      {
+        "id": "4",
+        "alias": "eyesHaiXiu",
+        "src": "./assets/e4.png",
+        "layer": 3
+      },
+      {
+        "id": "5",
+        "alias": "eyesHaiXiu2",
+        "src": "./assets/e5.png",
+        "layer": 3
+      },
+      {
+        "id": "6",
+        "alias": "eyesOO",
+        "src": "./assets/e6.png",
+        "layer": 3
+      },
+      {
+        "id": "7",
+        "alias": "eyesHuaJi",
+        "src": "./assets/e7.png",
+        "layer": 3
+      },
+      {
+        "id": "8",
+        "alias": "eyesJing",
+        "src": "./assets/e8.png",
+        "layer": 3
+      },
+      {
+        "id": "9",
+        "alias": "eyesShui",
+        "src": "./assets/e9.png",
+        "layer": 3
+      },
+      {
+        "id": "10",
+        "alias": "eyesKun",
+        "src": "./assets/e10.png",
+        "layer": 3
+      },
+      {
+        "id": "11",
+        "alias": "eyesSi",
+        "src": "./assets/e11.png",
+        "layer": 3
+      },
+      {
+        "id": "12",
+        "alias": "eyesKeLian",
+        "src": "./assets/e12.png",
+        "layer": 3
+      },
+      {
+        "id": "13",
+        "alias": "eyesMeng",
+        "src": "./assets/e13.png",
+        "layer": 3
+      },
+      {
+        "id": "14",
+        "alias": "eyesMiHu",
+        "src": "./assets/e14.png",
+        "layer": 3
+      },
+      {
+        "id": "15",
+        "alias": "eyesNu",
+        "src": "./assets/e15.png",
+        "layer": 3
+      },
+      {
+        "id": "16",
+        "alias": "eyesXin",
+        "src": "./assets/e16.png",
+        "layer": 3
+      },
+      {
+        "id": "17",
+        "alias": "eyesXingXing",
+        "src": "./assets/e17.png",
+        "layer": 3
+      },
+      {
+        "id": "18",
+        "alias": "eyesXiao",
+        "src": "./assets/e18.png",
+        "layer": 3
+      },
+      {
+        "id": "19",
+        "alias": "eyesDaXiao",
+        "src": "./assets/e19.png",
+        "layer": 3
+      },
+      {
+        "id": "20",
+        "alias": "eyesXiaoChou",
+        "src": "./assets/e20.png",
+        "layer": 3
+      },
+      {
+        "id": "21",
+        "alias": "eyesAoJiao",
+        "src": "./assets/e21.png",
+        "layer": 3
+      },
+      {
+        "id": "22",
+        "alias": "eyesnn",
+        "src": "./assets/e22.png",
+        "layer": 3
+      },
+      {
+        "id": "23",
+        "alias": "eyesuu",
+        "src": "./assets/e23.png",
+        "layer": 3
+      },
+      {
+        "id": "24",
+        "alias": "eyesHaiPa",
+        "src": "./assets/e24.png",
+        "layer": 3
+      },
+      {
+        "id": "25",
+        "alias": "eyesSiKao",
+        "src": "./assets/e25.png",
+        "layer": 3
+      },
+      {
+        "id": "26",
+        "alias": "wink",
+        "src": "./assets/e26.png",
+        "layer": 3,
+        "version": 2
+      },
+      {
+        "id": "27",
+        "alias": "eyes27",
+        "src": "./assets/e27.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "28",
+        "alias": "eyes28",
+        "src": "./assets/e28.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "29",
+        "alias": "eyes29",
+        "src": "./assets/e29.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "30",
+        "alias": "eyes30",
+        "src": "./assets/e30.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "31",
+        "alias": "eyes31",
+        "src": "./assets/e31.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "32",
+        "alias": "eyes32",
+        "src": "./assets/e32.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "33",
+        "alias": "eyes33",
+        "src": "./assets/e33.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "34",
+        "alias": "eyes34",
+        "src": "./assets/e34.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "35",
+        "alias": "eyes35",
+        "src": "./assets/e35.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "36",
+        "alias": "eyes36",
+        "src": "./assets/e36.png",
+        "layer": 2,
+        "version": 4
+      },
+      {
+        "id": "37",
+        "alias": "eyes37",
+        "src": "./assets/e37.png",
+        "layer": 2,
+        "version": 4
+      }
+    ]
+  },
+  "accessories": {
+    "id": "a",
+    "name": "配饰",
+    "layer": 4,
+    "multiSelect": true,
+    "maxSelect": 5,
+    "items": [
+      {
+        "id": "1",
+        "alias": "moJing",
+        "src": "./assets/a1.png",
+        "layer": 4
+      },
+      {
+        "id": "2",
+        "alias": "yanJing",
+        "src": "./assets/a2.png",
+        "layer": 4
+      },
+      {
+        "id": "3",
+        "alias": "yanJing2",
+        "src": "./assets/a3.png",
+        "layer": 4
+      },
+      {
+        "id": "4",
+        "alias": "yanJing3",
+        "src": "./assets/a4.png",
+        "layer": 4
+      },
+      {
+        "id": "5",
+        "alias": "yanJing4",
+        "src": "./assets/a5.png",
+        "layer": 4
+      },
+      {
+        "id": "6",
+        "alias": "dianZan",
+        "src": "./assets/a6.png",
+        "layer": 4
+      },
+      {
+        "id": "7",
+        "alias": "meiGui",
+        "src": "./assets/a7.png",
+        "layer": 4
+      },
+      {
+        "id": "8",
+        "alias": "kuMeigui",
+        "src": "./assets/a8.png",
+        "layer": 4
+      },
+      {
+        "id": "9",
+        "alias": "shiZhi",
+        "src": "./assets/a9.png",
+        "layer": 4
+      },
+      {
+        "id": "10",
+        "alias": "kuaiZi",
+        "src": "./assets/a10.png",
+        "layer": 4
+      },
+      {
+        "id": "11",
+        "alias": "chaZi",
+        "src": "./assets/a11.png",
+        "layer": 4
+      },
+      {
+        "id": "12",
+        "alias": "shaoZi",
+        "src": "./assets/a12.png",
+        "layer": 4
+      },
+      {
+        "id": "13",
+        "alias": "juXinXin",
+        "src": "./assets/a13.png",
+        "layer": 4
+      },
+      {
+        "id": "14",
+        "alias": "wuZui",
+        "src": "./assets/a14.png",
+        "layer": 4
+      },
+      {
+        "id": "15",
+        "alias": "wuYan",
+        "src": "./assets/a15.png",
+        "layer": 4
+      },
+      {
+        "id": "16",
+        "alias": "guangHuan",
+        "src": "./assets/a16.png",
+        "layer": 4
+      },
+      {
+        "id": "17",
+        "alias": "qiDao",
+        "src": "./assets/a17.png",
+        "layer": 4
+      },
+      {
+        "id": "18",
+        "alias": "naoTou",
+        "src": "./assets/a18.png",
+        "layer": 4
+      },
+      {
+        "id": "19",
+        "alias": "siKaoShou",
+        "src": "./assets/a19.png",
+        "layer": 4
+      },
+      {
+        "id": "20",
+        "alias": "xiaoChouMao",
+        "src": "./assets/a20.png",
+        "layer": 4
+      },
+      {
+        "id": "21",
+        "alias": "huDieJie",
+        "src": "./assets/a21.png",
+        "layer": 4
+      },
+      {
+        "id": "22",
+        "alias": "xiaoHuangMao1",
+        "src": "./assets/a22.png",
+        "layer": 4,
+        "version": 2
+      },
+      {
+        "id": "23",
+        "alias": "daiZi1",
+        "src": "./assets/a23.png",
+        "layer": 4,
+        "version": 2
+      },
+      {
+        "id": "24",
+        "alias": "acc24",
+        "src": "./assets/a24.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "25",
+        "alias": "acc25",
+        "src": "./assets/a25.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "26",
+        "alias": "acc26",
+        "src": "./assets/a26.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "27",
+        "alias": "acc27",
+        "src": "./assets/a27.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "28",
+        "alias": "acc28",
+        "src": "./assets/a28.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "29",
+        "alias": "acc29",
+        "src": "./assets/a29.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "30",
+        "alias": "acc30",
+        "src": "./assets/a30.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "31",
+        "alias": "acc31",
+        "src": "./assets/a31.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "32",
+        "alias": "acc32",
+        "src": "./assets/a32.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "33",
+        "alias": "acc33",
+        "src": "./assets/a33.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "34",
+        "alias": "acc34",
+        "src": "./assets/a34.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "35",
+        "alias": "acc35",
+        "src": "./assets/a35.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "36",
+        "alias": "acc36",
+        "src": "./assets/a36.png",
+        "layer": 4,
+        "version": 4
+      },
+      {
+        "id": "37",
+        "alias": "acc37",
+        "src": "./assets/a37.png",
+        "layer": 4,
+        "version": 5
+      },
+      {
+        "id": "38",
+        "alias": "acc38",
+        "src": "./assets/a38.png",
+        "layer": 4,
+        "version": 5
+      },
+      {
+        "id": "39",
+        "alias": "acc39",
+        "src": "./assets/a39.png",
+        "layer": 4,
+        "version": 5
+      }
+    ]
+  },
+  "others": {
+    "id": "o",
+    "name": "其他",
+    "layer": 5,
+    "multiSelect": true,
+    "maxSelect": 5,
+    "items": [
+      {
+        "id": "1",
+        "alias": "saiHong",
+        "src": "./assets/o1.png",
+        "layer": 2
+      },
+      {
+        "id": "2",
+        "alias": "saiHong2",
+        "src": "./assets/o2.png",
+        "layer": 2
+      },
+      {
+        "id": "3",
+        "alias": "lianHong",
+        "src": "./assets/o3.png",
+        "layer": 2
+      },
+      {
+        "id": "4",
+        "alias": "lei",
+        "src": "./assets/o4.png",
+        "layer": 2
+      },
+      {
+        "id": "5",
+        "alias": "haiXiu",
+        "src": "./assets/o5.png",
+        "layer": 2
+      },
+      {
+        "id": "6",
+        "alias": "wuYu",
+        "src": "./assets/o6.png",
+        "layer": 2
+      },
+      {
+        "id": "7",
+        "alias": "bingKuai",
+        "src": "./assets/o7.png",
+        "layer": 5
+      },
+      {
+        "id": "8",
+        "alias": "han",
+        "src": "./assets/o8.png",
+        "layer": 4
+      },
+      {
+        "id": "9",
+        "alias": "han2",
+        "src": "./assets/o9.png",
+        "layer": 4
+      },
+      {
+        "id": "10",
+        "alias": "han3",
+        "src": "./assets/o10.png",
+        "layer": 4
+      },
+      {
+        "id": "11",
+        "alias": "wen",
+        "src": "./assets/o11.png",
+        "layer": 4
+      },
+      {
+        "id": "12",
+        "alias": "ganTan",
+        "src": "./assets/o12.png",
+        "layer": 4
+      },
+      {
+        "id": "13",
+        "alias": "aiXing3",
+        "src": "./assets/o13.png",
+        "layer": 4
+      },
+      {
+        "id": "14",
+        "alias": "zzz",
+        "src": "./assets/o14.png",
+        "layer": 4
+      },
+      {
+        "id": "15",
+        "alias": "heiPing",
+        "src": "./assets/o15.png",
+        "layer": 1
+      },
+      {
+        "id": "16",
+        "alias": "tiaoWenPing",
+        "src": "./assets/o16.png",
+        "layer": 1
+      },
+      {
+        "id": "17",
+        "alias": "huaPing",
+        "src": "./assets/o17.png",
+        "layer": 1
+      },
+      {
+        "id": "18",
+        "alias": "xueHuaPing",
+        "src": "./assets/o18.png",
+        "layer": 1
+      },
+      {
+        "id": "19",
+        "alias": "fenPing",
+        "src": "./assets/o19.png",
+        "layer": 1
+      },
+      {
+        "id": "20",
+        "alias": "others20",
+        "src": "./assets/o20.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "21",
+        "alias": "others21",
+        "src": "./assets/o21.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "22",
+        "alias": "others22",
+        "src": "./assets/o22.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "23",
+        "alias": "others23",
+        "src": "./assets/o23.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "24",
+        "alias": "others24",
+        "src": "./assets/o24.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "25",
+        "alias": "others25",
+        "src": "./assets/o25.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "26",
+        "alias": "others26",
+        "src": "./assets/o26.png",
+        "layer": 2,
+        "version": 3
+      },
+      {
+        "id": "27",
+        "alias": "others27",
+        "src": "./assets/o27.png",
+        "layer": 2,
+        "version": 3
+      }
+    ]
+  }
+}

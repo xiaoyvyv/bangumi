@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -120,13 +121,14 @@ fun StateImage(
     border: BorderStroke? = null,
     filterQuality: FilterQuality = FilterQuality.High,
     clipToBounds: Boolean = true,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer
 ) {
     SubcomposeAsyncImage(
         modifier = modifier
             .fillMaxSize()
             .clip(shape)
             .let { if (border != null) it.border(border, shape) else it }
-            .background(MaterialTheme.colorScheme.surfaceContainer),
+            .background(containerColor),
         model = model,
         contentDescription = contentDescription,
         transform = transform,
@@ -164,14 +166,15 @@ fun StateImage(
             SubcomposeAsyncImageContent()
         },
         error = {
-            Box(modifier = Modifier.fillMaxSize()) {
+            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     style = MaterialTheme.typography.bodyLarge,
                     text = if (model is String && model.isNotBlank()) "404" else "Empty",
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.25f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.25f),
+                    fontSize = with(LocalDensity.current) { (maxWidth / 8).coerceAtMost(20.dp).toSp() }
                 )
             }
         }
