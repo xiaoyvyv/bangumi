@@ -61,17 +61,18 @@ data class ComposeComment(
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class ComposeReply(
+    @SerialName("id") val id: Long = 0,
     @SerialName("content") val content: String = "",
+    @SerialName("state") val state: Int = 0,
     @SerialName("createdAt") val createdAt: SerializeDateLong = 0,
     @SerialName("creator") @JsonNames("creator", "user") val user: ComposeUser = ComposeUser.Empty,
     @SerialName("creatorID") val creatorID: Long = 0,
-    @SerialName("id") val id: Long = 0,
+
     @SerialName("mainID") val mainID: Long = 0,
     @SerialName("relatedPhotoID") val relatedPhotoID: Long = 0,
     @SerialName("relatedID") val relatedID: Long = 0,
     @SerialName("reactions") val reactions: SerializeList<ComposeReaction> = persistentListOf(),
     @SerialName("replies") val replies: SerializeList<ComposeReply> = persistentListOf(),
-    @SerialName("state") val state: Int = 0,
 ) : Node<ComposeReply> {
 
     @Transient
@@ -95,4 +96,8 @@ data class ComposeReply(
     }
 
     override val children: SerializeList<ComposeReply> get() = replies
+
+    companion object {
+        val Empty = ComposeReply()
+    }
 }

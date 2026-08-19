@@ -16,6 +16,7 @@ import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
@@ -349,7 +350,11 @@ class SubjectRepositoryImpl(
         fetchSubjectParade(subjectId)
     }
 
-    override suspend fun submitEpisodeReaction(commentId: Long, value: String?): Result<Unit> {
-        error("")
+    override suspend fun submitEpisodeCommentReaction(commentId: Long, value: String?): Result<Unit> = client.requestNextEpisodeApi {
+        if (value.isNullOrBlank()) {
+            unlikeEpisodeComment(commentID = commentId)
+        } else {
+            likeEpisodeComment(commentId, LikeCommentParam(value.toInt()))
+        }
     }
 }

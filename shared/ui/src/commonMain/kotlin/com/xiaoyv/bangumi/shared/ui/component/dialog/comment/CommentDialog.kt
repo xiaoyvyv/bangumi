@@ -61,6 +61,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -104,9 +105,10 @@ import com.xiaoyv.bangumi.shared.core.utils.rememberTvEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend1Emojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend2Emojis
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.resource.toComposeUri
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
@@ -116,6 +118,7 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
+import com.xiaoyv.bangumi.shared.ui.component.turnstile.BgmTurnstile
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -147,7 +150,7 @@ expect fun TransparentDialog(
 fun CommentDialog(
     dialogState: AlertDialogState,
     anchor: CommentDialogAnchor,
-    onSendCommentSuccess: (ComposeNewReply) -> Unit = {},
+    onSendCommentSuccess: (ComposeReply) -> Unit = {},
 ) {
     if (dialogState.showing) TransparentDialog(
         onDismissRequest = { dialogState.dismiss() },
@@ -255,6 +258,18 @@ fun CommentDialogContent(
                 }
             )
 
+            if (!LocalInspectionMode.current) BgmTurnstile(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(90.dp)
+                    .padding(horizontal = 8.dp),
+                url = WebConstant.URL_BGM_TURNSTILE,
+                callback = "bangumi://",
+                onToken = {
+                    onEvent(CommentEvent.OnReceiveTurnstileToken(it))
+                }
+            )
+
             Row(
                 modifier = Modifier
                     .padding(horizontal = ContentMarginHalf)
@@ -285,7 +300,7 @@ fun CommentDialogContent(
                                     append(state.anchor.reply.user.nickname)
                                     pop()
                                     append(": ")
-                                    append(state.anchor.reply.comment)
+                                    append(state.anchor.reply.content)
                                 },
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
@@ -311,7 +326,7 @@ fun CommentDialogContent(
                         .align(Alignment.Bottom)
                         .padding(bottom = ContentMarginHalf, end = ContentMarginHalf)
                         .resetSize(),
-                    enabled = state.comment.text.isNotBlank() && !state.sending,
+                    enabled = state.comment.text.isNotBlank() && !state.sending && state.turnstile.isNotBlank(),
                     onClick = {
                         onEvent(CommentEvent.SendComment(state.comment.text))
                     },
@@ -520,11 +535,7 @@ fun PreviewCommentDialogContent() {
         CommentDialogContent(
             dialogState = rememberAlertDialogState(),
             state = CommentState(
-                anchor = CommentDialogAnchor(
-                    article = ComposeTopic.Empty,
-                    reply = ComposeComment.Empty,
-                    lastViewedInMillis = 0
-                )
+                anchor = CommentDialogAnchor(topic = ComposeTopic.Empty)
             ),
             onEvent = {
 

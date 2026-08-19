@@ -26,7 +26,6 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
@@ -110,12 +109,12 @@ class TopicDetailViewModel(
         ).onFailure {
             reduceError { it }
         }.onSuccess {
-            val (replies, displayReplies) = applyCommentFilters(state.data, it.data2)
+            val displayReplies = applyCommentFilters(state.data, it.data2)
 
             reduceData {
                 state.copy(
                     episode = it.data1,
-                    replies = replies,
+                    replies = it.data2.toImmutableList(),
                     displayReplies = displayReplies
                 )
             }
@@ -125,9 +124,10 @@ class TopicDetailViewModel(
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadGroupTopicDetail() {
         topicRepository.fetchTopicDetail(args.id, TopicType.TYPE_GROUP)
             .onSuccess {
-                val (replies, displayReplies) = applyCommentFilters(
+                val replies = it.replies.subList(1, it.replies.size)
+                val displayReplies = applyCommentFilters(
                     state = state.data,
-                    replies = it.replies.subList(1, it.replies.size)
+                    replies = replies
                 )
 
                 reduceData {
@@ -143,9 +143,10 @@ class TopicDetailViewModel(
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadSubjectTopicDetail() {
         topicRepository.fetchTopicDetail(args.id, TopicType.TYPE_SUBJECT)
             .onSuccess {
-                val (replies, displayReplies) = applyCommentFilters(
+                val replies = it.replies.subList(1, it.replies.size)
+                val displayReplies = applyCommentFilters(
                     state = state.data,
-                    replies = it.replies.subList(1, it.replies.size)
+                    replies = replies
                 )
 
                 reduceData {
@@ -165,12 +166,12 @@ class TopicDetailViewModel(
         ).onFailure {
             reduceError { it }
         }.onSuccess {
-            val (replies, displayReplies) = applyCommentFilters(state.data, it.data2)
+            val displayReplies = applyCommentFilters(state.data, it.data2)
 
             reduceData {
                 state.copy(
                     mono = ComposeMonoDisplay.from(MonoType.PERSON, it.data1),
-                    replies = replies,
+                    replies = it.data2.toImmutableList(),
                     displayReplies = displayReplies
                 )
             }
@@ -184,12 +185,12 @@ class TopicDetailViewModel(
         ).onFailure {
             reduceError { it }
         }.onSuccess {
-            val (replies, displayReplies) = applyCommentFilters(state.data, it.data2)
+            val displayReplies = applyCommentFilters(state.data, it.data2)
 
             reduceData {
                 state.copy(
                     mono = ComposeMonoDisplay.from(MonoType.CHARACTER, it.data1),
-                    replies = replies,
+                    replies = it.data2.toImmutableList(),
                     displayReplies = displayReplies
                 )
             }
@@ -204,12 +205,12 @@ class TopicDetailViewModel(
         ).onFailure {
             reduceError { it }
         }.onSuccess {
-            val (replies, displayReplies) = applyCommentFilters(state.data, it.data2)
+            val displayReplies = applyCommentFilters(state.data, it.data2)
 
             reduceData {
                 state.copy(
                     index = it.data1,
-                    replies = replies,
+                    replies = it.data2.toImmutableList(),
                     displayReplies = displayReplies
                 )
             }
@@ -224,12 +225,12 @@ class TopicDetailViewModel(
         ).onFailure {
             reduceError { it }
         }.onSuccess {
-            val (replies, displayReplies) = applyCommentFilters(state.data, it.data2)
+            val displayReplies = applyCommentFilters(state.data, it.data2)
 
             reduceData {
                 state.copy(
                     blog = it.data1.copy(subjects = it.data3.toImmutableList()),
-                    replies = replies,
+                    replies = it.data2.toImmutableList(),
                     displayReplies = displayReplies
                 )
             }
@@ -237,7 +238,7 @@ class TopicDetailViewModel(
     }
 
     private fun onCommentTypeChange(@CommentFilterType type: Int) = intent {
-        val (_, displayReplies) = applyCommentFilters(
+        val displayReplies = applyCommentFilters(
             state = state.data.copy(selectedCommentTypeFilter = type),
             replies = state.data.replies
         )
@@ -251,7 +252,7 @@ class TopicDetailViewModel(
     }
 
     private fun onCommentSortChange(@SortType type: Int) = intent {
-        val (_, displayReplies) = applyCommentFilters(
+        val displayReplies = applyCommentFilters(
             state = state.data.copy(selectedCommentSortFilter = type),
             replies = state.data.replies
         )
@@ -267,7 +268,7 @@ class TopicDetailViewModel(
     /**
      * 评论发送成功，向 UI 添加评论
      */
-    private fun onAppendComment(comment: ComposeNewReply) = intent {
+    private fun onAppendComment(comment: ComposeReply) = intent {
         /*val article = state.data.article
         val mains = comment.posts.main
         val subs = comment.posts.sub
@@ -327,7 +328,7 @@ class TopicDetailViewModel(
 
 
     private fun onReactionClick(commentId: Long, reaction: ComposeReaction) = intent {
-        val isLiked = reaction.users.any { it.id == userManager.userInfo.id }
+        val isLiked = reaction.users.any { it.username == userManager.userInfo.username }
 
         withActionLoading {
             when (args.type) {
@@ -339,12 +340,12 @@ class TopicDetailViewModel(
                     topicRepository.submitSubjectReaction(commentId, if (isLiked) null else reaction.value)
                 }
 
-                TopicType.TYPE_BLOG -> {
-                    blogRepository.submitBlogReaction(commentId, if (isLiked) null else reaction.value)
+                TopicType.TYPE_EP -> {
+                    subjectRepository.submitEpisodeCommentReaction(commentId, if (isLiked) null else reaction.value)
                 }
 
-                TopicType.TYPE_EP -> {
-                    subjectRepository.submitEpisodeReaction(commentId, if (isLiked) null else reaction.value)
+                TopicType.TYPE_BLOG -> {
+                    blogRepository.submitBlogReaction(commentId, if (isLiked) null else reaction.value)
                 }
 
                 else -> Result.failure(IllegalStateException("Not support!"))
@@ -352,42 +353,68 @@ class TopicDetailViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            val users = reaction.users
-                .filter { it.id != userManager.userInfo.id }
-                .toMutableList()
-
-            val result = if (isLiked) {
-                reaction.copy(users = users.toImmutableList())
-            } else {
-                reaction.copy(users = users.also { it.add(userManager.userInfo) }.toImmutableList())
-            }
+            val replies = state.data.replies.refreshReaction(commentId, reaction)
+            val displayReplies = applyCommentFilters(
+                state = state.data,
+                replies = replies
+            )
 
             reduceData {
                 state.copy(
-                    topic = state.topic.copy(
-                        replies = state.topic.replies.refreshReaction(commentId, result)
-                    ),
-                    replies = state.replies.refreshReaction(commentId, result)
+                    topic = state.topic.copy(replies = state.topic.replies.refreshReaction(commentId, reaction)),
+                    replies = replies,
+                    displayReplies = displayReplies
                 )
             }
         }
     }
 
-    private fun SerializeList<ComposeReply>.refreshReaction(
+    private fun List<ComposeReply>.refreshReaction(
         commentId: Long,
         reaction: ComposeReaction
     ): ImmutableList<ComposeReply> {
-        return this.map {
-            if (it.id == commentId) {
-                it.copy(reactions = it.reactions.map { rec ->
-                    if (rec.value == reaction.value) reaction else rec
-                }.toImmutableList())
+        val self = userManager.userInfo.username
+        val isLiked = reaction.users.any { it.username == userManager.userInfo.username }
+        return map { reply ->
+            val reply = if (reply.replies.isEmpty()) {
+                reply
             } else {
-                it
+                reply.copy(replies = reply.replies.refreshReaction(commentId, reaction))
+            }
+
+            if (reply.id == commentId) {
+                // 先从全部的贴贴移除自己
+                val reactions = reply.reactions
+                    .map { it.copy(users = it.users.filter { user -> user.username != self }.toImmutableList()) }
+                    .toMutableList()
+
+                // 评论没有该贴贴直接添加一个
+                val newReactions = if (reactions.find { it.value == reaction.value } == null) {
+                    reactions.add(reaction.copy(users = persistentListOf(userManager.userInfo)))
+                    reactions
+                } else {
+                    // 添加
+                    if (!isLiked) {
+                        reactions.map {
+                            if (it.value == reaction.value) {
+                                val users = it.users.toMutableList()
+                                users.add(userManager.userInfo)
+                                it.copy(users = users.toImmutableList())
+                            } else {
+                                it
+                            }
+                        }
+                    } else {
+                        reactions
+                    }
+                }
+
+                reply.copy(reactions = newReactions.filter { it.users.isNotEmpty() }.toImmutableList())
+            } else {
+                reply
             }
         }.toImmutableList()
     }
-
 
     /**
      * 刷新评论数据，排序和过滤项目实现
@@ -395,13 +422,14 @@ class TopicDetailViewModel(
     private suspend fun applyCommentFilters(
         state: TopicDetailState,
         replies: List<ComposeReply>
-    ): Pair<SerializeList<ComposeReply>, SerializeList<ComposeReply>> {
+    ): SerializeList<ComposeReply> {
         val self = userManager.userInfo.username
         val master = state.topic.creator.username
         val friends = userManager.friends.map { it.username }
 
         return withContext(Dispatchers.IO) {
-            replies.toImmutableList() to replies.asSequence()
+            replies
+                .asSequence()
                 .filter {
                     when (state.selectedCommentTypeFilter) {
                         CommentFilterType.ALL -> true

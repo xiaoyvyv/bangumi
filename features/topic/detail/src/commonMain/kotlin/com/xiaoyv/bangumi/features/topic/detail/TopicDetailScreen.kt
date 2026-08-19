@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.topic.detail
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,7 +52,6 @@ import com.xiaoyv.bangumi.core_resource.resources.topic_title
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailEvent
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailState
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailViewModel
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
@@ -173,15 +171,15 @@ private fun TopicDetailScreen(
             CommentDialog(
                 dialogState = commentDialogState,
                 anchor = CommentDialogAnchor(
-                    article = uiState.data.topic,
-                    lastViewedInMillis = System.currentTimeMillis()
+                    targetType = uiState.data.type,
+                    targetId = uiState.data.id
                 ),
                 onSendCommentSuccess = { comment ->
-//                        onActionEvent(TopicDetailEvent.Action.OnAppendComment(comment))
+                    onActionEvent(TopicDetailEvent.Action.OnAppendComment(comment))
                 }
             )
 
-            AnimatedVisibility(visible = uiState.data.topic != ComposeTopic.Empty) {
+            if (uiState.data.isLoadSuccess) {
                 FloatingActionButton(onClick = { commentDialogState.show() }) {
                     Icon(imageVector = BgmIcons.EditNote, contentDescription = null)
                 }

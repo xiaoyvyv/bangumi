@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
-import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
-import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
@@ -20,12 +20,12 @@ interface EpisodeApi {
      * 创建条目的剧集吐槽
      *
      * @param episodeID
-     * @param createBlogCommentRequest  (optional)
+     * @param createCommentParam  (optional)
      */
     @POST("p1/episodes/{episodeID}/comments")
     suspend fun createEpisodeComment(
         @Path("episodeID") episodeID: Int,
-        @Body createBlogCommentRequest: CreateBlogCommentRequest? = null,
+        @Body param: CreateCommentParam? = null,
     ): ComposeReply
 
     /**
@@ -56,12 +56,12 @@ interface EpisodeApi {
      * 给条目的剧集吐槽点赞
      *
      * @param commentID
-     * @param likeEpisodeCommentRequest
+     * @param likeCommentParam
      */
     @PUT("p1/episodes/-/comments/{commentID}/like")
     suspend fun likeEpisodeComment(
-        @Path("commentID") commentID: Int,
-        @Body likeEpisodeCommentRequest: LikeEpisodeCommentRequest,
+        @Path("commentID") commentID: Long,
+        @Body likeCommentParam: LikeCommentParam,
     ): HttpResponse
 
     /**
@@ -70,7 +70,7 @@ interface EpisodeApi {
      * @param commentID
      */
     @DELETE("p1/episodes/-/comments/{commentID}/like")
-    suspend fun unlikeEpisodeComment(@Path("commentID") commentID: Int): HttpResponse
+    suspend fun unlikeEpisodeComment(@Path("commentID") commentID: Long): HttpResponse
 
     /**
      * 编辑条目的剧集吐槽

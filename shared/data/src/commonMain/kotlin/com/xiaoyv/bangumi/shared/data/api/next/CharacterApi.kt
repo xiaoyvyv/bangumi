@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
@@ -24,12 +24,12 @@ interface CharacterApi {
      * 创建角色的吐槽
      *
      * @param characterID
-     * @param createBlogCommentRequest  (optional)
+     * @param createCommentParam  (optional)
      */
     @POST("p1/characters/{characterID}/comments")
     suspend fun createCharacterComment(
         @Path("characterID") characterID: Int,
-        @Body createBlogCommentRequest: CreateBlogCommentRequest? = null,
+        @Body param: CreateCommentParam? = null,
     ): ComposeReply
 
     /**

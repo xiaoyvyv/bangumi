@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.data.api.client
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.JsonContentTypePlugin
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -18,15 +19,15 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.LoggingFormat
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
 
+
 fun createHttpClient(
     config: ComposeSetting.NetworkConfig,
     redirect: Boolean = true,
-    logLevel: LogLevel = LogLevel.BODY,
+    logLevel: LogLevel = LogLevel.ALL,
     cookieStorage: CookiesStorage = AcceptAllCookiesStorage(),
     enableJsonContentNegotiation: Boolean = true,
     block: HttpClientConfig<*>.() -> Unit = {},
@@ -50,6 +51,8 @@ fun createHttpClient(
     }
 
     if (enableJsonContentNegotiation) {
+        install(JsonContentTypePlugin)
+
         install(ContentNegotiation) {
             json(defaultJson)
         }
@@ -64,6 +67,7 @@ fun createHttpClient(
     if (System.isDebugType) install(Logging) {
         format = LoggingFormat.Default
         level = logLevel
+        sanitizeHeader { false }
         logger = object : Logger {
             override fun log(message: String) {
                 message.lineSequence().forEach { line ->
@@ -82,7 +86,6 @@ fun createHttpClient(
     }
 
     defaultRequest {
-        headers.appendIfNameAbsent(HttpHeaders.ContentType, ContentType.Application.Json.toString())
         headers.appendIfNameAbsent(HttpHeaders.Pragma, "no-cache")
         headers.appendIfNameAbsent(HttpHeaders.CacheControl, "no-cache")
         headers.appendIfNameAbsent(HttpHeaders.TE, "trailers")

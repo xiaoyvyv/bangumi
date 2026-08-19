@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
@@ -26,12 +26,12 @@ interface PersonApi {
      * 创建人物的吐槽
      *
      * @param personID
-     * @param createBlogCommentRequest  (optional)
+     * @param createCommentParam  (optional)
      */
     @POST("p1/persons/{personID}/comments")
     suspend fun createPersonComment(
         @Path("personID") personID: Int,
-        @Body createBlogCommentRequest: CreateBlogCommentRequest? = null,
+        @Body param: CreateCommentParam? = null,
     ): ComposeReply
 
     /**

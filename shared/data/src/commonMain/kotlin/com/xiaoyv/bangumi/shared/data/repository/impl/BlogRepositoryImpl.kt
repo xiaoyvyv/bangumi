@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.PagingConfig
+import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
@@ -27,7 +28,7 @@ class BlogRepositoryImpl(
     override suspend fun submitBlogReaction(
         commentId: Long,
         value: String?
-    ): Result<Unit> {
+    ): Result<Unit> = runResult {
         TODO("Not yet implemented")
     }
 }

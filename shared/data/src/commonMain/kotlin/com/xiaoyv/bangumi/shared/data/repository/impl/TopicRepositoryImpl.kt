@@ -6,8 +6,10 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
-import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
@@ -78,7 +80,7 @@ class TopicRepositoryImpl(
         if (value.isNullOrBlank()) {
             unlikeGroupPost(postID = commentId)
         } else {
-            likeGroupPost(commentId, LikeEpisodeCommentRequest(value.toInt()))
+            likeGroupPost(commentId, LikeCommentParam(value.toInt()))
         }
     }
 
@@ -89,7 +91,37 @@ class TopicRepositoryImpl(
         if (value.isNullOrBlank()) {
             unlikeSubjectPost(postID = commentId)
         } else {
-            likeSubjectPost(commentId, LikeEpisodeCommentRequest(value.toInt()))
+            likeSubjectPost(commentId, LikeCommentParam(value.toInt()))
         }
+    }
+
+    override suspend fun submitGroupComment(
+        topicId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?
+    ): Result<ComposeReply> = client.requestNextTopicApi {
+        val replyId = createGroupReply(
+            topicID = topicId, param = CreateCommentParam(
+                content = content, turnstileToken = turnstile,
+                replyTo = replyTo ?: 0
+            )
+        ).id
+        getGroupPost(replyId)
+    }
+
+    override suspend fun submitSubjectComment(
+        topicId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?
+    ): Result<ComposeReply> = client.requestNextTopicApi {
+        val replyId = createSubjectReply(
+            topicID = topicId, param = CreateCommentParam(
+                content = content, turnstileToken = turnstile,
+                replyTo = replyTo ?: 0
+            )
+        ).id
+        getSubjectPost(replyId)
     }
 }

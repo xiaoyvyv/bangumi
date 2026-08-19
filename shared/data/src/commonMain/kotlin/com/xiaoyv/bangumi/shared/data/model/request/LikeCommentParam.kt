@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
  * @param `value`
  */
 @Serializable
-data class LikeEpisodeCommentRequest(
+data class LikeCommentParam(
     @SerialName(value = "value") @Required val `value`: Int,
 )

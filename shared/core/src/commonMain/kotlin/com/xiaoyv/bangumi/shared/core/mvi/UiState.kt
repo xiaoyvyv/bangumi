@@ -35,6 +35,9 @@ data class UiState<T>(
     val isError: Boolean
         get() = status is PageStatus.Error
 
+    val isIdle: Boolean
+        get() = status is PageStatus.Idle
+
     val errorMessage: String?
         get() = (status as? PageStatus.Error)?.message
 }

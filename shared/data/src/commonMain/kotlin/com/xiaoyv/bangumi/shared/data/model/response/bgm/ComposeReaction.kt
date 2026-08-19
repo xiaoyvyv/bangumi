@@ -1,8 +1,11 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
@@ -22,13 +25,25 @@ data class ComposeReaction(
     @SerialName("value") val value: String = "",
     @SerialName("users") val users: SerializeList<ComposeUser> = persistentListOf(),
 
+
     @SerialName("type") val type: Int = 0,
     @SerialName("main_id") val mainId: Long = 0,
     @SerialName("total") val total: Int = 0,
     @SerialName("emoji") val emoji: String = "",
-    @SerialName("selected") val selected: Boolean = false,
 ) {
     val count get() = if (total != 0) total else users.size
+
+    /**
+     * 自己是否点过
+     */
+    val selected: Boolean
+        @Composable
+        get() {
+            val self = currentUser()
+            return remember(users, self) {
+                users.any { it.id == self.id }
+            }
+        }
 
     companion object {
         /**

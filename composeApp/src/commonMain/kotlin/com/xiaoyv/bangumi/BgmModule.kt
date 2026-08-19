@@ -19,9 +19,14 @@ val commonModule = module {
     viewModelOf(::SharedViewModel)
     viewModel { (anchor: CommentDialogAnchor) ->
         CommentViewModel(
-            ugcRepository = get(),
+            dialogAnchor = anchor,
             choreRepository = get(),
-            dialogAnchor = anchor
+            topicRepository = get(),
+            monoRepository = get(),
+            blogRepository = get(),
+            groupRepository = get(),
+            subjectRepository = get(),
+            indexRepository = get(),
         )
     }
 }

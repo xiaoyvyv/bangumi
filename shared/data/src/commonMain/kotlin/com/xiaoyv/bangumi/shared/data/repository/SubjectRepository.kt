@@ -94,5 +94,5 @@ interface SubjectRepository {
 
     suspend fun fetchBrowserSubjectTags(@SubjectType type: Int, page: Int): Result<List<ComposeTag>>
 
-    suspend fun submitEpisodeReaction(commentId: Long, value: String?): Result<Unit>
+    suspend fun submitEpisodeCommentReaction(commentId: Long, value: String?): Result<Unit>
 }

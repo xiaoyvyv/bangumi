@@ -1,9 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
-import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
-import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
+import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.CreateTimelineSayRequest
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
@@ -21,12 +21,12 @@ interface TimelineApi {
      * 创建时间线回复
      *
      * @param timelineID
-     * @param createBlogCommentRequest  (optional)
+     * @param createCommentParam  (optional)
      */
     @POST("p1/timeline/{timelineID}/replies")
     suspend fun createTimelineReply(
         @Path("timelineID") timelineID: Int,
-        @Body createBlogCommentRequest: CreateBlogCommentRequest? = null,
+        @Body param: CreateCommentParam? = null,
     ): HttpResponse
 
     /**

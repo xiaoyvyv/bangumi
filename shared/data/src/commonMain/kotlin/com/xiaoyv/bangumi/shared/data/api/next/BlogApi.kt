@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
-import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
@@ -23,7 +23,7 @@ interface BlogApi {
     @POST("p1/blogs/{entryID}/comments")
     suspend fun createBlogComment(
         @Path("entryID") entryID: Long,
-        @Body createBlogCommentRequest: CreateBlogCommentRequest? = null
+        @Body param: CreateCommentParam? = null
     ): HttpResponse
 
     /**

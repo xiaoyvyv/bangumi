@@ -78,6 +78,20 @@ data class TopicDetailState(
         else -> ""
     }
 
+    val isLoadSuccess: Boolean
+        get() = when (type) {
+            TopicType.TYPE_SUBJECT,
+            TopicType.TYPE_GROUP -> topic != ComposeTopic.Empty
+
+            TopicType.TYPE_EP -> episode != ComposeEpisode.Empty
+            TopicType.TYPE_CRT,
+            TopicType.TYPE_PERSON -> mono != ComposeMonoDisplay.Empty
+
+            TopicType.TYPE_INDEX -> index != ComposeIndex.Empty
+            TopicType.TYPE_BLOG -> blog != ComposeBlogEntry.Empty
+            else -> false
+        }
+
     val shareUrl: String = when (type) {
         TopicType.TYPE_EP -> "https://bgm.tv/ep/topic/$id"
         TopicType.TYPE_GROUP -> "https://bgm.tv/group/topic/$id"

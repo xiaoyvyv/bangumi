@@ -7,13 +7,13 @@ import com.xiaoyv.bangumi.shared.core.types.ModeType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CreateGroupTopicRequest
-import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
+import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
@@ -263,12 +263,12 @@ interface SubjectApi {
      * 给条目收藏点赞
      *
      * @param collectID
-     * @param likeEpisodeCommentRequest
+     * @param likeCommentParam
      */
     @PUT("p1/subjects/-/collects/{collectID}/like")
     suspend fun likeSubjectCollect(
         @Path("collectID") collectID: Int,
-        @Body likeEpisodeCommentRequest: LikeEpisodeCommentRequest,
+        @Body likeCommentParam: LikeCommentParam,
     ): ComposeStatus
 
     /**

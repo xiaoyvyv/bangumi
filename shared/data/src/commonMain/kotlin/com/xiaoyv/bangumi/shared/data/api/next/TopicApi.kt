@@ -3,11 +3,12 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import androidx.annotation.IntRange
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogCommentRequest
-import com.xiaoyv.bangumi.shared.data.model.request.LikeEpisodeCommentRequest
+import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateSubjectTopicRequest
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateTopic
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
@@ -15,7 +16,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
-import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
@@ -31,8 +31,8 @@ interface TopicApi {
     @POST("p1/groups/-/topics/{topicID}/replies")
     suspend fun createGroupReply(
         @Path("topicID") topicID: Long,
-        @Body createBlogCommentRequest: CreateBlogCommentRequest? = null
-    ): HttpResponse
+        @Body param: CreateCommentParam? = null
+    ): ComposeId
 
     /**
      * 创建条目讨论回复
@@ -40,8 +40,8 @@ interface TopicApi {
     @POST("p1/subjects/-/topics/{topicID}/replies")
     suspend fun createSubjectReply(
         @Path("topicID") topicID: Long,
-        @Body createBlogCommentRequest: CreateBlogCommentRequest? = null
-    ): HttpResponse
+        @Body param: CreateCommentParam? = null
+    ): ComposeId
 
     /**
      * 删除小组话题回复
@@ -112,7 +112,7 @@ interface TopicApi {
     @PUT("p1/groups/-/posts/{postID}/like")
     suspend fun likeGroupPost(
         @Path("postID") postID: Long,
-        @Body likeEpisodeCommentRequest: LikeEpisodeCommentRequest
+        @Body likeCommentParam: LikeCommentParam
     ): HttpResponse
 
     /**
@@ -121,21 +121,19 @@ interface TopicApi {
     @PUT("p1/subjects/-/posts/{postID}/like")
     suspend fun likeSubjectPost(
         @Path("postID") postID: Long,
-        @Body likeEpisodeCommentRequest: LikeEpisodeCommentRequest
+        @Body likeCommentParam: LikeCommentParam
     ): HttpResponse
 
     /**
      * 取消小组话题回复点赞
      */
     @DELETE("p1/groups/-/posts/{postID}/like")
-    @Headers("Content-Type: */*")
     suspend fun unlikeGroupPost(@Path("postID") postID: Long): HttpResponse
 
     /**
      * 取消条目讨论回复点赞
      */
     @DELETE("p1/subjects/-/posts/{postID}/like")
-    @Headers("Content-Type: */*")
     suspend fun unlikeSubjectPost(@Path("postID") postID: Long): HttpResponse
 
     /**

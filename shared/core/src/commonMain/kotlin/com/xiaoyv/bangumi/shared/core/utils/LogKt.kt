@@ -14,7 +14,6 @@ data class LogScope(private var tag: String = "BangumiApp") {
     fun getTag() = tag
 }
 
-@AppDsl
 inline fun debugLog(crossinline message: LogScope.() -> Any) {
     if (System.isDebugType) {
         val logScope = LogScope()

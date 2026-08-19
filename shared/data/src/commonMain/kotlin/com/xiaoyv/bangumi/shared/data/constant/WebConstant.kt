@@ -18,6 +18,7 @@ object WebConstant {
     const val URL_BASE_WEB = "https://bgm.tv/"
     const val URL_BGM_STATUS_WEB = "https://bgm-status.ry.mk/"
     const val URL_BGM_STATUS_API = "https://bgm-status.ry.mk/api/mini"
+    const val URL_BGM_TURNSTILE = "https://next.bgm.tv/p1/turnstile?theme=auto&redirect_uri=bangumi://"
 }
 
 fun subjectImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/subjects/$id/image?type=$type"

@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_master
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
@@ -35,6 +37,7 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * [CommentItem]
@@ -106,12 +109,11 @@ fun CommentReplyItem(
                     if (LocalCommentTargetAuthorUsername.current == item.user.username) {
                         Text(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.shapes.extraSmall)
-                                .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.extraSmall)
-                                .padding(horizontal = 4.dp, vertical = 2.dp),
-                            text = "楼主",
+                                .background(MaterialTheme.colorScheme.tertiary, MaterialTheme.shapes.extraSmall)
+                                .padding(horizontal = 4.dp, vertical = 1.dp),
+                            text = stringResource(Res.string.global_master),
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                color = MaterialTheme.colorScheme.onTertiary,
                                 fontWeight = FontWeight.Medium
                             )
                         )

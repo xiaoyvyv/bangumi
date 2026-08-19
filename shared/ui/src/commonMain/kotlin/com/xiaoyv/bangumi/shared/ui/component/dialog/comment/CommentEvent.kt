@@ -7,4 +7,5 @@ sealed class CommentEvent {
     data class OnTextChange(val value: TextFieldValue) : CommentEvent()
     data class SendComment(val text: String) : CommentEvent()
     data class OnImagePickResult(val file: PlatformFile) : CommentEvent()
+    data class OnReceiveTurnstileToken(val token: String) : CommentEvent()
 }
