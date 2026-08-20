@@ -13,6 +13,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
 import de.jensklingenberg.ktorfit.http.Body
@@ -195,4 +196,15 @@ interface UserApi {
      */
     @PATCH("p1/privacy")
     suspend fun patchPrivacy(@Body param: ComposeUserPrivacy): ComposeUserPrivacy
+
+    /**
+     * 获取未读通知
+     *
+     * @param limit max=40
+     */
+    @GET("p1/notify")
+    suspend fun listNotice(
+        @Query("unread") unread: Boolean? = null,
+        @Query("limit") limit: Int = 40,
+    ): ComposePage<ComposeNotice>
 }

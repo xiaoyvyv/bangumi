@@ -26,6 +26,7 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
@@ -151,6 +152,7 @@ fun CommentReplyItem(
         },
         trailingContent = {
             val reactionState = rememberPopupReactionState()
+            val actionHandler = LocalActionHandler.current
 
             PopupReaction(
                 state = reactionState,
@@ -167,10 +169,12 @@ fun CommentReplyItem(
                     if (isLikeable) {
                         add(ButtonType.Reaction)
                     }
+                    add(ButtonType.Copy)
                     add(ButtonType.Report)
                 },
                 onOptionClick = {
                     when (it.type) {
+                        ButtonType.Copy -> actionHandler.copyContent(item.content)
                         ButtonType.Report -> onClickReport()
                         ButtonType.Reaction -> reactionState.show()
                         else -> Unit

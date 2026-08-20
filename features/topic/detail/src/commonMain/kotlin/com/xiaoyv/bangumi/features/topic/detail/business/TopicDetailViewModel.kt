@@ -81,12 +81,12 @@ class TopicDetailViewModel(
 
     override fun onEvent(event: TopicDetailEvent.Action) {
         when (event) {
+            is TopicDetailEvent.Action.OnRefresh -> refresh(event.loading)
             is TopicDetailEvent.Action.OnReactionClick -> onReactionClick(event.commentId, event.reaction)
 
             is TopicDetailEvent.Action.OnCommentTypeChange -> onCommentTypeChange(event.type)
             is TopicDetailEvent.Action.OnCommentSortChange -> onCommentSortChange(event.type)
             is TopicDetailEvent.Action.OnAppendComment -> onAppendComment(event.replyId)
-            else -> Unit
         }
     }
 
@@ -123,6 +123,7 @@ class TopicDetailViewModel(
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadGroupTopicDetail() {
         topicRepository.fetchTopicDetail(args.id, TopicType.TYPE_GROUP)
+            .onFailure { reduceError { it } }
             .onSuccess {
                 val replies = it.replies.subList(1, it.replies.size)
                 val displayReplies = applyCommentFilters(
@@ -142,6 +143,7 @@ class TopicDetailViewModel(
 
     suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.onLoadSubjectTopicDetail() {
         topicRepository.fetchTopicDetail(args.id, TopicType.TYPE_SUBJECT)
+            .onFailure { reduceError { it } }
             .onSuccess {
                 val replies = it.replies.subList(1, it.replies.size)
                 val displayReplies = applyCommentFilters(

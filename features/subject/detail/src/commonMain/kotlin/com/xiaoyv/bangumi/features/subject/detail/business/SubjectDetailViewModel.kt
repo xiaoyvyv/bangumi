@@ -180,7 +180,7 @@ class SubjectDetailViewModel(
     private fun onUpdateSubjectCollection(update: CollectionSubjectUpdate, showLoadingDialog: Boolean) = intent {
         reduceData { state.copy(loading = LoadingState.Loading) }
 
-        withActionLoading(showLoading = showLoadingDialog) { collectionRepository.submitUpdateUserSubject(args.subjectId, update) }
+        withActionLoading(enable = showLoadingDialog) { collectionRepository.submitUpdateUserSubject(args.subjectId, update) }
             .onFailure {
                 postToast { it.errMsg }
 

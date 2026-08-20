@@ -56,19 +56,19 @@ suspend inline fun <T : Any, SIDE_EFFECT : Any> Syntax<UiState<T>, UiSideEffect<
 @CheckResult
 suspend inline fun <T : Any, SIDE_EFFECT : Any, R> Syntax<UiState<T>, UiSideEffect<SIDE_EFFECT>>.withActionLoading(
     showError: Boolean = true,
-    showLoading: Boolean = true,
+    enable: Boolean = true,
     autoDismiss: Boolean = true,
     crossinline block: suspend IntentContext<T>.() -> Result<R>,
 ): Result<R> {
-    if (showLoading) postLoading { true }
+    if (enable) postLoading { true }
 
     return block(IntentContext(state.data))
         .onFailure {
-            if (showLoading) postLoading { false }
+            if (enable) postLoading { false }
             if (showError) postToast { it.errMsg }
         }
         .onSuccess {
-            if (showLoading && autoDismiss) postLoading { false }
+            if (enable && autoDismiss) postLoading { false }
         }
 }
 

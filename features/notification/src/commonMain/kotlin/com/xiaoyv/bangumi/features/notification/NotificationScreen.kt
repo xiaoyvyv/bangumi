@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.features.notification
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,37 +11,51 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_agree
+import com.xiaoyv.bangumi.core_resource.resources.global_ignore
+import com.xiaoyv.bangumi.core_resource.resources.global_no_more_notice
 import com.xiaoyv.bangumi.core_resource.resources.global_notification
+import com.xiaoyv.bangumi.core_resource.resources.global_unread
 import com.xiaoyv.bangumi.features.notification.business.NotificationEvent
 import com.xiaoyv.bangumi.features.notification.business.NotificationSideEffect
 import com.xiaoyv.bangumi.features.notification.business.NotificationState
 import com.xiaoyv.bangumi.features.notification.business.NotificationViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.utils.resetSize
+import com.xiaoyv.bangumi.shared.core.types.ButtonType
+import com.xiaoyv.bangumi.shared.core.types.NoticeType
+import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
+import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.manager.shared.shareViewModel
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
+import com.xiaoyv.bangumi.shared.data.model.PreviewComposeNotice
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.rememberDisplayAnnotatedString
+import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
+import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
+import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
-import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -57,6 +71,7 @@ fun NotificationRoute(
     viewModel.collectBaseSideEffect {
         when (it) {
             NotificationSideEffect.OnRefreshNotificationCount -> shareViewModel.onRefreshUserUnreadNotification()
+            is NotificationSideEffect.OnNavScreen -> onNavScreen(it.screen)
         }
     }
 
@@ -83,7 +98,22 @@ private fun NotificationScreen(
         topBar = {
             BgmTopAppBar(
                 title = stringResource(Res.string.global_notification),
-                onNavigationClick = { onUiEvent(NotificationEvent.UI.OnNavUp) }
+                onNavigationClick = { onUiEvent(NotificationEvent.UI.OnNavUp) },
+                actions = {
+                    uiState.data.run {
+                        val actionHandler = LocalActionHandler.current
+
+                        DropMenuActionButton(
+                            options = rememberButtonTypeMenu { add(ButtonType.OpenInBrowser) },
+                            onOptionClick = {
+                                when (it.type) {
+                                    ButtonType.OpenInBrowser -> actionHandler.openInBrowser(uiState.data.pageUrl)
+                                    else -> Unit
+                                }
+                            }
+                        )
+                    }
+                },
             )
         }
     ) {
@@ -91,7 +121,8 @@ private fun NotificationScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            onRefresh = { onActionEvent(NotificationEvent.Action.OnRefresh(it)) },
+            enablePullRefresh = true,
+            onRefresh = { loading -> onActionEvent(NotificationEvent.Action.OnRefresh(loading = loading)) },
             uiState = uiState,
         ) { state ->
             NotificationScreenContent(state, onUiEvent, onActionEvent)
@@ -107,99 +138,120 @@ private fun NotificationScreenContent(
     onActionEvent: (NotificationEvent.Action) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(state.notifications) {
+        items(state.notifications) { item ->
             ListItem(
-                modifier = Modifier
-                    .clickable {}
-                    .padding(vertical = 4.dp),
+                modifier = Modifier.clickable {
+                    onActionEvent(NotificationEvent.Action.OnClickItem(item))
+                    onActionEvent(NotificationEvent.Action.OnMarkRead(item, showLoading = false))
+                },
+                colors = ListItemDefaults.colors(
+                    containerColor = if (item.unread) {
+                        MaterialTheme.colorScheme.surfaceContainer
+                    } else {
+                        MaterialTheme.colorScheme.surface
+                    }
+                ),
                 leadingContent = {
                     StateImage(
-                        modifier = Modifier.size(44.dp),
-                        model = it.user.avatar.displayMediumImage,
+                        modifier = Modifier
+                            .size(44.dp)
+                            .clickWithoutRipped { onUiEvent(NotificationEvent.UI.OnNavScreen(Screen.UserDetail(item.sender.username))) },
+                        model = item.sender.avatar.displayMediumImage,
                         shape = MaterialTheme.shapes.small
                     )
                 },
                 overlineContent = {
-                    Text(
-                        text = it.user.nickname,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
-                },
-                headlineContent = {
-                    BgmLinkedText(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        text = it.message,
-                    )
-                },
-                supportingContent = {
-                    if (it.unread) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)) {
                         Text(
-                            text = "未读",
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickWithoutRipped { onUiEvent(NotificationEvent.UI.OnNavScreen(Screen.UserDetail(item.sender.username))) },
+                            text = item.sender.nickname,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Medium
+                            )
+                        )
+
+                        if (item.unread) Text(
+                            text = stringResource(Res.string.global_unread),
                             color = MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Start,
-                        )
-                    } else {
-                        Text(
-                            text = "已读",
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Start,
-                            color = Color.Green.copy(green = 0.8f)
                         )
                     }
                 },
-                trailingContent = if (!it.unread) null else {
-                    { NotificationActionButton(it, onActionEvent) }
+                headlineContent = {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = item.rememberDisplayAnnotatedString(),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                },
+                supportingContent = {
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(ContentMargin)) {
+                        Text(
+                            modifier = Modifier.padding(top = ContentMarginHalf / 2),
+                            text = item.createdAt.formatAgo(),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        )
+
+                        if (item.type == NoticeType.REQUEST_FRIEND && item.unread) Row(
+                            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            OutlinedButton(
+                                shape = MaterialTheme.shapes.small,
+                                onClick = { onActionEvent(NotificationEvent.Action.OnMarkRead(item)) }
+                            ) {
+                                Text(text = stringResource(Res.string.global_ignore))
+                            }
+                            OutlinedButton(
+                                shape = MaterialTheme.shapes.small,
+                                onClick = { onActionEvent(NotificationEvent.Action.OnAgreeFriendRequest(item)) }
+                            ) {
+                                Text(text = stringResource(Res.string.global_agree))
+                            }
+                        }
+                    }
                 }
             )
             BgmHorizontalDivider()
+        }
+
+        if (state.notifications.isNotEmpty() && state.notifications.size == 40) {
+            item {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
+                    text = stringResource(Res.string.global_no_more_notice),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun NotificationActionButton(
-    item: ComposeNotification,
-    onActionEvent: (NotificationEvent.Action) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)) {
-        if (item.message.contains("请求与你成为好友")) {
-            OutlinedButton(
-                modifier = Modifier.resetSize(),
-                contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
-                shape = MaterialTheme.shapes.small,
-                onClick = { onActionEvent(NotificationEvent.Action.OnMarkRead(item)) }
-            ) {
-                Text(text = "忽略")
-            }
-            OutlinedButton(
-                modifier = Modifier.resetSize(),
-                contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
-                shape = MaterialTheme.shapes.small,
-                onClick = { onActionEvent(NotificationEvent.Action.OnAgreeFriendRequest(item)) }
-            ) {
-                Text(text = "同意")
-            }
-        } else {
-            OutlinedButton(
-                modifier = Modifier.resetSize(),
-                contentPadding = PaddingValues(ContentMargin, ContentMarginHalf),
-                shape = MaterialTheme.shapes.small,
-                onClick = { onActionEvent(NotificationEvent.Action.OnMarkRead(item)) }
-            ) {
-                if (item.count == null || item.count == 0) {
-                    Text(text = "我已读")
-                } else {
-                    Text(text = "我已读 (${item.count})")
-                }
-            }
-        }
+@Preview
+private fun PreviewNotificationScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        NotificationScreen(
+            uiState = UiState(
+                NotificationState(
+                    notifications = persistentListOf(
+                        PreviewComposeNotice.copy(unread = false),
+                        PreviewComposeNotice.copy(unread = true)
+                    )
+                )
+            ),
+            onUiEvent = { },
+            onActionEvent = {}
+        )
     }
 }

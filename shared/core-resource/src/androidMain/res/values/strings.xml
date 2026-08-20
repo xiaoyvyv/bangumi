@@ -53,10 +53,13 @@
     <string name="global_message">消息</string>
     <string name="global_subject">条目</string>
     <string name="global_subject_topic">条目话题</string>
+    <string name="global_agree">同意</string>
+    <string name="global_ignore">忽略</string>
     <string name="global_character">角色</string>
     <string name="global_person">人物</string>
     <string name="global_blog">日志</string>
     <string name="global_group">小组</string>
+    <string name="global_unread">未读</string>
     <string name="global_my_group">我的小组</string>
     <string name="global_group_topic">小组话题</string>
     <string name="global_index">目录</string>
@@ -168,6 +171,7 @@
     <string name="global_empty_comments_title">还没有讨论</string>
     <string name="global_empty_comments_subtitle">目前还没有任何回复，暂时静悄悄的。</string>
     <string name="global_no_more">没有更多内容了~</string>
+    <string name="global_no_more_notice">更多通知历史记录请到网页端查看哦~</string>
     <string name="global_no_more_comments_tag">本页到底</string>
     <string name="global_no_more_comments_subtitle">这页讨论已经显示完毕，下面暂时没有更多回复了。</string>
     <string name="global_set_wallpaper">设置壁纸</string>
@@ -194,6 +198,46 @@
     <string name="mono_recently_work">最近参与</string>
     <string name="mono_character_list">虚构角色</string>
     <string name="mono_person_list">现实人物</string>
+
+    <string name="notice_msg_group_topic_reply">在你的小组话题「%1$s」中发表了新回复</string>
+    <string name="notice_msg_group_post_reply">在小组话题「%1$s」中回复了你</string>
+    <string name="notice_msg_blog_reply">在你的日志「%1$s」中发表了新回复</string>
+    <string name="notice_msg_blog_post_reply">在日志「%1$s」中回复了你</string>
+    <string name="notice_msg_character_topic_reply">在角色讨论「%1$s」中发表了新回复</string>
+    <string name="notice_msg_character_post_reply">在角色「%1$s」中回复了你</string>
+    <string name="notice_msg_person_post_reply">在人物「%1$s」中回复了你</string>
+    <string name="notice_msg_ep_post_reply">在章节「%1$s」中回复了你</string>
+    <string name="notice_msg_subject_topic_reply">在你的条目讨论「%1$s」中发表了新回复</string>
+    <string name="notice_msg_subject_topic_reply_at">在条目讨论「%1$s」中提到了你</string>
+    <string name="notice_msg_subject_post_reply">在条目讨论「%1$s」中回复了你</string>
+    <string name="notice_msg_index_reply">在目录「%1$s」中给你留言了</string>
+    <string name="notice_msg_index_post_reply">在目录「%1$s」中回复了你</string>
+    <string name="notice_msg_request_friend">请求添加你为好友</string>
+    <string name="notice_msg_accept_friend">通过了你的好友请求</string>
+    <string name="notice_msg_subject_patch_accepted">你对条目「%1$s」的修订已通过</string>
+    <string name="notice_msg_subject_patch_rejected">你对条目「%1$s」的修订被拒绝</string>
+    <string name="notice_msg_subject_patch_expired">你对条目「%1$s」的修订已过期</string>
+    <string name="notice_msg_subject_patch_reply">在条目「%1$s」的修订中回复了你</string>
+    <string name="notice_msg_episode_patch_accepted">你对章节「%1$s」的修订已通过</string>
+    <string name="notice_msg_episode_patch_rejected">你对章节「%1$s」的修订被拒绝</string>
+    <string name="notice_msg_episode_patch_expired">你对章节「%1$s」的修订已过期</string>
+    <string name="notice_msg_episode_patch_reply">在章节「%1$s」的修订中回复了你</string>
+    <string name="notice_msg_character_patch_accepted">你对角色「%1$s」的修订已通过</string>
+    <string name="notice_msg_character_patch_rejected">你对角色「%1$s」的修订被拒绝</string>
+    <string name="notice_msg_character_patch_expired">你对角色「%1$s」的修订已过期</string>
+    <string name="notice_msg_character_patch_reply">在角色「%1$s」的修订中回复了你</string>
+    <string name="notice_msg_person_patch_accepted">你对人物「%1$s」的修订已通过</string>
+    <string name="notice_msg_person_patch_rejected">你对人物「%1$s」的修订被拒绝</string>
+    <string name="notice_msg_person_patch_expired">你对人物「%1$s」的修订已过期</string>
+    <string name="notice_msg_person_patch_reply">在人物「%1$s」的修订中回复了你</string>
+    <string name="notice_msg_timeline_say_reply">回复了你的 %1$s</string>
+    <string name="notice_msg_timeline_say_at">在 %1$s 中提到了你</string>
+    <string name="notice_msg_blog_reply_at">在日志「%1$s」中提到了你</string>
+    <string name="notice_msg_ep_reply_at">在章节讨论「%1$s」中提到了你</string>
+    <string name="notice_msg_character_reply_at">在角色「%1$s」中提到了你</string>
+    <string name="notice_msg_group_topic_reply_at">在小组话题「%1$s」中提到了你</string>
+    <string name="notice_msg_person_reply_at">在人物讨论「%1$s」中提到了你</string>
+
 
     <!-- 登录页面 -->
     <string name="login_input_error_email">请输入邮箱</string>

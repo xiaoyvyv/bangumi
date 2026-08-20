@@ -26,18 +26,17 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.transform
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
-import com.xiaoyv.bangumi.shared.data.parser.bgm.NotificationParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
@@ -57,7 +56,6 @@ import io.ktor.http.HttpHeaders
 class UserRepositoryImpl(
     private val client: BgmApiClient,
     private val userParser: UserParser,
-    private val notificationParser: NotificationParser,
     private val preferenceStore: PreferenceStore,
     private val pagingConfig: PagingConfig,
 ) : UserRepository {
@@ -224,11 +222,9 @@ class UserRepositoryImpl(
         client.nextUserApi.patchPrivacy(privacy)
     }
 
-    override suspend fun fetchUserUnreadMessage(): Result<ComposeUnRead> = client.requestWebApi {
-        with(notificationParser) {
-            fetchUserUnreadMessage()
-                .fetchUserUnreadMessageConverted()
-        }
+
+    override suspend fun fetchUserNotify(unread: Boolean?): Result<List<ComposeNotice>> = client.requestNextUserApi {
+        listNotice(unread = unread).result.map { it.normalized() }
     }
 
     override suspend fun fetchUserMessageList(@MessageBoxType type: String, page: Int): Result<List<ComposeMessage>> =
@@ -243,24 +239,6 @@ class UserRepositoryImpl(
         with(userParser) {
             fetchUserMessageDetail(id)
                 .fetchUserMessageDetailConverted()
-        }
-    }
-
-
-    override suspend fun fetchUserAllNotification(): Result<List<ComposeNotification>> = client.requestWebApi {
-        with(notificationParser) {
-            val newest = fetchUserNotificationNewest()
-                .fetchUserNotificationConverted(checkEmpty = false)
-            val newestIds = newest.map { it.id }
-
-            fetchUserNotificationHistory()
-                .fetchUserNotificationConverted(checkEmpty = true)
-                .map { notification ->
-                    notification.copy(
-                        unread = newestIds.contains(notification.id),
-                        count = newest.find { it.id == notification.id }?.count
-                    )
-                }
         }
     }
 

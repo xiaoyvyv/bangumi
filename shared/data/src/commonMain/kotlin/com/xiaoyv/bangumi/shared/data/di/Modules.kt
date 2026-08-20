@@ -14,7 +14,6 @@ import com.xiaoyv.bangumi.shared.data.parser.bgm.GroupParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.HomeParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.MonoParser
-import com.xiaoyv.bangumi.shared.data.parser.bgm.NotificationParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicTableParser
@@ -80,7 +79,7 @@ private val repositoryModules = module {
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
     single<ImageRepository> { ImageRepositoryImpl(get(), get(), get()) }
     single<CacheRepository> { CacheRepositoryImpl() }
-    single<UserRepository> { UserRepositoryImpl(get(), get(), get(), get(), get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get(), get(), get()) }
     single<MikanRepository> { MikanRepositoryImpl(get(), get(), get()) }
     single<SubjectRepository> { SubjectRepositoryImpl(get(), get(), get(), get(), get()) }
     single<MonoRepository> { MonoRepositoryImpl(get(), get(), get()) }
@@ -114,7 +113,6 @@ private val converterModules = module {
     singleOf(::GroupParser)
     singleOf(::BlogParser)
     singleOf(::IndexParser)
-    singleOf(::NotificationParser)
     single { defaultJson }
 }
 

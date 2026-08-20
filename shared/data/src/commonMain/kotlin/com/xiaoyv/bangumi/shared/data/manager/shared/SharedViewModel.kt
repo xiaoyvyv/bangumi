@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.shared.data.manager.shared
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
-import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
@@ -95,20 +94,13 @@ class SharedViewModel(
     }
 
     fun onRefreshUserUnreadNotification() = intent {
-        awaitAll(
-            block1 = { userRepository.fetchUserUnreadNotification() },
-            block2 = { userRepository.fetchUserUnreadMessage() },
-        ).onFailure {
-            if (it is ApiHttpException && it.code == 401) {
-                userManager.logout()
+        userRepository.fetchUserUnreadNotification()
+            .onFailure {
+                if (it is ApiHttpException && it.code == 401) {
+                    userManager.logout()
+                }
+            }.onSuccess {
+                reduce { state.copy(unread = it) }
             }
-        }.onSuccess {
-            reduce {
-                state.copy(
-                    unreadNotification = it.data1.count ?: 0,
-                    unreadMessage = it.data2.count ?: 0
-                )
-            }
-        }
     }
 }

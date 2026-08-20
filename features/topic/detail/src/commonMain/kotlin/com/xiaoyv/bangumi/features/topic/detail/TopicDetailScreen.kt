@@ -203,7 +203,7 @@ private fun TopicDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            onRefresh = { onActionEvent(TopicDetailEvent.Action.OnRefresh(it)) },
+            onRefresh = { loading -> onActionEvent(TopicDetailEvent.Action.OnRefresh(loading)) },
             uiState = uiState,
         ) { state ->
             TopicDetailScreenContent(state, onUiEvent, onActionEvent)

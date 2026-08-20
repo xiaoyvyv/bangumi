@@ -15,10 +15,10 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
@@ -54,13 +54,11 @@ interface UserRepository {
 
     suspend fun fetchUserUnreadNotification(): Result<ComposeUnRead>
 
-    suspend fun fetchUserUnreadMessage(): Result<ComposeUnRead>
+    suspend fun fetchUserNotify(unread: Boolean?): Result<List<ComposeNotice>>
 
     suspend fun fetchUserMessageList(@MessageBoxType type: String, page: Int): Result<List<ComposeMessage>>
 
     suspend fun fetchUserMessageDetail(id: Long): Result<ComposeMessageDetail>
-
-    suspend fun fetchUserAllNotification(): Result<List<ComposeNotification>>
 
     suspend fun fetchUserCollectionSubject(
         username: String,

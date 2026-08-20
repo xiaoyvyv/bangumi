@@ -145,8 +145,8 @@ private fun ProfileScreen(
                 actions = {
                     BadgedBox(
                         badge = {
-                            if (sharedState.unreadNotification > 0) {
-                                Badge { Text(text = sharedState.unreadNotification.toString()) }
+                            if (sharedState.unread.notifyCount > 0) {
+                                Badge { Text(text = sharedState.unread.notifyCount.toString()) }
                             }
                         },
                         content = {
@@ -161,8 +161,8 @@ private fun ProfileScreen(
                     Spacer(Modifier.width(ContentMarginHalf))
                     BadgedBox(
                         badge = {
-                            if (sharedState.unreadMessage > 0) {
-                                Badge { Text(text = sharedState.unreadMessage.toString()) }
+                            if (sharedState.unread.pmCount > 0) {
+                                Badge { Text(text = sharedState.unread.pmCount.toString()) }
                             }
                         },
                         content = {

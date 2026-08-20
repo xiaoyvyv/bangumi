@@ -4,9 +4,11 @@ import androidx.paging.PagingData
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollectionInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.coroutines.flow.flowOf
 
 val PreviewComposeSubject = ComposeSubject(
@@ -30,6 +32,18 @@ val PreviewComposeCollection = ComposeCollection(
     subjectType = PreviewComposeSubject.type,
     comment = "随机评论内容",
     epStatus = 6
+)
+
+val PreviewComposeUser = ComposeUser(
+    id = 1,
+    nickname = "tom",
+    username = "tiny"
+)
+
+val PreviewComposeNotice = ComposeNotice(
+    title = "随机评论内容",
+    sender = PreviewComposeUser,
+    createdAt = 1234567890000
 )
 
 val PreviewComposeIndexRelated = ComposeIndexRelated(

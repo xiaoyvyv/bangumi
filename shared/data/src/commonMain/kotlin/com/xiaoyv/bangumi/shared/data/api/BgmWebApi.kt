@@ -76,24 +76,6 @@ interface BgmWebApi {
     suspend fun fetchUserUnreadNotification(@Query("_") timestamp: Long): Document
 
     /**
-     * 获取用户短信未读数目
-     */
-    @GET("pm/inbox.chii")
-    suspend fun fetchUserUnreadMessage(): Document
-
-    /**
-     * 获取用户最新的未读通知
-     */
-    @GET("notify")
-    suspend fun fetchUserNotificationNewest(): Document
-
-    /**
-     * 获取用户全部通知
-     */
-    @GET("notify/all")
-    suspend fun fetchUserNotificationHistory(): Document
-
-    /**
      * 获取用户的短信消息
      */
     @GET("/pm/{type}.chii")

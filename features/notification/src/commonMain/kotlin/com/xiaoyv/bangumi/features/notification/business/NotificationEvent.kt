@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.features.notification.business
 
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNotification
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -16,8 +16,9 @@ sealed class NotificationEvent {
     }
 
     sealed class Action : NotificationEvent() {
+        data class OnClickItem(val item: ComposeNotice) : Action()
         data class OnRefresh(val loading: Boolean) : Action()
-        data class OnMarkRead(val item: ComposeNotification) : Action()
-        data class OnAgreeFriendRequest(val item: ComposeNotification) : Action()
+        data class OnMarkRead(val item: ComposeNotice, val showLoading: Boolean = true) : Action()
+        data class OnAgreeFriendRequest(val item: ComposeNotice) : Action()
     }
 }

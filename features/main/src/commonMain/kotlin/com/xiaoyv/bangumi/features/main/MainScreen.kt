@@ -113,7 +113,7 @@ fun MainScreen(
                     colors = bottomNavItemColors,
                     badge = {
                         val appState = LocalSharedState.current
-                        val unreadCnt = appState.unreadNotification + appState.unreadMessage
+                        val unreadCnt = appState.unread.total
                         if (unreadCnt > 0 && item.first == Screen.Profile) {
                             Badge { Text(text = unreadCnt.toString()) }
                         }
