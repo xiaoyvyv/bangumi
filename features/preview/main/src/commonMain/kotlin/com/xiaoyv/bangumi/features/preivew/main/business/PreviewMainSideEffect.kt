@@ -9,7 +9,5 @@ import io.github.vinceglb.filekit.PlatformFile
  * @since 2025/1/12
  */
 sealed class PreviewMainSideEffect {
-    data class OnSaveMedia(val file: PlatformFile) : PreviewMainSideEffect()
     data class OnShareMedia(val file: PlatformFile) : PreviewMainSideEffect()
-    data class OnSetWallpaper(val file: PlatformFile) : PreviewMainSideEffect()
 }

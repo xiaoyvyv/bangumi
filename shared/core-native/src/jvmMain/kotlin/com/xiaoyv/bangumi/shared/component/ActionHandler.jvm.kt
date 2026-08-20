@@ -64,19 +64,7 @@ actual class ActionHandler actual constructor(
         }
     }
 
-    actual fun saveMedia(file: PlatformFile) {
-        if (Desktop.isDesktopSupported()) {
-            runCatching { Desktop.getDesktop().open(file.file.parentFile) }
-        }
-    }
-
-    actual fun shareMedia(file: PlatformFile) {
-        if (Desktop.isDesktopSupported()) {
-            runCatching { Desktop.getDesktop().open(file.file) }
-        }
-    }
-
-    actual fun setWallpaper(file: PlatformFile) {
+    actual fun shareImage(file: PlatformFile) {
         if (Desktop.isDesktopSupported()) {
             runCatching { Desktop.getDesktop().open(file.file) }
         }

@@ -74,12 +74,12 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -266,7 +266,7 @@ private fun MonoDetailScreenHeader(
                     )
                     .fillMaxHeight()
                     .aspectRatio(3 / 4f)
-                    .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.mono.images.displayMediumImage))) },
+                    .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.mono.images.displayOriginalUrl))) },
                 shape = MaterialTheme.shapes.small,
                 model = state.mono.images.displayMediumImage,
                 alignment = Alignment.TopCenter,

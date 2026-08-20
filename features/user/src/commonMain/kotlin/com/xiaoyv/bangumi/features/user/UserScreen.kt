@@ -51,9 +51,9 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -186,7 +186,7 @@ private fun UserScreenHeader(
                         .align(Alignment.Center)
                         .size(80.dp)
                         .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
-                        .clickable { onUiEvent(UserEvent.UI.OnNavScreen(Screen.PreviewMain(state.user.avatar.displayLargeImage))) },
+                        .clickable { onUiEvent(UserEvent.UI.OnNavScreen(Screen.PreviewMain(state.user.avatar.displayOriginalUrl))) },
                     model = state.user.avatar.displayMediumImage,
                     shape = CircleShape,
                 )

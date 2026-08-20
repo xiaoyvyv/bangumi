@@ -2,8 +2,11 @@ package com.xiaoyv.bangumi.features.preivew.main.business
 
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_save
+import com.xiaoyv.bangumi.core_resource.resources.global_save_gallery_success
 import com.xiaoyv.bangumi.core_resource.resources.global_set_wallpaper
+import com.xiaoyv.bangumi.core_resource.resources.global_set_wallpaper_success
 import com.xiaoyv.bangumi.core_resource.resources.global_share
+import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -13,8 +16,11 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.saveImageToGallery
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import org.jetbrains.compose.resources.getString
 
 /**
  * [PreviewMainViewModel]
@@ -58,26 +64,32 @@ class PreviewMainViewModel(
     }
 
     private fun onSaveMedia() = intent {
-        withActionLoading { choreRepository.fetchMediaPictureByUrl(state.items[state.index]) }
-            .onFailure { postToast { it.errMsg } }
-            .onSuccess { file ->
-                postEffect { PreviewMainSideEffect.OnSaveMedia(file) }
-            }
-    }
-
-    private fun onSetWallpaper() = intent {
-        withActionLoading { choreRepository.fetchMediaPictureByUrl(state.items[state.index]) }
-            .onFailure { postToast { it.errMsg } }
-            .onSuccess { file ->
-                postEffect { PreviewMainSideEffect.OnSetWallpaper(file) }
-            }
+        withActionLoading {
+            choreRepository.fetchPictureFileByUrl(state.items[state.index])
+                .map { FileKit.saveImageToGallery(it) }
+        }.onFailure {
+            postToast { it.errMsg }
+        }.onSuccess {
+            postToast { getString(Res.string.global_save_gallery_success) }
+        }
     }
 
     private fun onShareMedia() = intent {
-        withActionLoading { choreRepository.fetchMediaPictureByUrl(state.items[state.index]) }
+        withActionLoading { choreRepository.fetchPictureFileByUrl(state.items[state.index]) }
             .onFailure { postToast { it.errMsg } }
             .onSuccess { file ->
                 postEffect { PreviewMainSideEffect.OnShareMedia(file) }
             }
+    }
+
+    private fun onSetWallpaper() = intent {
+        withActionLoading {
+            choreRepository.fetchPictureFileByUrl(state.items[state.index])
+                .map { System.setWallpaper(it) }
+        }.onFailure {
+            postToast { it.errMsg }
+        }.onSuccess {
+            postToast { getString(Res.string.global_set_wallpaper_success) }
+        }
     }
 }

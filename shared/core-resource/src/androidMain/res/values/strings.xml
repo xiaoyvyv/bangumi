@@ -28,6 +28,7 @@
     <string name="global_settings">设置</string>
     <string name="global_avatar">头像</string>
     <string name="global_save">保存</string>
+    <string name="global_save_gallery_success">保存到相册成功</string>
     <string name="global_ok">好的</string>
     <string name="global_edit">编辑</string>
     <string name="global_nickname">昵称</string>
@@ -170,6 +171,7 @@
     <string name="global_no_more_comments_tag">本页到底</string>
     <string name="global_no_more_comments_subtitle">这页讨论已经显示完毕，下面暂时没有更多回复了。</string>
     <string name="global_set_wallpaper">设置壁纸</string>
+    <string name="global_set_wallpaper_success">设置壁纸成功</string>
     <string name="global_choose">请选择</string>
 
     <string name="emoji_tv">TV</string>

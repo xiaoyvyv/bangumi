@@ -6,7 +6,7 @@ import io.github.vinceglb.filekit.PlatformFile
 interface ChoreRepository {
     suspend fun fetchDns(hostname: String): Result<Pair<String, List<String>>>
 
-    suspend fun fetchMediaPictureByUrl(url: String): Result<PlatformFile>
+    suspend fun fetchPictureFileByUrl(url: String): Result<PlatformFile>
 
     suspend fun compressImageAndUpload(file: PlatformFile): Result<ComposeUploadImage>
 

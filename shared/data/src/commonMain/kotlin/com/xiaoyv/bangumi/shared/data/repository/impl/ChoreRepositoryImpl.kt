@@ -1,5 +1,10 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
+import coil3.SingletonImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.request.ErrorResult
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.isIpv4Address
 import com.xiaoyv.bangumi.shared.core.utils.runResult
@@ -9,16 +14,18 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUploadImage
 import com.xiaoyv.bangumi.shared.data.model.response.chore.CloudflareDnsResponse
 import com.xiaoyv.bangumi.shared.data.model.response.trace.MicrosoftTranslate
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
+import com.xiaoyv.bangumi.shared.platformContext
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.ImageFormat
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.cacheDir
 import io.github.vinceglb.filekit.compressImage
+import io.github.vinceglb.filekit.copyTo
 import io.github.vinceglb.filekit.createDirectories
 import io.github.vinceglb.filekit.div
 import io.github.vinceglb.filekit.filesDir
 import io.github.vinceglb.filekit.readBytes
-import io.github.vinceglb.filekit.sink
+import io.github.vinceglb.filekit.readString
 import io.github.vinceglb.filekit.source
 import io.github.vinceglb.filekit.write
 import io.ktor.client.request.forms.InputProvider
@@ -27,11 +34,9 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
-import io.ktor.client.statement.bodyAsChannel
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.utils.io.readAvailable
 import kotlinx.io.buffered
 import okio.ByteString.Companion.encodeUtf8
 
@@ -73,40 +78,49 @@ class ChoreRepositoryImpl(private val client: BgmApiClient) : ChoreRepository {
         throw lastException ?: IllegalStateException("No IPv4 address found for $normalizedHostname via DoH")
     }
 
-    override suspend fun fetchMediaPictureByUrl(url: String): Result<PlatformFile> = runResult {
-        val response = client.imageHttpClient.get(url)
-        require(response.status.value in 200..299) {
-            "Failed to download image: HTTP ${response.status.value}"
-        }
+    @OptIn(ExperimentalCoilApi::class)
+    override suspend fun fetchPictureFileByUrl(url: String): Result<PlatformFile> = runResult {
+        val imageLoader = SingletonImageLoader.get(platformContext)
 
-        val contentType = response.headers[HttpHeaders.ContentType].orEmpty().lowercase()
-        val extension = when {
-            contentType.contains("jpeg") || contentType.contains("jpg") -> "jpg"
-            contentType.contains("png") -> "png"
-            contentType.contains("gif") -> "gif"
-            contentType.contains("webp") -> "webp"
-            else -> url.substringAfterLast(".", "jpg").substringBefore("?").ifBlank { "jpg" }
-        }
+        val request = ImageRequest.Builder(platformContext)
+            .data(url)
+            .build()
 
-        val saveDir = FileKit.cacheDir.div("download_image").apply { createDirectories() }
-        val fileName = "${url.encodeUtf8().md5().hex()}.$extension"
-        val destFile = saveDir.div(fileName)
+        when (val result = imageLoader.execute(request)) {
+            is ErrorResult -> throw result.throwable
+            is SuccessResult -> {
+                val diskCache = requireNotNull(imageLoader.diskCache)
+                val cacheKey = request.diskCacheKey ?: result.request.data.toString()
 
-        val channel = response.bodyAsChannel()
-        val sink = destFile.sink().buffered()
-        try {
-            val buffer = ByteArray(64 * 1024)
-            while (!channel.isClosedForRead) {
-                val bytesRead = channel.readAvailable(buffer, 0, buffer.size)
-                if (bytesRead <= 0) break
-                sink.write(buffer, 0, bytesRead)
+                val snapshot = diskCache.openSnapshot(cacheKey)
+                    ?: diskCache.openSnapshot(url)
+                    ?: throw IllegalStateException("Failed to load image using Coil: $url")
+
+                snapshot.use {
+                    val extension = runCatching {
+                        PlatformFile(it.metadata.toString()).readString()
+                    }.map { metadataText ->
+                        when {
+                            metadataText.contains("image/jpeg") || metadataText.contains("image/jpg") -> "jpg"
+                            metadataText.contains("image/png") -> "png"
+                            metadataText.contains("image/gif") -> "gif"
+                            metadataText.contains("image/webp") -> "webp"
+                            metadataText.contains("image/avif") -> "avif"
+                            else -> "jpg"
+                        }
+                    }.recover {
+                        url.substringAfterLast(".", "jpg").substringBefore("?")
+                    }.getOrThrow()
+
+                    val cachedPath = it.data
+                    val saveDir = FileKit.cacheDir.div("image_cache_download").apply { createDirectories() }
+                    val fileName = "${url.encodeUtf8().md5().hex()}.$extension"
+                    val destFile = saveDir.div(fileName)
+                    PlatformFile(cachedPath.toString()).copyTo(destFile)
+                    destFile
+                }
             }
-            sink.flush()
-        } finally {
-            sink.close()
         }
-
-        destFile
     }
 
     override suspend fun compressImageAndUpload(file: PlatformFile): Result<ComposeUploadImage> =

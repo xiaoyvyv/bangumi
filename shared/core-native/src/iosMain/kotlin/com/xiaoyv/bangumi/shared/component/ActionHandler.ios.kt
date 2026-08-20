@@ -15,12 +15,8 @@ import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import platform.Foundation.NSData
-import platform.Foundation.dataWithContentsOfFile
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
-import platform.UIKit.UIImage
-import platform.UIKit.UIImageWriteToSavedPhotosAlbum
 import platform.UIKit.UIViewController
 import platform.UIKit.UIWindow
 import platform.UIKit.popoverPresentationController
@@ -71,15 +67,8 @@ actual class ActionHandler actual constructor(
         }
     }
 
-    actual fun saveMedia(file: PlatformFile) {
-        val path = file.nsUrl?.path ?: return
-        val data = NSData.dataWithContentsOfFile(path) ?: return
-        val image = UIImage.imageWithData(data) ?: return
-        UIImageWriteToSavedPhotosAlbum(image, null, null, null)
-    }
-
-    actual fun shareMedia(file: PlatformFile) {
-        val url = file.nsUrl ?: return
+    actual fun shareImage(file: PlatformFile) {
+        val url = file.nsUrl
         val activity = UIActivityViewController(
             activityItems = listOf(url),
             applicationActivities = null
@@ -95,9 +84,5 @@ actual class ActionHandler actual constructor(
 
         activity.popoverPresentationController?.sourceView = presenter?.view
         presenter?.presentViewController(activity, animated = true, completion = null)
-    }
-
-    actual fun setWallpaper(file: PlatformFile) {
-        shareMedia(file)
     }
 }

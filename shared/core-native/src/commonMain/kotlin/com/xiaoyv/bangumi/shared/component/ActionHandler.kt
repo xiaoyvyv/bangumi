@@ -7,6 +7,12 @@ import androidx.compose.ui.platform.UriHandler
 
 import io.github.vinceglb.filekit.PlatformFile
 
+val EmptyUriHandler = object : UriHandler {
+    override fun openUri(uri: String) {}
+}
+
+val EmptyActionHandler = ActionHandler(EmptyUriHandler, null)
+
 @Composable
 expect fun rememberActionHandler(): ActionHandler
 
@@ -19,11 +25,7 @@ expect class ActionHandler(uriHandler: UriHandler, clipboard: Clipboard?) {
 
     fun openInBrowser(link: String)
 
-    fun saveMedia(file: PlatformFile)
-
-    fun shareMedia(file: PlatformFile)
-
-    fun setWallpaper(file: PlatformFile)
+    fun shareImage(file: PlatformFile)
 }
 
 

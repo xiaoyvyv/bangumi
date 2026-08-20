@@ -57,6 +57,9 @@ fun PlatformBitmap.asImageBitmap(): ImageBitmap {
     return this.asComposeImageBitmap()
 }
 
+actual val platformContext: coil3.PlatformContext
+    get() = coil3.PlatformContext.INSTANCE
+
 actual object System {
 
     @OptIn(ExperimentalNativeApi::class)
@@ -146,5 +149,9 @@ actual object System {
 
     actual suspend fun cleanCache(): Result<Boolean> {
         return Result.success(true)
+    }
+
+    actual suspend fun setWallpaper(file: io.github.vinceglb.filekit.PlatformFile) {
+
     }
 }

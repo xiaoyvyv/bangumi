@@ -112,7 +112,7 @@ private fun GalleryScreenContent(
                     .aspectRatio(item.aspect),
                 item = item,
                 onClick = {
-                    onUiEvent(GalleryEvent.UI.OnNavScreen(Screen.PreviewMain(index, state.images.map { it.image })))
+                    onUiEvent(GalleryEvent.UI.OnNavScreen(Screen.PreviewMain(index, state.images.map { it.original })))
                 }
             )
         }

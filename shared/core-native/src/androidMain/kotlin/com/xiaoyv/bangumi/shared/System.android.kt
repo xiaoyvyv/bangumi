@@ -18,6 +18,7 @@ import com.xiaoyv.bangumi.shared.native.AppDatabase
 import com.xiaoyv.bangumi.shared.sni.AntiSniDns
 import com.xiaoyv.bangumi.shared.sni.AntiSniSocketFactory
 import com.xiaoyv.bangumi.shared.sni.DomainTlsFragmentationPolicy
+import io.github.vinceglb.filekit.readBytes
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.okhttp.OkHttp
@@ -29,6 +30,9 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.time.ExperimentalTime
 
 lateinit var application: Application
+
+actual val platformContext: coil3.PlatformContext
+    get() = application
 
 actual object System {
 
@@ -89,6 +93,16 @@ actual object System {
     actual suspend fun cleanCache(): Result<Boolean> {
         return withContext(Dispatchers.IO) {
             runCatching { application.cacheDir.deleteRecursively() }
+        }
+    }
+
+    @androidx.annotation.RequiresPermission(android.Manifest.permission.SET_WALLPAPER)
+    actual suspend fun setWallpaper(file: io.github.vinceglb.filekit.PlatformFile) {
+        withContext(Dispatchers.IO) {
+            val bytes = file.readBytes()
+            val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            android.app.WallpaperManager.getInstance(application).setBitmap(bitmap)
+            bitmap.recycle()
         }
     }
 

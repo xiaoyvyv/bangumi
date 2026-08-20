@@ -44,9 +44,7 @@ fun PreviewMainRoute(
 
     viewModel.collectBaseSideEffect { effect ->
         when (effect) {
-            is PreviewMainSideEffect.OnSaveMedia -> actionHandler.saveMedia(effect.file)
-            is PreviewMainSideEffect.OnShareMedia -> actionHandler.shareMedia(effect.file)
-            is PreviewMainSideEffect.OnSetWallpaper -> actionHandler.setWallpaper(effect.file)
+            is PreviewMainSideEffect.OnShareMedia -> actionHandler.shareImage(effect.file)
         }
     }
 

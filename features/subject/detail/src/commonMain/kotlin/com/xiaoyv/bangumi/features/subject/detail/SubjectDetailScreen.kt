@@ -298,9 +298,7 @@ private fun SubjectDetailScreenHeader(
                 StateImage(
                     modifier = Modifier
                         .matchParentSize()
-                        .clickable {
-                            onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.subject.images.displayMediumImage)))
-                        },
+                        .clickable { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.subject.images.displayOriginalUrl))) },
                     shape = MaterialTheme.shapes.small,
                     contentScale = ContentScale.Crop,
                     model = state.subject.images.displayMediumImage,

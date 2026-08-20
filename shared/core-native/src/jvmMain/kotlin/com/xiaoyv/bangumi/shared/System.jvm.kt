@@ -20,6 +20,9 @@ import java.net.URI
 import java.net.URLEncoder
 import kotlin.coroutines.CoroutineContext
 
+actual val platformContext: coil3.PlatformContext
+    get() = coil3.PlatformContext.INSTANCE
+
 actual object System {
     private var currentDir: File = File(System.getProperty("user.dir"))
 
@@ -85,5 +88,11 @@ actual object System {
 
     actual suspend fun cleanCache(): Result<Boolean> {
         return Result.success(true)
+    }
+
+    actual suspend fun setWallpaper(file: io.github.vinceglb.filekit.PlatformFile) {
+        if (Desktop.isDesktopSupported()) {
+            runCatching { Desktop.getDesktop().open(file.file) }
+        }
     }
 }

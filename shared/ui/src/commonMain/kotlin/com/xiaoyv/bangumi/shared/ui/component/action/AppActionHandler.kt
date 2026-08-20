@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.xiaoyv.bangumi.shared.component.ActionHandler
+import com.xiaoyv.bangumi.shared.component.EmptyActionHandler
 import com.xiaoyv.bangumi.shared.component.rememberActionHandler
 import com.xiaoyv.bangumi.shared.core.types.BgmPathType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
@@ -22,9 +23,13 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.collections.immutable.persistentListOf
 
-private val EmptyActionHandler = AppActionHandler(null)
+/**
+ * 默认空实现
+ */
+private val EmptyAppActionHandler = AppActionHandler(EmptyActionHandler)
+private val EmptyAppActionHandlerScreenRouter: ((Screen) -> Unit) = {}
 
-val LocalActionHandler = staticCompositionLocalOf { EmptyActionHandler }
+val LocalActionHandler = staticCompositionLocalOf { EmptyAppActionHandler }
 
 @Composable
 fun rememberAppActionHandler(onNavScreen: (Screen) -> Unit): AppActionHandler {
@@ -33,35 +38,32 @@ fun rememberAppActionHandler(onNavScreen: (Screen) -> Unit): AppActionHandler {
     val handler = remember(actionHandler, currentOnNavScreen) { AppActionHandler(actionHandler) }
 
     DisposableEffect(handler, currentOnNavScreen) {
-        handler.onNavScreen = currentOnNavScreen
+        handler.registerScreenRouter(currentOnNavScreen)
         onDispose {
-            handler.onNavScreen = null
+            handler.unRegisterScreenRouter()
         }
     }
     return handler
 }
 
 @Stable
-class AppActionHandler(val actionHandler: ActionHandler?) {
-    internal var onNavScreen: ((Screen) -> Unit)? = null
+class AppActionHandler(val actionHandler: ActionHandler) {
+    private var onNavScreen: (Screen) -> Unit = EmptyAppActionHandlerScreenRouter
 
     private val handleHosts = persistentListOf("bgm.tv", "bangumi.tv", "chii.in")
 
-    fun openInBrowser(link: String) = actionHandler?.openInBrowser(link)
-    fun copyContent(content: String) = actionHandler?.copyContent(content)
-    fun shareContent(content: String) = actionHandler?.shareContent(content)
-    fun shareMedia(file: PlatformFile) = actionHandler?.shareMedia(file)
-    fun saveMedia(file: PlatformFile) = actionHandler?.saveMedia(file)
-    fun setWallpaper(file: PlatformFile) = actionHandler?.setWallpaper(file)
+    fun openInBrowser(link: String) = actionHandler.openInBrowser(link)
 
-    fun openImage(url: String) {
-        onNavScreen?.invoke(Screen.PreviewMain(url))
-    }
+    fun copyContent(content: String) = actionHandler.copyContent(content)
+
+    fun shareContent(content: String) = actionHandler.shareContent(content)
+
+    fun shareImage(file: PlatformFile) = actionHandler.shareImage(file)
+
+    fun openImage(url: String) = onNavScreen.invoke(Screen.PreviewMain(url))
 
     fun openBgmLink(titleLink: String, jumpWeb: Boolean = true): Boolean {
         debugLog { "Handle Url: $titleLink" }
-
-        val onNavScreen = onNavScreen ?: return false
 
         val url = if (titleLink.startsWith("http", true)) titleLink.toUrl() else (WebConstant.URL_BASE_WEB + titleLink).toUrl()
         val id = titleLink.substringAfterLast("/")
@@ -160,5 +162,13 @@ class AppActionHandler(val actionHandler: ActionHandler?) {
         }
 
         return false
+    }
+
+    internal fun registerScreenRouter(currentOnNavScreen: (Screen) -> Unit) {
+        onNavScreen = currentOnNavScreen
+    }
+
+    internal fun unRegisterScreenRouter() {
+        onNavScreen = EmptyAppActionHandlerScreenRouter
     }
 }

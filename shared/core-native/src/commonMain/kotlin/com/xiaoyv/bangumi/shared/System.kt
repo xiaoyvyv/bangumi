@@ -4,11 +4,13 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.xiaoyv.bangumi.shared.native.AppDatabase
+import io.github.vinceglb.filekit.PlatformFile
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import kotlin.coroutines.CoroutineContext
 
 val systemDevice by lazy { SystemDevice() }
+expect val platformContext: coil3.PlatformContext
 
 expect object System {
     val isDebugType: Boolean
@@ -17,6 +19,8 @@ expect object System {
     val datastore: DataStore<Preferences>
 
     suspend fun cleanCache(): Result<Boolean>
+
+    suspend fun setWallpaper(file: PlatformFile)
 
     fun createClipEntry(text: String): ClipEntry
 
