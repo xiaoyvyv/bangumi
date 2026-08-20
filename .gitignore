@@ -32,3 +32,4 @@ captures
 /internal/SniShaper/
 /internal/bgm-ktor-client/
 /internal/pixiv/pixiv-client/
+/android/release/
