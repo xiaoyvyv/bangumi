@@ -19,6 +19,7 @@ import com.xiaoyv.bangumi.shared.core.utils.toLongValue
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.collections.immutable.persistentListOf
 
 private val EmptyActionHandler = AppActionHandler(null)
@@ -46,9 +47,12 @@ class AppActionHandler(val actionHandler: ActionHandler?) {
 
     private val handleHosts = persistentListOf("bgm.tv", "bangumi.tv", "chii.in")
 
-    fun shareContent(content: String) = actionHandler?.shareContent(content)
-    fun copyContent(content: String) = actionHandler?.copyContent(content)
     fun openInBrowser(link: String) = actionHandler?.openInBrowser(link)
+    fun copyContent(content: String) = actionHandler?.copyContent(content)
+    fun shareContent(content: String) = actionHandler?.shareContent(content)
+    fun shareMedia(file: PlatformFile) = actionHandler?.shareMedia(file)
+    fun saveMedia(file: PlatformFile) = actionHandler?.saveMedia(file)
+    fun setWallpaper(file: PlatformFile) = actionHandler?.setWallpaper(file)
 
     fun openImage(url: String) {
         onNavScreen?.invoke(Screen.PreviewMain(url))

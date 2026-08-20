@@ -11,11 +11,16 @@ import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import platform.Foundation.NSData
+import platform.Foundation.dataWithContentsOfFile
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
+import platform.UIKit.UIImage
+import platform.UIKit.UIImageWriteToSavedPhotosAlbum
 import platform.UIKit.UIViewController
 import platform.UIKit.UIWindow
 import platform.UIKit.popoverPresentationController
@@ -64,5 +69,35 @@ actual class ActionHandler actual constructor(
                 clipboard?.setClipEntry(ClipEntry.withPlainText(content))
             }
         }
+    }
+
+    actual fun saveMedia(file: PlatformFile) {
+        val path = file.nsUrl?.path ?: return
+        val data = NSData.dataWithContentsOfFile(path) ?: return
+        val image = UIImage.imageWithData(data) ?: return
+        UIImageWriteToSavedPhotosAlbum(image, null, null, null)
+    }
+
+    actual fun shareMedia(file: PlatformFile) {
+        val url = file.nsUrl ?: return
+        val activity = UIActivityViewController(
+            activityItems = listOf(url),
+            applicationActivities = null
+        )
+        val window = UIApplication.sharedApplication.keyWindow
+            ?: UIApplication.sharedApplication.windows.firstOrNull() as? UIWindow
+        val rootVC = window?.rootViewController ?: return
+
+        var presenter: UIViewController? = rootVC
+        while (presenter?.presentedViewController != null) {
+            presenter = presenter.presentedViewController
+        }
+
+        activity.popoverPresentationController?.sourceView = presenter?.view
+        presenter?.presentViewController(activity, animated = true, completion = null)
+    }
+
+    actual fun setWallpaper(file: PlatformFile) {
+        shareMedia(file)
     }
 }

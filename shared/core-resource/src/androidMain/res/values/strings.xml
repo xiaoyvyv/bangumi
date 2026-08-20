@@ -97,6 +97,8 @@
     <string name="global_input_hint">输入内容…</string>
     <string name="global_share">分享</string>
     <string name="global_copy">复制</string>
+    <string name="global_copy_name">复制名称</string>
+    <string name="global_copy_name_cn">复制中文名称</string>
     <string name="global_copy_link">复制链接</string>
     <string name="global_netabare">Netabare 趋势</string>
     <string name="global_open_browser">在浏览器中打开</string>
@@ -167,6 +169,8 @@
     <string name="global_no_more">没有更多内容了~</string>
     <string name="global_no_more_comments_tag">本页到底</string>
     <string name="global_no_more_comments_subtitle">这页讨论已经显示完毕，下面暂时没有更多回复了。</string>
+    <string name="global_set_wallpaper">设置壁纸</string>
+    <string name="global_choose">请选择</string>
 
     <string name="emoji_tv">TV</string>
     <string name="emoji_tv_1">TV-1</string>

@@ -6,6 +6,8 @@ import io.github.vinceglb.filekit.PlatformFile
 interface ChoreRepository {
     suspend fun fetchDns(hostname: String): Result<Pair<String, List<String>>>
 
+    suspend fun fetchMediaPictureByUrl(url: String): Result<PlatformFile>
+
     suspend fun compressImageAndUpload(file: PlatformFile): Result<ComposeUploadImage>
 
     suspend fun compressImage(file: PlatformFile): Result<PlatformFile>
@@ -13,4 +15,5 @@ interface ChoreRepository {
     suspend fun uploadImage(file: PlatformFile): Result<ComposeUploadImage>
 
     suspend fun translate(text: String, isHtml: Boolean): Result<String>
+
 }

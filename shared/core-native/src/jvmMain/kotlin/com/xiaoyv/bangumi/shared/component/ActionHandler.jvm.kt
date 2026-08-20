@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -60,6 +61,24 @@ actual class ActionHandler actual constructor(
             runCatching {
                 clipboard?.setClipEntry(ClipEntry(StringSelection(content)))
             }
+        }
+    }
+
+    actual fun saveMedia(file: PlatformFile) {
+        if (Desktop.isDesktopSupported()) {
+            runCatching { Desktop.getDesktop().open(file.file.parentFile) }
+        }
+    }
+
+    actual fun shareMedia(file: PlatformFile) {
+        if (Desktop.isDesktopSupported()) {
+            runCatching { Desktop.getDesktop().open(file.file) }
+        }
+    }
+
+    actual fun setWallpaper(file: PlatformFile) {
+        if (Desktop.isDesktopSupported()) {
+            runCatching { Desktop.getDesktop().open(file.file) }
         }
     }
 }

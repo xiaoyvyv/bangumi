@@ -17,5 +17,9 @@ sealed class PreviewMainEvent {
     sealed class Action : PreviewMainEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
         data class OnPageSelected(val index: Int) : Action()
+
+        data object OnSaveMedia : Action()
+        data object OnShareMedia : Action()
+        data object OnSetWallpaper : Action()
     }
 }

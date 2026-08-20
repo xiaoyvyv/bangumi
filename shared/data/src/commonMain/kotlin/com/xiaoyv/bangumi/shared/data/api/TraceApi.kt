@@ -5,15 +5,11 @@ package com.xiaoyv.bangumi.shared.data.api
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceCharacter
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceMoe
-import com.xiaoyv.bangumi.shared.data.model.response.trace.MicrosoftTranslate
-import com.xiaoyv.bangumi.shared.data.model.response.trace.MicrosoftTranslateParam
 import de.jensklingenberg.ktorfit.http.Body
-import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.client.statement.HttpResponse
 
 /**
  * [TraceApi]
@@ -43,20 +39,14 @@ interface TraceApi {
     suspend fun fetchCharacterInfoFromImage(@Body body: MultiPartFormDataContent): ComposeTraceCharacter
 
     /**
-     * 查询翻译 Token
-     */
-    @GET("https://edge.microsoft.com/translate/auth")
-    suspend fun queryEdgeAuthToken(): HttpResponse
-
-    /**
      * 翻译
      */
-    @POST("https://api.cognitive.microsofttranslator.com/translate")
+    @POST("https://edge.microsoft.com/translate/translatetext")
     suspend fun submitMicrosoftTranslate(
-        @Header("Authorization") authentication: String,
-        @Query("api-version") apiVersion: String = "3.0",
+        @Query("from") from: String = "",
         @Query("to") to: String = "zh-Hans",
         @Query("textType") textType: String = "plain",
-        @Body param: List<MicrosoftTranslateParam>,
-    ): List<MicrosoftTranslate>
+        @Query("isEnterpriseClient") isEnterpriseClient: Boolean = false,
+        @Body param: List<String>,
+    ): String
 }

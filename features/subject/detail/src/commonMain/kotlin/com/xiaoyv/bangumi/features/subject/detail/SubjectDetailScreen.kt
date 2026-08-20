@@ -33,10 +33,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.PagingData
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_image
 import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
@@ -83,12 +86,14 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfRed
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -133,7 +138,7 @@ private fun SubjectDetailScreen(
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            val iconColor = androidx.compose.ui.graphics.lerp(
+            val iconColor = lerp(
                 imageColorState.contentColor,
                 MaterialTheme.colorScheme.onSurface,
                 it
@@ -200,6 +205,8 @@ private fun SubjectDetailScreen(
                                 add(ButtonType.Netabare)
                                 add(ButtonType.Share)
                                 add(ButtonType.CopyLink)
+                                add(ButtonType.CopyName)
+                                if (uiState.data.subject.nameCn.isNotBlank()) add(ButtonType.CopyNameCn)
                                 add(ButtonType.OpenInBrowser)
                             }
                         ) { item ->
@@ -208,6 +215,8 @@ private fun SubjectDetailScreen(
                                 ButtonType.Share -> actionHandler.shareContent(subject.shareUrl)
                                 ButtonType.OpenInBrowser -> actionHandler.openInBrowser(subject.shareUrl)
                                 ButtonType.CopyLink -> actionHandler.copyContent(subject.shareUrl)
+                                ButtonType.CopyName -> actionHandler.copyContent(subject.name)
+                                ButtonType.CopyNameCn -> actionHandler.copyContent(subject.nameCn)
                                 else -> Unit
                             }
                         }
@@ -478,5 +487,21 @@ fun SubjectDetailScreenContent(
                 onActionEvent = onActionEvent
             )
         }
+    }
+}
+
+
+@Composable
+@Preview
+private fun PreviewSubjectDetailScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        SubjectDetailScreen(
+            uiState = UiState(
+                SubjectDetailState(1)
+            ),
+            commentPagingItems = flowOf(PagingData.from(emptyList<ComposeComment>())).collectAsLazyPagingItems(),
+            onUiEvent = { },
+            onActionEvent = {}
+        )
     }
 }

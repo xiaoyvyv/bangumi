@@ -5,6 +5,8 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.UriHandler
 
+import io.github.vinceglb.filekit.PlatformFile
+
 @Composable
 expect fun rememberActionHandler(): ActionHandler
 
@@ -16,6 +18,12 @@ expect class ActionHandler(uriHandler: UriHandler, clipboard: Clipboard?) {
     fun copyContent(content: String)
 
     fun openInBrowser(link: String)
+
+    fun saveMedia(file: PlatformFile)
+
+    fun shareMedia(file: PlatformFile)
+
+    fun setWallpaper(file: PlatformFile)
 }
 
 

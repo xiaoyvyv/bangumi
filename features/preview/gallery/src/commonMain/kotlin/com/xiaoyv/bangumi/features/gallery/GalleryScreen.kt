@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_artwork
@@ -38,6 +39,7 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -153,6 +155,19 @@ private fun GalleryPictureItem(
                     append(stringResource(Res.string.global_file_size, item.size.formatFileSize()))
                 }
             }
+        )
+    }
+}
+
+
+@Composable
+@Preview
+private fun PreviewGalleryScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        GalleryScreen(
+            uiState = UiState(GalleryState()),
+            onUiEvent = { },
+            onActionEvent = {}
         )
     }
 }

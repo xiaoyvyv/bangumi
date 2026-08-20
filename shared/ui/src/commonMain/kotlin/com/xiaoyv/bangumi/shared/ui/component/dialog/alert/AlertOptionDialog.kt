@@ -31,7 +31,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 @Composable
 fun <Key : Any> AlertOptionDialog(
     state: AlertDialogState,
-    title: String,
+    title: String?,
     message: String? = null,
     items: SerializeList<ComposeTextTab<Key>>,
     onClick: (ComposeTextTab<Key>, Int) -> Unit,
@@ -45,18 +45,19 @@ fun <Key : Any> AlertOptionDialog(
                 .padding(top = 12.dp, bottom = 20.dp)
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    modifier = Modifier.padding(ContentMargin),
+                if (title != null) Text(
+                    modifier = Modifier.padding(
+                        vertical = ContentMargin,
+                        horizontal = 20.dp
+                    ),
                     text = title,
                     style = MaterialTheme.typography.titleLarge
                 )
 
                 if (message != null) {
                     Text(
-                        modifier = Modifier
-                            .padding(horizontal = ContentMargin)
-                            .padding(vertical = ContentMarginHalf),
-                        text = title,
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = ContentMarginHalf),
+                        text = message,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -70,7 +71,7 @@ fun <Key : Any> AlertOptionDialog(
                                 onClick(tab, i)
                                 state.dismiss()
                             }
-                            .padding(horizontal = ContentMargin, vertical = ContentMargin),
+                            .padding(horizontal = 20.dp, vertical = ContentMargin),
                         text = tab.displayText(),
                         color = MaterialTheme.colorScheme.onSurface
                     )

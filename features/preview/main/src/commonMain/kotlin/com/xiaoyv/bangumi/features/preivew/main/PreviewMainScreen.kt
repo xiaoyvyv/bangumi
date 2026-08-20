@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.preivew.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -13,17 +14,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import com.github.panpf.zoomimage.CoilZoomAsyncImage
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_image
 import com.xiaoyv.bangumi.features.preivew.main.business.PreviewMainEvent
+import com.xiaoyv.bangumi.features.preivew.main.business.PreviewMainSideEffect
 import com.xiaoyv.bangumi.features.preivew.main.business.PreviewMainState
 import com.xiaoyv.bangumi.features.preivew.main.business.PreviewMainViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
+import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -34,9 +40,14 @@ fun PreviewMainRoute(
     onNavScreen: (Screen) -> Unit,
 ) {
     val baseState by viewModel.collectAsState()
+    val actionHandler = LocalActionHandler.current
 
-    viewModel.collectBaseSideEffect {
-
+    viewModel.collectBaseSideEffect { effect ->
+        when (effect) {
+            is PreviewMainSideEffect.OnSaveMedia -> actionHandler.saveMedia(effect.file)
+            is PreviewMainSideEffect.OnShareMedia -> actionHandler.shareMedia(effect.file)
+            is PreviewMainSideEffect.OnSetWallpaper -> actionHandler.setWallpaper(effect.file)
+        }
     }
 
     PreviewMainScreen(
@@ -61,12 +72,25 @@ private fun PreviewMainScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = uiState.data.run { "${index + 1}/${items.size}" },
+                title = uiState.data.title,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     navigationIconContentColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.surface,
                 ),
+                actions = {
+                    DropMenuActionButton(
+                        options = uiState.data.contextMenus,
+                        imageTint = MaterialTheme.colorScheme.surface,
+                        onOptionClick = { tab ->
+                            when (tab.type) {
+                                0 -> onActionEvent(PreviewMainEvent.Action.OnSaveMedia)
+                                1 -> onActionEvent(PreviewMainEvent.Action.OnShareMedia)
+                                2 -> onActionEvent(PreviewMainEvent.Action.OnSetWallpaper)
+                            }
+                        }
+                    )
+                },
                 onNavigationClick = { onUiEvent(PreviewMainEvent.UI.OnNavUp) }
             )
         }
@@ -105,12 +129,28 @@ private fun PreviewMainScreenContent(
         modifier = Modifier.fillMaxSize(),
         state = pagerState
     ) {
-        CoilZoomAsyncImage(
-            modifier = Modifier.fillMaxSize(),
-            model = state.items[it],
-            contentDescription = stringResource(Res.string.global_image),
-            onTap = { onUiEvent(PreviewMainEvent.UI.OnNavUp) }
+        Box(Modifier.fillMaxSize()) {
+            CoilZoomAsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = state.items[it],
+                contentDescription = stringResource(Res.string.global_image),
+                onTap = { onUiEvent(PreviewMainEvent.UI.OnNavUp) }
+            )
+        }
+    }
+}
+
+
+@Composable
+@Preview
+private fun PreviewMainScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        PreviewMainScreen(
+            uiState = UiState(PreviewMainState(0, title = "1/1")),
+            onUiEvent = { },
+            onActionEvent = {}
         )
     }
 }
+
 

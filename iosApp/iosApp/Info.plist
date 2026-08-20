@@ -58,5 +58,9 @@
                 <string>Viewer</string>
             </dict>
         </array>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>需要保存图片到系统相册</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>需要访问系统相册以选择或保存图片</string>
     </dict>
 </plist>

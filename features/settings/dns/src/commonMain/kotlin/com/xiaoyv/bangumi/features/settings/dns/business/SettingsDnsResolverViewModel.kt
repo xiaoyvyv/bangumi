@@ -165,7 +165,7 @@ class SettingsDnsResolverViewModel(
     }
 
     private companion object {
-        const val MAX_CONCURRENT_DNS_QUERIES = 3
+        const val MAX_CONCURRENT_DNS_QUERIES = 5
         const val DNS_QUERY_TIMEOUT_MILLIS = 20_000L
     }
 
