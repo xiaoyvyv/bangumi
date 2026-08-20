@@ -6,6 +6,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
+import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
@@ -77,6 +78,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.Web::class, Screen.Web.serializer())
             subclass(Screen.Calendar::class, Screen.Calendar.serializer())
             subclass(Screen.DnsResolver::class, Screen.DnsResolver.serializer())
+            subclass(Screen.Report::class, Screen.Report.serializer())
         }
     }
 }
@@ -97,6 +99,9 @@ sealed class Screen(
 
     @Serializable
     data object DnsResolver : Screen(SCREEN_ROUTE_DNS)
+
+    @Serializable
+    data class Report(@ReportType val type: Int, val targetId: Long) : Screen(SCREEN_ROUTE_REPORT)
 
     @Serializable
     data object Main : Screen(SCREEN_ROUTE_MAIN, LaunchMode.SINGLE_TASK, StackAction.ClearAll)

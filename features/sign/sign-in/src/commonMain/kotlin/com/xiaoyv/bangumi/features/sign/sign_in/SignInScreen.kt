@@ -45,6 +45,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -76,6 +77,7 @@ import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInState
 import com.xiaoyv.bangumi.features.sign.sign_in.business.SignInViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.button.LoadingButton
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
@@ -316,9 +318,11 @@ private fun SignInScreenContent(
             )
 
             Row(modifier = Modifier.padding(horizontal = ContentMargin)) {
+                val uriHandler = LocalUriHandler.current
+
                 TextButton(
                     modifier = Modifier.offset(x = (-12).dp),
-                    onClick = { onActionEvent(SignInEvent.Action.OnSignIn) }
+                    onClick = { uriHandler.openUri(WebConstant.URL_BGM_SIGN) }
                 ) {
                     Text(
                         text = stringResource(Res.string.login_signup_now),

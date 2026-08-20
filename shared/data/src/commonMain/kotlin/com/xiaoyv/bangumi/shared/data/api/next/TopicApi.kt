@@ -112,7 +112,7 @@ interface TopicApi {
     @PUT("p1/groups/-/posts/{postID}/like")
     suspend fun likeGroupPost(
         @Path("postID") postID: Long,
-        @Body likeCommentParam: LikeCommentParam
+        @Body param: LikeCommentParam
     ): HttpResponse
 
     /**
@@ -121,7 +121,7 @@ interface TopicApi {
     @PUT("p1/subjects/-/posts/{postID}/like")
     suspend fun likeSubjectPost(
         @Path("postID") postID: Long,
-        @Body likeCommentParam: LikeCommentParam
+        @Body param: LikeCommentParam
     ): HttpResponse
 
     /**

@@ -14,6 +14,16 @@ import androidx.compose.material.icons.rounded.Tag
 import androidx.compose.material.icons.rounded.ViewTimeline
 import androidx.compose.material.icons.rounded.VisibilityOff
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_ad
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_argument
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_attack
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_illegal
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_irrelevant
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_other
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_political
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_privacy
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_score
+import com.xiaoyv.bangumi.core_resource.resources.action_report_menu_spoiler
 import com.xiaoyv.bangumi.core_resource.resources.calendar_friday
 import com.xiaoyv.bangumi.core_resource.resources.calendar_monday
 import com.xiaoyv.bangumi.core_resource.resources.calendar_saturday
@@ -76,6 +86,9 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_indication_ripped
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_fade
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation_slide
+import com.xiaoyv.bangumi.core_resource.resources.settings_privacy_scope_all
+import com.xiaoyv.bangumi.core_resource.resources.settings_privacy_scope_friends
+import com.xiaoyv.bangumi.core_resource.resources.settings_privacy_scope_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
@@ -105,6 +118,7 @@ import com.xiaoyv.bangumi.shared.core.types.MagnetGardenSort
 import com.xiaoyv.bangumi.shared.core.types.MagnetGardenTeam
 import com.xiaoyv.bangumi.shared.core.types.MagnetGardenType
 import com.xiaoyv.bangumi.shared.core.types.MonoCastType
+import com.xiaoyv.bangumi.shared.core.types.ReportReason
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
@@ -369,6 +383,30 @@ object TabTokens {
         ComposeTextTab(5, Res.string.calendar_friday),
         ComposeTextTab(6, Res.string.calendar_saturday),
         ComposeTextTab(7, Res.string.calendar_sunday),
+    )
+
+    val reportReasonTabs = persistentListOf(
+        ComposeTextTab(ReportReason.ABUSE, Res.string.action_report_menu_attack),
+        ComposeTextTab(ReportReason.SPAM, Res.string.action_report_menu_irrelevant),
+        ComposeTextTab(ReportReason.POLITICAL, Res.string.action_report_menu_political),
+        ComposeTextTab(ReportReason.ILLEGAL, Res.string.action_report_menu_illegal),
+        ComposeTextTab(ReportReason.PRIVACY, Res.string.action_report_menu_privacy),
+        ComposeTextTab(ReportReason.CHEAT_SCORE, Res.string.action_report_menu_score),
+        ComposeTextTab(ReportReason.FLAME, Res.string.action_report_menu_argument),
+        ComposeTextTab(ReportReason.ADVERTISEMENT, Res.string.action_report_menu_ad),
+        ComposeTextTab(ReportReason.SPOILER, Res.string.action_report_menu_spoiler),
+        ComposeTextTab(ReportReason.OTHER, Res.string.action_report_menu_other),
+    )
+
+    val privacyScope3Tabs = persistentListOf(
+        ComposeTextTab("all", Res.string.settings_privacy_scope_all),
+        ComposeTextTab("friends", Res.string.settings_privacy_scope_friends),
+        ComposeTextTab("none", Res.string.settings_privacy_scope_none),
+    )
+
+    val privacyScope2Tabs = persistentListOf(
+        ComposeTextTab("all", Res.string.settings_privacy_scope_all),
+        ComposeTextTab("none", Res.string.settings_privacy_scope_none),
     )
 
     val subjectCharacterRoleFilters = persistentListOf(

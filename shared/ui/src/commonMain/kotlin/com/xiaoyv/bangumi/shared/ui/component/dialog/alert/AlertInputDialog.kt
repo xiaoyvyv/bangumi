@@ -30,6 +30,7 @@ import com.xiaoyv.bangumi.shared.core.utils.digit
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun BgmAlertInputDialog(
@@ -57,7 +58,7 @@ fun BgmAlertInputDialog(
                     onClick = {
                         state.dismiss()
                         scope.launch {
-                            delay(200)
+                            delay(200.milliseconds)
                             onConfirm(data.copy(value = text.text.trim()))
                         }
                     },
@@ -70,7 +71,7 @@ fun BgmAlertInputDialog(
                         onClick = {
                             state.dismiss()
                             scope.launch {
-                                delay(200)
+                                delay(200.milliseconds)
                                 onCancel()
                             }
                         },

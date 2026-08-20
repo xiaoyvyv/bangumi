@@ -50,7 +50,7 @@ fun CommentReplyItem(
     isLikeable: Boolean = false,
     onClickReaction: (ComposeReaction) -> Unit = {},
     onClickUser: (String) -> Unit = {},
-    onClickReport: () -> Unit = {},
+    onClickReport: () -> Unit = { },
     onClick: () -> Unit = {},
 ) {
     ListItem(

@@ -7,4 +7,5 @@ object SpKey {
     const val KEY_USER_AGREE_PRIVACY = "key_user_agree_privacy"
     const val KEY_USER_FIRST_USE = "key_user_first_use"
     const val KEY_SETTING = "key_setting"
+    const val KEY_LAST_LAUNCH_DATE = "key_last_launch_date"
 }

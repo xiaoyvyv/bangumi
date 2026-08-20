@@ -37,8 +37,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
-import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
-import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
@@ -227,14 +225,6 @@ fun CommentItem(
         },
         trailingContent = {
             val reactionState = rememberPopupReactionState()
-            val reportDialogState = rememberAlertDialogState()
-
-            ReportDialog(
-                state = reportDialogState,
-                onClick = { value, content ->
-
-                }
-            )
 
             PopupReaction(
                 state = reactionState,
@@ -255,7 +245,7 @@ fun CommentItem(
                 },
                 onOptionClick = {
                     when (it.type) {
-                        ButtonType.Report -> reportDialogState.show()
+                        ButtonType.Report -> {}
                         ButtonType.Reaction -> reactionState.show()
                         else -> Unit
                     }

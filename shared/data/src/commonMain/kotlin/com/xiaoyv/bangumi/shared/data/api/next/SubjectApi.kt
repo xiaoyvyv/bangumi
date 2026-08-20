@@ -263,12 +263,12 @@ interface SubjectApi {
      * 给条目收藏点赞
      *
      * @param collectID
-     * @param likeCommentParam
+     * @param param
      */
     @PUT("p1/subjects/-/collects/{collectID}/like")
     suspend fun likeSubjectCollect(
         @Path("collectID") collectID: Int,
-        @Body likeCommentParam: LikeCommentParam,
+        @Body param: LikeCommentParam,
     ): ComposeStatus
 
     /**

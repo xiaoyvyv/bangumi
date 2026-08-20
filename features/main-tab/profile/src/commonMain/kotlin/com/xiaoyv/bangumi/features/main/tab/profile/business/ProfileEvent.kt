@@ -18,6 +18,7 @@ sealed class ProfileEvent {
     }
 
     sealed class Action : ProfileEvent() {
+        data object OnRefresh : Action()
         data class OnChangeSubjectTypeFilter(@field:SubjectType val type: Int) : Action()
         data class OnChangeCollectionTypeFilter(@field:CollectionType val type: Int) : Action()
         data class OnChangeCollectionSortFilter(@field:CollectionWebSortType val type: String) : Action()

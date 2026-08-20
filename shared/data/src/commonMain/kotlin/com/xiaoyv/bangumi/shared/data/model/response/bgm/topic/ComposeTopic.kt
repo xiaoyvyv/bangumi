@@ -2,11 +2,12 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm.topic
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
+import com.xiaoyv.bangumi.shared.core.types.ReportReason
 import com.xiaoyv.bangumi.shared.core.types.ReportType
-import com.xiaoyv.bangumi.shared.core.types.ReportValueType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
@@ -52,11 +53,13 @@ data class ComposeTopic(
 ) {
     val contentPostId get() = replies.firstOrNull()?.id ?: 0
 
+    val shareUrl: String get() = WebConstant.URL_BASE_WEB
+
     /**
      * 举报参数
      */
     fun reportParam(
-        @ReportValueType value: Int, comment: String,
+        @ReportReason value: Int, comment: String,
         formHash: String,
     ): ReportParam {
         return when (topicType) {

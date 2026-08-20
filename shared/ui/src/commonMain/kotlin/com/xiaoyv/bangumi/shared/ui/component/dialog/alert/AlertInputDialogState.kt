@@ -11,9 +11,8 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
+import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import org.koin.mp.KoinPlatform
 
 @Composable
 fun rememberAlertInputDialogState(
@@ -60,14 +59,13 @@ class AlertInputDialogState(val properties: DialogProperties) {
     )
 
     companion object {
-        private val json get() = KoinPlatform.getKoin().get<Json>()
 
         fun Saver(properties: DialogProperties): Saver<AlertInputDialogState, *> = Saver(
-            save = { listOf(it.showing, json.encodeToString(it.data)) },
+            save = { listOf(it.showing, defaultJson.encodeToString(it.data)) },
             restore = {
                 AlertInputDialogState(properties = properties).apply {
                     showing = it.first() as Boolean
-                    data = json.decodeFromString(it.last() as String)
+                    data = defaultJson.decodeFromString(it.last() as String)
                 }
             }
         )

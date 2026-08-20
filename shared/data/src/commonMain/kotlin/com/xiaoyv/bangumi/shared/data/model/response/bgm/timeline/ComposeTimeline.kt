@@ -13,13 +13,17 @@ import com.xiaoyv.bangumi.shared.core.types.TimelineCat.Companion.STATUS
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat.Companion.SUBJECT
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat.Companion.WIKI
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisodeRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -36,6 +40,7 @@ data class ComposeTimeline(
     @SerialName("type") val type: Int = 0,
     @SerialName("uid") val uid: Long = 0,
     @SerialName("user") val user: ComposeUser = ComposeUser.Empty,
+    @SerialName("reactions") val reactions: SerializeList<ComposeReaction> = persistentListOf(),
 ) {
     @Composable
     fun rememberTimelineTitle(
@@ -71,6 +76,7 @@ data class ComposeTimeline(
         )
 
         STATUS -> memo.status.rememberTimelineTitle(action = type)
+
         BLOG -> memo.blog.rememberTimelineTitle(
             onBlogClickListener = onBlogClickListener
         )
@@ -84,6 +90,16 @@ data class ComposeTimeline(
         )
 
         else -> AnnotatedString("")
+    }
+
+    fun normalized(): ComposeTimeline {
+        return copy(
+            memo = memo.copy(
+                status = memo.status.copy(
+                    tsukkomi = memo.status.tsukkomi.bbcodeToHtml()
+                )
+            )
+        )
     }
 }
 

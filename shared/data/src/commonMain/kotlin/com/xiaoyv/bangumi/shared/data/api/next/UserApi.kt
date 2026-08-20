@@ -4,15 +4,21 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
+import com.xiaoyv.bangumi.shared.data.model.request.CreateReportParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
+import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.PATCH
+import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.serialization.json.JsonElement
@@ -169,4 +175,24 @@ interface UserApi {
         @Query("limit") limit: Int? = 20,
         @Query("until") until: Long? = null,
     ): List<ComposeTimeline>
+
+    /**
+     * 报告疑虑
+     *
+     * @param param
+     */
+    @POST("p1/report")
+    suspend fun createReport(@Body param: CreateReportParam): ComposeEmptyBody
+
+    /**
+     * Get current user privacy settings
+     */
+    @GET("p1/privacy")
+    suspend fun getPrivacy(): ComposeUserPrivacy
+
+    /**
+     * Update current user privacy settings
+     */
+    @PATCH("p1/privacy")
+    suspend fun patchPrivacy(@Body param: ComposeUserPrivacy): ComposeUserPrivacy
 }

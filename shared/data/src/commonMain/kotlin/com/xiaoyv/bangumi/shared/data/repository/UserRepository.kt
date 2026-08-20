@@ -3,10 +3,15 @@ package com.xiaoyv.bangumi.shared.data.repository
 import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
+import com.xiaoyv.bangumi.shared.core.types.ReportReason
+import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
@@ -17,6 +22,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
 
 /**
  * [UserRepository]
@@ -39,7 +46,11 @@ interface UserRepository {
 
     suspend fun fetchUserProfile(): Result<ComposeUser>
 
-    suspend fun fetchUserEditInfo(): Result<ComposeUserEdit>
+    suspend fun fetchUserEditInfo(): Result<ResultZip2<ComposeUserEdit, ComposeUserServicesEdit>>
+
+    suspend fun fetchUserPrivacy(): Result<ComposeUserPrivacy>
+
+    suspend fun submitUserPrivacy(privacy: ComposeUserPrivacy): Result<ComposeUserPrivacy>
 
     suspend fun fetchUserUnreadNotification(): Result<ComposeUnRead>
 
@@ -61,7 +72,11 @@ interface UserRepository {
 
     suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken>
 
-    suspend fun submitUserInfoUpdate(avatarBytes: ByteArray, parts: Map<String, String>): Result<Unit>
+    suspend fun submitUserInfoUpdate(
+        avatarBytes: ByteArray,
+        items: Map<String, String>,
+        networkItems: SerializeMap<String, String>
+    ): Result<Unit>
 
     suspend fun submitMarkNotificationRead(notificationId: Long): Result<Unit>
 
@@ -77,4 +92,6 @@ interface UserRepository {
     ): Result<ComposeMessageDetail>
 
     suspend fun submitDeleteMessage(ids: SerializeList<Long>, @MessageBoxType type: String): Result<Unit>
+
+    suspend fun submitReport(id: Long, @ReportType type: Int, @ReportReason reason: Int, comment: String): Result<ComposeEmptyBody>
 }

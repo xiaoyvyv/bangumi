@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val timelinePageModule = module {
     viewModel { (param: ListTimelineParam) ->
-        TimelinePageViewModel(ugcRepository = get(), param = param)
+        TimelinePageViewModel(param, get(), get(), get())
     }
 }

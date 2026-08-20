@@ -32,6 +32,7 @@ import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.data.repository.SignRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
+import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.data.repository.TraceRepository
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
@@ -50,6 +51,7 @@ import com.xiaoyv.bangumi.shared.data.repository.impl.MonoRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.PixivRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.SignRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.SubjectRepositoryImpl
+import com.xiaoyv.bangumi.shared.data.repository.impl.TimelineRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.TopicRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.TraceRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.UgcRepositoryImpl
@@ -84,6 +86,7 @@ private val repositoryModules = module {
     single<MonoRepository> { MonoRepositoryImpl(get(), get(), get()) }
     single<BlogRepository> { BlogRepositoryImpl(get(), get()) }
     single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get(), get(), get()) }
+    single<TimelineRepository> { TimelineRepositoryImpl(get(), get(), get()) }
     single<ChoreRepository> { ChoreRepositoryImpl(get()) }
     single<GroupRepository> { GroupRepositoryImpl(get(), get(), get()) }
     single<TopicRepository> { TopicRepositoryImpl(get(), get()) }

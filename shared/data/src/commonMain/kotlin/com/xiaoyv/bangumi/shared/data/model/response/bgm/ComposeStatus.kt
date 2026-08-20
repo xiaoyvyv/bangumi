@@ -7,7 +7,6 @@ import com.xiaoyv.bangumi.shared.System
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNames
 
 @Immutable
 @Serializable
@@ -21,6 +20,7 @@ data class ComposeStatus(
 @Serializable
 data class ComposeEmptyBody(
     @SerialName("_") val seq: Long = System.currentTimeMillis(),
+    @SerialName("message") val message: String = "",
 ) {
     companion object {
         val Empty = ComposeEmptyBody()

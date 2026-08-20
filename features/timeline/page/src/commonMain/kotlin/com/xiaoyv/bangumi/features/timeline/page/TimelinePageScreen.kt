@@ -2,11 +2,14 @@ package com.xiaoyv.bangumi.features.timeline.page
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -20,14 +23,19 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageEvent
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageViewModel
 import com.xiaoyv.bangumi.features.timeline.page.business.koinTimelinePageViewModel
+import com.xiaoyv.bangumi.shared.core.types.ButtonType
+import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
+import com.xiaoyv.bangumi.shared.core.types.TimelineStatusAction
 import com.xiaoyv.bangumi.shared.core.types.TimelineSubjectAction
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineBatch
@@ -36,12 +44,19 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelin
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineSingle
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
+import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
+import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
+import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
+import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
+import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
@@ -126,32 +141,49 @@ private fun TimelinePageItem(
                     .padding(vertical = ContentMarginHalf),
                 verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = item.rememberTimelineTitle(
-                        onUserClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.UserDetail(it.username)))
-                        },
-                        onGroupClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.GroupDetail(it.name)))
-                        },
-                        onSubjectClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id)))
-                        },
-                        onEpisodeClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_EP)))
-                        },
-                        onBlogClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_BLOG)))
-                        },
-                        onIndexClickListener = {
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.IndexDetail(it.id)))
-                        },
-                        onMonoClickListener = { it, type ->
-                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, type)))
+                // 吐槽单独用 LinkedText 渲染富文本
+                if (item.cat == TimelineCat.STATUS && item.type == TimelineStatusAction.COMMENT) {
+                    BgmLinkedText(text = item.memo.status.tsukkomi)
+                } else {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = item.rememberTimelineTitle(
+                            onUserClickListener = {
+                                onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.UserDetail(it.username)))
+                            },
+                            onGroupClickListener = {
+                                onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.GroupDetail(it.name)))
+                            },
+                            onSubjectClickListener = {
+                                onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id)))
+                            },
+                            onEpisodeClickListener = {
+                                onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_EP)))
+                            },
+                            onBlogClickListener = {
+                                onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_BLOG)))
+                            },
+                            onIndexClickListener = {
+                                onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.IndexDetail(it.id)))
+                            },
+                            onMonoClickListener = { it, type ->
+                                onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, type)))
+                            }
+                        )
+                    )
+                }
+
+                // 贴贴
+                if (item.reactions.isNotEmpty()) {
+                    ReactionGroup(
+                        modifier = Modifier.fillMaxWidth(),
+                        reactions = item.reactions,
+                        onClick = {
+                            onActionEvent(TimelinePageEvent.Action.OnClickRecation(item, it))
                         }
                     )
-                )
+                }
+
 
                 when (item.cat) {
                     TimelineCat.SUBJECT -> TimelinePageItemSubject(
@@ -234,16 +266,60 @@ private fun TimelinePageItem(
             )
         },
         overlineContent = {
-            Text(
-                modifier = Modifier.clickWithoutRipped {
-                    onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.UserDetail(item.user.username)))
-                },
-                text = item.user.nickname,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium
+            Row(Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickWithoutRipped {
+                            onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.UserDetail(item.user.username)))
+                        },
+                    text = item.user.nickname,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
                 )
-            )
+
+                // 吐槽类型或自己添加更多菜单
+                val selfTimeline = item.user.id == currentUser().id
+                if (item.cat == TimelineCat.STATUS || selfTimeline) {
+                    Box {
+                        val reactionState = rememberPopupReactionState()
+
+                        PopupReaction(
+                            state = reactionState,
+                            onClick = {
+                                onActionEvent(TimelinePageEvent.Action.OnClickRecation(item, ComposeReaction(value = it)))
+                            }
+                        )
+
+                        DropMenuActionButton(
+                            modifier = Modifier.size(20.dp),
+                            imageVector = BgmIcons.MoreHoriz,
+                            imageTint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            options = rememberButtonTypeMenu {
+                                if (item.cat == TimelineCat.STATUS) add(ButtonType.Reaction)
+                                if (selfTimeline) add(ButtonType.Delete)
+                                add(ButtonType.Report)
+                            },
+                            onOptionClick = {
+                                when (it.type) {
+                                    ButtonType.Reaction -> reactionState.show()
+                                    ButtonType.Delete -> {
+                                        onActionEvent(TimelinePageEvent.Action.OnDeleteTimeline(item))
+                                    }
+
+                                    ButtonType.Report -> {
+                                        onUiEvent(TimelinePageEvent.UI.OnNavScreen(Screen.Report(ReportType.TIMELINE, item.id)))
+                                    }
+
+                                    else -> Unit
+                                }
+                            }
+                        )
+                    }
+                }
+            }
         }
     )
 }

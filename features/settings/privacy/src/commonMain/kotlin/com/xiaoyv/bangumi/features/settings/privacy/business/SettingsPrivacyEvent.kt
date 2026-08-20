@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.features.settings.privacy.business
 
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -16,5 +17,6 @@ sealed class SettingsPrivacyEvent {
 
     sealed class Action : SettingsPrivacyEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
+        data class OnUpdatePrivacy(val privacy: ComposeUserPrivacy) : Action()
     }
 }

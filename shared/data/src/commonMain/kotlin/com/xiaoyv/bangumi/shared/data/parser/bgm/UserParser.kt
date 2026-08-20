@@ -7,8 +7,8 @@ import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
-import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
+import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
@@ -16,6 +16,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePrivacy
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserStats
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.toPersistentList
@@ -43,6 +44,17 @@ class UserParser : BaseParser() {
             timezone = items.findValue("时区"),
             site = items.findValue("个人主页"),
             intro = items.findValue("自我介绍"),
+        )
+    }
+
+    fun Element.fetchUserEditServicesInfoConverted(): ComposeUserServicesEdit {
+        requireLogin()
+        val items = select("table.settings > tbody > tr").map {
+            it.select("tr td").let { elements ->
+                elements.firsTextNode() to elements.getOrNull(1)
+            }
+        }
+        return ComposeUserServicesEdit(
             internetPsn = items.findValue("PSN"),
             internetXbox = items.findValue("Xbox Live"),
             internetSteam = items.findValue("Steam"),
@@ -52,6 +64,7 @@ class UserParser : BaseParser() {
             internetIns = items.findValue("Instagram"),
         )
     }
+
 
     suspend fun Element.fetchUserMessageListConverted(@MessageBoxType type: String): List<ComposeMessage> {
         requireNoError()

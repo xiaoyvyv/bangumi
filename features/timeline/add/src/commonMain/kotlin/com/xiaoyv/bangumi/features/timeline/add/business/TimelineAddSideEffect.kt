@@ -6,4 +6,6 @@ package com.xiaoyv.bangumi.features.timeline.add.business
  * @author why
  * @since 2025/1/12
  */
-sealed class TimelineAddSideEffect
+sealed class TimelineAddSideEffect {
+    data class OnCreateTimelineSuccess(val id: Long) : TimelineAddSideEffect()
+}

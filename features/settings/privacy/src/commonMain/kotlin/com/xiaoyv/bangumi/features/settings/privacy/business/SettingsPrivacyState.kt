@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.settings.privacy.business
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
 
 /**
  * [SettingsPrivacyState]
@@ -10,5 +11,6 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class SettingsPrivacyState(
-    val title: String = "",
+    val privacy: ComposeUserPrivacy = ComposeUserPrivacy.Empty,
+    val loading: Boolean = false,
 )

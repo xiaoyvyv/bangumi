@@ -9,8 +9,8 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionWebSortType
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
+import com.xiaoyv.bangumi.shared.core.types.ReportReason
 import com.xiaoyv.bangumi.shared.core.types.ReportType
-import com.xiaoyv.bangumi.shared.core.types.ReportValueType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TopicType
@@ -62,6 +62,12 @@ interface BgmWebApi {
      */
     @GET("settings")
     suspend fun fetchUserEditInfo(): Document
+
+    /**
+     * 获取用户网络服务设置
+     */
+    @GET("settings/network_services")
+    suspend fun fetchUserEditServicesInfo(): Document
 
     /**
      * 获取用户通知未读数目
@@ -295,6 +301,16 @@ interface BgmWebApi {
     ): Document
 
     /**
+     * 时间胶囊-删除时间线
+     */
+    @GET("erase/tml/{timelineId}")
+    suspend fun submitDeleteTimeline(
+        @Path("timelineId") timelineId: Long,
+        @Query("gh") gh: String,
+        @Query("ajax") ajax: Int = 1
+    ): Document
+
+    /**
      * 小组-全站
      *
      * @param category 全部传 `all`
@@ -462,7 +478,7 @@ interface BgmWebApi {
     suspend fun submitReport(
         @Query("id") targetId: Long,
         @Query("type") @ReportType type: Int,
-        @Query("value") @ReportValueType value: Int,
+        @Query("value") @ReportReason value: Int,
         @Query("comment") comment: String,
         @Query("formhash") formhash: String,
         @Query("update") update: String = "报告疑虑",
@@ -473,6 +489,12 @@ interface BgmWebApi {
      */
     @POST("settings")
     suspend fun submitUpdateUserInfo(@Body body: MultiPartFormDataContent): Document
+
+    /**
+     * 保存用户网络服务设置
+     */
+    @POST("settings/network_services")
+    suspend fun submitUpdateUserServicesInfo(@Body body: MultiPartFormDataContent): Document
 
     /**
      * 发表评论

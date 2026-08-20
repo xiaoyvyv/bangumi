@@ -20,14 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_avatar
 import com.xiaoyv.bangumi.core_resource.resources.global_network_service
+import com.xiaoyv.bangumi.core_resource.resources.global_network_service_pixiv_id_error
 import com.xiaoyv.bangumi.core_resource.resources.global_save
 import com.xiaoyv.bangumi.core_resource.resources.settings_account_info
+import com.xiaoyv.bangumi.core_resource.resources.settings_avatar
 import com.xiaoyv.bangumi.core_resource.resources.settings_change_avatar
+import com.xiaoyv.bangumi.core_resource.resources.settings_info
 import com.xiaoyv.bangumi.features.settings.account.business.SettingsAccountEvent
 import com.xiaoyv.bangumi.features.settings.account.business.SettingsAccountSideEffect
 import com.xiaoyv.bangumi.features.settings.account.business.SettingsAccountState
@@ -40,11 +44,14 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertInputDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertInputDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItem
+import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItemTrailing
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.orNotSet
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import kotlinx.coroutines.launch
@@ -138,31 +145,35 @@ private fun SettingsAccountScreenContent(
 ) {
     val scope = rememberCoroutineScope()
     val inputDialogState = rememberAlertInputDialogState()
+    val popupTipState = LocalPopupTipState.current
 
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
-        SettingContainer {
+        SettingContainer(label = { Text(text = stringResource(Res.string.settings_avatar)) }) {
             SettingItem(
-                modifier = Modifier.padding(vertical = 16.dp),
-                title = stringResource(Res.string.settings_change_avatar),
-                shape = ListItemDefaults.segmentedShapes(0, state.items.size + 1),
-                trailingContent = null,
+                title = "",
+                shape = ListItemDefaults.segmentedShapes(0, 1),
                 leadingContent = {
                     AsyncImage(
                         modifier = Modifier
-                            .size(64.dp)
+                            .size(56.dp)
                             .clip(CircleShape),
                         contentScale = ContentScale.Crop,
                         model = if (state.avatarBytes.isNotEmpty()) state.avatarBytes else state.avatar,
                         contentDescription = stringResource(Res.string.global_avatar)
                     )
                 },
+                trailingContent = {
+                    SettingItemTrailing(text = stringResource(Res.string.settings_change_avatar))
+                },
                 onClick = { onUiEvent(SettingsAccountEvent.UI.OnPickAvatar) }
             )
+        }
 
+        SettingContainer(label = { Text(text = stringResource(Res.string.settings_info)) }) {
             state.items.entries.forEachIndexed { index, data ->
                 SettingItem(
                     title = stringResource(EditInfoType.string(data.key)),
-                    shape = ListItemDefaults.segmentedShapes(index + 1, state.items.size + 1),
+                    shape = ListItemDefaults.segmentedShapes(index, state.items.size),
                     leadingContent = null,
                     trailingContent = null,
                     supportingContent = { Text(text = data.value.orNotSet()) },
@@ -210,7 +221,28 @@ private fun SettingsAccountScreenContent(
     BgmAlertInputDialog(
         state = inputDialogState,
         onConfirm = {
-            onActionEvent(SettingsAccountEvent.Action.OnEditInfo(it.extraString, it.value))
+            scope.launch {
+                if (it.extraString == EditInfoType.TYPE_INTERNET_PIXI && it.value.toLongOrNull() == null) {
+                    popupTipState.showToast(getString(Res.string.global_network_service_pixiv_id_error))
+                } else {
+                    onActionEvent(SettingsAccountEvent.Action.OnEditInfo(it.extraString, it.value))
+                }
+            }
         }
     )
+}
+
+
+@Composable
+@Preview
+private fun PreviewSettingsAccountScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        SettingsAccountScreen(
+            uiState = UiState(
+                SettingsAccountState()
+            ),
+            onUiEvent = {},
+            onActionEvent = {}
+        )
+    }
 }

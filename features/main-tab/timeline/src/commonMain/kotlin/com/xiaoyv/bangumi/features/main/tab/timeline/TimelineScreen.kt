@@ -19,9 +19,11 @@ import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
 import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
+import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLogin
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
@@ -105,18 +107,20 @@ private fun TimelineScreenContent(
         modifier = modifier.fillMaxSize(),
         tabs = timelineTabs
     ) {
-        TimelinePageRoute(
-            param = remember(it, state.username) {
-                ListTimelineParam(
-                    type = ListTimelineType.BROWSER,
-                    timelineMode = timelineTabs[it].type,
-                    username = state.username
-                )
-            },
-            onNavScreen = { screen ->
-                onUiEvent(TimelineEvent.UI.OnNavScreen(screen))
-            }
-        )
+        BgmRequireLogin(enable = timelineTabs[it].type == TimelineTarget.USER) {
+            TimelinePageRoute(
+                param = remember(it, state.username) {
+                    ListTimelineParam(
+                        type = ListTimelineType.BROWSER,
+                        timelineMode = timelineTabs[it].type,
+                        username = state.username
+                    )
+                },
+                onNavScreen = { screen ->
+                    onUiEvent(TimelineEvent.UI.OnNavScreen(screen))
+                }
+            )
+        }
     }
 }
 

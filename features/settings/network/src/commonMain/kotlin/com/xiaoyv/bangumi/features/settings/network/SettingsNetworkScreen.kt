@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_domain
@@ -22,6 +23,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_update
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_bgm
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_pixiv
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_resolver
+import com.xiaoyv.bangumi.core_resource.resources.settings_domain_resolver_desc
 import com.xiaoyv.bangumi.core_resource.resources.settings_dou_ban
 import com.xiaoyv.bangumi.core_resource.resources.settings_network
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_request
@@ -42,6 +44,7 @@ import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItem
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingOptionItem
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -123,6 +126,9 @@ private fun SettingsNetworkScreenContent(
             )
             SettingItem(
                 title = stringResource(Res.string.settings_domain_resolver),
+                supportingContent = {
+                    Text(text = stringResource(Res.string.settings_domain_resolver_desc))
+                },
                 shape = ListItemDefaults.segmentedShapes(1, 2),
                 onClick = {
                     onUiEvent(SettingsNetworkEvent.UI.OnNavScreen(Screen.DnsResolver))
@@ -234,3 +240,17 @@ private fun SettingsNetworkScreenContent(
         }
     }
 }
+
+
+@Preview
+@Composable
+private fun PreviewScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        SettingsNetworkScreen(
+            uiState = UiState(SettingsNetworkState()),
+            onUiEvent = {},
+            onActionEvent = {}
+        )
+    }
+}
+

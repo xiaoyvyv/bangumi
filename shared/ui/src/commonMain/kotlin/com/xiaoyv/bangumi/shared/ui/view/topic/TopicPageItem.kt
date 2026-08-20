@@ -31,16 +31,13 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
-import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
-import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
-import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
-import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
@@ -58,7 +55,7 @@ fun TopicPageItem(
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
     onClickMono: (ComposeMonoDisplay) -> Unit = {},
-    onReport: (ReportParam) -> Unit = {},
+    onReport: () -> Unit = {},
 ) {
     ListItem(
         modifier = modifier.clickable { onClick(item) },
@@ -163,23 +160,12 @@ fun TopicPageItemHeadline(item: ComposeTopic) {
 @Composable
 private fun TopicPageItemTrailing(
     item: ComposeTopic,
-    onReport: (ReportParam) -> Unit,
+    onReport: () -> Unit,
 ) {
     when (item.topicType) {
         TopicType.TYPE_SUBJECT,
         TopicType.TYPE_GROUP,
-        TopicType.TYPE_BLOG,
-            -> {
-            val reportDialogState = rememberAlertDialogState()
-            val user = LocalSharedState.current.user
-
-            ReportDialog(
-                state = reportDialogState,
-                onClick = { value, content ->
-                    onReport(item.reportParam(value, content, user.formHash))
-                }
-            )
-
+        TopicType.TYPE_BLOG -> {
             DropMenuActionButton(
                 modifier = Modifier.size(20.dp),
                 imageVector = BgmIcons.MoreHoriz,
@@ -187,7 +173,7 @@ private fun TopicPageItemTrailing(
                 options = rememberButtonTypeMenu { add(ButtonType.Report) },
                 onOptionClick = {
                     when (it.type) {
-                        ButtonType.Report -> reportDialogState.show()
+                        ButtonType.Report -> onReport()
                         else -> Unit
                     }
                 }
@@ -196,15 +182,16 @@ private fun TopicPageItemTrailing(
 
         TopicType.TYPE_EP,
         TopicType.TYPE_PERSON,
-        TopicType.TYPE_CRT,
-            -> {
+        TopicType.TYPE_CRT -> {
+            val actionHandler = LocalActionHandler.current
+
             DropMenuActionButton(
                 modifier = Modifier.size(20.dp),
                 imageVector = BgmIcons.MoreHoriz,
                 imageTint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 options = rememberButtonTypeMenu { add(ButtonType.Share) },
                 onOptionClick = {
-
+                    actionHandler.shareContent(item.shareUrl)
                 }
             )
         }

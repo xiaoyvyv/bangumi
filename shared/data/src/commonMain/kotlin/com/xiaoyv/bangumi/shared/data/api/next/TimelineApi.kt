@@ -4,13 +4,15 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.CreateTimelineSayRequest
+import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.statement.HttpResponse
@@ -32,10 +34,10 @@ interface TimelineApi {
     /**
      * 发送时间线吐槽
      *
-     * @param createTimelineSayRequest  (optional)
+     * @param param  (optional)
      */
     @POST("p1/timeline")
-    suspend fun createTimelineSay(@Body createTimelineSayRequest: CreateTimelineSayRequest? = null): HttpResponse
+    suspend fun createTimelineSay(@Body param: CreateCommentParam): ComposeId
 
     /**
      * 删除时间线
@@ -43,7 +45,7 @@ interface TimelineApi {
      * @param timelineID
      */
     @DELETE("p1/timeline/{timelineID}")
-    suspend fun deleteTimeline(@Path("timelineID") timelineID: Int): HttpResponse
+    suspend fun deleteTimeline(@Path("timelineID") timelineID: Long): HttpResponse
 
     /**
      * 获取时间线
@@ -67,4 +69,22 @@ interface TimelineApi {
      */
     @GET("p1/timeline/{timelineID}/replies")
     suspend fun getTimelineReplies(@Path("timelineID") timelineID: Int): List<ComposeReply>
+
+
+    /**
+     * 给时间线吐槽点赞
+     *
+     * @param timelineID
+     * @param param
+     */
+    @PUT("p1/timeline/{timelineID}/like")
+    suspend fun likeTimeline(@Path("timelineID") timelineID: Long, @Body param: LikeCommentParam): HttpResponse
+
+    /**
+     * 取消时间线吐槽点赞
+     *
+     * @param timelineID
+     */
+    @DELETE("p1/timeline/{timelineID}/like")
+    suspend fun unlikeTimeline(@Path("timelineID") timelineID: Long): HttpResponse
 }

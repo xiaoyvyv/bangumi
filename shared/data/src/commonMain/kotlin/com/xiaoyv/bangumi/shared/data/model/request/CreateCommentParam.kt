@@ -14,5 +14,5 @@ import kotlinx.serialization.Serializable
 data class CreateCommentParam(
     @SerialName(value = "content") @Required val content: String,
     @SerialName(value = "turnstileToken") @Required val turnstileToken: String,
-    @SerialName(value = "replyTo") val replyTo: Long? = 0
+    @SerialName(value = "replyTo") val replyTo: Long? = null
 )

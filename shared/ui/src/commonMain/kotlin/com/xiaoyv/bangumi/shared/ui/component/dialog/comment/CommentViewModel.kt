@@ -12,10 +12,8 @@ import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
-import com.xiaoyv.bangumi.shared.data.repository.GroupRepository
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
-import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import io.github.vinceglb.filekit.PlatformFile
 
@@ -26,8 +24,6 @@ class CommentViewModel(
     private val topicRepository: TopicRepository,
     private val monoRepository: MonoRepository,
     private val blogRepository: BlogRepository,
-    private val groupRepository: GroupRepository,
-    private val subjectRepository: SubjectRepository,
     private val indexRepository: IndexRepository,
 ) : BaseMviViewModel<CommentState, CommentSideEffect, CommentEvent>() {
 

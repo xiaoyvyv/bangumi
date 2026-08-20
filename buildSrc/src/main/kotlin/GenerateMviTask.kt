@@ -116,7 +116,7 @@ abstract class GenerateMviTask : DefaultTask() {
                     "    viewModelOf(::${mName}ViewModel)\n" +
                     "\n" +
                     "    navScope {\n" +
-                    "        navigation<Screen.${mName}>(metadata = ListDetailSceneStrategy.detailPane()) { key ->\n" +
+                    "        navigation<Screen.${mName}> { key ->\n" +
                     "            ${mName}Route(\n" +
                     "                viewModel = koinViewModel { parametersOf(key) },\n" +
                     "                onNavScreen = { navigator.navigate(it) },\n" +
@@ -176,7 +176,9 @@ abstract class GenerateMviTask : DefaultTask() {
                     "import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout\n" +
                     "import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen\n" +
                     "import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect\n" +
+                    "import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn\n" +
                     "import org.jetbrains.compose.resources.stringResource\n" +
+                    "import androidx.compose.ui.tooling.preview.Preview\n" +
                     "import org.koin.compose.viewmodel.koinViewModel\n" +
                     "\n" +
                     "@Composable\n" +
@@ -240,7 +242,21 @@ abstract class GenerateMviTask : DefaultTask() {
                     ") {\n" +
                     "\n" +
                     "}\n" +
-                    "\n"
+                    "\n" +
+                    "@Composable\n" +
+                    "@Preview\n" +
+                    "private fun Preview${mName}Screen() {\n" +
+                    "    PreviewColumn(modifier = Modifier.fillMaxSize()) {\n" +
+                    "        ${mName}Screen(\n" +
+                    "            uiState = UiState(\n" +
+                    "                ${mName}State()\n" +
+                    "            ),\n" +
+                    "            onUiEvent = {},\n" +
+                    "            onActionEvent = {}\n" +
+                    "        )\n" +
+                    "    }\n" +
+                    "}\n"
         )
     }
 }
+

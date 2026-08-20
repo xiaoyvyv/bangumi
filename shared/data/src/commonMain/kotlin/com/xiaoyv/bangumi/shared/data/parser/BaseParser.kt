@@ -26,14 +26,19 @@ open class BaseParser {
      */
     fun Element.requireLogin() {
         if (checkIsLogin()) return
-        throw ApiHttpException(code = 401, bodyAsText = select(".message").text())
+        throw ApiHttpException(code = 401, errorMsg = select(".message").text())
     }
 
-    suspend fun <T : Element> T.requireNoError() {
+    /**
+     * 判断是否真的出错了，因为可能是正常的提示
+     */
+    suspend fun <T : Element> T.requireNoError(
+        checkIsError: (String) -> Boolean = { !it.contains("成功") }
+    ) {
         RobotSpeech.instance.add(select("#robot_speech").text().trim())
 
         val errorMsg = select("#colunmNotice .text").text().trim()
-        if (errorMsg.isNotBlank()) {
+        if (errorMsg.isNotBlank() && checkIsError(errorMsg)) {
             throw ApiException(errorMsg.ifBlank { getString(Res.string.parse_data_none) })
         }
     }

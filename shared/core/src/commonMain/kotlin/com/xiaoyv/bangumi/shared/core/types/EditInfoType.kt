@@ -44,7 +44,6 @@ import org.jetbrains.compose.resources.StringResource
 @Retention(AnnotationRetention.SOURCE)
 annotation class EditInfoType {
     companion object {
-        const val TYPE_FORM_HASH = "formhash"
         const val TYPE_AVATAR = "picfile"
         const val TYPE_NICKNAME = "nickname"
         const val TYPE_SIGN = "sign_input"
@@ -58,7 +57,10 @@ annotation class EditInfoType {
         const val TYPE_INTERNET_GITHUB = "network_service[7]"
         const val TYPE_INTERNET_TWITTER = "network_service[8]"
         const val TYPE_INTERNET_INS = "network_service[9]"
+
+        const val TYPE_FORM_HASH = "formhash"
         const val TYPE_SUBMIT = "submit"
+        const val TYPE_SUBMIT_NETWORK_SERVICES = "submit_network_services"
 
         fun string(@EditInfoType type: String): StringResource {
             return when (type) {

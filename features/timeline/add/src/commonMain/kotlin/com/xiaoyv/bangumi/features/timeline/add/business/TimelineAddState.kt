@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.timeline.add.business
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.text.input.TextFieldValue
 
 /**
  * [TimelineAddState]
@@ -10,5 +11,11 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class TimelineAddState(
-    val title: String = ""
-)
+    val content: TextFieldValue = TextFieldValue(""),
+    val turnstileToken: String = ""
+) {
+    val canPublish: Boolean
+        get() = content.text.isNotBlank() && turnstileToken.isNotBlank()
+}
+
+

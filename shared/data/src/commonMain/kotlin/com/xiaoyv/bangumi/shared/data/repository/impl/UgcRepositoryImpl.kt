@@ -2,10 +2,11 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.login_first_tip
+import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
-import com.xiaoyv.bangumi.shared.core.types.TimelineCat
-import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
@@ -31,8 +32,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.BlogParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.GroupParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
@@ -41,10 +40,10 @@ import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createStepUniquePagingPager
 import io.ktor.client.statement.bodyAsText
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.json.jsonObject
+import org.jetbrains.compose.resources.getString
 
 class UgcRepositoryImpl(
     private val client: BgmApiClient,
@@ -55,42 +54,6 @@ class UgcRepositoryImpl(
     private val groupParser: GroupParser,
     private val userManager: UserManager,
 ) : UgcRepository {
-    private val userCache = HashMap<String, ComposeUser>()
-
-    override fun fetchTimelineDisplayPager(
-        @TimelineTarget target: String,
-        @TimelineCat type: Int,
-        username: String
-    ): Pager<Long, ComposeTimeline> {
-        return createStepUniquePagingPager(
-            pagingConfig = pagingConfig,
-            keySelector = { it.id },
-            onLoadData = {
-                val displays = if (target == TimelineTarget.USER) {
-                    client.requestNextUserApi {
-                        val user = userCache.getOrPut(username) { getUser(username) }
-
-                        getUserTimeline(
-                            username = username,
-                            cat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN },
-                            limit = pagingConfig.pageSize,
-                            until = it
-                        ).map { timeline -> timeline.copy(user = user) }
-                    }.getOrThrow()
-                } else {
-                    client.requestNextTimelineApi {
-                        getTimeline(
-                            mode = target,
-                            cat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN },
-                            limit = pagingConfig.pageSize,
-                            until = it
-                        )
-                    }.getOrThrow()
-                }
-                displays to displays.lastOrNull()?.id
-            }
-        )
-    }
 
     override fun fetchRaKuenPager(@RakuenType type: String, filter: String?): Pager<Int, ComposeRakuenTopic> {
         return createNetworkPageLimitPagingPager(
@@ -98,6 +61,11 @@ class UgcRepositoryImpl(
             onlyOnePage = true,
             keySelector = { it.key },
             onLoadData = {
+                // 登录检测
+                if (type == RakuenType.MY_GROUP && !userManager.isLogin) {
+                    throw ApiHttpException(401, getString(Res.string.login_first_tip))
+                }
+
                 client.requestNextTopicApi {
                     val rakuenTopics = getRakuenTopicList(type, 200).result
 

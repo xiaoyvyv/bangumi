@@ -3,8 +3,6 @@ package com.xiaoyv.bangumi.shared.data.repository
 import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
-import com.xiaoyv.bangumi.shared.core.types.TimelineCat
-import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
@@ -20,17 +18,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 
 interface UgcRepository {
-
-
-    fun fetchTimelineDisplayPager(
-        @TimelineTarget target: String,
-        @TimelineCat type: Int,
-        username: String = "",
-    ): Pager<Long, ComposeTimeline>
-
     fun fetchRaKuenPager(@RakuenType type: String, filter: String? = null): Pager<Int, ComposeRakuenTopic>
 
     fun fetchBlogPager(param: ListBlogParam): Pager<Int, ComposeBlogDisplay>

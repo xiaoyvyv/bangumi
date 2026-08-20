@@ -10,5 +10,5 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class TimelinePageState(
-    val title: String = "",
+    val title: String = ""
 )

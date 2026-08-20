@@ -144,8 +144,9 @@ private fun TopicDetailScreen(
                                 // 仅以下几种话题才显示举报
                                 when (type) {
                                     TopicType.TYPE_SUBJECT,
+                                    TopicType.TYPE_GROUP,
                                     TopicType.TYPE_BLOG,
-                                    TopicType.TYPE_GROUP -> add(ButtonType.Report)
+                                    TopicType.TYPE_INDEX -> add(ButtonType.Report)
                                 }
                             },
                             onOptionClick = {
@@ -154,7 +155,7 @@ private fun TopicDetailScreen(
                                     ButtonType.CopyLink -> actionHandler.copyContent(shareUrl)
                                     ButtonType.OpenInBrowser -> actionHandler.openInBrowser(shareUrl)
                                     ButtonType.Report -> {
-
+                                        onUiEvent(TopicDetailEvent.UI.OnNavScreen(Screen.Report(uiState.data.reportType, uiState.data.id)))
                                     }
 
                                     else -> Unit
@@ -453,6 +454,9 @@ private fun TopicDetailScreenContent(
                             listState.animateScrollToItem(index + 2, -stickHeaderHeight, density)
                             commentDialogState.show()
                         }
+                    },
+                    onClickReport = {
+                        onUiEvent(TopicDetailEvent.UI.OnNavScreen(Screen.Report(state.reportCommentType, item.id)))
                     },
                     onClickReaction = {
                         onActionEvent(TopicDetailEvent.Action.OnReactionClick(item.id, it))

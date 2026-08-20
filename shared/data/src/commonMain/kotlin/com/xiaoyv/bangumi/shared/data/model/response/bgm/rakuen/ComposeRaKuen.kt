@@ -7,11 +7,10 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.types.ReportType
-import com.xiaoyv.bangumi.shared.core.types.ReportValueType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
@@ -52,6 +51,17 @@ data class ComposeRakuenTopic(
 
     val displayName: String get() = nameCN.ifBlank { name }
 
+    val shareUrl: String
+        get() = when (type) {
+            RakuenType.GROUP -> WebConstant.URL_BASE_WEB + "group/topic/$id"
+            RakuenType.MY_GROUP -> WebConstant.URL_BASE_WEB + "group/topic/$id"
+            RakuenType.SUBJECT -> WebConstant.URL_BASE_WEB + "subject/topic/$id"
+            RakuenType.EP -> WebConstant.URL_BASE_WEB + "ep/$id"
+            RakuenType.CHARACTER -> WebConstant.URL_BASE_WEB + "character/$id"
+            RakuenType.PERSON -> WebConstant.URL_BASE_WEB + "person/$id"
+            else -> TopicType.TYPE_UNKNOWN
+        }
+
     /**
      * 对应的话题类型
      */
@@ -67,33 +77,15 @@ data class ComposeRakuenTopic(
         }
 
     /**
-     * 举报参数
+     * 举报类型
      */
-    fun reportParam(
-        @ReportValueType value: Int,
-        comment: String,
-        formHash: String,
-    ): ReportParam {
-        return when (type) {
-            RakuenType.GROUP, RakuenType.MY_GROUP -> ReportParam(
-                targetId = creator.id,
-                type = ReportType.GROUP_ARTICLE,
-                value = value,
-                comment = comment,
-                formhash = formHash
-            )
-
-            RakuenType.SUBJECT -> ReportParam(
-                targetId = creator.id,
-                type = ReportType.SUBJECT_ARTICLE,
-                value = value,
-                comment = comment,
-                formhash = formHash
-            )
-
-            else -> ReportParam.Empty
+    val reportType: Int
+        get() = when (type) {
+            RakuenType.GROUP -> ReportType.GROUP_ARTICLE
+            RakuenType.MY_GROUP -> ReportType.GROUP_ARTICLE
+            RakuenType.SUBJECT -> ReportType.SUBJECT_ARTICLE
+            else -> ReportType.UNKNOWN
         }
-    }
 
     fun toMono(): ComposeMonoDisplay {
         val monoType = if (type == RakuenType.CHARACTER) MonoType.CHARACTER else MonoType.PERSON

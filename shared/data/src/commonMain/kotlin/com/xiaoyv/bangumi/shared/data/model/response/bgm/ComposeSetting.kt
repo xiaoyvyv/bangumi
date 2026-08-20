@@ -50,7 +50,7 @@ data class ComposeSetting(
         val indication: Int = SettingIndication.RIPPLE,
 
         @field:SettingNavigationAnimation
-        @SerialName("navigationAnimation") val navigationAnimation: Int = SettingNavigationAnimation.FADE,
+        @SerialName("navigationAnimation") val navigationAnimation: Int = SettingNavigationAnimation.SLIDE,
 
         @SerialName("timeMachineGridLimit") val timeMachineGridLimit: Int = 10,
         @SerialName("trackingGridLineLimit") val trackingGridLineLimit: Int = 4,
@@ -117,11 +117,11 @@ data class ComposeSetting(
                 "api.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "next.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "lain.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
-                "share.dmhy.org" to listOf(),
-                "app-api.pixiv.net" to listOf(),
-                "oauth.secure.pixiv.net" to listOf(),
-                "accounts.pixiv.net" to listOf(),
-                "imgur.la" to listOf()
+                "share.dmhy.org" to listOf("104.25.61.106", "104.25.62.106", "172.67.98.15"),
+                "app-api.pixiv.net" to listOf("104.18.42.239", "172.64.145.17"),
+                "oauth.secure.pixiv.net" to listOf("104.18.42.239", "172.64.145.17"),
+                "accounts.pixiv.net" to listOf("104.18.42.239", "172.64.145.17"),
+                "imgur.la" to listOf("104.21.90.143", "172.67.157.192")
             )
             val Default = NetworkConfig()
         }

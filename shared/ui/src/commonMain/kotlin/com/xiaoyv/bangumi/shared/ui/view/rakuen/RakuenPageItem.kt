@@ -29,23 +29,20 @@ import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
-import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
-import com.xiaoyv.bangumi.shared.data.model.request.ReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
-import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
-import com.xiaoyv.bangumi.shared.ui.component.dialog.report.ReportDialog
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
-import com.xiaoyv.bangumi.shared.ui.theme.ThinBorderStrokeVariant
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.ThinBorderStrokeVariant
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 
@@ -56,12 +53,12 @@ import org.jetbrains.compose.resources.stringResource
 fun RakuenPageItem(
     item: ComposeRakuenTopic,
     modifier: Modifier = Modifier,
-    showCategory: Boolean = true,
+    needShowCategory: Boolean = true,
     onClick: (ComposeRakuenTopic) -> Unit = {},
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
     onClickMono: (ComposeMonoDisplay) -> Unit = {},
-    onReport: (ReportParam) -> Unit = {},
+    onReport: () -> Unit = {},
 ) {
     ListItem(
         modifier = modifier.clickable { onClick(item) },
@@ -76,7 +73,7 @@ fun RakuenPageItem(
         overlineContent = {
             TopicPageItemOverline(
                 item = item,
-                showCategory = showCategory,
+                showCategory = needShowCategory,
                 onClickUser = onClickUser,
                 onClickMono = onClickMono,
                 onClickSubject = onClickSubject
@@ -221,31 +218,26 @@ fun TopicPageItemHeadline(item: ComposeRakuenTopic) {
 @Composable
 private fun TopicPageItemTrailing(
     item: ComposeRakuenTopic,
-    onReport: (ReportParam) -> Unit,
+    onReport: () -> Unit,
 ) {
+    val actionHandler = LocalActionHandler.current
+
     when (item.type) {
         RakuenType.GROUP,
         RakuenType.MY_GROUP,
-        RakuenType.SUBJECT
-            -> {
-            val reportDialogState = rememberAlertDialogState()
-            val user = LocalSharedState.current.user
-
-            ReportDialog(
-                state = reportDialogState,
-                onClick = { value, content ->
-                    onReport(item.reportParam(value, content, user.formHash))
-                }
-            )
-
+        RakuenType.SUBJECT -> {
             DropMenuActionButton(
                 modifier = Modifier.size(20.dp),
                 imageVector = BgmIcons.MoreHoriz,
                 imageTint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                options = rememberButtonTypeMenu { add(ButtonType.Report) },
+                options = rememberButtonTypeMenu {
+                    add(ButtonType.Share)
+                    add(ButtonType.Report)
+                },
                 onOptionClick = {
                     when (it.type) {
-                        ButtonType.Report -> reportDialogState.show()
+                        ButtonType.Report -> onReport()
+                        ButtonType.Share -> actionHandler.shareContent(item.shareUrl)
                         else -> Unit
                     }
                 }
@@ -261,7 +253,7 @@ private fun TopicPageItemTrailing(
                 imageTint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 options = rememberButtonTypeMenu { add(ButtonType.Share) },
                 onOptionClick = {
-
+                    actionHandler.shareContent(item.shareUrl)
                 }
             )
         }

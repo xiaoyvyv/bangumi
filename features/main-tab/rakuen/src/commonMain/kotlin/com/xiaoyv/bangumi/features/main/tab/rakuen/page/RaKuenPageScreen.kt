@@ -29,7 +29,7 @@ fun RaKuenPageScreen(
 ) {
     StateLazyColumn(
         modifier = Modifier.fillMaxSize(),
-        pagingItems = viewModel.topicFlow.collectAsLazyPagingItems(),
+        pagingItems = viewModel.rakuenFlow.collectAsLazyPagingItems(),
         showScrollUpBtn = true,
         key = { item, _ -> item.key },
         contentType = { CONTENT_TYPE_RAKUEN }
@@ -37,12 +37,12 @@ fun RaKuenPageScreen(
         RakuenPageItem(
             modifier = Modifier.fillMaxWidth(),
             item = item,
-            showCategory = type == RakuenType.ALL,
+            needShowCategory = type == RakuenType.ALL,
             onClick = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, it.topicType))) },
             onClickUser = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.UserDetail(it.username))) },
             onClickSubject = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
             onClickMono = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, it.type))) },
-            onReport = { }
+            onReport = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.Report(item.reportType, item.id))) }
         )
         BgmHorizontalDivider()
     }

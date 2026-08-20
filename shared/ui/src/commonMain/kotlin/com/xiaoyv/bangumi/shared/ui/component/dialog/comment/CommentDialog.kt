@@ -77,7 +77,9 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.emoji_normal
+import com.xiaoyv.bangumi.core_resource.resources.emoji_bgm
+import com.xiaoyv.bangumi.core_resource.resources.emoji_blake
+import com.xiaoyv.bangumi.core_resource.resources.emoji_musume
 import com.xiaoyv.bangumi.core_resource.resources.emoji_tv
 import com.xiaoyv.bangumi.core_resource.resources.emoji_tv_1
 import com.xiaoyv.bangumi.core_resource.resources.emoji_tv_2
@@ -103,7 +105,9 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
 import com.xiaoyv.bangumi.shared.core.utils.insertEmoji
 import com.xiaoyv.bangumi.shared.core.utils.rememberBgmEmojis
+import com.xiaoyv.bangumi.shared.core.utils.rememberBlakeEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberImePanelState
+import com.xiaoyv.bangumi.shared.core.utils.rememberMusumeEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend1Emojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend2Emojis
@@ -264,8 +268,7 @@ fun CommentDialogContent(
                 BgmTurnstile(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(90.dp)
-                        .padding(horizontal = 8.dp),
+                        .padding(horizontal = ContentMarginHalf),
                     url = WebConstant.URL_BGM_TURNSTILE,
                     callback = "bangumi://",
                     onToken = {
@@ -364,7 +367,7 @@ fun CommentDialogContent(
 
 
 @Composable
-private fun InputActionBar(
+fun InputActionBar(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
@@ -445,7 +448,7 @@ private fun InputActionBarButton(
 }
 
 @Composable
-private fun CommentDialogPanel(
+fun CommentDialogPanel(
     modifier: Modifier,
     showEmojiPanel: Boolean,
     showPreviewPanel: Boolean,
@@ -454,11 +457,6 @@ private fun CommentDialogPanel(
 ) {
     when {
         showEmojiPanel -> {
-            val bgmEmojis = rememberBgmEmojis()
-            val tvEmojis = rememberTvEmojis()
-            val tvExtend1Emojis = rememberTvExtend1Emojis()
-            val tvExtend2Emojis = rememberTvExtend2Emojis()
-
             BgmTabHorizontalPager(
                 modifier = modifier,
                 style = MaterialTheme.typography.bodyMedium,
@@ -467,26 +465,31 @@ private fun CommentDialogPanel(
                         ComposeTextTab(0, Res.string.emoji_tv),
                         ComposeTextTab(1, Res.string.emoji_tv_1),
                         ComposeTextTab(2, Res.string.emoji_tv_2),
-                        ComposeTextTab(3, Res.string.emoji_normal),
+                        ComposeTextTab(3, Res.string.emoji_bgm),
+                        ComposeTextTab(4, Res.string.emoji_musume),
+                        ComposeTextTab(5, Res.string.emoji_blake),
                     )
                 }
             ) {
                 val context = LocalPlatformContext.current
+                val emojis = when (it) {
+                    0 -> rememberTvEmojis()
+                    1 -> rememberTvExtend1Emojis()
+                    2 -> rememberTvExtend2Emojis()
+                    3 -> rememberBgmEmojis()
+                    4 -> rememberMusumeEmojis()
+                    5 -> rememberBlakeEmojis()
+                    else -> persistentListOf()
+                }
 
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxSize(),
-                    columns = GridCells.Adaptive(40.dp),
+                    columns = GridCells.Adaptive(if (it == 4 || it == 5) 60.dp else 40.dp),
                     contentPadding = PaddingValues(ContentMarginHalf),
                     horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                     verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
-                    val emojis = when (it) {
-                        0 -> tvEmojis
-                        1 -> tvExtend1Emojis
-                        2 -> tvExtend2Emojis
-                        else -> bgmEmojis
-                    }
-                    items(emojis) { emoji ->
+                    items(emojis, key = { emoji -> emoji.smileId }) { emoji ->
                         AsyncImage(
                             modifier = Modifier
                                 .clip(MaterialTheme.shapes.small)

@@ -66,6 +66,7 @@ kotlin {
             implementation(projects.features.preview.main)
             implementation(projects.features.preview.text)
             implementation(projects.features.web)
+            implementation(projects.features.report)
             implementation(projects.features.dollars)
             implementation(projects.features.friend)
             implementation(projects.features.blog.page)

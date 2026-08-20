@@ -10,9 +10,12 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,27 +27,88 @@ val LocalPersonalState = staticCompositionLocalOf { PersonalState() }
 @Composable
 fun currentPersonalState() = LocalPersonalState.current
 
+/**
+ * [PersonalState]
+ *
+ * 个人数据状态，用于应用内多页面间状态同步
+ *
+ * @property subjects 修改或更新过的条目数据 Map (ID -> ComposeSubject)
+ * @property monos 修改或更新过的角色/人物数据 Map (ID -> ComposeMono)
+ * @property timelines 修改或更新过的动态/时间线数据 Map (ID -> ComposeTimeline)
+ * @property deletedTimelineIds 已删除的动态/时间线 ID 集合
+ */
 @Stable
 data class PersonalState(
     val subjects: SerializeMap<Long, ComposeSubject> = persistentMapOf(),
     val monos: SerializeMap<Long, ComposeMono> = persistentMapOf(),
+    val timelines: SerializeMap<Long, ComposeTimeline> = persistentMapOf(),
+    val deletedTimelineIds: Set<Long> = persistentSetOf(),
 )
 
+/**
+ * [PersonalStateStore]
+ *
+ * 个人数据状态存储管理器，用于全局广播与同步各种数据的修改与删除
+ */
 @Stable
 class PersonalStateStore {
     private val _state = MutableStateFlow(PersonalState())
+
+    /**
+     * 全局个人状态 Flow
+     */
     val state: StateFlow<PersonalState> = _state.asStateFlow()
 
+    /**
+     * 更新条目数据状态
+     *
+     * @param id 条目 ID
+     * @param data 新的条目数据对象
+     */
     fun updateSubject(id: Long, data: ComposeSubject) {
         _state.update { it.copy(subjects = it.subjects.plus(id to data).toPersistentMap()) }
     }
 
+    /**
+     * 更新角色/人物数据状态
+     *
+     * @param id 角色/人物 ID
+     * @param data 新的角色/人物数据对象
+     */
     fun updateMono(id: Long, data: ComposeMono) {
         _state.update { it.copy(monos = it.monos.plus(id to data).toPersistentMap()) }
     }
 
     /**
+     * 更新动态/时间线数据状态（如贴贴回应变动）
+     *
+     * @param id 动态 ID
+     * @param data 新的动态数据对象
+     */
+    fun updateTimeline(id: Long, data: ComposeTimeline) {
+        _state.update { it.copy(timelines = it.timelines.plus(id to data).toPersistentMap()) }
+    }
+
+    /**
+     * 删除指定的动态/时间线数据
+     *
+     * @param id 动态 ID
+     */
+    fun deleteTimeline(id: Long) {
+        _state.update {
+            it.copy(
+                timelines = it.timelines.minus(id).toPersistentMap(),
+                deletedTimelineIds = (it.deletedTimelineIds + id).toPersistentSet()
+            )
+        }
+    }
+
+    /**
      * 修改了章节收藏状态，刷新条目
+     *
+     * @param subject 条目数据对象
+     * @param episodeIds 变化的章节 ID 列表
+     * @param type 新的章节收藏状态 [CollectionEpisodeType]
      */
     fun updateCollectionEpisode(subject: ComposeSubject, episodeIds: List<Long>, @CollectionEpisodeType type: Int) {
         val episodes = subject.episodes.map {
@@ -68,6 +132,9 @@ class PersonalStateStore {
 
     /**
      * 更新条目收藏数据
+     *
+     * @param subject 条目数据对象
+     * @param update 条目收藏更新请求参数 [CollectionSubjectUpdate]
      */
     fun updateCollectionSubject(subject: ComposeSubject, update: CollectionSubjectUpdate) {
         updateSubject(

@@ -104,7 +104,7 @@ class BgmApiClient(
         createHttpClient(
             config = config,
             cookieStorage = cookieStorage,
-            logLevel = LogLevel.HEADERS,
+            logLevel = LogLevel.ALL,
             block = { installBgmAuth(preferenceStore) }
         )
     }

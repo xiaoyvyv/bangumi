@@ -15,7 +15,7 @@ val topicDetailModule = module {
     viewModelOf(::ArticleViewModel)
 
     navScope {
-        navigation<Screen.TopicDetail>(metadata = ListDetailSceneStrategy.detailPane()) { key ->
+        navigation<Screen.TopicDetail> { key ->
             ArticleRoute(
                 viewModel = koinViewModel { parametersOf(key) },
                 onNavScreen = { navigator.navigate(it) },

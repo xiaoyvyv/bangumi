@@ -21,7 +21,7 @@ fun TextFieldValue.appendText(newText: String): TextFieldValue {
 }
 
 fun TextFieldValue.insertEmoji(emoji: BgmEmoji): TextFieldValue {
-    val emojiText = "(bgm${emoji.number})"
+    val emojiText = if (emoji.number < 10000) "(bgm${emoji.number})" else "(${emoji.smileId})"
     val start = selection.start.coerceAtLeast(0)
     val end = selection.end.coerceAtLeast(0)
 
@@ -48,8 +48,8 @@ fun TextFieldValue.insertBBCode(
         .replaceRange(start, end, prefix + bbCode.codeString + suffix)
         .toString()
 
-    val selectionStart = start + bbCode.inputOffset
-    val selectionEnd = selectionStart + bbCode.selectLength
+    val selectionStart = start + bbCode.inputOffset + prefix.length
+    val selectionEnd = selectionStart + bbCode.selectLength + prefix.length
 
     return TextFieldValue(
         text = newText,

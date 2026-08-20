@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.features.settings.account.business
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.core.types.EditInfoType
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
+import kotlinx.collections.immutable.persistentMapOf
 
 /**
  * [SettingsAccountState]
@@ -15,25 +15,9 @@ data class SettingsAccountState(
     val avatarBytes: ByteArray = byteArrayOf(),
     val loading: Boolean = false,
     val avatar: String = "",
-    val items: Map<String, String> = emptyMap(),
-    val networkItems: Map<String, String> = emptyMap(),
+    val items: SerializeMap<String, String> = persistentMapOf(),
+    val networkItems: SerializeMap<String, String> = persistentMapOf(),
 ) {
-    fun toComposeEditInfo() = ComposeUserEdit(
-        avatar = items[EditInfoType.TYPE_AVATAR].orEmpty(),
-        nickname = items[EditInfoType.TYPE_NICKNAME].orEmpty(),
-        sign = items[EditInfoType.TYPE_SIGN].orEmpty(),
-        timezone = items[EditInfoType.TYPE_TIMEZONE].orEmpty(),
-        site = items[EditInfoType.TYPE_SITE].orEmpty(),
-        intro = items[EditInfoType.TYPE_INTRO].orEmpty(),
-        internetPsn = networkItems[EditInfoType.TYPE_INTERNET_PSN].orEmpty(),
-        internetXbox = networkItems[EditInfoType.TYPE_INTERNET_XBOX].orEmpty(),
-        internetSteam = networkItems[EditInfoType.TYPE_INTERNET_STEAM].orEmpty(),
-        internetPixi = networkItems[EditInfoType.TYPE_INTERNET_PIXI].orEmpty(),
-        internetGithub = networkItems[EditInfoType.TYPE_INTERNET_GITHUB].orEmpty(),
-        internetTwitter = networkItems[EditInfoType.TYPE_INTERNET_TWITTER].orEmpty(),
-        internetIns = networkItems[EditInfoType.TYPE_INTERNET_INS].orEmpty()
-    )
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false

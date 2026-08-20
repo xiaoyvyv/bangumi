@@ -39,9 +39,11 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_refresh
 import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
+import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
+import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLoginLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.refresh.PullToRefreshBox
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -206,37 +208,39 @@ fun StateErrorLayout(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
             .heightIn(min = 400.dp)
             .background(MaterialTheme.colorScheme.surface),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         val clampedBias = bias.coerceIn(0f, 1f)
 
         Spacer(modifier = Modifier.weight(clampedBias))
 
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(ContentMargin * 2),
-            text = if (System.isDebugType && throwable != null) {
-                throwable.errMsg
-            } else {
-                message.ifBlank { throwable?.errMsg.orEmpty() }
-            },
-            color = MaterialTheme.colorScheme.error,
-            textAlign = TextAlign.Center,
-            maxLines = if (System.isDebugType) 10 else 3,
-            overflow = TextOverflow.Ellipsis
-        )
+        if (throwable is ApiHttpException && throwable.code == 401) {
+            BgmRequireLoginLayout(modifier = Modifier.fillMaxSize()) {
+                onRefresh(true)
+            }
+        } else {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(ContentMargin),
+                text = if (System.isDebugType && throwable != null) {
+                    throwable.errMsg
+                } else {
+                    message.ifBlank { throwable?.errMsg.orEmpty() }
+                },
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center,
+                maxLines = if (System.isDebugType) 10 else 3,
+                overflow = TextOverflow.Ellipsis
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(onClick = { onRefresh(true) }) {
-            Text(text = stringResource(Res.string.global_refresh))
+            Button(onClick = { onRefresh(true) }) {
+                Text(text = stringResource(Res.string.global_refresh))
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f - clampedBias))

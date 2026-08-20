@@ -1,9 +1,13 @@
 package com.xiaoyv.bangumi.features.settings.dns.business
 
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.splash_resolve_empty_ip_tip
+import com.xiaoyv.bangumi.core_resource.resources.splash_resolve_finish_empty_ip_tip
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
@@ -15,6 +19,7 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withTimeoutOrNull
+import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -40,7 +45,16 @@ class SettingsDnsResolverViewModel(
     override fun onEvent(event: SettingsDnsResolverEvent.Action) {
         when (event) {
             SettingsDnsResolverEvent.Action.OnLaunch -> intent {
-                if (state.data.isComplete) postEffect { SettingsDnsResolverSideEffect.NavigateMain }
+                if (state.data.isComplete) {
+                    val hasEmptyAddressNode = state.data.nodes.any { node ->
+                        node.addresses.isEmpty() || node.addresses.all { it.isBlank() }
+                    }
+                    if (hasEmptyAddressNode) {
+                        postToast { getString(Res.string.splash_resolve_empty_ip_tip) }
+                    } else {
+                        postEffect { SettingsDnsResolverSideEffect.NavigateMain }
+                    }
+                }
             }
 
             SettingsDnsResolverEvent.Action.OnRefresh -> intent {
@@ -127,6 +141,13 @@ class SettingsDnsResolverViewModel(
                 activeHostname = "",
                 isComplete = true,
             )
+        }
+
+        val hasEmptyAddressNode = state.data.nodes.any { node ->
+            node.addresses.isEmpty() || node.addresses.all { it.isBlank() }
+        }
+        if (hasEmptyAddressNode) {
+            postToast { getString(Res.string.splash_resolve_finish_empty_ip_tip) }
         }
     }
 

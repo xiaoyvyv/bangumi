@@ -1,9 +1,438 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.xiaoyv.bangumi.shared.core.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.*
+import com.xiaoyv.bangumi.core_resource.resources.bgm_01
+import com.xiaoyv.bangumi.core_resource.resources.bgm_02
+import com.xiaoyv.bangumi.core_resource.resources.bgm_03
+import com.xiaoyv.bangumi.core_resource.resources.bgm_04
+import com.xiaoyv.bangumi.core_resource.resources.bgm_05
+import com.xiaoyv.bangumi.core_resource.resources.bgm_06
+import com.xiaoyv.bangumi.core_resource.resources.bgm_07
+import com.xiaoyv.bangumi.core_resource.resources.bgm_08
+import com.xiaoyv.bangumi.core_resource.resources.bgm_09
+import com.xiaoyv.bangumi.core_resource.resources.bgm_10
+import com.xiaoyv.bangumi.core_resource.resources.bgm_11
+import com.xiaoyv.bangumi.core_resource.resources.bgm_12
+import com.xiaoyv.bangumi.core_resource.resources.bgm_13
+import com.xiaoyv.bangumi.core_resource.resources.bgm_14
+import com.xiaoyv.bangumi.core_resource.resources.bgm_15
+import com.xiaoyv.bangumi.core_resource.resources.bgm_16
+import com.xiaoyv.bangumi.core_resource.resources.bgm_17
+import com.xiaoyv.bangumi.core_resource.resources.bgm_18
+import com.xiaoyv.bangumi.core_resource.resources.bgm_19
+import com.xiaoyv.bangumi.core_resource.resources.bgm_20
+import com.xiaoyv.bangumi.core_resource.resources.bgm_200
+import com.xiaoyv.bangumi.core_resource.resources.bgm_201
+import com.xiaoyv.bangumi.core_resource.resources.bgm_202
+import com.xiaoyv.bangumi.core_resource.resources.bgm_203
+import com.xiaoyv.bangumi.core_resource.resources.bgm_204
+import com.xiaoyv.bangumi.core_resource.resources.bgm_205
+import com.xiaoyv.bangumi.core_resource.resources.bgm_206
+import com.xiaoyv.bangumi.core_resource.resources.bgm_207
+import com.xiaoyv.bangumi.core_resource.resources.bgm_208
+import com.xiaoyv.bangumi.core_resource.resources.bgm_209
+import com.xiaoyv.bangumi.core_resource.resources.bgm_21
+import com.xiaoyv.bangumi.core_resource.resources.bgm_210
+import com.xiaoyv.bangumi.core_resource.resources.bgm_211
+import com.xiaoyv.bangumi.core_resource.resources.bgm_212
+import com.xiaoyv.bangumi.core_resource.resources.bgm_213
+import com.xiaoyv.bangumi.core_resource.resources.bgm_214
+import com.xiaoyv.bangumi.core_resource.resources.bgm_215
+import com.xiaoyv.bangumi.core_resource.resources.bgm_216
+import com.xiaoyv.bangumi.core_resource.resources.bgm_217
+import com.xiaoyv.bangumi.core_resource.resources.bgm_218
+import com.xiaoyv.bangumi.core_resource.resources.bgm_219
+import com.xiaoyv.bangumi.core_resource.resources.bgm_22
+import com.xiaoyv.bangumi.core_resource.resources.bgm_220
+import com.xiaoyv.bangumi.core_resource.resources.bgm_221
+import com.xiaoyv.bangumi.core_resource.resources.bgm_222
+import com.xiaoyv.bangumi.core_resource.resources.bgm_223
+import com.xiaoyv.bangumi.core_resource.resources.bgm_224
+import com.xiaoyv.bangumi.core_resource.resources.bgm_225
+import com.xiaoyv.bangumi.core_resource.resources.bgm_226
+import com.xiaoyv.bangumi.core_resource.resources.bgm_227
+import com.xiaoyv.bangumi.core_resource.resources.bgm_228
+import com.xiaoyv.bangumi.core_resource.resources.bgm_229
+import com.xiaoyv.bangumi.core_resource.resources.bgm_23
+import com.xiaoyv.bangumi.core_resource.resources.bgm_230
+import com.xiaoyv.bangumi.core_resource.resources.bgm_231
+import com.xiaoyv.bangumi.core_resource.resources.bgm_232
+import com.xiaoyv.bangumi.core_resource.resources.bgm_233
+import com.xiaoyv.bangumi.core_resource.resources.bgm_234
+import com.xiaoyv.bangumi.core_resource.resources.bgm_235
+import com.xiaoyv.bangumi.core_resource.resources.bgm_236
+import com.xiaoyv.bangumi.core_resource.resources.bgm_237
+import com.xiaoyv.bangumi.core_resource.resources.bgm_238
+import com.xiaoyv.bangumi.core_resource.resources.bgm_500
+import com.xiaoyv.bangumi.core_resource.resources.bgm_501
+import com.xiaoyv.bangumi.core_resource.resources.bgm_502
+import com.xiaoyv.bangumi.core_resource.resources.bgm_503
+import com.xiaoyv.bangumi.core_resource.resources.bgm_504
+import com.xiaoyv.bangumi.core_resource.resources.bgm_505
+import com.xiaoyv.bangumi.core_resource.resources.bgm_506
+import com.xiaoyv.bangumi.core_resource.resources.bgm_507
+import com.xiaoyv.bangumi.core_resource.resources.bgm_508
+import com.xiaoyv.bangumi.core_resource.resources.bgm_509
+import com.xiaoyv.bangumi.core_resource.resources.bgm_510
+import com.xiaoyv.bangumi.core_resource.resources.bgm_511
+import com.xiaoyv.bangumi.core_resource.resources.bgm_512
+import com.xiaoyv.bangumi.core_resource.resources.bgm_513
+import com.xiaoyv.bangumi.core_resource.resources.bgm_514
+import com.xiaoyv.bangumi.core_resource.resources.bgm_515
+import com.xiaoyv.bangumi.core_resource.resources.bgm_516
+import com.xiaoyv.bangumi.core_resource.resources.bgm_517
+import com.xiaoyv.bangumi.core_resource.resources.bgm_518
+import com.xiaoyv.bangumi.core_resource.resources.bgm_519
+import com.xiaoyv.bangumi.core_resource.resources.bgm_520
+import com.xiaoyv.bangumi.core_resource.resources.bgm_521
+import com.xiaoyv.bangumi.core_resource.resources.bgm_522
+import com.xiaoyv.bangumi.core_resource.resources.bgm_523
+import com.xiaoyv.bangumi.core_resource.resources.bgm_524
+import com.xiaoyv.bangumi.core_resource.resources.bgm_525
+import com.xiaoyv.bangumi.core_resource.resources.bgm_526
+import com.xiaoyv.bangumi.core_resource.resources.bgm_527
+import com.xiaoyv.bangumi.core_resource.resources.bgm_528
+import com.xiaoyv.bangumi.core_resource.resources.bgm_529
+import com.xiaoyv.bangumi.core_resource.resources.blake_01
+import com.xiaoyv.bangumi.core_resource.resources.blake_02
+import com.xiaoyv.bangumi.core_resource.resources.blake_03
+import com.xiaoyv.bangumi.core_resource.resources.blake_04
+import com.xiaoyv.bangumi.core_resource.resources.blake_05
+import com.xiaoyv.bangumi.core_resource.resources.blake_06
+import com.xiaoyv.bangumi.core_resource.resources.blake_07
+import com.xiaoyv.bangumi.core_resource.resources.blake_08
+import com.xiaoyv.bangumi.core_resource.resources.blake_09
+import com.xiaoyv.bangumi.core_resource.resources.blake_10
+import com.xiaoyv.bangumi.core_resource.resources.blake_100
+import com.xiaoyv.bangumi.core_resource.resources.blake_101
+import com.xiaoyv.bangumi.core_resource.resources.blake_102
+import com.xiaoyv.bangumi.core_resource.resources.blake_103
+import com.xiaoyv.bangumi.core_resource.resources.blake_104
+import com.xiaoyv.bangumi.core_resource.resources.blake_105
+import com.xiaoyv.bangumi.core_resource.resources.blake_106
+import com.xiaoyv.bangumi.core_resource.resources.blake_107
+import com.xiaoyv.bangumi.core_resource.resources.blake_108
+import com.xiaoyv.bangumi.core_resource.resources.blake_109
+import com.xiaoyv.bangumi.core_resource.resources.blake_11
+import com.xiaoyv.bangumi.core_resource.resources.blake_110
+import com.xiaoyv.bangumi.core_resource.resources.blake_111
+import com.xiaoyv.bangumi.core_resource.resources.blake_112
+import com.xiaoyv.bangumi.core_resource.resources.blake_113
+import com.xiaoyv.bangumi.core_resource.resources.blake_114
+import com.xiaoyv.bangumi.core_resource.resources.blake_115
+import com.xiaoyv.bangumi.core_resource.resources.blake_116
+import com.xiaoyv.bangumi.core_resource.resources.blake_117
+import com.xiaoyv.bangumi.core_resource.resources.blake_118
+import com.xiaoyv.bangumi.core_resource.resources.blake_12
+import com.xiaoyv.bangumi.core_resource.resources.blake_13
+import com.xiaoyv.bangumi.core_resource.resources.blake_14
+import com.xiaoyv.bangumi.core_resource.resources.blake_15
+import com.xiaoyv.bangumi.core_resource.resources.blake_16
+import com.xiaoyv.bangumi.core_resource.resources.blake_17
+import com.xiaoyv.bangumi.core_resource.resources.blake_18
+import com.xiaoyv.bangumi.core_resource.resources.blake_19
+import com.xiaoyv.bangumi.core_resource.resources.blake_20
+import com.xiaoyv.bangumi.core_resource.resources.blake_21
+import com.xiaoyv.bangumi.core_resource.resources.blake_22
+import com.xiaoyv.bangumi.core_resource.resources.blake_23
+import com.xiaoyv.bangumi.core_resource.resources.blake_24
+import com.xiaoyv.bangumi.core_resource.resources.blake_25
+import com.xiaoyv.bangumi.core_resource.resources.blake_26
+import com.xiaoyv.bangumi.core_resource.resources.blake_27
+import com.xiaoyv.bangumi.core_resource.resources.blake_28
+import com.xiaoyv.bangumi.core_resource.resources.blake_29
+import com.xiaoyv.bangumi.core_resource.resources.blake_30
+import com.xiaoyv.bangumi.core_resource.resources.blake_31
+import com.xiaoyv.bangumi.core_resource.resources.blake_32
+import com.xiaoyv.bangumi.core_resource.resources.blake_33
+import com.xiaoyv.bangumi.core_resource.resources.blake_34
+import com.xiaoyv.bangumi.core_resource.resources.blake_35
+import com.xiaoyv.bangumi.core_resource.resources.blake_36
+import com.xiaoyv.bangumi.core_resource.resources.blake_37
+import com.xiaoyv.bangumi.core_resource.resources.blake_38
+import com.xiaoyv.bangumi.core_resource.resources.blake_39
+import com.xiaoyv.bangumi.core_resource.resources.blake_40
+import com.xiaoyv.bangumi.core_resource.resources.blake_41
+import com.xiaoyv.bangumi.core_resource.resources.blake_42
+import com.xiaoyv.bangumi.core_resource.resources.blake_43
+import com.xiaoyv.bangumi.core_resource.resources.blake_44
+import com.xiaoyv.bangumi.core_resource.resources.blake_45
+import com.xiaoyv.bangumi.core_resource.resources.blake_46
+import com.xiaoyv.bangumi.core_resource.resources.blake_47
+import com.xiaoyv.bangumi.core_resource.resources.blake_48
+import com.xiaoyv.bangumi.core_resource.resources.blake_49
+import com.xiaoyv.bangumi.core_resource.resources.blake_50
+import com.xiaoyv.bangumi.core_resource.resources.blake_51
+import com.xiaoyv.bangumi.core_resource.resources.blake_52
+import com.xiaoyv.bangumi.core_resource.resources.blake_53
+import com.xiaoyv.bangumi.core_resource.resources.blake_54
+import com.xiaoyv.bangumi.core_resource.resources.blake_55
+import com.xiaoyv.bangumi.core_resource.resources.blake_56
+import com.xiaoyv.bangumi.core_resource.resources.blake_57
+import com.xiaoyv.bangumi.core_resource.resources.blake_58
+import com.xiaoyv.bangumi.core_resource.resources.blake_59
+import com.xiaoyv.bangumi.core_resource.resources.blake_60
+import com.xiaoyv.bangumi.core_resource.resources.blake_61
+import com.xiaoyv.bangumi.core_resource.resources.blake_62
+import com.xiaoyv.bangumi.core_resource.resources.blake_63
+import com.xiaoyv.bangumi.core_resource.resources.blake_64
+import com.xiaoyv.bangumi.core_resource.resources.blake_65
+import com.xiaoyv.bangumi.core_resource.resources.blake_66
+import com.xiaoyv.bangumi.core_resource.resources.blake_67
+import com.xiaoyv.bangumi.core_resource.resources.blake_68
+import com.xiaoyv.bangumi.core_resource.resources.blake_69
+import com.xiaoyv.bangumi.core_resource.resources.blake_70
+import com.xiaoyv.bangumi.core_resource.resources.blake_71
+import com.xiaoyv.bangumi.core_resource.resources.blake_72
+import com.xiaoyv.bangumi.core_resource.resources.blake_73
+import com.xiaoyv.bangumi.core_resource.resources.blake_74
+import com.xiaoyv.bangumi.core_resource.resources.blake_75
+import com.xiaoyv.bangumi.core_resource.resources.blake_76
+import com.xiaoyv.bangumi.core_resource.resources.blake_77
+import com.xiaoyv.bangumi.core_resource.resources.blake_78
+import com.xiaoyv.bangumi.core_resource.resources.blake_79
+import com.xiaoyv.bangumi.core_resource.resources.blake_80
+import com.xiaoyv.bangumi.core_resource.resources.blake_81
+import com.xiaoyv.bangumi.core_resource.resources.blake_82
+import com.xiaoyv.bangumi.core_resource.resources.blake_83
+import com.xiaoyv.bangumi.core_resource.resources.blake_84
+import com.xiaoyv.bangumi.core_resource.resources.blake_85
+import com.xiaoyv.bangumi.core_resource.resources.blake_86
+import com.xiaoyv.bangumi.core_resource.resources.blake_87
+import com.xiaoyv.bangumi.core_resource.resources.blake_88
+import com.xiaoyv.bangumi.core_resource.resources.blake_89
+import com.xiaoyv.bangumi.core_resource.resources.blake_90
+import com.xiaoyv.bangumi.core_resource.resources.blake_91
+import com.xiaoyv.bangumi.core_resource.resources.blake_92
+import com.xiaoyv.bangumi.core_resource.resources.blake_93
+import com.xiaoyv.bangumi.core_resource.resources.blake_94
+import com.xiaoyv.bangumi.core_resource.resources.blake_95
+import com.xiaoyv.bangumi.core_resource.resources.blake_96
+import com.xiaoyv.bangumi.core_resource.resources.blake_97
+import com.xiaoyv.bangumi.core_resource.resources.blake_98
+import com.xiaoyv.bangumi.core_resource.resources.blake_99
+import com.xiaoyv.bangumi.core_resource.resources.musume_01
+import com.xiaoyv.bangumi.core_resource.resources.musume_02
+import com.xiaoyv.bangumi.core_resource.resources.musume_03
+import com.xiaoyv.bangumi.core_resource.resources.musume_04
+import com.xiaoyv.bangumi.core_resource.resources.musume_05
+import com.xiaoyv.bangumi.core_resource.resources.musume_06
+import com.xiaoyv.bangumi.core_resource.resources.musume_07
+import com.xiaoyv.bangumi.core_resource.resources.musume_08
+import com.xiaoyv.bangumi.core_resource.resources.musume_09
+import com.xiaoyv.bangumi.core_resource.resources.musume_10
+import com.xiaoyv.bangumi.core_resource.resources.musume_100
+import com.xiaoyv.bangumi.core_resource.resources.musume_101
+import com.xiaoyv.bangumi.core_resource.resources.musume_102
+import com.xiaoyv.bangumi.core_resource.resources.musume_103
+import com.xiaoyv.bangumi.core_resource.resources.musume_104
+import com.xiaoyv.bangumi.core_resource.resources.musume_105
+import com.xiaoyv.bangumi.core_resource.resources.musume_106
+import com.xiaoyv.bangumi.core_resource.resources.musume_107
+import com.xiaoyv.bangumi.core_resource.resources.musume_108
+import com.xiaoyv.bangumi.core_resource.resources.musume_109
+import com.xiaoyv.bangumi.core_resource.resources.musume_11
+import com.xiaoyv.bangumi.core_resource.resources.musume_110
+import com.xiaoyv.bangumi.core_resource.resources.musume_111
+import com.xiaoyv.bangumi.core_resource.resources.musume_112
+import com.xiaoyv.bangumi.core_resource.resources.musume_113
+import com.xiaoyv.bangumi.core_resource.resources.musume_114
+import com.xiaoyv.bangumi.core_resource.resources.musume_115
+import com.xiaoyv.bangumi.core_resource.resources.musume_116
+import com.xiaoyv.bangumi.core_resource.resources.musume_117
+import com.xiaoyv.bangumi.core_resource.resources.musume_118
+import com.xiaoyv.bangumi.core_resource.resources.musume_12
+import com.xiaoyv.bangumi.core_resource.resources.musume_13
+import com.xiaoyv.bangumi.core_resource.resources.musume_14
+import com.xiaoyv.bangumi.core_resource.resources.musume_15
+import com.xiaoyv.bangumi.core_resource.resources.musume_16
+import com.xiaoyv.bangumi.core_resource.resources.musume_17
+import com.xiaoyv.bangumi.core_resource.resources.musume_18
+import com.xiaoyv.bangumi.core_resource.resources.musume_19
+import com.xiaoyv.bangumi.core_resource.resources.musume_20
+import com.xiaoyv.bangumi.core_resource.resources.musume_21
+import com.xiaoyv.bangumi.core_resource.resources.musume_22
+import com.xiaoyv.bangumi.core_resource.resources.musume_23
+import com.xiaoyv.bangumi.core_resource.resources.musume_24
+import com.xiaoyv.bangumi.core_resource.resources.musume_25
+import com.xiaoyv.bangumi.core_resource.resources.musume_26
+import com.xiaoyv.bangumi.core_resource.resources.musume_27
+import com.xiaoyv.bangumi.core_resource.resources.musume_28
+import com.xiaoyv.bangumi.core_resource.resources.musume_29
+import com.xiaoyv.bangumi.core_resource.resources.musume_30
+import com.xiaoyv.bangumi.core_resource.resources.musume_31
+import com.xiaoyv.bangumi.core_resource.resources.musume_32
+import com.xiaoyv.bangumi.core_resource.resources.musume_33
+import com.xiaoyv.bangumi.core_resource.resources.musume_34
+import com.xiaoyv.bangumi.core_resource.resources.musume_35
+import com.xiaoyv.bangumi.core_resource.resources.musume_36
+import com.xiaoyv.bangumi.core_resource.resources.musume_37
+import com.xiaoyv.bangumi.core_resource.resources.musume_38
+import com.xiaoyv.bangumi.core_resource.resources.musume_39
+import com.xiaoyv.bangumi.core_resource.resources.musume_40
+import com.xiaoyv.bangumi.core_resource.resources.musume_41
+import com.xiaoyv.bangumi.core_resource.resources.musume_42
+import com.xiaoyv.bangumi.core_resource.resources.musume_43
+import com.xiaoyv.bangumi.core_resource.resources.musume_44
+import com.xiaoyv.bangumi.core_resource.resources.musume_45
+import com.xiaoyv.bangumi.core_resource.resources.musume_46
+import com.xiaoyv.bangumi.core_resource.resources.musume_47
+import com.xiaoyv.bangumi.core_resource.resources.musume_48
+import com.xiaoyv.bangumi.core_resource.resources.musume_49
+import com.xiaoyv.bangumi.core_resource.resources.musume_50
+import com.xiaoyv.bangumi.core_resource.resources.musume_51
+import com.xiaoyv.bangumi.core_resource.resources.musume_52
+import com.xiaoyv.bangumi.core_resource.resources.musume_53
+import com.xiaoyv.bangumi.core_resource.resources.musume_54
+import com.xiaoyv.bangumi.core_resource.resources.musume_55
+import com.xiaoyv.bangumi.core_resource.resources.musume_56
+import com.xiaoyv.bangumi.core_resource.resources.musume_57
+import com.xiaoyv.bangumi.core_resource.resources.musume_58
+import com.xiaoyv.bangumi.core_resource.resources.musume_59
+import com.xiaoyv.bangumi.core_resource.resources.musume_60
+import com.xiaoyv.bangumi.core_resource.resources.musume_61
+import com.xiaoyv.bangumi.core_resource.resources.musume_62
+import com.xiaoyv.bangumi.core_resource.resources.musume_63
+import com.xiaoyv.bangumi.core_resource.resources.musume_64
+import com.xiaoyv.bangumi.core_resource.resources.musume_65
+import com.xiaoyv.bangumi.core_resource.resources.musume_66
+import com.xiaoyv.bangumi.core_resource.resources.musume_67
+import com.xiaoyv.bangumi.core_resource.resources.musume_68
+import com.xiaoyv.bangumi.core_resource.resources.musume_69
+import com.xiaoyv.bangumi.core_resource.resources.musume_70
+import com.xiaoyv.bangumi.core_resource.resources.musume_71
+import com.xiaoyv.bangumi.core_resource.resources.musume_72
+import com.xiaoyv.bangumi.core_resource.resources.musume_73
+import com.xiaoyv.bangumi.core_resource.resources.musume_74
+import com.xiaoyv.bangumi.core_resource.resources.musume_75
+import com.xiaoyv.bangumi.core_resource.resources.musume_76
+import com.xiaoyv.bangumi.core_resource.resources.musume_77
+import com.xiaoyv.bangumi.core_resource.resources.musume_78
+import com.xiaoyv.bangumi.core_resource.resources.musume_79
+import com.xiaoyv.bangumi.core_resource.resources.musume_80
+import com.xiaoyv.bangumi.core_resource.resources.musume_81
+import com.xiaoyv.bangumi.core_resource.resources.musume_82
+import com.xiaoyv.bangumi.core_resource.resources.musume_83
+import com.xiaoyv.bangumi.core_resource.resources.musume_84
+import com.xiaoyv.bangumi.core_resource.resources.musume_85
+import com.xiaoyv.bangumi.core_resource.resources.musume_86
+import com.xiaoyv.bangumi.core_resource.resources.musume_87
+import com.xiaoyv.bangumi.core_resource.resources.musume_88
+import com.xiaoyv.bangumi.core_resource.resources.musume_89
+import com.xiaoyv.bangumi.core_resource.resources.musume_90
+import com.xiaoyv.bangumi.core_resource.resources.musume_91
+import com.xiaoyv.bangumi.core_resource.resources.musume_92
+import com.xiaoyv.bangumi.core_resource.resources.musume_93
+import com.xiaoyv.bangumi.core_resource.resources.musume_94
+import com.xiaoyv.bangumi.core_resource.resources.musume_95
+import com.xiaoyv.bangumi.core_resource.resources.musume_96
+import com.xiaoyv.bangumi.core_resource.resources.musume_99
+import com.xiaoyv.bangumi.core_resource.resources.tv_01
+import com.xiaoyv.bangumi.core_resource.resources.tv_02
+import com.xiaoyv.bangumi.core_resource.resources.tv_03
+import com.xiaoyv.bangumi.core_resource.resources.tv_04
+import com.xiaoyv.bangumi.core_resource.resources.tv_05
+import com.xiaoyv.bangumi.core_resource.resources.tv_06
+import com.xiaoyv.bangumi.core_resource.resources.tv_07
+import com.xiaoyv.bangumi.core_resource.resources.tv_08
+import com.xiaoyv.bangumi.core_resource.resources.tv_09
+import com.xiaoyv.bangumi.core_resource.resources.tv_10
+import com.xiaoyv.bangumi.core_resource.resources.tv_100
+import com.xiaoyv.bangumi.core_resource.resources.tv_101
+import com.xiaoyv.bangumi.core_resource.resources.tv_102
+import com.xiaoyv.bangumi.core_resource.resources.tv_11
+import com.xiaoyv.bangumi.core_resource.resources.tv_12
+import com.xiaoyv.bangumi.core_resource.resources.tv_13
+import com.xiaoyv.bangumi.core_resource.resources.tv_14
+import com.xiaoyv.bangumi.core_resource.resources.tv_15
+import com.xiaoyv.bangumi.core_resource.resources.tv_16
+import com.xiaoyv.bangumi.core_resource.resources.tv_17
+import com.xiaoyv.bangumi.core_resource.resources.tv_18
+import com.xiaoyv.bangumi.core_resource.resources.tv_19
+import com.xiaoyv.bangumi.core_resource.resources.tv_20
+import com.xiaoyv.bangumi.core_resource.resources.tv_21
+import com.xiaoyv.bangumi.core_resource.resources.tv_22
+import com.xiaoyv.bangumi.core_resource.resources.tv_23
+import com.xiaoyv.bangumi.core_resource.resources.tv_24
+import com.xiaoyv.bangumi.core_resource.resources.tv_25
+import com.xiaoyv.bangumi.core_resource.resources.tv_26
+import com.xiaoyv.bangumi.core_resource.resources.tv_27
+import com.xiaoyv.bangumi.core_resource.resources.tv_28
+import com.xiaoyv.bangumi.core_resource.resources.tv_29
+import com.xiaoyv.bangumi.core_resource.resources.tv_30
+import com.xiaoyv.bangumi.core_resource.resources.tv_31
+import com.xiaoyv.bangumi.core_resource.resources.tv_32
+import com.xiaoyv.bangumi.core_resource.resources.tv_33
+import com.xiaoyv.bangumi.core_resource.resources.tv_34
+import com.xiaoyv.bangumi.core_resource.resources.tv_35
+import com.xiaoyv.bangumi.core_resource.resources.tv_36
+import com.xiaoyv.bangumi.core_resource.resources.tv_37
+import com.xiaoyv.bangumi.core_resource.resources.tv_38
+import com.xiaoyv.bangumi.core_resource.resources.tv_39
+import com.xiaoyv.bangumi.core_resource.resources.tv_40
+import com.xiaoyv.bangumi.core_resource.resources.tv_41
+import com.xiaoyv.bangumi.core_resource.resources.tv_42
+import com.xiaoyv.bangumi.core_resource.resources.tv_43
+import com.xiaoyv.bangumi.core_resource.resources.tv_44
+import com.xiaoyv.bangumi.core_resource.resources.tv_45
+import com.xiaoyv.bangumi.core_resource.resources.tv_46
+import com.xiaoyv.bangumi.core_resource.resources.tv_47
+import com.xiaoyv.bangumi.core_resource.resources.tv_48
+import com.xiaoyv.bangumi.core_resource.resources.tv_49
+import com.xiaoyv.bangumi.core_resource.resources.tv_50
+import com.xiaoyv.bangumi.core_resource.resources.tv_51
+import com.xiaoyv.bangumi.core_resource.resources.tv_52
+import com.xiaoyv.bangumi.core_resource.resources.tv_53
+import com.xiaoyv.bangumi.core_resource.resources.tv_54
+import com.xiaoyv.bangumi.core_resource.resources.tv_55
+import com.xiaoyv.bangumi.core_resource.resources.tv_56
+import com.xiaoyv.bangumi.core_resource.resources.tv_57
+import com.xiaoyv.bangumi.core_resource.resources.tv_58
+import com.xiaoyv.bangumi.core_resource.resources.tv_59
+import com.xiaoyv.bangumi.core_resource.resources.tv_60
+import com.xiaoyv.bangumi.core_resource.resources.tv_61
+import com.xiaoyv.bangumi.core_resource.resources.tv_62
+import com.xiaoyv.bangumi.core_resource.resources.tv_63
+import com.xiaoyv.bangumi.core_resource.resources.tv_64
+import com.xiaoyv.bangumi.core_resource.resources.tv_65
+import com.xiaoyv.bangumi.core_resource.resources.tv_66
+import com.xiaoyv.bangumi.core_resource.resources.tv_67
+import com.xiaoyv.bangumi.core_resource.resources.tv_68
+import com.xiaoyv.bangumi.core_resource.resources.tv_69
+import com.xiaoyv.bangumi.core_resource.resources.tv_70
+import com.xiaoyv.bangumi.core_resource.resources.tv_71
+import com.xiaoyv.bangumi.core_resource.resources.tv_72
+import com.xiaoyv.bangumi.core_resource.resources.tv_73
+import com.xiaoyv.bangumi.core_resource.resources.tv_74
+import com.xiaoyv.bangumi.core_resource.resources.tv_75
+import com.xiaoyv.bangumi.core_resource.resources.tv_76
+import com.xiaoyv.bangumi.core_resource.resources.tv_77
+import com.xiaoyv.bangumi.core_resource.resources.tv_78
+import com.xiaoyv.bangumi.core_resource.resources.tv_79
+import com.xiaoyv.bangumi.core_resource.resources.tv_80
+import com.xiaoyv.bangumi.core_resource.resources.tv_81
+import com.xiaoyv.bangumi.core_resource.resources.tv_82
+import com.xiaoyv.bangumi.core_resource.resources.tv_83
+import com.xiaoyv.bangumi.core_resource.resources.tv_84
+import com.xiaoyv.bangumi.core_resource.resources.tv_85
+import com.xiaoyv.bangumi.core_resource.resources.tv_86
+import com.xiaoyv.bangumi.core_resource.resources.tv_87
+import com.xiaoyv.bangumi.core_resource.resources.tv_88
+import com.xiaoyv.bangumi.core_resource.resources.tv_89
+import com.xiaoyv.bangumi.core_resource.resources.tv_90
+import com.xiaoyv.bangumi.core_resource.resources.tv_91
+import com.xiaoyv.bangumi.core_resource.resources.tv_92
+import com.xiaoyv.bangumi.core_resource.resources.tv_93
+import com.xiaoyv.bangumi.core_resource.resources.tv_94
+import com.xiaoyv.bangumi.core_resource.resources.tv_95
+import com.xiaoyv.bangumi.core_resource.resources.tv_96
+import com.xiaoyv.bangumi.core_resource.resources.tv_97
+import com.xiaoyv.bangumi.core_resource.resources.tv_98
+import com.xiaoyv.bangumi.core_resource.resources.tv_99
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.DrawableResource
@@ -231,23 +660,23 @@ val bgmEmojis by lazy {
         "528" to BgmEmoji(smileId = "528", image = Res.drawable.bgm_528, number = 528),
         "529" to BgmEmoji(smileId = "529", image = Res.drawable.bgm_529, number = 529),
 
-        "blake_1" to BgmEmoji(smileId = "blake_1", image = Res.drawable.blake_01, number = 10001),
+        "blake_1" to BgmEmoji(smileId = "blake_1", image = Res.drawable.blake_01, number = 11001),
+        "blake_2" to BgmEmoji(smileId = "blake_2", image = Res.drawable.blake_02, number = 11002),
+        "blake_3" to BgmEmoji(smileId = "blake_3", image = Res.drawable.blake_03, number = 11003),
+        "blake_4" to BgmEmoji(smileId = "blake_4", image = Res.drawable.blake_04, number = 11004),
+        "blake_5" to BgmEmoji(smileId = "blake_5", image = Res.drawable.blake_05, number = 11005),
+        "blake_6" to BgmEmoji(smileId = "blake_6", image = Res.drawable.blake_06, number = 11006),
+        "blake_7" to BgmEmoji(smileId = "blake_7", image = Res.drawable.blake_07, number = 11007),
+        "blake_8" to BgmEmoji(smileId = "blake_8", image = Res.drawable.blake_08, number = 11008),
+        "blake_9" to BgmEmoji(smileId = "blake_9", image = Res.drawable.blake_09, number = 11009),
         "blake_01" to BgmEmoji(smileId = "blake_01", image = Res.drawable.blake_01, number = 10001),
-        "blake_2" to BgmEmoji(smileId = "blake_2", image = Res.drawable.blake_02, number = 10002),
         "blake_02" to BgmEmoji(smileId = "blake_02", image = Res.drawable.blake_02, number = 10002),
-        "blake_3" to BgmEmoji(smileId = "blake_3", image = Res.drawable.blake_03, number = 10003),
         "blake_03" to BgmEmoji(smileId = "blake_03", image = Res.drawable.blake_03, number = 10003),
-        "blake_4" to BgmEmoji(smileId = "blake_4", image = Res.drawable.blake_04, number = 10004),
         "blake_04" to BgmEmoji(smileId = "blake_04", image = Res.drawable.blake_04, number = 10004),
-        "blake_5" to BgmEmoji(smileId = "blake_5", image = Res.drawable.blake_05, number = 10005),
         "blake_05" to BgmEmoji(smileId = "blake_05", image = Res.drawable.blake_05, number = 10005),
-        "blake_6" to BgmEmoji(smileId = "blake_6", image = Res.drawable.blake_06, number = 10006),
         "blake_06" to BgmEmoji(smileId = "blake_06", image = Res.drawable.blake_06, number = 10006),
-        "blake_7" to BgmEmoji(smileId = "blake_7", image = Res.drawable.blake_07, number = 10007),
         "blake_07" to BgmEmoji(smileId = "blake_07", image = Res.drawable.blake_07, number = 10007),
-        "blake_8" to BgmEmoji(smileId = "blake_8", image = Res.drawable.blake_08, number = 10008),
         "blake_08" to BgmEmoji(smileId = "blake_08", image = Res.drawable.blake_08, number = 10008),
-        "blake_9" to BgmEmoji(smileId = "blake_9", image = Res.drawable.blake_09, number = 10009),
         "blake_09" to BgmEmoji(smileId = "blake_09", image = Res.drawable.blake_09, number = 10009),
         "blake_10" to BgmEmoji(smileId = "blake_10", image = Res.drawable.blake_10, number = 10010),
         "blake_11" to BgmEmoji(smileId = "blake_11", image = Res.drawable.blake_11, number = 10011),
@@ -359,23 +788,23 @@ val bgmEmojis by lazy {
         "blake_117" to BgmEmoji(smileId = "blake_117", image = Res.drawable.blake_117, number = 10117),
         "blake_118" to BgmEmoji(smileId = "blake_118", image = Res.drawable.blake_118, number = 10118),
 
-        "musume_1" to BgmEmoji(smileId = "musume_1", image = Res.drawable.musume_01, number = 20001),
+        "musume_1" to BgmEmoji(smileId = "musume_1", image = Res.drawable.musume_01, number = 21001),
+        "musume_2" to BgmEmoji(smileId = "musume_2", image = Res.drawable.musume_02, number = 21002),
+        "musume_3" to BgmEmoji(smileId = "musume_3", image = Res.drawable.musume_03, number = 21003),
+        "musume_4" to BgmEmoji(smileId = "musume_4", image = Res.drawable.musume_04, number = 21004),
+        "musume_5" to BgmEmoji(smileId = "musume_5", image = Res.drawable.musume_05, number = 21005),
+        "musume_6" to BgmEmoji(smileId = "musume_6", image = Res.drawable.musume_06, number = 21006),
+        "musume_7" to BgmEmoji(smileId = "musume_7", image = Res.drawable.musume_07, number = 21007),
+        "musume_8" to BgmEmoji(smileId = "musume_8", image = Res.drawable.musume_08, number = 21008),
+        "musume_9" to BgmEmoji(smileId = "musume_9", image = Res.drawable.musume_09, number = 21009),
         "musume_01" to BgmEmoji(smileId = "musume_01", image = Res.drawable.musume_01, number = 20001),
-        "musume_2" to BgmEmoji(smileId = "musume_2", image = Res.drawable.musume_02, number = 20002),
         "musume_02" to BgmEmoji(smileId = "musume_02", image = Res.drawable.musume_02, number = 20002),
-        "musume_3" to BgmEmoji(smileId = "musume_3", image = Res.drawable.musume_03, number = 20003),
         "musume_03" to BgmEmoji(smileId = "musume_03", image = Res.drawable.musume_03, number = 20003),
-        "musume_4" to BgmEmoji(smileId = "musume_4", image = Res.drawable.musume_04, number = 20004),
         "musume_04" to BgmEmoji(smileId = "musume_04", image = Res.drawable.musume_04, number = 20004),
-        "musume_5" to BgmEmoji(smileId = "musume_5", image = Res.drawable.musume_05, number = 20005),
         "musume_05" to BgmEmoji(smileId = "musume_05", image = Res.drawable.musume_05, number = 20005),
-        "musume_6" to BgmEmoji(smileId = "musume_6", image = Res.drawable.musume_06, number = 20006),
         "musume_06" to BgmEmoji(smileId = "musume_06", image = Res.drawable.musume_06, number = 20006),
-        "musume_7" to BgmEmoji(smileId = "musume_7", image = Res.drawable.musume_07, number = 20007),
         "musume_07" to BgmEmoji(smileId = "musume_07", image = Res.drawable.musume_07, number = 20007),
-        "musume_8" to BgmEmoji(smileId = "musume_8", image = Res.drawable.musume_08, number = 20008),
         "musume_08" to BgmEmoji(smileId = "musume_08", image = Res.drawable.musume_08, number = 20008),
-        "musume_9" to BgmEmoji(smileId = "musume_9", image = Res.drawable.musume_09, number = 20009),
         "musume_09" to BgmEmoji(smileId = "musume_09", image = Res.drawable.musume_09, number = 20009),
         "musume_10" to BgmEmoji(smileId = "musume_10", image = Res.drawable.musume_10, number = 20010),
         "musume_11" to BgmEmoji(smileId = "musume_11", image = Res.drawable.musume_11, number = 20011),
@@ -507,4 +936,14 @@ fun rememberTvExtend1Emojis(): SerializeList<BgmEmoji> {
 @Composable
 fun rememberTvExtend2Emojis(): SerializeList<BgmEmoji> {
     return remember { bgmEmojis.values.filter { it.number in (500..529) }.toPersistentList() }
+}
+
+@Composable
+fun rememberBlakeEmojis(): SerializeList<BgmEmoji> {
+    return remember { bgmEmojis.values.filter { it.number in (10001..10999) }.toPersistentList() }
+}
+
+@Composable
+fun rememberMusumeEmojis(): SerializeList<BgmEmoji> {
+    return remember { bgmEmojis.values.filter { it.number in (20001..20999) }.toPersistentList() }
 }

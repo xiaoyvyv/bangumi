@@ -25,9 +25,9 @@ class RaKuenPageViewModel(
     ugcRepository: UgcRepository,
     @field:RakuenType private val type: String,
 ) : BaseViewModel<RaKuenPageState, RaKuenSideEffect, RaKuenEvent>() {
-    private val topicPager = ugcRepository.fetchRaKuenPager(type = type)
+    private val rakuenPager = ugcRepository.fetchRaKuenPager(type = type)
 
-    internal val topicFlow = topicPager.flow.cachedIn(viewModelScope)
+    internal val rakuenFlow = rakuenPager.flow.cachedIn(viewModelScope)
 
     override fun createInitialState() = RaKuenPageState(
         type = type,

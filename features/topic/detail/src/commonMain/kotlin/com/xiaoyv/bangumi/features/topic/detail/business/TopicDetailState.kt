@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.topic.detail.business
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
@@ -101,5 +102,24 @@ data class TopicDetailState(
         TopicType.TYPE_INDEX -> "https://bgm.tv/index/$id"
         TopicType.TYPE_BLOG -> "https://bgm.tv/blog/$id"
         else -> "https://bgm.tv"
+    }
+
+    val reportType = when (type) {
+        TopicType.TYPE_GROUP -> ReportType.GROUP_ARTICLE
+        TopicType.TYPE_SUBJECT -> ReportType.SUBJECT_ARTICLE
+        TopicType.TYPE_INDEX -> ReportType.INDEX
+        TopicType.TYPE_BLOG -> ReportType.BLOG
+        else -> ReportType.UNKNOWN
+    }
+
+    val reportCommentType = when (type) {
+        TopicType.TYPE_EP -> ReportType.EP_COMMENT
+        TopicType.TYPE_GROUP -> ReportType.GROUP_ARTICLE_COMMENT
+        TopicType.TYPE_PERSON -> ReportType.PERSON_COMMENT
+        TopicType.TYPE_CRT -> ReportType.CHARACTER_COMMENT
+        TopicType.TYPE_SUBJECT -> ReportType.SUBJECT_ARTICLE_COMMENT
+        TopicType.TYPE_INDEX -> ReportType.INDEX_COMMENT
+        TopicType.TYPE_BLOG -> ReportType.BLOG_COMMENT
+        else -> ReportType.UNKNOWN
     }
 }

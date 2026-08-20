@@ -57,12 +57,12 @@ interface EpisodeApi {
      * 给条目的剧集吐槽点赞
      *
      * @param commentID
-     * @param likeCommentParam
+     * @param param
      */
     @PUT("p1/episodes/-/comments/{commentID}/like")
     suspend fun likeEpisodeComment(
         @Path("commentID") commentID: Long,
-        @Body likeCommentParam: LikeCommentParam,
+        @Body param: LikeCommentParam,
     ): HttpResponse
 
     /**

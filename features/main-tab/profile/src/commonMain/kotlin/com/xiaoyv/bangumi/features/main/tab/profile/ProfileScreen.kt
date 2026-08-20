@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Menu
@@ -63,14 +64,14 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
-import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLoginLayout
+import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLogin
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -277,10 +278,10 @@ private fun ProfileScreenContent(
     onActionEvent: (ProfileEvent.Action) -> Unit,
     onTabSelected: (Int) -> Unit,
 ) {
-    BgmRequireLoginLayout(
-        modifier = Modifier.fillMaxSize(),
-        isLogin = LocalSharedState.current.isLogin,
-        onLogin = { onUiEvent(ProfileEvent.UI.OnNavScreen(Screen.SignIn)) }
+    BgmRequireLogin(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
     ) {
         BgmTabHorizontalPager(
             modifier = Modifier.fillMaxSize(),

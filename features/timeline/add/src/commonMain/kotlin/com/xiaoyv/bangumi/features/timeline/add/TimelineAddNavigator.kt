@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.timeline.add
 
-import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import com.xiaoyv.bangumi.features.timeline.add.business.TimelineAddViewModel
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
@@ -15,7 +14,7 @@ val timelineAddModule = module {
     viewModelOf(::TimelineAddViewModel)
 
     navScope {
-        navigation<Screen.TimelineAdd>(metadata = ListDetailSceneStrategy.detailPane()) { key ->
+        navigation<Screen.TimelineAdd> { key ->
             TimelineAddRoute(
                 viewModel = koinViewModel { parametersOf(key) },
                 onNavScreen = { navigator.navigate(it) },

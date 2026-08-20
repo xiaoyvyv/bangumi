@@ -16,6 +16,7 @@ import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.readBytes
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -43,22 +44,22 @@ class SettingsAccountViewModel(
             .onSuccess {
                 reduceData {
                     state.copy(
-                        avatar = it.avatar,
-                        items = mapOf(
-                            EditInfoType.TYPE_NICKNAME to it.nickname,
-                            EditInfoType.TYPE_SIGN to it.sign,
-                            EditInfoType.TYPE_TIMEZONE to it.timezone,
-                            EditInfoType.TYPE_SITE to it.site,
-                            EditInfoType.TYPE_INTRO to it.intro
+                        avatar = it.data1.avatar,
+                        items = persistentMapOf(
+                            EditInfoType.TYPE_NICKNAME to it.data1.nickname,
+                            EditInfoType.TYPE_SIGN to it.data1.sign,
+                            EditInfoType.TYPE_TIMEZONE to it.data1.timezone,
+                            EditInfoType.TYPE_SITE to it.data1.site,
+                            EditInfoType.TYPE_INTRO to it.data1.intro
                         ),
-                        networkItems = mapOf(
-                            EditInfoType.TYPE_INTERNET_PSN to it.internetPsn,
-                            EditInfoType.TYPE_INTERNET_XBOX to it.internetXbox,
-                            EditInfoType.TYPE_INTERNET_STEAM to it.internetSteam,
-                            EditInfoType.TYPE_INTERNET_PIXI to it.internetPixi,
-                            EditInfoType.TYPE_INTERNET_GITHUB to it.internetGithub,
-                            EditInfoType.TYPE_INTERNET_TWITTER to it.internetTwitter,
-                            EditInfoType.TYPE_INTERNET_INS to it.internetIns,
+                        networkItems = persistentMapOf(
+                            EditInfoType.TYPE_INTERNET_PSN to it.data2.internetPsn,
+                            EditInfoType.TYPE_INTERNET_XBOX to it.data2.internetXbox,
+                            EditInfoType.TYPE_INTERNET_STEAM to it.data2.internetSteam,
+                            EditInfoType.TYPE_INTERNET_PIXI to it.data2.internetPixi,
+                            EditInfoType.TYPE_INTERNET_GITHUB to it.data2.internetGithub,
+                            EditInfoType.TYPE_INTERNET_TWITTER to it.data2.internetTwitter,
+                            EditInfoType.TYPE_INTERNET_INS to it.data2.internetIns,
                         )
                     )
                 }
@@ -98,13 +99,9 @@ class SettingsAccountViewModel(
     }
 
     private fun onSaveInfo() = intent {
-        val data = (state.data.items + state.data.networkItems).toMutableMap()
-        data[EditInfoType.TYPE_FORM_HASH] = userManager.userInfo.formHash
-        data[EditInfoType.TYPE_SUBMIT] = "submit"
-
         reduceData { state.copy(loading = true) }
 
-        userRepository.submitUserInfoUpdate(state.data.avatarBytes, data.toImmutableMap())
+        userRepository.submitUserInfoUpdate(state.data.avatarBytes, state.data.items, state.data.networkItems)
             .onFailure {
                 reduceData { state.copy(loading = false) }
                 postToast { it.errMsg }

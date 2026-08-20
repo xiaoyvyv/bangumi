@@ -37,6 +37,7 @@ import com.xiaoyv.bangumi.features.pixiv.main.pixivMainModule
 import com.xiaoyv.bangumi.features.preivew.album.previewAlbumModule
 import com.xiaoyv.bangumi.features.preivew.gallery.previewTextModule
 import com.xiaoyv.bangumi.features.preivew.main.previewMainModule
+import com.xiaoyv.bangumi.features.report.reportModule
 import com.xiaoyv.bangumi.features.search.input.searchInputModule
 import com.xiaoyv.bangumi.features.search.result.searchResultModule
 import com.xiaoyv.bangumi.features.settings.account.settingsAccountModule
@@ -80,6 +81,7 @@ internal val navigationModule = module {
         raKuenModule,
         trackingModule,
         profileModule,
+        reportModule,
         homeModule,
         almanacModule,
         settingsMainModule,

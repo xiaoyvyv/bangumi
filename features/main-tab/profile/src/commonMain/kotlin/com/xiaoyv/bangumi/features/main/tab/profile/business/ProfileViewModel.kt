@@ -62,6 +62,7 @@ class ProfileViewModel :
 
     override fun onEvent(event: ProfileEvent.Action) {
         when (event) {
+            ProfileEvent.Action.OnRefresh -> refresh(loading = false)
             is ProfileEvent.Action.OnChangeSubjectTypeFilter -> onChangeSubjectTypeFilter(event.type)
             is ProfileEvent.Action.OnChangeCollectionTypeFilter -> onChangeCollectionTypeFilter(event.type)
             is ProfileEvent.Action.OnChangeCollectionSortFilter -> onChangeCollectionSortFilter(event.type)

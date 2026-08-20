@@ -9,16 +9,20 @@ import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.types.EditInfoType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
+import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.fromJson
 import com.xiaoyv.bangumi.shared.core.utils.requireNoError
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
+import com.xiaoyv.bangumi.shared.data.model.request.CreateReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
@@ -31,6 +35,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.transform
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
 import com.xiaoyv.bangumi.shared.data.parser.bgm.NotificationParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
@@ -73,6 +79,15 @@ class UserRepositoryImpl(
                 fetchUserListByPage(param, it, pagingConfig.pageSize).result
             }
         )
+    }
+
+    override suspend fun submitReport(
+        id: Long,
+        type: Int,
+        reason: Int,
+        comment: String
+    ): Result<ComposeEmptyBody> = client.requestNextUserApi {
+        createReport(CreateReportParam(id = id, type = type, reason = reason, comment = comment))
     }
 
     override suspend fun fetchUserListByPage(
@@ -176,11 +191,21 @@ class UserRepositoryImpl(
         fetchUserProfile()
     }
 
-    override suspend fun fetchUserEditInfo(): Result<ComposeUserEdit> = client.requestWebApi {
-        with(userParser) {
-            fetchUserEditInfo()
-                .fetchUserEditInfoConverted()
-        }
+    override suspend fun fetchUserEditInfo(): Result<ResultZip2<ComposeUserEdit, ComposeUserServicesEdit>> {
+        return awaitAll(
+            block1 = {
+                Result.success(with(userParser) {
+                    client.bgmWebApi.fetchUserEditInfo()
+                        .fetchUserEditInfoConverted()
+                })
+            },
+            block2 = {
+                Result.success(with(userParser) {
+                    client.bgmWebApi.fetchUserEditServicesInfo()
+                        .fetchUserEditServicesInfoConverted()
+                })
+            }
+        )
     }
 
     override suspend fun fetchUserUnreadNotification(): Result<ComposeUnRead> = client.requestWebApi {
@@ -189,6 +214,14 @@ class UserRepositoryImpl(
             if (info.count == null) throw ApiHttpException(code = 401)
             info
         }
+    }
+
+    override suspend fun fetchUserPrivacy(): Result<ComposeUserPrivacy> = runResult {
+        client.nextUserApi.getPrivacy()
+    }
+
+    override suspend fun submitUserPrivacy(privacy: ComposeUserPrivacy): Result<ComposeUserPrivacy> = runResult {
+        client.nextUserApi.patchPrivacy(privacy)
     }
 
     override suspend fun fetchUserUnreadMessage(): Result<ComposeUnRead> = client.requestWebApi {
@@ -249,22 +282,47 @@ class UserRepositoryImpl(
 
     override suspend fun submitUserInfoUpdate(
         avatarBytes: ByteArray,
-        parts: Map<String, String>,
+        items: Map<String, String>,
+        networkItems: SerializeMap<String, String>,
     ): Result<Unit> = runResult {
-        val multipart = MultiPartFormDataContent(formData {
-            parts.forEach {
-                append(it.key, it.value)
-            }
-            append(EditInfoType.TYPE_AVATAR, avatarBytes, Headers.build {
-                append(HttpHeaders.ContentType, "image/png")
-                append(HttpHeaders.ContentDisposition, "filename=\"avatar.png\"")
-            })
-        })
+        // 个人信息
+        if (items.isNotEmpty()) {
+            val data = items.toMutableMap()
+            data[EditInfoType.TYPE_FORM_HASH] = preferenceStore.userInfo.formHash
+            data[EditInfoType.TYPE_SUBMIT] = "submit"
 
-        with(userParser) {
-            client.bgmWebApi
-                .submitUpdateUserInfo(body = multipart)
-                .sendUpdateUserInfoConverted()
+            val multipart = MultiPartFormDataContent(formData {
+                data.forEach { append(it.key, it.value) }
+                if (avatarBytes.isNotEmpty()) {
+                    append(EditInfoType.TYPE_AVATAR, avatarBytes, Headers.build {
+                        append(HttpHeaders.ContentType, "image/png")
+                        append(HttpHeaders.ContentDisposition, "filename=\"avatar.png\"")
+                    })
+                }
+            })
+
+            with(userParser) {
+                client.bgmWebApi
+                    .submitUpdateUserInfo(body = multipart)
+                    .sendUpdateUserInfoConverted()
+            }
+        }
+
+        // 网络服务信息
+        if (networkItems.isNotEmpty()) {
+            val data = networkItems.toMutableMap()
+            data[EditInfoType.TYPE_FORM_HASH] = preferenceStore.userInfo.formHash
+            data[EditInfoType.TYPE_SUBMIT_NETWORK_SERVICES] = "submit"
+
+            val multipart = MultiPartFormDataContent(formData {
+                data.forEach { append(it.key, it.value) }
+            })
+
+            with(userParser) {
+                client.bgmWebApi
+                    .submitUpdateUserServicesInfo(body = multipart)
+                    .sendUpdateUserInfoConverted()
+            }
         }
     }
 
