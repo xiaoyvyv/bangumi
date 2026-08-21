@@ -200,13 +200,8 @@ export interface SubjectRating {
 }
 
 export interface Reaction {
-	emoji?: string;
-	main_id?: number;
-	selected?: boolean;
-	total?: number;
-	type?: number;
 	users: User[];
-	value: string;
+	value: number;
 }
 
 export interface Source {

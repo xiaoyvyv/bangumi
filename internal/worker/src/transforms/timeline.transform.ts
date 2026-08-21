@@ -157,24 +157,18 @@ function parseDataLikesList(html: string): Map<string, Reaction[]> {
 						return {
 							id: uid,
 							username: uname,
-							nickname: String(u.nickname || '')
+							nickname: String(u.nickname || ''),
+							avatar: optImageUrl(`https://api.bgm.tv/v0/users/${uname}/avatar?type=large`)
 						} as User;
 					})
 					: [];
 
-				const mainId = typeof item.main_id === 'number'
-					? item.main_id
-					: parseInt(String(item.main_id || '0')) || 0;
+				const reactionVal = parseInt(String(item.value ?? '0')) || 0;
 
 				reactionList.push({
-					value: String(item.value ?? ''),
-					type: typeof item.type === 'number' ? item.type : parseInt(String(item.type || '0')) || 0,
-					main_id: mainId,
-					total: typeof item.total === 'number' ? item.total : parseInt(String(item.total || '0')) || users.length,
-					emoji: String(item.emoji ?? ''),
-					selected: Boolean(item.selected),
+					value: reactionVal,
 					users: users
-				} as Reaction);
+				});
 			}
 
 			likesMap.set(id, reactionList);
@@ -431,6 +425,10 @@ function parseTimelineMemoStaus(element: Element, type: number): Status {
 		.replace(/href=(['"])\/\//g, 'href=$1https://')
 		.replace(/\[([a-zA-Z0-9_-]+)(=[^\]]*)?\]\s*<a[^>]*>([\s\S]*?)<\/a>\s*\[\/\1\]/gi, (match, tag, val, text) => {
 			return `[${tag}${val || ''}]${text}[/${tag}]`;
+		})
+		.replace(/<img\s+[^>]*smileid=['"]?[^'"\s>]+['"]?[^>]*>/gi, (imgTag) => {
+			const altMatch = imgTag.match(/alt=['"]?([^'"]+)['"]?/i);
+			return altMatch ? altMatch[1] : imgTag;
 		});
 
 	if (type === 0) {
