@@ -6,7 +6,7 @@ on:
       - main
       - master
     paths:
-      - 'internal/wroker/**'
+      - 'internal/worker/**'
       - '.github/workflows/deploy-worker.yml'
   workflow_dispatch:
 
@@ -23,14 +23,14 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: 'internal/wroker/package-lock.json'
+          cache-dependency-path: 'internal/worker/package-lock.json'
 
       - name: Install dependencies
-        working-directory: internal/wroker
+        working-directory: internal/worker
         run: npm ci
 
       - name: Run unit tests
-        working-directory: internal/wroker
+        working-directory: internal/worker
         run: npm test
 
       - name: Deploy to Cloudflare Workers
@@ -38,4 +38,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: 'internal/wroker'
+          workingDirectory: 'internal/worker'
