@@ -141,7 +141,7 @@ fun SubjectDetailMainScreen(
             // 图片预览
             SubjectDetailPreview(state, onUiEvent, onActionEvent)
             // 巡礼数据
-            SubjectDetailParade(state, onUiEvent, onActionEvent)
+            if (state.parade.litePoints.isNotEmpty()) SubjectDetailParade(state, onUiEvent, onActionEvent)
         }
 
         // 详细信息

@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import com.xiaoyv.bangumi.shared.core.utils.formatHMS
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -32,7 +34,7 @@ data class ComposeParade(
     @SerialName("imagesLength")
     val imagesLength: Int = 0,
     @SerialName("litePoints")
-    val litePoints: List<LitePoint>? = null,
+    val litePoints: SerializeList<LitePoint> = persistentListOf(),
     @SerialName("modified")
     val modified: Long = 0,
     @SerialName("pointsLength")
@@ -42,8 +44,6 @@ data class ComposeParade(
     @SerialName("zoom")
     val zoom: Double = 0.0,
 ) {
-    val isNotEmpty: Boolean
-        get() = !litePoints.isNullOrEmpty()
 
     @Immutable
     @Serializable

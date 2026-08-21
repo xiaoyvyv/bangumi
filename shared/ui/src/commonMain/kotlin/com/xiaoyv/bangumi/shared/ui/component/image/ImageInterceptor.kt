@@ -27,6 +27,16 @@ object ImageInterceptor : Interceptor {
         val data = chain.request.data
         if (data !is String) return chain.proceed()
 
+        // 巡礼图片修复
+        if (data.contains("image.anitabi.cn")) {
+            return chain.withRequest(
+                chain.request
+                    .newBuilder()
+                    .data(data.replace("image.anitabi.cn", "image-anitabi.magiconch.com"))
+                    .build()
+            ).proceed()
+        }
+
         // 豆瓣数据图片特殊处理
         if (data.contains("douban")) {
             return chain.withRequest(
