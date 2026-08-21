@@ -67,6 +67,7 @@ export async function transformTimeline(req: Request, res: Response) {
 	const html = await res.text();
 	const doc = parseDocument(html);
 	const timelines = selectElements('#timeline > ul > li', doc);
+	const likesMap = parseDataLikesList(html);
 
 	let avatar: Element | null = null;
 
@@ -94,7 +95,7 @@ export async function transformTimeline(req: Request, res: Response) {
 
 		const nickname = user ? textContent(user) : '';
 
-		const reactions: Reaction[] = [];
+		const reactions: Reaction[] = likesMap.get(String(id)) || [];
 
 		const catAndType = parseTimelineCatAndType(selectElement('span.info', node));
 		const memo = parseTimelineMemo(node, catAndType);
@@ -125,6 +126,64 @@ export async function transformTimeline(req: Request, res: Response) {
 	return new Response(JSON.stringify(items), {
 		headers: { 'content-type': 'application/json' }
 	});
+}
+
+function parseDataLikesList(html: string): Map<string, Reaction[]> {
+	const likesMap = new Map<string, Reaction[]>();
+	const match = html.match(/var\s+data_likes_list\s*=\s*(\{[\s\S]*?\});/);
+	if (!match || !match[1]) return likesMap;
+
+	try {
+		const rawLikes = JSON.parse(match[1]);
+		if (typeof rawLikes !== 'object' || rawLikes === null) return likesMap;
+
+		for (const [id, value] of Object.entries(rawLikes)) {
+			const reactionList: Reaction[] = [];
+
+			let rawItems: any[] = [];
+			if (Array.isArray(value)) {
+				rawItems = value;
+			} else if (typeof value === 'object' && value !== null) {
+				rawItems = Object.values(value);
+			}
+
+			for (const item of rawItems) {
+				if (typeof item !== 'object' || item === null) continue;
+
+				const users: User[] = Array.isArray(item.users)
+					? item.users.map((u: any) => {
+						const uname = String(u.username || '');
+						const uid = isNaN(parseInt(uname)) ? 0 : parseInt(uname);
+						return {
+							id: uid,
+							username: uname,
+							nickname: String(u.nickname || '')
+						} as User;
+					})
+					: [];
+
+				const mainId = typeof item.main_id === 'number'
+					? item.main_id
+					: parseInt(String(item.main_id || '0')) || 0;
+
+				reactionList.push({
+					value: String(item.value ?? ''),
+					type: typeof item.type === 'number' ? item.type : parseInt(String(item.type || '0')) || 0,
+					main_id: mainId,
+					total: typeof item.total === 'number' ? item.total : parseInt(String(item.total || '0')) || users.length,
+					emoji: String(item.emoji ?? ''),
+					selected: Boolean(item.selected),
+					users: users
+				} as Reaction);
+			}
+
+			likesMap.set(id, reactionList);
+		}
+	} catch (_e) {
+		// ignore
+	}
+
+	return likesMap;
 }
 
 

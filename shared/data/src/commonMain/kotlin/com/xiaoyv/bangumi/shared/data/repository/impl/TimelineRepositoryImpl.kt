@@ -13,6 +13,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelin
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createStepUniquePagingPager
 
 class TimelineRepositoryImpl(
@@ -32,7 +33,7 @@ class TimelineRepositoryImpl(
         val timelineCat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN }
         if (timelineCat != null && target != TimelineTarget.USER) {
             return createNetworkPageLimitPagingPager(
-                pagingConfig = pagingConfig,
+                pagingConfig = createPagingConfig(20),
                 keySelector = { it.id },
                 onLoadData = {
                     client.requestNextTimelineApi {
@@ -50,7 +51,8 @@ class TimelineRepositoryImpl(
                                 TimelineCat.MONO -> "mono"
                                 TimelineCat.WINDOW -> "doujin"
                                 else -> null
-                            }
+                            },
+                            page = it
                         )
                     }.getOrThrow()
                 }

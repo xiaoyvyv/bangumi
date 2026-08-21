@@ -64,8 +64,20 @@ fun createHttpClient(
         identity()
     }
 
+    block()
+
+    defaultRequest {
+        headers.appendIfNameAbsent(HttpHeaders.Pragma, "no-cache")
+        headers.appendIfNameAbsent(HttpHeaders.CacheControl, "no-cache")
+        headers.appendIfNameAbsent(HttpHeaders.TE, "trailers")
+        headers.appendIfNameAbsent(HttpHeaders.AcceptLanguage, "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
+        headers.appendIfNameAbsent(HttpHeaders.Cookie, "kira=4")
+        headers.appendIfNameAbsent(HttpHeaders.UserAgent, System.userAgent())
+    }
+
+    // 日志放最后，保证能打印前面的修改内容
     if (System.isDebugType) install(Logging) {
-        format = LoggingFormat.Default
+        format = LoggingFormat.OkHttp
         level = logLevel
         sanitizeHeader { false }
         logger = object : Logger {
@@ -85,14 +97,4 @@ fun createHttpClient(
         }
     }
 
-    defaultRequest {
-        headers.appendIfNameAbsent(HttpHeaders.Pragma, "no-cache")
-        headers.appendIfNameAbsent(HttpHeaders.CacheControl, "no-cache")
-        headers.appendIfNameAbsent(HttpHeaders.TE, "trailers")
-        headers.appendIfNameAbsent(HttpHeaders.AcceptLanguage, "zh-CN,zh;q=0.8,zh-TW;q=0.6,zh-HK;q=0.4,en;q=0.2")
-        headers.appendIfNameAbsent(HttpHeaders.Cookie, "kira=4")
-        headers.appendIfNameAbsent(HttpHeaders.UserAgent, System.userAgent())
-    }
-
-    block()
 }

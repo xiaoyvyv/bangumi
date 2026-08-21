@@ -105,7 +105,6 @@ class BgmApiClient(
         createHttpClient(
             config = config,
             cookieStorage = cookieStorage,
-            logLevel = LogLevel.ALL,
             block = { installBgmAuth(preferenceStore) }
         )
     }
@@ -345,8 +344,6 @@ class BgmApiClient(
     private fun HttpClientConfig<*>.installBgmAuth(preferenceStore: PreferenceStore) {
         install(AuthCompat)
 
-        install(AuthProxyCookiePlugin)
-
         install(Auth) {
             bearer {
                 cacheTokens = false
@@ -389,6 +386,10 @@ class BgmApiClient(
                     }
                 }
             }
+        }
+
+        install(AuthProxyCookiePlugin) {
+            bgmUrl = preferenceStore.settings.network.bgmHost
         }
     }
 }

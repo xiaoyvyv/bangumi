@@ -7,33 +7,33 @@ import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import io.ktor.client.plugins.api.ClientPlugin
 import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.plugins.cookies.cookies
+import io.ktor.client.request.HttpSendPipeline
 import io.ktor.http.HttpHeaders
 import io.ktor.http.Url
 import io.ktor.utils.io.KtorDsl
 
 @KtorDsl
-class BgmProxyCookiePluginConfig(
+class AuthProxyCookiePluginConfig(
     var bgmUrl: String = WebConstant.URL_BASE_WEB,
     var proxyUrl: String = WebConstant.URL_BGM_PROXY,
 )
 
 /**
  * [AuthProxyCookiePlugin]
- *
- * 将 bgmUrl 的本地 cookie 透传给 proxyUrl
  */
-val AuthProxyCookiePlugin: ClientPlugin<BgmProxyCookiePluginConfig> =
-    createClientPlugin("AuthProxyCookiePlugin", ::BgmProxyCookiePluginConfig) {
+val AuthProxyCookiePlugin: ClientPlugin<AuthProxyCookiePluginConfig> =
+    createClientPlugin("AuthProxyCookiePlugin", ::AuthProxyCookiePluginConfig) {
         val config = pluginConfig
-        val httpClient = this.client
+        val client = client
 
-        onRequest { request, _ ->
+        client.sendPipeline.intercept(HttpSendPipeline.State) {
+            val request = context
             val url = request.url.toString()
 
             if (url.startsWith(config.proxyUrl, true)) {
-                val bgmCookies = httpClient.cookies(Url(config.bgmUrl))
-                if (bgmCookies.isNotEmpty()) {
-                    val bgmCookieHeader = bgmCookies.joinToString("; ") { "${it.name}=${it.value}" }
+                val cookies = client.cookies(Url(config.bgmUrl))
+                if (cookies.isNotEmpty()) {
+                    val bgmCookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
                     val existingCookie = request.headers[HttpHeaders.Cookie]
                     if (!existingCookie.isNullOrBlank()) {
                         request.headers[HttpHeaders.Cookie] = "$existingCookie; $bgmCookieHeader"
