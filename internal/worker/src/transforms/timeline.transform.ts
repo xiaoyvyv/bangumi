@@ -3,7 +3,8 @@
 import { parseDocument } from 'htmlparser2';
 import { selectAll, selectOne } from 'css-select';
 import { UPSTREAM } from '../config';
-import { innerHTML, removeElement, textContent } from 'domutils';
+import { removeElement, textContent } from 'domutils';
+import render from 'dom-serializer';
 import { Element, isTag } from 'domhandler';
 import '../config/array.extensions';
 import {
@@ -366,7 +367,7 @@ function parseTimelineMemoStaus(element: Element, type: number): Status {
 	const statusElement = selectElement('p.status', element);
 	if (!statusElement) return {};
 
-	const html = innerHTML(statusElement);
+	const html = render(statusElement.children);
 
 	if (type === 0) {
 		// 更新签名
