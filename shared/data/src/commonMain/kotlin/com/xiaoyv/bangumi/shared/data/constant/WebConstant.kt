@@ -22,7 +22,7 @@ object WebConstant {
     const val URL_BGM_SIGN = "https://bgm.tv/signup"
 
     const val CLOUDFLARE_DNS_ENDPOINT_1 = "https://xwfpeb16ii.cloudflare-gateway.com/dns-query"
-    const val CLOUDFLARE_DNS_ENDPOINT_2 = "https://2db48881951041908d8f6af02e689c77.xiaoyv.com.cn/dns-query"
+    const val CLOUDFLARE_DNS_ENDPOINT_2 = "https://01b8c1cd4205405eb3d1d4d9850cec7a.xiaoyv.com.cn/dns-query"
 }
 
 fun subjectImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/subjects/$id/image?type=$type"
