@@ -18,6 +18,7 @@ import androidx.annotation.IntDef
     SubjectDetailTab.CHART,
     SubjectDetailTab.RELATED,
     SubjectDetailTab.INDEX,
+    SubjectDetailTab.RANT,
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class SubjectDetailTab {
@@ -32,5 +33,6 @@ annotation class SubjectDetailTab {
         const val CHART = 7
         const val RELATED = 8
         const val INDEX = 9
+        const val RANT = 10
     }
 }

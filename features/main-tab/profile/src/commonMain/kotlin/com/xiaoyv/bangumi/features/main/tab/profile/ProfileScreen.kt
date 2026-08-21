@@ -29,7 +29,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -65,7 +64,6 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLogin
-import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
@@ -115,17 +113,18 @@ private fun ProfileScreen(
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         state = scrollState,
-        topBar = {
+        topBar = { progressProvider ->
+            val progress = progressProvider()
             val iconColor = androidx.compose.ui.graphics.lerp(
                 imageColorState.contentColor,
                 MaterialTheme.colorScheme.onSurface,
-                it
+                progress
             )
             BgmTopAppBar(
                 title = currentUser().nickname,
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
-                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
+                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
                     actionIconContentColor = iconColor
                 ),
@@ -189,16 +188,14 @@ private fun ProfileScreen(
                 ProfileScreenHeader(state = this, it, imageColorState, onUiEvent, onActionEvent)
             }
         }
-    ) {
+    ) { _ ->
         StateLayout(
             modifier = Modifier.fillMaxSize(),
             uiState = uiState,
         ) { state ->
-            CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
-                val scope = rememberCoroutineScope()
-                ProfileScreenContent(state, onUiEvent, onActionEvent) {
-                    scope.launch { scrollState.animateScrollTo(scrollState.maxValue) }
-                }
+            val scope = rememberCoroutineScope()
+            ProfileScreenContent(state, onUiEvent, onActionEvent) {
+                scope.launch { scrollState.animateScrollTo(scrollState.maxValue) }
             }
         }
     }

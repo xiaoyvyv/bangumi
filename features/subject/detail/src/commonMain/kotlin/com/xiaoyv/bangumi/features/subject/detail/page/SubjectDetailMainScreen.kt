@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
@@ -54,7 +56,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_preview
 import com.xiaoyv.bangumi.core_resource.resources.global_related_index
 import com.xiaoyv.bangumi.core_resource.resources.global_related_subject
 import com.xiaoyv.bangumi.core_resource.resources.global_score
-import com.xiaoyv.bangumi.core_resource.resources.global_spit_out
 import com.xiaoyv.bangumi.core_resource.resources.global_summary
 import com.xiaoyv.bangumi.core_resource.resources.global_tag
 import com.xiaoyv.bangumi.core_resource.resources.subject_action_deleted
@@ -75,19 +76,13 @@ import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.chart.RatingBarChart
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.rememberSheetDialogState
-import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalHalfBlackToTransparent
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
@@ -97,7 +92,6 @@ import com.xiaoyv.bangumi.shared.ui.kts.isMediumScreen
 import com.xiaoyv.bangumi.shared.ui.kts.isSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.view.comment.CommentItem
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodePager
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexCardItem
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoCardItem
@@ -109,20 +103,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
-private const val ItemCollection = "KeyCollection"
-private const val ItemEpisode = "KeyEpisode"
-private const val ItemSummary = "KeySummary"
-private const val ItemTag = "KeyTag"
-private const val ItemPreview = "KeyPreview"
-private const val ItemParade = "KeyParade"
-private const val ItemInfo = "KeyInfo"
-private const val ItemScore = "KeyScore"
-private const val ItemCharacter = "KeyCharacter"
-private const val ItemRelated = "KeyRelated"
-private const val ItemIndex = "ItemIndex"
-private const val ItemCommentTip = "KeyCommentTip"
-private const val ItemCommentItem = "KeyCommentTip"
-
 /**
  * [SubjectDetailMainScreen]
  *
@@ -131,68 +111,50 @@ private const val ItemCommentItem = "KeyCommentTip"
 @Composable
 fun SubjectDetailMainScreen(
     state: SubjectDetailState,
-    commentPagingItems: LazyPagingItems<ComposeComment>,
     onUiEvent: (SubjectDetailEvent.UI) -> Unit,
     onActionEvent: (SubjectDetailEvent.Action) -> Unit,
 ) {
-    StateLazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        pagingItems = commentPagingItems,
-        state = rememberCacheWindowLazyListState(),
-        userScrollEnabled = true,
-        header = {
-            itemKey(ItemCollection) {
-                SubjectDetailCollection(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemEpisode) {
-                SubjectDetailEpisode(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemSummary) {
-                SubjectDetailSummary(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemTag) {
-                SubjectDetailTag(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemPreview, state.photo.isNotEmpty) {
-                SubjectDetailPreview(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemParade, visible = state.parade.isNotEmpty) {
-                SubjectDetailParade(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemInfo) {
-                SubjectDetailInfo(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemScore, visible = state.subject.displayRateTotalCount > 0) {
-                SubjectDetailScore(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemCharacter, visible = state.characters.isNotEmpty()) {
-                SubjectDetailCharacter(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemRelated, visible = state.related.isNotEmpty()) {
-                SubjectDetailRelated(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemIndex, visible = state.subject.webInfo.indexList.isNotEmpty()) {
-                SubjectDetailIndexList(state, onUiEvent, onActionEvent)
-            }
-            itemKey(ItemCommentTip) {
-                SubjectDetailComment(state, onUiEvent, onActionEvent)
-            }
-        },
-        key = { item, index -> item.id },
-        contentType = { _ -> ItemCommentItem },
-        itemContent = { item, index ->
-            if (index > 0 && item.parent == null) BgmHorizontalDivider()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
 
-            CommentItem(
-                modifier = Modifier.fillMaxWidth(),
-                item = item,
-                onClickUser = { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.UserDetail(it))) },
-                onClick = {
+        // 收藏
+        SubjectDetailCollection(state, onUiEvent, onActionEvent)
 
-                }
-            )
+        // 章节
+        if (state.subject.type == SubjectType.MUSIC
+            || state.subject.type == SubjectType.REAL
+            || state.subject.type == SubjectType.ANIME
+        ) {
+            SubjectDetailEpisode(state, onUiEvent, onActionEvent)
         }
-    )
+
+        // 描述
+        SubjectDetailSummary(state, onUiEvent, onActionEvent)
+        // 标签
+        SubjectDetailTag(state, onUiEvent, onActionEvent)
+
+        // 图片预览 | 巡礼数据
+        if (state.subject.type == SubjectType.REAL || state.subject.type == SubjectType.ANIME) {
+            // 图片预览
+            SubjectDetailPreview(state, onUiEvent, onActionEvent)
+            // 巡礼数据
+            SubjectDetailParade(state, onUiEvent, onActionEvent)
+        }
+
+        // 详细信息
+        SubjectDetailInfo(state, onUiEvent, onActionEvent)
+        // 评分
+        SubjectDetailScore(state, onUiEvent, onActionEvent)
+        // 相关人物
+        SubjectDetailCharacter(state, onUiEvent, onActionEvent)
+        // 相关条目
+        SubjectDetailRelated(state, onUiEvent, onActionEvent)
+        // 相关目录
+        SubjectDetailIndexList(state, onUiEvent, onActionEvent)
+    }
 }
 
 
@@ -798,18 +760,4 @@ private fun SubjectDetailIndexList(
             }
         }
     }
-}
-
-@Composable
-private fun SubjectDetailComment(
-    state: SubjectDetailState,
-    onUiEvent: (SubjectDetailEvent.UI) -> Unit,
-    onActionEvent: (SubjectDetailEvent.Action) -> Unit,
-) {
-    DetailSectionTitle(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = ContentMargin, bottom = ContentMarginHalf),
-        title = stringResource(Res.string.global_spit_out),
-    )
 }

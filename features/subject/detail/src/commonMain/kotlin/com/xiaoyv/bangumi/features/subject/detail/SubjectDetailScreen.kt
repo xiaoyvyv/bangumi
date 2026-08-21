@@ -26,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,6 +57,7 @@ import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailIndexScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailMainScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailPersonScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailPreviewScreen
+import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailRantScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailRelatedScreen
 import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailTopicScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -65,6 +65,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.rememberInterceptEvent
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentMikanId
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
@@ -78,7 +79,6 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
-import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
@@ -137,18 +137,20 @@ private fun SubjectDetailScreen(
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
+        topBar = { progressProvider ->
+            val progress = progressProvider()
             val iconColor = lerp(
                 imageColorState.contentColor,
                 MaterialTheme.colorScheme.onSurface,
-                it
+                progress
             )
+            debugLog { "topBar recompose" }
             BgmTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 title = uiState.data.subject.displayName,
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
-                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
+                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
                     actionIconContentColor = iconColor
                 ),
@@ -240,20 +242,18 @@ private fun SubjectDetailScreen(
                 )
             }
         },
-        content = {
+        content = { _ ->
             StateLayout(
                 modifier = Modifier.fillMaxSize(),
                 onRefresh = { onActionEvent(SubjectDetailEvent.Action.OnRefresh(it)) },
                 uiState = uiState,
             ) { state ->
-                CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
-                    SubjectDetailScreenContent(
-                        state = state,
-                        commentPagingItems = commentPagingItems,
-                        onUiEvent = onUiEvent,
-                        onActionEvent = onActionEvent
-                    )
-                }
+                SubjectDetailScreenContent(
+                    state = state,
+                    commentPagingItems = commentPagingItems,
+                    onUiEvent = onUiEvent,
+                    onActionEvent = onActionEvent
+                )
             }
         }
     )
@@ -421,7 +421,6 @@ fun SubjectDetailScreenContent(
         when (tabs[it].type) {
             SubjectDetailTab.OVERVIEW -> SubjectDetailMainScreen(
                 state = state,
-                commentPagingItems = commentPagingItems,
                 onUiEvent = rememberInterceptEvent(onUiEvent) { event ->
                     if (event is SubjectDetailEvent.UI.OnSelectedPageType) {
                         scope.launch { pagerState.animateScrollToPage(tabs.indexOfFirst { tab -> tab.type == event.tab }) }
@@ -435,6 +434,11 @@ fun SubjectDetailScreenContent(
                 state = state,
                 onUiEvent = onUiEvent,
                 onActionEvent = onActionEvent
+            )
+
+            SubjectDetailTab.RANT -> SubjectDetailRantScreen(
+                commentPagingItems = commentPagingItems,
+                onUiEvent = onUiEvent
             )
 
             SubjectDetailTab.EPISODE -> SubjectDetailEpisodeScreen(

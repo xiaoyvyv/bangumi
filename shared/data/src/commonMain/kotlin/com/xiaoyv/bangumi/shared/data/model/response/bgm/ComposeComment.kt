@@ -61,10 +61,10 @@ data class ComposeComment(
 @Serializable
 data class ComposeReply(
     @SerialName("id") val id: Long = 0,
-    @SerialName("content") val content: String = "",
+    @SerialName("content") @JsonNames("comment") val content: String = "",
     @SerialName("state") val state: Int = 0,
-    @SerialName("createdAt") val createdAt: SerializeDateLong = 0,
-    @SerialName("creator") @JsonNames("creator", "user") val user: ComposeUser = ComposeUser.Empty,
+    @SerialName("createdAt") @JsonNames("updatedAt") val createdAt: SerializeDateLong = 0,
+    @SerialName("creator") @JsonNames("user") val user: ComposeUser = ComposeUser.Empty,
     @SerialName("creatorID") val creatorID: Long = 0,
 
     @SerialName("mainID") val mainID: Long = 0,
@@ -72,6 +72,12 @@ data class ComposeReply(
     @SerialName("relatedID") val relatedID: Long = 0,
     @SerialName("reactions") val reactions: SerializeList<ComposeReaction> = persistentListOf(),
     @SerialName("replies") val replies: SerializeList<ComposeReply> = persistentListOf(),
+
+    /**
+     * 条目吐槽的额外数据
+     */
+    @SerialName("rate") val rate: Int = 0,
+    @SerialName("type") val type: Int = CollectionType.UNKNOWN
 ) : Node<ComposeReply> {
 
     fun normalized(): ComposeReply {

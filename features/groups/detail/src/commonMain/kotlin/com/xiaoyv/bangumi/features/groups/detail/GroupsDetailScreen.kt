@@ -21,7 +21,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -57,7 +56,6 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
-import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
@@ -105,17 +103,18 @@ private fun GroupsDetailScreen(
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
+        topBar = { progressProvider ->
+            val progress = progressProvider()
             val iconColor = androidx.compose.ui.graphics.lerp(
                 imageColorState.contentColor,
                 MaterialTheme.colorScheme.onSurface,
-                it
+                progress
             )
             BgmTopAppBar(
                 title = uiState.data.run { group.title },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = it),
-                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = it),
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
+                    titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
                     actionIconContentColor = iconColor
                 ),
@@ -153,15 +152,13 @@ private fun GroupsDetailScreen(
                 )
             }
         }
-    ) {
+    ) { _ ->
         StateLayout(
             modifier = Modifier.fillMaxSize(),
             onRefresh = { loading -> onActionEvent(GroupsDetailEvent.Action.OnRefresh(loading)) },
             uiState = uiState,
         ) { state ->
-            CompositionLocalProvider(LocalCollapsingPullRefresh provides (it == 0f)) {
-                GroupsDetailScreenContent(state, onUiEvent, onActionEvent)
-            }
+            GroupsDetailScreenContent(state, onUiEvent, onActionEvent)
         }
     }
 }

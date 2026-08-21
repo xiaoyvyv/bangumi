@@ -381,6 +381,7 @@
 
     <string name="subject_tab_overview">概览</string>
     <string name="subject_tab_preview">预览</string>
+    <string name="subject_tab_collect_comment">吐槽</string>
     <string name="subject_tab_episode">章节</string>
     <string name="subject_tab_tracks">曲目</string>
     <string name="subject_tab_character">角色</string>

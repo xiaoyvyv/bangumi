@@ -7,11 +7,11 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
-val LocalCollapsingPullRefresh = staticCompositionLocalOf { true }
+val LocalCollapsingPullRefresh = compositionLocalOf { true }
 
 /**
  * [BgmRefreshBox]

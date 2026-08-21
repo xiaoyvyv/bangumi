@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.subject_tab_blog
 import com.xiaoyv.bangumi.core_resource.resources.subject_tab_character
 import com.xiaoyv.bangumi.core_resource.resources.subject_tab_chart
+import com.xiaoyv.bangumi.core_resource.resources.subject_tab_collect_comment
 import com.xiaoyv.bangumi.core_resource.resources.subject_tab_episode
 import com.xiaoyv.bangumi.core_resource.resources.subject_tab_index
 import com.xiaoyv.bangumi.core_resource.resources.subject_tab_overview
@@ -24,10 +25,10 @@ import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.chineseNames
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
@@ -92,10 +93,11 @@ data class SubjectDetailState(
                 )
             )
         }
-        // 动画和三次元 才显示预览 TAB
+        // 动画和三次元 相关的TAB
         if (subject.type == SubjectType.REAL || subject.type == SubjectType.ANIME) {
             items.add(ComposeTextTab(SubjectDetailTab.PREVIEW, Res.string.subject_tab_preview))
         }
+        items.add(ComposeTextTab(SubjectDetailTab.RANT, Res.string.subject_tab_collect_comment))
         items.add(ComposeTextTab(SubjectDetailTab.CHARACTER, Res.string.subject_tab_character))
         items.add(ComposeTextTab(SubjectDetailTab.PERSON, Res.string.subject_tab_person))
         items.add(ComposeTextTab(SubjectDetailTab.RELATED, Res.string.subject_tab_related))

@@ -163,9 +163,7 @@ private fun NotificationScreenContent(
                 overlineContent = {
                     Row(horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)) {
                         Text(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickWithoutRipped { onUiEvent(NotificationEvent.UI.OnNavScreen(Screen.UserDetail(item.sender.username))) },
+                            modifier = Modifier.weight(1f),
                             text = item.sender.nickname,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
