@@ -19,6 +19,7 @@ import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpDocumentConverter
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.EmptyCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthCompat
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthProxyCookiePlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.BmoPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.DouBanPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.PixivProxyPlugin
@@ -343,6 +344,8 @@ class BgmApiClient(
      */
     private fun HttpClientConfig<*>.installBgmAuth(preferenceStore: PreferenceStore) {
         install(AuthCompat)
+
+        install(AuthProxyCookiePlugin)
 
         install(Auth) {
             bearer {
