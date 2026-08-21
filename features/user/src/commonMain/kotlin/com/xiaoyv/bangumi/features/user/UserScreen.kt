@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,9 +49,11 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
@@ -93,10 +96,27 @@ private fun UserScreen(
 ) {
     val scrollState = rememberScrollState()
     val imageColorState = rememberImageColorState()
+    val collapsingState = rememberBgmCollapsingScaffoldState()
+    val tabs = uiState.data.rememberTabs()
+    val initialPage = remember(initialTab, tabs) {
+        val idx = tabs.indexOfFirst { it.type == initialTab }
+        if (idx >= 0) idx else 0
+    }
+    val pagerState = rememberBgmPagerState(
+        initialPage = initialPage.coerceAtLeast(0),
+        pageCount = { tabs.size }
+    )
+
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage != 0) {
+            collapsingState.collapse()
+        }
+    }
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
         state = scrollState,
+        collapsingState = collapsingState,
         topBar = { progressProvider ->
             val progress = progressProvider()
             val iconColor = androidx.compose.ui.graphics.lerp(
@@ -145,7 +165,7 @@ private fun UserScreen(
             modifier = Modifier.fillMaxSize(),
             uiState = uiState,
         ) { state ->
-            UserScreenContent(state, initialTab, onUiEvent, onActionEvent)
+            UserScreenContent(state, initialTab, pagerState, onUiEvent, onActionEvent)
         }
     }
 }
@@ -208,6 +228,7 @@ private fun UserScreenHeader(
 private fun UserScreenContent(
     state: UserState,
     @ProfileMenu initialTab: Int,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
@@ -217,10 +238,6 @@ private fun UserScreenContent(
         if (idx >= 0) idx else 0
     }
     val scope = rememberCoroutineScope()
-    val pagerState = androidx.compose.foundation.pager.rememberPagerState(
-        initialPage = initialPage.coerceAtLeast(0),
-        pageCount = { tabs.size }
-    )
     val collectionPageIndex = remember(tabs) { tabs.indexOfFirst { it.type == ProfileMenu.COLLECTION } }
 
     BgmTabHorizontalPager(

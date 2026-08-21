@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -58,10 +59,12 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -102,9 +105,18 @@ private fun GroupsDetailScreen(
     onActionEvent: (GroupsDetailEvent.Action) -> Unit,
 ) {
     val imageColorState = rememberImageColorState()
+    val collapsingState = rememberBgmCollapsingScaffoldState()
+    val pagerState = rememberBgmPagerState { uiState.data.tabs.size }
+
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage != 0) {
+            collapsingState.collapse()
+        }
+    }
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
+        collapsingState = collapsingState,
         topBar = { progressProvider ->
             val progress = progressProvider()
             val iconColor = androidx.compose.ui.graphics.lerp(
@@ -160,7 +172,7 @@ private fun GroupsDetailScreen(
             onRefresh = { loading -> onActionEvent(GroupsDetailEvent.Action.OnRefresh(loading)) },
             uiState = uiState,
         ) { state ->
-            GroupsDetailScreenContent(state, onUiEvent, onActionEvent)
+            GroupsDetailScreenContent(state, pagerState, onUiEvent, onActionEvent)
         }
     }
 }
@@ -262,11 +274,13 @@ private fun GroupsDetailScreenHeader(
 @Composable
 private fun GroupsDetailScreenContent(
     state: GroupsDetailState,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     onUiEvent: (GroupsDetailEvent.UI) -> Unit,
     onActionEvent: (GroupsDetailEvent.Action) -> Unit,
 ) {
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
+        pagerState = pagerState,
         tabs = state.tabs
     ) {
         when (it) {

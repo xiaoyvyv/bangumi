@@ -21,12 +21,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -49,10 +52,82 @@ private enum class BgmCollapsingSlot {
     OVERLAY
 }
 
+@Stable
+class BgmCollapsingScaffoldState(
+    initialOffset: Float = 0f,
+) {
+    var currentOffset by mutableFloatStateOf(initialOffset)
+        internal set
+
+    var offsetLimit by mutableIntStateOf(0)
+        internal set
+
+    val progress: Float
+        get() = if (offsetLimit == 0) 0f
+        else (abs(currentOffset) / abs(offsetLimit).toFloat()).coerceIn(0f, 1f)
+
+    val isCollapsed: Boolean
+        get() = offsetLimit < 0 && currentOffset <= offsetLimit.toFloat()
+
+    val isExpanded: Boolean
+        get() = currentOffset >= 0f
+
+    suspend fun collapse() {
+        if (offsetLimit < 0 && currentOffset > offsetLimit.toFloat()) {
+            val anim = Animatable(currentOffset)
+            try {
+                anim.animateTo(offsetLimit.toFloat()) {
+                    currentOffset = value
+                }
+            } catch (_: CancellationException) {
+                currentOffset = offsetLimit.toFloat()
+            }
+        }
+    }
+
+    suspend fun expand() {
+        if (offsetLimit < 0 && currentOffset < 0f) {
+            val anim = Animatable(currentOffset)
+            try {
+                anim.animateTo(0f) {
+                    currentOffset = value
+                }
+            } catch (_: CancellationException) {
+                currentOffset = 0f
+            }
+        }
+    }
+
+    fun collapseSnap() {
+        if (offsetLimit < 0) {
+            currentOffset = offsetLimit.toFloat()
+        }
+    }
+
+    fun expandSnap() {
+        currentOffset = 0f
+    }
+
+    companion object {
+        val Saver: Saver<BgmCollapsingScaffoldState, *> = Saver(
+            save = { it.currentOffset },
+            restore = { BgmCollapsingScaffoldState(initialOffset = it) }
+        )
+    }
+}
+
+@Composable
+fun rememberBgmCollapsingScaffoldState(): BgmCollapsingScaffoldState {
+    return rememberSaveable(saver = BgmCollapsingScaffoldState.Saver) {
+        BgmCollapsingScaffoldState()
+    }
+}
+
 @Composable
 fun BgmCollapsingScaffold(
     modifier: Modifier = Modifier,
     state: ScrollState = rememberScrollState(),
+    collapsingState: BgmCollapsingScaffoldState = rememberBgmCollapsingScaffoldState(),
     windowInsets: WindowInsets = WindowInsets.navigationBars,
     collapse: @Composable BoxScope.(pinPadding: PaddingValues) -> Unit,
     topBar: @Composable (BoxScope.(progress: () -> Float) -> Unit)? = null,
@@ -66,16 +141,16 @@ fun BgmCollapsingScaffold(
     var maxHeightPx by rememberSaveable { mutableIntStateOf(0) }
 
     // Header 可以向上移动的最大距离 (负值)
-    val offsetLimit by remember(minHeightPx, maxHeightPx) {
-        mutableIntStateOf(-(maxHeightPx - minHeightPx).coerceAtLeast(0))
+    val calculatedOffsetLimit = -(maxHeightPx - minHeightPx).coerceAtLeast(0)
+    SideEffect {
+        collapsingState.offsetLimit = calculatedOffsetLimit
     }
 
-    // 当前 Header 的偏移量，范围在 [offsetLimit, 0] 之间
-    var currentOffset by rememberSaveable(maxHeightPx) { mutableFloatStateOf(0f) }
+    val offsetLimit = collapsingState.offsetLimit
 
     // 当 offsetLimit 发生变化时进行边界校准
     LaunchedEffect(offsetLimit) {
-        currentOffset = currentOffset.coerceIn(offsetLimit.toFloat(), 0f)
+        collapsingState.currentOffset = collapsingState.currentOffset.coerceIn(offsetLimit.toFloat(), 0f)
     }
 
     // 真实物理衰减惯性滚动 (Fling Momentum)
@@ -84,8 +159,8 @@ fun BgmCollapsingScaffold(
     suspend fun performDecayFling(initialVelocity: Float): Float {
         if (offsetLimit >= 0 || initialVelocity == 0f) return initialVelocity
 
-        val anim = Animatable(currentOffset)
-        var lastValue = currentOffset
+        val anim = Animatable(collapsingState.currentOffset)
+        var lastValue = collapsingState.currentOffset
         var currentVelocity = initialVelocity
 
         try {
@@ -97,9 +172,9 @@ fun BgmCollapsingScaffold(
                 lastValue = value
                 currentVelocity = velocity
 
-                val oldOffset = currentOffset
+                val oldOffset = collapsingState.currentOffset
                 val newOffset = (oldOffset + delta).coerceIn(offsetLimit.toFloat(), 0f)
-                currentOffset = newOffset
+                collapsingState.currentOffset = newOffset
 
                 if (newOffset == offsetLimit.toFloat() || newOffset == 0f) {
                     throw CancellationException("Animation bounds reached")
@@ -112,29 +187,27 @@ fun BgmCollapsingScaffold(
     }
 
     // 进度计算使用 Lambda 闭包与 derivedStateOf
-    val scrollProgressLambda: () -> Float = remember(offsetLimit) {
-        val derivedProgress = derivedStateOf {
-            if (offsetLimit == 0) 0f
-            else (abs(currentOffset) / abs(offsetLimit).toFloat()).coerceIn(0f, 1f)
-        }
-        return@remember { derivedProgress.value }
+    val scrollProgressLambda: () -> Float = remember(collapsingState) {
+        return@remember { collapsingState.progress }
     }
 
     // 计算是否完全展开到最顶端
-    val isAtTop by remember(offsetLimit) {
-        derivedStateOf { currentOffset == 0f }
+    val isAtTop by remember(collapsingState) {
+        derivedStateOf { collapsingState.isExpanded }
     }
 
     // 统一 NestedScrollConnection 滚动手势控制器
-    val nestedScrollConnection = remember(offsetLimit, density) {
+    val nestedScrollConnection = remember(collapsingState, density) {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y
+                val currentOffset = collapsingState.currentOffset
+                val offsetLimit = collapsingState.offsetLimit
                 // 上滑 (delta < 0)：优先折叠 Header
                 if (delta < 0 && currentOffset > offsetLimit) {
                     val newOffset = (currentOffset + delta).coerceAtLeast(offsetLimit.toFloat())
                     val consumed = newOffset - currentOffset
-                    currentOffset = newOffset
+                    collapsingState.currentOffset = newOffset
                     return Offset(0f, consumed)
                 }
                 return Offset.Zero
@@ -142,11 +215,12 @@ fun BgmCollapsingScaffold(
 
             override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y
+                val currentOffset = collapsingState.currentOffset
                 // 下滑 (delta > 0)：子列表滚到最顶端后，剩余下滑量展开 Header
                 if (delta > 0 && currentOffset < 0) {
                     val newOffset = (currentOffset + delta).coerceAtMost(0f)
                     val consumedByHeader = newOffset - currentOffset
-                    currentOffset = newOffset
+                    collapsingState.currentOffset = newOffset
                     return Offset(0f, consumedByHeader)
                 }
                 return Offset.Zero
@@ -154,6 +228,8 @@ fun BgmCollapsingScaffold(
 
             override suspend fun onPreFling(available: Velocity): Velocity {
                 val velocity = available.y
+                val currentOffset = collapsingState.currentOffset
+                val offsetLimit = collapsingState.offsetLimit
                 // 上滑惯性：若 Header 未完全收起，优先惯性折叠 Header
                 if (offsetLimit < 0 && velocity < 0f && currentOffset > offsetLimit) {
                     val remainingVelocity = performDecayFling(velocity)
@@ -164,6 +240,8 @@ fun BgmCollapsingScaffold(
 
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
                 val velocity = available.y
+                val currentOffset = collapsingState.currentOffset
+                val offsetLimit = collapsingState.offsetLimit
                 // 下滑惯性：Content 滚动到顶后剩余的惯性，拉出 Header
                 if (offsetLimit < 0 && velocity > 0f && currentOffset < 0f) {
                     val remainingVelocity = performDecayFling(velocity)
@@ -180,11 +258,13 @@ fun BgmCollapsingScaffold(
         .draggable(
             orientation = Orientation.Vertical,
             state = rememberDraggableState { delta ->
+                val offsetLimit = collapsingState.offsetLimit
                 if (offsetLimit < 0) {
-                    currentOffset = (currentOffset + delta).coerceIn(offsetLimit.toFloat(), 0f)
+                    collapsingState.currentOffset = (collapsingState.currentOffset + delta).coerceIn(offsetLimit.toFloat(), 0f)
                 }
             },
             onDragStopped = { velocity ->
+                val offsetLimit = collapsingState.offsetLimit
                 if (offsetLimit < 0 && velocity != 0f) {
                     coroutineScope.launch {
                         performDecayFling(velocity)
@@ -200,11 +280,13 @@ fun BgmCollapsingScaffold(
         .draggable(
             orientation = Orientation.Vertical,
             state = rememberDraggableState { delta ->
+                val offsetLimit = collapsingState.offsetLimit
                 if (offsetLimit < 0) {
-                    currentOffset = (currentOffset + delta).coerceIn(offsetLimit.toFloat(), 0f)
+                    collapsingState.currentOffset = (collapsingState.currentOffset + delta).coerceIn(offsetLimit.toFloat(), 0f)
                 }
             },
             onDragStopped = { velocity ->
+                val offsetLimit = collapsingState.offsetLimit
                 if (offsetLimit < 0 && velocity != 0f) {
                     coroutineScope.launch {
                         performDecayFling(velocity)
@@ -264,7 +346,7 @@ fun BgmCollapsingScaffold(
 
         // --- 布局 (Layout) ---
         layout(constraints.maxWidth, constraints.maxHeight) {
-            val currentOffsetPx = currentOffset.roundToInt()
+            val currentOffsetPx = collapsingState.currentOffset.roundToInt()
 
             // Content: 位于 Header 底部，随 offset 移动
             contentPlaceable.placeRelative(

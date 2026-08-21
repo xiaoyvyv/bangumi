@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,6 +68,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
@@ -122,9 +124,19 @@ private fun MonoDetailScreen(
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
 ) {
     val imageColorState = rememberImageColorState()
+    val collapsingState = rememberBgmCollapsingScaffoldState()
+    val tabs = uiState.data.rememberTabs()
+    val pagerState = rememberBgmPagerState { tabs.size }
+
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage != 0) {
+            collapsingState.collapse()
+        }
+    }
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
+        collapsingState = collapsingState,
         topBar = { progressProvider ->
             val progress = progressProvider()
             val iconColor = androidx.compose.ui.graphics.lerp(
@@ -223,6 +235,7 @@ private fun MonoDetailScreen(
                     state = state,
                     pixivImageItems = pixivImageItems,
                     animePicImageItems = animePicImageItems,
+                    pagerState = pagerState,
                     onUiEvent = onUiEvent,
                     onActionEvent = onActionEvent
                 )
@@ -321,11 +334,11 @@ private fun MonoDetailScreenContent(
     state: MonoDetailState,
     pixivImageItems: LazyPagingItems<ComposeGallery>,
     animePicImageItems: LazyPagingItems<ComposeGallery>,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     onUiEvent: (MonoDetailEvent.UI) -> Unit,
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
 ) {
     val tabs = state.rememberTabs()
-    val pagerState = rememberBgmPagerState { tabs.size }
     val scope = rememberCoroutineScope()
 
     BgmTabHorizontalPager(

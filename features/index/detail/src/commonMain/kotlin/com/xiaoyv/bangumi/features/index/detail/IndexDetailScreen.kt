@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -54,9 +55,11 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -99,9 +102,18 @@ private fun IndexDetailScreen(
     onActionEvent: (IndexDetailEvent.Action) -> Unit,
 ) {
     val imageColorState = rememberImageColorState()
+    val collapsingState = rememberBgmCollapsingScaffoldState()
+    val pagerState = rememberBgmPagerState { uiState.data.tabs.size }
+
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage != 0) {
+            collapsingState.collapse()
+        }
+    }
 
     BgmCollapsingScaffold(
         modifier = Modifier.fillMaxSize(),
+        collapsingState = collapsingState,
         topBar = { progressProvider ->
             val progress = progressProvider()
             val iconColor = androidx.compose.ui.graphics.lerp(
@@ -164,7 +176,7 @@ private fun IndexDetailScreen(
             onRefresh = { loading -> onActionEvent(IndexDetailEvent.Action.OnRefresh(loading)) },
             uiState = uiState,
         ) { state ->
-            IndexDetailScreenContent(state, onUiEvent, onActionEvent)
+            IndexDetailScreenContent(state, pagerState, onUiEvent, onActionEvent)
         }
     }
 }
@@ -259,11 +271,13 @@ private fun IndexDetailScreenHeader(
 @Composable
 private fun IndexDetailScreenContent(
     state: IndexDetailState,
+    pagerState: androidx.compose.foundation.pager.PagerState,
     onUiEvent: (IndexDetailEvent.UI) -> Unit,
     onActionEvent: (IndexDetailEvent.Action) -> Unit,
 ) {
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
+        pagerState = pagerState,
         tabs = state.tabs
     ) {
         val tab = state.tabs[it]
