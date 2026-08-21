@@ -367,7 +367,7 @@ function parseTimelineMemoStaus(element: Element, type: number): Status {
 	const statusElement = selectElement('p.status', element);
 	if (!statusElement) return {};
 
-	const html = render(statusElement.children);
+	const html = render(statusElement.children, { encodeEntities: 'utf8' });
 
 	if (type === 0) {
 		// 更新签名
