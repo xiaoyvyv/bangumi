@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
@@ -60,6 +61,20 @@ interface TimelineApi {
         @Query("cat") @TimelineCat cat: Int? = null,
         @Query("limit") limit: Int? = 20,
         @Query("until") until: Long? = null,
+    ): List<ComposeTimeline>
+
+    /**
+     * 获取时间线 - Web 解析版本
+     *
+     * @param type 网页版本的时间线对应的类型
+     * @param mode 登录时默认为 friends, 未登录或没有好友时始终为 all (optional)
+     */
+    @GET("${WebConstant.URL_BGM_PROXY}p1/timeline")
+    suspend fun getTimelineWebApi(
+        @Query("mode") @TimelineTarget mode: String,
+        @Query("type") type: String? = null,
+        @Query("user") username: String? = null,
+        @Query("page") page: Int = 1,
     ): List<ComposeTimeline>
 
     /**

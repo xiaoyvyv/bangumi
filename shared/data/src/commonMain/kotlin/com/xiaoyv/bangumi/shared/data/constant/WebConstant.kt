@@ -20,9 +20,10 @@ object WebConstant {
     const val URL_BGM_STATUS_API = "https://bgm-status.ry.mk/api/mini"
     const val URL_BGM_TURNSTILE = "https://next.bgm.tv/p1/turnstile?theme=auto&redirect_uri=bangumi://"
     const val URL_BGM_SIGN = "https://bgm.tv/signup"
+    const val URL_BGM_PROXY = "https://01b8c1cd4205405eb3d1d4d9850cec7a.xiaoyv.com.cn/"
 
     const val CLOUDFLARE_DNS_ENDPOINT_1 = "https://xwfpeb16ii.cloudflare-gateway.com/dns-query"
-    const val CLOUDFLARE_DNS_ENDPOINT_2 = "https://01b8c1cd4205405eb3d1d4d9850cec7a.xiaoyv.com.cn/dns-query"
+    const val CLOUDFLARE_DNS_ENDPOINT_2 = "${URL_BGM_PROXY}dns-query"
 }
 
 fun subjectImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/subjects/$id/image?type=$type"

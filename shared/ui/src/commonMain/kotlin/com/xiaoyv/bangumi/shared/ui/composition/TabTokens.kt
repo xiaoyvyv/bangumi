@@ -94,6 +94,8 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
 import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_mine_title
+import com.xiaoyv.bangumi.core_resource.resources.timeline_rant_all
+import com.xiaoyv.bangumi.core_resource.resources.timeline_rant_friend
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_discover
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_hidden
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_pm
@@ -128,7 +130,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
-import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
+import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
@@ -371,9 +373,11 @@ object TabTokens {
     )
 
     val timelineTabs = persistentListOf(
-        ComposeTextTab(TimelineTarget.WHOLE, Res.string.global_all),
-        ComposeTextTab(TimelineTarget.FRIEND, Res.string.timeline_friend_title),
-        ComposeTextTab(TimelineTarget.USER, Res.string.timeline_mine_title),
+        ComposeTextTab(TimelineTab.TIMELINE_ANYONE, Res.string.global_all),
+        ComposeTextTab(TimelineTab.TIMELINE_FRIEND, Res.string.timeline_friend_title),
+        ComposeTextTab(TimelineTab.TIMELINE_SELF, Res.string.timeline_mine_title),
+        ComposeTextTab(TimelineTab.RANT_ANYONE, Res.string.timeline_rant_all),
+        ComposeTextTab(TimelineTab.RANT_FRIEND, Res.string.timeline_rant_friend),
     )
 
     val timelineCatTabs = persistentListOf(

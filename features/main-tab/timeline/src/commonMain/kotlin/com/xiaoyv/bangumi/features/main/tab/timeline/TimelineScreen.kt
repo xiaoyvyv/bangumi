@@ -19,6 +19,8 @@ import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
 import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.types.TimelineCat
+import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
@@ -107,12 +109,29 @@ private fun TimelineScreenContent(
         modifier = modifier.fillMaxSize(),
         tabs = timelineTabs
     ) {
-        BgmRequireLogin(enable = timelineTabs[it].type == TimelineTarget.USER) {
+        val tab = timelineTabs[it].type
+        BgmRequireLogin(
+            enable = tab == TimelineTab.TIMELINE_SELF
+                    || tab == TimelineTab.TIMELINE_FRIEND
+                    || tab == TimelineTab.RANT_FRIEND
+        ) {
             TimelinePageRoute(
-                param = remember(it, state.username) {
+                param = remember(tab, state.username) {
                     ListTimelineParam(
                         type = ListTimelineType.BROWSER,
-                        timelineMode = timelineTabs[it].type,
+                        timelineMode = when (tab) {
+                            TimelineTab.TIMELINE_ANYONE -> TimelineTarget.WHOLE
+                            TimelineTab.TIMELINE_FRIEND -> TimelineTarget.FRIEND
+                            TimelineTab.TIMELINE_SELF -> TimelineTarget.USER
+                            TimelineTab.RANT_ANYONE -> TimelineTarget.WHOLE
+                            TimelineTab.RANT_FRIEND -> TimelineTarget.FRIEND
+                            else -> TimelineTarget.WHOLE
+                        },
+                        timelineCat = when (tab) {
+                            TimelineTab.RANT_ANYONE -> TimelineCat.STATUS
+                            TimelineTab.RANT_FRIEND -> TimelineCat.STATUS
+                            else -> TimelineCat.UNKNOWN
+                        },
                         username = state.username
                     )
                 },

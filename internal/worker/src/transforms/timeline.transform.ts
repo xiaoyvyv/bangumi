@@ -3,7 +3,7 @@
 import { parseDocument } from 'htmlparser2';
 import { selectAll, selectOne } from 'css-select';
 import { UPSTREAM } from '../config';
-import { removeElement, textContent } from 'domutils';
+import { innerHTML, removeElement, textContent } from 'domutils';
 import { Element, isTag } from 'domhandler';
 import '../config/array.extensions';
 import {
@@ -16,6 +16,7 @@ import {
 	selectElement,
 	selectElements,
 	spanStyleAvatar,
+	subAfter,
 	subAfterLast
 } from '../config/util';
 import {
@@ -257,28 +258,28 @@ function parseTimelineMemo(element: Element | null, catAndType: TimelineCatAndTy
 
 	switch (catAndType.cat) {
 		// 1:注册, 2:加为了好友, 3:加入了小组, 4:创建了小组,
-		case TimelineCat.DAILY :
+		case TimelineCat.DAILY:
 			memo.daily = parseTimelineMemoDaily(element, type);
 			break;
-		case TimelineCat.WIKI :
+		case TimelineCat.WIKI:
 			memo.wiki = parseTimelineMemoWiki(element, type);
 			break;
-		case TimelineCat.SUBJECT :
+		case TimelineCat.SUBJECT:
 			memo.subject = parseTimelineMemoSubject(element, type);
 			break;
-		case TimelineCat.PROGRESS :
+		case TimelineCat.PROGRESS:
 			memo.progress = parseTimelineMemoProgress(element, type);
 			break;
-		case TimelineCat.STATUS :
+		case TimelineCat.STATUS:
 			memo.status = parseTimelineMemoStaus(element, type);
 			break;
-		case TimelineCat.BLOG :
+		case TimelineCat.BLOG:
 			memo.blog = parseTimelineMemoBlog(element, type);
 			break;
-		case TimelineCat.INDEX :
+		case TimelineCat.INDEX:
 			memo.index = parseTimelineMemoIndex(element, type);
 			break;
-		case TimelineCat.MONO : {
+		case TimelineCat.MONO: {
 			memo.mono = parseTimelineMemoMono(element, type);
 			break;
 		}
@@ -362,7 +363,30 @@ function parseTimelineMemoProgress(element: Element, type: number): Progress {
 }
 
 function parseTimelineMemoStaus(element: Element, type: number): Status {
-	return {};
+	const statusElement = selectElement('p.status', element);
+	if (!statusElement) return {};
+
+	const html = innerHTML(statusElement);
+
+	if (type === 0) {
+		// 更新签名
+		const sign = subAfter(subAfter(html, '更新了签名: '), '更新了签名：');
+		return { sign };
+	} else if (type === 2) {
+		// 改名
+		const strongs = selectElements('strong', statusElement);
+		return {
+			nickname: {
+				before: strongs[0] ? textContent(strongs[0]).trim() : '',
+				after: strongs[1] ? textContent(strongs[1]).trim() : '',
+			}
+		};
+	} else {
+		// 吐槽
+		return {
+			tsukkomi: html
+		};
+	}
 }
 
 function parseTimelineMemoBlog(element: Element, type: number): Blog {

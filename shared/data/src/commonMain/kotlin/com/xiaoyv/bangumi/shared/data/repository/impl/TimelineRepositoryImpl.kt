@@ -28,7 +28,34 @@ class TimelineRepositoryImpl(
         @TimelineCat type: Int,
         username: String
     ): Pager<Int, ComposeTimeline> {
+        // 官方 API 暂不支持分类，这里用 Web 代替
         val timelineCat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN }
+        if (timelineCat != null && target != TimelineTarget.USER) {
+            return createNetworkPageLimitPagingPager(
+                pagingConfig = pagingConfig,
+                keySelector = { it.id },
+                onLoadData = {
+                    client.requestNextTimelineApi {
+                        getTimelineWebApi(
+                            mode = target,
+                            username = username.takeIf { it.isNotBlank() },
+                            type = when (timelineCat) {
+                                TimelineCat.DAILY -> "say"
+                                TimelineCat.WIKI -> "wiki"
+                                TimelineCat.SUBJECT -> "subject"
+                                TimelineCat.PROGRESS -> "progress"
+                                TimelineCat.STATUS -> "say"
+                                TimelineCat.BLOG -> "blog"
+                                TimelineCat.INDEX -> "index"
+                                TimelineCat.MONO -> "mono"
+                                TimelineCat.WINDOW -> "doujin"
+                                else -> null
+                            }
+                        )
+                    }.getOrThrow()
+                }
+            )
+        }
         return createStepUniquePagingPager(
             pagingConfig = pagingConfig,
             keySelector = { it.id },
