@@ -17,7 +17,6 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUploadImage
 import de.jensklingenberg.ktorfit.http.Body
@@ -274,6 +273,29 @@ interface BgmWebApi {
     suspend fun fetchUserPrivacy(): Document
 
     /**
+     * 时间胶囊-指定用户
+     *
+     * @param ajax 仅返回嵌套的 html
+     */
+    @GET("user/{username}/timeline")
+    suspend fun fetchTimelineForUser(
+        @Path("username", encoded = true) username: String,
+        @Query("type") type: String,
+        @Query("page") page: Int? = null,
+        @Query("ajax") ajax: Long = 1,
+    ): Document
+
+    /**
+     * 时间胶囊-全部
+     */
+    @GET("timeline")
+    suspend fun fetchTimelineForWhole(
+        @Query("type") type: String,
+        @Query("page") page: Int? = null,
+        @Query("ajax") ajax: Long = 1,
+    ): Document
+
+    /**
      * 时间胶囊-吐槽回复内容
      */
     @GET("user/{username}/timeline/status/{timelineId}")
@@ -487,7 +509,7 @@ interface BgmWebApi {
         @Path("action", encoded = true) action: String,
         @FieldMap params: Map<String, Any>,
         @Query("ajax") ajax: Int = 1,
-    ): ComposeNewReply
+    ): HttpResponse
 
     /**
      * 发表Dollars

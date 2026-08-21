@@ -1,0 +1,41 @@
+name: Deploy Worker
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'internal/wroker/**'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build, Test and Deploy Worker
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'internal/wroker/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: internal/wroker
+        run: npm ci
+
+      - name: Run unit tests
+        working-directory: internal/wroker
+        run: npm test
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: 'internal/wroker'

@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.mono.detail.business
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
@@ -19,8 +18,10 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
+import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
 import com.xiaoyv.bangumi.shared.data.repository.ImageRepository
@@ -29,10 +30,7 @@ import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.data.usecase.MonoRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -56,6 +54,7 @@ class MonoDetailViewModel(
     private val monoRepository: MonoRepository,
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
+    private val userManager: UserManager
 ) : BaseViewModel<MonoDetailState, MonoDetailSideEffect, MonoDetailEvent.Action>() {
 
     private val cacheKey = stringPreferencesKey(name = "mono_detail_${args.type}_" + args.id)
@@ -120,6 +119,7 @@ class MonoDetailViewModel(
         when (event) {
             is MonoDetailEvent.Action.OnRefresh -> refresh(event.loading)
             is MonoDetailEvent.Action.OnToggleBookmarkMono -> onToggleBookmarkMono()
+            is MonoDetailEvent.Action.OnReactionClick -> onReactionClick(event.comment, event.reaction)
         }
     }
 
@@ -128,21 +128,7 @@ class MonoDetailViewModel(
             awaitAll(
                 block1 = { monoRepoUseCase.fetchMonoDetail(args.id, args.type) },
                 block2 = { monoRepository.fetchCharacterCasts(args.id) },
-            ).onFailure {
-                reduceError { it }
-            }.onSuccess {
-                reduceData {
-                    state.copy(
-                        mono = it.data1,
-                        casts = it.data2.toPersistentList()
-                    )
-                }
-            }
-        } else {
-            awaitAll(
-                block1 = { monoRepoUseCase.fetchMonoDetail(args.id, args.type) },
-                block2 = { monoRepository.fetchPersonCast(args.id, limit = 5) },
-                block3 = { monoRepository.fetchPersonWorks(args.id, limit = 5) },
+                block3 = { monoRepository.fetchMonoComments(args.id, MonoType.CHARACTER) },
             ).onFailure {
                 reduceError { it }
             }.onSuccess {
@@ -150,7 +136,25 @@ class MonoDetailViewModel(
                     state.copy(
                         mono = it.data1,
                         casts = it.data2.toPersistentList(),
-                        works = it.data3.toPersistentList()
+                        comments = it.data3.toPersistentList()
+                    )
+                }
+            }
+        } else {
+            awaitAll(
+                block1 = { monoRepoUseCase.fetchMonoDetail(args.id, args.type) },
+                block2 = { monoRepository.fetchPersonCast(args.id, limit = 5) },
+                block3 = { monoRepository.fetchMonoComments(args.id, MonoType.PERSON) },
+                block4 = { monoRepository.fetchPersonWorks(args.id, limit = 5) },
+            ).onFailure {
+                reduceError { it }
+            }.onSuccess {
+                reduceData {
+                    state.copy(
+                        mono = it.data1,
+                        casts = it.data2.toPersistentList(),
+                        comments = it.data3.toPersistentList(),
+                        works = it.data4.toPersistentList()
                     )
                 }
             }
@@ -193,5 +197,13 @@ class MonoDetailViewModel(
             .onSuccess { tags ->
                 animePicTag.update { tags.joinToString("||") }
             }
+    }
+
+
+    private fun onReactionClick(comment: ComposeReply, reaction: ComposeReaction) = intent {
+        val isLiked = reaction.users.any { it.username == userManager.userInfo.username }
+        val self = userManager.userInfo.username
+
+        postToast { "暂未开通贴贴哦~" }
     }
 }

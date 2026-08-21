@@ -11,7 +11,7 @@ interface TimelineRepository {
         @TimelineTarget target: String,
         @TimelineCat type: Int,
         username: String
-    ): Pager<Long, ComposeTimeline>
+    ): Pager<Int, ComposeTimeline>
 
     suspend fun submitCreateTimeline(content: String, turnstileToken: String): Result<ComposeId>
 

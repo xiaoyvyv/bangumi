@@ -27,7 +27,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.json.JsonPrimitive
 
 @AppParserDsl
-class MonoParser(private val commentParser: CommentParser) : BaseParser() {
+class MonoParser : BaseParser() {
 
     suspend fun Element.fetchMonoDetailConverted(): ComposeMonoWebInfo {
         requireNoError()

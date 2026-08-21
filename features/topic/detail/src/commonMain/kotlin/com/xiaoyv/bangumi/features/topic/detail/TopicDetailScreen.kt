@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,16 +37,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_comments
-import com.xiaoyv.bangumi.core_resource.resources.global_empty_comments_subtitle
-import com.xiaoyv.bangumi.core_resource.resources.global_empty_comments_title
 import com.xiaoyv.bangumi.core_resource.resources.global_no_content
-import com.xiaoyv.bangumi.core_resource.resources.global_no_more
-import com.xiaoyv.bangumi.core_resource.resources.global_no_more_comments_subtitle
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.topic_title
 import com.xiaoyv.bangumi.features.topic.detail.business.TopicDetailEvent
@@ -58,8 +52,8 @@ import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.animateScrollToItem
 import com.xiaoyv.bangumi.shared.core.utils.nodesIndexed
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -72,6 +66,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
 import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
+import com.xiaoyv.bangumi.shared.ui.component.layout.state.CommentNoDataTip
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -465,7 +460,7 @@ private fun TopicDetailScreenContent(
             }
 
             itemKey(CONTENT_TYPE_BOTTOM_CHARACTER) {
-                TopicDetailScreenNoDataTip(isEmpty = state.displayReplies.isEmpty())
+                CommentNoDataTip(isEmpty = state.displayReplies.isEmpty())
             }
         }
     }
@@ -551,62 +546,6 @@ private fun TopicDetailScreenRecationButton(
             )
             Spacer(Modifier.width(4.dp))
             Text(stringResource(Res.string.global_reaction))
-        }
-    }
-}
-
-@Composable
-private fun TopicDetailScreenNoDataTip(
-    isEmpty: Boolean,
-    modifier: Modifier = Modifier
-) {
-    val title = stringResource(
-        if (isEmpty) Res.string.global_empty_comments_title
-        else Res.string.global_no_more
-    )
-    val subtitle = stringResource(
-        if (isEmpty) Res.string.global_empty_comments_subtitle
-        else Res.string.global_no_more_comments_subtitle
-    )
-
-    if (!isEmpty) BgmHorizontalDivider()
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .let { if (isEmpty) it.height(400.dp) else it.padding(bottom = 200.dp) }
-            .padding(horizontal = ContentMargin),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
-    ) {
-        if (isEmpty) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                ),
-                textAlign = TextAlign.Center
-            )
-
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.fillMaxWidth(0.82f)
-            )
-        } else {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = ContentMargin, vertical = 24.dp),
-                text = title,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium
-            )
         }
     }
 }

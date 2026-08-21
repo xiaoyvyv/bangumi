@@ -1,6 +1,8 @@
 package com.xiaoyv.bangumi.features.mono.detail.business
 
 import com.xiaoyv.bangumi.shared.core.types.MonoDetailTab
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -19,5 +21,7 @@ sealed class MonoDetailEvent {
     sealed class Action : MonoDetailEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
         data object OnToggleBookmarkMono : Action()
+
+        data class OnReactionClick(val comment: ComposeReply, val reaction: ComposeReaction) : Action()
     }
 }

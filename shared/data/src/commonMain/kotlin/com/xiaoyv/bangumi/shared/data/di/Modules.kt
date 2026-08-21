@@ -9,13 +9,11 @@ import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.parser.MikanParser
 import com.xiaoyv.bangumi.shared.data.parser.SignParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.BlogParser
-import com.xiaoyv.bangumi.shared.data.parser.bgm.CommentParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.GroupParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.HomeParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.MonoParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
-import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicTableParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
@@ -84,7 +82,7 @@ private val repositoryModules = module {
     single<SubjectRepository> { SubjectRepositoryImpl(get(), get(), get(), get(), get()) }
     single<MonoRepository> { MonoRepositoryImpl(get(), get(), get()) }
     single<BlogRepository> { BlogRepositoryImpl(get(), get()) }
-    single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get(), get(), get()) }
+    single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get(), get()) }
     single<TimelineRepository> { TimelineRepositoryImpl(get(), get(), get()) }
     single<ChoreRepository> { ChoreRepositoryImpl(get()) }
     single<GroupRepository> { GroupRepositoryImpl(get(), get(), get()) }
@@ -101,14 +99,12 @@ private val useCaseModules = module {
 }
 
 private val converterModules = module {
-    singleOf(::CommentParser)
     singleOf(::SignParser)
     singleOf(::UserParser)
     singleOf(::SubjectParser)
     singleOf(::HomeParser)
     singleOf(::MikanParser)
     singleOf(::MonoParser)
-    singleOf(::TopicParser)
     singleOf(::TopicTableParser)
     singleOf(::GroupParser)
     singleOf(::BlogParser)

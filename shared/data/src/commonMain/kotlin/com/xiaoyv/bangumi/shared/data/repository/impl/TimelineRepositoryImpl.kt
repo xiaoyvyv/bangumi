@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createStepUniquePagingPager
 
 class TimelineRepositoryImpl(
@@ -26,7 +27,8 @@ class TimelineRepositoryImpl(
         @TimelineTarget target: String,
         @TimelineCat type: Int,
         username: String
-    ): Pager<Long, ComposeTimeline> {
+    ): Pager<Int, ComposeTimeline> {
+        val timelineCat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN }
         return createStepUniquePagingPager(
             pagingConfig = pagingConfig,
             keySelector = { it.id },
@@ -37,22 +39,22 @@ class TimelineRepositoryImpl(
 
                         getUserTimeline(
                             username = username,
-                            cat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN },
+                            cat = null,
                             limit = pagingConfig.pageSize,
-                            until = it
+                            until = it?.toLong()
                         ).map { timeline -> timeline.copy(user = user).normalized() }
                     }.getOrThrow()
                 } else {
                     client.requestNextTimelineApi {
                         getTimeline(
                             mode = target,
-                            cat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN },
+                            cat = null,
                             limit = pagingConfig.pageSize,
-                            until = it
+                            until = it?.toLong()
                         ).map { timeline -> timeline.normalized() }
                     }.getOrThrow()
                 }
-                displays to displays.lastOrNull()?.id
+                displays to displays.lastOrNull()?.id?.toInt()
             }
         )
     }

@@ -7,7 +7,6 @@ import com.xiaoyv.bangumi.core_resource.resources.login_first_tip
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
-import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
@@ -24,18 +23,15 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry.Companion.optImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroupHomepage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.parser.bgm.BlogParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.GroupParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
-import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicParser
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
@@ -48,7 +44,6 @@ import org.jetbrains.compose.resources.getString
 class UgcRepositoryImpl(
     private val client: BgmApiClient,
     private val pagingConfig: PagingConfig,
-    private val topicParser: TopicParser,
     private val blogParser: BlogParser,
     private val indexParser: IndexParser,
     private val groupParser: GroupParser,
@@ -260,20 +255,6 @@ class UgcRepositoryImpl(
         }
     }
 
-    override suspend fun fetchTopicDetail(id: Long, @TopicType type: String): Result<ComposeTopicDetail> = runResult {
-        with(topicParser) {
-            if (type == TopicType.TYPE_BLOG) {
-                client.bgmWebApi
-                    .fetchRakuenBlogDetail(id)
-                    .fetchRakuenBlogDetailConverted(id)
-            } else {
-                client.bgmWebApi
-                    .fetchRakuenTopicDetail(id, type = type)
-                    .fetchRakuenTopicDetailConverted(id, type)
-            }
-        }
-    }
-
     override suspend fun fetchDollarsChat(): Result<List<ComposeDollarItem>> = client.requestWebApi {
         fetchDollarChat().map {
             it.copy(
@@ -312,10 +293,6 @@ class UgcRepositoryImpl(
         ComposeReaction.fromJson(reactionJson).entries
             .firstOrNull()?.value
             .orEmpty()
-    }
-
-    override suspend fun submitNewReply(action: String, params: Map<String, Any>): Result<ComposeNewReply> = client.requestWebApi {
-        submitNewReply(action.trimStart('/'), params = params)
     }
 
     override suspend fun summitDollarsChat(message: String): Result<ComposeStatus> = client.requestWebApi {

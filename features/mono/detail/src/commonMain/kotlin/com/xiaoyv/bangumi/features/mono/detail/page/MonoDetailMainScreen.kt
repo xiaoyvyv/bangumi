@@ -2,16 +2,17 @@ package com.xiaoyv.bangumi.features.mono.detail.page
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_collabs
 import com.xiaoyv.bangumi.core_resource.resources.global_detail
@@ -35,16 +36,20 @@ import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailEvent
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.shared.core.types.MonoDetailTab
 import com.xiaoyv.bangumi.shared.core.types.MonoType
+import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
-import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
+import com.xiaoyv.bangumi.shared.ui.component.layout.box.MaxHeightFadeBox
+import com.xiaoyv.bangumi.shared.ui.component.layout.state.CommentNoDataTip
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import com.xiaoyv.bangumi.shared.ui.view.comment.CommentReplyItem
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexCardItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectWorkItem
 import org.jetbrains.compose.resources.stringResource
@@ -59,6 +64,7 @@ private const val ItemIndex = "ItemIndex"
 private const val ItemTitleComment = "TitleComment"
 private const val ItemTitleCharacterSubject = "KeyTitleCharacterSubject"
 private const val ItemTitlePersonCharacter = "KeyTitlePersonCharacter"
+private const val ItemNoMore = "KeyNoMore"
 
 /**
  * [MonoDetailMainScreen]
@@ -180,7 +186,7 @@ fun MonoDetailMainScreen(
         }
 
         // 评论
-        if (state.mono.webInfo.comments.isNotEmpty()) {
+        if (state.comments.isNotEmpty()) {
             itemKey(ItemTitleComment) {
                 DetailSectionTitle(
                     modifier = Modifier
@@ -189,15 +195,25 @@ fun MonoDetailMainScreen(
                     title = stringResource(Res.string.global_spit_out),
                 )
             }
-            itemsIndexed(state.mono.webInfo.comments) { index, item ->
-                if (index > 0 && item.parent == null) BgmHorizontalDivider()
+            itemsIndexed(state.comments) { index, item ->
+                CommentReplyItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    item = item,
+                    level = 0,
+                    isLikeable = true,
+                    onClickUser = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.UserDetail(it))) },
+                    onClickReport = {
+                        onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.Report(ReportType.USER, item.user.id)))
+                    },
+                    onClickReaction = {
+                        onActionEvent(MonoDetailEvent.Action.OnReactionClick(item, it))
+                    }
+                )
+                HorizontalDivider()
+            }
 
-//                CommentItem(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    item = item,
-//                    onClickUser = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.UserDetail(it))) },
-//                    onClick = {}
-//                )
+            itemKey(ItemNoMore) {
+                CommentNoDataTip(isEmpty = state.comments.isEmpty())
             }
         }
     }
@@ -217,18 +233,19 @@ private fun MonoDetailSummary(
         title = stringResource(Res.string.global_summary),
         onActionClick = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.summary))) }
     ) {
-        Text(
+        MaxHeightFadeBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.summary))) }
-                .padding(horizontal = ContentMargin),
-            text = state.mono.summary.ifBlank { stringResource(Res.string.global_no_summary) },
-            style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 28.sp),
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 10,
-            minLines = 5,
-            overflow = TextOverflow.Ellipsis
-        )
+                .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.summary))) },
+            maxHeight = 300.dp,
+        ) {
+            BgmLinkedText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ContentMargin),
+                text = state.mono.summary.ifBlank { stringResource(Res.string.global_no_summary) },
+            )
+        }
     }
 }
 
@@ -245,14 +262,19 @@ private fun MonoDetailInfo(
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.webInfo.info))) }
     ) {
-        BgmLinkedText(
+        MaxHeightFadeBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 100.dp)
-                .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.webInfo.info))) }
-                .padding(horizontal = ContentMargin),
-            text = state.mono.webInfo.shortInfo,
-        )
+                .clickWithoutRipped { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.mono.webInfo.info))) },
+            maxHeight = 300.dp,
+        ) {
+            BgmLinkedText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ContentMargin),
+                text = state.mono.webInfo.info.ifBlank { stringResource(Res.string.global_no_summary) },
+            )
+        }
     }
 }
 
@@ -303,7 +325,7 @@ private fun MonoDetailCollabPreviewItem(
     collab: ComposeMonoCollab,
     onClick: () -> Unit,
 ) {
-    androidx.compose.foundation.layout.Column(
+    Column(
         modifier = Modifier
             .clickWithoutRipped(onClick = onClick)
             .width(80.dp),
@@ -334,3 +356,17 @@ private fun MonoDetailCollabPreviewItem(
         }
     }
 }
+
+
+@Preview
+@Composable
+private fun PreviewMonoDetailMainScreen() {
+    PreviewColumn {
+        MonoDetailMainScreen(
+            state = MonoDetailState(1),
+            onUiEvent = {},
+            onActionEvent = {},
+        )
+    }
+}
+

@@ -32,21 +32,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_empty_comments_subtitle
+import com.xiaoyv.bangumi.core_resource.resources.global_empty_comments_title
+import com.xiaoyv.bangumi.core_resource.resources.global_no_more
+import com.xiaoyv.bangumi.core_resource.resources.global_no_more_comments_subtitle
 import com.xiaoyv.bangumi.core_resource.resources.global_refresh
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
+import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLoginLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
 import com.xiaoyv.bangumi.shared.ui.component.layout.refresh.PullToRefreshBox
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -242,3 +249,60 @@ fun StateErrorLayout(
         Spacer(modifier = Modifier.weight(1f - clampedBias))
     }
 }
+
+@Composable
+fun  CommentNoDataTip(
+    isEmpty: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val title = stringResource(
+        if (isEmpty) Res.string.global_empty_comments_title
+        else Res.string.global_no_more
+    )
+    val subtitle = stringResource(
+        if (isEmpty) Res.string.global_empty_comments_subtitle
+        else Res.string.global_no_more_comments_subtitle
+    )
+
+    if (!isEmpty) BgmHorizontalDivider()
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .let { if (isEmpty) it.height(400.dp) else it.padding(bottom = 200.dp) }
+            .padding(horizontal = ContentMargin),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
+    ) {
+        if (isEmpty) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                ),
+                textAlign = TextAlign.Center
+            )
+
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                ),
+                modifier = Modifier.fillMaxWidth(0.82f)
+            )
+        } else {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ContentMargin, vertical = 24.dp),
+                text = title,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+

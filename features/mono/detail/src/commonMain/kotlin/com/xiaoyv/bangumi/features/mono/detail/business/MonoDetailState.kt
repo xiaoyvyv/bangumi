@@ -23,6 +23,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectPersonWo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
@@ -44,6 +45,7 @@ data class MonoDetailState(
     @SerialName("casts") val casts: SerializeList<ComposeMonoInfo> = persistentListOf(),
     @SerialName("works") val works: SerializeList<ComposeSubjectDisplay> = persistentListOf(),
     @SerialName("positions") val positions: SerializeList<ComposePersonPosition> = persistentListOf(),
+    @SerialName("comments") val comments: SerializeList<ComposeReply> = persistentListOf(),
 ) {
 
     @Composable
