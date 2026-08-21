@@ -46,9 +46,10 @@ import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
 val LocalCommentSubjectType = compositionLocalOf { SubjectType.UNKNOWN }
+val LocalCommentTargetAuthorUsername = compositionLocalOf { "" }
 
 /**
- * [CommentItem]
+ * [CommentReplyItem]
  *
  * @since 2025/5/7
  */

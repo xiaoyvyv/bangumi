@@ -1,11 +1,11 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
 import androidx.paging.Pager
+import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.EpisodeType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
@@ -31,7 +31,7 @@ interface SubjectRepository {
 
     fun fetchSubjectPager(param: ListSubjectParam): Pager<Int, ComposeSubjectDisplay>
 
-    fun fetchSubjectCommentPager(subjectId: Long): Pager<Int, ComposeReply>
+    fun fetchSubjectCommentPager(subjectId: Long, @CollectionType collectionType: Int): Pager<Int, ComposeReply>
 
     fun fetchSearchSuggestion(query: String): Flow<Result<ComposeDoubanSuggest>>
 

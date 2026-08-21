@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.core.types
 import androidx.annotation.IntDef
 import androidx.compose.runtime.Composable
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.core_resource.resources.global_unknown
 import com.xiaoyv.bangumi.core_resource.resources.type_interest_doing
 import com.xiaoyv.bangumi.core_resource.resources.type_interest_done
@@ -74,7 +75,7 @@ annotation class CollectionType {
 
                 ASIDE -> stringResource(Res.string.type_interest_hold)
                 DROP -> stringResource(Res.string.type_interest_drop)
-                else -> stringResource(Res.string.global_unknown)
+                else -> stringResource(Res.string.global_all)
             }
 
         suspend fun stringSync(@SubjectType subjectType: Int, @CollectionType collectType: Int) =
@@ -96,7 +97,7 @@ annotation class CollectionType {
 
                 ASIDE -> getString(Res.string.type_interest_hold)
                 DROP -> getString(Res.string.type_interest_drop)
-                else -> getString(Res.string.global_unknown)
+                else -> getString(Res.string.global_all)
             }
     }
 }

@@ -5,6 +5,7 @@ import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollectionInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
@@ -43,6 +44,13 @@ val PreviewComposeUser = ComposeUser(
 val PreviewComposeNotice = ComposeNotice(
     title = "随机评论内容",
     sender = PreviewComposeUser,
+    createdAt = 1234567890000
+)
+
+val PreviewComposeReply = ComposeReply(
+    id = 1,
+    content = "随机评论内容",
+    user = PreviewComposeUser,
     createdAt = 1234567890000
 )
 

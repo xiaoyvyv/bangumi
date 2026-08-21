@@ -108,6 +108,11 @@ import com.xiaoyv.bangumi.core_resource.resources.type_feature_timeline
 import com.xiaoyv.bangumi.core_resource.resources.type_group_created
 import com.xiaoyv.bangumi.core_resource.resources.type_group_members
 import com.xiaoyv.bangumi.core_resource.resources.type_group_topics
+import com.xiaoyv.bangumi.core_resource.resources.type_interest_doing
+import com.xiaoyv.bangumi.core_resource.resources.type_interest_done
+import com.xiaoyv.bangumi.core_resource.resources.type_interest_drop
+import com.xiaoyv.bangumi.core_resource.resources.type_interest_hold
+import com.xiaoyv.bangumi.core_resource.resources.type_interest_wish
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.CollectionWebSortType
 import com.xiaoyv.bangumi.shared.core.types.FeatureType
@@ -349,6 +354,15 @@ object TabTokens {
         ComposeTextTab(CollectionType.DROP),
     )
 
+    val subjectRantFilters = persistentListOf(
+        ComposeTextTab(CollectionType.UNKNOWN, Res.string.global_all),
+        ComposeTextTab(CollectionType.WISH, Res.string.type_interest_wish),
+        ComposeTextTab(CollectionType.DONE, Res.string.type_interest_done),
+        ComposeTextTab(CollectionType.DOING, Res.string.type_interest_doing),
+        ComposeTextTab(CollectionType.ASIDE, Res.string.type_interest_hold),
+        ComposeTextTab(CollectionType.DROP, Res.string.type_interest_drop),
+    )
+
     val collectionSortFilters = persistentListOf(
         ComposeTextTab(CollectionWebSortType.RATE, Res.string.global_sort_rating),
         ComposeTextTab(CollectionWebSortType.COLLECT_TIME, Res.string.global_sort_update),
@@ -416,6 +430,7 @@ object TabTokens {
         ComposeTextTab(MonoCastType.GUEST, labelText = "客串"),
         ComposeTextTab(MonoCastType.OTHER, labelText = "闲角")
     )
+
 
     val settingBangumiHosts = persistentListOf(
         ComposeTextTab("https://bgm.tv/", labelText = "bgm.tv"),

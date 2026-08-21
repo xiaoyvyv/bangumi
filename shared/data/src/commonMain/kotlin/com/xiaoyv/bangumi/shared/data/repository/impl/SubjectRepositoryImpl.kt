@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.CollectionWebPath
 import com.xiaoyv.bangumi.shared.core.types.EpisodeType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
@@ -20,7 +21,6 @@ import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
@@ -74,7 +74,7 @@ class SubjectRepositoryImpl(
         )
     }
 
-    override fun fetchSubjectCommentPager(subjectId: Long): Pager<Int, ComposeReply> {
+    override fun fetchSubjectCommentPager(subjectId: Long, collectionType: Int): Pager<Int, ComposeReply> {
         return createNetworkOffsetLimitPagingPager(
             keySelector = { it.id },
             pagingConfig = pagingConfig,
@@ -82,7 +82,7 @@ class SubjectRepositoryImpl(
                 client.requestNextSubjectApi {
                     getSubjectComments(
                         subjectID = subjectId,
-                        type = null,
+                        type = collectionType.takeIf { type -> type != CollectionType.UNKNOWN },
                         limit = pagingConfig.pageSize,
                         offset = it
                     ).result.map { reply -> reply.normalized() }

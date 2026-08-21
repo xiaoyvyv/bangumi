@@ -124,7 +124,7 @@ interface SubjectApi {
     @GET("p1/subjects/{subjectID}/comments")
     suspend fun getSubjectComments(
         @Path("subjectID") subjectID: Long,
-        @Query("type") type: CollectionType? = null,
+        @Query("type") type: Int? = null,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
     ): ComposePage<ComposeReply>

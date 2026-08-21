@@ -1,7 +1,8 @@
 package com.xiaoyv.bangumi.features.subject.detail
 
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailViewModel
-import com.xiaoyv.bangumi.features.subject.detail.page.SubjectDetailChartViewModel
+import com.xiaoyv.bangumi.features.subject.detail.page.chart.SubjectDetailChartViewModel
+import com.xiaoyv.bangumi.features.subject.detail.page.rant.SubjectDetailRantViewModel
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navScope
 import com.xiaoyv.bangumi.shared.ui.component.navigation.navigator
@@ -15,8 +16,18 @@ import org.koin.dsl.navigation3.navigation
 val subjectDetailModule = module {
     viewModelOf(::SubjectDetailViewModel)
     viewModel { (subjectId: Long) ->
-        SubjectDetailChartViewModel(subjectRepository = get(), subjectId = subjectId)
+        SubjectDetailChartViewModel(subjectId = subjectId, subjectRepository = get())
     }
+    viewModel { (subjectId: Long, collectType: Int) ->
+        SubjectDetailRantViewModel(
+            subjectId = subjectId,
+            collectionType = collectType,
+            subjectRepository = get(),
+            topicRepository = get(),
+            userManager = get()
+        )
+    }
+
 
     navScope {
         navigation<Screen.SubjectDetail> { key ->

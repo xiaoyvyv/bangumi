@@ -41,7 +41,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.PagingData
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_image
 import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
@@ -71,7 +70,6 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentMikanId
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -86,8 +84,6 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
-import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfRed
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -96,7 +92,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -110,14 +105,12 @@ fun SubjectDetailRoute(
     onNavScreen: (Screen) -> Unit,
 ) {
     val baseState by viewModel.collectAsState()
-    val commentPagingItems = viewModel.subjectComments.collectAsLazyPagingItems()
 
     viewModel.collectBaseSideEffect {
     }
 
     SubjectDetailScreen(
         uiState = baseState,
-        commentPagingItems = commentPagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -132,7 +125,6 @@ fun SubjectDetailRoute(
 @Composable
 private fun SubjectDetailScreen(
     uiState: UiState<SubjectDetailState>,
-    commentPagingItems: LazyPagingItems<ComposeReply>,
     onUiEvent: (SubjectDetailEvent.UI) -> Unit,
     onActionEvent: (SubjectDetailEvent.Action) -> Unit,
 ) {
@@ -262,7 +254,6 @@ private fun SubjectDetailScreen(
             ) { state ->
                 SubjectDetailScreenContent(
                     state = state,
-                    commentPagingItems = commentPagingItems,
                     pagerState = pagerState,
                     onUiEvent = onUiEvent,
                     onActionEvent = onActionEvent
@@ -418,7 +409,6 @@ private fun SubjectDetailScreenHeader(
 @Composable
 fun SubjectDetailScreenContent(
     state: SubjectDetailState,
-    commentPagingItems: LazyPagingItems<ComposeReply>,
     pagerState: androidx.compose.foundation.pager.PagerState,
     onUiEvent: (SubjectDetailEvent.UI) -> Unit,
     onActionEvent: (SubjectDetailEvent.Action) -> Unit,
@@ -450,10 +440,9 @@ fun SubjectDetailScreenContent(
             )
 
             SubjectDetailTab.RANT -> SubjectDetailRantScreen(
+                subjectId = state.id,
                 subjectType = state.subject.type,
-                commentPagingItems = commentPagingItems,
                 onUiEvent = onUiEvent,
-                onActionEvent = onActionEvent
             )
 
             SubjectDetailTab.EPISODE -> SubjectDetailEpisodeScreen(
@@ -487,9 +476,7 @@ fun SubjectDetailScreenContent(
             )
 
             SubjectDetailTab.CHART -> SubjectDetailChartScreen(
-                state = state,
-                onUiEvent = onUiEvent,
-                onActionEvent = onActionEvent
+                state = state
             )
 
             SubjectDetailTab.INDEX -> SubjectDetailIndexScreen(
@@ -516,7 +503,6 @@ private fun PreviewSubjectDetailScreen() {
             uiState = UiState(
                 SubjectDetailState(1)
             ),
-            commentPagingItems = flowOf(PagingData.from(emptyList<ComposeReply>())).collectAsLazyPagingItems(),
             onUiEvent = { },
             onActionEvent = {}
         )

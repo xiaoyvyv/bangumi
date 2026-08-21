@@ -45,7 +45,6 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.view.comment.CommentItem
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexCardItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectWorkItem
 import org.jetbrains.compose.resources.stringResource
@@ -193,12 +192,12 @@ fun MonoDetailMainScreen(
             itemsIndexed(state.mono.webInfo.comments) { index, item ->
                 if (index > 0 && item.parent == null) BgmHorizontalDivider()
 
-                CommentItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    item = item,
-                    onClickUser = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.UserDetail(it))) },
-                    onClick = {}
-                )
+//                CommentItem(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    item = item,
+//                    onClickUser = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.UserDetail(it))) },
+//                    onClick = {}
+//                )
             }
         }
     }
