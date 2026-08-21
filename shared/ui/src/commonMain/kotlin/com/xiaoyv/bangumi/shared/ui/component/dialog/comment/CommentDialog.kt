@@ -114,7 +114,6 @@ import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend2Emojis
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.resource.toComposeUri
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
@@ -344,7 +343,7 @@ fun CommentDialogContent(
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             modifier = Modifier.alpha(if (state.sending) 0f else 1f),
-                            text = if (state.anchor.reply == ComposeComment.Empty) {
+                            text = if (state.anchor.reply == ComposeReply.Empty) {
                                 stringResource(Res.string.reply_comment_send)
                             } else {
                                 stringResource(Res.string.reply_comment)

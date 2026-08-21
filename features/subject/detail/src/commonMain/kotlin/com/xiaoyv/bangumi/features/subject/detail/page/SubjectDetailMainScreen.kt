@@ -139,7 +139,7 @@ fun SubjectDetailMainScreen(
         // 图片预览 | 巡礼数据
         if (state.subject.type == SubjectType.REAL || state.subject.type == SubjectType.ANIME) {
             // 图片预览
-            SubjectDetailPreview(state, onUiEvent, onActionEvent)
+            if (state.photo.photos.isNotEmpty()) SubjectDetailPreview(state, onUiEvent, onActionEvent)
             // 巡礼数据
             if (state.parade.litePoints.isNotEmpty()) SubjectDetailParade(state, onUiEvent, onActionEvent)
         }

@@ -55,11 +55,12 @@ private enum class BgmCollapsingSlot {
 @Stable
 class BgmCollapsingScaffoldState(
     initialOffset: Float = 0f,
+    initialOffsetLimit: Int = 0,
 ) {
     var currentOffset by mutableFloatStateOf(initialOffset)
         internal set
 
-    var offsetLimit by mutableIntStateOf(0)
+    var offsetLimit by mutableIntStateOf(initialOffsetLimit)
         internal set
 
     val progress: Float
@@ -110,8 +111,14 @@ class BgmCollapsingScaffoldState(
 
     companion object {
         val Saver: Saver<BgmCollapsingScaffoldState, *> = Saver(
-            save = { it.currentOffset },
-            restore = { BgmCollapsingScaffoldState(initialOffset = it) }
+            save = { listOf(it.currentOffset, it.offsetLimit) },
+            restore = {
+                val list = it as List<*>
+                BgmCollapsingScaffoldState(
+                    initialOffset = (list[0] as Number).toFloat(),
+                    initialOffsetLimit = (list[1] as Number).toInt()
+                )
+            }
         )
     }
 }
@@ -148,9 +155,11 @@ fun BgmCollapsingScaffold(
 
     val offsetLimit = collapsingState.offsetLimit
 
-    // 当 offsetLimit 发生变化时进行边界校准
-    LaunchedEffect(offsetLimit) {
-        collapsingState.currentOffset = collapsingState.currentOffset.coerceIn(offsetLimit.toFloat(), 0f)
+    // 当 Header 测量完成 (maxHeightPx > 0 且 offsetLimit < 0) 且 offsetLimit 发生变化时进行边界校准
+    LaunchedEffect(maxHeightPx, offsetLimit) {
+        if (maxHeightPx > 0 && offsetLimit < 0) {
+            collapsingState.currentOffset = collapsingState.currentOffset.coerceIn(offsetLimit.toFloat(), 0f)
+        }
     }
 
     // 真实物理衰减惯性滚动 (Fling Momentum)

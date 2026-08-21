@@ -81,6 +81,16 @@ data class ComposeReply(
     @SerialName("type") @CollectionType val type: Int = CollectionType.UNKNOWN
 ) : Node<ComposeReply> {
 
+    fun updateCommentById(updates: Map<Long, ComposeReply>): ComposeReply {
+        val updatedSelf = updates[id] ?: this
+        if (updatedSelf.replies.isEmpty()) return updatedSelf
+        return updatedSelf.copy(
+            replies = updatedSelf.replies
+                .map { it.updateCommentById(updates) }
+                .toImmutableList()
+        )
+    }
+
     fun normalized(): ComposeReply {
         return copy(
             content = content.bbcodeToHtml(),

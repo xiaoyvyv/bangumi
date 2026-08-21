@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
@@ -69,7 +69,7 @@ class CommentViewModel(
 
         val reply = state.anchor.reply
         val comment = state.comment.text.trim()
-        val hasReplyComment = reply != ComposeComment.Empty
+        val hasReplyComment = reply != ComposeReply.Empty
 
         val result = when (state.anchor.targetType) {
             TopicType.TYPE_GROUP -> {

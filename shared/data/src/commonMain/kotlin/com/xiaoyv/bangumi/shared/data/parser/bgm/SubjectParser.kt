@@ -6,7 +6,6 @@ import com.fleeksoft.ksoup.nodes.Element
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.fromJson
 import com.xiaoyv.bangumi.shared.core.utils.groupValue
@@ -20,7 +19,6 @@ import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthRegex
 import com.xiaoyv.bangumi.shared.core.utils.parseStar
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
@@ -131,30 +129,6 @@ class SubjectParser : BaseParser() {
             shortInfo = shortInfo,
             indexList = indexList.toPersistentList()
         )
-    }
-
-    suspend fun Element.fetchSubjectCommentConverted(): List<ComposeComment> {
-        requireNoError()
-        return select("#comment_box > .item").map {
-            val avatarUrl = it.select("a.avatar > span").styleAvatarUrl()
-            val comment = it.select(".comment").text()
-            val text = it.select(".text small").text()
-
-            ComposeComment(
-                id = it.attr("data-item-user"),
-                type = CommentType.SUBJECT,
-                comment = comment,
-                time = text.substringAfterLast("@").trim(),
-                collectType = CollectionType.from(text.substringBefore("@")),
-                star = it.parseStar(),
-                user = ComposeUser(
-                    id = avatarUrl.avatarUrlId(it.attr("data-item-user")),
-                    username = it.attr("data-item-user"),
-                    avatar = ComposeImages.fromUrl(avatarUrl),
-                    nickname = it.select(".text a.l").text()
-                ),
-            )
-        }
     }
 
     suspend fun Element.fetchIndexEpListConverted(): List<ComposeIndexEp> {

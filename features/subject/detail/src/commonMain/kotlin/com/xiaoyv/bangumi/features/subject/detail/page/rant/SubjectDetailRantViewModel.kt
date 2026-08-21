@@ -103,14 +103,4 @@ class SubjectDetailRantViewModel(
             }
         }
     }
-
-    private fun ComposeReply.updateCommentById(updates: Map<Long, ComposeReply>): ComposeReply {
-        val updatedSelf = updates[id] ?: this
-        if (updatedSelf.replies.isEmpty()) return updatedSelf
-        return updatedSelf.copy(
-            replies = updatedSelf.replies
-                .map { it.updateCommentById(updates) }
-                .toImmutableList()
-        )
-    }
 }

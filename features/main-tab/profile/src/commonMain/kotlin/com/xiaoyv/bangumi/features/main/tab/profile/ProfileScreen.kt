@@ -32,6 +32,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.drop
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -117,10 +119,14 @@ private fun ProfileScreen(
     val collapsingState = rememberBgmCollapsingScaffoldState()
     val pagerState = rememberBgmPagerState { uiState.data.tabs.size }
 
-    LaunchedEffect(pagerState.currentPage) {
-        if (pagerState.currentPage != 0) {
-            collapsingState.collapse()
-        }
+    LaunchedEffect(pagerState, collapsingState) {
+        snapshotFlow { pagerState.currentPage }
+            .drop(1)
+            .collect { page ->
+                if (page != 0) {
+                    collapsingState.collapse()
+                }
+            }
     }
 
     BgmCollapsingScaffold(

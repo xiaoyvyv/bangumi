@@ -18,7 +18,6 @@ data class ComposeMonoWebInfo(
     @SerialName("info") val info: String = "",
     @SerialName("shortInfo") val shortInfo: String = "",
     @SerialName("indexList") val indexList: SerializeList<ComposeIndex> = persistentListOf(),
-    @SerialName("comments") val comments: SerializeList<ComposeComment> = persistentListOf(),
     @SerialName("collabs") val collabs: SerializeList<ComposeMonoCollab> = persistentListOf(),
 ) {
     companion object Companion {

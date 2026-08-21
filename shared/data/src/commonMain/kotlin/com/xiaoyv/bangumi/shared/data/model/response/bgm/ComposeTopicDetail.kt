@@ -34,11 +34,8 @@ data class ComposeTopicDetail(
     val group: ComposeGroup = ComposeGroup.Empty,
     val emojiParam: ComposeEmojiParam = ComposeEmojiParam.Empty,
     val replyParam: ComposeCommentParam = ComposeCommentParam.Empty,
-    val comments: SerializeList<ComposeComment> = persistentListOf(),
     val reactions: SerializeMap<String, SerializeList<ComposeReaction>> = persistentMapOf(),
 ) {
-    val firstSubject get() = subjects.firstOrNull() ?: ComposeSubject.Empty
-
     val shareUrl: String
         get() = when (type) {
             TopicType.TYPE_EP -> "https://bgm.tv/ep/topic/$id"

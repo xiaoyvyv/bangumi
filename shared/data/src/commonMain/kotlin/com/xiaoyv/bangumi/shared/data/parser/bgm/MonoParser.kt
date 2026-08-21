@@ -2,20 +2,16 @@
 
 package com.xiaoyv.bangumi.shared.data.parser.bgm
 
-import androidx.compose.ui.text.AnnotatedString
 import com.fleeksoft.ksoup.nodes.Element
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
-import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.href
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
 import com.xiaoyv.bangumi.shared.core.utils.hrefLongId
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSectionTitle
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeInfobox
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
@@ -24,6 +20,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPersonType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.toPersistentList
@@ -42,7 +39,6 @@ class MonoParser(private val commentParser: CommentParser) : BaseParser() {
         infoHtml.addAll(if (infoHtml.isNotEmpty()) 1 else 0, subInfoHtml)
         infoHtml.removeAll { it.html().contains("别名") }
 
-        val comments = with(commentParser) { parserBottomComment(CommentType.MONO) }
 
         val info = infoHtml.joinToString("<br>") { it.infoHtml() }
         val shortInfo = infoHtml.take(10).joinToString("<br>") { it.infoHtml() }
@@ -81,7 +77,6 @@ class MonoParser(private val commentParser: CommentParser) : BaseParser() {
             info = info,
             indexList = indexList.toPersistentList(),
             shortInfo = shortInfo,
-            comments = comments.toPersistentList(),
             collabs = collabs.toPersistentList(),
         )
     }
