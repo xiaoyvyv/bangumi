@@ -33,7 +33,7 @@ import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton

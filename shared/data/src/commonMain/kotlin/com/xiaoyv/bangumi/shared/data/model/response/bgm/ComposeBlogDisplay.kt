@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.shared.core.utils.addUrl
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.collections.immutable.persistentListOf

@@ -19,7 +19,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisodeRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser

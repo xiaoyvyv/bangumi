@@ -96,6 +96,14 @@ class TopicRepositoryImpl(
         }
     }
 
+    override suspend fun submitSubjectCommentReaction(commentId: Long, value: String?): Result<Unit> = client.requestNextTopicApi {
+        if (value.isNullOrBlank()) {
+            unlikeSubjectComment(commentId)
+        } else {
+            likeSubjectComment(commentId, LikeCommentParam(value.toInt()))
+        }
+    }
+
     override suspend fun submitGroupComment(
         topicId: Long,
         content: String,

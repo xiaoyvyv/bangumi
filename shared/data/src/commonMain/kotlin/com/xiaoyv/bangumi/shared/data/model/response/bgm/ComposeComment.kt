@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.shared.core.utils.Node
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -76,8 +77,8 @@ data class ComposeReply(
     /**
      * 条目吐槽的额外数据
      */
-    @SerialName("rate") val rate: Int = 0,
-    @SerialName("type") val type: Int = CollectionType.UNKNOWN
+    @SerialName("rate") val rate: Double = 0.0,
+    @SerialName("type") @CollectionType val type: Int = CollectionType.UNKNOWN
 ) : Node<ComposeReply> {
 
     fun normalized(): ComposeReply {

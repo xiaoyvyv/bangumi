@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.features.topic.detail.business
 
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.SortType
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**

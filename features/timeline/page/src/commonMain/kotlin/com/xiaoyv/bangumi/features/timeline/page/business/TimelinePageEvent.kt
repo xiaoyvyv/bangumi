@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.features.timeline.page.business
 
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 

@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.features.subject.detail.business
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_firstly
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
@@ -22,21 +23,29 @@ import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
+import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax
 
@@ -49,15 +58,35 @@ import org.orbitmvi.orbit.syntax.Syntax
 class SubjectDetailViewModel(
     private val args: Screen.SubjectDetail,
     private val subjectRepository: SubjectRepository,
+    private val topicRepository: TopicRepository,
     private val cacheRepository: CacheRepository,
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
     private val userManager: UserManager,
 ) : BaseViewModel<SubjectDetailState, SubjectDetailSideEffect, SubjectDetailEvent.Action>() {
+    private val updatedComments = MutableStateFlow<Map<Long, ComposeReply>>(emptyMap())
     private val subjectCommentPager = subjectRepository.fetchSubjectCommentPager(args.subjectId)
+    private val rawSubjectComments = subjectCommentPager.flow.cachedIn(viewModelScope)
 
-    internal val subjectComments = subjectCommentPager.flow
-        .cachedIn(viewModelScope)
+    internal val subjectComments = combine(rawSubjectComments, updatedComments) { pagingData, updates ->
+        if (updates.isEmpty()) {
+            pagingData
+        } else {
+            pagingData.map { comment ->
+                comment.updateCommentById(updates)
+            }
+        }
+    }.cachedIn(viewModelScope)
+
+    private fun ComposeReply.updateCommentById(updates: Map<Long, ComposeReply>): ComposeReply {
+        val updatedSelf = updates[id] ?: this
+        if (updatedSelf.replies.isEmpty()) return updatedSelf
+        return updatedSelf.copy(
+            replies = updatedSelf.replies
+                .map { it.updateCommentById(updates) }
+                .toImmutableList()
+        )
+    }
 
     private val cacheKey = stringPreferencesKey(name = "subject_detail_" + args.subjectId)
 
@@ -102,6 +131,7 @@ class SubjectDetailViewModel(
             is SubjectDetailEvent.Action.DeleteCollection -> onDeleteCollection()
             is SubjectDetailEvent.Action.OnUpdateSubjectCollection -> onUpdateSubjectCollection(event.update, event.showLoadingDialog)
             is SubjectDetailEvent.Action.OnUpdateEpisodeCollection -> onUpdateEpisodeCollection(event.episodes, event.type)
+            is SubjectDetailEvent.Action.OnReactionClick -> onReactionClick(event.comment, event.reaction)
         }
     }
 
@@ -206,4 +236,48 @@ class SubjectDetailViewModel(
             }
     }
 
+    private fun onReactionClick(comment: ComposeReply, reaction: ComposeReaction) = intent {
+        val isLiked = reaction.users.any { it.username == userManager.userInfo.username }
+        val self = userManager.userInfo.username
+
+        withActionLoading {
+            topicRepository.submitSubjectCommentReaction(comment.id, if (isLiked) null else reaction.value)
+        }.onFailure {
+            postToast { it.errMsg }
+        }.onSuccess {
+            // 先从全部的贴贴移除自己
+            val reactions = comment.reactions
+                .map { it.copy(users = it.users.filter { user -> user.username != self }.toImmutableList()) }
+                .toMutableList()
+
+            // 评论没有该贴贴直接添加一个
+            val newReactions = if (reactions.find { it.value == reaction.value } == null) {
+                reactions.add(reaction.copy(users = persistentListOf(userManager.userInfo)))
+                reactions
+            } else {
+                // 添加
+                if (!isLiked) {
+                    reactions.map {
+                        if (it.value == reaction.value) {
+                            val users = it.users.toMutableList()
+                            users.add(userManager.userInfo)
+                            it.copy(users = users.toImmutableList())
+                        } else {
+                            it
+                        }
+                    }
+                } else {
+                    reactions
+                }
+            }
+
+            val updatedComment = comment.copy(
+                reactions = newReactions.filter { it.users.isNotEmpty() }.toImmutableList()
+            )
+
+            updatedComments.update { map ->
+                map + (comment.id to updatedComment)
+            }
+        }
+    }
 }

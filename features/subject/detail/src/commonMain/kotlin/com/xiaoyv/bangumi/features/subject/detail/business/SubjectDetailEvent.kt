@@ -4,6 +4,8 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -29,5 +31,7 @@ sealed class SubjectDetailEvent {
             val episodes: List<ComposeEpisode>,
             @field:CollectionEpisodeType val type: Int,
         ) : Action()
+
+        data class OnReactionClick(val comment: ComposeReply, val reaction: ComposeReaction) : Action()
     }
 }

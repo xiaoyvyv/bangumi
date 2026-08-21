@@ -74,16 +74,19 @@ class SubjectRepositoryImpl(
         )
     }
 
-    override fun fetchSubjectCommentPager(subjectId: Long): Pager<Int, ComposeComment> {
-        return createNetworkPageLimitPagingPager(
+    override fun fetchSubjectCommentPager(subjectId: Long): Pager<Int, ComposeReply> {
+        return createNetworkOffsetLimitPagingPager(
             keySelector = { it.id },
             pagingConfig = pagingConfig,
             onLoadData = {
-                with(subjectParser) {
-                    client.bgmWebApi
-                        .fetchSubjectComment(subjectId, it)
-                        .fetchSubjectCommentConverted()
-                }
+                client.requestNextSubjectApi {
+                    getSubjectComments(
+                        subjectID = subjectId,
+                        type = null,
+                        limit = pagingConfig.pageSize,
+                        offset = it
+                    ).result.map { reply -> reply.normalized() }
+                }.getOrThrow()
             }
         )
     }

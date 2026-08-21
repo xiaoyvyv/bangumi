@@ -11,7 +11,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroupHomepage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeNewReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex

@@ -35,7 +35,7 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelineBatch

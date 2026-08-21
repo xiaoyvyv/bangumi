@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,6 +15,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -22,11 +24,15 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_master
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
+import com.xiaoyv.bangumi.shared.core.types.CollectionType
+import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
+import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
+import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
@@ -34,9 +40,12 @@ import com.xiaoyv.bangumi.shared.ui.component.emoji.rememberPopupReactionState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
+import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
+
+val LocalCommentSubjectType = compositionLocalOf { SubjectType.UNKNOWN }
 
 /**
  * [CommentItem]
@@ -126,6 +135,39 @@ fun CommentReplyItem(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     )
+
+
+                    // 条目底部评论收藏状态
+                    if (item.type != CollectionType.UNKNOWN) {
+                        val buttonColors = collectionButtonColors(item.type)
+
+                        Text(
+                            text = CollectionType.string(LocalCommentSubjectType.current, item.type),
+                            modifier = Modifier
+                                .background(buttonColors.containerColor, MaterialTheme.shapes.extraSmall)
+                                .padding(vertical = 2.dp, horizontal = 4.dp),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = buttonColors.contentColor
+                            )
+                        )
+                    }
+
+                    // 底部条目评论评分
+                    if (item.rate > 0) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                        ) {
+                            RatingBar(value = item.rate, starSize = 16.dp)
+                            Text(
+                                text = "(${item.rate})",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    color = StarColor,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+                    }
                 }
             }
         },

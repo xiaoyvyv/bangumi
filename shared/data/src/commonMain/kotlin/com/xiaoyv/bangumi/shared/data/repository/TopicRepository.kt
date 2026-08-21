@@ -16,6 +16,8 @@ interface TopicRepository {
 
     suspend fun submitSubjectReaction(commentId: Long, value: String?): Result<Unit>
 
+    suspend fun submitSubjectCommentReaction(commentId: Long, value: String?): Result<Unit>
+
     suspend fun submitGroupComment(topicId: Long, content: String, turnstile: String, replyTo: Long? = null): Result<ComposeId>
 
     suspend fun submitSubjectComment(topicId: Long, content: String, turnstile: String, replyTo: Long? = null): Result<ComposeId>

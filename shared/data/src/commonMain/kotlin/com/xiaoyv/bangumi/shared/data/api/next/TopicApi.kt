@@ -125,6 +125,16 @@ interface TopicApi {
     ): HttpResponse
 
     /**
+     * 给条目的吐槽点赞
+     */
+    @PUT("p1/subjects/-/comments/{commentID}/like")
+    suspend fun likeSubjectComment(
+        @Path("commentID") commentID: Long,
+        @Body param: LikeCommentParam
+    ): HttpResponse
+
+
+    /**
      * 取消小组话题回复点赞
      */
     @DELETE("p1/groups/-/posts/{postID}/like")
@@ -135,6 +145,12 @@ interface TopicApi {
      */
     @DELETE("p1/subjects/-/posts/{postID}/like")
     suspend fun unlikeSubjectPost(@Path("postID") postID: Long): HttpResponse
+
+    /**
+     * 取消条目的吐槽点赞
+     */
+    @DELETE("p1/subjects/-/comments/{commentID}/like")
+    suspend fun unlikeSubjectComment(@Path("commentID") commentID: Long): HttpResponse
 
     /**
      * 编辑自己创建的条目讨论

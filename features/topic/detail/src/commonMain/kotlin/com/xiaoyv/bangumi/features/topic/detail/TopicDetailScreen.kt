@@ -58,7 +58,7 @@ import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.animateScrollToItem
 import com.xiaoyv.bangumi.shared.core.utils.nodesIndexed
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler

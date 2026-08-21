@@ -70,7 +70,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentMikanId
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeComment
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -130,7 +130,7 @@ fun SubjectDetailRoute(
 @Composable
 private fun SubjectDetailScreen(
     uiState: UiState<SubjectDetailState>,
-    commentPagingItems: LazyPagingItems<ComposeComment>,
+    commentPagingItems: LazyPagingItems<ComposeReply>,
     onUiEvent: (SubjectDetailEvent.UI) -> Unit,
     onActionEvent: (SubjectDetailEvent.Action) -> Unit,
 ) {
@@ -405,7 +405,7 @@ private fun SubjectDetailScreenHeader(
 @Composable
 fun SubjectDetailScreenContent(
     state: SubjectDetailState,
-    commentPagingItems: LazyPagingItems<ComposeComment>,
+    commentPagingItems: LazyPagingItems<ComposeReply>,
     onUiEvent: (SubjectDetailEvent.UI) -> Unit,
     onActionEvent: (SubjectDetailEvent.Action) -> Unit,
 ) {
@@ -437,8 +437,10 @@ fun SubjectDetailScreenContent(
             )
 
             SubjectDetailTab.RANT -> SubjectDetailRantScreen(
+                subjectType = state.subject.type,
                 commentPagingItems = commentPagingItems,
-                onUiEvent = onUiEvent
+                onUiEvent = onUiEvent,
+                onActionEvent = onActionEvent
             )
 
             SubjectDetailTab.EPISODE -> SubjectDetailEpisodeScreen(
@@ -501,7 +503,7 @@ private fun PreviewSubjectDetailScreen() {
             uiState = UiState(
                 SubjectDetailState(1)
             ),
-            commentPagingItems = flowOf(PagingData.from(emptyList<ComposeComment>())).collectAsLazyPagingItems(),
+            commentPagingItems = flowOf(PagingData.from(emptyList<ComposeReply>())).collectAsLazyPagingItems(),
             onUiEvent = { },
             onActionEvent = {}
         )

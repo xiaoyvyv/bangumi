@@ -26,8 +26,9 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.refreshReaction
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
@@ -369,7 +370,7 @@ class TopicDetailViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            val replies = state.data.replies.refreshReaction(commentId, reaction)
+            val replies = state.data.replies.refreshReaction(userManager, commentId, reaction)
             val displayReplies = applyCommentFilters(
                 state = state.data,
                 replies = replies
@@ -377,7 +378,7 @@ class TopicDetailViewModel(
 
             reduceData {
                 state.copy(
-                    topic = state.topic.copy(replies = state.topic.replies.refreshReaction(commentId, reaction)),
+                    topic = state.topic.copy(replies = state.topic.replies.refreshReaction(userManager, commentId, reaction)),
                     replies = replies,
                     displayReplies = displayReplies
                 )
@@ -385,52 +386,6 @@ class TopicDetailViewModel(
         }
     }
 
-    private fun List<ComposeReply>.refreshReaction(
-        commentId: Long,
-        reaction: ComposeReaction
-    ): ImmutableList<ComposeReply> {
-        val self = userManager.userInfo.username
-        val isLiked = reaction.users.any { it.username == userManager.userInfo.username }
-        return map { reply ->
-            val reply = if (reply.replies.isEmpty()) {
-                reply
-            } else {
-                reply.copy(replies = reply.replies.refreshReaction(commentId, reaction))
-            }
-
-            if (reply.id == commentId) {
-                // 先从全部的贴贴移除自己
-                val reactions = reply.reactions
-                    .map { it.copy(users = it.users.filter { user -> user.username != self }.toImmutableList()) }
-                    .toMutableList()
-
-                // 评论没有该贴贴直接添加一个
-                val newReactions = if (reactions.find { it.value == reaction.value } == null) {
-                    reactions.add(reaction.copy(users = persistentListOf(userManager.userInfo)))
-                    reactions
-                } else {
-                    // 添加
-                    if (!isLiked) {
-                        reactions.map {
-                            if (it.value == reaction.value) {
-                                val users = it.users.toMutableList()
-                                users.add(userManager.userInfo)
-                                it.copy(users = users.toImmutableList())
-                            } else {
-                                it
-                            }
-                        }
-                    } else {
-                        reactions
-                    }
-                }
-
-                reply.copy(reactions = newReactions.filter { it.users.isNotEmpty() }.toImmutableList())
-            } else {
-                reply
-            }
-        }.toImmutableList()
-    }
 
     /**
      * 刷新评论数据，排序和过滤项目实现

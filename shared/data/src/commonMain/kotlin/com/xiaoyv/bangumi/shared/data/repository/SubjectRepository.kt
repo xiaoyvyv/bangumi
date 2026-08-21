@@ -31,7 +31,7 @@ interface SubjectRepository {
 
     fun fetchSubjectPager(param: ListSubjectParam): Pager<Int, ComposeSubjectDisplay>
 
-    fun fetchSubjectCommentPager(subjectId: Long): Pager<Int, ComposeComment>
+    fun fetchSubjectCommentPager(subjectId: Long): Pager<Int, ComposeReply>
 
     fun fetchSearchSuggestion(query: String): Flow<Result<ComposeDoubanSuggest>>
 

@@ -43,7 +43,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.window.Popup
 import com.xiaoyv.bangumi.shared.core.utils.bgmReactionKey
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
