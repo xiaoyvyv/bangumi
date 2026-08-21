@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -114,7 +115,7 @@ private fun IndexDetailScreen(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
-                    actionIconContentColor = iconColor
+                    actionIconContentColor = iconColor.copy(alpha = 0.75f)
                 ),
                 actions = {
                     uiState.data.run {
@@ -196,57 +197,61 @@ private fun IndexDetailScreenHeader(
                     )
                 )
         )
-        ListItem(
-            modifier = Modifier
-                .padding(padding)
-                .padding(vertical = ContentMarginHalf),
-            colors = ListItemDefaults.colors(
-                containerColor = Color.Transparent,
-                headlineColor = imageColorState.contentColor,
-                supportingColor = imageColorState.contentColorSecondary
-            ),
-            leadingContent = {
-                StateImage(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clickable { onUiEvent(IndexDetailEvent.UI.OnNavScreen(Screen.UserDetail(state.index.creator.username))) }
-                        .border(2.dp, MaterialTheme.colorScheme.surface, MaterialTheme.shapes.small),
-                    model = state.index.creator.avatar.displayMediumImage,
-                    shape = MaterialTheme.shapes.small,
-                )
-            },
-            headlineContent = {
-                Text(
-                    text = state.index.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            },
-            supportingContent = {
-                Column {
-                    Text(
-                        modifier = Modifier.padding(vertical = ContentMarginHalf),
-                        text = buildString {
-                            append(state.index.total)
-                            append("个收录 ")
-                            append(state.index.collects)
-                            append("人收藏")
-                        }
+        CompositionLocalProvider(
+            LocalContentColor provides imageColorState.contentColor
+        ) {
+            ListItem(
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(vertical = ContentMarginHalf),
+                colors = ListItemDefaults.colors(
+                    containerColor = Color.Transparent,
+                    headlineColor = LocalContentColor.current,
+                    supportingColor = LocalContentColor.current.copy(alpha = 0.75f)
+                ),
+                leadingContent = {
+                    StateImage(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clickable { onUiEvent(IndexDetailEvent.UI.OnNavScreen(Screen.UserDetail(state.index.creator.username))) }
+                            .border(2.dp, MaterialTheme.colorScheme.surface, MaterialTheme.shapes.small),
+                        model = state.index.creator.avatar.displayMediumImage,
+                        shape = MaterialTheme.shapes.small,
                     )
+                },
+                headlineContent = {
                     Text(
-                        text = buildAnnotatedString {
-                            withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = imageColorState.contentColor)) {
-                                append(state.index.creator.nickname)
+                        text = state.index.title,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                supportingContent = {
+                    Column {
+                        Text(
+                            modifier = Modifier.padding(vertical = ContentMarginHalf),
+                            text = buildString {
+                                append(state.index.total)
+                                append("个收录 ")
+                                append(state.index.collects)
+                                append("人收藏")
                             }
-                            append(" 创建 ")
-                            append(state.index.createdAt.formatDate("yyyy-MM-dd"))
-                            append(" 更新 ")
-                            append(state.index.updatedAt.formatDate("yyyy-MM-dd"))
-                        }
-                    )
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = LocalContentColor.current)) {
+                                    append(state.index.creator.nickname)
+                                }
+                                append(" 创建 ")
+                                append(state.index.createdAt.formatDate("yyyy-MM-dd"))
+                                append(" 更新 ")
+                                append(state.index.updatedAt.formatDate("yyyy-MM-dd"))
+                            }
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }
 

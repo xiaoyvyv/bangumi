@@ -25,10 +25,12 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -126,7 +128,7 @@ private fun ProfileScreen(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
-                    actionIconContentColor = iconColor
+                    actionIconContentColor = iconColor.copy(alpha = 0.75f)
                 ),
                 navigationIcon = {
                     DropMenuActionButton(
@@ -226,44 +228,44 @@ private fun ProfileScreenHeader(
             onState = imageColorState.onImageState
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
+        CompositionLocalProvider(
+            LocalContentColor provides imageColorState.contentColor
         ) {
-            Box(modifier = Modifier.clickWithoutRipped { onUiEvent(ProfileEvent.UI.OnNavScreen(Screen.SettingsAccount)) }) {
-                StateImage(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape),
-                    model = avatar,
-                    shape = CircleShape,
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
+            ) {
+                Box(modifier = Modifier.clickWithoutRipped { onUiEvent(ProfileEvent.UI.OnNavScreen(Screen.SettingsAccount)) }) {
+                    StateImage(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape),
+                        model = avatar,
+                        shape = CircleShape,
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(24.dp)
+                            .background(MaterialTheme.colorScheme.surface, CircleShape)
+                            .padding(4.dp),
+                        imageVector = BgmIcons.Edit,
+                        contentDescription = stringResource(Res.string.global_edit)
+                    )
+                }
+                Text(
+                    modifier = Modifier.padding(top = ContentMarginHalf),
+                    text = currentUser.nickname.ifBlank { stringResource(Res.string.login_first_tip) },
+                    style = MaterialTheme.typography.titleLarge
                 )
-                Icon(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .size(24.dp)
-                        .background(MaterialTheme.colorScheme.surface, CircleShape)
-                        .padding(4.dp),
-                    imageVector = BgmIcons.Edit,
-                    contentDescription = stringResource(Res.string.global_edit)
+                Text(
+                    text = "@" + currentUser.username.ifBlank { "bangumi" },
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
-            Text(
-                modifier = Modifier.padding(top = ContentMarginHalf),
-                text = currentUser.nickname.ifBlank { stringResource(Res.string.login_first_tip) },
-                style = MaterialTheme.typography.titleLarge.copy(
-                    color = imageColorState.contentColor
-                )
-            )
-            Text(
-                text = "@" + currentUser.username.ifBlank { "bangumi" },
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = imageColorState.contentColor
-                )
-            )
         }
     }
 }

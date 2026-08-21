@@ -7,8 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Article
+import androidx.compose.material.icons.automirrored.rounded.Undo
+import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material.icons.rounded.Preview
+import androidx.compose.material.icons.rounded.ToggleOff
 import androidx.compose.material.icons.rounded.Translate
+import androidx.compose.material.icons.rounded.Undo
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,10 +29,15 @@ import com.xiaoyv.bangumi.features.preivew.gallery.business.PreviewTextEvent
 import com.xiaoyv.bangumi.features.preivew.gallery.business.PreviewTextState
 import com.xiaoyv.bangumi.features.preivew.gallery.business.PreviewTextViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.LoadingState
+import com.xiaoyv.bangumi.shared.core.types.TopicType
+import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
+import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -85,6 +96,27 @@ private fun PreviewTextScreen(
                                 )
                             }
                         }
+
+                        val actionHandler = LocalActionHandler.current
+
+                        DropMenuActionButton(
+                            options = rememberButtonTypeMenu {
+                                add(ButtonType.Copy)
+                                add(ButtonType.Share)
+                            },
+                            onOptionClick = {
+                                val content = if (uiState.data.showOrigin) {
+                                    uiState.data.originText
+                                } else {
+                                    uiState.data.translateText
+                                }
+                                when (it.type) {
+                                    ButtonType.Share -> actionHandler.shareContent(content)
+                                    ButtonType.Copy -> actionHandler.copyContent(content)
+                                    else -> Unit
+                                }
+                            }
+                        )
                     }
                 },
                 onNavigationClick = { onUiEvent(PreviewTextEvent.UI.OnNavUp) }

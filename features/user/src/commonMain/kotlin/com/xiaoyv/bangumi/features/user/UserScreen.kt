@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -108,7 +110,7 @@ private fun UserScreen(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
-                    actionIconContentColor = iconColor
+                    actionIconContentColor = iconColor.copy(alpha = 0.75f)
                 ),
                 actions = {
                     uiState.data.run {
@@ -170,32 +172,34 @@ private fun UserScreenHeader(
             onState = imageColorState.onImageState
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
+        CompositionLocalProvider(
+            LocalContentColor provides imageColorState.contentColor
         ) {
-            Box {
-                StateImage(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(80.dp)
-                        .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
-                        .clickable { onUiEvent(UserEvent.UI.OnNavScreen(Screen.PreviewMain(state.user.avatar.displayOriginalUrl))) },
-                    model = state.user.avatar.displayMediumImage,
-                    shape = CircleShape,
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
+            ) {
+                Box {
+                    StateImage(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(80.dp)
+                            .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
+                            .clickable { onUiEvent(UserEvent.UI.OnNavScreen(Screen.PreviewMain(state.user.avatar.displayOriginalUrl))) },
+                        model = state.user.avatar.displayMediumImage,
+                        shape = CircleShape,
+                    )
+                }
+
+                Text(
+                    modifier = Modifier.padding(top = ContentMarginHalf),
+                    text = state.user.nickname + "@" + state.user.username,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
-
-            Text(
-                modifier = Modifier.padding(top = ContentMarginHalf),
-                text = state.user.nickname + "@" + state.user.username,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = imageColorState.contentColor
-                )
-            )
         }
     }
 }

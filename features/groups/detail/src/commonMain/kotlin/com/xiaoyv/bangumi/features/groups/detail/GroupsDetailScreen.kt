@@ -16,11 +16,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -116,7 +118,7 @@ private fun GroupsDetailScreen(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
-                    actionIconContentColor = iconColor
+                    actionIconContentColor = iconColor.copy(alpha = 0.75f)
                 ),
                 actions = {
                     uiState.data.run {
@@ -192,64 +194,68 @@ private fun GroupsDetailScreenHeader(
                     )
                 )
         )
-        ListItem(
-            modifier = Modifier
-                .padding(padding)
-                .padding(vertical = ContentMarginHalf),
-            colors = ListItemDefaults.colors(
-                containerColor = Color.Transparent,
-                headlineColor = imageColorState.contentColor,
-                supportingColor = imageColorState.contentColorSecondary
-            ),
-            leadingContent = {
-                StateImage(
-                    modifier = Modifier.size(64.dp)
-                        .border(2.dp, MaterialTheme.colorScheme.surface, MaterialTheme.shapes.small),
-                    model = state.group.images.large,
-                    shape = MaterialTheme.shapes.small,
-                )
-            },
-            headlineContent = {
-                Text(
-                    text = state.group.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            },
-            supportingContent = {
-                Column {
-                    Text(
-                        modifier = Modifier.padding(vertical = ContentMarginHalf),
-                        text = buildString {
-                            append(state.group.members)
-                            append(" 位成员")
-                            append(" ")
-                            append(state.group.topics)
-                            append(" 条讨论")
-                        }
+        CompositionLocalProvider(
+            LocalContentColor provides imageColorState.contentColor
+        ) {
+            ListItem(
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(vertical = ContentMarginHalf),
+                colors = ListItemDefaults.colors(
+                    containerColor = Color.Transparent,
+                    headlineColor = LocalContentColor.current,
+                    supportingColor = LocalContentColor.current.copy(alpha = 0.75f)
+                ),
+                leadingContent = {
+                    StateImage(
+                        modifier = Modifier.size(64.dp)
+                            .border(2.dp, MaterialTheme.colorScheme.surface, MaterialTheme.shapes.small),
+                        model = state.group.images.large,
+                        shape = MaterialTheme.shapes.small,
                     )
-                    Text(text = "成立于 " + state.group.createdAt.formatDate("yyyy-MM-dd"))
-                }
-            },
-            trailingContent = {
-                OutlinedButton(
-                    shape = MaterialTheme.shapes.small,
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = if (state.group.isJoined) imageColorState.contentColor else StarColor,
-                    ),
-                    border = BorderStroke(1.dp, if (state.group.isJoined) imageColorState.contentColor else StarColor),
-                    onClick = { onActionEvent(GroupsDetailEvent.Action.OnToggleJoinGroup) }
-                ) {
+                },
+                headlineContent = {
                     Text(
-                        text = if (state.group.membership == ComposeMembership.Empty) {
-                            stringResource(Res.string.group_join)
-                        } else {
-                            stringResource(Res.string.group_joined)
-                        }
+                        text = state.group.title,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
                     )
+                },
+                supportingContent = {
+                    Column {
+                        Text(
+                            modifier = Modifier.padding(vertical = ContentMarginHalf),
+                            text = buildString {
+                                append(state.group.members)
+                                append(" 位成员")
+                                append(" ")
+                                append(state.group.topics)
+                                append(" 条讨论")
+                            }
+                        )
+                        Text(text = "成立于 " + state.group.createdAt.formatDate("yyyy-MM-dd"))
+                    }
+                },
+                trailingContent = {
+                    OutlinedButton(
+                        shape = MaterialTheme.shapes.small,
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = if (state.group.isJoined) LocalContentColor.current else StarColor,
+                        ),
+                        border = BorderStroke(1.dp, if (state.group.isJoined) LocalContentColor.current else StarColor),
+                        onClick = { onActionEvent(GroupsDetailEvent.Action.OnToggleJoinGroup) }
+                    ) {
+                        Text(
+                            text = if (state.group.membership == ComposeMembership.Empty) {
+                                stringResource(Res.string.group_join)
+                            } else {
+                                stringResource(Res.string.group_joined)
+                            }
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }
 

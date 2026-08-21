@@ -1,8 +1,10 @@
 package com.xiaoyv.bangumi.shared.ui.component.image
 
 import android.graphics.Bitmap
+import android.os.Build
 import coil3.BitmapImage
 import coil3.Image
+import androidx.core.graphics.get
 
 /**
  * Android 平台实现：从 Coil3 Image 中提取平均亮度
@@ -18,7 +20,7 @@ actual fun computeAverageLuminance(image: Image): Float {
     if (width == 0 || height == 0) return 0.3f
 
     // HARDWARE bitmap 不支持像素访问，需要复制为 ARGB_8888
-    val bitmap = if (originalBitmap.config == Bitmap.Config.HARDWARE) {
+    val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && originalBitmap.config == Bitmap.Config.HARDWARE) {
         originalBitmap.copy(Bitmap.Config.ARGB_8888, false) ?: return 0.3f
     } else {
         originalBitmap
@@ -36,7 +38,7 @@ actual fun computeAverageLuminance(image: Image): Float {
         while (y < height) {
             var x = 0
             while (x < width) {
-                val pixel = bitmap.getPixel(x, y)
+                val pixel = bitmap[x, y]
                 val r = (pixel shr 16 and 0xFF) / 255.0
                 val g = (pixel shr 8 and 0xFF) / 255.0
                 val b = (pixel and 0xFF) / 255.0

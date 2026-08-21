@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -138,7 +139,7 @@ private fun MonoDetailScreen(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
-                    actionIconContentColor = iconColor
+                    actionIconContentColor = iconColor.copy(alpha = 0.75f)
                 ),
                 actions = {
                     uiState.data.run {
@@ -248,66 +249,68 @@ private fun MonoDetailScreenHeader(
             onState = imageColorState.onImageState
         )
 
-        Row(
-            modifier = Modifier
-                .matchParentSize()
-                .padding(insets)
+        CompositionLocalProvider(
+            LocalContentColor provides imageColorState.contentColor
         ) {
-            StateImage(
+            Row(
                 modifier = Modifier
-                    .padding(
-                        top = ContentMarginHalf,
-                        bottom = ContentMargin,
-                        start = ContentMargin,
-                        end = ContentMarginHalf
-                    )
-                    .fillMaxHeight()
-                    .aspectRatio(3 / 4f)
-                    .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.mono.images.displayOriginalUrl))) },
-                shape = MaterialTheme.shapes.small,
-                model = state.mono.images.displayMediumImage,
-                alignment = Alignment.TopCenter,
-                contentDescription = stringResource(Res.string.global_image)
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .padding(
-                        top = ContentMarginHalf,
-                        bottom = ContentMargin,
-                        start = ContentMarginHalf,
-                        end = ContentMargin
-                    ),
-                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                    .matchParentSize()
+                    .padding(insets)
             ) {
-                Text(
-                    text = state.mono.displayName,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = imageColorState.contentColor,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                StateImage(
+                    modifier = Modifier
+                        .padding(
+                            top = ContentMarginHalf,
+                            bottom = ContentMargin,
+                            start = ContentMargin,
+                            end = ContentMarginHalf
+                        )
+                        .fillMaxHeight()
+                        .aspectRatio(3 / 4f)
+                        .clickable { onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.mono.images.displayOriginalUrl))) },
+                    shape = MaterialTheme.shapes.small,
+                    model = state.mono.images.displayMediumImage,
+                    alignment = Alignment.TopCenter,
+                    contentDescription = stringResource(Res.string.global_image)
                 )
 
-                Text(
-                    modifier = Modifier.basicMarquee(),
-                    text = state.mono.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = imageColorState.contentColor,
-                    maxLines = 1,
-                )
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(
+                            top = ContentMarginHalf,
+                            bottom = ContentMargin,
+                            start = ContentMarginHalf,
+                            end = ContentMargin
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                ) {
+                    Text(
+                        text = state.mono.displayName,
+                        style = MaterialTheme.typography.titleLarge,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
 
-                // 职业
-                Text(
-                    text = "",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = imageColorState.contentColorSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.MiddleEllipsis,
-                )
+                    Text(
+                        modifier = Modifier.basicMarquee(),
+                        text = state.mono.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                    )
 
-                Spacer(modifier = Modifier.weight(1f))
+                    // 职业
+                    Text(
+                        text = "",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = LocalContentColor.current.copy(alpha = 0.75f),
+                        maxLines = 1,
+                        overflow = TextOverflow.MiddleEllipsis,
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         }
     }

@@ -37,6 +37,7 @@ import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthRegex
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
+import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollectionInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
@@ -269,6 +270,10 @@ data class ComposeSubject(
                 }
             }
         }
+    }
+
+    fun normalized(): ComposeSubject {
+        return copy(summary = summary.bbcodeToHtml())
     }
 
     companion object {

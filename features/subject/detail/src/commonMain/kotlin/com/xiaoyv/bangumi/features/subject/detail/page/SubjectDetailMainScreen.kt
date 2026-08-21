@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_message
@@ -82,6 +81,7 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.rememberSheetDialogState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.component.layout.box.MaxHeightFadeBox
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalHalfBlackToTransparent
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
@@ -379,18 +379,19 @@ private fun SubjectDetailSummary(
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.summary))) }
     ) {
-        Text(
+        MaxHeightFadeBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = ContentMargin)
                 .clickWithoutRipped { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.summary))) },
-            text = state.subject.summary.ifBlank { stringResource(Res.string.global_no_summary) },
-            style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 28.sp),
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 10,
-            minLines = 5,
-            overflow = TextOverflow.Ellipsis
-        )
+            maxHeight = 300.dp,
+        ) {
+            BgmLinkedText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ContentMargin),
+                text = state.subject.summary.ifBlank { stringResource(Res.string.global_no_summary) },
+            )
+        }
     }
 }
 
@@ -559,14 +560,19 @@ private fun SubjectDetailInfo(
         action = stringResource(Res.string.subject_action_more),
         onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.webInfo.info))) }
     ) {
-        BgmLinkedText(
+        MaxHeightFadeBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 100.dp)
-                .padding(horizontal = ContentMargin)
                 .clickWithoutRipped { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewText(state.subject.webInfo.info))) },
-            text = state.subject.webInfo.shortInfo,
-        )
+            maxHeight = 300.dp,
+        ) {
+            BgmLinkedText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ContentMargin),
+                text = state.subject.webInfo.shortInfo,
+            )
+        }
     }
 }
 

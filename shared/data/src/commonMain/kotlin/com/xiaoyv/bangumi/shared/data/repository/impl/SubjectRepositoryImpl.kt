@@ -218,7 +218,7 @@ class SubjectRepositoryImpl(
     }
 
     override suspend fun fetchSubjectDetail(subjectId: Long): Result<ComposeSubject> = client.requestNextSubjectApi {
-        getSubject(subjectId)
+        getSubject(subjectId).normalized()
     }
 
     override suspend fun fetchSubjectDetailByWeb(subjectId: Long): Result<ComposeSubjectWebInfo> = client.requestWebApi {

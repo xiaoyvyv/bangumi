@@ -22,10 +22,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,7 +67,6 @@ import com.xiaoyv.bangumi.shared.core.mvi.rememberInterceptEvent
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
-import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentMikanId
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
@@ -144,7 +145,6 @@ private fun SubjectDetailScreen(
                 MaterialTheme.colorScheme.onSurface,
                 progress
             )
-            debugLog { "topBar recompose" }
             BgmTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 title = uiState.data.subject.displayName,
@@ -152,7 +152,7 @@ private fun SubjectDetailScreen(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = progress),
                     titleContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = progress),
                     navigationIconContentColor = iconColor,
-                    actionIconContentColor = iconColor
+                    actionIconContentColor = iconColor.copy(alpha = 0.75f)
                 ),
                 actions = {
                     uiState.data.run {
@@ -198,7 +198,7 @@ private fun SubjectDetailScreen(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_add_index),
-                                contentDescription = stringResource(Res.string.subject_action_more)
+                                contentDescription = stringResource(Res.string.subject_action_more),
                             )
                         }
 
@@ -279,122 +279,122 @@ private fun SubjectDetailScreenHeader(
             onState = imageColorState.onImageState
         )
 
-        Row(
-            modifier = Modifier
-                .matchParentSize()
-                .padding(insets)
-        ) {
-            Box(
+        CompositionLocalProvider(LocalContentColor provides imageColorState.contentColor) {
+            Row(
                 modifier = Modifier
-                    .padding(
-                        top = ContentMarginHalf,
-                        bottom = ContentMargin,
-                        start = ContentMargin,
-                        end = ContentMarginHalf
-                    )
-                    .fillMaxHeight()
-                    .aspectRatio(3 / 4f),
+                    .matchParentSize()
+                    .padding(insets)
             ) {
-                StateImage(
+                Box(
                     modifier = Modifier
-                        .matchParentSize()
-                        .clickable { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.subject.images.displayOriginalUrl))) },
-                    shape = MaterialTheme.shapes.small,
-                    contentScale = ContentScale.Crop,
-                    model = state.subject.images.displayMediumImage,
-                    contentDescription = stringResource(Res.string.global_image),
-                )
-
-                // 排名
-                if (state.subject.rating.rank != 0) Text(
-                    modifier = Modifier
-                        .padding(top = ContentMarginHalf)
-                        .align(Alignment.TopStart)
-                        .background(
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
-                            RoundedCornerShape(topEnd = 6.dp, bottomEnd = 6.dp),
+                        .padding(
+                            top = ContentMarginHalf,
+                            bottom = ContentMargin,
+                            start = ContentMargin,
+                            end = ContentMarginHalf
                         )
-                        .padding(ContentMarginHalf, 4.dp),
-                    text = stringResource(Res.string.global_rank_no) + " " + state.subject.rating.rank,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-
-                // 锁定
-                if (state.subject.locked) Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .background(
-                            BrushVerticalTransparentToHalfRed,
-                            MaterialTheme.shapes.small.copy(
-                                topStart = CornerSize(0.dp),
-                                topEnd = CornerSize(0.dp)
-                            )
-                        )
-                        .padding(bottom = ContentMarginHalf, top = ContentMargin * 2)
-                        .padding(horizontal = ContentMarginHalf),
-                    text = stringResource(Res.string.subject_locked),
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onError,
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .padding(
-                        top = ContentMarginHalf,
-                        bottom = ContentMargin,
-                        start = ContentMarginHalf,
-                        end = ContentMargin
-                    ),
-                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
-            ) {
-                Text(
-                    text = state.subject.displayName,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = imageColorState.contentColor,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                if (state.subject.name.isNotBlank()
-                    && state.subject.displayName != state.subject.name
-                ) Text(
-                    modifier = Modifier.basicMarquee(),
-                    text = state.subject.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = imageColorState.contentColor,
-                    maxLines = 1,
-                )
-                // 日期
-                Text(
-                    text = state.subject.rememberDisplayDateAndType(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = imageColorState.contentColorSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.MiddleEllipsis,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-
-                // 评分
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxHeight()
+                        .aspectRatio(3 / 4f),
                 ) {
-                    if (state.subject.rating.score > 0) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Bottom),
-                            text = state.subject.rememberDisplayScoreText(StarColor),
-                            style = MaterialTheme.typography.headlineLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            color = StarColor
-                        )
+                    StateImage(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable { onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.PreviewMain(state.subject.images.displayOriginalUrl))) },
+                        shape = MaterialTheme.shapes.small,
+                        contentScale = ContentScale.Crop,
+                        model = state.subject.images.displayMediumImage,
+                        contentDescription = stringResource(Res.string.global_image),
+                    )
+
+                    // 排名
+                    if (state.subject.rating.rank != 0) Text(
+                        modifier = Modifier
+                            .padding(top = ContentMarginHalf)
+                            .align(Alignment.TopStart)
+                            .background(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
+                                RoundedCornerShape(topEnd = 6.dp, bottomEnd = 6.dp),
+                            )
+                            .padding(ContentMarginHalf, 4.dp),
+                        text = stringResource(Res.string.global_rank_no) + " " + state.subject.rating.rank,
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+
+                    // 锁定
+                    if (state.subject.locked) Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                            .background(
+                                BrushVerticalTransparentToHalfRed,
+                                MaterialTheme.shapes.small.copy(
+                                    topStart = CornerSize(0.dp),
+                                    topEnd = CornerSize(0.dp)
+                                )
+                            )
+                            .padding(bottom = ContentMarginHalf, top = ContentMargin * 2)
+                            .padding(horizontal = ContentMarginHalf),
+                        text = stringResource(Res.string.subject_locked),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onError,
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(
+                            top = ContentMarginHalf,
+                            bottom = ContentMargin,
+                            start = ContentMarginHalf,
+                            end = ContentMargin
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                ) {
+                    Text(
+                        text = state.subject.displayName,
+                        style = MaterialTheme.typography.titleLarge,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    if (state.subject.name.isNotBlank()
+                        && state.subject.displayName != state.subject.name
+                    ) Text(
+                        modifier = Modifier.basicMarquee(),
+                        text = state.subject.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                    )
+                    // 日期
+                    Text(
+                        text = state.subject.rememberDisplayDateAndType(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = LocalContentColor.current.copy(alpha = 0.75f),
+                        maxLines = 1,
+                        overflow = TextOverflow.MiddleEllipsis,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // 评分
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if (state.subject.rating.score > 0) {
+                            Text(
+                                modifier = Modifier.align(Alignment.Bottom),
+                                text = state.subject.rememberDisplayScoreText(StarColor),
+                                style = MaterialTheme.typography.headlineLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = StarColor
+                            )
+                        }
                     }
                 }
             }

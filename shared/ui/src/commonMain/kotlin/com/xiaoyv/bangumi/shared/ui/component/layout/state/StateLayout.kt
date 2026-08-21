@@ -227,14 +227,10 @@ fun StateErrorLayout(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(ContentMargin),
-                text = if (System.isDebugType && throwable != null) {
-                    throwable.errMsg
-                } else {
-                    message.ifBlank { throwable?.errMsg.orEmpty() }
-                },
+                text = message.ifBlank { throwable.errMsg },
                 color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.Center,
-                maxLines = if (System.isDebugType) 10 else 3,
+                maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
 

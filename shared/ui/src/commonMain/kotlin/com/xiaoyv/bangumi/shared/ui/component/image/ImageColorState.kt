@@ -19,7 +19,9 @@ import coil3.compose.AsyncImagePainter
  * ```
  * val imageColorState = rememberImageColorState()
  * BlurImage(onState = imageColorState.onImageState, ...)
- * Text(color = imageColorState.contentColor, ...)
+ * CompositionLocalProvider(LocalContentColor provides imageColorState.contentColor) {
+ *     Text(...)
+ * }
  * ```
  */
 @Stable
@@ -29,12 +31,6 @@ class ImageColorState {
      */
     var contentColor: Color by mutableStateOf(Color.White)
         private set
-
-    /**
-     * 背景上次要文字应使用的颜色（带透明度）
-     */
-    val contentColorSecondary: Color
-        get() = contentColor.copy(alpha = 0.75f)
 
     /**
      * 传递给 BlurImage 的 onState 回调

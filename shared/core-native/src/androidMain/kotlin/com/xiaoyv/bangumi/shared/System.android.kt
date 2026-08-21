@@ -36,8 +36,9 @@ actual val platformContext: coil3.PlatformContext
 
 actual object System {
 
-    actual val isDebugType: Boolean
-        get() = (application.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+    actual val isDebugType: Boolean by lazy {
+        (application.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+    }
 
     actual val uiDispatcher: CoroutineContext = AndroidUiDispatcher.Main
 
