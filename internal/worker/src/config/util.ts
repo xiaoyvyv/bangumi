@@ -2,6 +2,31 @@ import { type AnyNode, Element, isTag } from 'domhandler';
 import { selectAll } from 'css-select';
 import { textContent } from 'domutils';
 import { Images } from '../types';
+import { HTML2BBCode } from 'html2bbcode';
+
+const bbcodeConverter = new HTML2BBCode({
+	no_wrap: true
+});
+
+/**
+ * HTML 转 BBCode，基于 html2bbcode 标准转换并保持现有特定规则
+ */
+export function html2bbcode(html: string): string {
+	if (!html) return '';
+
+	const processed = html
+		.replace(/src=(['"])\/\//g, 'src=$1https://')
+		.replace(/href=(['"])\/\//g, 'href=$1https://')
+		.replace(/\[([a-zA-Z0-9_-]+)(=[^\]]*)?\]\s*<a[^>]*>([\s\S]*?)<\/a>\s*\[\/\1\]/gi, (match, tag, val, text) => {
+			return `[${tag}${val || ''}]${text}[/${tag}]`;
+		})
+		.replace(/<img\s+[^>]*smileid=['"]?[^'"\s>]+['"]?[^>]*>/gi, (imgTag) => {
+			const altMatch = imgTag.match(/alt=['"]?([^'"]+)['"]?/i);
+			return altMatch ? altMatch[1] : imgTag;
+		});
+
+	return bbcodeConverter.feed(processed).toString().trim();
+}
 
 export function selectElements(q: string, root: any): Element[] {
 	return selectAll(q, root).filter(isTag);

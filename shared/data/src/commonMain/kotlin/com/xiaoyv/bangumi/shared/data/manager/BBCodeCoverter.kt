@@ -9,8 +9,8 @@ import com.xiaoyv.library.convert.DefaultSmileTextReplacement
 
 val bbCodeConverter = BBCodeToHtml(listOf(BgmDefaultSmileTextReplacement()))
 
-fun String.bbcodeToHtml(): String {
-    return bbCodeConverter.convert(this)
+fun String.bbcodeToHtml(escapeHtml: Boolean = true): String {
+    return bbCodeConverter.convert(this, escapeHtml = escapeHtml)
 }
 
 class BgmDefaultSmileTextReplacement : DefaultSmileTextReplacement() {

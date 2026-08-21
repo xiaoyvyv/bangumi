@@ -11,6 +11,7 @@ import {
 	containsAll,
 	containsAny,
 	containsAnyRegex,
+	html2bbcode,
 	imageUrlId,
 	numberContent,
 	optImageUrl,
@@ -420,20 +421,12 @@ function parseTimelineMemoStaus(element: Element, type: number): Status {
 	const statusElement = selectElement('p.status', element);
 	if (!statusElement) return {};
 
-	const html = render(statusElement.children, { encodeEntities: 'utf8' })
-		.replace(/src=(['"])\/\//g, 'src=$1https://')
-		.replace(/href=(['"])\/\//g, 'href=$1https://')
-		.replace(/\[([a-zA-Z0-9_-]+)(=[^\]]*)?\]\s*<a[^>]*>([\s\S]*?)<\/a>\s*\[\/\1\]/gi, (match, tag, val, text) => {
-			return `[${tag}${val || ''}]${text}[/${tag}]`;
-		})
-		.replace(/<img\s+[^>]*smileid=['"]?[^'"\s>]+['"]?[^>]*>/gi, (imgTag) => {
-			const altMatch = imgTag.match(/alt=['"]?([^'"]+)['"]?/i);
-			return altMatch ? altMatch[1] : imgTag;
-		});
+	const html = render(statusElement.children, { encodeEntities: 'utf8' });
+	const bbcode = html2bbcode(html);
 
 	if (type === 0) {
 		// 更新签名
-		const sign = subAfter(subAfter(html, '更新了签名: '), '更新了签名：');
+		const sign = subAfter(subAfter(bbcode, '更新了签名: '), '更新了签名：');
 		return { sign };
 	} else if (type === 2) {
 		// 改名
@@ -447,7 +440,7 @@ function parseTimelineMemoStaus(element: Element, type: number): Status {
 	} else {
 		// 吐槽
 		return {
-			tsukkomi: html
+			tsukkomi: bbcode
 		};
 	}
 }

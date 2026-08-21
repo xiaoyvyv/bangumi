@@ -53,7 +53,7 @@ class TimelineRepositoryImpl(
                                 else -> null
                             },
                             page = it
-                        )
+                        ).map { timeline -> timeline.normalized() }
                     }.getOrThrow()
                 }
             )

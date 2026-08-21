@@ -21,6 +21,7 @@
     "css-select": "^7.0.0",
     "domhandler": "^6.0.1",
     "domutils": "^4.0.2",
+	  "html2bbcode": "^1.2.6",
     "htmlparser2": "^12.0.0"
   }
 }
