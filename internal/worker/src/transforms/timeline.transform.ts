@@ -428,7 +428,10 @@ function parseTimelineMemoStaus(element: Element, type: number): Status {
 
 	const html = render(statusElement.children, { encodeEntities: 'utf8' })
 		.replace(/src=(['"])\/\//g, 'src=$1https://')
-		.replace(/href=(['"])\/\//g, 'href=$1https://');
+		.replace(/href=(['"])\/\//g, 'href=$1https://')
+		.replace(/\[([a-zA-Z0-9_-]+)(=[^\]]*)?\]\s*<a[^>]*>([\s\S]*?)<\/a>\s*\[\/\1\]/gi, (match, tag, val, text) => {
+			return `[${tag}${val || ''}]${text}[/${tag}]`;
+		});
 
 	if (type === 0) {
 		// 更新签名
