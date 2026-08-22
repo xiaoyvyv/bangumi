@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.mono.page.business
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
@@ -34,7 +33,7 @@ class MonoPageViewModel(
 
     private val monoPager = monoRepository.fetchMonoListPager(param)
 
-    val monos = monoPager.flow.cachedIn(viewModelScope)
+    val monos = monoPager.cachedIn(viewModelScope)
 
     init {
         monoPager.bindMonoDisplayPersonalState(viewModelScope, personalStateStore)

@@ -9,12 +9,12 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexPageItem
 
 const val CONTENT_TYPE_INDEX_ITEM = "CONTENT_TYPE_INDEX_ITEM"

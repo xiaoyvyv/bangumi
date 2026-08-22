@@ -22,10 +22,18 @@ internal class MemoryPagingSource<T : Any, Id : Any>(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> = try {
-        store.load(
-            offset = params.key ?: 0,
-            loadSize = params.loadSize,
-        )
+        when (params) {
+            is LoadParams.Refresh -> store.loadRefresh(params.loadSize)
+            is LoadParams.Append -> store.load(
+                offset = params.key,
+                loadSize = params.loadSize,
+            )
+
+            is LoadParams.Prepend -> store.load(
+                offset = params.key,
+                loadSize = params.loadSize,
+            )
+        }
     } catch (e: Exception) {
         LoadResult.Error(e)
     }

@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailEvent
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.shared.core.types.MonoCastType
@@ -38,7 +37,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
@@ -59,7 +58,7 @@ class MonoDetailCastsViewModel(
     personalStateStore: PersonalStateStore,
 ) : ViewModel() {
     private val castPager = monoRepository.fetchPersonCastPager(param)
-    val casts = castPager.flow.cachedIn(viewModelScope)
+    val casts = castPager.cachedIn(viewModelScope)
 
     init {
         castPager.bindMonoInfoPersonalState(viewModelScope, personalStateStore)

@@ -1,7 +1,14 @@
 package com.xiaoyv.bangumi.shared.data.repository.datasource.store
 
 import androidx.paging.PagingData
+import androidx.paging.PagingDataEvent
+import androidx.paging.PagingDataPresenter
+import androidx.paging.cachedIn
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * 内存分页数据的操作入口。
@@ -17,6 +24,29 @@ interface MemoryPagingController<T : Any, Id : Any> {
      * Paging3 消费的分页数据流。
      */
     val flow: Flow<PagingData<T>>
+
+    /**
+     * 缓存 PagingData，并在 [scope] 存活期间持续预热最新 generation。
+     *
+     * MemoryStore 更新导致 PagingSource invalidate 时，即使页面暂时没有 UI collector，后台
+     * Presenter 也会完成内存 REFRESH。页面返回后，官方 LazyPagingItems 可以直接从 cachedIn
+     * 的 replay 数据恢复已加载快照，避免 itemCount 短暂变为 0。
+     *
+     * @param scope 缓存及后台 Presenter 使用的协程作用域。
+     * @return 可直接交给官方 `collectAsLazyPagingItems` 的标准 PagingData Flow。
+     */
+    fun cachedIn(scope: CoroutineScope): Flow<PagingData<T>> {
+        val cachedFlow = flow.cachedIn(scope)
+        scope.launch {
+            val presenter = object : PagingDataPresenter<T>(
+                mainContext = EmptyCoroutineContext,
+            ) {
+                override suspend fun presentPagingDataEvent(event: PagingDataEvent<T>) = Unit
+            }
+            cachedFlow.collectLatest(presenter::collectFrom)
+        }
+        return cachedFlow
+    }
 
     /**
      * 变换指定 ID 的已加载项。

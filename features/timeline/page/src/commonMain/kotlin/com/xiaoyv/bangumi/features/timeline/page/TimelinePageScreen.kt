@@ -6,6 +6,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageEvent
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageViewModel
 import com.xiaoyv.bangumi.features.timeline.page.business.koinTimelinePageViewModel
@@ -14,8 +16,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelin
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.paging.LazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.component.paging.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.timeline.TimelinePageItem
 

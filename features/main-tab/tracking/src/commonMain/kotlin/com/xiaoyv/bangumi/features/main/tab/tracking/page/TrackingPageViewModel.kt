@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.main.tab.tracking.page
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
@@ -40,7 +39,7 @@ class TrackingPageViewModel(
         fetchEpisode = true
     )
 
-    val collections = userCollectionController.flow.cachedIn(viewModelScope)
+    val collections = userCollectionController.cachedIn(viewModelScope)
 
     init {
         userCollectionController.bindCollectionSubjectPersonalState(viewModelScope, personalStateStore)

@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.timeline.page.business
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
@@ -43,7 +42,7 @@ class TimelinePageViewModel(
         username = param.username
     )
 
-    internal val timelines = timelineController.flow.cachedIn(viewModelScope)
+    internal val timelines = timelineController.cachedIn(viewModelScope)
 
     init {
         timelineController.bindTimelinePersonalState(viewModelScope, personalStateStore)

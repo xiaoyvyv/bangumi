@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.subject.page.business
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
@@ -32,7 +31,7 @@ class SubjectPageViewModel(
 ) : BaseViewModel<SubjectPageState, SubjectPageSideEffect, SubjectPageEvent.Action>() {
 
     private val subjectPager = subjectRepository.fetchSubjectPager(param)
-    internal val subjects = subjectPager.flow.cachedIn(viewModelScope)
+    internal val subjects = subjectPager.cachedIn(viewModelScope)
 
     init {
         subjectPager.bindSubjectDisplayPersonalState(viewModelScope, personalStateStore)

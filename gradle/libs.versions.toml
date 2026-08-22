@@ -100,7 +100,7 @@ compose-adaptive-navigation3 = { module = "org.jetbrains.compose.material3.adapt
 compose-mvi = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit-mvi" }
 compose-mvi-compose = { module = "org.orbit-mvi:orbit-compose", version.ref = "orbit-mvi" }
 compose-paging-common = { module = "androidx.paging:paging-common", version.ref = "compose-paging-common" }
-compose-paging-common-android = { module = "androidx.paging:paging-compose-android", version.ref = "compose-paging-common" }
+compose-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "compose-paging-common" }
 compose-webview = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "compose-webview" }
 compose-confettikit = { module = "io.github.vinceglb:confettikit", version.ref = "confettikit" }
 compose-markdown-core = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "compose-markdown" }
@@ -205,6 +205,7 @@ compose-common = [
     "compose-adaptive",
     "compose-adaptive-navigation3",
     "compose-paging-common",
+    "compose-paging-compose",
     "compose-webview",
     "compose-confettikit",
 ]

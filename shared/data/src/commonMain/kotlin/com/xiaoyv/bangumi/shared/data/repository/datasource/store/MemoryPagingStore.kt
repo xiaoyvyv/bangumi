@@ -43,9 +43,7 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
      */
     fun createPagingSource(): PagingSource<Int, T> {
         val sourceId = nextSourceId.incrementAndGet()
-        return MemoryPagingSource(
-            store = this,
-        ).also { source ->
+        return MemoryPagingSource(store = this).also { source ->
             synchronized(sourcesLock) {
                 activeSources[sourceId] = source
             }
@@ -75,23 +73,7 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
             }
 
             ensureLoadedLocked(offset + loadSize)
-
-            val startIndex = min(offset, items.size)
-            val endIndex = min(offset + loadSize, items.size)
-            val pageData = items.subList(startIndex, endIndex).toList()
-            val nextKey = when {
-                endIndex < items.size -> endIndex
-                endReached -> null
-                pageData.isEmpty() -> null
-                else -> endIndex
-            }
-
-            MemoryPageSnapshot(
-                data = pageData,
-                startIndex = startIndex,
-                totalCount = items.size,
-                nextKey = nextKey,
-            )
+            createPageSnapshotLocked(offset, loadSize)
         }
 
         return PagingSource.LoadResult.Page(
@@ -99,7 +81,35 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
             prevKey = if (offset == 0) null else max(offset - loadSize, 0),
             nextKey = snapshot.nextKey,
             itemsBefore = snapshot.startIndex,
-            itemsAfter = max(snapshot.totalCount - offset - snapshot.data.size, 0),
+            itemsAfter = max(snapshot.totalCount - snapshot.startIndex - snapshot.data.size, 0),
+        )
+    }
+
+    /**
+     * 重新创建 PagingSource 时返回 Store 当前已加载的完整前缀。
+     *
+     * 这使关闭 placeholders 的列表仍能保持原有 index；首次加载或 UI refresh 后 Store 为空，
+     * 因而仍只请求 [loadSize] 条数据。
+     *
+     * @param loadSize Store 尚未初始化时需要加载的最小数量。
+     * @return 从 index 0 开始、覆盖当前全部已加载项的页面。
+     */
+    suspend fun loadRefresh(loadSize: Int): PagingSource.LoadResult.Page<Int, T> {
+        val snapshot = mutex.withLock {
+            if (pendingRefresh.value) {
+                resetLocked()
+            }
+
+            ensureLoadedLocked(loadSize)
+            createPageSnapshotLocked(offset = 0, loadSize = items.size)
+        }
+
+        return PagingSource.LoadResult.Page(
+            data = snapshot.data,
+            prevKey = null,
+            nextKey = snapshot.nextKey,
+            itemsBefore = 0,
+            itemsAfter = max(snapshot.totalCount - snapshot.data.size, 0),
         )
     }
 
@@ -244,6 +254,25 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
         endReached = false
         initialized = false
         pendingRefresh.value = false
+    }
+
+    private fun createPageSnapshotLocked(offset: Int, loadSize: Int): MemoryPageSnapshot<T> {
+        val startIndex = min(offset, items.size)
+        val endIndex = min(offset + loadSize, items.size)
+        val pageData = items.subList(startIndex, endIndex).toList()
+        val nextKey = when {
+            endIndex < items.size -> endIndex
+            endReached -> null
+            pageData.isEmpty() -> null
+            else -> endIndex
+        }
+
+        return MemoryPageSnapshot(
+            data = pageData,
+            startIndex = startIndex,
+            totalCount = items.size,
+            nextKey = nextKey,
+        )
     }
 
     private fun invalidateActiveSources() {
