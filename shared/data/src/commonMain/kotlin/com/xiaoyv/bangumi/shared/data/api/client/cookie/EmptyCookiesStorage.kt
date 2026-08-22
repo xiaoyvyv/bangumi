@@ -4,7 +4,7 @@ import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
 
-class EmptyCookiesStorage : CookiesStorage {
+object EmptyCookiesStorage : CookiesStorage {
     override suspend fun get(requestUrl: Url): List<Cookie> {
         return emptyList()
     }

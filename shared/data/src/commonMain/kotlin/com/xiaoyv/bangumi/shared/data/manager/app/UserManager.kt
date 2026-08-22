@@ -5,7 +5,7 @@ import androidx.compose.ui.util.fastJoinToString
 import com.multiplatform.webview.cookie.Cookie
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
-import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.ApiCookiesStorage
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
@@ -28,7 +28,7 @@ import kotlin.time.Clock
 class UserManager(
     private val userRepository: UserRepository,
     private val preferenceStore: PreferenceStore,
-    private val cookieStorage: BgmCookiesStorage,
+    private val cookieStorage: ApiCookiesStorage,
 ) : CoroutineScope by MainScope() {
     private val seq: Long
         get() = Clock.System.now().let { it.nanosecondsOfSecond + it.epochSeconds }

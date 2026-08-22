@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.data.api.ImageApi
 import com.xiaoyv.bangumi.shared.data.api.TraceApi
 import com.xiaoyv.bangumi.shared.data.api.app.AppApi
 import com.xiaoyv.bangumi.shared.data.api.app.createAppApi
-import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.ApiCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.EmptyCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.BmoPlugin
 import com.xiaoyv.bangumi.shared.data.api.createAuthApi
@@ -71,7 +71,7 @@ import kotlin.coroutines.CoroutineContext
  */
 @AppDsl
 class ApiClient(
-    private val cookieStorage: BgmCookiesStorage,
+    private val cookieStorage: ApiCookiesStorage,
     private val preferenceStore: PreferenceStore,
 ) {
     val config get() = preferenceStore.settings.network
@@ -82,7 +82,7 @@ class ApiClient(
     val authClient by lazy {
         createHttpClient(
             config = config,
-            cookieStorage = EmptyCookiesStorage(),
+            cookieStorage = EmptyCookiesStorage,
         )
     }
 

@@ -8,11 +8,11 @@ import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.uppercaseFirstChar
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpCodeConverterFactory
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpDocumentConverterFactory
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthBgmProxyPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthCompat
-import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthProxyCookiePlugin
-import com.xiaoyv.bangumi.shared.data.api.client.plugin.DouBanPlugin
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthDouBanPlugin
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthPixivPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.JsonContentTypePlugin
-import com.xiaoyv.bangumi.shared.data.api.client.plugin.PixivProxyPlugin
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
@@ -107,7 +107,7 @@ internal fun createDocumentKtorfit(client: HttpClient, url: String): Ktorfit = k
  * @param config 提供豆瓣 User-Agent 与签名密钥的网络配置。
  */
 internal fun HttpClientConfig<*>.installDbAuth(config: ComposeSetting.NetworkConfig) {
-    install(DouBanPlugin) {
+    install(AuthDouBanPlugin) {
         agent = config.douBanUA
         key = config.douBanKey
     }
@@ -126,7 +126,7 @@ internal fun HttpClientConfig<*>.installPixivAuth(
     refreshToken: suspend (String) -> ComposePixivToken,
 ) {
     install(AuthCompat)
-    install(PixivProxyPlugin) {
+    install(AuthPixivPlugin) {
         network = config
         os = systemDevice.os
         userAgent = buildString {
@@ -202,7 +202,7 @@ internal fun HttpClientConfig<*>.installBgmAuth(
             }
         }
     }
-    install(AuthProxyCookiePlugin) {
+    install(AuthBgmProxyPlugin) {
         bgmUrl = preferenceStore.settings.network.bgmHost
     }
 }

@@ -9,23 +9,19 @@ import io.ktor.client.plugins.api.ClientPlugin
 import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.utils.io.KtorDsl
 
-/**
- * imp.pximg.net
- * i-f.pximg.net
- * source.pximg.net
- */
+
 @KtorDsl
-class PixivImagePluginConfig(
+class AuthPixivPluginConfig(
     var os: String = "android",
     var userAgent: String = "PixivAndroidApp/6.141.1 (Android 15; Google Pixel 7);",
     var network: ComposeSetting.NetworkConfig = ComposeSetting.NetworkConfig.Default,
 )
 
 /**
- * [PixivProxyPlugin]
+ * [AuthPixivPlugin]
  */
-val PixivProxyPlugin: ClientPlugin<PixivImagePluginConfig> =
-    createClientPlugin("PixivProxyPlugin", ::PixivImagePluginConfig) {
+val AuthPixivPlugin: ClientPlugin<AuthPixivPluginConfig> =
+    createClientPlugin("AuthPixivPlugin", ::AuthPixivPluginConfig) {
         val config = pluginConfig
 
         onRequest { request, _ ->

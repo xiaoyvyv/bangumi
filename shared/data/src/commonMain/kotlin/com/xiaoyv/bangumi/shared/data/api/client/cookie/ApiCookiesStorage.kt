@@ -12,12 +12,12 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 /**
- * [BgmCookiesStorage]
+ * [ApiCookiesStorage]
  *
  * @author why
  * @since 2025/1/15
  */
-class BgmCookiesStorage : CookiesStorage {
+class ApiCookiesStorage : CookiesStorage {
     private val mutex = Mutex()
 
     private val database = System.database

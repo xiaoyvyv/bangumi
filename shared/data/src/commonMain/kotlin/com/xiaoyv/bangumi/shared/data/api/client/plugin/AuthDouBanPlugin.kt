@@ -23,13 +23,13 @@ class DouBanConfig(
 )
 
 /**
- * [DouBanPlugin]
+ * [AuthDouBanPlugin]
  *
  * @author why
  * @since 2025/1/25
  */
-val DouBanPlugin: ClientPlugin<DouBanConfig> =
-    createClientPlugin("DouBanPlugin", ::DouBanConfig) {
+val AuthDouBanPlugin: ClientPlugin<DouBanConfig> =
+    createClientPlugin("AuthDouBanPlugin", ::DouBanConfig) {
         val config = pluginConfig
 
         onRequest { request, _ ->

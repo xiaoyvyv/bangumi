@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.di
 
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
-import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.ApiCookiesStorage
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
@@ -64,7 +64,7 @@ import org.koin.dsl.module
 private val dataModule = module {
     singleOf(::PreferenceStore)
     singleOf(::ApiClient)
-    singleOf(::BgmCookiesStorage)
+    singleOf(::ApiCookiesStorage)
     singleOf(::UserManager)
     singleOf(::PersonalStateStore)
     single { createPagingConfig(20) }

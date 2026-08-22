@@ -13,16 +13,16 @@ import io.ktor.http.Url
 import io.ktor.utils.io.KtorDsl
 
 @KtorDsl
-class AuthProxyCookiePluginConfig(
+class AuthBgmProxyPluginConfig(
     var bgmUrl: String = WebConstant.URL_BASE_WEB,
     var proxyUrl: String = WebConstant.URL_BGM_PROXY,
 )
 
 /**
- * [AuthProxyCookiePlugin]
+ * [AuthBgmProxyPlugin]
  */
-val AuthProxyCookiePlugin: ClientPlugin<AuthProxyCookiePluginConfig> =
-    createClientPlugin("AuthProxyCookiePlugin", ::AuthProxyCookiePluginConfig) {
+val AuthBgmProxyPlugin: ClientPlugin<AuthBgmProxyPluginConfig> =
+    createClientPlugin("AuthBgmProxyPlugin", ::AuthBgmProxyPluginConfig) {
         val config = pluginConfig
         val client = client
 
