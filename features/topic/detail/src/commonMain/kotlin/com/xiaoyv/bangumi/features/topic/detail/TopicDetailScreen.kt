@@ -29,8 +29,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +42,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.comment_delete_confirm
 import com.xiaoyv.bangumi.core_resource.resources.global_comments
+import com.xiaoyv.bangumi.core_resource.resources.global_delete
 import com.xiaoyv.bangumi.core_resource.resources.global_no_content
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.topic_title
@@ -59,6 +63,7 @@ import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.comment.CommentDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.comment.CommentDialogAnchor
@@ -375,6 +380,20 @@ private fun TopicDetailScreenContent(
 ) {
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
+    val deleteDialogState = rememberAlertDialogState()
+    var deletingCommentId by remember { mutableStateOf<Long?>(null) }
+
+    BgmAlertDialog(
+        state = deleteDialogState,
+        text = stringResource(Res.string.comment_delete_confirm),
+        confirm = stringResource(Res.string.global_delete),
+        onConfirm = {
+            deletingCommentId?.let {
+                onActionEvent(TopicDetailEvent.Action.OnDeleteComment(it))
+            }
+            deletingCommentId = null
+        },
+    )
 
     CompositionLocalProvider(LocalCommentTargetAuthorUsername provides state.topic.creator.username) {
         LazyColumn(
@@ -444,6 +463,9 @@ private fun TopicDetailScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     item = item,
                     level = level,
+                    isDeletable = (state.currentUserId != 0L &&
+                            (item.creatorID == state.currentUserId || item.user.id == state.currentUserId)) ||
+                            (state.currentUsername.isNotBlank() && item.user.username == state.currentUsername),
                     isLikeable = state.type == TopicType.TYPE_GROUP ||
                             state.type == TopicType.TYPE_SUBJECT ||
                             state.type == TopicType.TYPE_EP ||
@@ -457,6 +479,10 @@ private fun TopicDetailScreenContent(
                     },
                     onClickReport = {
                         onUiEvent(TopicDetailEvent.UI.OnNavScreen(Screen.Report(state.reportCommentType, item.id)))
+                    },
+                    onClickDelete = {
+                        deletingCommentId = item.id
+                        deleteDialogState.show()
                     },
                     onClickReaction = {
                         onActionEvent(TopicDetailEvent.Action.OnReactionClick(item.id, it))

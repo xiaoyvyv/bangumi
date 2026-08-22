@@ -25,6 +25,8 @@ import kotlinx.collections.immutable.toImmutableList
 @Immutable
 data class TopicDetailState(
     val id: Long = 0,
+    val currentUserId: Long = 0,
+    val currentUsername: String = "",
     @field:TopicType
     val type: String = TopicType.TYPE_UNKNOWN,
     val topic: ComposeTopic = ComposeTopic.Empty,

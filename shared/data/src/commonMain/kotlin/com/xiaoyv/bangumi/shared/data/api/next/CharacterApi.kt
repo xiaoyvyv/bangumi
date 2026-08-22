@@ -18,6 +18,7 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.statement.HttpResponse
 
 @AppJsonApiDsl
 interface CharacterApi {
@@ -39,7 +40,7 @@ interface CharacterApi {
      * @param commentID
      */
     @DELETE("p1/characters/-/comments/{commentID}")
-    suspend fun deleteCharacterComment(@Path("commentID") commentID: Int): ComposeReply
+    suspend fun deleteCharacterComment(@Path("commentID") commentID: Int): HttpResponse
 
     /**
      * 获取角色

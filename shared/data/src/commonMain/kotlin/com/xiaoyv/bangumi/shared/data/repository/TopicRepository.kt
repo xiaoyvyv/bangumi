@@ -12,6 +12,8 @@ interface TopicRepository {
 
     suspend fun fetchTopicDetail(topicId: Long, @TopicType type: String): Result<ComposeTopic>
 
+    suspend fun deleteComment(@TopicType type: String, commentId: Long): Result<Unit>
+
     suspend fun submitGroupReaction(commentId: Long, value: String?): Result<Unit>
 
     suspend fun submitSubjectReaction(commentId: Long, value: String?): Result<Unit>

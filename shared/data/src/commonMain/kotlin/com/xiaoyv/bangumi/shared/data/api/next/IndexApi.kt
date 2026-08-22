@@ -10,10 +10,12 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.statement.HttpResponse
 
 @AppJsonApiDsl
 interface IndexApi {
@@ -25,6 +27,12 @@ interface IndexApi {
         @Path("indexID") indexID: Long,
         @Body param: CreateCommentParam? = null
     ): ComposeId
+
+    /**
+     * 删除目录的评论
+     */
+    @DELETE("p1/indexes/-/comments/{commentID}")
+    suspend fun deleteIndexComment(@Path("commentID") commentID: Long): HttpResponse
 
     /**
      * 获取目录详情

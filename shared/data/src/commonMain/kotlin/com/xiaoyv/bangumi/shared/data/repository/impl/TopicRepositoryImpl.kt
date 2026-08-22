@@ -74,6 +74,20 @@ class TopicRepositoryImpl(
         }
     }.map { it.normalized(type) }
 
+    override suspend fun deleteComment(
+        type: String,
+        commentId: Long,
+    ): Result<Unit> = when (type) {
+        TopicType.TYPE_GROUP -> client.requestNextTopicApi { deleteGroupPost(commentId) }
+        TopicType.TYPE_SUBJECT -> client.requestNextTopicApi { deleteSubjectPost(commentId) }
+        TopicType.TYPE_EP -> client.requestNextEpisodeApi { deleteEpisodeComment(commentId.toInt()) }
+        TopicType.TYPE_PERSON -> client.requestNextPersonApi { deletePersonComment(commentId.toInt()) }
+        TopicType.TYPE_CRT -> client.requestNextCharacterApi { deleteCharacterComment(commentId.toInt()) }
+        TopicType.TYPE_INDEX -> client.requestNextIndexApi { deleteIndexComment(commentId) }
+        TopicType.TYPE_BLOG -> client.requestNextBlogApi { deleteBlogComment(commentId) }
+        else -> Result.failure(IllegalArgumentException("Unsupported topic type: $type"))
+    }.map { }
+
     override suspend fun submitGroupReaction(
         commentId: Long,
         value: String?

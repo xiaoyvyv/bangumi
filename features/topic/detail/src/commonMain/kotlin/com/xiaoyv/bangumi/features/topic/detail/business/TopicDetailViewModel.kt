@@ -66,6 +66,8 @@ class TopicDetailViewModel(
     override fun createInitialState() = TopicDetailState(
         type = args.type,
         id = args.id,
+        currentUserId = userManager.userInfo.id,
+        currentUsername = userManager.userInfo.username,
         commentTypeFilters = persistentListOf(
             ComposeTextTab(CommentFilterType.ALL, label = Res.string.global_all),
             ComposeTextTab(CommentFilterType.REACTION, label = Res.string.global_reaction),
@@ -88,6 +90,7 @@ class TopicDetailViewModel(
             is TopicDetailEvent.Action.OnCommentTypeChange -> onCommentTypeChange(event.type)
             is TopicDetailEvent.Action.OnCommentSortChange -> onCommentSortChange(event.type)
             is TopicDetailEvent.Action.OnAppendComment -> onAppendComment(event.replyId)
+            is TopicDetailEvent.Action.OnDeleteComment -> onDeleteComment(event.commentId)
         }
     }
 
@@ -274,6 +277,20 @@ class TopicDetailViewModel(
      * @param replyId 评论ID
      */
     private fun onAppendComment(replyId: Long) = intent {
+        reloadComments()
+    }
+
+    private fun onDeleteComment(commentId: Long) = intent {
+        withActionLoading {
+            topicRepository.deleteComment(args.type, commentId)
+        }.onFailure {
+            postToast { it.errMsg }
+        }.onSuccess {
+            reloadComments()
+        }
+    }
+
+    private suspend fun Syntax<UiState<TopicDetailState>, UiSideEffect<TopicDetailSideEffect>>.reloadComments() {
         when (args.type) {
             TopicType.TYPE_GROUP -> onLoadGroupTopicDetail()
             TopicType.TYPE_SUBJECT -> onLoadSubjectTopicDetail()

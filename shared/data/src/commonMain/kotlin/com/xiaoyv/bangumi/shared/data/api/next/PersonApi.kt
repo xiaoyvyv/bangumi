@@ -20,6 +20,7 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.statement.HttpResponse
 
 @AppJsonApiDsl
 interface PersonApi {
@@ -41,7 +42,7 @@ interface PersonApi {
      * @param commentID
      */
     @DELETE("p1/persons/-/comments/{commentID}")
-    suspend fun deletePersonComment(@Path("commentID") commentID: Int): ComposeStatus
+    suspend fun deletePersonComment(@Path("commentID") commentID: Int): HttpResponse
 
     /**
      * 获取人物

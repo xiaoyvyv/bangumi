@@ -59,8 +59,10 @@ fun CommentReplyItem(
     level: Int = 0,
     modifier: Modifier = Modifier,
     isLikeable: Boolean = false,
+    isDeletable: Boolean = false,
     onClickReaction: (ComposeReaction) -> Unit = {},
     onClickUser: (String) -> Unit = {},
+    onClickDelete: () -> Unit = {},
     onClickReport: () -> Unit = { },
     onClick: () -> Unit = {},
 ) {
@@ -213,11 +215,16 @@ fun CommentReplyItem(
                         add(ButtonType.Reaction)
                     }
                     add(ButtonType.Copy)
-                    add(ButtonType.Report)
+                    if (isDeletable) {
+                        add(ButtonType.Delete)
+                    } else {
+                        add(ButtonType.Report)
+                    }
                 },
                 onOptionClick = {
                     when (it.type) {
                         ButtonType.Copy -> actionHandler.copyContent(item.content)
+                        ButtonType.Delete -> onClickDelete()
                         ButtonType.Report -> onClickReport()
                         ButtonType.Reaction -> reactionState.show()
                         else -> Unit
