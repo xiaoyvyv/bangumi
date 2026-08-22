@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.ui.component.layout.state
 
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -259,21 +260,20 @@ fun PagingAppendErrorLayout(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
+            .height(64.dp)
+            .clickable(onClick = onRetry)
+            .padding(horizontal = ContentMargin),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = throwable.errMsg,
+            text = "${throwable.errMsg}，点击重试",
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
-        OutlinedButton(onClick = onRetry) {
-            Text(text = stringResource(Res.string.global_refresh))
-        }
     }
 }
 
