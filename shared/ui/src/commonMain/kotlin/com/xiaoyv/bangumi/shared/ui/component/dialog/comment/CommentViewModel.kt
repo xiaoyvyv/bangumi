@@ -6,6 +6,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.BBCode
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
+import com.xiaoyv.bangumi.shared.core.utils.extractHtmlText
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
 import com.xiaoyv.bangumi.shared.core.utils.onCompletion
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
@@ -14,6 +15,7 @@ import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
+import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import io.github.vinceglb.filekit.PlatformFile
 
@@ -25,6 +27,7 @@ class CommentViewModel(
     private val monoRepository: MonoRepository,
     private val blogRepository: BlogRepository,
     private val indexRepository: IndexRepository,
+    private val timelineRepository: TimelineRepository,
 ) : BaseMviViewModel<CommentState, CommentSideEffect, CommentEvent>() {
 
     override fun createInitialState(): CommentState {
@@ -67,79 +70,71 @@ class CommentViewModel(
     private fun onSendComment() = intent {
         reduce { state.copy(sending = true) }
 
-        val reply = state.anchor.reply
         val comment = state.comment.text.trim()
-        val hasReplyComment = reply != ComposeReply.Empty
+        val payload = state.anchor.createSubmitPayload(comment)
 
-        val result = when (state.anchor.targetType) {
-            TopicType.TYPE_GROUP -> {
-                topicRepository.submitGroupComment(
-                    topicId = state.anchor.targetId,
-                    content = comment,
+        val result = when (val target = state.anchor.target) {
+            is CommentTarget.Topic -> when (target.type) {
+                TopicType.TYPE_GROUP -> topicRepository.submitGroupComment(
+                    topicId = target.id,
+                    content = payload.content,
                     turnstile = state.turnstile,
-                    replyTo = if (hasReplyComment) reply.id else null
+                    replyTo = payload.replyTo,
                 )
-            }
 
-            TopicType.TYPE_SUBJECT -> {
-                topicRepository.submitSubjectComment(
-                    topicId = state.anchor.targetId,
-                    content = comment,
+                TopicType.TYPE_SUBJECT -> topicRepository.submitSubjectComment(
+                    topicId = target.id,
+                    content = payload.content,
                     turnstile = state.turnstile,
-                    replyTo = if (hasReplyComment) reply.id else null
+                    replyTo = payload.replyTo,
                 )
-            }
 
-            TopicType.TYPE_EP -> {
-                topicRepository.submitSubjectEpisodeComment(
-                    episodeId = state.anchor.targetId,
-                    content = comment,
+                TopicType.TYPE_EP -> topicRepository.submitSubjectEpisodeComment(
+                    episodeId = target.id,
+                    content = payload.content,
                     turnstile = state.turnstile,
-                    replyTo = if (hasReplyComment) reply.id else null
+                    replyTo = payload.replyTo,
                 )
-            }
 
-            TopicType.TYPE_PERSON -> {
-                monoRepository.submitMonoComment(
+                TopicType.TYPE_PERSON -> monoRepository.submitMonoComment(
                     type = MonoType.PERSON,
-                    monoId = state.anchor.targetId,
-                    content = comment,
+                    monoId = target.id,
+                    content = payload.content,
                     turnstile = state.turnstile,
-                    replyTo = if (hasReplyComment) reply.id else null
+                    replyTo = payload.replyTo,
                 )
-            }
 
-            TopicType.TYPE_CRT -> {
-                monoRepository.submitMonoComment(
+                TopicType.TYPE_CRT -> monoRepository.submitMonoComment(
                     type = MonoType.CHARACTER,
-                    monoId = state.anchor.targetId,
-                    content = comment,
+                    monoId = target.id,
+                    content = payload.content,
                     turnstile = state.turnstile,
-                    replyTo = if (hasReplyComment) reply.id else null
+                    replyTo = payload.replyTo,
                 )
+
+                TopicType.TYPE_INDEX -> indexRepository.submitIndexComment(
+                    indexId = target.id,
+                    content = payload.content,
+                    turnstile = state.turnstile,
+                    replyTo = payload.replyTo,
+                )
+
+                TopicType.TYPE_BLOG -> blogRepository.submitBlogComment(
+                    blogId = target.id,
+                    content = payload.content,
+                    turnstile = state.turnstile,
+                    replyTo = payload.replyTo,
+                )
+
+                else -> Result.failure(IllegalStateException())
             }
 
-            TopicType.TYPE_INDEX -> {
-                indexRepository.submitIndexComment(
-                    indexId = state.anchor.targetId,
-                    content = comment,
-                    turnstile = state.turnstile,
-                    replyTo = if (hasReplyComment) reply.id else null
-                )
-            }
-
-            TopicType.TYPE_BLOG -> {
-                blogRepository.submitBlogComment(
-                    blogId = state.anchor.targetId,
-                    content = comment,
-                    turnstile = state.turnstile,
-                    replyTo = if (hasReplyComment) reply.id else null
-                )
-            }
-
-            else -> {
-                Result.failure(IllegalStateException())
-            }
+            is CommentTarget.Timeline -> timelineRepository.submitTimelineReply(
+                timelineId = target.id,
+                content = payload.content,
+                turnstile = state.turnstile,
+                replyTo = payload.replyTo,
+            )
         }
 
         result
@@ -150,3 +145,34 @@ class CommentViewModel(
             }
     }
 }
+
+private data class CommentSubmitPayload(
+    val content: String,
+    val replyTo: Long?,
+)
+
+private fun CommentDialogAnchor.createSubmitPayload(comment: String): CommentSubmitPayload {
+    val reply = this.reply
+    if (reply == ComposeReply.Empty) return CommentSubmitPayload(content = comment, replyTo = null)
+    if (reply.relatedID == 0L) return CommentSubmitPayload(content = comment, replyTo = reply.id)
+
+    // ComposeReply content is normalized HTML. Submit only plain text inside the new BBCode quote.
+    val quote = reply.content
+        .extractHtmlText(excludeQuoteBlocks = true)
+        .trim()
+        .replace("[/quote]", "[/ quote]", ignoreCase = true)
+        .let { content ->
+            if (content.length > REPLY_QUOTE_MAX_LENGTH) {
+                content.take(REPLY_QUOTE_MAX_LENGTH) + "..."
+            } else {
+                content
+            }
+        }
+
+    return CommentSubmitPayload(
+        content = "[quote]${quote}[/quote]\n$comment",
+        replyTo = reply.relatedID,
+    )
+}
+
+private const val REPLY_QUOTE_MAX_LENGTH = 100

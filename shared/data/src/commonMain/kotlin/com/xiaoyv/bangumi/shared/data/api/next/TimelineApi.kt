@@ -30,7 +30,7 @@ interface TimelineApi {
     suspend fun createTimelineReply(
         @Path("timelineID") timelineID: Int,
         @Body param: CreateCommentParam? = null,
-    ): HttpResponse
+    ): ComposeId
 
     /**
      * 发送时间线吐槽

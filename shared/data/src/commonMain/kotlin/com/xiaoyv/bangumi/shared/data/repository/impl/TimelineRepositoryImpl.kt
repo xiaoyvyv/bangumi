@@ -105,6 +105,22 @@ class TimelineRepositoryImpl(
         )
     }
 
+    override suspend fun submitTimelineReply(
+        timelineId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?,
+    ): Result<ComposeId> = client.requestNextTimelineApi {
+        createTimelineReply(
+            timelineID = timelineId.toInt(),
+            param = CreateCommentParam(
+                content = content,
+                turnstileToken = turnstile,
+                replyTo = replyTo ?: 0,
+            ),
+        )
+    }
+
     override suspend fun submitTimelineReaction(timelineId: Long, value: String?): Result<Unit> = client.requestNextTimelineApi {
         if (value.isNullOrBlank()) {
             unlikeTimeline(timelineID = timelineId)

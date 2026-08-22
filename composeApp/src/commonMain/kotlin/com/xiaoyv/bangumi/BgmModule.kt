@@ -25,6 +25,7 @@ val commonModule = module {
             monoRepository = get(),
             blogRepository = get(),
             indexRepository = get(),
+            timelineRepository = get(),
         )
     }
 }

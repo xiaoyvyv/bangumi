@@ -16,8 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.timeline_reply_cnt
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
@@ -50,6 +53,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TimelinePageItem(
@@ -137,13 +141,28 @@ fun TimelinePageItem(
             }
         },
         supportingContent = {
-            Text(
-                text = buildString {
-                    append(item.createdAt.formatAgo())
-                    if (item.source.name.isNotBlank()) append(" · ").append(item.source.name)
-                },
-                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
-            )
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = buildString {
+                        append(item.createdAt.formatAgo())
+                        if (item.source.name.isNotBlank()) append(" · ").append(item.source.name)
+                    },
+                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                if (item.replies > 0) {
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = stringResource(Res.string.timeline_reply_cnt, item.replies),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    )
+                }
+            }
         },
         overlineContent = {
             Row(Modifier.fillMaxWidth()) {

@@ -450,3 +450,16 @@ fun String?.preHandleHtml(): String {
         .replace("src=\"/(?!/)".toRegex(), "src=\"https://bgm.tv/")
         .replace("group/topic/350677", "group/topic/391651")
 }
+
+/**
+ * 提取 HTML 中可见的纯文本。
+ *
+ * @param excludeQuoteBlocks 是否排除 `blockquote` 和 `.quote` 引用块。
+ */
+fun String.extractHtmlText(excludeQuoteBlocks: Boolean = false): String {
+    val document = Ksoup.parse(preHandleHtml())
+    if (excludeQuoteBlocks) {
+        document.select("blockquote, .quote").remove()
+    }
+    return document.body().text()
+}

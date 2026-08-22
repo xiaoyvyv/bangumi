@@ -542,7 +542,7 @@ fun PreviewCommentDialogContent() {
         CommentDialogContent(
             dialogState = rememberAlertDialogState(),
             state = CommentState(
-                anchor = CommentDialogAnchor(TopicType.TYPE_UNKNOWN, 0)
+                anchor = CommentDialogAnchor(CommentTarget.Topic(TopicType.TYPE_UNKNOWN, 0))
             ),
             onEvent = {
 

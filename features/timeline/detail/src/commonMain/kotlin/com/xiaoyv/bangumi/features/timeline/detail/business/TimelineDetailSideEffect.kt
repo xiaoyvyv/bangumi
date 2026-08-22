@@ -6,4 +6,6 @@ package com.xiaoyv.bangumi.features.timeline.detail.business
  * @author why
  * @since 2025/1/12
  */
-sealed class TimelineDetailSideEffect
+sealed class TimelineDetailSideEffect {
+    data object OnNavUp : TimelineDetailSideEffect()
+}

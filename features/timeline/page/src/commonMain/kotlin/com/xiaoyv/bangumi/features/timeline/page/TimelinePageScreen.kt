@@ -9,7 +9,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageEvent
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageViewModel
 import com.xiaoyv.bangumi.features.timeline.page.business.koinTimelinePageViewModel
-import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
@@ -31,7 +30,6 @@ fun TimelinePageRoute(
 
     val viewModel: TimelinePageViewModel = koinTimelinePageViewModel(param)
     val pagingItems = viewModel.timelines.collectAsLazyPagingItems()
-    debugLog { "pagingItems${pagingItems.itemCount}" }
 
     viewModel.collectBaseSideEffect {
 

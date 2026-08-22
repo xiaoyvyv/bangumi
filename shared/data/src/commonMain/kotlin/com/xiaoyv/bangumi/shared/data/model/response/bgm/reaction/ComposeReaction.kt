@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentMap
@@ -127,4 +128,39 @@ fun List<ComposeReply>.refreshReaction(
     reaction: ComposeReaction,
 ): ImmutableList<ComposeReply> {
     return map { it.refreshReaction(userManager, commentId, reaction) }.toImmutableList()
+}
+
+/**
+ * 根据当前用户切换时间线的贴贴，并保证一个用户仅保留一个贴贴。
+ *
+ * @param userManager 当前用户信息提供者。
+ * @param reaction 被点击的贴贴。
+ * @return 更新贴贴后的时间线。
+ */
+fun ComposeTimeline.refreshReaction(
+    userManager: UserManager,
+    reaction: ComposeReaction,
+): ComposeTimeline {
+    val self = userManager.userInfo.username
+    val isLiked = reaction.users.any { it.username == self }
+    val reactionsList = reactions
+        .map { it.copy(users = it.users.filter { user -> user.username != self }.toImmutableList()) }
+        .toMutableList()
+
+    val newReactions = if (reactionsList.none { it.value == reaction.value }) {
+        reactionsList.add(reaction.copy(users = persistentListOf(userManager.userInfo)))
+        reactionsList
+    } else if (!isLiked) {
+        reactionsList.map {
+            if (it.value == reaction.value) {
+                it.copy(users = (it.users + userManager.userInfo).toImmutableList())
+            } else {
+                it
+            }
+        }
+    } else {
+        reactionsList
+    }
+
+    return copy(reactions = newReactions.filter { it.users.isNotEmpty() }.toImmutableList())
 }

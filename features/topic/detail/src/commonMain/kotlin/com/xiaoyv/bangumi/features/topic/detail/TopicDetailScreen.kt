@@ -62,6 +62,7 @@ import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.comment.CommentDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.comment.CommentDialogAnchor
+import com.xiaoyv.bangumi.shared.ui.component.dialog.comment.CommentTarget
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.emoji.PopupReaction
 import com.xiaoyv.bangumi.shared.ui.component.emoji.ReactionGroup
@@ -169,17 +170,19 @@ private fun TopicDetailScreen(
                 dialogState = commentDialogState,
                 anchor = remember(uiState.data) {
                     CommentDialogAnchor(
-                        targetType = uiState.data.type,
-                        targetId = when (uiState.data.type) {
-                            TopicType.TYPE_GROUP -> uiState.data.id
-                            TopicType.TYPE_SUBJECT -> uiState.data.id
-                            TopicType.TYPE_EP -> uiState.data.episode.id
-                            TopicType.TYPE_PERSON -> uiState.data.mono.id
-                            TopicType.TYPE_CRT -> uiState.data.mono.mono.id
-                            TopicType.TYPE_INDEX -> uiState.data.index.id
-                            TopicType.TYPE_BLOG -> uiState.data.blog.id
-                            else -> 0
-                        }
+                        target = CommentTarget.Topic(
+                            type = uiState.data.type,
+                            id = when (uiState.data.type) {
+                                TopicType.TYPE_GROUP -> uiState.data.id
+                                TopicType.TYPE_SUBJECT -> uiState.data.id
+                                TopicType.TYPE_EP -> uiState.data.episode.id
+                                TopicType.TYPE_PERSON -> uiState.data.mono.id
+                                TopicType.TYPE_CRT -> uiState.data.mono.mono.id
+                                TopicType.TYPE_INDEX -> uiState.data.index.id
+                                TopicType.TYPE_BLOG -> uiState.data.blog.id
+                                else -> 0
+                            },
+                        ),
                     )
                 },
                 onSendCommentSuccess = { replyId ->
@@ -416,17 +419,19 @@ private fun TopicDetailScreenContent(
                     dialogState = commentDialogState,
                     anchor = remember(state) {
                         CommentDialogAnchor(
-                            targetType = state.type,
-                            targetId = when (state.type) {
-                                TopicType.TYPE_GROUP -> state.id
-                                TopicType.TYPE_SUBJECT -> state.id
-                                TopicType.TYPE_EP -> state.episode.id
-                                TopicType.TYPE_PERSON -> state.mono.id
-                                TopicType.TYPE_CRT -> state.mono.mono.id
-                                TopicType.TYPE_INDEX -> state.index.id
-                                TopicType.TYPE_BLOG -> state.blog.id
-                                else -> 0
-                            },
+                            target = CommentTarget.Topic(
+                                type = state.type,
+                                id = when (state.type) {
+                                    TopicType.TYPE_GROUP -> state.id
+                                    TopicType.TYPE_SUBJECT -> state.id
+                                    TopicType.TYPE_EP -> state.episode.id
+                                    TopicType.TYPE_PERSON -> state.mono.id
+                                    TopicType.TYPE_CRT -> state.mono.mono.id
+                                    TopicType.TYPE_INDEX -> state.index.id
+                                    TopicType.TYPE_BLOG -> state.blog.id
+                                    else -> 0
+                                },
+                            ),
                             reply = item
                         )
                     },

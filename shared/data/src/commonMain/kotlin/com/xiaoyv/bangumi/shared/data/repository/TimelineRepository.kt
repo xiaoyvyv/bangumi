@@ -18,6 +18,13 @@ interface TimelineRepository {
 
     suspend fun submitCreateTimeline(content: String, turnstileToken: String): Result<ComposeId>
 
+    suspend fun submitTimelineReply(
+        timelineId: Long,
+        content: String,
+        turnstile: String,
+        replyTo: Long?,
+    ): Result<ComposeId>
+
     suspend fun submitTimelineReaction(timelineId: Long, value: String?): Result<Unit>
 
     suspend fun submitDeleteTimeline(timelineId: Long): Result<Unit>

@@ -14,15 +14,49 @@ data class CommentState(
     val turnstile: String = ""
 )
 
+/**
+ * 评论弹窗的目标对象。
+ */
+@Immutable
+sealed interface CommentTarget {
+    /**
+     * 弹窗实例的稳定目标标识。
+     */
+    val key: String
+
+    /**
+     * 话题类评论目标。
+     *
+     * @param type 话题目标类型。
+     * @param id 话题目标 ID。
+     */
+    @Immutable
+    data class Topic(
+        @TopicType val type: String,
+        val id: Long,
+    ) : CommentTarget {
+        override val key = "topic-$type-$id"
+    }
+
+    /**
+     * 时间线评论目标。
+     *
+     * @param id 时间线 ID。
+     */
+    @Immutable
+    data class Timeline(val id: Long) : CommentTarget {
+        override val key = "timeline-$id"
+    }
+}
+
 @Immutable
 data class CommentDialogAnchor(
-    @TopicType val targetType: String,
-    val targetId: Long,
+    val target: CommentTarget,
     val reply: ComposeReply = ComposeReply.Empty,
 ) {
-    val key = targetType + "-" + targetId + "-" + reply.id
+    val key = target.key + "-" + reply.id
 
     companion object {
-        val Empty = CommentDialogAnchor(TopicType.TYPE_UNKNOWN, 0)
+        val Empty = CommentDialogAnchor(CommentTarget.Topic(TopicType.TYPE_UNKNOWN, 0))
     }
 }
