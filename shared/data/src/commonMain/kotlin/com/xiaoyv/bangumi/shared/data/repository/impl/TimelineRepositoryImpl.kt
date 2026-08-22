@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
@@ -13,9 +12,10 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryStepUniquePagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createStepUniquePagingPager
 
 class TimelineRepositoryImpl(
     private val client: BgmApiClient,
@@ -29,13 +29,13 @@ class TimelineRepositoryImpl(
         @TimelineTarget target: String,
         @TimelineCat type: Int,
         username: String
-    ): Pager<Int, ComposeTimeline> {
+    ): MemoryPagingController<ComposeTimeline, Long> {
         // 官方 API 暂不支持分类，这里用 Web 代替
         val timelineCat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN }
         if (timelineCat != null && target != TimelineTarget.USER) {
-            return createNetworkPageLimitPagingPager(
+            return createMemoryPageLimitPagingController(
                 pagingConfig = createPagingConfig(20),
-                keySelector = { it.id },
+                idSelector = { it.id },
                 onLoadData = {
                     client.requestNextTimelineApi {
                         getTimelineWebApi(
@@ -59,9 +59,9 @@ class TimelineRepositoryImpl(
                 }
             )
         }
-        return createStepUniquePagingPager(
+        return createMemoryStepUniquePagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = {
                 val displays = if (target == TimelineTarget.USER) {
                     client.requestNextUserApi {

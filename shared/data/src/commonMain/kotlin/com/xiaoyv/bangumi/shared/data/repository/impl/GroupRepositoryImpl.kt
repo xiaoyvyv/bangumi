@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.list.ListGroupType
 import com.xiaoyv.bangumi.shared.core.utils.requireNoError
@@ -9,7 +8,8 @@ import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.group.ListGroupParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.repository.GroupRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
 
 class GroupRepositoryImpl(
     private val client: BgmApiClient,
@@ -17,10 +17,10 @@ class GroupRepositoryImpl(
     private val preferenceStore: PreferenceStore,
 ) : GroupRepository {
 
-    override fun fetchGroupPager(param: ListGroupParam): Pager<Int, ComposeGroup> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchGroupPager(param: ListGroupParam): MemoryPagingController<ComposeGroup, String> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.name },
+            idSelector = { it.name },
             onLoadData = {
                 when (param.type) {
                     ListGroupType.BROWSER -> client.nextGroupApi.getGroups(

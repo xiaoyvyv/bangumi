@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.login_first_tip
@@ -33,8 +32,9 @@ import com.xiaoyv.bangumi.shared.data.parser.bgm.BlogParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.GroupParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.IndexParser
 import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
 import io.ktor.client.statement.bodyAsText
 import kotlinx.collections.immutable.toPersistentList
@@ -50,11 +50,11 @@ class UgcRepositoryImpl(
     private val userManager: UserManager,
 ) : UgcRepository {
 
-    override fun fetchRaKuenPager(@RakuenType type: String, filter: String?): Pager<Int, ComposeRakuenTopic> {
-        return createNetworkPageLimitPagingPager(
+    override fun fetchRaKuenPager(@RakuenType type: String, filter: String?): MemoryPagingController<ComposeRakuenTopic, String> {
+        return createMemoryPageLimitPagingController(
             pagingConfig = pagingConfig,
             onlyOnePage = true,
-            keySelector = { it.key },
+            idSelector = { it.key },
             onLoadData = {
                 // 登录检测
                 if (type == RakuenType.MY_GROUP && !userManager.isLogin) {
@@ -122,10 +122,10 @@ class UgcRepositoryImpl(
         )
     }
 
-    override fun fetchBlogPager(param: ListBlogParam): Pager<Int, ComposeBlogDisplay> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchBlogPager(param: ListBlogParam): MemoryPagingController<ComposeBlogDisplay, Long> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.uniqueKey },
+            idSelector = { it.uniqueKey },
             onLoadData = { offset ->
                 when (param.type) {
                     // 用户创建的日志
@@ -174,11 +174,11 @@ class UgcRepositoryImpl(
         )
     }
 
-    override fun fetchIndexPager(param: ListIndexParam): Pager<Int, ComposeIndex> {
-        return createNetworkPageLimitPagingPager(
+    override fun fetchIndexPager(param: ListIndexParam): MemoryPagingController<ComposeIndex, Long> {
+        return createMemoryPageLimitPagingController(
             pagingConfig = createPagingConfig(20),
             onlyOnePage = true,
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = { page ->
                 with(indexParser) {
                     when (param.type) {
@@ -232,10 +232,10 @@ class UgcRepositoryImpl(
         )
     }
 
-    override fun fetchIndexRelatePager(param: ListIndexRelatedParam): Pager<Int, ComposeIndexRelated> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchIndexRelatePager(param: ListIndexRelatedParam): MemoryPagingController<ComposeIndexRelated, Long> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = {
                 client.nextIndexApi.getIndexRelated(
                     indexID = param.indexId,

@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.CollectionWebPath
@@ -40,8 +39,9 @@ import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicTableParser
 import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -64,19 +64,19 @@ class SubjectRepositoryImpl(
     private val databaseRepository: DatabaseRepository,
 ) : SubjectRepository {
 
-    override fun fetchSubjectPager(param: ListSubjectParam): Pager<Int, ComposeSubjectDisplay> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchSubjectPager(param: ListSubjectParam): MemoryPagingController<ComposeSubjectDisplay, Long> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.subject.id },
+            idSelector = { it.subject.id },
             onLoadData = {
                 fetchSubjectList(param, it, pagingConfig.pageSize).getOrThrow()
             }
         )
     }
 
-    override fun fetchSubjectCommentPager(subjectId: Long, collectionType: Int): Pager<Int, ComposeReply> {
-        return createNetworkOffsetLimitPagingPager(
-            keySelector = { it.id },
+    override fun fetchSubjectCommentPager(subjectId: Long, collectionType: Int): MemoryPagingController<ComposeReply, Long> {
+        return createMemoryOffsetLimitPagingController(
+            idSelector = { it.id },
             pagingConfig = pagingConfig,
             onLoadData = {
                 client.requestNextSubjectApi {
@@ -92,10 +92,10 @@ class SubjectRepositoryImpl(
     }
 
 
-    override fun fetchSubjectTagPager(param: ListTagParam): Pager<Int, ComposeTag> {
-        return createNetworkPageLimitPagingPager(
+    override fun fetchSubjectTagPager(param: ListTagParam): MemoryPagingController<ComposeTag, String> {
+        return createMemoryPageLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.name },
+            idSelector = { it.name },
             onlyOnePage = param.type == ListTagType.SEARCH,
             onLoadData = {
                 when (param.type) {

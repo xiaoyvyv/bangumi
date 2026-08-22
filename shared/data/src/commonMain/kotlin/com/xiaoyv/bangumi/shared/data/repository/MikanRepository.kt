@@ -1,9 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanGroup
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 /**
  * [MikanRepository]
@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
  * @since 2025/1/14
  */
 interface MikanRepository {
-    fun fetchGardenResourcePager(param: SearchMagnetBody): Pager<Int, ComposeMikanResource>
+    fun fetchGardenResourcePager(param: SearchMagnetBody): MemoryPagingController<ComposeMikanResource, String>
 
     suspend fun fetchMikanIdMapByEmbed(): Result<Map<String, String>>
 

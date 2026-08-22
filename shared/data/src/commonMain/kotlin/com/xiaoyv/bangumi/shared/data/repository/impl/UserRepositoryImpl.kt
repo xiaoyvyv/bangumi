@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.System
@@ -39,8 +38,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.statement.bodyAsText
@@ -60,19 +60,19 @@ class UserRepositoryImpl(
     private val pagingConfig: PagingConfig,
 ) : UserRepository {
 
-    override fun fetchUserMessagePager(@MessageBoxType type: String): Pager<Int, ComposeMessage> {
-        return createNetworkPageLimitPagingPager(
-            keySelector = { it.id },
+    override fun fetchUserMessagePager(@MessageBoxType type: String): MemoryPagingController<ComposeMessage, Long> {
+        return createMemoryPageLimitPagingController(
+            idSelector = { it.id },
             pagingConfig = pagingConfig,
             onLoadData = { fetchUserMessageList(type, it).getOrThrow() }
         )
     }
 
 
-    override fun fetchUserPager(param: ListUserParam): Pager<Int, ComposeUserDisplay> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchUserPager(param: ListUserParam): MemoryPagingController<ComposeUserDisplay, String> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.user.username },
+            idSelector = { it.user.username },
             onLoadData = {
                 fetchUserListByPage(param, it, pagingConfig.pageSize).result
             }

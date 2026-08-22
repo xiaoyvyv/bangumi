@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
@@ -12,17 +11,18 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
 
 class TopicRepositoryImpl(
     private val client: BgmApiClient,
     private val pagingConfig: PagingConfig,
 ) : TopicRepository {
 
-    override fun fetchTopicPager(param: ListTopicParam): Pager<Int, ComposeTopic> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchTopicPager(param: ListTopicParam): MemoryPagingController<ComposeTopic, Long> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = { offset ->
                 when (param.type) {
                     ListTopicType.SUBJECT_ALL -> client.nextSubjectApi.getRecentSubjectTopics(

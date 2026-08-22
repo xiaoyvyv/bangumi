@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.subject.detail.page.rant
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
@@ -16,9 +15,6 @@ import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.update
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -37,19 +33,9 @@ class SubjectDetailRantViewModel(
     private val topicRepository: TopicRepository,
     private val userManager: UserManager
 ) : BaseViewModel<Any, Any, SubjectDetailRantEvent>() {
-    private val updatedComments = MutableStateFlow<Map<Long, ComposeReply>>(emptyMap())
-    private val subjectCommentPager = subjectRepository.fetchSubjectCommentPager(subjectId, collectionType)
-    private val rawSubjectComments = subjectCommentPager.flow.cachedIn(viewModelScope)
+    private val subjectCommentController = subjectRepository.fetchSubjectCommentPager(subjectId, collectionType)
 
-    internal val subjectComments = combine(rawSubjectComments, updatedComments) { pagingData, updates ->
-        if (updates.isEmpty()) {
-            pagingData
-        } else {
-            pagingData.map { comment ->
-                comment.updateCommentById(updates)
-            }
-        }
-    }.cachedIn(viewModelScope)
+    internal val subjectComments = subjectCommentController.flow.cachedIn(viewModelScope)
 
     override fun createInitialState() = Unit
 
@@ -98,9 +84,7 @@ class SubjectDetailRantViewModel(
                 reactions = newReactions.filter { it.users.isNotEmpty() }.toImmutableList()
             )
 
-            updatedComments.update { map ->
-                map + (comment.id to updatedComment)
-            }
+            subjectCommentController.replaceById(comment.id, updatedComment)
         }
     }
 }

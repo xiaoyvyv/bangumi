@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.MonoCastType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
@@ -23,7 +22,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.parser.bgm.MonoParser
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
 
 /**
  * [MonoRepositoryImpl]
@@ -36,10 +36,10 @@ class MonoRepositoryImpl(
     private val monoParser: MonoParser,
 ) : MonoRepository {
 
-    override fun fetchMonoListPager(param: ListMonoParam): Pager<Int, ComposeMonoDisplay> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchMonoListPager(param: ListMonoParam): MemoryPagingController<ComposeMonoDisplay, String> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.key },
+            idSelector = { it.key },
             onLoadData = {
                 fetchMonoListByType(param, it, pagingConfig.pageSize).getOrThrow()
             }
@@ -53,10 +53,10 @@ class MonoRepositoryImpl(
         }
     }
 
-    override fun fetchPersonCastPager(param: ListPersonCastParam): Pager<Int, ComposeMonoInfo> {
-        return createNetworkOffsetLimitPagingPager(
+    override fun fetchPersonCastPager(param: ListPersonCastParam): MemoryPagingController<ComposeMonoInfo, Long> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.mono.id },
+            idSelector = { it.mono.id },
             onLoadData = {
                 client.nextPersonApi.getPersonCasts(
                     personID = param.personId,

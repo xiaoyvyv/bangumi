@@ -3,13 +3,10 @@ package com.xiaoyv.bangumi.features.timeline.page.business
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.filter
-import androidx.paging.map
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
-import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
@@ -17,7 +14,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelin
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.combine
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -37,24 +33,15 @@ class TimelinePageViewModel(
     param: ListTimelineParam,
     private val timelineRepository: TimelineRepository,
     private val userManager: UserManager,
-    private val personalStateStore: PersonalStateStore,
 ) : BaseViewModel<TimelinePageState, TimelinePageSideEffect, TimelinePageEvent.Action>() {
 
-    private val timelinePager = timelineRepository.fetchTimelineDisplayPager(
+    private val timelineController = timelineRepository.fetchTimelineDisplayPager(
         target = param.timelineMode,
         type = param.timelineCat,
         username = param.username
     )
 
-    private val flow = timelinePager.flow.cachedIn(viewModelScope)
-
-    internal val timelines = flow
-        .combine(personalStateStore.state) { pagingData, personalState ->
-            pagingData
-                .filter { it.id !in personalState.deletedTimelineIds }
-                .map { personalState.timelines[it.id] ?: it }
-        }
-        .cachedIn(viewModelScope)
+    internal val timelines = timelineController.flow.cachedIn(viewModelScope)
 
     override fun createInitialState() = TimelinePageState()
 
@@ -104,7 +91,7 @@ class TimelinePageViewModel(
             val updatedTimeline = timeline.copy(
                 reactions = newReactions.filter { it.users.isNotEmpty() }.toImmutableList()
             )
-            personalStateStore.updateTimeline(timeline.id, updatedTimeline)
+            timelineController.replaceById(timeline.id, updatedTimeline)
         }
     }
 
@@ -114,7 +101,7 @@ class TimelinePageViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            personalStateStore.deleteTimeline(timeline.id)
+            timelineController.removeById(timeline.id)
         }
     }
 }

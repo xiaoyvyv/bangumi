@@ -1,6 +1,7 @@
 package com.kyant.backdrop.utils
 
 import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.skiaPaint
 import org.jetbrains.skia.MaskFilter
 
 private fun FilterBlurMode.toSkiaFilterBlurMode(): org.jetbrains.skia.FilterBlurMode = when (this) {
@@ -14,7 +15,7 @@ actual fun Paint.applyBlurMaskFilter(
     radius: Float,
     mode: FilterBlurMode
 ) {
-    this.asFrameworkPaint().maskFilter =
+    this.skiaPaint.maskFilter =
         if (radius > 0f) {
             MaskFilter.makeBlur(mode.toSkiaFilterBlurMode(), radius / 2, true)
         } else {

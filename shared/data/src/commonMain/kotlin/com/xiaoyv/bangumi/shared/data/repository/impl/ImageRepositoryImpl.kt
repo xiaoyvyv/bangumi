@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.compose.ui.graphics.Color
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.list.ListAlbumType
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
@@ -13,8 +12,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
 import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
 import com.xiaoyv.bangumi.shared.data.repository.ImageRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkPageLimitPagingPager
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createStepUniquePagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryStepUniquePagingController
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -32,10 +32,10 @@ class ImageRepositoryImpl(
     private val subjectParser: SubjectParser,
 ) : ImageRepository {
 
-    override fun fetchAlbumPager(param: ListAlbumParam): Pager<Int, ComposeGallery> {
-        return createNetworkPageLimitPagingPager(
+    override fun fetchAlbumPager(param: ListAlbumParam): MemoryPagingController<ComposeGallery, String> {
+        return createMemoryPageLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = { page ->
                 fetchAlbumList(param, page, pagingConfig.pageSize).getOrThrow()
             }
@@ -46,10 +46,10 @@ class ImageRepositoryImpl(
     override fun fetchAnimePictures(
         searchTags: String?,
         deniedTags: String?,
-    ): Pager<Int, ComposeGallery> {
-        return createNetworkPageLimitPagingPager(
+    ): MemoryPagingController<ComposeGallery, String> {
+        return createMemoryPageLimitPagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = { page ->
                 val picture = client.imageApi.fetchAnimePictures(
                     searchTags = searchTags,
@@ -73,10 +73,10 @@ class ImageRepositoryImpl(
         )
     }
 
-    override fun fetchPixivPictures(tag: String): Pager<Int, ComposeGallery> {
-        return createStepUniquePagingPager(
+    override fun fetchPixivPictures(tag: String): MemoryPagingController<ComposeGallery, String> {
+        return createMemoryStepUniquePagingController(
             pagingConfig = pagingConfig,
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = { key ->
                 val offset = key ?: 0
                 val illusts = client.requestPixivApi {

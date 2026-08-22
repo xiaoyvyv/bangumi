@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val timelinePageModule = module {
     viewModel { (param: ListTimelineParam) ->
-        TimelinePageViewModel(param, get(), get(), get())
+        TimelinePageViewModel(param, get(), get())
     }
 }

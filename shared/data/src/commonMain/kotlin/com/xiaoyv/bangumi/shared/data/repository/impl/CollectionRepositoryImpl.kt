@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
@@ -16,7 +15,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
-import com.xiaoyv.bangumi.shared.data.repository.datasource.createNetworkOffsetLimitPagingPager
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -34,10 +34,10 @@ class CollectionRepositoryImpl(
         @SubjectType subjectType: Int,
         @CollectionType type: Int,
         fetchEpisode: Boolean,
-    ): Pager<Int, ComposeSubject> {
-        return createNetworkOffsetLimitPagingPager(
+    ): MemoryPagingController<ComposeSubject, Long> {
+        return createMemoryOffsetLimitPagingController(
             pagingConfig = createPagingConfig(10),
-            keySelector = { it.id },
+            idSelector = { it.id },
             onLoadData = {
                 fetchMyCollectionSubject(
                     subjectType = subjectType,

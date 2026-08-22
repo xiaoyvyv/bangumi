@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
@@ -15,15 +14,16 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 interface UgcRepository {
-    fun fetchRaKuenPager(@RakuenType type: String, filter: String? = null): Pager<Int, ComposeRakuenTopic>
+    fun fetchRaKuenPager(@RakuenType type: String, filter: String? = null): MemoryPagingController<ComposeRakuenTopic, String>
 
-    fun fetchBlogPager(param: ListBlogParam): Pager<Int, ComposeBlogDisplay>
+    fun fetchBlogPager(param: ListBlogParam): MemoryPagingController<ComposeBlogDisplay, Long>
 
-    fun fetchIndexPager(param: ListIndexParam): Pager<Int, ComposeIndex>
+    fun fetchIndexPager(param: ListIndexParam): MemoryPagingController<ComposeIndex, Long>
 
-    fun fetchIndexRelatePager(param: ListIndexRelatedParam): Pager<Int, ComposeIndexRelated>
+    fun fetchIndexRelatePager(param: ListIndexRelatedParam): MemoryPagingController<ComposeIndexRelated, Long>
 
     suspend fun fetchIndexFocus(): Result<List<ComposeIndexFocus>>
 

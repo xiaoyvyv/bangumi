@@ -1,18 +1,18 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 interface TimelineRepository {
     fun fetchTimelineDisplayPager(
         @TimelineTarget target: String,
         @TimelineCat type: Int,
         username: String
-    ): Pager<Int, ComposeTimeline>
+    ): MemoryPagingController<ComposeTimeline, Long>
 
     suspend fun fetchTimelineReplies(timelineId: Long): Result<List<ComposeReply>>
 

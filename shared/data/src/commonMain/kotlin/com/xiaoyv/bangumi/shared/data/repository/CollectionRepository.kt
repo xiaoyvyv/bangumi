@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
@@ -8,6 +7,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 interface CollectionRepository {
 
@@ -15,7 +15,7 @@ interface CollectionRepository {
         @SubjectType subjectType: Int = 0,
         @CollectionType type: Int = 0,
         fetchEpisode: Boolean = false,
-    ): Pager<Int, ComposeSubject>
+    ): MemoryPagingController<ComposeSubject, Long>
 
     /**
      * 收藏或取消收藏 人物或角色

@@ -1,13 +1,13 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 interface TopicRepository {
-    fun fetchTopicPager(param: ListTopicParam): Pager<Int, ComposeTopic>
+    fun fetchTopicPager(param: ListTopicParam): MemoryPagingController<ComposeTopic, Long>
 
 
     suspend fun fetchTopicDetail(topicId: Long, @TopicType type: String): Result<ComposeTopic>

@@ -1,10 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository.datasource
 
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
-import com.xiaoyv.bangumi.shared.core.utils.debugLog
 
 fun createPagingConfig(pageSize: Int): PagingConfig {
     return PagingConfig(
@@ -14,140 +10,76 @@ fun createPagingConfig(pageSize: Int): PagingConfig {
     )
 }
 
-fun <T : Any, K> createNetworkPageLimitPagingPager(
+fun <T : Any, Id : Any> createMemoryPageLimitPagingController(
     pagingConfig: PagingConfig,
+    idSelector: (T) -> Id,
     onLoadData: suspend (Int) -> List<T>,
-    keySelector: ((T) -> K)? = null,
     onlyOnePage: Boolean = false,
-): Pager<Int, T> = Pager(
-    config = pagingConfig,
-    pagingSourceFactory = {
-        PageLimitDataSource(
-            onLoadData = onLoadData,
-            onlyOnePage = onlyOnePage,
-            keySelector = keySelector
-        )
-    }
-)
+): MemoryPagingController<T, Id> {
+    val store = MemoryPagingStore(
+        idSelector = idSelector,
+        onLoadData = { page ->
+            val currentPage = page ?: 1
+            val data = onLoadData(currentPage)
 
-fun <T : Any, K> createNetworkOffsetLimitPagingPager(
+            PageResult(
+                data = data,
+                nextCursor = when {
+                    onlyOnePage -> null
+                    data.isEmpty() -> null
+                    else -> currentPage + 1
+                }
+            )
+        }
+    )
+
+    return DefaultMemoryPagingController(
+        store = store,
+        pagingConfig = pagingConfig,
+    )
+}
+
+fun <T : Any, Id : Any> createMemoryOffsetLimitPagingController(
     pagingConfig: PagingConfig,
-    keySelector: ((T) -> K)? = null,
+    idSelector: (T) -> Id,
     onLoadData: suspend (Int) -> List<T>,
-): Pager<Int, T> = Pager(
-    config = pagingConfig,
-    pagingSourceFactory = {
-        OffsetLimitDataSource(
-            onLoadData = onLoadData,
-            keySelector = keySelector
-        )
-    }
-)
-
-/**
- * 通用的可以扩展的分页器
- *
- * @param onLoadData 返回当页数据和下一页的Key，Key 为空则没有更多了
- */
-fun <T : Any, K : Any> createStepUniquePagingPager(
-    pagingConfig: PagingConfig,
-    keySelector: ((T) -> Any)? = null,
-    onLoadData: suspend (K?) -> Pair<List<T>, K?>,
-): Pager<K, T> = Pager(
-    config = pagingConfig,
-    pagingSourceFactory = {
-        KeyLimitDataSource(
-            onLoadData = onLoadData,
-            keySelector = keySelector
-        )
-    }
-)
-
-
-class PageLimitDataSource<T : Any, K>(
-    private val onLoadData: suspend (Int) -> List<T>,
-    private val keySelector: ((T) -> K)? = null,
-    private val onlyOnePage: Boolean = false,
-) : PagingSource<Int, T>() {
-    private val initialKey = 1
-    private val seen = mutableSetOf<K>()
-
-    override fun getRefreshKey(state: PagingState<Int, T>) = null
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
-        try {
-            val page = params.key ?: initialKey
-            if (page <= 1) seen.clear()
-            val data = onLoadData(page)
-
-            // 是否去重
-            val loadData = if (keySelector == null) data else data.filter { seen.add(keySelector(it)) }
-            return LoadResult.Page(
-                data = loadData,
-                prevKey = if (page > 1) page - 1 else null,
-                nextKey = if (loadData.isEmpty()) null else page + 1,
-            )
-        } catch (e: Exception) {
-            return LoadResult.Error(e)
-        }
-    }
-}
-
-class KeyLimitDataSource<T : Any, K : Any>(
-    private val onLoadData: suspend (K?) -> Pair<List<T>, K?>,
-    private val keySelector: ((T) -> Any)?,
-) : PagingSource<K, T>() {
-    private val initialKey = null
-    private val seen = mutableSetOf<Any>()
-
-    override fun getRefreshKey(state: PagingState<K, T>) = null
-
-    override suspend fun load(params: LoadParams<K>): LoadResult<K, T> {
-        try {
-            val offset = params.key ?: initialKey
-            val res = onLoadData(offset)
-            val data = res.first
-            val nextKey = res.second
-            val end = nextKey == null
-
-            // 是否去重
-            val loadData = if (keySelector == null) data else data.filter { seen.add(keySelector(it)) }
-            return LoadResult.Page(
-                data = loadData,
-                prevKey = null,
-                nextKey = if (end) null else nextKey,
-            )
-        } catch (e: Exception) {
-            return LoadResult.Error(e)
-        }
-    }
-}
-
-
-class OffsetLimitDataSource<T : Any, K>(
-    private val onLoadData: suspend (Int) -> List<T>,
-    private val keySelector: ((T) -> K)?,
-) : PagingSource<Int, T>() {
-    private val initialKey = 0
-    private val seen = mutableSetOf<K>()
-
-    override fun getRefreshKey(state: PagingState<Int, T>) = null
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
-        try {
-            val offset = params.key ?: initialKey
+): MemoryPagingController<T, Id> {
+    val store = MemoryPagingStore(
+        idSelector = idSelector,
+        onLoadData = { cursor ->
+            val offset = cursor ?: 0
             val data = onLoadData(offset)
-            val end = data.size < params.loadSize
-            debugLog { "end:$end,${data.size}" }
-            // 是否去重
-            val loadData = if (keySelector == null) data else data.filter { seen.add(keySelector(it)) }
-            return LoadResult.Page(
-                data = loadData,
-                prevKey = if (offset >= params.loadSize) offset - params.loadSize else null,
-                nextKey = if (end) null else offset + params.loadSize,
+            PageResult(
+                data = data,
+                nextCursor = if (data.size < pagingConfig.pageSize) null else offset + data.size,
             )
-        } catch (e: Exception) {
-            return LoadResult.Error(e)
         }
-    }
+    )
+
+    return DefaultMemoryPagingController(
+        store = store,
+        pagingConfig = pagingConfig,
+    )
+}
+
+fun <T : Any, Id : Any> createMemoryStepUniquePagingController(
+    pagingConfig: PagingConfig,
+    idSelector: (T) -> Id,
+    onLoadData: suspend (Int?) -> Pair<List<T>, Int?>,
+): MemoryPagingController<T, Id> {
+    val store = MemoryPagingStore(
+        idSelector = idSelector,
+        onLoadData = {
+            val result = onLoadData(it)
+            PageResult(
+                data = result.first,
+                nextCursor = result.second,
+            )
+        }
+    )
+
+    return DefaultMemoryPagingController(
+        store = store,
+        pagingConfig = pagingConfig,
+    )
 }

@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.EpisodeType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -19,6 +18,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectW
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -29,13 +29,13 @@ import kotlinx.coroutines.flow.Flow
  */
 interface SubjectRepository {
 
-    fun fetchSubjectPager(param: ListSubjectParam): Pager<Int, ComposeSubjectDisplay>
+    fun fetchSubjectPager(param: ListSubjectParam): MemoryPagingController<ComposeSubjectDisplay, Long>
 
-    fun fetchSubjectCommentPager(subjectId: Long, @CollectionType collectionType: Int): Pager<Int, ComposeReply>
+    fun fetchSubjectCommentPager(subjectId: Long, @CollectionType collectionType: Int): MemoryPagingController<ComposeReply, Long>
 
     fun fetchSearchSuggestion(query: String): Flow<Result<ComposeDoubanSuggest>>
 
-    fun fetchSubjectTagPager(param: ListTagParam): Pager<Int, ComposeTag>
+    fun fetchSubjectTagPager(param: ListTagParam): MemoryPagingController<ComposeTag, String>
 
     suspend fun fetchSubjectPreview(subject: ComposeSubject): Result<ComposeDoubanPhoto>
 

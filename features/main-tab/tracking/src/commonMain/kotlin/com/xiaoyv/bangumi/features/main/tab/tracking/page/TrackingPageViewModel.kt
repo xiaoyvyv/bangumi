@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.main.tab.tracking.page
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
@@ -18,7 +17,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.combine
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -37,27 +35,13 @@ class TrackingPageViewModel(
     private val personalStateStore: PersonalStateStore,
 ) : BaseViewModel<TrackingPageState, Any, TrackingPageEvent.Action>() {
 
-    private val userCollectionPager = collectionRepository.fetchMyCollectionSubjectPager(
+    private val userCollectionController = collectionRepository.fetchMyCollectionSubjectPager(
         subjectType = type,
         type = CollectionType.DOING,
         fetchEpisode = true
     )
 
-    val collections = userCollectionPager.flow
-        .cachedIn(viewModelScope)
-        .combine(personalStateStore.state) { pagingData, personalState ->
-            pagingData.map { subject ->
-                personalState.subjects[subject.id]?.let { item ->
-                    item.copy(
-                        episodes = subject.episodes
-                            .map { if (it.splitter != null) it else item.episodes.find { ep -> ep.id == it.id } ?: it }
-                            .toImmutableList()
-                            .grouped()
-                    )
-                } ?: subject
-            }
-        }
-        .cachedIn(viewModelScope)
+    val collections = userCollectionController.flow.cachedIn(viewModelScope)
 
     override fun createInitialState(): TrackingPageState = TrackingPageState()
 
@@ -86,6 +70,7 @@ class TrackingPageViewModel(
             postToast { it.errMsg }
         }.onSuccess {
             personalStateStore.updateCollectionSubject(subject, update)
+            userCollectionController.replaceById(subject.id, mergePersonalSubject(subject))
         }
     }
 
@@ -100,6 +85,17 @@ class TrackingPageViewModel(
             postToast { it.errMsg }
         }.onSuccess {
             personalStateStore.updateCollectionEpisode(subject, episodes.map { it.id }, type)
+            userCollectionController.replaceById(subject.id, mergePersonalSubject(subject))
         }
+    }
+
+    private fun mergePersonalSubject(subject: ComposeSubject): ComposeSubject {
+        val updated = personalStateStore.state.value.subjects[subject.id] ?: return subject
+        return updated.copy(
+            episodes = subject.episodes
+                .map { if (it.splitter != null) it else updated.episodes.find { ep -> ep.id == it.id } ?: it }
+                .toImmutableList()
+                .grouped()
+        )
     }
 }

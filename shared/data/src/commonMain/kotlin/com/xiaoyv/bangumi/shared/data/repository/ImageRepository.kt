@@ -1,9 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.data.model.request.list.album.ListAlbumParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 /**
  * [ImageRepository]
@@ -12,14 +12,14 @@ import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
  */
 interface ImageRepository {
 
-    fun fetchAlbumPager(param: ListAlbumParam): Pager<Int, ComposeGallery>
+    fun fetchAlbumPager(param: ListAlbumParam): MemoryPagingController<ComposeGallery, String>
 
     fun fetchAnimePictures(
         searchTags: String? = null,
         deniedTags: String? = null,
-    ): Pager<Int, ComposeGallery>
+    ): MemoryPagingController<ComposeGallery, String>
 
-    fun fetchPixivPictures(tag: String): Pager<Int, ComposeGallery>
+    fun fetchPixivPictures(tag: String): MemoryPagingController<ComposeGallery, String>
 
     suspend fun fetchAlbumList(param: ListAlbumParam, page: Int, size: Int): Result<List<ComposeGallery>>
 

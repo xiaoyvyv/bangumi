@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListPersonCastParam
@@ -13,6 +12,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 /**
  * [MonoRepository]
@@ -20,9 +20,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectD
  * @since 2025/5/18
  */
 interface MonoRepository {
-    fun fetchMonoListPager(param: ListMonoParam): Pager<Int, ComposeMonoDisplay>
+    fun fetchMonoListPager(param: ListMonoParam): MemoryPagingController<ComposeMonoDisplay, String>
 
-    fun fetchPersonCastPager(param: ListPersonCastParam): Pager<Int, ComposeMonoInfo>
+    fun fetchPersonCastPager(param: ListPersonCastParam): MemoryPagingController<ComposeMonoInfo, Long>
 
     suspend fun fetchMonoListByType(param: ListMonoParam, offset: Int, limit: Int): Result<List<ComposeMonoDisplay>>
 

@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import androidx.paging.Pager
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.types.ReportReason
@@ -24,6 +23,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserPrivacy
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 /**
  * [UserRepository]
@@ -32,9 +32,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserService
  * @since 2025/1/15
  */
 interface UserRepository {
-    fun fetchUserMessagePager(@MessageBoxType type: String): Pager<Int, ComposeMessage>
+    fun fetchUserMessagePager(@MessageBoxType type: String): MemoryPagingController<ComposeMessage, Long>
 
-    fun fetchUserPager(param: ListUserParam): Pager<Int, ComposeUserDisplay>
+    fun fetchUserPager(param: ListUserParam): MemoryPagingController<ComposeUserDisplay, String>
 
     suspend fun fetchUserInfo(username: String): Result<ComposeUser>
 
