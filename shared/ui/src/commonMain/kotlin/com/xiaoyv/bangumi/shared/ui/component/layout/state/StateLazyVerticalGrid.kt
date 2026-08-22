@@ -212,6 +212,18 @@ private fun <T : Any> LazyGridScope.gridStateLayout(
             span = { GridItemSpan(maxLineSpan) },
             content = { loadingFooter() }
         )
+        // Load more failed
+        lazyAppendState is LoadState.Error -> item(
+            key = LOAD_MORE,
+            contentType = LOAD_MORE,
+            span = { GridItemSpan(maxLineSpan) },
+            content = {
+                PagingAppendErrorLayout(
+                    throwable = lazyAppendState.error,
+                    onRetry = { pagingItems.retry() },
+                )
+            }
+        )
     }
 }
 

@@ -251,6 +251,33 @@ fun StateErrorLayout(
 }
 
 @Composable
+fun PagingAppendErrorLayout(
+    throwable: Throwable,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+    ) {
+        Text(
+            text = throwable.errMsg,
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+        OutlinedButton(onClick = onRetry) {
+            Text(text = stringResource(Res.string.global_refresh))
+        }
+    }
+}
+
+@Composable
 fun  CommentNoDataTip(
     isEmpty: Boolean,
     modifier: Modifier = Modifier
@@ -305,4 +332,3 @@ fun  CommentNoDataTip(
         }
     }
 }
-

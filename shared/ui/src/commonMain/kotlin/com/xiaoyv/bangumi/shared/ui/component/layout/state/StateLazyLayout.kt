@@ -495,6 +495,18 @@ private fun <T : Any> LazyStaggeredGridScope.gridStateLayout(
             span = StaggeredGridItemSpan.FullLine,
             content = { loadingFooter() }
         )
+        // Load more failed
+        lazyAppendState is LoadState.Error -> item(
+            key = LOAD_MORE,
+            contentType = LOAD_MORE,
+            span = StaggeredGridItemSpan.FullLine,
+            content = {
+                PagingAppendErrorLayout(
+                    throwable = lazyAppendState.error,
+                    onRetry = { pagingItems.retry() },
+                )
+            }
+        )
     }
 }
 
@@ -548,6 +560,18 @@ private fun <T : Any> LazyListScope.listStateLayout(
             content = { loadingFooter() }
         )
 
+        // Load more failed
+        is LoadState.Error -> item(
+            key = LOAD_MORE,
+            contentType = LOAD_MORE,
+            content = {
+                PagingAppendErrorLayout(
+                    throwable = lazyAppendState.error,
+                    onRetry = { pagingItems.retry() },
+                )
+            }
+        )
+
         // No More
         is LoadState.NotLoading if lazyAppendState.endOfPaginationReached && pagingItems.itemCount != 0 -> item(
             key = LOAD_MORE,
@@ -579,5 +603,4 @@ inline fun LazyListScope.itemKey(
         content()
     }
 }
-
 
