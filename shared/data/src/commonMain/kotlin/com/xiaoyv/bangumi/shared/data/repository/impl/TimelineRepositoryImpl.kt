@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
@@ -19,7 +19,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryStepUniq
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
 
 class TimelineRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val pagingConfig: PagingConfig,
     private val preferenceStore: PreferenceStore,
 ) : TimelineRepository {

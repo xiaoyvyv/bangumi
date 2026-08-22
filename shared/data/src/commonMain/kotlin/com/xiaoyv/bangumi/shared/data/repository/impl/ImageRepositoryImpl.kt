@@ -6,7 +6,7 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListAlbumType
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiOffset
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.list.album.ListAlbumParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
@@ -27,7 +27,7 @@ import kotlin.math.roundToInt
  * @since 2025/5/22
  */
 class ImageRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val pagingConfig: PagingConfig,
     private val subjectParser: SubjectParser,
 ) : ImageRepository {

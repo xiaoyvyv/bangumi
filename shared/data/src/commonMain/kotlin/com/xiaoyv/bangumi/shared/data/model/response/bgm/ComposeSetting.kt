@@ -105,7 +105,6 @@ data class ComposeSetting(
              */
             val DefaultHosts = persistentMapOf(
                 "www.gstatic.cn" to listOf("120.253.244.235"),
-                "www.recaptcha.net" to listOf("142.251.23.94")
             )
 
             /**
@@ -118,11 +117,12 @@ data class ComposeSetting(
                 "next.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "lain.bgm.tv" to listOf("104.26.8.23", "104.26.9.23", "172.67.73.67"),
                 "share.dmhy.org" to listOf("104.25.61.106", "104.25.62.106", "172.67.98.15"),
-                "app-api.pixiv.net" to listOf("104.18.42.239", "172.64.145.17"),
-                "oauth.secure.pixiv.net" to listOf("104.18.42.239", "172.64.145.17"),
-                "accounts.pixiv.net" to listOf("104.18.42.239", "172.64.145.17"),
+                "www.pixiv.net" to listOf("172.64.145.17", "104.18.42.239"),
+                "app-api.pixiv.net" to listOf("172.64.145.17", "104.18.42.239"),
+                "oauth.secure.pixiv.net" to listOf("172.64.145.17", "104.18.42.239"),
+                "accounts.pixiv.net" to listOf("172.64.145.17", "104.18.42.239"),
                 "imgur.la" to listOf("104.21.90.143", "172.67.157.192"),
-                "translate.googleapis.com" to listOf(),
+                "www.recaptcha.net" to listOf("120.253.255.98")
             )
             val Default = NetworkConfig()
         }

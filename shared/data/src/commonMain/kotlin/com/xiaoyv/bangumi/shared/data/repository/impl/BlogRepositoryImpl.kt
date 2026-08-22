@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.utils.runResult
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 
 class BlogRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val pagingConfig: PagingConfig,
 ) : BlogRepository {
 

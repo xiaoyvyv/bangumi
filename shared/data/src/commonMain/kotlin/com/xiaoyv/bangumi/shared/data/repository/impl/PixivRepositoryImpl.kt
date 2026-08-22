@@ -5,7 +5,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.runResult
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.ChallengeParam
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
@@ -20,7 +20,7 @@ import kotlin.io.encoding.Base64
  * @since 2025/5/26
  */
 class PixivRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val preferenceStore: PreferenceStore,
 ) : PixivRepository {
     override val cacheChallengeParam = atomic<ChallengeParam?>(null)

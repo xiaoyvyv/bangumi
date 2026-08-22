@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListPersonCastParam
@@ -32,7 +32,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLi
  * @since 2025/5/18
  */
 class MonoRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val pagingConfig: PagingConfig,
     private val monoParser: MonoParser,
 ) : MonoRepository {

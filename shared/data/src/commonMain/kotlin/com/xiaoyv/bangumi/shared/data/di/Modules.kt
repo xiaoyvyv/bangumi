@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.di
 
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
@@ -63,7 +63,7 @@ import org.koin.dsl.module
 
 private val dataModule = module {
     singleOf(::PreferenceStore)
-    singleOf(::BgmApiClient)
+    singleOf(::ApiClient)
     singleOf(::BgmCookiesStorage)
     singleOf(::UserManager)
     singleOf(::PersonalStateStore)

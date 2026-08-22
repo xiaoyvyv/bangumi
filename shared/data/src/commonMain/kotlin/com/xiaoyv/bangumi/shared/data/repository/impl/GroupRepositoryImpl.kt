@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.list.ListGroupType
 import com.xiaoyv.bangumi.shared.core.utils.requireNoError
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.group.ListGroupParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingControll
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
 
 class GroupRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val pagingConfig: PagingConfig,
     private val preferenceStore: PreferenceStore,
 ) : GroupRepository {

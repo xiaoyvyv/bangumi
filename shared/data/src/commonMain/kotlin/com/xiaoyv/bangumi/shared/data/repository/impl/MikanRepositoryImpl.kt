@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.shared.core.utils.runResult
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanGroup
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
@@ -20,7 +20,7 @@ import kotlinx.serialization.json.Json
  * @since 2025/1/23
  */
 class MikanRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val mikanParser: MikanParser,
     private val json: Json,
 ) : MikanRepository {

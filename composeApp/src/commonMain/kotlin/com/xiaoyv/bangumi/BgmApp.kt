@@ -37,7 +37,7 @@ import com.xiaoyv.bangumi.shared.component.BgmLive2DView
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.component.LaunchReceiveShareImageEffect
 import com.xiaoyv.bangumi.shared.component.rememberBgmLive2DState
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.LocalPersonalState
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedModelStoreOwner
@@ -72,7 +72,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun App() = KoinApplication(configuration = koinConfiguration(declaration = { initializeKoin() })) {
-    val apiClient: BgmApiClient = koinInject()
+    val apiClient: ApiClient = koinInject()
     val personalStateStore: PersonalStateStore = koinInject()
 
     setSingletonImageLoaderFactory { context ->

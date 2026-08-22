@@ -4,7 +4,7 @@ import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
@@ -15,7 +15,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingControll
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
 
 class TopicRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val pagingConfig: PagingConfig,
 ) : TopicRepository {
 

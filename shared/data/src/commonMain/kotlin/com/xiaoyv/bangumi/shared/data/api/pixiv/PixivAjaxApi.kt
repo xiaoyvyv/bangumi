@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.shared.data.api
+package com.xiaoyv.bangumi.shared.data.api.pixiv
 
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.model.SearchIllustrations
@@ -6,12 +6,12 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
 
 /**
- * [PixivApi]
+ * [PixivAjaxApi]
  *
  * @since 2025/5/26
  */
 @AppDsl
-interface PixivApi {
+interface PixivAjaxApi {
     /**
      * 搜索插画作品。
      *
@@ -34,7 +34,7 @@ interface PixivApi {
      * @param searchAiType 是否显示 AI 生成作品，0 过滤，1 显示，默认为 null（不指定）。
      * @param offset 翻页偏移量，用于分页查询，默认为 null。
      */
-    @GET("https://app-api.pixiv.net/v1/search/illust")
+    @GET("v1/search/illust")
     suspend fun searchIllust(
         @Query("word") word: String,
         @Query("search_target") searchTarget: String = "exact_match_for_tags", // enum可定义: partial_match_for_tags, exact_match_for_tags, title_and_caption

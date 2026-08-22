@@ -8,7 +8,7 @@ import coil3.request.SuccessResult
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.isIpv4Address
 import com.xiaoyv.bangumi.shared.core.utils.runResult
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUploadImage
 import com.xiaoyv.bangumi.shared.data.model.response.chore.CloudflareDnsResponse
@@ -40,7 +40,7 @@ import io.ktor.http.HttpHeaders
 import kotlinx.io.buffered
 import okio.ByteString.Companion.encodeUtf8
 
-class ChoreRepositoryImpl(private val client: BgmApiClient) : ChoreRepository {
+class ChoreRepositoryImpl(private val client: ApiClient) : ChoreRepository {
 
     override suspend fun fetchDns(hostname: String): Result<Pair<String, List<String>>> = runResult {
         val normalizedHostname = hostname.trim().lowercase().removeSuffix(".")

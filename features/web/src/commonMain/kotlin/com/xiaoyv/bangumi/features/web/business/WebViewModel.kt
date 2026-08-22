@@ -1,5 +1,8 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.xiaoyv.bangumi.features.web.business
 
+import com.multiplatform.webview.cookie.WebViewCookieManager
 import com.multiplatform.webview.request.WebRequest
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
@@ -14,6 +17,7 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.core.utils.trimStr
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -35,6 +39,7 @@ class WebViewModel(
     private val cookieStorage: BgmCookiesStorage,
     private val userManager: UserManager
 ) : BaseViewModel<WebState, WebSideEffect, WebEvent.Action>() {
+    private val webViewCookieManager = WebViewCookieManager()
 
     override fun initBaseState(): UiState<WebState> = UiState(data = createInitialState(), status = PageStatus.Loading)
 
@@ -90,9 +95,8 @@ class WebViewModel(
                             postEffect { WebSideEffect.OnReload }
                         }
                         .onSuccess {
-                            userManager.setPixivToken(it)
-
-                            debugLog { "PixivUser:$it" }
+                            val cookies = webViewCookieManager.getCookies(WebConstant.URL_BASE_PIXIV)
+                            userManager.setPixivToken(it, cookies)
 
                             postEffect { WebSideEffect.OnNavUp }
                         }

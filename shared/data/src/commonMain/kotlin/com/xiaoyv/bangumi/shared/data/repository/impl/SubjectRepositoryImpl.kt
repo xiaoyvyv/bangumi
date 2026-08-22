@@ -15,7 +15,7 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
@@ -25,8 +25,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
@@ -58,7 +58,7 @@ import kotlin.math.abs
  * @since 2025/1/25
  */
 class SubjectRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val pagingConfig: PagingConfig,
     private val subjectParser: SubjectParser,
     private val topicTableParser: TopicTableParser,

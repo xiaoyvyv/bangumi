@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.runResult
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.LoginParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginForm
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginResult
@@ -17,7 +17,7 @@ import io.ktor.client.statement.bodyAsBytes
  * @since 2025/1/14
  */
 class SignRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val signParser: SignParser,
 ) : SignRepository {
 
@@ -25,7 +25,7 @@ class SignRepositoryImpl(
         with(signParser) {
             client.bgmWebApi
                 .fetchLoginForm()
-                .fetchLoginFormConverted(client.baseUrl)
+                .fetchLoginFormConverted(client.config.bgmHost)
         }
     }
 
@@ -43,7 +43,7 @@ class SignRepositoryImpl(
 
         with(signParser) {
             client.bgmWebApi
-                .sendLogin(referer = client.baseUrl, param = forms)
+                .sendLogin(referer = client.config.bgmHost, param = forms)
                 .sendLoginConverted()
         }
     }

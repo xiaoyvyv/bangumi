@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_failed
 import com.xiaoyv.bangumi.shared.core.utils.runResult
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceCharacter
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceMoe
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceName
@@ -22,7 +22,7 @@ import org.jetbrains.compose.resources.getString
  * @since 2025/5/15
  */
 class TraceRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val json: Json,
 ) : TraceRepository {
     override suspend fun fetchAniTitleMapByEmbed(): Result<List<ComposeTraceName>> = runResult {

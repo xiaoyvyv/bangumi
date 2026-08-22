@@ -1,15 +1,20 @@
 package com.xiaoyv.bangumi.shared.data.manager.app
 
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.util.fastJoinToString
+import com.multiplatform.webview.cookie.Cookie
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.BgmCookiesStorage
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
+import io.ktor.client.plugins.cookies.addCookie
+import io.ktor.http.parseServerSetCookieHeader
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -69,8 +74,15 @@ class UserManager(
         preferenceStore.userToken = token
     }
 
-    fun setPixivToken(token: ComposePixivToken) {
+    suspend fun setPixivToken(token: ComposePixivToken, webCookies: List<Cookie>) {
         preferenceStore.pixivToken = token
+        webCookies.forEach {
+            cookieStorage.addCookie(WebConstant.URL_BASE_PIXIV, parseServerSetCookieHeader(it.toString()))
+        }
+        val cookie = webCookies.fastJoinToString(";") { it.name + "=" + it.value }
+
+//        debugLog { "PixivUser:$it" }
+        debugLog { "PixivCookie:$cookie" }
     }
 
     /**

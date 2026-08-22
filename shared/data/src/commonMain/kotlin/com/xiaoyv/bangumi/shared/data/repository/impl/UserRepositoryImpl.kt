@@ -16,7 +16,7 @@ import com.xiaoyv.bangumi.shared.core.utils.requireNoError
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
-import com.xiaoyv.bangumi.shared.data.api.client.BgmApiClient
+import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.CreateReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
@@ -54,7 +54,7 @@ import io.ktor.http.HttpHeaders
  * @since 2025/1/15
  */
 class UserRepositoryImpl(
-    private val client: BgmApiClient,
+    private val client: ApiClient,
     private val userParser: UserParser,
     private val preferenceStore: PreferenceStore,
     private val pagingConfig: PagingConfig,
@@ -355,7 +355,7 @@ class UserRepositoryImpl(
     override suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken> = client.createBgmToken(formHash)
 
     companion object {
-        suspend fun BgmApiClient.createBgmToken(formHash: String) = runResult {
+        suspend fun ApiClient.createBgmToken(formHash: String) = runResult {
             val response = bgmWebApiNoRedirect.sendAuthJsonApi(formhash = formHash)
             if (response.status.value == 200) {
                 Ksoup.parse(response.bodyAsText()).requireNoError()
