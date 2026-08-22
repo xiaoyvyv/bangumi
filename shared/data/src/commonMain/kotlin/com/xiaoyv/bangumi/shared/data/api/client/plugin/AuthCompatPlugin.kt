@@ -13,6 +13,13 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.InternalAPI
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * 包装已被读取的响应，并以指定状态码重新提供完整响应体。
+ *
+ * @param origin 原始 HTTP 响应。
+ * @param status 对外暴露的响应状态码。
+ * @param cachedBytes 从原始响应中缓存的响应体。
+ */
 class RewrittenStatusResponse(
     private val origin: HttpResponse,
     override val status: HttpStatusCode,
@@ -29,6 +36,13 @@ class RewrittenStatusResponse(
     override val rawContent: ByteReadChannel get() = ByteReadChannel(cachedBytes)
 }
 
+/**
+ * 兼容将 Token 失效错误返回为 HTTP 400 的服务端。
+ *
+ * 插件检查 JSON 格式的 400 响应；当响应体包含授权或 Token 失效特征时，将状态码改写为 401，
+ * 从而触发 Ktor Bearer Auth 的 Token 刷新。由于检查过程会消费响应体，无论是否改写状态码，
+ * 都会通过 [RewrittenStatusResponse] 恢复响应内容供后续插件和调用方读取。
+ */
 val AuthCompat = createClientPlugin("AuthCompat") {
     client.receivePipeline.intercept(HttpReceivePipeline.Before) { originalResponse ->
         if (originalResponse.status == HttpStatusCode.BadRequest &&

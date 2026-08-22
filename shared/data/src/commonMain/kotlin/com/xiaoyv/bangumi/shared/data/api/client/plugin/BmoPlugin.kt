@@ -26,6 +26,10 @@ class BmoConfig {
 
 /**
  * 拦截本地 BMO 表情生成请求，根据编码合成 PNG 二进制数据返回
+ *
+ * 请求命中配置的本地地址且包含 `code` 参数时，插件从 Compose Resources 读取 BMO 清单与图层，
+ * 在内存中合成为指定尺寸的 PNG，并直接构造成功响应，不会发起网络请求。
+ * 编码为空、资源缺失或无法生成图片时，请求会继续交给原有网络管线处理。
  */
 @OptIn(InternalAPI::class)
 val BmoPlugin: ClientPlugin<BmoConfig> = createClientPlugin("BmoPlugin", ::BmoConfig) {

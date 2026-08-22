@@ -16,6 +16,12 @@ import io.ktor.utils.io.KtorDsl
 import io.ktor.utils.io.core.toByteArray
 import kotlin.io.encoding.Base64
 
+/**
+ * 豆瓣 API 请求签名配置。
+ *
+ * @param agent 豆瓣客户端 User-Agent。
+ * @param key 生成 HMAC-SHA1 请求签名的密钥。
+ */
 @KtorDsl
 class DouBanConfig(
     var agent: String = "",
@@ -24,6 +30,9 @@ class DouBanConfig(
 
 /**
  * [AuthDouBanPlugin]
+ *
+ * 仅处理豆瓣 API 请求：根据请求方法、编码后的路径和当前时间生成 `_sig`、`_ts` 查询参数，
+ * 同时移除不适用于豆瓣的 Bearer Authorization，并写入指定 User-Agent。
  *
  * @author why
  * @since 2025/1/25

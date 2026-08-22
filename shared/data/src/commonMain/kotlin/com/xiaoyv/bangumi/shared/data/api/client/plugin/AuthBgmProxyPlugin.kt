@@ -12,6 +12,12 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.Url
 import io.ktor.utils.io.KtorDsl
 
+/**
+ * Bangumi 代理请求的 Cookie 转发配置。
+ *
+ * @param bgmUrl 读取登录 Cookie 的 Bangumi 站点地址。
+ * @param proxyUrl 需要接收 Bangumi Cookie 的代理服务地址。
+ */
 @KtorDsl
 class AuthBgmProxyPluginConfig(
     var bgmUrl: String = WebConstant.URL_BASE_WEB,
@@ -20,6 +26,10 @@ class AuthBgmProxyPluginConfig(
 
 /**
  * [AuthBgmProxyPlugin]
+ *
+ * 将 [AuthBgmProxyPluginConfig.bgmUrl] 下保存的登录 Cookie 追加到发往
+ * [AuthBgmProxyPluginConfig.proxyUrl] 的请求，使代理接口能够复用当前 Bangumi 登录态。
+ * 非代理请求不会被修改，已有 Cookie 也会被保留。
  */
 val AuthBgmProxyPlugin: ClientPlugin<AuthBgmProxyPluginConfig> =
     createClientPlugin("AuthBgmProxyPlugin", ::AuthBgmProxyPluginConfig) {
