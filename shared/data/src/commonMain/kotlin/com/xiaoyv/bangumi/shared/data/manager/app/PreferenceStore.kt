@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
 import com.xiaoyv.bangumi.shared.data.repository.boolean
+import com.xiaoyv.bangumi.shared.data.repository.long
 import com.xiaoyv.bangumi.shared.data.repository.serializable
 import com.xiaoyv.bangumi.shared.data.repository.string
 
@@ -52,4 +53,9 @@ class PreferenceStore(
      * 上次启动 APP 的日期（格式：yyyy-MM-dd）
      */
     internal var lastLaunchDate by cacheRepository.string(SpKey.KEY_LAST_LAUNCH_DATE, default = "")
+
+    /**
+     * 上次启动时检测 Bangumi 服务连通性的时间戳
+     */
+    internal var lastBgmHostCheckTime by cacheRepository.long(SpKey.KEY_LAST_BGM_HOST_CHECK_TIME)
 }

@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.timeline.page
+package com.xiaoyv.bangumi.shared.ui.view.timeline
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,9 +23,10 @@ import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
+internal const val CONTENT_TYPE_TIMELINE_SUBJECT = "CONTENT_TYPE_TIMELINE_SUBJECT"
 
 @Composable
 internal fun TimelinePageItemSubject(
@@ -68,9 +69,7 @@ internal fun TimelinePageItemSubject(
                             text = entry.subject.displayName,
                             textPadding = 4.dp,
                             textMaxLines = 1,
-                            textStyle = MaterialTheme.typography.bodySmall.copy(
-                                color = Color.White,
-                            ),
+                            textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
                             onClick = { onClick(entry.subject) }
                         )
                     }
@@ -111,7 +110,6 @@ internal fun TimelinePageItemSubjectItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-
                 Text(
                     text = subject.info,
                     style = MaterialTheme.typography.bodySmall.copy(
@@ -121,7 +119,6 @@ internal fun TimelinePageItemSubjectItem(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-
                 if (subject.rating.score > 0) {
                     Text(
                         text = subject.rating.score.toFixed(1).toTrimString(),

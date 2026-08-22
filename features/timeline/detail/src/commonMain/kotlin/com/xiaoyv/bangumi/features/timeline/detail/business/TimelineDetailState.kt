@@ -1,6 +1,10 @@
 package com.xiaoyv.bangumi.features.timeline.detail.business
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * [TimelineDetailState]
@@ -10,5 +14,6 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class TimelineDetailState(
-    val title: String = ""
+    val timeline: ComposeTimeline = ComposeTimeline(),
+    val replies: SerializeList<ComposeReply> = persistentListOf(),
 )

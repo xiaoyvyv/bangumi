@@ -37,6 +37,7 @@ class UserManager(
     var isAgreePrivacy by preferenceStore::isAgreePrivacy
     var settings by preferenceStore::settings
     var lastLaunchDate by preferenceStore::lastLaunchDate
+    var lastBgmHostCheckTime by preferenceStore::lastBgmHostCheckTime
 
     val friends = persistentListOf<ComposeFriend>()
 

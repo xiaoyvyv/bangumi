@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
@@ -86,6 +87,10 @@ class TimelineRepositoryImpl(
                 displays to displays.lastOrNull()?.id?.toInt()
             }
         )
+    }
+
+    override suspend fun fetchTimelineReplies(timelineId: Long): Result<List<ComposeReply>> = client.requestNextTimelineApi {
+        getTimelineReplies(timelineId.toInt()).map { it.normalized() }
     }
 
     override suspend fun submitCreateTimeline(

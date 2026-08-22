@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.timeline.page
+package com.xiaoyv.bangumi.shared.ui.view.timeline
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 @Composable
 internal fun TimelinePageItemComment(
@@ -28,9 +28,7 @@ internal fun TimelinePageItemComment(
 ) {
     OutlinedCard(modifier = modifier) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(contentPaddings),
+            modifier = Modifier.fillMaxWidth().padding(contentPaddings),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             if (rate > 0) {
@@ -38,28 +36,16 @@ internal fun TimelinePageItemComment(
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
-                    RatingBar(
-                        value = rate,
-                        starSize = 16.dp
-                    )
+                    RatingBar(value = rate, starSize = 16.dp)
                     Text(
                         text = "(${rate.toTrimString()})",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = StarColor,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        style = MaterialTheme.typography.bodySmall.copy(color = StarColor, fontWeight = FontWeight.SemiBold)
                     )
                 }
             }
-
             if (comment.isNotBlank()) {
                 SelectionContainer {
-                    Text(
-                        text = comment,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    )
+                    Text(text = comment, style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant))
                 }
             }
         }

@@ -11,6 +11,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -116,7 +117,7 @@ sealed class Screen(
     data object TimelineAdd : Screen(SCREEN_ROUTE_TIMELINE_ADD)
 
     @Serializable
-    data object TimelineDetail : Screen(SCREEN_ROUTE_TIMELINE_DETAIL)
+    data class TimelineDetail(val timeline: ComposeTimeline) : Screen(SCREEN_ROUTE_TIMELINE_DETAIL)
 
     @Serializable
     data object RaKuen : Screen(SCREEN_ROUTE_TOPIC)

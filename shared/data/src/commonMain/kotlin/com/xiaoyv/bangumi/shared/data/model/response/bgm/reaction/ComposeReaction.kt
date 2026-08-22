@@ -45,7 +45,7 @@ data class ComposeReaction(
         get() {
             val self = currentUser()
             return remember(users, self) {
-                users.any { it.id == self.id }
+                users.any { it.username == self.username }
             }
         }
 

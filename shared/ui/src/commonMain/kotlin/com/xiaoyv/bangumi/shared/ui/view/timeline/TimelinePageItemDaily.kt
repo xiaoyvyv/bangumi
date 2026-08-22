@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.timeline.page
+package com.xiaoyv.bangumi.shared.ui.view.timeline
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,12 +18,13 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.timeline_member_cnt
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
+internal const val CONTENT_TYPE_TIMELINE_DAILY = "CONTENT_TYPE_TIMELINE_DAILY"
 
 @Composable
 internal fun TimelinePageItemDaily(
@@ -36,59 +37,39 @@ internal fun TimelinePageItemDaily(
         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         if (item.memo.daily.users.isNotEmpty()) {
-            items(
-                items = item.memo.daily.users,
-                contentType = { CONTENT_TYPE_TIMELINE_DAILY }
-            ) { user ->
+            items(items = item.memo.daily.users, contentType = { CONTENT_TYPE_TIMELINE_DAILY }) { user ->
                 OutlinedCard(onClick = { onClickUser(user) }) {
                     Row(
                         modifier = Modifier.padding(12.dp),
                         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                     ) {
                         StateImage(
-                            modifier = Modifier
-                                .size(44.dp)
-                                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small),
+                            modifier = Modifier.size(44.dp).border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small),
                             shape = MaterialTheme.shapes.small,
                             model = user.avatar.displayGridImage
                         )
                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                text = user.nickname,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Text(
-                                text = user.sign.ifBlank { "@" + user.username },
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            Text(text = user.nickname, style = MaterialTheme.typography.bodyMedium)
+                            Text(text = user.sign.ifBlank { "@" + user.username }, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
             }
         }
         if (item.memo.daily.groups.isNotEmpty()) {
-            items(
-                items = item.memo.daily.groups,
-                contentType = { CONTENT_TYPE_TIMELINE_DAILY }
-            ) { group ->
+            items(items = item.memo.daily.groups, contentType = { CONTENT_TYPE_TIMELINE_DAILY }) { group ->
                 OutlinedCard(onClick = { onClickGroup(group) }) {
                     Row(
                         modifier = Modifier.padding(12.dp),
                         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                     ) {
                         StateImage(
-                            modifier = Modifier
-                                .size(44.dp)
-                                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small),
+                            modifier = Modifier.size(44.dp).border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small),
                             shape = MaterialTheme.shapes.small,
                             model = group.images.displayGridImage
                         )
                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                text = group.title,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            Text(text = group.title, style = MaterialTheme.typography.bodyMedium)
                             Text(
                                 text = stringResource(Res.string.timeline_member_cnt, group.members),
                                 style = MaterialTheme.typography.bodySmall,

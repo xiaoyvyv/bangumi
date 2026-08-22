@@ -1,9 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.timeline.business
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * [TimelineState]
@@ -13,6 +10,5 @@ import kotlinx.collections.immutable.persistentListOf
  */
 @Immutable
 data class TimelineState(
-    val username: String = "",
-    val actions: SerializeList<ComposeTextTab<String>> = persistentListOf(),
+    val id: Long = 0,
 )

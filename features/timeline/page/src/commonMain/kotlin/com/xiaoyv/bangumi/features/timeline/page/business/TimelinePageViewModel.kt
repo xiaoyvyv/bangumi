@@ -46,8 +46,9 @@ class TimelinePageViewModel(
         username = param.username
     )
 
-    internal val timelines = timelinePager.flow
-        .cachedIn(viewModelScope)
+    private val flow = timelinePager.flow.cachedIn(viewModelScope)
+
+    internal val timelines = flow
         .combine(personalStateStore.state) { pagingData, personalState ->
             pagingData
                 .filter { it.id !in personalState.deletedTimelineIds }

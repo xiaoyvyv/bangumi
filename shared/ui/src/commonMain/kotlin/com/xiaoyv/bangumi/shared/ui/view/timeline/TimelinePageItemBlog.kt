@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.timeline.page
+package com.xiaoyv.bangumi.shared.ui.view.timeline
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

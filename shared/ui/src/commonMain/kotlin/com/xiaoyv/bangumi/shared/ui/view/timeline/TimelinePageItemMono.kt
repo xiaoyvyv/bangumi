@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.timeline.page
+package com.xiaoyv.bangumi.shared.ui.view.timeline
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -16,6 +16,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+
+internal const val CONTENT_TYPE_TIMELINE_MONO = "CONTENT_TYPE_TIMELINE_MONO"
 
 @Composable
 internal fun TimelinePageItemMono(

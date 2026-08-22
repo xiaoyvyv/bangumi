@@ -375,9 +375,9 @@ object TabTokens {
     val timelineTabs = persistentListOf(
         ComposeTextTab(TimelineTab.TIMELINE_ANYONE, Res.string.global_all),
         ComposeTextTab(TimelineTab.TIMELINE_FRIEND, Res.string.timeline_friend_title),
-        ComposeTextTab(TimelineTab.TIMELINE_SELF, Res.string.timeline_mine_title),
-        ComposeTextTab(TimelineTab.RANT_ANYONE, Res.string.timeline_rant_all),
         ComposeTextTab(TimelineTab.RANT_FRIEND, Res.string.timeline_rant_friend),
+        ComposeTextTab(TimelineTab.RANT_ANYONE, Res.string.timeline_rant_all),
+        ComposeTextTab(TimelineTab.TIMELINE_SELF, Res.string.timeline_mine_title),
     )
 
     val timelineCatTabs = persistentListOf(

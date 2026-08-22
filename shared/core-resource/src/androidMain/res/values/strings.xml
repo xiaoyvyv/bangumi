@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Bangumi App</string>
+    <string name="app_name">Bangumi</string>
     <string name="global_home">首页</string>
     <string name="global_empty" />
     <string name="global_close">关闭</string>
@@ -113,7 +113,6 @@
     <string name="global_other">其它</string>
     <string name="global_more">更多</string>
     <string name="global_mono">人物</string>
-    <string name="global_login_first">请先登录后才能继续进行</string>
     <string name="global_more_tag">更多 &gt;&gt;</string>
     <string name="global_input_right_link">请输入正确的链接</string>
     <string name="global_kind">类型</string>
@@ -475,8 +474,8 @@
     <string name="timeline_index_content_update">%1$s个收录，更新于 %1$s</string>
     <string name="timeline_member_cnt">%1$s个成员</string>
     <string name="timeline_reply_cnt">%1$s 个回复</string>
-    <string name="timeline_rant_all">吐槽-所有人</string>
-    <string name="timeline_rant_friend">吐槽-好友</string>
+    <string name="timeline_rant_friend">朋友圈</string>
+    <string name="timeline_rant_all">广场</string>
 
     <string name="timeline_add">吐个槽~</string>
     <string name="timeline_add_cancel">取消</string>

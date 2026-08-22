@@ -23,6 +23,7 @@ import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLogin
@@ -111,12 +112,15 @@ private fun TimelineScreenContent(
     ) {
         val tab = timelineTabs[it].type
         BgmRequireLogin(
+            modifier = Modifier.fillMaxSize(),
             enable = tab == TimelineTab.TIMELINE_SELF
                     || tab == TimelineTab.TIMELINE_FRIEND
                     || tab == TimelineTab.RANT_FRIEND
         ) {
+            val username = currentUser().username
+
             TimelinePageRoute(
-                param = remember(tab, state.username) {
+                param = remember(tab, username) {
                     ListTimelineParam(
                         type = ListTimelineType.BROWSER,
                         timelineMode = when (tab) {
@@ -132,7 +136,7 @@ private fun TimelineScreenContent(
                             TimelineTab.RANT_FRIEND -> TimelineCat.STATUS
                             else -> TimelineCat.UNKNOWN
                         },
-                        username = state.username
+                        username = username
                     )
                 },
                 onNavScreen = { screen ->
