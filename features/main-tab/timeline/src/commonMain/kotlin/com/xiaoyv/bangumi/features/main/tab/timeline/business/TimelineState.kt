@@ -1,6 +1,10 @@
 package com.xiaoyv.bangumi.features.main.tab.timeline.business
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.types.TimelineTab
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * [TimelineState]
@@ -10,5 +14,6 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class TimelineState(
-    val id: Long = 0,
+    val actions: SerializeList<ComposeTextTab<Int>> = persistentListOf(),
+    val selectedMode: Int = TimelineTab.TIMELINE_FRIEND
 )

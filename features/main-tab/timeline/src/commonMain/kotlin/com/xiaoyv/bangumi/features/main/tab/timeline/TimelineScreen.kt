@@ -13,6 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_all
+import com.xiaoyv.bangumi.core_resource.resources.global_friend
+import com.xiaoyv.bangumi.core_resource.resources.global_self
 import com.xiaoyv.bangumi.core_resource.resources.timeline_title
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineEvent
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
@@ -25,12 +28,11 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
+import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLogin
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineChipTabs
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
@@ -76,7 +78,12 @@ private fun TimelineScreen(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 BgmTopAppBar(
-                    title = stringResource(Res.string.timeline_title),
+                    title = stringResource(Res.string.timeline_title) + "-" + when (state.selectedMode) {
+                        TimelineTab.TIMELINE_ANYONE -> stringResource(Res.string.global_all)
+                        TimelineTab.TIMELINE_FRIEND -> stringResource(Res.string.global_friend)
+                        TimelineTab.TIMELINE_SELF -> stringResource(Res.string.global_self)
+                        else -> stringResource(Res.string.global_all)
+                    },
                     onNavigationClick = { onUiEvent(TimelineEvent.UI.OnNavUp) },
                     actions = {
                         IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
@@ -85,6 +92,12 @@ private fun TimelineScreen(
                         IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.TimelineAdd)) }) {
                             Icon(BgmIcons.Create, contentDescription = null)
                         }
+                        DropMenuActionButton(
+                            options = uiState.data.actions,
+                            onOptionClick = { mode ->
+                                onActionEvent(TimelineEvent.Action.OnChangeTimeline(mode.type))
+                            }
+                        )
                     }
                 )
             }
@@ -111,36 +124,32 @@ private fun TimelineScreenContent(
         modifier = modifier.fillMaxSize(),
         tabs = timelineTabs
     ) {
-        val tab = timelineTabs[it].type
+        val cat = timelineTabs[it].type
+        val username = currentUser().username
+        val tab = state.selectedMode
 
         BgmRequireLogin(
             modifier = Modifier.fillMaxSize(),
             enable = tab == TimelineTab.TIMELINE_SELF || tab == TimelineTab.TIMELINE_FRIEND
         ) {
-            val username = currentUser().username
-
-            BgmChipHorizontalPager(tabs = timelineChipTabs) { index ->
-                val cat = timelineChipTabs[index].type
-
-                TimelinePageRoute(
-                    param = remember(tab, cat, username) {
-                        ListTimelineParam(
-                            type = ListTimelineType.BROWSER,
-                            timelineMode = when (tab) {
-                                TimelineTab.TIMELINE_ANYONE -> TimelineTarget.WHOLE
-                                TimelineTab.TIMELINE_FRIEND -> TimelineTarget.FRIEND
-                                TimelineTab.TIMELINE_SELF -> TimelineTarget.USER
-                                else -> TimelineTarget.WHOLE
-                            },
-                            timelineCat = cat,
-                            username = username
-                        )
-                    },
-                    onNavScreen = { screen ->
-                        onUiEvent(TimelineEvent.UI.OnNavScreen(screen))
-                    }
-                )
-            }
+            TimelinePageRoute(
+                param = remember(tab, cat, username) {
+                    ListTimelineParam(
+                        type = ListTimelineType.BROWSER,
+                        timelineMode = when (tab) {
+                            TimelineTab.TIMELINE_ANYONE -> TimelineTarget.WHOLE
+                            TimelineTab.TIMELINE_FRIEND -> TimelineTarget.FRIEND
+                            TimelineTab.TIMELINE_SELF -> TimelineTarget.USER
+                            else -> TimelineTarget.WHOLE
+                        },
+                        timelineCat = cat,
+                        username = username
+                    )
+                },
+                onNavScreen = { screen ->
+                    onUiEvent(TimelineEvent.UI.OnNavScreen(screen))
+                }
+            )
         }
     }
 }
@@ -156,4 +165,3 @@ fun Test() {
         )
     }
 }
-

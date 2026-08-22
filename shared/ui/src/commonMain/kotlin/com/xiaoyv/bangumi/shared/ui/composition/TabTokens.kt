@@ -93,7 +93,6 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
 import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
-import com.xiaoyv.bangumi.core_resource.resources.timeline_mine_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_status
 import com.xiaoyv.bangumi.core_resource.resources.timeline_timeline
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_discover
@@ -372,15 +371,16 @@ object TabTokens {
         ComposeTextTab(CollectionWebSortType.TITLE, Res.string.global_sort_title),
     )
 
+
     val timelineTabs = persistentListOf(
-        ComposeTextTab(TimelineTab.TIMELINE_ANYONE, Res.string.global_all),
-        ComposeTextTab(TimelineTab.TIMELINE_FRIEND, Res.string.timeline_friend_title),
-        ComposeTextTab(TimelineTab.TIMELINE_SELF, Res.string.timeline_mine_title)
+        ComposeTextTab(TimelineCat.UNKNOWN, Res.string.timeline_timeline),
+        ComposeTextTab(TimelineCat.STATUS, Res.string.timeline_status),
     )
 
     val timelineChipTabs = persistentListOf(
-        ComposeTextTab(TimelineCat.UNKNOWN, Res.string.timeline_timeline),
-        ComposeTextTab(TimelineCat.STATUS, Res.string.timeline_status),
+        ComposeTextTab(TimelineTab.TIMELINE_ANYONE, Res.string.global_all),
+        ComposeTextTab(TimelineTab.TIMELINE_FRIEND, Res.string.timeline_friend_title),
+//        ComposeTextTab(TimelineTab.TIMELINE_SELF, Res.string.timeline_mine_title)
     )
 
     val timelineCatTabs = persistentListOf(
