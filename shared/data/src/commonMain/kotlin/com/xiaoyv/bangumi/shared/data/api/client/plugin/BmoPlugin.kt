@@ -1,9 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api.client.plugin
 
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.shared.core.bmo.BmoDecoder
-import com.xiaoyv.bangumi.shared.core.bmo.BmoImageCompositor
-import com.xiaoyv.bangumi.shared.core.bmo.BmoResolvedItem
+import com.xiaoyv.bangumi.shared.core.bmo.BmoAssetManager
 import io.ktor.client.call.HttpClientCall
 import io.ktor.client.plugins.api.ClientPlugin
 import io.ktor.client.plugins.api.Send
@@ -18,11 +16,26 @@ import io.ktor.util.date.GMTDate
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.InternalAPI
 
+private val assetManager by lazy {
+    BmoAssetManager(
+        loadManifest = {
+            Res.readBytes("files/bmo/manifest.local.json").decodeToString()
+        },
+        loadAsset = { rawPath ->
+            val relativePath = rawPath.removePrefix("./").removePrefix("/")
+            runCatching { Res.readBytes("files/bmo/$relativePath") }
+                .getOrNull()
+                ?.takeIf { it.isNotEmpty() }
+        },
+    )
+}
+
 class BmoConfig {
     var url: String = "http://localhost/bmo"
     var canvasWidth: Int = 63
     var canvasHeight: Int = 63
 }
+
 
 /**
  * 拦截本地 BMO 表情生成请求，根据编码合成 PNG 二进制数据返回
@@ -34,8 +47,6 @@ class BmoConfig {
 @OptIn(InternalAPI::class)
 val BmoPlugin: ClientPlugin<BmoConfig> = createClientPlugin("BmoPlugin", ::BmoConfig) {
     val config = pluginConfig
-    val assetManager = BmoAssetManager()
-
     on(Send) { builder ->
         val url = builder.url
         val isBmoHost = url.toString().startsWith(config.url, true)
@@ -66,42 +77,5 @@ val BmoPlugin: ClientPlugin<BmoConfig> = createClientPlugin("BmoPlugin", ::BmoCo
             }
         }
         proceed(builder)
-    }
-}
-
-private class BmoAssetManager {
-    private var manifestJsonString: String? = null
-
-    private suspend fun getManifestJson(): String {
-        manifestJsonString?.let { return it }
-        val text = Res.readBytes("files/bmo/manifest.local.json").decodeToString()
-        manifestJsonString = text
-        return text
-    }
-
-    suspend fun getOrGenerateCompositeImage(
-        code: String,
-        width: Int,
-        height: Int
-    ): ByteArray? {
-        val manifestJson = getManifestJson()
-        val decodeResult = BmoDecoder.decode(code, manifestJson = manifestJson)
-        if (decodeResult.items.isEmpty()) return null
-
-        val layersData = mutableListOf<Pair<BmoResolvedItem, ByteArray>>()
-        for (item in decodeResult.items) {
-            val bytes = fetchAssetBytes(item.src) ?: continue
-            layersData.add(item to bytes)
-        }
-        if (layersData.isEmpty()) return null
-
-        return BmoImageCompositor.composite(layersData, width, height)
-    }
-
-    private suspend fun fetchAssetBytes(rawSrc: String): ByteArray? {
-        val cleanSrc = rawSrc.removePrefix("./").removePrefix("/")
-        return runCatching { Res.readBytes("files/bmo/$cleanSrc") }
-            .getOrNull()
-            ?.takeIf { it.isNotEmpty() }
     }
 }
