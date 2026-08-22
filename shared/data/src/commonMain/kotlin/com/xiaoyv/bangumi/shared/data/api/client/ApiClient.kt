@@ -14,6 +14,7 @@ import com.xiaoyv.bangumi.shared.data.api.app.AppApi
 import com.xiaoyv.bangumi.shared.data.api.app.createAppApi
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.ApiCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.EmptyCookiesStorage
+import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthPixivAjaxPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.BmoPlugin
 import com.xiaoyv.bangumi.shared.data.api.createAuthApi
 import com.xiaoyv.bangumi.shared.data.api.createBgmJsonApi
@@ -141,9 +142,21 @@ class ApiClient(
             url = WebConstant.URL_BASE_API_DOUBAN,
         )
     }
+
+    private val pixivAjaxKtorfit by lazy {
+        createDocumentKtorfit(
+            client = createHttpClient(config, cookieStorage = cookieStorage) {
+                install(AuthPixivAjaxPlugin) {
+                    referer = WebConstant.URL_BASE_PIXIV
+                }
+            },
+            url = WebConstant.URL_BASE_PIXIV,
+        )
+    }
+
     private val pixivKtorfit by lazy {
         createApiKtorfit(
-            client = createHttpClient(config, cookieStorage = cookieStorage) {
+            client = createHttpClient(config) {
                 installPixivAuth(
                     config = config,
                     preferenceStore = preferenceStore,
@@ -158,7 +171,7 @@ class ApiClient(
                     },
                 )
             },
-            url = WebConstant.URL_BASE_PIXIV,
+            url = WebConstant.URL_BASE_PIXIV_APP_API,
         )
     }
 
@@ -190,7 +203,7 @@ class ApiClient(
     val traceApi: TraceApi by lazy { appApiKtorfit.createTraceApi() }
     val imageApi: ImageApi by lazy { appApiKtorfit.createImageApi() }
     val pixivApi: PixivApi by lazy { pixivKtorfit.createPixivApi() }
-    val pixivAjaxApi: PixivAjaxApi by lazy { pixivKtorfit.createPixivAjaxApi() }
+    val pixivAjaxApi: PixivAjaxApi by lazy { pixivAjaxKtorfit.createPixivAjaxApi() }
     val dbApi: DouBanApi by lazy { dbApiKtorfit.createDouBanApi() }
 
     suspend fun <R> requestAuthApi(block: suspend AuthApi.() -> R) = requestApi(authApi, block = block)

@@ -7,14 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.login_title
+import com.xiaoyv.bangumi.core_resource.resources.global_pixiv
 import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainEvent
 import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainState
 import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainViewModel
+import com.xiaoyv.bangumi.features.pixiv.main.page.PixivMainPageScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -49,37 +51,44 @@ private fun PixivMainScreen(
     onUiEvent: (PixivMainEvent.UI) -> Unit,
     onActionEvent: (PixivMainEvent.Action) -> Unit,
 ) {
-
-    Scaffold(
+    StateLayout(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            BgmTopAppBar(
-                title = stringResource(Res.string.login_title),
-                onNavigationClick = { onUiEvent(PixivMainEvent.UI.OnNavUp) }
+        uiState = uiState,
+    ) { state ->
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                BgmTopAppBar(
+                    title = stringResource(Res.string.global_pixiv),
+                    onNavigationClick = { onUiEvent(PixivMainEvent.UI.OnNavUp) }
+                )
+            }
+        ) { paddingValues ->
+            PixivMainScreenContent(
+                modifier = Modifier.padding(paddingValues),
+                state = state,
+                onUiEvent = onUiEvent,
+                onActionEvent = onActionEvent
             )
-        }
-    ) {
-        StateLayout(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            onRefresh = { onActionEvent(PixivMainEvent.Action.OnRefresh(it)) },
-            uiState = uiState,
-        ) { state ->
-            PixivMainScreenContent(state, onUiEvent, onActionEvent)
         }
     }
 }
 
-
 @Composable
 private fun PixivMainScreenContent(
+    modifier: Modifier,
     state: PixivMainState,
     onUiEvent: (PixivMainEvent.UI) -> Unit,
     onActionEvent: (PixivMainEvent.Action) -> Unit,
 ) {
-
+    BgmTabHorizontalPager(
+        modifier = modifier.fillMaxSize(),
+        tabs = state.tabs
+    ) { page ->
+        PixivMainPageScreen(
+            content = state.tabs[page].type,
+            onUiEvent = onUiEvent,
+            onActionEvent = onActionEvent
+        )
+    }
 }
-
-
-

@@ -1,6 +1,9 @@
 package com.xiaoyv.bangumi.features.pixiv.main.business
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * [PixivMainState]
@@ -10,5 +13,5 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class PixivMainState(
-    val title: String = "",
+    val tabs: SerializeList<ComposeTextTab<String>> = persistentListOf(),
 )

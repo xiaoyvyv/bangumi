@@ -14,6 +14,7 @@ data class ComposePixivRankingContent(
     @SerialName("tags") val tags: SerializeList<String> = persistentListOf(),
     @SerialName("url") val url: String = "",
     @SerialName("illust_type") val illust_type: String = "0",
+    @SerialName("illust_page_count") val illust_page_count: String = "1",
     @SerialName("user_name") val user_name: String = "",
     @SerialName("profile_img") val profile_img: String = "",
     @SerialName("illust_id") val illust_id: Long = 0,

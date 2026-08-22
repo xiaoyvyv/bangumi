@@ -2,13 +2,17 @@
 
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
+import androidx.paging.PagingConfig
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.ChallengeParam
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
+import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
 import org.kotlincrypto.random.CryptoRand
@@ -22,6 +26,7 @@ import kotlin.io.encoding.Base64
 class PixivRepositoryImpl(
     private val client: ApiClient,
     private val preferenceStore: PreferenceStore,
+    private val pagingConfig: PagingConfig,
 ) : PixivRepository {
     override val cacheChallengeParam = atomic<ChallengeParam?>(null)
 
@@ -44,5 +49,17 @@ class PixivRepositoryImpl(
             includePolicy = true,
             redirectUri = "https://app-api.pixiv.net/web/v1/users/auth/pixiv/callback"
         ).let { it.copy(expiresAt = System.currentTimeMillis() + it.expiresIn * 1000) }
+    }
+
+    override fun fetchIllustRankingPager(content: String, mode: String): MemoryPagingController<ComposePixivRankingContent, Long> {
+        return createMemoryPageLimitPagingController(
+            pagingConfig = pagingConfig,
+            idSelector = { it.illust_id },
+            onLoadData = { page ->
+                client.requestPixivAjaxApi {
+                    getIllustRanking(mode = mode, content = content, page = page).contents
+                }.getOrThrow()
+            }
+        )
     }
 }

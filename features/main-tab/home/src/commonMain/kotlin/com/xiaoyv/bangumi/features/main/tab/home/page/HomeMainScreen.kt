@@ -186,7 +186,7 @@ fun HomeMainAction(
                             )
 
                             FeatureType.TYPE_ALMANAC -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Almanac))
-                            FeatureType.TYPE_PIXIV -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.PixivLogin))
+                            FeatureType.TYPE_PIXIV -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.PixivMain))
                             FeatureType.TYPE_SUBJECT_BROWSER -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectBrowser()))
                             FeatureType.TYPE_TAG -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.TagDetail()))
                             FeatureType.TYPE_SCHEDULE -> onUiEvent(HomeEvent.UI.OnNavScreen(Screen.Calendar(true)))

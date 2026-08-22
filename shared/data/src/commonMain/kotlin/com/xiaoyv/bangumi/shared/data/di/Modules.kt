@@ -72,7 +72,7 @@ private val dataModule = module {
 
 private val repositoryModules = module {
     single<SignRepository> { SignRepositoryImpl(get(), get()) }
-    single<PixivRepository> { PixivRepositoryImpl(get(), get()) }
+    single<PixivRepository> { PixivRepositoryImpl(get(), get(), get()) }
     single<TraceRepository> { TraceRepositoryImpl(get(), get()) }
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
     single<ImageRepository> { ImageRepositoryImpl(get(), get(), get()) }
