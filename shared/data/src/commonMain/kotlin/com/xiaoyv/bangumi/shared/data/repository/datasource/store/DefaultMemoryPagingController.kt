@@ -5,6 +5,14 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * [MemoryPagingController] 的默认实现，负责将 Store 接入 Paging3 的 Pager。
+ *
+ * @param T 列表项类型。
+ * @param Id 列表项的稳定唯一标识类型。
+ * @param store 内存分页数据层。
+ * @param pagingConfig Paging3 的分页配置。
+ */
 internal class DefaultMemoryPagingController<T : Any, Id : Any>(
     private val store: MemoryPagingStore<T, Id>,
     pagingConfig: PagingConfig,

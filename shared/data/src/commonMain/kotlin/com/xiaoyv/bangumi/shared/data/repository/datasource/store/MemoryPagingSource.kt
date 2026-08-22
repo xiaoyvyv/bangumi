@@ -3,8 +3,14 @@ package com.xiaoyv.bangumi.shared.data.repository.datasource.store
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 
+/**
+ * 将 [MemoryPagingStore] 的连续内存快照适配为 Paging3 offset 分页源。
+ *
+ * @param T 列表项类型。
+ * @param Id 列表项的稳定唯一标识类型。
+ * @param store 提供快照和网络补页能力的内存 Store。
+ */
 internal class MemoryPagingSource<T : Any, Id : Any>(
-    private val sourceId: Int,
     private val store: MemoryPagingStore<T, Id>,
 ) : PagingSource<Int, T>() {
     override fun getRefreshKey(state: PagingState<Int, T>): Int? {

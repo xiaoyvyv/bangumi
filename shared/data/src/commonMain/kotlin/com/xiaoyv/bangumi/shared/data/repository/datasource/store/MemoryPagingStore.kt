@@ -2,11 +2,21 @@ package com.xiaoyv.bangumi.shared.data.repository.datasource.store
 
 import androidx.paging.PagingSource
 import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * 管理分页快照、游标和本地 tombstone 的内存数据层。
+ *
+ * @param T 列表项类型。
+ * @param Id 列表项的稳定唯一标识类型。
+ * @param idSelector 从列表项获取稳定 ID 的函数。
+ * @param onLoadData 按游标加载网络页的函数；返回 `null` next cursor 表示没有下一页。
+ */
 internal class MemoryPagingStore<T : Any, Id : Any>(
     private val idSelector: (T) -> Id,
     private val onLoadData: suspend (PageCursor) -> PageResult<T>,
@@ -14,35 +24,50 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
     private val mutex = Mutex()
     private val items = mutableListOf<T>()
     private val deletedIds = mutableSetOf<Id>()
+    private val sourcesLock = SynchronizedObject()
     private val activeSources = linkedMapOf<Int, MemoryPagingSource<T, Id>>()
+    private val internallyInvalidatedSourceIds = mutableSetOf<Int>()
     private val nextSourceId = atomic(0)
-    private val internalInvalidations = atomic(0)
     private val pendingRefresh = atomic(false)
 
     private var nextCursor: PageCursor = null
     private var endReached = false
     private var initialized = false
 
+    /**
+     * 创建与当前 Store 快照关联的 PagingSource。
+     *
+     * Source 的外部失效会标记下次加载为网络 refresh；Store 内部变更引发的失效则只重读内存快照。
+     *
+     * @return 供 [androidx.paging.Pager] 使用的 PagingSource。
+     */
     fun createPagingSource(): PagingSource<Int, T> {
         val sourceId = nextSourceId.incrementAndGet()
         return MemoryPagingSource(
-            sourceId = sourceId,
             store = this,
         ).also { source ->
-            activeSources[sourceId] = source
+            synchronized(sourcesLock) {
+                activeSources[sourceId] = source
+            }
             source.registerInvalidatedCallback {
-                activeSources.remove(sourceId)
-
-                val remaining = internalInvalidations.value
-                if (remaining > 0) {
-                    internalInvalidations.decrementAndGet()
-                } else {
+                val internallyInvalidated = synchronized(sourcesLock) {
+                    activeSources.remove(sourceId)
+                    internallyInvalidatedSourceIds.remove(sourceId)
+                }
+                if (!internallyInvalidated) {
                     pendingRefresh.value = true
                 }
             }
         }
     }
 
+    /**
+     * 按内存 offset 返回分页页，并在数据不足时顺序加载网络页。
+     *
+     * @param offset 当前 PagingSource 请求的内存偏移量。
+     * @param loadSize 当前 PagingSource 请求的项数。
+     * @return 包含内存快照及下一页 offset 的加载结果。
+     */
     suspend fun load(offset: Int, loadSize: Int): PagingSource.LoadResult.Page<Int, T> {
         val snapshot = mutex.withLock {
             if (pendingRefresh.value) {
@@ -63,6 +88,7 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
 
             MemoryPageSnapshot(
                 data = pageData,
+                startIndex = startIndex,
                 totalCount = items.size,
                 nextKey = nextKey,
             )
@@ -72,7 +98,7 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
             data = snapshot.data,
             prevKey = if (offset == 0) null else max(offset - loadSize, 0),
             nextKey = snapshot.nextKey,
-            itemsBefore = offset,
+            itemsBefore = snapshot.startIndex,
             itemsAfter = max(snapshot.totalCount - offset - snapshot.data.size, 0),
         )
     }
@@ -118,8 +144,9 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
 
     suspend fun removeById(id: Id): Boolean {
         return mutateLocked { current ->
-            deletedIds.add(id)
-            current.removeAll { idSelector(it) == id }
+            val tombstoneAdded = deletedIds.add(id)
+            val itemRemoved = current.removeAll { idSelector(it) == id }
+            tombstoneAdded || itemRemoved
         }
     }
 
@@ -217,10 +244,14 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
     }
 
     private fun invalidateActiveSources() {
-        val sources = activeSources.values.toList()
+        val sources = synchronized(sourcesLock) {
+            activeSources.map { (sourceId, source) ->
+                internallyInvalidatedSourceIds.add(sourceId)
+                source
+            }
+        }
         if (sources.isEmpty()) return
 
-        internalInvalidations.addAndGet(sources.size)
         sources.forEach { it.invalidate() }
     }
 }
