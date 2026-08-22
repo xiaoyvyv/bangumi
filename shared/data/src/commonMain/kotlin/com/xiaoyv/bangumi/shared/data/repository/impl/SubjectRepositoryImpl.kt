@@ -25,6 +25,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -78,6 +79,7 @@ class SubjectRepositoryImpl(
         return createMemoryOffsetLimitPagingController(
             idSelector = { it.id },
             pagingConfig = pagingConfig,
+            transformData = { it.normalizedReplies() },
             onLoadData = {
                 client.requestNextSubjectApi {
                     getSubjectComments(
@@ -85,7 +87,7 @@ class SubjectRepositoryImpl(
                         type = collectionType.takeIf { type -> type != CollectionType.UNKNOWN },
                         limit = pagingConfig.pageSize,
                         offset = it
-                    ).result.map { reply -> reply.normalized() }
+                    ).result
                 }.getOrThrow()
             }
         )
@@ -209,7 +211,7 @@ class SubjectRepositoryImpl(
 
     override suspend fun fetchSubjectEpisodeComments(episodeId: Long): Result<List<ComposeReply>> =
         client.requestNextEpisodeApi {
-            getEpisodeComments(episodeId).map { it.normalized() }
+            getEpisodeComments(episodeId).normalizedReplies()
         }
 
 

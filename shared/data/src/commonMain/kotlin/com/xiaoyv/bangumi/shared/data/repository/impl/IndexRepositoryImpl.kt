@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -31,7 +32,7 @@ class IndexRepositoryImpl(
     }
 
     override suspend fun fetchIndexComments(indexId: Long): Result<List<ComposeReply>> = client.requestNextIndexApi {
-        getIndexComments(indexId).map { it.normalized() }
+        getIndexComments(indexId).normalizedReplies()
     }
 
 

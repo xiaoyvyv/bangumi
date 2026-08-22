@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 
@@ -20,7 +21,7 @@ class BlogRepositoryImpl(
     }
 
     override suspend fun fetchBlogComments(blogId: Long): Result<List<ComposeReply>> = client.requestNextBlogApi {
-        getBlogComments(blogId).map { it.normalized() }
+        getBlogComments(blogId).normalizedReplies()
     }
 
     override suspend fun fetchBlogRelateSubjects(blogId: Long): Result<List<ComposeSubject>> = client.requestNextBlogApi {

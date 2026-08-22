@@ -46,6 +46,7 @@ fun <T : Any, Id : Any> createMemoryOffsetLimitPagingController(
     pagingConfig: PagingConfig,
     idSelector: (T) -> Id,
     onLoadData: suspend (Int) -> List<T>,
+    transformData: (List<T>) -> List<T> = { it },
 ): MemoryPagingController<T, Id> {
     val store = MemoryPagingStore(
         idSelector = idSelector,
@@ -53,7 +54,7 @@ fun <T : Any, Id : Any> createMemoryOffsetLimitPagingController(
             val offset = cursor ?: 0
             val data = onLoadData(offset)
             PageResult(
-                data = data,
+                data = transformData(data),
                 nextCursor = if (data.size < pagingConfig.pageSize) null else offset + data.size,
             )
         }
