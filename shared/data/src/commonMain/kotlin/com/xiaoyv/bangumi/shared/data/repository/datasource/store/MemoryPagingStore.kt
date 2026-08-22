@@ -217,6 +217,7 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
 
     private fun applyLoadedPageLocked(result: PageResult<T>) {
         initialized = true
+        val itemCountBefore = items.size
 
         result.data.forEach { incoming ->
             val id = idSelector(incoming)
@@ -231,7 +232,9 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
         }
 
         nextCursor = result.nextCursor
-        endReached = result.nextCursor == null
+        // A cursor that only returns existing IDs cannot advance the local snapshot.
+        // Stop here so a repeated remote page cannot trigger an unbounded append loop.
+        endReached = result.nextCursor == null || items.size == itemCountBefore
         pendingRefresh.value = false
     }
 
