@@ -7,11 +7,13 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
+import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
+import com.xiaoyv.bangumi.shared.data.repository.datasource.bindTimelinePersonalState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
@@ -32,6 +34,7 @@ fun koinTimelinePageViewModel(param: ListTimelineParam) = koinViewModel<Timeline
 class TimelinePageViewModel(
     param: ListTimelineParam,
     private val timelineRepository: TimelineRepository,
+    private val personalStateStore: PersonalStateStore,
     private val userManager: UserManager,
 ) : BaseViewModel<TimelinePageState, TimelinePageSideEffect, TimelinePageEvent.Action>() {
 
@@ -42,6 +45,10 @@ class TimelinePageViewModel(
     )
 
     internal val timelines = timelineController.flow.cachedIn(viewModelScope)
+
+    init {
+        timelineController.bindTimelinePersonalState(viewModelScope, personalStateStore)
+    }
 
     override fun createInitialState() = TimelinePageState()
 
@@ -91,7 +98,7 @@ class TimelinePageViewModel(
             val updatedTimeline = timeline.copy(
                 reactions = newReactions.filter { it.users.isNotEmpty() }.toImmutableList()
             )
-            timelineController.replaceById(timeline.id, updatedTimeline)
+            personalStateStore.updateTimeline(timeline.id, updatedTimeline)
         }
     }
 
@@ -101,7 +108,7 @@ class TimelinePageViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            timelineController.removeById(timeline.id)
+            personalStateStore.deleteTimeline(timeline.id)
         }
     }
 }

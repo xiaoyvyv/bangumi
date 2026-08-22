@@ -16,7 +16,7 @@ import org.koin.dsl.navigation3.navigation
 val monoDetailModule = module {
     viewModelOf(::MonoDetailViewModel)
     viewModel { (param: ListPersonCastParam) ->
-        MonoDetailCastsViewModel(param = param, monoRepository = get())
+        MonoDetailCastsViewModel(param = param, monoRepository = get(), personalStateStore = get())
     }
 
     navScope {

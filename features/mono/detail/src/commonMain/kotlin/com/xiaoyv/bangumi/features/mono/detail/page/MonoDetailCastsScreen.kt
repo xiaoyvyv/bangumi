@@ -29,9 +29,11 @@ import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.shared.core.types.MonoCastType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListPersonCastParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
+import com.xiaoyv.bangumi.shared.data.repository.datasource.bindMonoInfoPersonalState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
@@ -51,9 +53,17 @@ fun koinMonoDetailCastsViewModel(param: ListPersonCastParam): MonoDetailCastsVie
     )
 }
 
-class MonoDetailCastsViewModel(param: ListPersonCastParam, monoRepository: MonoRepository) : ViewModel() {
+class MonoDetailCastsViewModel(
+    param: ListPersonCastParam,
+    monoRepository: MonoRepository,
+    personalStateStore: PersonalStateStore,
+) : ViewModel() {
     private val castPager = monoRepository.fetchPersonCastPager(param)
     val casts = castPager.flow.cachedIn(viewModelScope)
+
+    init {
+        castPager.bindMonoInfoPersonalState(viewModelScope, personalStateStore)
+    }
 }
 
 /**

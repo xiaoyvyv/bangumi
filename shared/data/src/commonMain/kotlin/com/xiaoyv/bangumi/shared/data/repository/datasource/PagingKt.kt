@@ -1,6 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.repository.datasource
 
 import androidx.paging.PagingConfig
+import com.xiaoyv.bangumi.shared.data.repository.datasource.store.DefaultMemoryPagingController
+import com.xiaoyv.bangumi.shared.data.repository.datasource.store.MemoryPagingStore
+import com.xiaoyv.bangumi.shared.data.repository.datasource.store.PageResult
 
 fun createPagingConfig(pageSize: Int): PagingConfig {
     return PagingConfig(

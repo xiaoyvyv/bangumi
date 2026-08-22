@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val subjectPageModule = module {
     viewModel { (param: ListSubjectParam) ->
-        SubjectPageViewModel(subjectRepository = get(), param = param)
+        SubjectPageViewModel(subjectRepository = get(), personalStateStore = get(), param = param)
     }
 }

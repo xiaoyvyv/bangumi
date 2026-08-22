@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val monoPageModule = module {
     viewModel { (param: ListMonoParam) ->
-        MonoPageViewModel(monoRepository = get(), param = param)
+        MonoPageViewModel(monoRepository = get(), personalStateStore = get(), param = param)
     }
 }

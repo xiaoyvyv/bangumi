@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
+import com.xiaoyv.bangumi.shared.data.repository.datasource.bindSubjectDisplayPersonalState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,11 +27,16 @@ fun koinSubjectPageViewModel(param: ListSubjectParam): SubjectPageViewModel {
  */
 class SubjectPageViewModel(
     private val subjectRepository: SubjectRepository,
+    private val personalStateStore: PersonalStateStore,
     private val param: ListSubjectParam,
 ) : BaseViewModel<SubjectPageState, SubjectPageSideEffect, SubjectPageEvent.Action>() {
 
     private val subjectPager = subjectRepository.fetchSubjectPager(param)
     internal val subjects = subjectPager.flow.cachedIn(viewModelScope)
+
+    init {
+        subjectPager.bindSubjectDisplayPersonalState(viewModelScope, personalStateStore)
+    }
 
     override fun createInitialState() = SubjectPageState(
         param = param

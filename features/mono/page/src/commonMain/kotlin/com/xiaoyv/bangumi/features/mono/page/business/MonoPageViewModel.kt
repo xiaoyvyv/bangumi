@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
+import com.xiaoyv.bangumi.shared.data.repository.datasource.bindMonoDisplayPersonalState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -26,12 +28,17 @@ fun koinMonoPageViewModel(param: ListMonoParam): MonoPageViewModel {
  */
 class MonoPageViewModel(
     monoRepository: MonoRepository,
+    personalStateStore: PersonalStateStore,
     val param: ListMonoParam,
 ) : BaseViewModel<MonoPageState, MonoPageSideEffect, MonoPageEvent.Action>() {
 
     private val monoPager = monoRepository.fetchMonoListPager(param)
 
     val monos = monoPager.flow.cachedIn(viewModelScope)
+
+    init {
+        monoPager.bindMonoDisplayPersonalState(viewModelScope, personalStateStore)
+    }
 
     override fun createInitialState() = MonoPageState(param = param)
 

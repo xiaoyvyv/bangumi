@@ -13,10 +13,9 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
-import kotlinx.collections.immutable.toImmutableList
+import com.xiaoyv.bangumi.shared.data.repository.datasource.bindCollectionSubjectPersonalState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -42,6 +41,10 @@ class TrackingPageViewModel(
     )
 
     val collections = userCollectionController.flow.cachedIn(viewModelScope)
+
+    init {
+        userCollectionController.bindCollectionSubjectPersonalState(viewModelScope, personalStateStore)
+    }
 
     override fun createInitialState(): TrackingPageState = TrackingPageState()
 
@@ -70,7 +73,6 @@ class TrackingPageViewModel(
             postToast { it.errMsg }
         }.onSuccess {
             personalStateStore.updateCollectionSubject(subject, update)
-            userCollectionController.replaceById(subject.id, mergePersonalSubject(subject))
         }
     }
 
@@ -85,17 +87,6 @@ class TrackingPageViewModel(
             postToast { it.errMsg }
         }.onSuccess {
             personalStateStore.updateCollectionEpisode(subject, episodes.map { it.id }, type)
-            userCollectionController.replaceById(subject.id, mergePersonalSubject(subject))
         }
-    }
-
-    private fun mergePersonalSubject(subject: ComposeSubject): ComposeSubject {
-        val updated = personalStateStore.state.value.subjects[subject.id] ?: return subject
-        return updated.copy(
-            episodes = subject.episodes
-                .map { if (it.splitter != null) it else updated.episodes.find { ep -> ep.id == it.id } ?: it }
-                .toImmutableList()
-                .grouped()
-        )
     }
 }

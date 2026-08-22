@@ -1,68 +1,11 @@
-package com.xiaoyv.bangumi.shared.data.repository.datasource
+package com.xiaoyv.bangumi.shared.data.repository.datasource.store
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
-import androidx.paging.PagingState
 import kotlinx.atomicfu.atomic
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.math.max
 import kotlin.math.min
-
-interface MemoryPagingController<T : Any, Id : Any> {
-    val flow: Flow<PagingData<T>>
-
-    suspend fun updateById(id: Id, transform: (T) -> T): Boolean
-
-    suspend fun replaceById(id: Id, item: T): Boolean
-
-    suspend fun removeById(id: Id): Boolean
-
-    suspend fun filter(predicate: (T) -> Boolean): Boolean
-
-    suspend fun sortWith(comparator: Comparator<in T>): Boolean
-
-    suspend fun replaceAll(transform: (List<T>) -> List<T>): Boolean
-}
-
-internal class DefaultMemoryPagingController<T : Any, Id : Any>(
-    private val store: MemoryPagingStore<T, Id>,
-    pagingConfig: PagingConfig,
-) : MemoryPagingController<T, Id> {
-    private val pager = Pager(
-        config = pagingConfig,
-        pagingSourceFactory = store::createPagingSource
-    )
-
-    override val flow: Flow<PagingData<T>> = pager.flow
-
-    override suspend fun updateById(id: Id, transform: (T) -> T): Boolean {
-        return store.updateById(id, transform)
-    }
-
-    override suspend fun replaceById(id: Id, item: T): Boolean {
-        return store.replaceById(id, item)
-    }
-
-    override suspend fun removeById(id: Id): Boolean {
-        return store.removeById(id)
-    }
-
-    override suspend fun filter(predicate: (T) -> Boolean): Boolean {
-        return store.filter(predicate)
-    }
-
-    override suspend fun sortWith(comparator: Comparator<in T>): Boolean {
-        return store.sortWith(comparator)
-    }
-
-    override suspend fun replaceAll(transform: (List<T>) -> List<T>): Boolean {
-        return store.replaceAll(transform)
-    }
-}
 
 internal class MemoryPagingStore<T : Any, Id : Any>(
     private val idSelector: (T) -> Id,
@@ -70,6 +13,7 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
 ) {
     private val mutex = Mutex()
     private val items = mutableListOf<T>()
+    private val deletedIds = mutableSetOf<Id>()
     private val activeSources = linkedMapOf<Int, MemoryPagingSource<T, Id>>()
     private val nextSourceId = atomic(0)
     private val internalInvalidations = atomic(0)
@@ -137,8 +81,27 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
         return mutateLocked { current ->
             val index = current.indexOfFirst { idSelector(it) == id }
             if (index < 0) return@mutateLocked false
-            current[index] = transform(current[index])
+            val updated = transform(current[index])
+            if (updated == current[index]) return@mutateLocked false
+            current[index] = updated
             true
+        }
+    }
+
+    suspend fun updateWhere(predicate: (T) -> Boolean, transform: (T) -> T): Boolean {
+        return mutateLocked { current ->
+            var changed = false
+            current.indices.forEach { index ->
+                val item = current[index]
+                if (predicate(item)) {
+                    val updated = transform(item)
+                    if (updated != item) {
+                        current[index] = updated
+                        changed = true
+                    }
+                }
+            }
+            changed
         }
     }
 
@@ -146,6 +109,8 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
         return mutateLocked { current ->
             val index = current.indexOfFirst { idSelector(it) == id }
             if (index < 0) return@mutateLocked false
+            if (current[index] == item) return@mutateLocked false
+            deletedIds.remove(id)
             current[index] = item
             true
         }
@@ -153,7 +118,19 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
 
     suspend fun removeById(id: Id): Boolean {
         return mutateLocked { current ->
+            deletedIds.add(id)
             current.removeAll { idSelector(it) == id }
+        }
+    }
+
+    suspend fun insert(item: T, index: Int): Boolean {
+        return mutateLocked { current ->
+            val id = idSelector(item)
+            if (current.any { idSelector(it) == id }) return@mutateLocked false
+
+            deletedIds.remove(id)
+            current.add(index.coerceIn(0, current.size), item)
+            true
         }
     }
 
@@ -216,6 +193,7 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
 
         result.data.forEach { incoming ->
             val id = idSelector(incoming)
+            if (id in deletedIds) return@forEach
             val index = items.indexOfFirst { idSelector(it) == id }
 
             if (index >= 0) {
@@ -246,40 +224,3 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
         sources.forEach { it.invalidate() }
     }
 }
-
-internal class MemoryPagingSource<T : Any, Id : Any>(
-    private val sourceId: Int,
-    private val store: MemoryPagingStore<T, Id>,
-) : PagingSource<Int, T>() {
-    override fun getRefreshKey(state: PagingState<Int, T>): Int? {
-        val anchor = state.anchorPosition ?: return null
-        val page = state.closestPageToPosition(anchor) ?: return null
-
-        return page.prevKey?.plus(state.config.pageSize)
-            ?: page.nextKey?.minus(state.config.pageSize)?.coerceAtLeast(0)
-    }
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
-        return try {
-            store.load(
-                offset = params.key ?: 0,
-                loadSize = params.loadSize,
-            )
-        } catch (e: Exception) {
-            LoadResult.Error(e)
-        }
-    }
-}
-
-internal data class PageResult<T : Any>(
-    val data: List<T>,
-    val nextCursor: PageCursor,
-)
-
-internal data class MemoryPageSnapshot<T : Any>(
-    val data: List<T>,
-    val totalCount: Int,
-    val nextKey: Int?,
-)
-
-internal typealias PageCursor = Int?
