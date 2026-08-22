@@ -19,7 +19,6 @@ import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
 import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
@@ -29,7 +28,9 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRequireLogin
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineChipTabs
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
@@ -111,38 +112,35 @@ private fun TimelineScreenContent(
         tabs = timelineTabs
     ) {
         val tab = timelineTabs[it].type
+
         BgmRequireLogin(
             modifier = Modifier.fillMaxSize(),
-            enable = tab == TimelineTab.TIMELINE_SELF
-                    || tab == TimelineTab.TIMELINE_FRIEND
-                    || tab == TimelineTab.RANT_FRIEND
+            enable = tab == TimelineTab.TIMELINE_SELF || tab == TimelineTab.TIMELINE_FRIEND
         ) {
             val username = currentUser().username
 
-            TimelinePageRoute(
-                param = remember(tab, username) {
-                    ListTimelineParam(
-                        type = ListTimelineType.BROWSER,
-                        timelineMode = when (tab) {
-                            TimelineTab.TIMELINE_ANYONE -> TimelineTarget.WHOLE
-                            TimelineTab.TIMELINE_FRIEND -> TimelineTarget.FRIEND
-                            TimelineTab.TIMELINE_SELF -> TimelineTarget.USER
-                            TimelineTab.RANT_ANYONE -> TimelineTarget.WHOLE
-                            TimelineTab.RANT_FRIEND -> TimelineTarget.FRIEND
-                            else -> TimelineTarget.WHOLE
-                        },
-                        timelineCat = when (tab) {
-                            TimelineTab.RANT_ANYONE -> TimelineCat.STATUS
-                            TimelineTab.RANT_FRIEND -> TimelineCat.STATUS
-                            else -> TimelineCat.UNKNOWN
-                        },
-                        username = username
-                    )
-                },
-                onNavScreen = { screen ->
-                    onUiEvent(TimelineEvent.UI.OnNavScreen(screen))
-                }
-            )
+            BgmChipHorizontalPager(tabs = timelineChipTabs) { index ->
+                val cat = timelineChipTabs[index].type
+
+                TimelinePageRoute(
+                    param = remember(tab, cat, username) {
+                        ListTimelineParam(
+                            type = ListTimelineType.BROWSER,
+                            timelineMode = when (tab) {
+                                TimelineTab.TIMELINE_ANYONE -> TimelineTarget.WHOLE
+                                TimelineTab.TIMELINE_FRIEND -> TimelineTarget.FRIEND
+                                TimelineTab.TIMELINE_SELF -> TimelineTarget.USER
+                                else -> TimelineTarget.WHOLE
+                            },
+                            timelineCat = cat,
+                            username = username
+                        )
+                    },
+                    onNavScreen = { screen ->
+                        onUiEvent(TimelineEvent.UI.OnNavScreen(screen))
+                    }
+                )
+            }
         }
     }
 }

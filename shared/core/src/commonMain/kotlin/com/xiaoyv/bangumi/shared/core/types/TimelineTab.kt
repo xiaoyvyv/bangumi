@@ -10,9 +10,7 @@ import androidx.annotation.IntDef
 @IntDef(
     TimelineTab.TIMELINE_ANYONE,
     TimelineTab.TIMELINE_SELF,
-    TimelineTab.TIMELINE_FRIEND,
-    TimelineTab.RANT_FRIEND,
-    TimelineTab.RANT_ANYONE,
+    TimelineTab.TIMELINE_FRIEND
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class TimelineTab {
@@ -20,7 +18,5 @@ annotation class TimelineTab {
         const val TIMELINE_ANYONE = 0
         const val TIMELINE_FRIEND = 1
         const val TIMELINE_SELF = 2
-        const val RANT_FRIEND = 3
-        const val RANT_ANYONE = 4
     }
 }

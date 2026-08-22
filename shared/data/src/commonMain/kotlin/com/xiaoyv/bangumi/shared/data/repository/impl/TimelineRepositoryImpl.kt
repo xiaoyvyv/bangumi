@@ -32,7 +32,7 @@ class TimelineRepositoryImpl(
     ): MemoryPagingController<ComposeTimeline, Long> {
         // 官方 API 暂不支持分类，这里用 Web 代替
         val timelineCat = type.takeIf { cat -> cat != TimelineCat.UNKNOWN }
-        if (timelineCat != null && target != TimelineTarget.USER) {
+        if (timelineCat != null) {
             return createMemoryPageLimitPagingController(
                 pagingConfig = createPagingConfig(20),
                 idSelector = { it.id },
@@ -40,7 +40,7 @@ class TimelineRepositoryImpl(
                     client.requestNextTimelineApi {
                         getTimelineWebApi(
                             mode = target,
-                            username = username.takeIf { it.isNotBlank() },
+                            username = username.takeIf { text -> text.isNotBlank() },
                             type = when (timelineCat) {
                                 TimelineCat.DAILY -> "say"
                                 TimelineCat.WIKI -> "wiki"

@@ -73,7 +73,7 @@ interface TimelineApi {
     suspend fun getTimelineWebApi(
         @Query("mode") @TimelineTarget mode: String,
         @Query("type") type: String? = null,
-        @Query("user") username: String? = null,
+        @Query("username") username: String? = null,
         @Query("page") page: Int = 1,
     ): List<ComposeTimeline>
 

@@ -153,6 +153,18 @@ private data class CommentSubmitPayload(
 
 private fun CommentDialogAnchor.createSubmitPayload(comment: String): CommentSubmitPayload {
     val reply = this.reply
+    if (target is CommentTarget.Timeline) {
+        val username = reply.user.username.trim()
+        return CommentSubmitPayload(
+            content = if (reply == ComposeReply.Empty || username.isEmpty()) {
+                comment
+            } else {
+                "[user=${reply.user.username}]${reply.user.nickname}[/user] $comment"
+            },
+            replyTo = 0,
+        )
+    }
+
     if (reply == ComposeReply.Empty) return CommentSubmitPayload(content = comment, replyTo = null)
     if (reply.relatedID == 0L) return CommentSubmitPayload(content = comment, replyTo = reply.id)
 

@@ -94,8 +94,8 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
 import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_mine_title
-import com.xiaoyv.bangumi.core_resource.resources.timeline_rant_all
-import com.xiaoyv.bangumi.core_resource.resources.timeline_rant_friend
+import com.xiaoyv.bangumi.core_resource.resources.timeline_status
+import com.xiaoyv.bangumi.core_resource.resources.timeline_timeline
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_discover
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_hidden
 import com.xiaoyv.bangumi.core_resource.resources.type_feature_pm
@@ -375,9 +375,12 @@ object TabTokens {
     val timelineTabs = persistentListOf(
         ComposeTextTab(TimelineTab.TIMELINE_ANYONE, Res.string.global_all),
         ComposeTextTab(TimelineTab.TIMELINE_FRIEND, Res.string.timeline_friend_title),
-        ComposeTextTab(TimelineTab.RANT_FRIEND, Res.string.timeline_rant_friend),
-        ComposeTextTab(TimelineTab.RANT_ANYONE, Res.string.timeline_rant_all),
-        ComposeTextTab(TimelineTab.TIMELINE_SELF, Res.string.timeline_mine_title),
+        ComposeTextTab(TimelineTab.TIMELINE_SELF, Res.string.timeline_mine_title)
+    )
+
+    val timelineChipTabs = persistentListOf(
+        ComposeTextTab(TimelineCat.UNKNOWN, Res.string.timeline_timeline),
+        ComposeTextTab(TimelineCat.STATUS, Res.string.timeline_status),
     )
 
     val timelineCatTabs = persistentListOf(

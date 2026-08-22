@@ -474,8 +474,7 @@
     <string name="timeline_index_content_update">%1$s个收录，更新于 %1$s</string>
     <string name="timeline_member_cnt">%1$s个成员</string>
     <string name="timeline_reply_cnt">%1$s 个回复</string>
-    <string name="timeline_rant_friend">朋友圈</string>
-    <string name="timeline_rant_all">广场</string>
+    <string name="timeline_timeline">时间线</string>
 
     <string name="timeline_add">吐个槽~</string>
     <string name="timeline_add_cancel">取消</string>

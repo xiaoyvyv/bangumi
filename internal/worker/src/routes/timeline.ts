@@ -8,7 +8,9 @@ export async function handleTimeline(req: Request, env: any) {
 
 	const mode = url.searchParams.get('mode')?.toLowerCase() || 'all';
 	const type = url.searchParams.get('type') || '';
-	const username = url.searchParams.get('username')?.toLowerCase() || '';
+	const username = (
+		url.searchParams.get('user') ?? url.searchParams.get('username')
+	)?.trim().toLowerCase() || '';
 	const page = url.searchParams.get('page') || '';
 
 	let anonymous = false;
@@ -51,4 +53,3 @@ export async function handleTimeline(req: Request, env: any) {
 		anonymous
 	);
 }
-

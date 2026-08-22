@@ -98,7 +98,7 @@ export async function transformTimeline(req: Request, res: Response) {
 
 		const reactions: Reaction[] = likesMap.get(String(id)) || [];
 
-		const catAndType = parseTimelineCatAndType(selectElement('span.info', node));
+		const catAndType = parseTimelineCatAndType(selectElement('span.info, span.info_full', node));
 		const memo = parseTimelineMemo(node, catAndType);
 
 		return {

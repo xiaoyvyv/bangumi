@@ -63,6 +63,7 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -104,6 +105,7 @@ import com.xiaoyv.bangumi.shared.core.utils.bbcodeUnderline
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
 import com.xiaoyv.bangumi.shared.core.utils.insertEmoji
+import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
 import com.xiaoyv.bangumi.shared.core.utils.rememberBgmEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberBlakeEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberImePanelState
@@ -296,19 +298,18 @@ fun CommentDialogContent(
                     minLines = 3,
                     placeholder = {
                         if (state.anchor.reply != ComposeReply.Empty) {
-                            Text(
-                                text = buildAnnotatedString {
-                                    pushStyle(
-                                        SpanStyle(
-                                            fontWeight = FontWeight.Medium,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
-                                    )
+                            val primary = MaterialTheme.colorScheme.primary
+                            val hint by produceState(AnnotatedString(""), primary) {
+                                value = buildAnnotatedString {
+                                    pushStyle(SpanStyle(fontWeight = FontWeight.Medium, color = primary))
                                     append(state.anchor.reply.user.nickname)
                                     pop()
                                     append(": ")
-                                    append(state.anchor.reply.content)
-                                },
+                                    append(state.anchor.reply.content.parseAsHtml(primary))
+                                }
+                            }
+                            Text(
+                                text = hint,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                                 style = LocalTextStyle.current
