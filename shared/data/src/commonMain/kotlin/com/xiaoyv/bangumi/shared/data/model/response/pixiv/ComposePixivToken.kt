@@ -5,13 +5,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Access Token:
+ * [ComposePixivToken] Pixiv Token 响应数据
  *
- * - This is the short-lived key used to access protected resources on the server. It typically expires after a short period (e.g., an hour) for security reasons.
- *
- * Refresh Token:
- *
- * - This is a longer-lived token (e.g., days or weeks) used to acquire new access tokens when the original one expires. It's stored securely by the application.
+ * @author why
+ * @since 2025/1/12
  */
 @Immutable
 @Serializable
@@ -21,14 +18,17 @@ data class ComposePixivToken(
     @SerialName("scope") val scope: String = "",
     @SerialName("refresh_token") val refreshToken: String = "",
     @SerialName("device_token") val deviceToken: String = "",
-    @SerialName("local_user") val localUser: String = "",
+    @SerialName("user") val user: ComposePixivUser = ComposePixivUser.Empty,
+    @SerialName("response") val response: ComposePixivToken? = null,
     @SerialName("expires_in") val expiresIn: Long = 0,
 
-    /**
-     * 本地填充，过期毫秒时间戳
-     */
+    // 本地填充，过期毫秒时间戳
     @SerialName("expires_at") val expiresAt: Long = 0,
 ) {
+    // 优先读取根节点 user，若空则尝试读取 response.user
+    val currentUser: ComposePixivUser
+        get() = if (user.id.isNotBlank()) user else (response?.user ?: ComposePixivUser.Empty)
+
     companion object {
         val Empty = ComposePixivToken()
     }

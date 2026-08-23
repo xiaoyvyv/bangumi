@@ -81,8 +81,8 @@ class UserManager(
         }
         val cookie = webCookies.fastJoinToString(";") { it.name + "=" + it.value }
 
-//        debugLog { "PixivUser:$it" }
         debugLog { "PixivCookie:$cookie" }
+        notificationChanged()
     }
 
     /**
@@ -117,7 +117,7 @@ class UserManager(
                 }
             },
             onSuccess = {
-                // 拉取个人信息，顺便检查 Json 授权是否失效
+                // 拉取个人信息，顺便检查 Json 授权环境是否失效
                 userRepository.fetchUserProfile()
                     .onSuccess {
                         debugLog { "更新用户信息: ${it.copy(formHash = userInfo.formHash)}" }

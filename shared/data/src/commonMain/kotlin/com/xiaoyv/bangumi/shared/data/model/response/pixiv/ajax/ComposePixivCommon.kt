@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
+import com.xiaoyv.bangumi.shared.core.utils.serialization.StringStringMapOrEmptyListSerializer
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -118,6 +119,7 @@ data class ComposePixivMetaData(
     @SerialName("title") val title: String = "",
     @SerialName("description") val description: String = "",
     @SerialName("canonical") val canonical: String = "",
+    @Serializable(with = StringStringMapOrEmptyListSerializer::class)
     @SerialName("alternateLanguages") val alternateLanguages: SerializeMap<String, String> = persistentMapOf(),
     @SerialName("descriptionHeader") val descriptionHeader: String = "",
     @SerialName("ogp") val ogp: ComposePixivOgpData = ComposePixivOgpData.Empty,

@@ -112,9 +112,9 @@ data class ComposePixivUnfollowUserResponse(
 @Immutable
 @Serializable
 data class ComposePixivProfileAllBody(
-    @SerialName("illusts") val illusts: SerializeMap<String, ComposePixivIllustSimple> = persistentMapOf(),
-    @SerialName("manga") val manga: SerializeMap<String, ComposePixivIllustSimple> = persistentMapOf(),
-    @SerialName("novels") val novels: SerializeMap<String, ComposePixivNovelSimple> = persistentMapOf(),
+    @SerialName("illusts") val illusts: SerializeMap<String, ComposePixivIllustSimple?> = persistentMapOf(),
+    @SerialName("manga") val manga: SerializeMap<String, ComposePixivIllustSimple?> = persistentMapOf(),
+    @SerialName("novels") val novels: SerializeMap<String, ComposePixivNovelSimple?> = persistentMapOf(),
     @SerialName("pickup") val pickup: SerializeList<ComposePixivIllustSimple> = persistentListOf()
 ) {
     companion object {
@@ -125,7 +125,7 @@ data class ComposePixivProfileAllBody(
 @Immutable
 @Serializable
 data class ComposePixivProfileIllustsBody(
-    @SerialName("works") val works: SerializeMap<String, ComposePixivIllustSimple> = persistentMapOf()
+    @SerialName("works") val works: SerializeMap<String, ComposePixivIllustSimple?> = persistentMapOf()
 ) {
     companion object {
         val Empty = ComposePixivProfileIllustsBody()

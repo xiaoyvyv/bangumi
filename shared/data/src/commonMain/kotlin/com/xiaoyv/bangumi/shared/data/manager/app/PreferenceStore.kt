@@ -44,6 +44,13 @@ class PreferenceStore(
      */
     internal var pixivToken by cacheRepository.serializable(SpKey.KEY_USER_PIXIV_TOKEN, ComposePixivToken.Empty)
 
+    val pixivTokenData: ComposePixivToken
+        get() = pixivToken
+
+    fun clearPixivToken() {
+        pixivToken = ComposePixivToken.Empty
+    }
+
     /**
      * APP 设置
      */

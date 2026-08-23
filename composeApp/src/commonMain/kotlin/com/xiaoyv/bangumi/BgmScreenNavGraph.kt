@@ -32,6 +32,8 @@ import com.xiaoyv.bangumi.features.mono.browser.monoBrowserModule
 import com.xiaoyv.bangumi.features.mono.detail.monoDetailModule
 import com.xiaoyv.bangumi.features.mono.page.monoPageModule
 import com.xiaoyv.bangumi.features.notification.notificationModule
+import com.xiaoyv.bangumi.features.pixiv.illust.main.pixivIllustMainModule
+import com.xiaoyv.bangumi.features.pixiv.illust.page.pixivIllustPageModule
 import com.xiaoyv.bangumi.features.pixiv.login.pixivLoginModule
 import com.xiaoyv.bangumi.features.pixiv.main.pixivMainModule
 import com.xiaoyv.bangumi.features.preivew.album.previewAlbumModule
@@ -104,6 +106,8 @@ internal val navigationModule = module {
         indexDetailModule,
         tagDetailModule,
         pixivMainModule,
+        pixivIllustMainModule,
+        pixivIllustPageModule,
         pixivLoginModule,
         topicDetailModule,
         blogPageModule,

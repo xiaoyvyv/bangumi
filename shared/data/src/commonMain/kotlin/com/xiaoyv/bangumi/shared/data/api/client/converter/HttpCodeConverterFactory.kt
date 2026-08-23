@@ -1,5 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.api.client.converter
 
+import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.nodes.Element
+import com.fleeksoft.ksoup.nodes.Node
+import com.fleeksoft.ksoup.nodes.TextNode
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -25,13 +29,27 @@ internal class HttpCodeConverterFactory : Converter.Factory {
                 is KtorfitResult.Failure -> throw result.throwable
                 is KtorfitResult.Success -> {
                     if (result.response.status.value in (200 until 400)) {
-                        result.response.call.body(typeData.typeInfo)
+                        try {
+                            result.response.call.body(typeData.typeInfo)
+                        } catch (throwable: Throwable) {
+                            val text = result.response.bodyAsText().trim()
+                            if (text.startsWith("<") || text.contains("<html")) {
+                                val errorMsg = parseHtmlErrorMsg(text)
+                                throw ApiHttpException(
+                                    code = result.response.status.value,
+                                    errorMsg = errorMsg
+                                )
+                            }
+                            throw throwable
+                        }
                     } else {
                         val text = result.response.bodyAsText().trim()
                         val isJson = result.response.headers[HttpHeaders.ContentType].orEmpty()
                         if (isJson.contains("json") && text.startsWith("{")) {
                             val info = defaultJson.decodeFromString<Map<String, JsonElement>>(text)
-                            val errorMsg = info["message"] ?: info["msg"] ?: info["error"] ?: info["code"] ?: JsonPrimitive("")
+                            val errorMsg =
+                                info["message"] ?: info["msg"] ?: info["error"] ?: info["code"]
+                                ?: JsonPrimitive("")
                             throw ApiHttpException(
                                 code = result.response.status.value,
                                 errorMsg = if (errorMsg is JsonPrimitive) {
@@ -41,11 +59,31 @@ internal class HttpCodeConverterFactory : Converter.Factory {
                                 }
                             )
                         } else {
-                            throw ApiHttpException(result.response.status.value, text)
+                            val errorMsg = if (text.startsWith("<") || text.contains("<html")) {
+                                parseHtmlErrorMsg(text)
+                            } else {
+                                text
+                            }
+                            throw ApiHttpException(
+                                code = result.response.status.value,
+                                errorMsg = errorMsg
+                            )
                         }
                     }
                 }
             }
+
+        /**
+         * 解析 HTML 页面，递归遍历并收集最底层的文本节点内容（自动跳过 script 与 style 标签）
+         */
+        private fun parseHtmlErrorMsg(html: String): String {
+            return try {
+                val doc = Ksoup.parse(html)
+                doc.text()
+            } catch (_: Throwable) {
+                "Error"
+            }
+        }
     }
 
     override fun suspendResponseConverter(

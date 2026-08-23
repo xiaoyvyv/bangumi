@@ -8,7 +8,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.orbitmvi.orbit.annotation.OrbitDsl
 
-@OrbitDsl
 suspend inline fun <T> runResult(
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     crossinline block: suspend () -> T,

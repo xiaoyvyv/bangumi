@@ -3,6 +3,8 @@
 package com.xiaoyv.bangumi.shared.data.api.pixiv
 
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingContentType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingMode
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.pixiv.PixivAddTagRequest
 import com.xiaoyv.bangumi.shared.data.model.request.pixiv.PixivBookmarkRequest
@@ -97,7 +99,7 @@ interface PixivAjaxApi {
      * @return 页面列表，每个元素包含该页的各种尺寸图片 URL
      */
     @GET("ajax/illust/{pid}/pages")
-    suspend fun getIllustPages(@Path("pid") pid: Long): ComposePixivResponse<SerializeList<ComposePixivPageInfo>>
+    suspend fun getIllustPages(@Path("pid") pid: Long): ComposePixivResponse<List<ComposePixivPageInfo>>
 
     /**
      * 查询 Ugoira 动图元数据
@@ -409,7 +411,7 @@ interface PixivAjaxApi {
     suspend fun getUserIllustTags(
         @Path("uid") uid: Long,
         @Query("all") all: Int = 1
-    ): ComposePixivResponse<SerializeList<ComposePixivUserIllustTag>>
+    ): ComposePixivResponse<List<ComposePixivUserIllustTag>>
 
     /**
      * 获取用户指定标签的插画作品
@@ -441,7 +443,7 @@ interface PixivAjaxApi {
     suspend fun getUserNovelTags(
         @Path("uid") uid: Long,
         @Query("all") all: Int = 1
-    ): ComposePixivResponse<SerializeList<ComposePixivUserIllustTag>>
+    ): ComposePixivResponse<List<ComposePixivUserIllustTag>>
 
     /**
      * 获取用户指定标签的小说作品
@@ -606,7 +608,7 @@ interface PixivAjaxApi {
      * @param seriesId 系列ID
      */
     @POST("ajax/illust/series/{seriesId}/watch")
-    suspend fun watchIllustSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<SerializeList<String>>
+    suspend fun watchIllustSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<List<String>>
 
     /**
      * 移除插画/漫画系列追更
@@ -614,7 +616,7 @@ interface PixivAjaxApi {
      * @param seriesId 系列ID
      */
     @POST("ajax/illust/series/{seriesId}/unwatch")
-    suspend fun unwatchIllustSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<SerializeList<String>>
+    suspend fun unwatchIllustSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<List<String>>
 
     /**
      * 查询小说系列详情
@@ -646,7 +648,7 @@ interface PixivAjaxApi {
      * @param seriesId 系列ID
      */
     @GET("ajax/novel/series/{seriesId}/content_titles")
-    suspend fun getNovelSeriesTitles(@Path("seriesId") seriesId: Long): ComposePixivResponse<SerializeList<ComposePixivNovelSeriesTitle>>
+    suspend fun getNovelSeriesTitles(@Path("seriesId") seriesId: Long): ComposePixivResponse<List<ComposePixivNovelSeriesTitle>>
 
     /**
      * 加入小说系列追更列表
@@ -654,7 +656,7 @@ interface PixivAjaxApi {
      * @param seriesId 系列ID
      */
     @POST("ajax/novel/series/{seriesId}/watch")
-    suspend fun watchNovelSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<SerializeList<String>>
+    suspend fun watchNovelSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<List<String>>
 
     /**
      * 移除小说系列追更
@@ -662,7 +664,7 @@ interface PixivAjaxApi {
      * @param seriesId 系列ID
      */
     @POST("ajax/novel/series/{seriesId}/unwatch")
-    suspend fun unwatchNovelSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<SerializeList<String>>
+    suspend fun unwatchNovelSeries(@Path("seriesId") seriesId: Long): ComposePixivResponse<List<String>>
 
     // ==================== 评论 API ====================
 
@@ -857,9 +859,9 @@ interface PixivAjaxApi {
      */
     @GET("ranking.php")
     suspend fun getIllustRanking(
-        @Query("mode") mode: String = "daily",
+        @Query("mode") @PixivRankingMode mode: String = PixivRankingMode.DAILY,
         @Query("p") page: Int = 1,
-        @Query("content") content: String = "all",
+        @Query("content") @PixivRankingContentType content: String = PixivRankingContentType.ALL,
         @Query("date") date: String? = null,
         @Query("format") format: String = "json"
     ): ComposePixivRankingResponse

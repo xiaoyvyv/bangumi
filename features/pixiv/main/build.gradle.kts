@@ -13,6 +13,7 @@ kotlin {
             implementation(projects.shared.core)
             implementation(projects.shared.data)
             implementation(projects.shared.ui)
+            implementation(projects.features.pixiv.illust.page)
         }
     }
 }

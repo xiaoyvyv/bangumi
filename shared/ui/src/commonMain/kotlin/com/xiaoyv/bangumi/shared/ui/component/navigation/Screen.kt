@@ -61,6 +61,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.IndexDetail::class, Screen.IndexDetail.serializer())
             subclass(Screen.TagDetail::class, Screen.TagDetail.serializer())
             subclass(Screen.PixivMain::class, Screen.PixivMain.serializer())
+            subclass(Screen.PixivIllust::class, Screen.PixivIllust.serializer())
             subclass(Screen.PixivLogin::class, Screen.PixivLogin.serializer())
             subclass(Screen.TopicDetail::class, Screen.TopicDetail.serializer())
             subclass(Screen.DetectImage::class, Screen.DetectImage.serializer())
@@ -193,6 +194,9 @@ sealed class Screen(
 
     @Serializable
     data object PixivMain : Screen(SCREEN_ROUTE_PIXIV_MAIN)
+
+    @Serializable
+    data class PixivIllust(val id: Long) : Screen(SCREEN_ROUTE_PIXIV_ILLUST)
 
     @Serializable
     data object PixivLogin : Screen(SCREEN_ROUTE_PIXIV_LOGIN)

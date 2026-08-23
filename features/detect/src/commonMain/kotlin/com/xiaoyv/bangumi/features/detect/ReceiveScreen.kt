@@ -488,7 +488,10 @@ private fun ReceiveScreenCharacterDialog(
     onUiEvent: (ReceiveEvent.UI) -> Unit,
     onActionEvent: (ReceiveEvent.Action) -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState(true) { it != SheetValue.Hidden }
+    val bottomSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    ) { it != SheetValue.Hidden }
     val scope = rememberCoroutineScope()
     if (state.resultCharacter.isNotEmpty()) {
         ModalBottomSheet(

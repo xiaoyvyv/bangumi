@@ -6,15 +6,21 @@ import androidx.paging.PagingConfig
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.runResult
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.ChallengeParam
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustDetailBody
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivPageInfo
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivUserInfoBody
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import org.kotlincrypto.random.CryptoRand
 import kotlin.io.encoding.Base64
 
@@ -51,15 +57,46 @@ class PixivRepositoryImpl(
         ).let { it.copy(expiresAt = System.currentTimeMillis() + it.expiresIn * 1000) }
     }
 
-    override fun fetchIllustRankingPager(content: String, mode: String): MemoryPagingController<ComposePixivRankingContent, Long> {
+    override fun fetchIllustRankingPager(
+        content: String,
+        mode: String,
+        date: String?,
+    ): MemoryPagingController<ComposePixivRankingContent, Long> {
         return createMemoryPageLimitPagingController(
             pagingConfig = pagingConfig,
             idSelector = { it.illust_id },
             onLoadData = { page ->
                 client.requestPixivAjaxApi {
-                    getIllustRanking(mode = mode, content = content, page = page).contents
+                    getIllustRanking(
+                        mode = mode,
+                        content = content,
+                        date = date.takeIf { it.orEmpty().isNotBlank() },
+                        page = page
+                    ).contents
                 }.getOrThrow()
             }
         )
+    }
+
+    override suspend fun fetchIllustDetail(illustId: Long): Result<ComposePixivIllustDetailBody> {
+        return client.requestPixivAjaxApi {
+            getIllustDetail(illustId).body ?: throw IllegalStateException("Illust detail body is null")
+        }
+    }
+
+    override suspend fun fetchIllustPages(illustId: Long): Result<SerializeList<ComposePixivPageInfo>> {
+        return client.requestPixivAjaxApi {
+            getIllustPages(illustId).body?.toPersistentList() ?: persistentListOf()
+        }
+    }
+
+    override suspend fun fetchUserInfo(uid: Long): Result<ComposePixivUserInfoBody> {
+        return client.requestPixivAjaxApi {
+            val response = getUserInfo(uid)
+            if (response.error) {
+                throw IllegalStateException(response.message.ifBlank { "Fetch user info failed" })
+            }
+            response.body ?: throw IllegalStateException("User info body is null")
+        }
     }
 }
