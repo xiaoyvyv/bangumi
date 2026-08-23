@@ -214,7 +214,12 @@ private fun PixivIllustScreenContent(
 
         // 作者信息
         itemKey(unique = CONTENT_TYPE_ILLUST_AUTHOR) {
-            PixivIllustAuthorItem(detail = detail)
+            PixivIllustAuthorItem(
+                modifier = Modifier.clickable {
+                    onUiEvent(PixivIllustEvent.UI.OnNavScreen(Screen.PixivUserMain(detail.userId)))
+                },
+                detail = detail
+            )
         }
 
         // 标题与时间

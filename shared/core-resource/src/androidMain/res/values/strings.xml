@@ -555,6 +555,15 @@
     <string name="profile_time_machine">时光机</string>
     <string name="profile_state">统计</string>
     <string name="profile_bio">个人介绍</string>
+    <string name="profile_joined_at">加入于 %1$s</string>
+    <string name="profile_no_sign">这个人很神秘，什么都没留下</string>
+    <string name="profile_rating_score">%1$d分</string>
+    <string name="profile_collection_empty">暂时没有收藏该类型</string>
+    <string name="profile_collection_section_title">Ta的%1$s</string>
+    <string name="profile_stat_finished_rate">完成率</string>
+    <string name="profile_stat_average_score">平均分</string>
+    <string name="profile_stat_standard_deviation">标准差</string>
+    <string name="profile_stat_rating_count">评分数</string>
     <string name="profile_network_service">社交网络</string>
 
     <string name="notification_no_data">暂时没有通知哦~</string>

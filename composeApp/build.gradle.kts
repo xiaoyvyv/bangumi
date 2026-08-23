@@ -89,6 +89,9 @@ kotlin {
             implementation(projects.features.pixiv.illust.main)
             implementation(projects.features.pixiv.illust.page)
             implementation(projects.features.pixiv.login)
+            implementation(projects.features.pixiv.user.main)
+            implementation(projects.features.pixiv.user.setting)
+            implementation(projects.features.pixiv.user.edit)
         }
     }
 }

@@ -6,14 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
@@ -27,9 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.multiplatform.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.multiplatform.cartesian.CartesianMeasuringContext
@@ -41,21 +37,33 @@ import com.patrykandpatrick.vico.multiplatform.cartesian.data.CartesianValueForm
 import com.patrykandpatrick.vico.multiplatform.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.multiplatform.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.multiplatform.cartesian.rememberCartesianChart
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_collection
+import com.xiaoyv.bangumi.core_resource.resources.global_done
+import com.xiaoyv.bangumi.core_resource.resources.global_rating
+import com.xiaoyv.bangumi.core_resource.resources.profile_stat_average_score
+import com.xiaoyv.bangumi.core_resource.resources.profile_stat_finished_rate
+import com.xiaoyv.bangumi.core_resource.resources.profile_stat_rating_count
+import com.xiaoyv.bangumi.core_resource.resources.profile_stat_standard_deviation
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsAverage
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsCollect
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsComments
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsFinish
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsFinishRate
 import com.xiaoyv.bangumi.shared.ui.theme.colorChartStatisticsStander
+import com.xiaoyv.bangumi.shared.ui.view.user.UserStatHighlightCard
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
+/**
+ * 用户统计页，展示各条目类型下的收藏摘要与评分分布。
+ */
 @Composable
 @OptIn(ExperimentalGridApi::class)
 fun UserStateScreen(
@@ -70,26 +78,39 @@ fun UserStateScreen(
             .padding(ContentMargin),
         verticalArrangement = Arrangement.spacedBy(ContentMargin)
     ) {
-        var current by remember { mutableStateOf(SubjectType.UNKNOWN) }
+        var current by remember { mutableStateOf(SubjectType.ANIME) }
+        val contentMargin = ContentMargin
 
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            TabTokens.subjectTypeFilters.forEachIndexed { index, (t, _) ->
-                SegmentedButton(
-                    selected = current == t,
-                    onClick = { current = t },
-                    shape = SegmentedButtonDefaults.itemShape(
-                        index = index,
-                        count = TabTokens.subjectTypeFilters.size,
-                        baseShape = MaterialTheme.shapes.small
-                    ),
-                    label = {
-                        Text(
-                            modifier = Modifier.basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(4.dp)),
-                            maxLines = 1,
-                            text = stringResource(SubjectType.string(t))
-                        )
-                    }
-                )
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.large,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            )
+        ) {
+            SingleChoiceSegmentedButtonRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentMargin)
+            ) {
+                TabTokens.subjectTypeFilters.forEachIndexed { index, (type, _) ->
+                    SegmentedButton(
+                        selected = current == type,
+                        onClick = { current = type },
+                        shape = SegmentedButtonDefaults.itemShape(
+                            index = index,
+                            count = TabTokens.subjectTypeFilters.size,
+                            baseShape = MaterialTheme.shapes.medium
+                        ),
+                        label = {
+                            Text(
+                                modifier = Modifier.basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(4.dp)),
+                                maxLines = 1,
+                                text = stringResource(SubjectType.string(type))
+                            )
+                        }
+                    )
+                }
             }
         }
 
@@ -101,54 +122,43 @@ fun UserStateScreen(
             SubjectType.BOOK -> state.user.stats.subject.book to state.user.stats.rating.book
             else -> state.user.stats.subject.all to state.user.stats.rating.all
         }
-
-        val gridSpacing = ContentMargin
+        contentMargin
         Grid(
             config = {
-                repeat(3) { column(minmax(0.dp, 1.fr)) }
-                gap(gridSpacing)
+                repeat(2) { column(minmax(0.dp, 1.fr)) }
+                gap(contentMargin)
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            CardInfo(
-                modifier = Modifier.fillMaxWidth(),
-                title = "收藏",
+            UserStatHighlightCard(
+                title = stringResource(Res.string.global_collection),
                 value = collection.total.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsCollect)
             )
-            CardInfo(
-                modifier = Modifier.fillMaxWidth(),
-                title = "完成",
+            UserStatHighlightCard(
+                title = stringResource(Res.string.global_done),
                 value = collection.collect.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsFinish)
-
             )
-            CardInfo(
-                modifier = Modifier.fillMaxWidth(),
-                title = "完成率",
+            UserStatHighlightCard(
+                title = stringResource(Res.string.profile_stat_finished_rate),
                 value = collection
                     .let { if (it.total > 0) it.collect / it.total.toFloat() * 100f else 0f }
                     .toFixed(2).toString() + "%",
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsFinishRate)
-
             )
-            CardInfo(
-                modifier = Modifier.fillMaxWidth(),
-                title = "平均分",
+            UserStatHighlightCard(
+                title = stringResource(Res.string.profile_stat_average_score),
                 value = rating.averageScore.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsAverage)
-
             )
-            CardInfo(
-                modifier = Modifier.fillMaxWidth(),
-                title = "标准差",
+            UserStatHighlightCard(
+                title = stringResource(Res.string.profile_stat_standard_deviation),
                 value = rating.standardDeviation.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsStander)
-
             )
-            CardInfo(
-                modifier = Modifier.fillMaxWidth(),
-                title = "评分数",
+            UserStatHighlightCard(
+                title = stringResource(Res.string.profile_stat_rating_count),
                 value = rating.ratingCount.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsComments)
             )
@@ -163,59 +173,48 @@ fun UserStateScreen(
             }
         }
 
-        CartesianChartHost(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            chart = rememberCartesianChart(
-                rememberColumnCartesianLayer(),
-                startAxis = VerticalAxis.rememberStart(),
-                bottomAxis = HorizontalAxis.rememberBottom(
-                    valueFormatter = remember(rating.infos) {
-                        object : CartesianValueFormatter {
-                            override fun format(
-                                context: CartesianMeasuringContext,
-                                value: Double,
-                                verticalAxisPosition: Axis.Position.Vertical?,
-                            ): CharSequence {
-                                return (10 - value).roundToInt().toString()
-                            }
-                        }
-                    }
-                ),
-            ),
-            modelProducer = modelProducer,
-        )
-    }
-}
-
-@Composable
-private fun CardInfo(
-    title: String,
-    value: String,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(12.dp),
-    colors: CardColors = CardDefaults.cardColors(),
-) {
-    Card(modifier = modifier, colors = colors) {
-        Column(
-            modifier = Modifier.padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(ContentMargin)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.large,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            )
         ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White
-                ),
-                maxLines = 1,
-                overflow = Ellipsis
-            )
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.White.copy(alpha = 0.8f)
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentMargin),
+                verticalArrangement = Arrangement.spacedBy(contentMargin)
+            ) {
+                Text(
+                    text = stringResource(Res.string.global_rating),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                CartesianChartHost(
+                    modifier = Modifier.fillMaxWidth(),
+                    chart = rememberCartesianChart(
+                        rememberColumnCartesianLayer(),
+                        startAxis = VerticalAxis.rememberStart(),
+                        bottomAxis = HorizontalAxis.rememberBottom(
+                            valueFormatter = remember(rating.infos) {
+                                object : CartesianValueFormatter {
+                                    override fun format(
+                                        context: CartesianMeasuringContext,
+                                        value: Double,
+                                        verticalAxisPosition: Axis.Position.Vertical?,
+                                    ): CharSequence {
+                                        return (10 - value).roundToInt().toString()
+                                    }
+                                }
+                            }
+                        ),
+                    ),
+                    modelProducer = modelProducer,
+                )
+            }
         }
     }
 }

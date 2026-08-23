@@ -11,6 +11,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +26,7 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.text.font.FontWeight
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_success
+import com.xiaoyv.bangumi.core_resource.resources.global_summary
 import com.xiaoyv.bangumi.core_resource.resources.profile_network_service
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
@@ -39,15 +43,20 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * 用户主页个人介绍与社交帐号页面。
+ */
 @Composable
 fun UserBioScreen(
     state: UserState,
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
-    val summary by produceState("个人简介", state.user.bio) {
+    val summaryTitle = stringResource(Res.string.global_summary)
+    val summary by produceState(summaryTitle, state.user.bio) {
         value = state.user.bio.bbcodeToHtml()
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,53 +73,74 @@ fun UserBioScreen(
                 showMore = false
             )
 
-            FlowRow(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = ContentMargin),
-                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                )
             ) {
-                val actionHandler = LocalActionHandler.current
-                val clipboard = LocalClipboard.current
-                val scope = rememberCoroutineScope()
-                val popupTipState = LocalPopupTipState.current
-
-                state.user.networkServices.forEach { service ->
-                    val hasLink = service.url.isNotBlank()
-
-                    AssistChip(
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = remember(service.color) { parseHtmlHexColor(service.color) ?: Color.Unspecified },
-                            labelColor = Color.White
-                        ),
-                        onClick = {
-                            if (hasLink) {
-                                actionHandler.openInBrowser(service.url + service.account)
-                            } else {
-                                scope.launch {
-                                    clipboard.setClipEntry(System.createClipEntry(service.account))
-                                    popupTipState.showToast(getString(Res.string.global_copy_success))
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(ContentMargin),
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                ) {
+                    val actionHandler = LocalActionHandler.current
+                    val clipboard = LocalClipboard.current
+                    val scope = rememberCoroutineScope()
+                    val popupTipState = LocalPopupTipState.current
+                    val primary = MaterialTheme.colorScheme.primary
+                    state.user.networkServices.forEach { service ->
+                        AssistChip(
+                            colors = AssistChipDefaults.assistChipColors(
+                                containerColor = remember(service.color) {
+                                    parseHtmlHexColor(service.color) ?: primary
+                                },
+                                labelColor = Color.White
+                            ),
+                            onClick = {
+                                if (service.url.isNotBlank()) {
+                                    actionHandler.openInBrowser(service.url + service.account)
+                                } else {
+                                    scope.launch {
+                                        clipboard.setClipEntry(System.createClipEntry(service.account))
+                                        popupTipState.showToast(getString(Res.string.global_copy_success))
+                                    }
                                 }
+                            },
+                            shape = CircleShape,
+                            label = {
+                                Text(
+                                    text = service.title + ": " + service.account,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = FontWeight.Medium
+                                )
                             }
-                        },
-                        shape = CircleShape,
-                        label = {
-                            Text(
-                                text = service.title + ": " + service.account,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
 
-        BgmLinkedText(
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(ContentMargin),
-            text = summary
-        )
+                .padding(horizontal = ContentMargin),
+            shape = MaterialTheme.shapes.large,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            )
+        ) {
+            BgmLinkedText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(ContentMargin),
+                text = summary
+            )
+        }
     }
 }

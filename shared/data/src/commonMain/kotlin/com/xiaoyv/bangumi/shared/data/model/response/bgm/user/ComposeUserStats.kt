@@ -18,6 +18,7 @@ data class ComposeUserStats(
     @SerialName("subject") val subject: Subject = Subject.Empty,
     @SerialName("rating") val rating: Rating = Rating.Empty,
 ) {
+    @Immutable
     @Serializable
     data class Index(
         @SerialName("collect") val collect: Int = 0,
@@ -28,6 +29,7 @@ data class ComposeUserStats(
         }
     }
 
+    @Immutable
     @Serializable
     data class Mono(
         @SerialName("character") val character: Int = 0,
@@ -38,6 +40,7 @@ data class ComposeUserStats(
         }
     }
 
+    @Immutable
     @Serializable
     data class Subject(
         @SerialName("1") val book: ComposeCollectionInfo = ComposeCollectionInfo.Companion.Empty,
