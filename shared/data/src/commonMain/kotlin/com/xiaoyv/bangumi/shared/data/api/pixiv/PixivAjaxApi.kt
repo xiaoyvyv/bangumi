@@ -3,6 +3,13 @@
 package com.xiaoyv.bangumi.shared.data.api.pixiv
 
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchMode
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchOrder
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRating
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRatio
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustrationSearchType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchAiType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchDefaults
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingContentType
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingMode
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -465,29 +472,71 @@ interface PixivAjaxApi {
     // ==================== 搜索 API ====================
 
     /**
-     * 搜索插画 + 漫画 + 动图
+     * 根据标签或关键词搜索插画与动图。
      *
-     * @param keyword 关键词
-     * @param word 搜索文本
-     * @param searchMode 搜索模式：s_tag(部分一致), s_tag_full(完全一致), s_tc(标题说明)
-     * @param order 排序：date_d(最新), date(最旧)
-     * @param mode 模式：all, safe, r18
-     * @param page 页码
-     * @param aiType AI作品过滤：1(隐藏AI), null(显示AI)
-     * @param scd 起始日期 (yyyy-MM-dd)
-     * @param ecd 结束日期 (yyyy-MM-dd)
+     * @param keyword 编码后写入请求路径的搜索关键词。
+     * @param searchMode 标签匹配策略。
+     * @param order 作品排序方式。
+     * @param mode 内容分级过滤条件。
+     * @param aiType AI 作品显示选项。
+     * @param csw Pixiv Web 使用的搜索选项标记。
+     * @param ratio 作品宽高比过滤条件。
+     * @param startDate 起始发布日期，格式为 yyyy-MM-dd。
+     * @param endDate 结束发布日期，格式为 yyyy-MM-dd。
+     * @param workLanguage 作品语言过滤条件。
+     * @param minWidth 作品最小宽度。
+     * @param maxWidth 作品最大宽度。
+     * @param minHeight 作品最小高度。
+     * @param maxHeight 作品最大高度。
+     * @param type 插画或动图过滤条件。
+     * @param language 响应翻译语言。
+     * @param page 从 1 开始的页码。
      */
-    @GET("ajax/search/artworks/{keyword}")
-    suspend fun searchIllust(
+    @GET("ajax/search/illustrations/{keyword}")
+    suspend fun searchIllustrations(
         @Path("keyword", encoded = true) keyword: String,
-        @Query("word") word: String,
-        @Query("s_mode") searchMode: String = "s_tag_full",
-        @Query("order") order: String = "date_d",
-        @Query("mode") mode: String = "all",
+        @Query("s_mode") @PixivIllustSearchMode searchMode: String = PixivIllustSearchMode.TAG_FULL,
+        @Query("order") @PixivIllustSearchOrder order: String = PixivIllustSearchOrder.LATEST,
+        @Query("mode") @PixivIllustSearchRating mode: String = PixivIllustSearchRating.ALL,
+        @Query("ai_type") @PixivIllustSearchAiType aiType: Int = PixivIllustSearchAiType.HIDE,
+        @Query("csw") csw: Int = PixivIllustSearchDefaults.CSW_DISABLED,
+        @Query("ratio") @PixivIllustSearchRatio ratio: String? = null,
+        @Query("scd") startDate: String? = null,
+        @Query("ecd") endDate: String? = null,
+        @Query("work_lang") workLanguage: String? = null,
+        @Query("wlt") minWidth: String? = null,
+        @Query("wgt") maxWidth: String? = null,
+        @Query("hlt") minHeight: String? = null,
+        @Query("hgt") maxHeight: String? = null,
+        @Query("type") @PixivIllustrationSearchType type: String = PixivIllustrationSearchType.ILLUST_AND_UGOIRA,
+        @Query("lang") language: String = PixivIllustSearchDefaults.LANGUAGE_ZH,
         @Query("p") page: Int = 1,
-        @Query("ai_type") aiType: Int? = null,
-        @Query("scd") scd: String? = null,
-        @Query("ecd") ecd: String? = null
+    ): ComposePixivResponse<ComposePixivIllustSearchBody>
+
+    /**
+     * 根据标签或关键词搜索漫画。
+     *
+     * 参数与 [searchIllustrations] 保持一致，但漫画搜索不支持插画专用的
+     * `type` 过滤条件。
+     */
+    @GET("ajax/search/manga/{keyword}")
+    suspend fun searchManga(
+        @Path("keyword", encoded = true) keyword: String,
+        @Query("s_mode") @PixivIllustSearchMode searchMode: String = PixivIllustSearchMode.TAG_FULL,
+        @Query("order") @PixivIllustSearchOrder order: String = PixivIllustSearchOrder.LATEST,
+        @Query("mode") @PixivIllustSearchRating mode: String = PixivIllustSearchRating.ALL,
+        @Query("ai_type") @PixivIllustSearchAiType aiType: Int = PixivIllustSearchAiType.HIDE,
+        @Query("csw") csw: Int = PixivIllustSearchDefaults.CSW_DISABLED,
+        @Query("ratio") @PixivIllustSearchRatio ratio: String? = null,
+        @Query("scd") startDate: String? = null,
+        @Query("ecd") endDate: String? = null,
+        @Query("work_lang") workLanguage: String? = null,
+        @Query("wlt") minWidth: String? = null,
+        @Query("wgt") maxWidth: String? = null,
+        @Query("hlt") minHeight: String? = null,
+        @Query("hgt") maxHeight: String? = null,
+        @Query("lang") language: String = PixivIllustSearchDefaults.LANGUAGE_ZH,
+        @Query("p") page: Int = 1,
     ): ComposePixivResponse<ComposePixivIllustSearchBody>
 
     /**

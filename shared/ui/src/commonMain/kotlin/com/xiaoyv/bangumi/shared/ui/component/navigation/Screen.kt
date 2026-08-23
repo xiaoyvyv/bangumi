@@ -66,6 +66,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.PixivUserMain::class, Screen.PixivUserMain.serializer())
             subclass(Screen.PixivUserSetting::class, Screen.PixivUserSetting.serializer())
             subclass(Screen.PixivUserEdit::class, Screen.PixivUserEdit.serializer())
+            subclass(Screen.PixivTag::class, Screen.PixivTag.serializer())
             subclass(Screen.TopicDetail::class, Screen.TopicDetail.serializer())
             subclass(Screen.DetectImage::class, Screen.DetectImage.serializer())
             subclass(Screen.SearchInput::class, Screen.SearchInput.serializer())
@@ -212,6 +213,9 @@ sealed class Screen(
 
     @Serializable
     data object PixivUserEdit : Screen(SCREEN_ROUTE_PIXIV_USER_EDIT)
+
+    @Serializable
+    data class PixivTag(val tag: String) : Screen(SCREEN_ROUTE_PIXIV_TAG)
 
     @Serializable
     data class TopicDetail(val id: Long, @field:TopicType val type: String) : Screen(SCREEN_ROUTE_TOPIC_DETAIL)

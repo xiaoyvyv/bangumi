@@ -72,6 +72,8 @@ import com.xiaoyv.bangumi.core_resource.resources.ic_process
 import com.xiaoyv.bangumi.core_resource.resources.ic_show
 import com.xiaoyv.bangumi.core_resource.resources.ic_tag
 import com.xiaoyv.bangumi.core_resource.resources.ic_timeline
+import com.xiaoyv.bangumi.core_resource.resources.pixiv_tab_manga
+import com.xiaoyv.bangumi.core_resource.resources.pixiv_tag_tab_illustrations
 import com.xiaoyv.bangumi.core_resource.resources.search_match_e
 import com.xiaoyv.bangumi.core_resource.resources.search_match_m
 import com.xiaoyv.bangumi.core_resource.resources.search_sort_date
@@ -130,6 +132,8 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchOrder
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivArtworkSearchType
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
@@ -195,6 +199,19 @@ object TabTokens {
     val layoutTabs = persistentListOf(
         ComposeTextTab(LayoutType.LIST, Res.string.global_list),
         ComposeTextTab(LayoutType.GRID, Res.string.global_grid),
+    )
+
+    val pixivTagTypeTabs = persistentListOf(
+        ComposeTextTab(PixivArtworkSearchType.ILLUSTRATIONS, Res.string.pixiv_tag_tab_illustrations),
+        ComposeTextTab(PixivArtworkSearchType.MANGA, Res.string.pixiv_tab_manga),
+    )
+
+    val pixivTagSortTabs = persistentListOf(
+        ComposeTextTab(PixivIllustSearchOrder.LATEST, PixivIllustSearchOrder.label(PixivIllustSearchOrder.LATEST)),
+        ComposeTextTab(PixivIllustSearchOrder.OLDEST, PixivIllustSearchOrder.label(PixivIllustSearchOrder.OLDEST)),
+        ComposeTextTab(PixivIllustSearchOrder.POPULAR, PixivIllustSearchOrder.label(PixivIllustSearchOrder.POPULAR)),
+        ComposeTextTab(PixivIllustSearchOrder.MALE_POPULAR, PixivIllustSearchOrder.label(PixivIllustSearchOrder.MALE_POPULAR)),
+        ComposeTextTab(PixivIllustSearchOrder.FEMALE_POPULAR, PixivIllustSearchOrder.label(PixivIllustSearchOrder.FEMALE_POPULAR)),
     )
 
     val subjectTypeAllTabs = persistentListOf(

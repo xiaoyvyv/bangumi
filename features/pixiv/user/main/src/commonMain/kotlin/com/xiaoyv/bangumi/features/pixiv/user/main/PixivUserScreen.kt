@@ -23,12 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_edit
-import com.xiaoyv.bangumi.core_resource.resources.global_settings
 import com.xiaoyv.bangumi.core_resource.resources.pixiv_user_bio
 import com.xiaoyv.bangumi.core_resource.resources.pixiv_user_location
 import com.xiaoyv.bangumi.core_resource.resources.pixiv_user_no_bio
 import com.xiaoyv.bangumi.core_resource.resources.pixiv_user_website
 import com.xiaoyv.bangumi.features.pixiv.user.main.business.PixivUserEvent
+import com.xiaoyv.bangumi.features.pixiv.user.main.business.PixivUserMoreAction
 import com.xiaoyv.bangumi.features.pixiv.user.main.business.PixivUserState
 import com.xiaoyv.bangumi.features.pixiv.user.main.business.PixivUserViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -38,7 +38,6 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
@@ -47,14 +46,6 @@ import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.pixiv.PixivUserProfileHeader
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
-import kotlinx.collections.immutable.persistentListOf
-
-private val pixivUserMoreOptions = persistentListOf(
-    ComposeTextTab(
-        type = Screen.PixivUserSetting,
-        label = Res.string.global_settings,
-    )
-)
 
 @Composable
 fun PixivUserRoute(
@@ -81,7 +72,7 @@ fun PixivUserRoute(
 }
 
 /**
- * Hosts the Pixiv user page and its refresh state.
+ * 承载 Pixiv 用户页及其刷新状态。
  */
 @Composable
 private fun PixivUserScreen(
@@ -121,9 +112,17 @@ private fun PixivUserScreen(
                                 )
                             }
                             DropMenuActionButton(
-                                options = pixivUserMoreOptions,
+                                options = state.actions,
                                 onOptionClick = {
-                                    onUiEvent(PixivUserEvent.UI.OnNavScreen(it.type))
+                                    when (it.type) {
+                                        PixivUserMoreAction.Settings -> {
+                                            onUiEvent(PixivUserEvent.UI.OnNavScreen(Screen.PixivUserSetting))
+                                        }
+
+                                        PixivUserMoreAction.Logout -> {
+                                            onActionEvent(PixivUserEvent.Action.OnLogout)
+                                        }
+                                    }
                                 },
                             )
                         }

@@ -16,5 +16,6 @@ sealed interface PixivUserEvent {
 
     sealed interface Action : PixivUserEvent {
         data class OnRefresh(val loading: Boolean = false) : Action
+        data object OnLogout : Action
     }
 }

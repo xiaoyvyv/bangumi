@@ -46,7 +46,13 @@
     <string name="pixiv_tab_illust">插画</string>
     <string name="pixiv_tab_ugoira">动图</string>
     <string name="pixiv_tab_manga">漫画</string>
+    <string name="pixiv_tag_tab_illustrations">插画·动图</string>
     <string name="pixiv_illust_detail_title">作品详情</string>
+    <string name="pixiv_search_order_popular">热门</string>
+    <string name="pixiv_search_order_latest">最新</string>
+    <string name="pixiv_search_order_oldest">最旧</string>
+    <string name="pixiv_search_order_male_popular">男性热门</string>
+    <string name="pixiv_search_order_female_popular">女性热门</string>
     <string name="pixiv_date_latest">最新</string>
     <string name="pixiv_date_prev">前一天</string>
     <string name="pixiv_date_next">后一天</string>
@@ -70,6 +76,11 @@
     <string name="pixiv_mode_daily_title">Pixiv 今日排行榜</string>
     <string name="pixiv_mode_title">Pixiv %1$s</string>
     <string name="pixiv_logged_in">已登录</string>
+    <string name="pixiv_logout">退出 Pixiv 登录</string>
+    <string name="pixiv_login_title">连接到 Pixiv</string>
+    <string name="pixiv_login_description">登录将在应用内网页中完成。授权后即可使用 Pixiv 的账号功能。</string>
+    <string name="pixiv_login_action">在应用内打开 Pixiv</string>
+    <string name="pixiv_login_privacy">登录页面由 Pixiv 提供，Bangumi 不会获取你的密码。</string>
     <string name="pixiv_visitor_mode">游客模式</string>
     <string name="pixiv_user_id">Pixiv ID：%1$s</string>
     <string name="pixiv_user_following">关注</string>

@@ -3,6 +3,14 @@ package com.xiaoyv.bangumi.shared.data.model.request.list.pixiv
 import androidx.compose.runtime.Immutable
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.core.types.list.ListIllustType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchMode
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchOrder
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRatio
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRating
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivArtworkSearchType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustrationSearchType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchAiType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchDefaults
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingContentType
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingMode
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
@@ -51,6 +59,45 @@ data class IllustUserBody(
 @Serializable
 data class IllustSearchBody(
     @SerialName("keyword") val keyword: String = "",
+    @field:PixivArtworkSearchType
+    @SerialName("artwork_type")
+    val artworkType: String = PixivArtworkSearchType.ILLUSTRATIONS,
+    @field:PixivIllustrationSearchType
+    @SerialName("illustration_type")
+    val illustrationType: String = PixivIllustrationSearchType.ILLUST_AND_UGOIRA,
+    @field:PixivIllustSearchMode
+    @SerialName("search_mode")
+    val searchMode: String = PixivIllustSearchMode.TAG_FULL,
+    @field:PixivIllustSearchOrder
+    @SerialName("order")
+    val order: String = PixivIllustSearchOrder.LATEST,
+    @field:PixivIllustSearchRating
+    @SerialName("rating")
+    val rating: String = PixivIllustSearchRating.ALL,
+    @field:PixivIllustSearchAiType
+    @SerialName("ai_type")
+    val aiType: Int = PixivIllustSearchAiType.HIDE,
+    @SerialName("csw")
+    val csw: Int = PixivIllustSearchDefaults.CSW_DISABLED,
+    @field:PixivIllustSearchRatio
+    @SerialName("ratio")
+    val ratio: String? = null,
+    @SerialName("scd")
+    val startDate: String? = null,
+    @SerialName("ecd")
+    val endDate: String? = null,
+    @SerialName("work_lang")
+    val workLanguage: String? = null,
+    @SerialName("wlt")
+    val minWidth: String? = null,
+    @SerialName("wgt")
+    val maxWidth: String? = null,
+    @SerialName("hlt")
+    val minHeight: String? = null,
+    @SerialName("hgt")
+    val maxHeight: String? = null,
+    @SerialName("lang")
+    val language: String = PixivIllustSearchDefaults.LANGUAGE_ZH,
 ) {
     companion object {
         val Empty = IllustSearchBody()

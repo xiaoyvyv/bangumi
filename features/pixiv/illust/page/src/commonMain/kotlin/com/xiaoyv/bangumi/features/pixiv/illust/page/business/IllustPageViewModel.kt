@@ -35,6 +35,8 @@ class IllustPageViewModel(
             date = param.rank.date.takeIf { it.isNotBlank() }
         )
 
+        ListIllustType.SEARCH -> pixivRepository.fetchIllustSearchPager(param.search)
+
         else -> pixivRepository.fetchIllustRankingPager(
             content = param.rank.content,
             mode = param.rank.mode,

@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +43,7 @@ fun PixivRankingItem(
     val pageCount = item.illust_page_count.toIntOrNull() ?: 1
     val isNew = item.yes_rank == 0
     val rankDiff = item.yes_rank - item.rank
+    val isUgoira = item.illust_type == "2"
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -67,53 +71,72 @@ fun PixivRankingItem(
                     modifier = Modifier.matchParentSize()
                 )
 
-                // 排名 & 升降趋势合并 Badge (左上角)
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(ContentMarginHalf)
-                        .background(
-                            color = when (item.rank) {
-                                1 -> MaterialTheme.colorScheme.primaryContainer
-                                2 -> MaterialTheme.colorScheme.secondaryContainer
-                                3 -> MaterialTheme.colorScheme.tertiaryContainer
-                                else -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.9f)
-                            },
-                            shape = MaterialTheme.shapes.extraSmall
+                if (isUgoira) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(44.dp)
+                            .clip(MaterialTheme.shapes.extraLarge)
+                            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.48f)),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.PlayArrow,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.inverseOnSurface,
+                            modifier = Modifier.size(28.dp),
                         )
-                        .padding(horizontal = ContentMarginHalf, vertical = 2.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "#${item.rank}",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = when (item.rank) {
-                                1 -> MaterialTheme.colorScheme.onPrimaryContainer
-                                2 -> MaterialTheme.colorScheme.onSecondaryContainer
-                                3 -> MaterialTheme.colorScheme.onTertiaryContainer
-                                else -> MaterialTheme.colorScheme.onSurfaceVariant
-                            }
-                        )
+                    }
+                }
 
-                        Spacer(modifier = Modifier.width(ContentMarginHalf / 2))
+                if (item.rank > 0) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(ContentMarginHalf)
+                            .background(
+                                color = when (item.rank) {
+                                    1 -> MaterialTheme.colorScheme.primaryContainer
+                                    2 -> MaterialTheme.colorScheme.secondaryContainer
+                                    3 -> MaterialTheme.colorScheme.tertiaryContainer
+                                    else -> MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.9f)
+                                },
+                                shape = MaterialTheme.shapes.extraSmall,
+                            )
+                            .padding(horizontal = ContentMarginHalf, vertical = 2.dp),
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "#${item.rank}",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = when (item.rank) {
+                                    1 -> MaterialTheme.colorScheme.onPrimaryContainer
+                                    2 -> MaterialTheme.colorScheme.onSecondaryContainer
+                                    3 -> MaterialTheme.colorScheme.onTertiaryContainer
+                                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                },
+                            )
 
-                        Text(
-                            text = when {
-                                isNew -> "NEW"
-                                rankDiff > 0 -> "↑$rankDiff"
-                                rankDiff < 0 -> "↓${abs(rankDiff)}"
-                                else -> "-"
-                            },
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = when {
-                                isNew -> MaterialTheme.colorScheme.error
-                                rankDiff > 0 -> MaterialTheme.colorScheme.primary
-                                rankDiff < 0 -> MaterialTheme.colorScheme.error
-                                else -> MaterialTheme.colorScheme.outline
-                            }
-                        )
+                            Spacer(modifier = Modifier.width(ContentMarginHalf / 2))
+
+                            Text(
+                                text = when {
+                                    isNew -> "NEW"
+                                    rankDiff > 0 -> "↑$rankDiff"
+                                    rankDiff < 0 -> "↓${abs(rankDiff)}"
+                                    else -> "-"
+                                },
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = when {
+                                    isNew -> MaterialTheme.colorScheme.error
+                                    rankDiff > 0 -> MaterialTheme.colorScheme.primary
+                                    rankDiff < 0 -> MaterialTheme.colorScheme.error
+                                    else -> MaterialTheme.colorScheme.outline
+                                },
+                            )
+                        }
                     }
                 }
 

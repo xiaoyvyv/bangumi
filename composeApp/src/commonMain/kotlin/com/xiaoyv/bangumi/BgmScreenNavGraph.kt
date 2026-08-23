@@ -36,6 +36,7 @@ import com.xiaoyv.bangumi.features.pixiv.illust.main.pixivIllustMainModule
 import com.xiaoyv.bangumi.features.pixiv.illust.page.pixivIllustPageModule
 import com.xiaoyv.bangumi.features.pixiv.login.pixivLoginModule
 import com.xiaoyv.bangumi.features.pixiv.main.pixivMainModule
+import com.xiaoyv.bangumi.features.pixiv.tag.main.pixivTagMainModule
 import com.xiaoyv.bangumi.features.pixiv.user.edit.pixivUserEditModule
 import com.xiaoyv.bangumi.features.pixiv.user.main.pixivUserMainModule
 import com.xiaoyv.bangumi.features.pixiv.user.setting.pixivUserSettingModule
@@ -111,6 +112,7 @@ internal val navigationModule = module {
         pixivMainModule,
         pixivIllustMainModule,
         pixivIllustPageModule,
+        pixivTagMainModule,
         pixivLoginModule,
         pixivUserMainModule,
         pixivUserSettingModule,

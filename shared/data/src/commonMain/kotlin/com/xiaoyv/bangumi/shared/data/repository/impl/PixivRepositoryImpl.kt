@@ -5,14 +5,18 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import androidx.paging.PagingConfig
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.System
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivArtworkSearchType
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.ChallengeParam
+import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.IllustSearchBody
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustDetailBody
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivPageInfo
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivTagInfoBody
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustSimple
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivUserInfoBody
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
@@ -78,6 +82,63 @@ class PixivRepositoryImpl(
         )
     }
 
+    override fun fetchIllustSearchPager(search: IllustSearchBody): MemoryPagingController<ComposePixivRankingContent, Long> {
+        return createMemoryPageLimitPagingController(
+            pagingConfig = pagingConfig,
+            idSelector = { it.illust_id },
+            onLoadData = { page ->
+                client.requestPixivAjaxApi {
+                    val response = when (search.artworkType) {
+                        PixivArtworkSearchType.MANGA -> searchManga(
+                            keyword = search.keyword,
+                            searchMode = search.searchMode,
+                            order = search.order,
+                            mode = search.rating,
+                            aiType = search.aiType,
+                            csw = search.csw,
+                            ratio = search.ratio,
+                            startDate = search.startDate,
+                            endDate = search.endDate,
+                            workLanguage = search.workLanguage,
+                            minWidth = search.minWidth,
+                            maxWidth = search.maxWidth,
+                            minHeight = search.minHeight,
+                            maxHeight = search.maxHeight,
+                            language = search.language,
+                            page = page,
+                        )
+
+                        else -> searchIllustrations(
+                            keyword = search.keyword,
+                            searchMode = search.searchMode,
+                            order = search.order,
+                            mode = search.rating,
+                            aiType = search.aiType,
+                            csw = search.csw,
+                            ratio = search.ratio,
+                            startDate = search.startDate,
+                            endDate = search.endDate,
+                            workLanguage = search.workLanguage,
+                            minWidth = search.minWidth,
+                            maxWidth = search.maxWidth,
+                            minHeight = search.minHeight,
+                            maxHeight = search.maxHeight,
+                            type = search.illustrationType,
+                            language = search.language,
+                            page = page,
+                        )
+                    }
+                    val artwork = if (search.artworkType == PixivArtworkSearchType.MANGA) {
+                        response.body?.manga
+                    } else {
+                        response.body?.illust
+                    }
+                    artwork?.data.orEmpty().map { it.toRankingContent() }
+                }.getOrThrow()
+            },
+        )
+    }
+
     override suspend fun fetchIllustDetail(illustId: Long): Result<ComposePixivIllustDetailBody> {
         return client.requestPixivAjaxApi {
             getIllustDetail(illustId).body ?: throw IllegalStateException("Illust detail body is null")
@@ -98,5 +159,32 @@ class PixivRepositoryImpl(
             }
             response.body ?: throw IllegalStateException("User info body is null")
         }
+    }
+
+    override suspend fun fetchTagInfo(tag: String): Result<ComposePixivTagInfoBody> {
+        return client.requestPixivAjaxApi {
+            getTagInfo(tag).body ?: throw IllegalStateException("Tag info body is null")
+        }
+    }
+
+    private fun ComposePixivIllustSimple.toRankingContent(): ComposePixivRankingContent {
+        return ComposePixivRankingContent(
+            title = title,
+            date = createDate,
+            tags = tags,
+            url = url,
+            illust_type = illustType.toString(),
+            illust_page_count = pageCount.toString(),
+            user_name = userName,
+            profile_img = profileImageUrl,
+            illust_id = id,
+            width = width,
+            height = height,
+            user_id = userId,
+            is_masked = isMasked,
+            is_bookmarked = (bookmarkData?.id ?: 0) > 0,
+            bookmarkable = isBookmarkable,
+            bookmark_id = bookmarkData?.id ?: 0,
+        )
     }
 }

@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
+import com.xiaoyv.bangumi.shared.core.utils.serialization.FlexibleLongSerializer
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.SerialName
@@ -12,6 +13,7 @@ import kotlinx.serialization.Transient
 @Immutable
 @Serializable
 data class ComposePixivIllustSimple(
+    @Serializable(FlexibleLongSerializer::class)
     @SerialName("id") val id: Long = 0,
     @SerialName("title") val title: String = "",
     @SerialName("illustType") val illustType: Int = 0,
@@ -21,13 +23,14 @@ data class ComposePixivIllustSimple(
     @SerialName("url") val url: String = "",
     @SerialName("description") val description: String = "",
     @SerialName("tags") val tags: SerializeList<String> = persistentListOf(),
+    @Serializable(FlexibleLongSerializer::class)
     @SerialName("userId") val userId: Long = 0,
     @SerialName("userName") val userName: String = "",
     @SerialName("width") val width: Int = 0,
     @SerialName("height") val height: Int = 0,
     @SerialName("pageCount") val pageCount: Int = 0,
     @SerialName("isBookmarkable") val isBookmarkable: Boolean = false,
-    @SerialName("bookmarkData") val bookmarkData: ComposePixivBookmarkData = ComposePixivBookmarkData.Empty,
+    @SerialName("bookmarkData") val bookmarkData: ComposePixivBookmarkData? = null,
     @SerialName("alt") val alt: String = "",
     @SerialName("titleCaptionTranslation") val titleCaptionTranslation: ComposePixivTitleCaptionTranslation = ComposePixivTitleCaptionTranslation.Empty,
     @SerialName("createDate") val createDate: String = "",
@@ -397,10 +400,22 @@ data class ComposePixivIllustRecommendInitBody(
 data class ComposePixivIllustMangaData(
     @SerialName("data") val data: SerializeList<ComposePixivIllustSimple> = persistentListOf(),
     @SerialName("total") val total: Int = 0,
-    @SerialName("lastPage") val lastPage: Int = 0
+    @SerialName("lastPage") val lastPage: Int = 0,
+    @SerialName("bookmarkRanges") val bookmarkRanges: SerializeList<ComposePixivBookmarkRange> = persistentListOf(),
 ) {
     companion object {
         val Empty = ComposePixivIllustMangaData()
+    }
+}
+
+@Immutable
+@Serializable
+data class ComposePixivBookmarkRange(
+    @SerialName("min") val min: Int? = null,
+    @SerialName("max") val max: Int? = null,
+) {
+    companion object {
+        val Empty = ComposePixivBookmarkRange()
     }
 }
 
@@ -418,7 +433,8 @@ data class ComposePixivPopularData(
 @Immutable
 @Serializable
 data class ComposePixivIllustSearchBody(
-    @SerialName("illustManga") val illustManga: ComposePixivIllustMangaData = ComposePixivIllustMangaData.Empty,
+    @SerialName("illust") val illust: ComposePixivIllustMangaData = ComposePixivIllustMangaData.Empty,
+    @SerialName("manga") val manga: ComposePixivIllustMangaData = ComposePixivIllustMangaData.Empty,
     @SerialName("popular") val popular: ComposePixivPopularData = ComposePixivPopularData.Empty,
     @SerialName("relatedTags") val relatedTags: SerializeList<String> = persistentListOf(),
     @SerialName("zoneConfig") val zoneConfig: ComposePixivZoneConfig = ComposePixivZoneConfig.Empty,

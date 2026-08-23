@@ -51,6 +51,12 @@ class PixivUserViewModel(
     override fun onEvent(event: PixivUserEvent.Action) {
         when (event) {
             is PixivUserEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            PixivUserEvent.Action.OnLogout -> onLogout()
         }
+    }
+
+    private fun onLogout() = intent {
+        preferenceStore.clearPixivToken()
+        reduceData { state.copy(isCurrentUser = false) }
     }
 }
