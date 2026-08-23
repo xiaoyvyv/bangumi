@@ -15,5 +15,6 @@ import kotlinx.collections.immutable.persistentListOf
 data class PixivMainState(
     val tabs: SerializeList<ComposeTextTab<String>> = persistentListOf(),
     val isPixivLogin: Boolean = false,
+    val userId: Long = 0,
     val userAvatar: String = "",
 )

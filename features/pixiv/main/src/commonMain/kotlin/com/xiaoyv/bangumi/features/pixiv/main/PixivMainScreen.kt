@@ -87,7 +87,14 @@ private fun PixivMainScreen(
                         PixivLoginUserAvatarAction(
                             isLoggedIn = state.isPixivLogin,
                             avatarUrl = state.userAvatar,
-                            onClick = { onUiEvent(PixivMainEvent.UI.OnNavScreen(Screen.PixivLogin)) }
+                            onClick = {
+                                val screen = if (state.isPixivLogin && state.userId > 0) {
+                                    Screen.PixivUserMain(state.userId)
+                                } else {
+                                    Screen.PixivLogin
+                                }
+                                onUiEvent(PixivMainEvent.UI.OnNavScreen(screen))
+                            }
                         )
                     }
                 )

@@ -16,5 +16,8 @@ sealed interface PixivUserSettingEvent {
 
     sealed interface Action : PixivUserSettingEvent {
         data class OnRefresh(val loading: Boolean = false) : Action
+        data class OnShowR18Changed(val value: Boolean) : Action
+        data class OnShowAiWorksChanged(val value: Boolean) : Action
+        data class OnAutoplayUgoiraChanged(val value: Boolean) : Action
     }
 }

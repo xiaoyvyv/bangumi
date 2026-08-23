@@ -10,5 +10,7 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class PixivUserEditState(
-    val title: String = "",
+    val displayName: String = "",
+    val introduction: String = "",
+    val website: String = "",
 )

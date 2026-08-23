@@ -16,5 +16,8 @@ sealed interface PixivUserEditEvent {
 
     sealed interface Action : PixivUserEditEvent {
         data class OnRefresh(val loading: Boolean = false) : Action
+        data class OnDisplayNameChanged(val value: String) : Action
+        data class OnIntroductionChanged(val value: String) : Action
+        data class OnWebsiteChanged(val value: String) : Action
     }
 }

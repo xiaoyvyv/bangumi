@@ -122,7 +122,7 @@ fun UserStateScreen(
             SubjectType.BOOK -> state.user.stats.subject.book to state.user.stats.rating.book
             else -> state.user.stats.subject.all to state.user.stats.rating.all
         }
-        contentMargin
+
         Grid(
             config = {
                 repeat(2) { column(minmax(0.dp, 1.fr)) }

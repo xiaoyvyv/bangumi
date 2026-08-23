@@ -33,6 +33,9 @@ class PixivMainViewModel(
     private val userAvatar: String
         get() = preferenceStore.pixivTokenData.currentUser.profileImageUrls.maxUrl
 
+    private val userId: Long
+        get() = preferenceStore.pixivTokenData.currentUser.id.toLongOrNull() ?: 0
+
     override fun createInitialState() = PixivMainState(
         tabs = persistentListOf(
             ComposeTextTab(PixivRankingContentType.ALL, Res.string.pixiv_tab_all),
@@ -41,6 +44,7 @@ class PixivMainViewModel(
             ComposeTextTab(PixivRankingContentType.MANGA, Res.string.pixiv_tab_manga),
         ),
         isPixivLogin = isPixivLogin,
+        userId = userId,
         userAvatar = userAvatar,
     )
 
@@ -49,6 +53,7 @@ class PixivMainViewModel(
         reduceData {
             state.copy(
                 isPixivLogin = isLogin,
+                userId = if (isLogin) userId else 0,
                 userAvatar = if (isLogin) preferenceStore.pixivTokenData.currentUser.profileImageUrls.maxUrl else ""
             )
         }

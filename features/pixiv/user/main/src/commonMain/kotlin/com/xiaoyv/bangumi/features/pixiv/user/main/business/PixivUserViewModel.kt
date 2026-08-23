@@ -1,10 +1,12 @@
 package com.xiaoyv.bangumi.features.pixiv.user.main.business
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import org.orbitmvi.orbit.syntax.Syntax
 
@@ -16,10 +18,20 @@ import org.orbitmvi.orbit.syntax.Syntax
  */
 class PixivUserViewModel(
     private val userId: Long,
+    private val preferenceStore: PreferenceStore,
     private val pixivRepository: PixivRepository,
 ) : BaseViewModel<PixivUserState, PixivUserSideEffect, PixivUserEvent.Action>() {
 
-    override fun createInitialState() = PixivUserState(userId = userId)
+    private val isCurrentUser: Boolean
+        get() = userId > 0 && userId == preferenceStore.pixivTokenData.currentUser.id.toLongOrNull()
+
+    override fun initBaseState(): UiState<PixivUserState> =
+        UiState(data = createInitialState(), status = PageStatus.Loading)
+
+    override fun createInitialState() = PixivUserState(
+        userId = userId,
+        isCurrentUser = isCurrentUser,
+    )
 
     override suspend fun Syntax<UiState<PixivUserState>, UiSideEffect<PixivUserSideEffect>>.refreshSync() {
         if (state.data.userId <= 0) return
@@ -28,7 +40,10 @@ class PixivUserViewModel(
             .onFailure { reduceError { it } }
             .onSuccess { userInfo ->
                 reduceData {
-                    state.copy(userInfo = userInfo)
+                    state.copy(
+                        isCurrentUser = isCurrentUser,
+                        userInfo = userInfo,
+                    )
                 }
             }
     }

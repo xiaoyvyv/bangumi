@@ -12,5 +12,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivUser
 @Immutable
 data class PixivUserState(
     val userId: Long = 0,
+    val isCurrentUser: Boolean = false,
     val userInfo: ComposePixivUserInfoBody = ComposePixivUserInfoBody.Empty,
 )

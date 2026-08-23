@@ -10,5 +10,7 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class PixivUserSettingState(
-    val title: String = "",
+    val showR18: Boolean = false,
+    val showAiWorks: Boolean = true,
+    val autoplayUgoira: Boolean = true,
 )
