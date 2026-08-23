@@ -103,9 +103,31 @@ jobs:
         id: build
         run: ./gradlew :android:assembleRelease
 
-      # 上传 Android APK
-      - name: Upload Android APK
+      # 按 ABI 分别上传 APK，避免合并为同一个下载包。
+      - name: Upload armeabi-v7a APK
         uses: actions/upload-artifact@v4
         with:
-          name: android-release-apk
-          path: android/build/outputs/apk/release/*.apk
+          name: android-release-apk-armeabi-v7a
+          path: android/build/outputs/apk/release/*-armeabi-v7a-release.apk
+          if-no-files-found: error
+
+      - name: Upload arm64-v8a APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk-arm64-v8a
+          path: android/build/outputs/apk/release/*-arm64-v8a-release.apk
+          if-no-files-found: error
+
+      - name: Upload x86 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk-x86
+          path: android/build/outputs/apk/release/*-x86-release.apk
+          if-no-files-found: error
+
+      - name: Upload x86_64 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk-x86_64
+          path: android/build/outputs/apk/release/*-x86_64-release.apk
+          if-no-files-found: error
