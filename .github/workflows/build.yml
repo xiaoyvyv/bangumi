@@ -2,9 +2,9 @@ name: Compose Multiplatform CI
 
 on:
   push:
-    branches: [ 'multiplatform' ]
+    branches: [ 'main' ]
   pull_request:
-    branches: [ 'multiplatform' ]
+    branches: [ 'main' ]
 
 jobs:
   #  build-ios:
