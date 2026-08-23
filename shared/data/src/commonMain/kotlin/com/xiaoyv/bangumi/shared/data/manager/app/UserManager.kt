@@ -3,8 +3,10 @@ package com.xiaoyv.bangumi.shared.data.manager.app
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.util.fastJoinToString
 import com.multiplatform.webview.cookie.Cookie
+import com.multiplatform.webview.cookie.WebViewCookieManager
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
+import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.ApiCookiesStorage
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
@@ -51,6 +53,7 @@ class UserManager(
      */
     val userInfo: ComposeUser get() = preferenceStore.userInfo
     val userToken: ComposeAuthToken get() = preferenceStore.userToken
+    val pixivToken: ComposePixivToken get() = preferenceStore.pixivTokenData
 
     private val _notification = MutableStateFlow(seq)
     val notification = _notification.asStateFlow()
@@ -82,6 +85,30 @@ class UserManager(
         val cookie = webCookies.fastJoinToString(";") { it.name + "=" + it.value }
 
         debugLog { "PixivCookie:$cookie" }
+        notificationChanged()
+    }
+
+    /**
+     * 清理 Pixiv 的网页登录 Cookie 与 Token。
+     */
+    suspend fun clearPixivToken() {
+        val cookieManager = WebViewCookieManager()
+        WebConstant.pixivCookieUrls.forEach { url ->
+            cookieManager.getCookies(url).forEach { cookie ->
+                cookieManager.setCookie(
+                    url = url,
+                    cookie = cookie.copy(
+                        value = "",
+                        path = cookie.path ?: "/",
+                        expiresDate = 0,
+                        maxAge = 0,
+                    ),
+                )
+            }
+            cookieManager.removeCookies(url)
+            cookieStorage.removeCookies(url.toUrl())
+        }
+        preferenceStore.pixivToken = ComposePixivToken.Empty
         notificationChanged()
     }
 

@@ -16,5 +16,7 @@ sealed class PixivLoginEvent {
 
     sealed class Action : PixivLoginEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
+        data object OnOpenLogin : Action()
+        data object OnCheckLogin : Action()
     }
 }

@@ -13,11 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
@@ -30,11 +27,12 @@ import com.xiaoyv.bangumi.core_resource.resources.pixiv_login_description
 import com.xiaoyv.bangumi.core_resource.resources.pixiv_login_privacy
 import com.xiaoyv.bangumi.core_resource.resources.pixiv_login_title
 import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginEvent
+import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginSideEffect
 import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginState
 import com.xiaoyv.bangumi.features.pixiv.login.business.PixivLoginViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
-import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
+import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
+import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.button.LoadingButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -42,9 +40,7 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import org.orbitmvi.orbit.compose.collectAsState
 
 private const val PIXIV_LOGIN_START = "https://app-api.pixiv.net/web/v1/login?code_challenge="
@@ -57,9 +53,20 @@ fun PixivLoginRoute(
     onNavScreen: (Screen) -> Unit,
 ) {
     val baseState by viewModel.collectAsState()
+    val sharedState = LocalSharedState.current
 
-    viewModel.collectBaseSideEffect {
+    LaunchedEffect(sharedState.pixivToken) {
+        viewModel.onEvent(PixivLoginEvent.Action.OnCheckLogin)
+    }
 
+    viewModel.collectBaseSideEffect { sideEffect ->
+        when (sideEffect) {
+            is PixivLoginSideEffect.OnOpenWebLogin -> {
+                onNavScreen(Screen.Web(PIXIV_LOGIN_START + sideEffect.codeChallenge + PIXIV_LOGIN_END))
+            }
+
+            PixivLoginSideEffect.OnLoginSuccess -> onNavUp()
+        }
     }
 
     PixivLoginScreen(
@@ -84,7 +91,7 @@ private fun PixivLoginScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            BgmTopAppBar(
+            BgmLargeTopAppBar(
                 title = stringResource(Res.string.pixiv_login_title),
                 onNavigationClick = { onUiEvent(PixivLoginEvent.UI.OnNavUp) }
             )
@@ -97,31 +104,23 @@ private fun PixivLoginScreen(
             onRefresh = { onActionEvent(PixivLoginEvent.Action.OnRefresh(it)) },
             uiState = uiState,
         ) {
-            PixivLoginScreenContent(onUiEvent)
+            PixivLoginScreenContent(
+                state = it,
+                onActionEvent = onActionEvent,
+            )
         }
     }
 }
 
 
 @Composable
-private fun PixivLoginScreenContent(onUiEvent: (PixivLoginEvent.UI) -> Unit) {
-    val repo = koinInject<PixivRepository>()
-    val scope = rememberCoroutineScope()
-    var isOpening by remember { mutableStateOf(false) }
-
+private fun PixivLoginScreenContent(
+    state: PixivLoginState,
+    onActionEvent: (PixivLoginEvent.Action) -> Unit,
+) {
     PixivLoginContent(
-        isOpening = isOpening,
-        onOpenLogin = {
-            scope.launch {
-                isOpening = true
-                runCatching {
-                    repo.fetchLoginChallenge().getOrThrow().codeChallenge
-                }.onSuccess { challenge ->
-                    onUiEvent(PixivLoginEvent.UI.OnNavScreen(Screen.Web(PIXIV_LOGIN_START + challenge + PIXIV_LOGIN_END)))
-                }
-                isOpening = false
-            }
-        },
+        isOpening = state.isOpeningLogin,
+        onOpenLogin = { onActionEvent(PixivLoginEvent.Action.OnOpenLogin) },
     )
 }
 
@@ -133,8 +132,12 @@ private fun PixivLoginContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = ContentMargin),
-        verticalArrangement = Arrangement.Center,
+            .padding(
+                start = ContentMargin,
+                top = ContentMarginHalf,
+                end = ContentMargin,
+            ),
+        verticalArrangement = Arrangement.Top,
     ) {
         Text(
             text = stringResource(Res.string.global_pixiv),
@@ -142,13 +145,6 @@ private fun PixivLoginContent(
             color = MaterialTheme.colorScheme.primary,
         )
         Spacer(modifier = Modifier.height(ContentMarginHalf))
-        Text(
-            text = stringResource(Res.string.pixiv_login_title),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
-        Spacer(modifier = Modifier.height(ContentMargin))
 
         Column(
             modifier = Modifier
@@ -160,7 +156,7 @@ private fun PixivLoginContent(
                     color = MaterialTheme.colorScheme.outlineVariant,
                     shape = MaterialTheme.shapes.extraLarge,
                 )
-                .padding(ContentMargin),
+                .padding(horizontal = ContentMargin, vertical = ContentMargin + ContentMarginHalf),
             verticalArrangement = Arrangement.spacedBy(ContentMargin),
         ) {
             Text(
@@ -188,7 +184,7 @@ private fun PixivLoginContent(
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(Res.string.pixiv_login_privacy),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
@@ -199,9 +195,10 @@ private fun PixivLoginContent(
 @Preview
 private fun PreviewPixivLoginContent() {
     PreviewColumn(modifier = Modifier.fillMaxSize()) {
-        PixivLoginContent(
-            isOpening = false,
-            onOpenLogin = {},
+        PixivLoginScreen(
+            uiState = UiState(PixivLoginState()),
+            onActionEvent = {},
+            onUiEvent = {}
         )
     }
 }

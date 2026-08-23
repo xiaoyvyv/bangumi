@@ -31,6 +31,7 @@ import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainState
 import com.xiaoyv.bangumi.features.pixiv.main.business.PixivMainViewModel
 import com.xiaoyv.bangumi.features.pixiv.main.page.PixivMainPageScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -72,6 +73,8 @@ private fun PixivMainScreen(
     onUiEvent: (PixivMainEvent.UI) -> Unit,
     onActionEvent: (PixivMainEvent.Action) -> Unit,
 ) {
+    val sharedState = LocalSharedState.current
+
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         uiState = uiState,
@@ -85,11 +88,11 @@ private fun PixivMainScreen(
                     onNavigationClick = { onUiEvent(PixivMainEvent.UI.OnNavUp) },
                     actions = {
                         PixivLoginUserAvatarAction(
-                            isLoggedIn = state.isPixivLogin,
-                            avatarUrl = state.userAvatar,
+                            isLoggedIn = sharedState.isPixivLogin,
+                            avatarUrl = sharedState.pixivUserAvatar,
                             onClick = {
-                                val screen = if (state.isPixivLogin && state.userId > 0) {
-                                    Screen.PixivUserMain(state.userId)
+                                val screen = if (sharedState.isPixivLogin && sharedState.pixivUserId > 0) {
+                                    Screen.PixivUserMain(sharedState.pixivUserId)
                                 } else {
                                     Screen.PixivLogin
                                 }

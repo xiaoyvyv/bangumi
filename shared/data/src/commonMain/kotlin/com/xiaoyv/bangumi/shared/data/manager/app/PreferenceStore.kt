@@ -1,8 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.manager.app
 
-import com.multiplatform.webview.cookie.WebViewCookieManager
 import com.xiaoyv.bangumi.shared.data.constant.SpKey
-import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
@@ -48,12 +46,6 @@ class PreferenceStore(
 
     val pixivTokenData: ComposePixivToken
         get() = pixivToken
-
-    suspend fun clearPixivToken() {
-        val cookieManager = WebViewCookieManager()
-        cookieManager.removeCookies(WebConstant.URL_BASE_PIXIV)
-        pixivToken = ComposePixivToken.Empty
-    }
 
     /**
      * APP 设置

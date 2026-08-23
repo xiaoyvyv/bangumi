@@ -46,6 +46,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.pixiv.PixivUserProfileHeader
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun PixivUserRoute(
@@ -112,7 +113,13 @@ private fun PixivUserScreen(
                                 )
                             }
                             DropMenuActionButton(
-                                options = state.actions,
+                                options = state.actions.map { option ->
+                                    if (option.type == PixivUserMoreAction.Logout) {
+                                        option.copy(contentColor = MaterialTheme.colorScheme.error)
+                                    } else {
+                                        option
+                                    }
+                                }.toPersistentList(),
                                 onOptionClick = {
                                     when (it.type) {
                                         PixivUserMoreAction.Settings -> {

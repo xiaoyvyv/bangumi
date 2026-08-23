@@ -46,6 +46,7 @@ class SharedViewModel(
                     reduce {
                         state.copy(
                             user = userManager.userInfo,
+                            pixivToken = userManager.pixivToken,
                             settings = userManager.settings
                         )
                     }
@@ -64,6 +65,7 @@ class SharedViewModel(
 
     private fun initAppState() = SharedState(
         user = userManager.userInfo,
+        pixivToken = userManager.pixivToken,
         settings = userManager.settings,
     )
 

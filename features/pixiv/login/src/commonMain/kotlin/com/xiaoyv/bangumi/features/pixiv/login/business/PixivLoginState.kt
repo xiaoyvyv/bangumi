@@ -10,5 +10,5 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 data class PixivLoginState(
-    val title: String = "",
+    val isOpeningLogin: Boolean = false,
 )

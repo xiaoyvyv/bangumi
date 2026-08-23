@@ -66,6 +66,28 @@ class ApiCookiesStorage : CookiesStorage {
         database.appCookieQueries.deleteAllCookie()
     }
 
+    /**
+     * 清理指定站点及其父域名匹配的 Cookie。
+     */
+    suspend fun removeCookies(requestUrl: Url) = mutex.withLock {
+        cleanupExpiredCookies(getTimeMillis())
+
+        database.appCookieQueries.selectAll().executeAsList()
+            .mapNotNull { row ->
+                runCatching {
+                    defaultJson.decodeFromString<Cookie>(row.cookie.orEmpty())
+                }.onFailure { it.printTrace() }.getOrNull()
+            }
+            .filter { it.matches(requestUrl) }
+            .forEach { cookie ->
+                database.appCookieQueries.deleteCookieByNameAndDomain(
+                    name = cookie.name,
+                    domain = cookie.domain.orEmpty(),
+                    path = cookie.path,
+                )
+            }
+    }
+
     private fun cleanupExpiredCookies(timestamp: Long) {
         database.appCookieQueries.deleteExpiredSqlCookie(timestamp)
     }

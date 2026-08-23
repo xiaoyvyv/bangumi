@@ -7,6 +7,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
+import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import org.orbitmvi.orbit.syntax.Syntax
 
@@ -19,6 +20,7 @@ import org.orbitmvi.orbit.syntax.Syntax
 class PixivUserViewModel(
     private val userId: Long,
     private val preferenceStore: PreferenceStore,
+    private val userManager: UserManager,
     private val pixivRepository: PixivRepository,
 ) : BaseViewModel<PixivUserState, PixivUserSideEffect, PixivUserEvent.Action>() {
 
@@ -56,7 +58,7 @@ class PixivUserViewModel(
     }
 
     private fun onLogout() = intent {
-        preferenceStore.clearPixivToken()
+        userManager.clearPixivToken()
         reduceData { state.copy(isCurrentUser = false) }
     }
 }
