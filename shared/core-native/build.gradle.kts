@@ -10,12 +10,9 @@ plugins {
     alias(libs.plugins.googleKsp)
 }
 
-
-
 kotlin {
     android {
         namespace = "com.xiaoyv.bangumi.shared.libnative"
-
     }
 
     jvm {
@@ -37,12 +34,17 @@ kotlin {
                 defFile(project.file("src/iosMain/cinterop/BridgeSwift.def"))
                 includeDirs(project.file("headers"))
             }
+            val live2dInterop = cinterops.create("live2d") {
+                defFile(project.file("src/iosMain/cinterop/live2d.def"))
+                includeDirs(project.file("src/cpp"))
+                val targetDir = if (iosTarget.name.contains("Simulator")) "iphonesimulator" else "iphoneos"
+                extraOpts("-libraryPath", project.file("native/ios/$targetDir").absolutePath)
+            }
         }
     }
 
     sourceSets {
         androidMain.dependencies {
-            implementation(files("libs/Live2DCubismCore.aar"))
             implementation(libs.androidx.webkit)
         }
     }

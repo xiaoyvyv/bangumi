@@ -1,22 +1,17 @@
 package com.xiaoyv.bangumi.shared.component
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 
-@Composable
-fun rememberBgmLive2DState(): BgmLive2DState {
-    return remember { BgmLive2DState() }
-}
-
-@Stable
-expect class BgmLive2DState() {
-    fun loadModel(modelName: String, modelDir: String)
-}
+typealias BgmLive2DState = Live2DState
 
 @Composable
-expect fun BgmLive2DView(
-    modifier: Modifier,
+fun rememberBgmLive2DState(): BgmLive2DState = rememberLive2DState()
+
+@Composable
+fun BgmLive2DView(
+    modifier: Modifier = Modifier,
     state: BgmLive2DState = rememberBgmLive2DState(),
-)
+) {
+    Live2D(modifier = modifier, state = state)
+}

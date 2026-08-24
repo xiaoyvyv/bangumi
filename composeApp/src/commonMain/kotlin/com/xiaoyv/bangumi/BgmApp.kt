@@ -36,7 +36,9 @@ import com.xiaoyv.bangumi.shared.avif.AvifDecoderFactory
 import com.xiaoyv.bangumi.shared.component.BgmLive2DView
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.component.LaunchReceiveShareImageEffect
+import com.xiaoyv.bangumi.shared.component.Live2D
 import com.xiaoyv.bangumi.shared.component.rememberBgmLive2DState
+import com.xiaoyv.bangumi.shared.component.rememberLive2DState
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.LocalPersonalState
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
@@ -137,9 +139,9 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
             )
 
             if (LocalSharedState.current.settings.live2d.enable) {
-                val live2DState = rememberBgmLive2DState()
+              /*  val live2DState = rememberLive2DState()
 
-                BgmLive2DView(
+                Live2D(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .systemBarsPadding()
@@ -154,7 +156,7 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
                     val modelPath = Res.getUri("files/live2d/$modelName/$modelName.moc3")
                     val modelDir = modelPath.substringBeforeLast("/")
                     live2DState.loadModel(modelName, modelDir)
-                }
+                }*/
             }
         }
     }

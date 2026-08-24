@@ -1,0 +1,4 @@
+headers = live2d_renderer.h
+package = com.xiaoyv.bangumi.shared.component.live2d
+headerFilter = live2d_renderer.h
+staticLibraries = liblive2d_native.a
