@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,13 +33,19 @@ import com.xiaoyv.bangumi.features.settings.business.SplashState
 import com.xiaoyv.bangumi.features.settings.business.SplashViewModel
 import com.xiaoyv.bangumi.shared.component.Live2D
 import com.xiaoyv.bangumi.shared.component.rememberLive2DState
-import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.absolutePath
+import io.github.vinceglb.filekit.createDirectories
+import io.github.vinceglb.filekit.div
 import io.github.vinceglb.filekit.filesDir
-import io.github.vinceglb.filekit.path
+import io.github.vinceglb.filekit.write
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -58,17 +65,20 @@ fun SplashRoute(
             state = baseState.data,
             onLaunch = { viewModel.onEvent(SplashEvent.Action.OnLaunch) },
         )*/
-    Live2DSplash()
+    Live2DSplash {
+        onNavScreen(Screen.PixivMain)
+    }
 }
 
 @Composable
-fun Live2DSplash() {
+fun Live2DSplash(onClick: () -> Unit) {
     val live2DState = rememberLive2DState()
 
     Column(
         Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
     ) {
+        val scope = rememberCoroutineScope()
 
         Live2D(
             modifier = Modifier
@@ -81,15 +91,24 @@ fun Live2DSplash() {
         )
 
         Button(onClick = {
-            val modelName = "bangumi_musume_2d"
-            val modelPath = Res.getUri("files/live2d/$modelName/$modelName.moc3")
-            val modelJsonPath = Res.getUri("files/live2d/$modelName/$modelName.model3.json")
-            val modelDir = modelPath.substringBeforeLast("/")
-            debugLog { "modelDir:$modelDir, " }
-            debugLog { "modelJsonPath:$modelDir, " }
-            debugLog { "modelPath:$modelPath, " }
-            live2DState.loadModel(modelDir, "$modelName.model3.json")
+            scope.launch {
+                val workDir = (FileKit.filesDir / "live2d").also {
+                    it.createDirectories()
+                }
+                val path = withContext(Dispatchers.IO) {
+                    val bytes = Res.readBytes("files/live2d/bangumi_musume_2026_parts_grouped.zip")
+                    val targetFile = workDir / "bangumi_musume_2026_parts_grouped.zip"
+                    targetFile.write(bytes)
+                    targetFile.absolutePath()
+                }
+                live2DState.workDir = workDir.absolutePath()
+                live2DState.loadModel(path, "bangumi_musume_2026_parts_grouped")
+            }
         }) {
+            Text(text = "Load Live2D")
+        }
+
+        Button(onClick = onClick) {
             Text(text = "Load Live2D")
         }
     }

@@ -6,29 +6,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 
 @Composable
-fun rememberLive2DState(): Live2DState {
-    return remember { Live2DState() }
+fun rememberLive2DState(workDir: String = ""): Live2DState {
+    return remember(workDir) { Live2DState(workDir) }
 }
 
 @Stable
-expect class Live2DState() {
+expect class Live2DState(workDir: String = "") {
+    var workDir: String
+
     /**
-     * 加载指定目录和模型的 Live2D 配置文件
-     * @param modelDir 包含 .model3.json 的文件夹路径
-     * @param modelJsonName 模型主配置文件名（例如 bangumi_black_musume_2026_parts.model3.json）
+     * 从 ZIP 文件加载 Live2D 模型
+     * @param zipFilePath 可读写的 ZIP 完整路径
+     * @param modelName 模型名称（解压后存放在 workDir/modelName 下）
      */
-    fun loadModel(modelDir: String, modelJsonName: String)
+    fun loadModel(zipFilePath: String, modelName: String)
 
     /**
      * 播放指定分组的动作动画
-     * @param group 动作分组名称（例如 "Idle", "Tap", "Sleeping" 等）
-     * @param index 组内动作索引，默认为 0
      */
     fun setMotion(group: String, index: Int = 0)
 
     /**
      * 设置表情
-     * @param expressionId 表情 ID
      */
     fun setExpression(expressionId: String)
 

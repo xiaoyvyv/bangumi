@@ -10,16 +10,7 @@
 
 extern "C" {
 
-JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeSetAssetManager(
-        JNIEnv *env, jobject thiz, jobject asset_manager) {
-#if defined(ANDROID) || defined(__ANDROID__)
-    if (asset_manager) {
-        AAssetManager* mgr = AAssetManager_fromJava(env, asset_manager);
-        live2d_set_asset_manager(mgr);
-    }
-#endif
-}
+
 
 JNIEXPORT jlong JNICALL
 Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeCreate(JNIEnv *env, jobject thiz) {
@@ -42,6 +33,23 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeLoadModel(
 
     env->ReleaseStringUTFChars(model_dir, c_model_dir);
     env->ReleaseStringUTFChars(model_json_name, c_model_json_name);
+
+    return result ? JNI_TRUE : JNI_FALSE;
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeLoadModelFromZip(
+        JNIEnv *env, jobject thiz, jlong handle, jstring zip_file_path, jstring work_dir, jstring model_name) {
+    if (!handle || !zip_file_path || !work_dir || !model_name) return JNI_FALSE;
+    const char *c_zip_path = env->GetStringUTFChars(zip_file_path, nullptr);
+    const char *c_work_dir = env->GetStringUTFChars(work_dir, nullptr);
+    const char *c_model_name = env->GetStringUTFChars(model_name, nullptr);
+
+    bool result = live2d_load_model_from_zip(reinterpret_cast<Live2DHandle>(handle), c_zip_path, c_work_dir, c_model_name);
+
+    env->ReleaseStringUTFChars(zip_file_path, c_zip_path);
+    env->ReleaseStringUTFChars(work_dir, c_work_dir);
+    env->ReleaseStringUTFChars(model_name, c_model_name);
 
     return result ? JNI_TRUE : JNI_FALSE;
 }

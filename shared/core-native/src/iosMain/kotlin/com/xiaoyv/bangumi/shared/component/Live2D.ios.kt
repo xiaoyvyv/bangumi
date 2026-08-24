@@ -15,15 +15,15 @@ import platform.QuartzCore.CADisplayLink
 import com.xiaoyv.bangumi.shared.component.live2d.*
 
 @Stable
-actual class Live2DState actual constructor() {
+actual class Live2DState actual constructor(actual var workDir: String) {
     var nativeHandle: Live2DHandle? = live2d_create()
         private set
 
     internal var glkDelegate: Live2DGLKViewDelegate? = null
 
-    actual fun loadModel(modelDir: String, modelJsonName: String) {
+    actual fun loadModel(zipFilePath: String, modelName: String) {
         val handle = nativeHandle ?: return
-        live2d_load_model(handle, modelDir, modelJsonName)
+        live2d_load_model_from_zip(handle, zipFilePath, workDir, modelName)
     }
 
     actual fun setMotion(group: String, index: Int) {

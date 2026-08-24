@@ -10,13 +10,16 @@ class Live2DNativeBridge {
         nativeHandle = nativeCreate()
     }
 
-    fun setAssetManager(assetManager: AssetManager) {
-        nativeSetAssetManager(assetManager)
-    }
+    private external fun nativeCreate(): Long
 
     fun loadModel(modelDir: String, modelJsonName: String): Boolean {
         if (nativeHandle == 0L) return false
         return nativeLoadModel(nativeHandle, modelDir, modelJsonName)
+    }
+
+    fun loadModelFromZip(zipFilePath: String, workDir: String, modelName: String): Boolean {
+        if (nativeHandle == 0L) return false
+        return nativeLoadModelFromZip(nativeHandle, zipFilePath, workDir, modelName)
     }
 
     fun setMotion(group: String, index: Int) {
@@ -60,10 +63,10 @@ class Live2DNativeBridge {
         }
     }
 
-    private external fun nativeSetAssetManager(assetManager: AssetManager)
-    private external fun nativeCreate(): Long
+
     private external fun nativeDestroy(handle: Long)
     private external fun nativeLoadModel(handle: Long, modelDir: String, modelJsonName: String): Boolean
+    private external fun nativeLoadModelFromZip(handle: Long, zipFilePath: String, workDir: String, modelName: String): Boolean
     private external fun nativeSetMotion(handle: Long, group: String, index: Int)
     private external fun nativeSetExpression(handle: Long, expressionId: String)
     private external fun nativeGetMotions(handle: Long): Array<String>?

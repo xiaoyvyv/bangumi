@@ -13,13 +13,12 @@ extern "C" {
 
 typedef void* Live2DHandle;
 
-#if defined(ANDROID) || defined(__ANDROID__)
-void live2d_set_asset_manager(AAssetManager* asset_manager);
-#endif
+
 
 Live2DHandle live2d_create(void);
 void live2d_destroy(Live2DHandle handle);
 bool live2d_load_model(Live2DHandle handle, const char* model_dir, const char* model_json_name);
+bool live2d_load_model_from_zip(Live2DHandle handle, const char* zip_file_path, const char* work_dir, const char* model_name);
 void live2d_set_motion(Live2DHandle handle, const char* group, int index);
 void live2d_set_expression(Live2DHandle handle, const char* expression_id);
 int live2d_get_motion_count(Live2DHandle handle);

@@ -15,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10
 private const val TAG = "Live2DState"
 
 @Stable
-actual class Live2DState actual constructor() {
+actual class Live2DState actual constructor(actual var workDir: String) {
     val bridge = Live2DNativeBridge()
     var glSurfaceView: Live2DGLSurfaceView? = null
 
@@ -23,28 +23,12 @@ actual class Live2DState actual constructor() {
     var isSurfaceCreated = false
         private set
 
-    actual fun loadModel(modelDir: String, modelJsonName: String) {
-        var cleanDir = modelDir.trim()
-        var cleanJson = modelJsonName.trim()
+    actual fun loadModel(zipFilePath: String, modelName: String) {
+        val cleanZip = zipFilePath.trim()
+        val cleanName = modelName.trim()
 
-        if (cleanDir.endsWith(".json", ignoreCase = true)) {
-            val lastSlash = cleanDir.lastIndexOf('/')
-            if (lastSlash != -1) {
-                cleanJson = cleanDir.substring(lastSlash + 1)
-                cleanDir = cleanDir.substring(0, lastSlash)
-            }
-        }
-
-        if (cleanJson.isEmpty()) {
-            val lastSlash = cleanDir.lastIndexOf('/')
-            if (lastSlash != -1) {
-                val folderName = cleanDir.substring(lastSlash + 1)
-                cleanJson = "$folderName.model3.json"
-            }
-        }
-
-        Log.d(TAG, "loadModel requested: dir=$cleanDir, json=$cleanJson, isSurfaceCreated=$isSurfaceCreated")
-        pendingLoad = Pair(cleanDir, cleanJson)
+        Log.d(TAG, "loadModel requested: zipFilePath=$cleanZip, modelName=$cleanName, workDir=$workDir, isSurfaceCreated=$isSurfaceCreated")
+        pendingLoad = Pair(cleanZip, cleanName)
         checkAndExecutePendingLoad()
     }
 
@@ -67,11 +51,11 @@ actual class Live2DState actual constructor() {
             return
         }
 
-        val (dir, json) = pending
+        val (zip, name) = pending
         pendingLoad = null
-        Log.d(TAG, "Executing queued bridge.loadModel: dir=$dir, json=$json")
+        Log.d(TAG, "Executing queued bridge.loadModelFromZip: zip=$zip, workDir=$workDir, modelName=$name")
         view.queueEvent {
-            bridge.loadModel(dir, json)
+            bridge.loadModelFromZip(zip, workDir, name)
         }
     }
 
@@ -111,8 +95,6 @@ actual class Live2DState actual constructor() {
 
 class Live2DGLSurfaceView(context: Context, private val state: Live2DState) : GLSurfaceView(context) {
     init {
-        state.bridge.setAssetManager(context.assets)
-
         setEGLContextClientVersion(2)
         setEGLConfigChooser(8, 8, 8, 8, 16, 0)
         holder.setFormat(PixelFormat.TRANSLUCENT)

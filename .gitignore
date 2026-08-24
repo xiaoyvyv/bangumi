@@ -35,3 +35,7 @@ captures
 /android/release/
 /internal/pixiv/ProjectU/
 /shared/core-native/native/CubismSdkForNative-5-r.5/
+/shared/core-native/src/cpp/build_arm64/
+/shared/core-native/src/cpp/build_ios_dev/
+/shared/core-native/src/cpp/build_ios_sim/
+/shared/core-native/src/cpp/build_x86_64/

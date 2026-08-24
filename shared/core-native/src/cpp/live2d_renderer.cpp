@@ -8,6 +8,11 @@
 #include <memory>
 #include <algorithm>
 #include <cstdlib>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include "miniz.h"
+
 #include <mutex>
 
 #if defined(ANDROID) || defined(__ANDROID__)
@@ -17,7 +22,6 @@
 #define LOG_TAG "Live2DNative"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-static AAssetManager* g_assetManager = nullptr;
 #else
 #include <OpenGLES/ES2/gl.h>
 #include <cstdio>
@@ -43,12 +47,7 @@ static AAssetManager* g_assetManager = nullptr;
 
 using namespace Csm;
 
-#if defined(ANDROID) || defined(__ANDROID__)
-void live2d_set_asset_manager(AAssetManager* asset_manager) {
-    g_assetManager = asset_manager;
-    LOGI("AAssetManager set successfully");
-}
-#endif
+
 
 #include "live2d_shaders.h"
 
@@ -56,27 +55,14 @@ void live2d_set_asset_manager(AAssetManager* asset_manager) {
 // Universal file loader with candidate path fallback
 static bool LoadFileBuffer(const std::string& rawPath, std::vector<char>& outBuffer) {
     std::string cleanPath = rawPath;
-    const std::string assetPrefix = "file:///android_asset/";
     const std::string fileScheme = "file://";
 
-    if (cleanPath.rfind(assetPrefix, 0) == 0) {
-        cleanPath = cleanPath.substr(assetPrefix.length());
-    } else if (cleanPath.rfind(fileScheme, 0) == 0) {
+    if (cleanPath.rfind(fileScheme, 0) == 0) {
         cleanPath = cleanPath.substr(fileScheme.length());
-    } else if (cleanPath.rfind("assets/", 0) == 0) {
-        cleanPath = cleanPath.substr(7);
-    }
-
-    while (!cleanPath.empty() && (cleanPath.front() == '/' || (cleanPath.length() >= 2 && cleanPath[0] == '.' && cleanPath[1] == '/'))) {
-        if (cleanPath.length() >= 2 && cleanPath[0] == '.' && cleanPath[1] == '/') {
-            cleanPath = cleanPath.substr(2);
-        } else if (cleanPath.front() == '/') {
-            cleanPath = cleanPath.substr(1);
-        }
     }
 
     std::string baseFilename = cleanPath;
-    size_t lastSlashPos = cleanPath.find_last_of('/');
+    size_t lastSlashPos = cleanPath.find_last_of("/");
     if (lastSlashPos != std::string::npos) {
         baseFilename = cleanPath.substr(lastSlashPos + 1);
     }
@@ -88,61 +74,13 @@ static bool LoadFileBuffer(const std::string& rawPath, std::vector<char>& outBuf
         return true;
     }
 
-    std::vector<std::string> candidates;
-    if (!cleanPath.empty()) {
-        candidates.push_back(cleanPath);
-        candidates.push_back(baseFilename);
-        candidates.push_back("FrameworkShaders/" + baseFilename);
-
-        // Add common Compose Multiplatform asset search fallbacks
-        if (cleanPath.find("composeResources/") != 0) {
-            candidates.push_back("composeResources/com.xiaoyv.bangumi.core_resource.resources/" + cleanPath);
-            candidates.push_back("composeResources/com.xiaoyv.bangumi.core_resource.resources/files/live2d/" + cleanPath);
-            candidates.push_back("files/live2d/" + cleanPath);
-            candidates.push_back("live2d/" + cleanPath);
-        }
-    }
-
-#if defined(ANDROID) || defined(__ANDROID__)
-    if (g_assetManager != nullptr) {
-        for (const auto& path : candidates) {
-            AAsset* asset = AAssetManager_open(g_assetManager, path.c_str(), AASSET_MODE_BUFFER);
-            if (asset) {
-                size_t size = AAsset_getLength(asset);
-                outBuffer.resize(size);
-                AAsset_read(asset, outBuffer.data(), size);
-                AAsset_close(asset);
-                LOGI("Successfully loaded asset via AAssetManager: %s (size: %zu)", path.c_str(), size);
-                return true;
-            }
-        }
-    }
-#endif
-
-    // Fallback to std::ifstream for disk paths (/data/user/0/..., etc.)
-    for (const auto& path : candidates) {
-        std::ifstream file(path, std::ios::binary | std::ios::ate);
-        if (file.is_open()) {
-            std::streamsize size = file.tellg();
-            file.seekg(0, std::ios::beg);
-            outBuffer.resize(size);
-            if (file.read(outBuffer.data(), size)) {
-                LOGI("Successfully loaded disk file: %s (size: %zu)", path.c_str(), static_cast<size_t>(size));
-                return true;
-            }
-        }
-    }
-
-    if (rawPath != cleanPath) {
-        std::ifstream file(rawPath, std::ios::binary | std::ios::ate);
-        if (file.is_open()) {
-            std::streamsize size = file.tellg();
-            file.seekg(0, std::ios::beg);
-            outBuffer.resize(size);
-            if (file.read(outBuffer.data(), size)) {
-                LOGI("Successfully loaded raw disk file: %s (size: %zu)", rawPath.c_str(), static_cast<size_t>(size));
-                return true;
-            }
+    std::ifstream file(cleanPath.c_str(), std::ios::binary | std::ios::ate);
+    if (file.is_open()) {
+        std::streamsize size = file.tellg();
+        file.seekg(0, std::ios::beg);
+        outBuffer.resize(static_cast<size_t>(size));
+        if (file.read(outBuffer.data(), size)) {
+            return true;
         }
     }
 
@@ -367,6 +305,26 @@ public:
             }
         }
 
+        // Preload Physics
+        std::string physicsFile = _modelSetting->GetPhysicsFileName();
+        if (!physicsFile.empty()) {
+            std::string physicsPath = _modelDir + physicsFile;
+            std::vector<char> pbuf;
+            if (LoadFileBuffer(physicsPath, pbuf)) {
+                LoadPhysics(reinterpret_cast<csmByte*>(pbuf.data()), static_cast<csmSizeInt>(pbuf.size()));
+            }
+        }
+
+        // Preload Pose
+        std::string poseFile = _modelSetting->GetPoseFileName();
+        if (!poseFile.empty()) {
+            std::string posePath = _modelDir + poseFile;
+            std::vector<char> pbuf;
+            if (LoadFileBuffer(posePath, pbuf)) {
+                LoadPose(reinterpret_cast<csmByte*>(pbuf.data()), static_cast<csmSizeInt>(pbuf.size()));
+            }
+        }
+
         // Preload Expressions
         int exprCount = _modelSetting->GetExpressionCount();
         for (int i = 0; i < exprCount; i++) {
@@ -414,8 +372,31 @@ public:
 
     void StartMotion(const std::string& group, int index, int priority = 2) {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
+        if (!_motionManager) return;
+
+        if (priority == 3 /* PriorityForce */) {
+            _motionManager->SetReservePriority(priority);
+        } else if (!_motionManager->ReserveMotion(priority)) {
+            return;
+        }
+
         std::string key = group + "_" + std::to_string(index);
         auto it = _motions.find(key);
+        if (it == _motions.end()) {
+            // Case-insensitive / prefix search fallback for group names like "idle" vs "Idle"
+            for (auto mIt = _motions.begin(); mIt != _motions.end(); ++mIt) {
+                if (mIt->first.rfind(group, 0) == 0 ||
+                    #if defined(_WIN32)
+                    _stricmp(mIt->first.c_str(), group.c_str()) == 0
+                    #else
+                    strcasecmp(mIt->first.c_str(), group.c_str()) == 0
+                    #endif
+                ) {
+                    it = mIt;
+                    break;
+                }
+            }
+        }
         if (it != _motions.end()) {
             _motionManager->StartMotionPriority(it->second, false, priority);
         }
@@ -453,14 +434,26 @@ public:
 
         float deltaTime = 0.016f; // ~60fps
         _model->LoadParameters();
+
         if (_motionManager->IsFinished()) {
             StartMotion("Idle", 0, 1);
-        } else {
-            _motionManager->UpdateMotion(_model, deltaTime);
         }
-        _expressionManager->UpdateMotion(_model, deltaTime);
-        _model->SaveParameters();
 
+        _motionManager->UpdateMotion(_model, deltaTime);
+
+        if (_expressionManager) {
+            _expressionManager->UpdateMotion(_model, deltaTime);
+        }
+
+        if (_physics) {
+            _physics->Evaluate(_model, deltaTime);
+        }
+
+        if (_pose) {
+            _pose->UpdateParameters(_model, deltaTime);
+        }
+
+        _model->SaveParameters();
         _model->Update();
 
         // Calculate aspect-ratio projection matrix matching LAppMinimumLive2DManager
@@ -521,7 +514,185 @@ void live2d_destroy(Live2DHandle handle) {
 bool live2d_load_model(Live2DHandle handle, const char* model_dir, const char* model_json_name) {
     if (!handle || !model_dir || !model_json_name) return false;
     InitCubismFrameworkInitializeIfNeeded();
-    return static_cast<Live2DModelWrapper*>(handle)->LoadAssets(model_dir, model_json_name);
+
+    std::string dirStr = model_dir;
+    std::string jsonStr = model_json_name;
+
+    const std::string fileScheme = "file://";
+    if (dirStr.rfind(fileScheme, 0) == 0) {
+        dirStr = dirStr.substr(fileScheme.length());
+    }
+
+    LOGI("Loading model directly: dir=%s, json=%s", dirStr.c_str(), jsonStr.c_str());
+    return static_cast<Live2DModelWrapper*>(handle)->LoadAssets(dirStr, jsonStr);
+}
+
+
+static bool CreateDirectoryRecursive(const std::string& path) {
+    if (path.empty()) return false;
+    struct stat st;
+    if (stat(path.c_str(), &st) == 0) {
+        return S_ISDIR(st.st_mode);
+    }
+    size_t pos = 0;
+    while ((pos = path.find_first_of("/\\", pos + 1)) != std::string::npos) {
+        std::string sub = path.substr(0, pos);
+        if (!sub.empty() && sub != "." && sub != "..") {
+            if (stat(sub.c_str(), &st) != 0) {
+                #if defined(_WIN32)
+                _mkdir(sub.c_str());
+                #else
+                mkdir(sub.c_str(), 0755);
+                #endif
+            }
+        }
+    }
+    #if defined(_WIN32)
+    return _mkdir(path.c_str()) == 0 || errno == EEXIST;
+    #else
+    return mkdir(path.c_str(), 0755) == 0 || errno == EEXIST;
+    #endif
+}
+
+static std::string GetZipUniqueId(const std::string& zipFilePath) {
+    std::string cleanPath = zipFilePath;
+    const std::string fileScheme = "file://";
+    if (cleanPath.rfind(fileScheme, 0) == 0) {
+        cleanPath = cleanPath.substr(fileScheme.length());
+    }
+    struct stat st;
+    if (stat(cleanPath.c_str(), &st) == 0) {
+        return std::to_string(st.st_size) + "_" + std::to_string(st.st_mtime);
+    }
+    return "";
+}
+
+static bool ExtractZipFile(const std::string& rawZipPath, const std::string& destDir) {
+    std::string cleanZipPath = rawZipPath;
+    const std::string fileScheme = "file://";
+    if (cleanZipPath.rfind(fileScheme, 0) == 0) {
+        cleanZipPath = cleanZipPath.substr(fileScheme.length());
+    }
+
+    mz_zip_archive zipArchive;
+    memset(&zipArchive, 0, sizeof(zipArchive));
+
+    if (!mz_zip_reader_init_file(&zipArchive, cleanZipPath.c_str(), 0)) {
+        LOGE("Failed to open ZIP file for reading: %s", cleanZipPath.c_str());
+        return false;
+    }
+
+    if (!CreateDirectoryRecursive(destDir)) {
+        LOGE("Failed to create destination directory: %s", destDir.c_str());
+        mz_zip_reader_end(&zipArchive);
+        return false;
+    }
+
+    mz_uint numFiles = mz_zip_reader_get_num_files(&zipArchive);
+    LOGI("Extracting %u files from ZIP: %s to %s", numFiles, cleanZipPath.c_str(), destDir.c_str());
+
+    for (mz_uint i = 0; i < numFiles; i++) {
+        mz_zip_archive_file_stat fileStat;
+        if (!mz_zip_reader_file_stat(&zipArchive, i, &fileStat)) {
+            continue;
+        }
+
+        std::string filename = fileStat.m_filename;
+        if (filename.empty()) continue;
+
+        std::string outPath = destDir + "/" + filename;
+
+        if (mz_zip_reader_is_file_a_directory(&zipArchive, i)) {
+            CreateDirectoryRecursive(outPath);
+        } else {
+            size_t lastSlash = outPath.find_last_of("/\\");
+            if (lastSlash != std::string::npos) {
+                CreateDirectoryRecursive(outPath.substr(0, lastSlash));
+            }
+            if (!mz_zip_reader_extract_to_file(&zipArchive, i, outPath.c_str(), 0)) {
+                LOGE("Failed to extract ZIP entry %s to %s", filename.c_str(), outPath.c_str());
+            }
+        }
+    }
+
+    mz_zip_reader_end(&zipArchive);
+    return true;
+}
+
+bool live2d_load_model_from_zip(Live2DHandle handle, const char* zip_file_path, const char* work_dir, const char* model_name) {
+    if (!handle || !zip_file_path || !work_dir || !model_name) return false;
+    InitCubismFrameworkInitializeIfNeeded();
+
+    std::string zipPathStr = zip_file_path;
+    std::string workDirStr = work_dir;
+    std::string modelNameStr = model_name;
+
+    const std::string fileScheme = "file://";
+    if (workDirStr.rfind(fileScheme, 0) == 0) {
+        workDirStr = workDirStr.substr(fileScheme.length());
+    }
+    while (!workDirStr.empty() && workDirStr.back() == '/') {
+        workDirStr.pop_back();
+    }
+
+    std::string targetDir = workDirStr + "/" + modelNameStr;
+    std::string markerFile = targetDir + "/.zip_id";
+    std::string currentZipId = GetZipUniqueId(zipPathStr);
+
+    bool needExtract = true;
+    if (!currentZipId.empty()) {
+        std::ifstream markerIn(markerFile);
+        if (markerIn.is_open()) {
+            std::string savedZipId;
+            markerIn >> savedZipId;
+            if (savedZipId == currentZipId) {
+                needExtract = false;
+                LOGI("Zip file unchanged (ID: %s). Reusing extracted model directory: %s", currentZipId.c_str(), targetDir.c_str());
+            }
+        }
+    }
+
+    if (needExtract) {
+        if (!ExtractZipFile(zipPathStr, targetDir)) {
+            LOGE("Failed to extract model ZIP: %s", zipPathStr.c_str());
+            return false;
+        }
+        if (!currentZipId.empty()) {
+            std::ofstream markerOut(markerFile);
+            if (markerOut.is_open()) {
+                markerOut << currentZipId;
+            }
+        }
+    }
+
+    std::string jsonFilename = "";
+    std::string expectedJson = modelNameStr + ".model3.json";
+    std::string checkExpectedPath = targetDir + "/" + expectedJson;
+    struct stat st;
+    if (stat(checkExpectedPath.c_str(), &st) == 0) {
+        jsonFilename = expectedJson;
+    } else {
+        DIR* dir = opendir(targetDir.c_str());
+        if (dir) {
+            struct dirent* entry;
+            while ((entry = readdir(dir)) != nullptr) {
+                std::string fname = entry->d_name;
+                if (fname.find(".model3.json") != std::string::npos) {
+                    jsonFilename = fname;
+                    break;
+                }
+            }
+            closedir(dir);
+        }
+    }
+
+    if (jsonFilename.empty()) {
+        LOGE("No .model3.json found in extracted directory: %s", targetDir.c_str());
+        return false;
+    }
+
+    LOGI("Loading extracted model: dir=%s, json=%s", targetDir.c_str(), jsonFilename.c_str());
+    return live2d_load_model(handle, targetDir.c_str(), jsonFilename.c_str());
 }
 
 void live2d_set_motion(Live2DHandle handle, const char* group, int index) {

@@ -38,6 +38,7 @@ if(IOS_BUILD)
 
     add_library(live2d_native STATIC
         live2d_renderer.cpp
+        miniz.c
         ${FRAMEWORK_SOURCES}
     )
 else()
@@ -51,6 +52,7 @@ else()
     add_library(live2d_native SHARED
         live2d_renderer.cpp
         live2d_jni.cpp
+        miniz.c
         ${FRAMEWORK_SOURCES}
     )
 
@@ -61,4 +63,6 @@ else()
         android
         log
     )
+
+    target_link_options(live2d_native PRIVATE "-Wl,-z,max-page-size=16384")
 endif()
