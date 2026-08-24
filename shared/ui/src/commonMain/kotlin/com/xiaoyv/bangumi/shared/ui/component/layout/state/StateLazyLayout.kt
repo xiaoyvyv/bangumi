@@ -276,10 +276,10 @@ private fun <T : Any> StateLazyLayoutImpl(
     val lazyRefreshState = pagingItems.loadState.refresh
 
     LaunchedEffect(lazyRefreshState) {
-        when {
-            lazyRefreshState is LoadState.Loading && pagingItems.itemCount > 0 -> refreshing = true
-            lazyRefreshState is LoadState.Error -> refreshing = false
-            lazyRefreshState is LoadState.NotLoading -> refreshing = false
+        when (lazyRefreshState) {
+            is LoadState.Loading if pagingItems.itemCount > 0 -> refreshing = true
+            is LoadState.Error -> refreshing = false
+            is LoadState.NotLoading -> refreshing = false
             else -> Unit
         }
     }

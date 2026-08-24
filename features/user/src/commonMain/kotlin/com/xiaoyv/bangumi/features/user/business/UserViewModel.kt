@@ -2,9 +2,6 @@ package com.xiaoyv.bangumi.features.user.business
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.profile_collection_empty
-import com.xiaoyv.bangumi.core_resource.resources.profile_collection_section_title
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -135,9 +132,7 @@ class UserViewModel(
         saveCache()
     }
 
-    /**
-     * 拉取单个条目类型的最近收藏并拼装为页面展示分区。
-     */
+
     private suspend fun fetchSingleSection(
         user: ComposeUser,
         @SubjectType type: Int,
@@ -167,22 +162,16 @@ class UserViewModel(
             if (collection.onHold > 0) add(CollectionType.stringSync(type, CollectionType.ASIDE) + " " + collection.onHold)
             if (collection.dropped > 0) add(CollectionType.stringSync(type, CollectionType.DROP) + " " + collection.dropped)
         }
-        val collectionInfoText = if (collectionInfo.isEmpty()) {
-            getString(Res.string.profile_collection_empty)
-        } else {
-            collectionInfo.joinToString("、")
-        }
+        val collectionInfoText = if (collectionInfo.isEmpty()) "暂时没有收藏该类型" else collectionInfo.joinToString("、")
 
+        // 有数据才添加块头
         if (result.data1.isNotEmpty() || result.data2.isNotEmpty()) {
             sections.add(
                 ComposeSection(
                     key = type.toString(),
                     header = ComposeSectionTitle(
                         id = type.toString(),
-                        title = getString(
-                            Res.string.profile_collection_section_title,
-                            getString(SubjectType.string(type))
-                        ),
+                        title = "Ta的${getString(SubjectType.string(type))}",
                         subtitle = collectionInfoText
                     ),
                     item = ComposeSubject.Empty

@@ -1,0 +1,295 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "Angle X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "Angle Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "Angle Z"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "ParamGroup",
+			"Name": "EyeL Open"
+		},
+		{
+			"Id": "ParamEyeLSmile",
+			"GroupId": "ParamGroup",
+			"Name": "EyeL Smile"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "ParamGroup",
+			"Name": "EyeR Open"
+		},
+		{
+			"Id": "ParamEyeRSmile",
+			"GroupId": "ParamGroup",
+			"Name": "EyeR Smile"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "ParamGroup",
+			"Name": "Eyeball X"
+		},
+		{
+			"Id": "ParamEyeBallY",
+			"GroupId": "ParamGroup",
+			"Name": "Eyeball Y"
+		},
+		{
+			"Id": "ParamBrowLY",
+			"GroupId": "ParamGroup",
+			"Name": "BrowL Y"
+		},
+		{
+			"Id": "ParamBrowRY",
+			"GroupId": "ParamGroup",
+			"Name": "BrowR Y"
+		},
+		{
+			"Id": "ParamBrowLX",
+			"GroupId": "ParamGroup",
+			"Name": "BrowL X"
+		},
+		{
+			"Id": "ParamBrowRX",
+			"GroupId": "ParamGroup",
+			"Name": "BrowR X"
+		},
+		{
+			"Id": "ParamBrowLAngle",
+			"GroupId": "ParamGroup",
+			"Name": "BrowL Angle"
+		},
+		{
+			"Id": "ParamBrowRAngle",
+			"GroupId": "ParamGroup",
+			"Name": "BrowR Angle"
+		},
+		{
+			"Id": "ParamBrowLForm",
+			"GroupId": "ParamGroup",
+			"Name": "BrowL Form"
+		},
+		{
+			"Id": "ParamBrowRForm",
+			"GroupId": "ParamGroup",
+			"Name": "BrowR Form"
+		},
+		{
+			"Id": "ParamFlash",
+			"GroupId": "ParamGroup4",
+			"Name": "flash"
+		},
+		{
+			"Id": "ParamAnger",
+			"GroupId": "ParamGroup4",
+			"Name": "anger"
+		},
+		{
+			"Id": "ParamDrop",
+			"GroupId": "ParamGroup4",
+			"Name": "drop"
+		},
+		{
+			"Id": "ParamQuestion",
+			"GroupId": "ParamGroup4",
+			"Name": "question"
+		},
+		{
+			"Id": "ParamShock",
+			"GroupId": "ParamGroup4",
+			"Name": "shock"
+		},
+		{
+			"Id": "ParamMouthShock",
+			"GroupId": "ParamGroup4",
+			"Name": "mouth_shock"
+		},
+		{
+			"Id": "ParamMouthCat",
+			"GroupId": "ParamGroup4",
+			"Name": "mouth_cat"
+		},
+		{
+			"Id": "ParamMouthSmall",
+			"GroupId": "ParamGroup4",
+			"Name": "mouth_small"
+		},
+		{
+			"Id": "ParamDespise",
+			"GroupId": "ParamGroup4",
+			"Name": "despise"
+		},
+		{
+			"Id": "ParamMouthForm",
+			"GroupId": "ParamGroup3",
+			"Name": "Mouth Form"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "ParamGroup3",
+			"Name": "Mouth Open"
+		},
+		{
+			"Id": "ParamCheek",
+			"GroupId": "",
+			"Name": "Cheek"
+		},
+		{
+			"Id": "ParamBodyAngleX",
+			"GroupId": "",
+			"Name": "Body X"
+		},
+		{
+			"Id": "ParamBodyAngleY",
+			"GroupId": "",
+			"Name": "Body Y"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "Body Z"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "Breath"
+		},
+		{
+			"Id": "ParamHairFront",
+			"GroupId": "",
+			"Name": "Hair Move Front"
+		},
+		{
+			"Id": "ParamHairSide",
+			"GroupId": "",
+			"Name": "Hair Move Side"
+		},
+		{
+			"Id": "ParamHairBack",
+			"GroupId": "",
+			"Name": "Hair Move Back"
+		},
+		{
+			"Id": "ParamSkirt",
+			"GroupId": "",
+			"Name": "スカート揺れ"
+		},
+		{
+			"Id": "ParamArmL01",
+			"GroupId": "ParamGroup2",
+			"Name": "左上腕"
+		},
+		{
+			"Id": "ParamArmL02",
+			"GroupId": "ParamGroup2",
+			"Name": "左前腕"
+		},
+		{
+			"Id": "ParamArmR01",
+			"GroupId": "ParamGroup2",
+			"Name": "右上腕"
+		},
+		{
+			"Id": "ParamArmR02",
+			"GroupId": "ParamGroup2",
+			"Name": "右前腕"
+		}
+	],
+	"ParameterGroups": [
+		{
+			"Id": "ParamGroup",
+			"GroupId": "",
+			"Name": "eye"
+		},
+		{
+			"Id": "ParamGroup4",
+			"GroupId": "",
+			"Name": "emo"
+		},
+		{
+			"Id": "ParamGroup3",
+			"GroupId": "",
+			"Name": "mouth"
+		},
+		{
+			"Id": "ParamGroup2",
+			"GroupId": "",
+			"Name": "hands"
+		},
+		{
+			"Id": "ParamGroup5",
+			"GroupId": "",
+			"Name": "emo"
+		}
+	],
+	"Parts": [
+		{
+			"Id": "Part",
+			"Name": "HitArea"
+		},
+		{
+			"Id": "accessory",
+			"Name": "accessory"
+		},
+		{
+			"Id": "Part01Item",
+			"Name": "アイテム"
+		},
+		{
+			"Id": "Part01Body",
+			"Name": "体"
+		},
+		{
+			"Id": "Part01Arm",
+			"Name": "腕"
+		},
+		{
+			"Id": "Part01Neck",
+			"Name": "首"
+		},
+		{
+			"Id": "Part01HairBack001",
+			"Name": "後ろ髪"
+		},
+		{
+			"Id": "Part01HairFront001",
+			"Name": "前髪"
+		},
+		{
+			"Id": "Part01HairSide001",
+			"Name": "横髪"
+		},
+		{
+			"Id": "Part01Mouth001",
+			"Name": "口"
+		},
+		{
+			"Id": "Part01EyeBall001",
+			"Name": "目玉"
+		},
+		{
+			"Id": "Part01Eye001",
+			"Name": "目"
+		},
+		{
+			"Id": "Part01Face001",
+			"Name": "顔"
+		},
+		{
+			"Id": "Part01Core",
+			"Name": "コア"
+		}
+	]
+}

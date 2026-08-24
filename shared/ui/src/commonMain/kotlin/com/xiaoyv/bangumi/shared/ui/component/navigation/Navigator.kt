@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.ui.component.navigation
 
 import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.xiaoyv.bangumi.shared.System
@@ -68,8 +69,12 @@ class Navigator(startDestination: NavKey = Screen.Splash) {
         stackAction: StackAction
     ) {
         debounce(route) {
-            applyStackAction(stackAction)
-            applyLaunchMode(route, mode)
+            // NavDisplay requires a non-empty back stack. Apply a clear-and-navigate
+            // transition atomically so composition never observes the cleared stack.
+            Snapshot.withMutableSnapshot {
+                applyStackAction(stackAction)
+                applyLaunchMode(route, mode)
+            }
         }
     }
 

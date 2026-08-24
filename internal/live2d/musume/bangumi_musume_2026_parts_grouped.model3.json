@@ -1,0 +1,126 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "bangumi_musume_2026_parts_grouped.moc3",
+		"Textures": [
+			"bangumi_musume_2026_parts_grouped.1024/texture_00.png"
+		],
+		"DisplayInfo": "bangumi_musume_2026_parts_grouped.cdi3.json",
+		"Motions": {
+			"Idle": [
+				{
+					"File": "motion/idle.motion3.json"
+				}
+			],
+			"Notify": [
+				{
+					"File": "motion/think.motion3.json"
+				}
+			],
+			"Tap": [
+				{
+					"File": "motion/smile.motion3.json"
+				},
+				{
+					"File": "motion/squint.motion3.json"
+				},
+				{
+					"File": "motion/curious.motion3.json"
+				},
+				{
+					"File": "motion/wink.motion3.json"
+				}
+			],
+			"Flick@Body": [
+				{
+					"File": "motion/sorrow.motion3.json"
+				},
+				{
+					"File": "motion/suprise.motion3.json"
+				},
+				{
+					"File": "motion/question.motion3.json"
+				}
+			],
+			"Tap@Body": [
+				{
+					"File": "motion/anger.motion3.json"
+				},
+				{
+					"File": "motion/doubt.motion3.json"
+				},
+				{
+					"File": "motion/cry.motion3.json"
+				}
+			],
+			"Sleeping": [
+				{
+					"File": "motion/sleeping.motion3.json"
+				}
+			],
+			"Foot": [
+				{
+					"File": "motion/shock.motion3.json"
+				},
+				{
+					"File": "motion/sweat.motion3.json"
+				}
+			],
+			"Question": [
+				{
+					"File": "motion/question.motion3.json"
+				}
+			],
+			"Squint": [
+				{
+					"File": "motion/squint.motion3.json"
+				}
+			],
+			"Shock": [
+				{
+					"File": "motion/shock.motion3.json"
+				}
+			],
+			"Bgm38": [
+				{
+					"File": "motion/bgm38.motion3.json"
+				}
+			],
+			"Sad": [
+				{
+					"File": "motion/sad.motion3.json"
+				}
+			]
+		}
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	],
+	"HitAreas": [
+		{
+			"Id": "HitBody",
+			"Name": "Body"
+		},
+		{
+			"Id": "HitFace",
+			"Name": "Face"
+		},
+		{
+			"Id": "HitHair",
+			"Name": "Hair"
+		},
+		{
+			"Id": "HitFoot",
+			"Name": "Foot"
+		}
+	]
+}

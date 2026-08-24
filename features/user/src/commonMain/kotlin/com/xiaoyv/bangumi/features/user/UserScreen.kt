@@ -1,31 +1,46 @@
 package com.xiaoyv.bangumi.features.user
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.drop
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_image
+import com.xiaoyv.bangumi.core_resource.resources.pixiv_illust_stat_bookmarks
+import com.xiaoyv.bangumi.core_resource.resources.pixiv_illust_stat_likes
+import com.xiaoyv.bangumi.core_resource.resources.pixiv_illust_stat_views
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.features.user.business.UserViewModel
@@ -43,6 +58,7 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
 import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
+import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
@@ -52,10 +68,11 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.view.user.UserProfileHeroCard
-import kotlinx.coroutines.flow.drop
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -84,9 +101,6 @@ fun UserRoute(
     )
 }
 
-/**
- * 用户主页整体入口，负责折叠头图与分页内容的组合。
- */
 @Composable
 private fun UserScreen(
     uiState: UiState<UserState>,
@@ -175,9 +189,6 @@ private fun UserScreen(
 }
 
 
-/**
- * 顶部沉浸式头图与用户信息卡。
- */
 @Composable
 private fun UserScreenHeader(
     state: UserState,
@@ -187,50 +198,108 @@ private fun UserScreenHeader(
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
     Box(
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .height(360.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .height(440.dp)
+            .background(MaterialTheme.colorScheme.surfaceContainer),
     ) {
-        BlurImage(
-            modifier = Modifier.fillMaxSize(),
-            model = state.user.avatar.displayGridImage,
-            contentDescription = org.jetbrains.compose.resources.stringResource(Res.string.global_image),
-            onState = imageColorState.onImageState
-        )
+        val imageUrl = state.user.avatar.displayMediumImage.ifBlank {
 
-        Box(
+        }
+
+        /*StateImage(
+            modifier = Modifier.fillMaxSize(),
+            model = imageUrl,
+            blurLoading = false,
+            contentDescription = detail.title,
+            contentScale = ContentScale.Crop,
+        )
+        Column(
             modifier = Modifier
-                .fillMaxSize()
+                .align(Alignment.BottomStart)
+                .fillMaxWidth()
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.12f),
-                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.58f)
+                            Color.Transparent,
+                            MaterialTheme.colorScheme.surface,
+                            MaterialTheme.colorScheme.surface,
                         )
                     )
                 )
-        )
-
-        CompositionLocalProvider(
-            LocalContentColor provides imageColorState.contentColor
+                .padding(topPadding)
+                .padding(
+                    start = ContentMargin,
+                    top = ContentMargin + ContentMarginHalf,
+                    end = ContentMargin,
+                    bottom = ContentMargin,
+                ),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(horizontal = ContentMarginHalf, vertical = ContentMarginHalf),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf, Alignment.CenterVertically)
+            Text(
+                text = detail.title,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+            )
+            Text(
+                text = detail.userName,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                modifier = Modifier.clickable(onClick = onUserClick),
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                UserProfileHeroCard(
-                    user = state.user,
-                    onAvatarClick = {
-                        onUiEvent(UserEvent.UI.OnNavScreen(Screen.PreviewMain(state.user.avatar.displayOriginalUrl)))
-                    }
+                PixivIllustHeaderStat(
+                    value = detail.viewCount,
+                    label = stringResource(Res.string.pixiv_illust_stat_views),
+                )
+                PixivIllustHeaderStat(
+                    value = detail.likeCount,
+                    label = stringResource(Res.string.pixiv_illust_stat_likes),
+                )
+                PixivIllustHeaderStat(
+                    value = detail.bookmarkCount,
+                    label = stringResource(Res.string.pixiv_illust_stat_bookmarks),
                 )
             }
-        }
+            if (detail.tags.tags.isNotEmpty()) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    maxLines = 3,
+                ) {
+                    detail.tags.tags.forEachIndexed { index, tag ->
+                        val tagColor = when (index % 4) {
+                            0 -> MaterialTheme.colorScheme.primary
+                            1 -> MaterialTheme.colorScheme.tertiary
+                            2 -> MaterialTheme.colorScheme.error
+                            else -> MaterialTheme.colorScheme.secondary
+                        }
+
+                        Text(
+                            modifier = Modifier
+                                .clip(MaterialTheme.shapes.small)
+                                .background(tagColor.copy(alpha = 0.18f))
+                                .clickable { onTagClick(tag.tag) }
+                                .padding(
+                                    horizontal = ContentMarginHalf,
+                                    vertical = ContentMarginHalf,
+                                ),
+                            text = "#${tag.tag}",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = tagColor,
+                            maxLines = 1,
+                        )
+                    }
+                }
+            }
+        }*/
     }
 }
 
@@ -268,6 +337,7 @@ private fun UserScreenContent(
                     }
                 }
             )
+
             ProfileMenu.BIO -> UserBioScreen(state, onUiEvent, onActionEvent)
             ProfileMenu.TIMELINE -> UserTimelineScreen(state, onUiEvent, onActionEvent)
             ProfileMenu.COLLECTION -> UserCollectionScreen(state, onUiEvent, onActionEvent)
@@ -275,5 +345,19 @@ private fun UserScreenContent(
             ProfileMenu.FRIEND -> UserFriendScreen(state, onUiEvent, onActionEvent)
             else -> Unit
         }
+    }
+}
+
+
+@Composable
+@Preview
+private fun PreviewUserScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        UserScreen(
+            uiState = UiState(UserState()),
+            initialTab = ProfileMenu.TIME_MACHINE,
+            onUiEvent = {},
+            onActionEvent = {}
+        )
     }
 }

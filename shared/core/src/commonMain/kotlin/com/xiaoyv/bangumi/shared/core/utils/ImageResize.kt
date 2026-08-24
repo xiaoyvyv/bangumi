@@ -34,6 +34,7 @@ private val removeModeRegex = "/pic/(.*?)/[gcsml]/".toRegex()
  * - https://lain.bgm.tv/pic/crt/g/28/e5/181459_crt_a8ITi.jpg
  */
 fun String.bgmImageUrl(variant: BgmImageVariant = BgmImageVariant.S): String {
+    if (isBlank()) return this
     if (isBlank() || !contains("lain.bgm.tv")) return this
     val url = replace("http://", "https://")
         .substringBeforeLast("?")
