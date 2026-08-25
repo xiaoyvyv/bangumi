@@ -7,6 +7,7 @@ BUILD_BASE_DIR="${SCRIPT_DIR}/build/live2d"
 mkdir -p "${BUILD_BASE_DIR}"
 
 "${SCRIPT_DIR}/scripts/setup_sdk.sh"
+"${SCRIPT_DIR}/scripts/generate_shaders.sh"
 
 if [[ -z "${JAVA_HOME}" ]] && command -v /usr/libexec/java_home &>/dev/null; then
   export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null || true)"
@@ -17,11 +18,6 @@ EXTRA_CMAKE_FLAGS=()
 if [ "${SHOW_WARNINGS}" = "false" ]; then
   EXTRA_CMAKE_FLAGS+=("-Wno-dev" "-DCMAKE_WARN_DEPRECATED=OFF" "-DCMAKE_C_FLAGS=-w" "-DCMAKE_CXX_FLAGS=-w")
 fi
-
-echo "=========================================="
-echo " Generating Embedded GLSL Shaders Header "
-echo "=========================================="
-"${SCRIPT_DIR}/src/cpp/generate_shaders.sh"
 
 echo "=========================================="
 echo " Building macOS Desktop arm64 (.dylib)    "

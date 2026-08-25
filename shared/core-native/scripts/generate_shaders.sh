@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SHADERS_DIR="${SCRIPT_DIR}/shaders"
-OUTPUT_HEADER="${SCRIPT_DIR}/live2d_shaders.h"
+# Bangumi Multiplatform - Generate Live2D GLSL Embedded Shaders Header
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SDK_NAME="${CUBISM_SDK_NAME:-CubismSdkForNative-5-r.5}"
+SHADERS_DIR="${SCRIPT_DIR}/native/${SDK_NAME}/Framework/src/Rendering/OpenGL/Shaders/StandardES"
+OUTPUT_HEADER="${SCRIPT_DIR}/src/cpp/live2d_shaders.h"
+
+if [ ! -d "${SHADERS_DIR}" ]; then
+  "${SCRIPT_DIR}/scripts/setup_sdk.sh"
+fi
 
 if [ ! -d "${SHADERS_DIR}" ]; then
   echo "Error: Shader directory not found at ${SHADERS_DIR}"
@@ -17,7 +23,7 @@ cat << 'EOF' > "${OUTPUT_HEADER}"
 #include <map>
 #include <string>
 
-// Auto-generated 36 GLSL StandardES Framework Shaders from src/cpp/shaders/
+// Auto-generated 36 GLSL StandardES Framework Shaders from Cubism SDK
 static const std::map<std::string, std::string> g_embeddedShaders = {
 EOF
 
@@ -41,4 +47,4 @@ cat << 'EOF' >> "${OUTPUT_HEADER}"
 #endif // LIVE2D_SHADERS_H
 EOF
 
-echo "Successfully generated ${OUTPUT_HEADER} from ${SHADERS_DIR}"
+echo "[Shaders] Successfully generated ${OUTPUT_HEADER}"

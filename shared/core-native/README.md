@@ -86,13 +86,11 @@ shared/core-native/
 
 ## 3. GLSL 着色器嵌入头文件生成机制
 
-着色器源码文件直接托管在项目源码路径 [`shared/core-native/src/cpp/shaders/`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/src/cpp/shaders/) 中。
-
-渲染器在编译前通过 [`generate_shaders.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/src/cpp/generate_shaders.sh) 前置脚本，将这 **36 个 GLSL 着色器源码**直接打入 C++ 头文件 `live2d_shaders.h` 内存字典中。这完全消除了对解压后的官方 SDK 内部深层着色器路径的依赖，并同时支持 Mobile GLES 2.0 与 Desktop OpenGL 语法自动兼容补丁。
+渲染器在编译前通过 [`scripts/generate_shaders.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/generate_shaders.sh) 前置脚本，扫描解压后 Live2D 官方 SDK 内部的 **36 个 GLSL 着色器源码**，并自动生成打包打入 C++ 头文件 `live2d_shaders.h` 的全局内存字典。如果未检测到 SDK 目录，前置脚本会自动触发 [`scripts/setup_sdk.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/setup_sdk.sh) 自动下载解压。
 
 ### 运行前置脚本生成着色器头文件：
 ```bash
-./shared/core-native/src/cpp/generate_shaders.sh
+./shared/core-native/scripts/generate_shaders.sh
 ```
 
 ---

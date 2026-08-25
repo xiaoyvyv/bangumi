@@ -7,6 +7,7 @@ BUILD_BASE_DIR="${SCRIPT_DIR}/build/live2d"
 mkdir -p "${BUILD_BASE_DIR}"
 
 "${SCRIPT_DIR}/scripts/setup_sdk.sh"
+"${SCRIPT_DIR}/scripts/generate_shaders.sh"
 
 NDK_VERSION="${NDK_VERSION:-26.3.11579264}"
 ANDROID_PLATFORM="${ANDROID_PLATFORM:-android-21}"
@@ -26,11 +27,6 @@ EXTRA_CMAKE_FLAGS=()
 if [ "${SHOW_WARNINGS}" = "false" ]; then
   EXTRA_CMAKE_FLAGS+=("-Wno-dev" "-DCMAKE_WARN_DEPRECATED=OFF" "-DCMAKE_C_FLAGS=-w" "-DCMAKE_CXX_FLAGS=-w")
 fi
-
-echo "=========================================="
-echo " Generating Embedded GLSL Shaders Header "
-echo "=========================================="
-"${SCRIPT_DIR}/src/cpp/generate_shaders.sh"
 
 ABIS=("arm64-v8a" "x86_64" "x86")
 for ABI in "${ABIS[@]}"; do
