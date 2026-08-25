@@ -82,7 +82,94 @@ elseif(MACOS_DESKTOP_BUILD)
         Live2DCubismCore
         ${OPENGL_LIBRARIES}
     )
+elseif(WINDOWS_DESKTOP_BUILD OR (WIN32 AND NOT ANDROID))
+    add_compile_definitions(CSM_TARGET_WIN_GL WINDOWS_DESKTOP_BUILD)
+
+    find_package(OpenGL REQUIRED)
+    include_directories(${OPENGL_INCLUDE_DIR})
+
+    if(DEFINED ENV{JAVA_HOME})
+        include_directories(
+            "$ENV{JAVA_HOME}/include"
+            "$ENV{JAVA_HOME}/include/win32"
+        )
+    else()
+        find_package(JNI QUIET)
+        if(JNI_FOUND)
+            include_directories(${JNI_INCLUDE_DIRS})
+        endif()
+    endif()
+
+    find_package(GLEW QUIET)
+
+    add_library(Live2DCubismCore STATIC IMPORTED)
+    set_target_properties(Live2DCubismCore PROPERTIES IMPORTED_LOCATION
+        "${SDK_ROOT}/Core/lib/windows/x86_64/143/Live2DCubismCore_MD.lib"
+    )
+
+    add_library(live2d_native SHARED
+        live2d_renderer.cpp
+        live2d_jni.cpp
+        miniz.c
+        ${FRAMEWORK_SOURCES}
+    )
+
+    if(GLEW_FOUND)
+        include_directories(${GLEW_INCLUDE_DIRS})
+        target_link_libraries(live2d_native
+            Live2DCubismCore
+            ${OPENGL_LIBRARIES}
+            ${GLEW_LIBRARIES}
+            opengl32
+        )
+    else()
+        target_link_libraries(live2d_native
+            Live2DCubismCore
+            ${OPENGL_LIBRARIES}
+            opengl32
+        )
+    endif()
+
+elseif(LINUX_DESKTOP_BUILD OR (UNIX AND NOT APPLE AND NOT ANDROID))
+    add_compile_definitions(CSM_TARGET_LINUX_GL LINUX_DESKTOP_BUILD)
+
+    find_package(OpenGL REQUIRED)
+    find_package(X11 REQUIRED)
+    include_directories(${OPENGL_INCLUDE_DIR} ${X11_INCLUDE_DIR})
+
+    if(DEFINED ENV{JAVA_HOME})
+        include_directories(
+            "$ENV{JAVA_HOME}/include"
+            "$ENV{JAVA_HOME}/include/linux"
+        )
+    else()
+        find_package(JNI QUIET)
+        if(JNI_FOUND)
+            include_directories(${JNI_INCLUDE_DIRS})
+        endif()
+    endif()
+
+    add_library(Live2DCubismCore STATIC IMPORTED)
+    set_target_properties(Live2DCubismCore PROPERTIES IMPORTED_LOCATION
+        "${SDK_ROOT}/Core/lib/linux/x86_64/libLive2DCubismCore.a"
+    )
+
+    add_library(live2d_native SHARED
+        live2d_renderer.cpp
+        live2d_jni.cpp
+        miniz.c
+        ${FRAMEWORK_SOURCES}
+    )
+
+    target_link_libraries(live2d_native
+        Live2DCubismCore
+        ${OPENGL_LIBRARIES}
+        ${X11_LIBRARIES}
+        GL
+    )
+
 else()
+    # Android
     add_compile_definitions(CSM_TARGET_ANDROID_ES2)
 
     add_library(Live2DCubismCore STATIC IMPORTED)

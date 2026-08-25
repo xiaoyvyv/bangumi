@@ -10,7 +10,11 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include <sys/types.h>
+#if defined(_WIN32)
+#include <windows.h>
+#else
 #include <dirent.h>
+#endif
 #include "miniz.h"
 
 #include <mutex>
@@ -30,6 +34,18 @@
 #elif defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
 #include <OpenGL/gl.h>
 #include <OpenGL/OpenGL.h>
+#include <cstdio>
+#define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
+#elif defined(WINDOWS_DESKTOP_BUILD) || defined(_WIN32)
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <cstdio>
+#define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
+#elif defined(LINUX_DESKTOP_BUILD) || defined(__linux__)
+#include <GL/glew.h>
+#include <GL/gl.h>
 #include <cstdio>
 #define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
@@ -864,6 +880,15 @@ bool live2d_load_model_from_zip(Live2DHandle handle, const char* zip_file_path, 
     if (stat(checkExpectedPath.c_str(), &st) == 0) {
         jsonFilename = expectedJson;
     } else {
+#if defined(_WIN32)
+        std::string searchPath = targetDir + "\\*.model3.json";
+        WIN32_FIND_DATAA findData;
+        HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
+        if (hFind != INVALID_HANDLE_VALUE) {
+            jsonFilename = findData.cFileName;
+            FindClose(hFind);
+        }
+#else
         DIR* dir = opendir(targetDir.c_str());
         if (dir) {
             struct dirent* entry;
@@ -876,6 +901,7 @@ bool live2d_load_model_from_zip(Live2DHandle handle, const char* zip_file_path, 
             }
             closedir(dir);
         }
+#endif
     }
 
     if (jsonFilename.empty()) {

@@ -67,6 +67,9 @@ jobs:
       - name: Setup MSVC & CMake
         uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Install GLEW
+        run: choco install glew --yes
+
       - name: Build Windows dll
         shell: bash
         run: ./shared/core-native/scripts/build_windows.sh

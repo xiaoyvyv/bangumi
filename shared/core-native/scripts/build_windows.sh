@@ -27,6 +27,7 @@ rm -rf "${BUILD_DIR}"
 
 cmake -S "${SCRIPT_DIR}/src/cpp" -B "${BUILD_DIR}" \
   "${EXTRA_CMAKE_FLAGS[@]}" \
+  -DWINDOWS_DESKTOP_BUILD=ON \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build "${BUILD_DIR}" --config Release
 
