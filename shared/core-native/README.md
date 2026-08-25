@@ -38,9 +38,6 @@ shared/core-native/
 │   ├── ios/                           # iOS 生成的合并静态库目录
 │   │   ├── iphoneos/liblive2d_native.a
 │   │   └── iphonesimulator/liblive2d_native.a
-│   ├── macos/liblive2d_native.dylib
-│   ├── windows/live2d_native.dll
-│   └── linux/liblive2d_native.so
 └── src/
     ├── androidMain/
     │   ├── jniLibs/                   # Android 生成的 NDK 动态库
@@ -49,14 +46,13 @@ shared/core-native/
     │   │   └── x86/liblive2d_native.so
     │   └── kotlin/.../Live2D.android.kt
     ├── jvmMain/
-    │   ├── resources/native/          # Desktop (JVM) 打包内嵌 Native 动态库资源
+    │   ├── resources/native/          # Desktop (JVM) 打包内嵌 Native 动态库资源 (构建脚本直接输出到此)
     │   │   ├── macos/liblive2d_native.dylib
     │   │   ├── windows/live2d_native.dll
     │   │   └── linux/liblive2d_native.so
     │   └── kotlin/.../Live2D.jvm.kt   # Compose Desktop 离屏 Framebuffer 渲染 Loop
     ├── cpp/                           # 跨平台 C++ 核心渲染引擎源码
     │   ├── CMakeLists.txt             # 跨平台 CMake 构建规则
-    │   ├── generate_shaders.sh        # GLSL 着色器自动生成 Header 脚本
     │   ├── live2d_shaders.h           # 内嵌生成的 36 个 GLSL 着色器内存头文件
     │   ├── live2d_renderer.cpp        # 跨平台离屏/窗口 GLES/GL 渲染引擎核心
     │   ├── live2d_renderer.h          # 跨平台导出 C API 接口
@@ -133,13 +129,13 @@ shared/core-native/
 
 主脚本按平台分发调用 [`scripts/`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/) 目录下的专属构建脚本。脚本会自动将编译产物输出并复制到项目所需的资源目录中：
 
-| 平台 | 构建脚本 | 输出与分发路径 |
+| 平台 | 构建脚本 | 输出路径 |
 | :--- | :--- | :--- |
 | **Android** | [`scripts/build_android.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_android.sh) | `src/androidMain/jniLibs/{abi}/liblive2d_native.so` |
-| **macOS** | [`scripts/build_macos.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_macos.sh) | `native/macos/` & `src/jvmMain/resources/native/macos/` |
+| **macOS** | [`scripts/build_macos.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_macos.sh) | `src/jvmMain/resources/native/macos/liblive2d_native.dylib` |
 | **iOS** | [`scripts/build_ios.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_ios.sh) | `native/ios/iphoneos/` & `native/ios/iphonesimulator/` |
-| **Windows** | [`scripts/build_windows.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_windows.sh) | `native/windows/` & `src/jvmMain/resources/native/windows/` |
-| **Linux** | [`scripts/build_linux.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_linux.sh) | `native/linux/` & `src/jvmMain/resources/native/linux/` |
+| **Windows** | [`scripts/build_windows.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_windows.sh) | `src/jvmMain/resources/native/windows/live2d_native.dll` |
+| **Linux** | [`scripts/build_linux.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_linux.sh) | `src/jvmMain/resources/native/linux/liblive2d_native.so` |
 
 ---
 
@@ -149,9 +145,9 @@ shared/core-native/
 
 - **触发时机**：代码推送到 `main` 分支或提交针对 `shared/core-native/` 的 Pull Request 时触发。
 - **构建矩阵**：
-  - `macos-latest`：自动化生成 macOS `.dylib`、iOS `.a` 静态库以及 Android `.so`；
-  - `windows-latest`：自动化生成 Windows `live2d_native.dll`；
-  - `ubuntu-latest`：自动化生成 Linux `liblive2d_native.so`。
+  - `macos-latest`：自动化生成 macOS `.dylib` 与 iOS `.a` 静态库；
+  - `ubuntu-latest`：自动化生成 Android `.so`（NDK 构建）与 Linux `liblive2d_native.so`；
+  - `windows-latest`：自动化生成 Windows `live2d_native.dll`。
 - **Artifacts 托管**：编译成功的全部平台 Native 二进制文件将自动存为 GitHub Actions 构件，供团队下载或 Release 打包。
 
 ---
