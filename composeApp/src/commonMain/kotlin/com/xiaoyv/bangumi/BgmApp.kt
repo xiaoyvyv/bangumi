@@ -33,11 +33,9 @@ import com.xiaoyv.bangumi.core_resource.resources.image_detect
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_character
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
 import com.xiaoyv.bangumi.shared.avif.AvifDecoderFactory
-import com.xiaoyv.bangumi.shared.component.BgmLive2DView
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.component.LaunchReceiveShareImageEffect
 import com.xiaoyv.bangumi.shared.component.Live2D
-import com.xiaoyv.bangumi.shared.component.rememberBgmLive2DState
 import com.xiaoyv.bangumi.shared.component.rememberLive2DState
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.LocalPersonalState
@@ -47,6 +45,7 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedViewModel
 import com.xiaoyv.bangumi.shared.data.manager.shared.SharedViewModel
 import com.xiaoyv.bangumi.shared.gif.addPlatformGifSupport
+import com.xiaoyv.bangumi.shared.resource.copyToDir
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.action.rememberAppActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
@@ -61,6 +60,11 @@ import com.xiaoyv.bangumi.shared.ui.component.popup.rememberPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.rememberPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmAppTheme
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.absolutePath
+import io.github.vinceglb.filekit.createDirectories
+import io.github.vinceglb.filekit.div
+import io.github.vinceglb.filekit.filesDir
 import kotlinx.collections.immutable.persistentListOf
 import okio.FileSystem
 import org.jetbrains.compose.resources.stringResource
@@ -139,7 +143,7 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
             )
 
             if (LocalSharedState.current.settings.live2d.enable) {
-              /*  val live2DState = rememberLive2DState()
+                val live2DState = rememberLive2DState()
 
                 Live2D(
                     modifier = Modifier
@@ -152,11 +156,15 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
                 )
 
                 LaunchedEffect(Unit) {
-                    val modelName = "bangumi_musume_2d"
-                    val modelPath = Res.getUri("files/live2d/$modelName/$modelName.moc3")
-                    val modelDir = modelPath.substringBeforeLast("/")
-                    live2DState.loadModel(modelName, modelDir)
-                }*/
+                    val workDir = (FileKit.filesDir / "live2d").also {
+                        it.createDirectories()
+                    }
+                    val name = "bangumi_black_musume_2026_parts"
+                    val targetFile = Res.copyToDir(resourcePath = "files/live2d/$name.zip", workDir)
+
+                    live2DState.workDir = workDir.absolutePath()
+                    live2DState.loadModel(targetFile.absolutePath(), name)
+                }
             }
         }
     }

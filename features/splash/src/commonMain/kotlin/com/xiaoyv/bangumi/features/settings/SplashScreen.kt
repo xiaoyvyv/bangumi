@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.app_name
+import com.xiaoyv.bangumi.features.settings.business.SplashEvent
 import com.xiaoyv.bangumi.features.settings.business.SplashSideEffect
 import com.xiaoyv.bangumi.features.settings.business.SplashState
 import com.xiaoyv.bangumi.features.settings.business.SplashViewModel
@@ -46,6 +47,7 @@ import com.xiaoyv.bangumi.shared.component.rememberLive2DState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.joinToString
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
+import com.xiaoyv.bangumi.shared.resource.copyToDir
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import io.github.vinceglb.filekit.FileKit
@@ -73,13 +75,13 @@ fun SplashRoute(
         }
     }
 
-    /*    SplashScreen(
+        SplashScreen(
             state = baseState.data,
             onLaunch = { viewModel.onEvent(SplashEvent.Action.OnLaunch) },
-        )*/
-    Live2DSplash {
-        onNavScreen(Screen.PixivMain)
-    }
+        )
+//    Live2DSplash {
+//        onNavScreen(Screen.PixivMain)
+//    }
 }
 
 @Composable
@@ -114,12 +116,8 @@ fun Live2DSplash(onClick: () -> Unit) {
                     it.createDirectories()
                 }
                 val name = "bangumi_black_musume_2026_parts"
-                val path = withContext(Dispatchers.IO) {
-                    val bytes = Res.readBytes("files/live2d/$name.zip")
-                    val targetFile = workDir / "$name.zip"
-                    targetFile.write(bytes)
-                    targetFile.absolutePath()
-                }
+                val targetFile = Res.copyToDir("files/live2d/$name.zip", workDir)
+                val path = targetFile.absolutePath()
                 live2DState.workDir = workDir.absolutePath()
                 live2DState.loadModel(path, name)
 
@@ -142,7 +140,7 @@ fun Live2DSplash(onClick: () -> Unit) {
             .fillMaxSize()
             .background(colorScheme.background)
             .systemBarsPadding()
-//            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)

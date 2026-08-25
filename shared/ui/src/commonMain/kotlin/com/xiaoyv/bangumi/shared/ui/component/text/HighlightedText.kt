@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.TextUnit
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
 
+val StarColor = Color(0xFFFFAA00)
+
 @Composable
 fun HighlightedText(
     text: CharSequence,

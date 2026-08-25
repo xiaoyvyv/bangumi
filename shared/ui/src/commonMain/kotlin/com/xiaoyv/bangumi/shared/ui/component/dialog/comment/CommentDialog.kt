@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.shared.ui.component.dialog.comment
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -117,7 +118,6 @@ import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
-import com.xiaoyv.bangumi.shared.resource.toComposeUri
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
@@ -133,6 +133,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
+import org.jetbrains.compose.resources.painterResource
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -490,21 +491,16 @@ fun CommentDialogPanel(
                     verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     items(emojis, key = { emoji -> emoji.smileId }) { emoji ->
-                        AsyncImage(
+                        Image(
                             modifier = Modifier
                                 .clip(MaterialTheme.shapes.small)
                                 .fillMaxWidth()
                                 .aspectRatio(1f)
                                 .clickable { onValueChange(value.insertEmoji(emoji)) }
                                 .padding(ContentMarginHalf),
-                            model = remember(emoji.smileId) {
-                                ImageRequest.Builder(context)
-                                    .data(emoji.image.toComposeUri())
-                                    .build()
-                            },
+                            painter = painterResource(emoji.image),
                             contentScale = ContentScale.Crop,
-                            contentDescription = null,
-                            filterQuality = FilterQuality.None
+                            contentDescription = null
                         )
                     }
                 }

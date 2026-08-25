@@ -3,6 +3,7 @@
 package com.xiaoyv.bangumi.shared.core.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.bgm_01
@@ -437,6 +438,7 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.DrawableResource
 
+@Immutable
 data class BgmEmoji(
     val number: Int,
     val image: DrawableResource,
