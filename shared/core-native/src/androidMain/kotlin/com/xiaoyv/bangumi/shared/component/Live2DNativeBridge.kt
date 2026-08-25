@@ -1,24 +1,28 @@
 package com.xiaoyv.bangumi.shared.component
 
-import android.content.res.AssetManager
-
 class Live2DNativeBridge {
     var nativeHandle: Long = 0
         private set
 
     init {
-        nativeHandle = nativeCreate()
+        ensureNativeCreated()
+    }
+
+    fun ensureNativeCreated() {
+        if (nativeHandle == 0L) {
+            nativeHandle = nativeCreate()
+        }
     }
 
     private external fun nativeCreate(): Long
 
     fun loadModel(modelDir: String, modelJsonName: String): Boolean {
-        if (nativeHandle == 0L) return false
+        ensureNativeCreated()
         return nativeLoadModel(nativeHandle, modelDir, modelJsonName)
     }
 
     fun loadModelFromZip(zipFilePath: String, workDir: String, modelName: String): Boolean {
-        if (nativeHandle == 0L) return false
+        ensureNativeCreated()
         return nativeLoadModelFromZip(nativeHandle, zipFilePath, workDir, modelName)
     }
 
@@ -41,7 +45,8 @@ class Live2DNativeBridge {
     }
 
     fun onSurfaceCreated() {
-        if (nativeHandle != 0L) nativeOnSurfaceCreated(nativeHandle)
+        ensureNativeCreated()
+        nativeOnSurfaceCreated(nativeHandle)
     }
 
     fun onSurfaceChanged(width: Int, height: Int) {
@@ -62,7 +67,6 @@ class Live2DNativeBridge {
             nativeHandle = 0L
         }
     }
-
 
     private external fun nativeDestroy(handle: Long)
     private external fun nativeLoadModel(handle: Long, modelDir: String, modelJsonName: String): Boolean

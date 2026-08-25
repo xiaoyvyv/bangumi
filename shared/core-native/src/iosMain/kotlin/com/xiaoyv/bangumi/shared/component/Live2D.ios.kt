@@ -16,14 +16,36 @@ import com.xiaoyv.bangumi.shared.component.live2d.*
 
 @Stable
 actual class Live2DState actual constructor(actual var workDir: String) {
-    var nativeHandle: Live2DHandle? = live2d_create()
+    var nativeHandle: Live2DHandle? = null
         private set
 
+    private var currentModelInfo: Pair<String, String>? = null
     internal var glkDelegate: Live2DGLKViewDelegate? = null
 
+    init {
+        ensureNativeCreated()
+    }
+
+    fun ensureNativeCreated() {
+        if (nativeHandle == null) {
+            val handle = live2d_create()
+            nativeHandle = handle
+            currentModelInfo?.let { (zip, name) ->
+                if (handle != null) {
+                    live2d_load_model_from_zip(handle, zip, workDir, name)
+                }
+            }
+        }
+    }
+
     actual fun loadModel(zipFilePath: String, modelName: String) {
+        val cleanZip = zipFilePath.trim()
+        val cleanName = modelName.trim()
+        currentModelInfo = Pair(cleanZip, cleanName)
+
+        ensureNativeCreated()
         val handle = nativeHandle ?: return
-        live2d_load_model_from_zip(handle, zipFilePath, workDir, modelName)
+        live2d_load_model_from_zip(handle, cleanZip, workDir, cleanName)
     }
 
     actual fun setMotion(group: String, index: Int) {
@@ -87,6 +109,7 @@ actual fun Live2D(
     UIKitView(
         modifier = modifier,
         factory = {
+            state.ensureNativeCreated()
             val eaglContext = EAGLContext(kEAGLRenderingAPIOpenGLES2)
             val glkView = GLKView(frame = CGRectZero.readValue(), context = eaglContext)
             glkView.backgroundColor = UIColor.clearColor

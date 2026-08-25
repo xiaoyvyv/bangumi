@@ -257,6 +257,9 @@ public:
             _modelMatrix->SetupFromLayout(layout);
         }
 
+        // Ensure static shaders are initialized for current GL context
+        Rendering::CubismShader_OpenGLES2::GetInstance();
+
         // Create Renderer & Initialize Shaders
         CreateRenderer(_viewportWidth, _viewportHeight);
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
@@ -413,6 +416,57 @@ public:
     const std::vector<std::string>& GetMotionGroups() const { return _motionGroupNames; }
     const std::vector<std::string>& GetExpressions() const { return _expressionNames; }
 
+    void OnSurfaceCreated() {
+        std::lock_guard<std::recursive_mutex> lock(_mutex);
+        Rendering::CubismShader_OpenGLES2::GetInstance();
+
+        if (_modelSetting && _model) {
+            LOGI("OnSurfaceCreated: Re-binding Live2D shaders and textures for new OpenGL ES context...");
+            DeleteRenderer();
+            CreateRenderer(_viewportWidth, _viewportHeight);
+            GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
+
+            _textureIds.clear();
+            int textureCount = _modelSetting->GetTextureCount();
+            for (int i = 0; i < textureCount; i++) {
+                std::string texFile = _modelSetting->GetTextureFileName(i);
+                if (texFile.empty()) continue;
+                std::string texPath = _modelDir + texFile;
+
+                std::vector<char> texBuffer;
+                if (LoadFileBuffer(texPath, texBuffer)) {
+                    int w, h, comp;
+                    unsigned char* pixels = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(texBuffer.data()), static_cast<int>(texBuffer.size()), &w, &h, &comp, STBI_rgb_alpha);
+                    if (pixels) {
+                        for (int pIdx = 0; pIdx < w * h; pIdx++) {
+                            unsigned char* p = pixels + pIdx * 4;
+                            float alphaFactor = static_cast<float>(p[3]) / 255.0f;
+                            p[0] = static_cast<unsigned char>(p[0] * alphaFactor);
+                            p[1] = static_cast<unsigned char>(p[1] * alphaFactor);
+                            p[2] = static_cast<unsigned char>(p[2] * alphaFactor);
+                        }
+
+                        GLuint texId;
+                        glGenTextures(1, &texId);
+                        glBindTexture(GL_TEXTURE_2D, texId);
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+                        glGenerateMipmap(GL_TEXTURE_2D);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                        glBindTexture(GL_TEXTURE_2D, 0);
+                        stbi_image_free(pixels);
+
+                        GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->BindTexture(i, texId);
+                        _textureIds.push_back(texId);
+                        LOGI("Re-bound OpenGL ES texture Index %d -> Texture ID %d (%dx%d)", i, texId, w, h);
+                    }
+                }
+            }
+        }
+    }
+
     void OnSurfaceChanged(int w, int h) {
         _viewportWidth = w;
         _viewportHeight = h;
@@ -474,6 +528,8 @@ public:
         }
 
         projection.MultiplyByMatrix(_modelMatrix);
+
+        while (glGetError() != GL_NO_ERROR); // Clear pre-existing GL errors
 
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->SetMvpMatrix(&projection);
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->DrawModel();
@@ -736,10 +792,15 @@ const char* live2d_get_expression_id_at(Live2DHandle handle, int index) {
 void live2d_on_surface_created(Live2DHandle handle) {
     LOGI("live2d_on_surface_created called");
     InitCubismFrameworkInitializeIfNeeded();
+    Rendering::CubismShader_OpenGLES2::DeleteInstance();
     Rendering::CubismShader_OpenGLES2::GetInstance();
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+    if (handle) {
+        static_cast<Live2DModelWrapper*>(handle)->OnSurfaceCreated();
+    }
 }
 
 void live2d_on_surface_changed(Live2DHandle handle, int width, int height) {
