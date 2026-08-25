@@ -40,9 +40,8 @@ cmake -S "${SCRIPT_DIR}/src/cpp" -B "${BUILD_DIR}" \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build "${BUILD_DIR}" --config Release
 
-OUT_NATIVE="${SCRIPT_DIR}/native/windows"
 OUT_JVM_RES="${SCRIPT_DIR}/src/jvmMain/resources/native/windows"
-mkdir -p "${OUT_NATIVE}" "${OUT_JVM_RES}"
+mkdir -p "${OUT_JVM_RES}"
 
 DLL_FILE=""
 if [ -f "${BUILD_DIR}/Release/live2d_native.dll" ]; then
@@ -52,7 +51,6 @@ elif [ -f "${BUILD_DIR}/live2d_native.dll" ]; then
 fi
 
 if [ -n "${DLL_FILE}" ]; then
-  cp "${DLL_FILE}" "${OUT_NATIVE}/live2d_native.dll"
   cp "${DLL_FILE}" "${OUT_JVM_RES}/live2d_native.dll"
   echo "[Windows] Successfully built live2d_native.dll!"
 else

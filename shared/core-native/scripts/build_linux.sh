@@ -31,11 +31,8 @@ cmake -S "${SCRIPT_DIR}/src/cpp" -B "${BUILD_DIR}" \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build "${BUILD_DIR}" --config Release
 
-OUT_NATIVE="${SCRIPT_DIR}/native/linux"
 OUT_JVM_RES="${SCRIPT_DIR}/src/jvmMain/resources/native/linux"
-mkdir -p "${OUT_NATIVE}" "${OUT_JVM_RES}"
-
-cp "${BUILD_DIR}/liblive2d_native.so" "${OUT_NATIVE}/"
+mkdir -p "${OUT_JVM_RES}"
 cp "${BUILD_DIR}/liblive2d_native.so" "${OUT_JVM_RES}/"
 
 echo "[Linux] Successfully built liblive2d_native.so!"
