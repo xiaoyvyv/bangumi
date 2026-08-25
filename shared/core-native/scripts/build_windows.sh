@@ -25,8 +25,17 @@ echo "=========================================="
 BUILD_DIR="${BUILD_BASE_DIR}/windows-x64"
 rm -rf "${BUILD_DIR}"
 
+VCPKG_FLAGS=()
+if [ -n "${CMAKE_TOOLCHAIN_FILE}" ]; then
+  VCPKG_FLAGS+=("-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}")
+  if [ -n "${VCPKG_TARGET_TRIPLET}" ]; then
+    VCPKG_FLAGS+=("-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
+  fi
+fi
+
 cmake -S "${SCRIPT_DIR}/src/cpp" -B "${BUILD_DIR}" \
   "${EXTRA_CMAKE_FLAGS[@]}" \
+  "${VCPKG_FLAGS[@]}" \
   -DWINDOWS_DESKTOP_BUILD=ON \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build "${BUILD_DIR}" --config Release

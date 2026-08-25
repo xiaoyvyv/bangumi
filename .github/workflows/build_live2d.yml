@@ -67,12 +67,18 @@ jobs:
       - name: Setup MSVC & CMake
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Install GLEW
-        run: choco install glew --yes
+      - name: Install GLEW via vcpkg
+        run: |
+          vcpkg install glew:x64-windows
+          echo "GLEW_DIR=C:/vcpkg/installed/x64-windows" >> $GITHUB_ENV
+        shell: bash
 
       - name: Build Windows dll
         shell: bash
         run: ./shared/core-native/scripts/build_windows.sh
+        env:
+          CMAKE_TOOLCHAIN_FILE: C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+          VCPKG_TARGET_TRIPLET: x64-windows
 
       - name: Upload Windows Native Library
         uses: actions/upload-artifact@v4
