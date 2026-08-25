@@ -33,8 +33,8 @@ cmake -S "${SCRIPT_DIR}/src/cpp" -B "${BUILD_BASE_DIR}/ios-iphonesimulator" \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build "${BUILD_BASE_DIR}/ios-iphonesimulator" --config Release
 
-mkdir -p "${SCRIPT_DIR}/native/ios/iphonesimulator"
-libtool -static -o "${SCRIPT_DIR}/native/ios/iphonesimulator/liblive2d_native.a" \
+mkdir -p "${SCRIPT_DIR}/src/iosMain/libs/iphonesimulator"
+libtool -static -o "${SCRIPT_DIR}/src/iosMain/libs/iphonesimulator/liblive2d_native.a" \
   "${BUILD_BASE_DIR}/ios-iphonesimulator/liblive2d_native.a" \
   "${SCRIPT_DIR}/native/${SDK_NAME}/Core/lib/ios/Release-iphonesimulator-arm64/libLive2DCubismCore.a"
 
@@ -53,8 +53,8 @@ cmake -S "${SCRIPT_DIR}/src/cpp" -B "${BUILD_BASE_DIR}/ios-iphoneos" \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build "${BUILD_BASE_DIR}/ios-iphoneos" --config Release
 
-mkdir -p "${SCRIPT_DIR}/native/ios/iphoneos"
-libtool -static -o "${SCRIPT_DIR}/native/ios/iphoneos/liblive2d_native.a" \
+mkdir -p "${SCRIPT_DIR}/src/iosMain/libs/iphoneos"
+libtool -static -o "${SCRIPT_DIR}/src/iosMain/libs/iphoneos/liblive2d_native.a" \
   "${BUILD_BASE_DIR}/ios-iphoneos/liblive2d_native.a" \
   "${SCRIPT_DIR}/native/${SDK_NAME}/Core/lib/ios/Release-iphoneos/libLive2DCubismCore.a"
 

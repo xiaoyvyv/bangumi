@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: live2d-native-ios
-          path: shared/core-native/native/ios/
+          path: shared/core-native/src/iosMain/libs/
 
   build-android:
     name: Build Android Native Libraries (.so)

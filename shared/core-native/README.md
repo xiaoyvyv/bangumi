@@ -35,9 +35,7 @@ shared/core-native/
 │   ├── CubismSdkForNative-5-r.5/      # Live2D 官方 Native SDK v5 核心文件目录
 │   │   ├── Core/                      # 官方 C Core 头文件及各平台预编译静态库
 │   │   └── Framework/                 # 官方 C++ Framework 渲染与动作逻辑源码
-│   ├── ios/                           # iOS 生成的合并静态库目录
-│   │   ├── iphoneos/liblive2d_native.a
-│   │   └── iphonesimulator/liblive2d_native.a
+
 └── src/
     ├── androidMain/
     │   ├── jniLibs/                   # Android 生成的 NDK 动态库
@@ -60,6 +58,9 @@ shared/core-native/
     │   └── miniz.c / miniz.h          # 高性能无依赖 ZIP 原生解压库
     └── iosMain/
         ├── cinterop/live2d.def        # Kotlin Native cinterop 定义
+        ├── libs/                      # iOS 生成的合并静态库目录
+        │   ├── iphoneos/liblive2d_native.a
+        │   └── iphonesimulator/liblive2d_native.a
         └── kotlin/.../Live2D.ios.kt   # UIKitView + EAGLContext 渲染组件
 ```
 
@@ -133,7 +134,7 @@ shared/core-native/
 | :--- | :--- | :--- |
 | **Android** | [`scripts/build_android.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_android.sh) | `src/androidMain/jniLibs/{abi}/liblive2d_native.so` |
 | **macOS** | [`scripts/build_macos.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_macos.sh) | `src/jvmMain/resources/native/macos/liblive2d_native.dylib` |
-| **iOS** | [`scripts/build_ios.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_ios.sh) | `native/ios/iphoneos/` & `native/ios/iphonesimulator/` |
+| **iOS** | [`scripts/build_ios.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_ios.sh) | `src/iosMain/libs/iphoneos/` & `src/iosMain/libs/iphonesimulator/` |
 | **Windows** | [`scripts/build_windows.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_windows.sh) | `src/jvmMain/resources/native/windows/live2d_native.dll` |
 | **Linux** | [`scripts/build_linux.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/scripts/build_linux.sh) | `src/jvmMain/resources/native/linux/liblive2d_native.so` |
 

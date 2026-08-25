@@ -38,7 +38,7 @@ kotlin {
                 defFile(project.file("src/iosMain/cinterop/live2d.def"))
                 includeDirs(project.file("src/cpp"))
                 val targetDir = if (iosTarget.name.contains("Simulator")) "iphonesimulator" else "iphoneos"
-                extraOpts("-libraryPath", project.file("native/ios/$targetDir").absolutePath)
+                extraOpts("-libraryPath", project.file("src/iosMain/libs/$targetDir").absolutePath)
             }
         }
     }
