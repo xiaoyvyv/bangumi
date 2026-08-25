@@ -125,9 +125,9 @@ static void InitCubismFrameworkStartUpIfNeeded() {
         return;
     }
 
-    g_cubismOption.LoggingLevel = CubismFramework::Option::LogLevel_Verbose;
+    g_cubismOption.LoggingLevel = CubismFramework::Option::LogLevel_Error;
     g_cubismOption.LogFunction = [](const char* message) {
-        LOGI("[CubismSDK] %s", message);
+        LOGE("[CubismSDK Error] %s", message);
     };
     g_cubismOption.LoadFileFunction = [](const std::string path, csmSizeInt* outSize) -> csmByte* {
         std::vector<char> buffer;
@@ -300,7 +300,6 @@ public:
 
                     GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->BindTexture(i, texId);
                     _textureIds.push_back(texId);
-                    LOGI("Successfully bound OpenGL ES texture Index %d -> Texture ID %d (%dx%d)", i, texId, w, h);
                 } else {
                     LOGE("Failed to decode PNG texture via stb_image: %s", texPath.c_str());
                 }
@@ -430,7 +429,6 @@ public:
         Rendering::CubismShader_OpenGLES2::GetInstance();
 
         if (_modelSetting && _model) {
-            LOGI("OnSurfaceCreated: Re-binding Live2D shaders and textures for new OpenGL ES context...");
             DeleteRenderer();
             CreateRenderer(_viewportWidth, _viewportHeight);
             GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
@@ -469,7 +467,6 @@ public:
 
                         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->BindTexture(i, texId);
                         _textureIds.push_back(texId);
-                        LOGI("Re-bound OpenGL ES texture Index %d -> Texture ID %d (%dx%d)", i, texId, w, h);
                     }
                 }
             }
@@ -481,7 +478,6 @@ public:
         _viewportHeight = h;
         glViewport(0, 0, w, h);
         SetRenderTargetSize(w, h);
-        LOGI("OnSurfaceChanged Viewport: %dx%d", w, h);
     }
 
     void OnDrawFrame() {
@@ -542,11 +538,6 @@ public:
 
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->SetMvpMatrix(&projection);
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->DrawModel();
-
-        if (_frameCount % 60 == 0) {
-            GLenum err = glGetError();
-            LOGI("OnDrawFrame #%d completed. Viewport: %dx%d, GLErr: 0x%x", _frameCount, _viewportWidth, _viewportHeight, err);
-        }
     }
 
 private:
@@ -799,7 +790,6 @@ const char* live2d_get_expression_id_at(Live2DHandle handle, int index) {
 }
 
 void live2d_on_surface_created(Live2DHandle handle) {
-    LOGI("live2d_on_surface_created called");
     InitCubismFrameworkInitializeIfNeeded();
     Rendering::CubismShader_OpenGLES2::DeleteInstance();
     Rendering::CubismShader_OpenGLES2::GetInstance();
@@ -813,7 +803,6 @@ void live2d_on_surface_created(Live2DHandle handle) {
 }
 
 void live2d_on_surface_changed(Live2DHandle handle, int width, int height) {
-    LOGI("live2d_on_surface_changed called (%dx%d)", width, height);
     if (!handle) return;
     static_cast<Live2DModelWrapper*>(handle)->OnSurfaceChanged(width, height);
 }
