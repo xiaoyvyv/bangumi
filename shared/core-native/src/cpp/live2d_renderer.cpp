@@ -174,6 +174,7 @@ public:
     void ReleaseModel() {
         if (_motionManager) {
             _motionManager->StopAllMotions();
+            _motionManager->SetReservePriority(0);
         }
         if (_expressionManager) {
             _expressionManager->StopAllMotions();
@@ -375,13 +376,7 @@ public:
 
     void StartMotion(const std::string& group, int index, int priority = 2) {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
-        if (!_motionManager) return;
-
-        if (priority == 3 /* PriorityForce */) {
-            _motionManager->SetReservePriority(priority);
-        } else if (!_motionManager->ReserveMotion(priority)) {
-            return;
-        }
+        if (!_motionManager || _motions.empty()) return;
 
         std::string key = group + "_" + std::to_string(index);
         auto it = _motions.find(key);
@@ -400,9 +395,21 @@ public:
                 }
             }
         }
-        if (it != _motions.end()) {
-            _motionManager->StartMotionPriority(it->second, false, priority);
+
+        // Fallback to first available motion if requested group was not found
+        if (it == _motions.end() && !_motions.empty()) {
+            it = _motions.begin();
         }
+
+        if (it == _motions.end()) return;
+
+        if (priority == 3 /* PriorityForce */) {
+            _motionManager->SetReservePriority(priority);
+        } else if (!_motionManager->ReserveMotion(priority)) {
+            return;
+        }
+
+        _motionManager->StartMotionPriority(it->second, false, priority);
     }
 
     void SetExpression(const std::string& expressionId) {

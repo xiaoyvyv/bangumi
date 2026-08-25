@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -72,23 +76,28 @@ fun SplashRoute(
 
 @Composable
 fun Live2DSplash(onClick: () -> Unit) {
-    val live2DState = rememberLive2DState()
 
     Column(
-        Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
+        Modifier.fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
     ) {
-        val scope = rememberCoroutineScope()
+        Spacer(Modifier.height(400.dp))
 
-        Live2D(
-            modifier = Modifier
-                .systemBarsPadding()
-                .padding(bottom = 80.dp)
-                .width(200.dp)
-                .aspectRatio(202 / 308f)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            state = live2DState
-        )
+        val scope = rememberCoroutineScope()
+        val live2DState = rememberLive2DState()
+
+        Box(modifier = Modifier.border(1.dp, Color.Red)) {
+            Live2D(
+                modifier = Modifier
+                    .width(200.dp)
+                    .aspectRatio(202 / 308f)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                state = live2DState
+            )
+            Text(text = "贴贴")
+        }
 
         Button(onClick = {
             scope.launch {
@@ -111,6 +120,10 @@ fun Live2DSplash(onClick: () -> Unit) {
         Button(onClick = onClick) {
             Text(text = "Load Live2D")
         }
+
+        Spacer(Modifier.height(400.dp))
+        Spacer(Modifier.height(400.dp))
+        Spacer(Modifier.height(400.dp))
     }
 }
 

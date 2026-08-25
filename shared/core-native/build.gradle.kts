@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id("bgm.library")
     id("bgm.native")
-    id("app.cash.sqldelight") version "2.2.1"
+    id("app.cash.sqldelight") version "2.3.2"
     alias(libs.plugins.googleKsp)
 }
 
