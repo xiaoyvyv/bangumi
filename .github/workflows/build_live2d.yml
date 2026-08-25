@@ -1,0 +1,97 @@
+name: Live2D Native Libraries CI
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths:
+      - 'shared/core-native/**'
+      - '.github/workflows/build_live2d.yml'
+  pull_request:
+    branches: [ 'main' ]
+    paths:
+      - 'shared/core-native/**'
+      - '.github/workflows/build_live2d.yml'
+  workflow_dispatch:
+
+jobs:
+  build-macos-ios-android:
+    name: Build macOS, iOS & Android Native Libraries
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Android NDK
+        uses: nsetup/setup-android-ndk@v1
+        with:
+          ndk-version: r26b
+
+      - name: Build macOS dylib
+        run: ./shared/core-native/scripts/build_macos.sh
+
+      - name: Build iOS static library (.a)
+        run: ./shared/core-native/scripts/build_ios.sh
+
+      - name: Build Android shared libraries (.so)
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: ./shared/core-native/scripts/build_android.sh
+
+      - name: Upload macOS Native Library
+        uses: actions/upload-artifact@v4
+        with:
+          name: live2d-native-macos
+          path: shared/core-native/src/jvmMain/resources/native/macos/liblive2d_native.dylib
+
+      - name: Upload iOS Native Library
+        uses: actions/upload-artifact@v4
+        with:
+          name: live2d-native-ios
+          path: shared/core-native/native/ios/
+
+      - name: Upload Android Native Libraries
+        uses: actions/upload-artifact@v4
+        with:
+          name: live2d-native-android
+          path: shared/core-native/src/androidMain/jniLibs/
+
+  build-windows:
+    name: Build Windows Native Library (.dll)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC & CMake
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build Windows dll
+        shell: bash
+        run: ./shared/core-native/scripts/build_windows.sh
+
+      - name: Upload Windows Native Library
+        uses: actions/upload-artifact@v4
+        with:
+          name: live2d-native-windows
+          path: shared/core-native/src/jvmMain/resources/native/windows/live2d_native.dll
+
+  build-linux:
+    name: Build Linux Native Library (.so)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libgl1-mesa-dev libx11-dev
+
+      - name: Build Linux so
+        run: ./shared/core-native/scripts/build_linux.sh
+
+      - name: Upload Linux Native Library
+        uses: actions/upload-artifact@v4
+        with:
+          name: live2d-native-linux
+          path: shared/core-native/src/jvmMain/resources/native/linux/liblive2d_native.so

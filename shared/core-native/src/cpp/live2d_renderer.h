@@ -28,6 +28,7 @@ const char* live2d_get_expression_id_at(Live2DHandle handle, int index);
 void live2d_on_surface_created(Live2DHandle handle);
 void live2d_on_surface_changed(Live2DHandle handle, int width, int height);
 void live2d_on_draw_frame(Live2DHandle handle);
+bool live2d_render_pixels(Live2DHandle handle, int width, int height, unsigned int* out_pixels);
 void live2d_on_touch(Live2DHandle handle, float x, float y, int phase);
 
 #ifdef __cplusplus

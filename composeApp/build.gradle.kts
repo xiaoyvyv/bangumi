@@ -115,7 +115,7 @@ compose.desktop {
 
         mainClass = "com.xiaoyv.bangumi.MainKt"
         nativeDistributions {
-            modules("java.base", "java.sql", "jdk.unsupported")
+            modules("java.base", "java.desktop", "java.sql", "java.logging", "java.naming", "java.prefs", "java.management", "jdk.unsupported")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.xiaoyv.bangumi"
             packageVersion = "1.0.0"

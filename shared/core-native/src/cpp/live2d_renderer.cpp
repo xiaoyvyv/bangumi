@@ -29,6 +29,7 @@
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
 #elif defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
 #include <OpenGL/gl.h>
+#include <OpenGL/OpenGL.h>
 #include <cstdio>
 #define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
@@ -77,25 +78,61 @@ static bool LoadFileBuffer(const std::string& rawPath, std::vector<char>& outBuf
         baseFilename = cleanPath.substr(lastSlashPos + 1);
     }
 
+    bool loaded = false;
     // Check embedded shaders first for 100% fail-safe GLSL compilation
     auto embedIt = g_embeddedShaders.find(baseFilename);
     if (embedIt != g_embeddedShaders.end()) {
         outBuffer.assign(embedIt->second.begin(), embedIt->second.end());
-        return true;
-    }
-
-    std::ifstream file(cleanPath.c_str(), std::ios::binary | std::ios::ate);
-    if (file.is_open()) {
-        std::streamsize size = file.tellg();
-        file.seekg(0, std::ios::beg);
-        outBuffer.resize(static_cast<size_t>(size));
-        if (file.read(outBuffer.data(), size)) {
-            return true;
+        loaded = true;
+    } else {
+        std::ifstream file(cleanPath.c_str(), std::ios::binary | std::ios::ate);
+        if (file.is_open()) {
+            std::streamsize size = file.tellg();
+            file.seekg(0, std::ios::beg);
+            outBuffer.resize(static_cast<size_t>(size));
+            if (file.read(outBuffer.data(), size)) {
+                loaded = true;
+            }
         }
     }
 
-    LOGE("Failed to open or read file: %s (cleanPath: %s)", rawPath.c_str(), cleanPath.c_str());
-    return false;
+    if (!loaded) {
+        LOGE("Failed to open or read file: %s (cleanPath: %s)", rawPath.c_str(), cleanPath.c_str());
+        return false;
+    }
+
+#if defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
+    // Desktop GLSL cleanup for macOS OpenGL:
+    if (baseFilename.find(".vert") != std::string::npos || baseFilename.find(".frag") != std::string::npos) {
+        std::string shaderStr(outBuffer.data(), outBuffer.size());
+
+        // 1. Remove any #version directives so concatenated shaders don't put #version in the middle of code
+        size_t verPos = 0;
+        while ((verPos = shaderStr.find("#version", verPos)) != std::string::npos) {
+            size_t eol = shaderStr.find('\n', verPos);
+            if (eol != std::string::npos) {
+                shaderStr.replace(verPos, eol - verPos + 1, "//version removed\n");
+            } else {
+                shaderStr.replace(verPos, 8, "//version");
+            }
+            verPos += 18;
+        }
+
+        // 2. Comment out "precision ...;" statements on Desktop GLSL (where precision is a reserved word)
+        size_t precPos = 0;
+        while ((precPos = shaderStr.find("precision ", precPos)) != std::string::npos) {
+            shaderStr.replace(precPos, 9, "//precision");
+            precPos += 11;
+        }
+
+        // 3. Add precision macros
+        shaderStr = "#define lowp\n#define mediump\n#define highp\n" + shaderStr;
+
+        outBuffer.assign(shaderStr.begin(), shaderStr.end());
+    }
+#endif
+
+    return true;
 }
 
 // POSIX-compliant Aligned Allocator for Cubism Framework
@@ -268,53 +305,59 @@ public:
             _modelMatrix->SetupFromLayout(layout);
         }
 
-        // Ensure static shaders are initialized for current GL context
-        Rendering::CubismShader_OpenGLES2::GetInstance();
+#if defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
+        bool hasGLContext = (CGLGetCurrentContext() != nullptr);
+#else
+        bool hasGLContext = true;
+#endif
 
-        // Create Renderer & Initialize Shaders
-        CreateRenderer(_viewportWidth, _viewportHeight);
-        GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
+        if (hasGLContext) {
+            // Ensure static shaders are initialized for current GL context
+            Rendering::CubismShader_OpenGLES2::GetInstance();
 
-        // Load Textures
-        int textureCount = _modelSetting->GetTextureCount();
-        LOGI("Loading %d textures for Live2D model...", textureCount);
-        for (int i = 0; i < textureCount; i++) {
-            std::string texFile = _modelSetting->GetTextureFileName(i);
-            if (texFile.empty()) continue;
-            std::string texPath = _modelDir + texFile;
+            // Create Renderer & Initialize Shaders
+            CreateRenderer(_viewportWidth, _viewportHeight);
+            GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
 
-            std::vector<char> texBuffer;
-            if (LoadFileBuffer(texPath, texBuffer)) {
-                int w, h, comp;
-                unsigned char* pixels = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(texBuffer.data()), static_cast<int>(texBuffer.size()), &w, &h, &comp, STBI_rgb_alpha);
-                if (pixels) {
-                    for (int pIdx = 0; pIdx < w * h; pIdx++) {
-                        unsigned char* p = pixels + pIdx * 4;
-                        float alphaFactor = static_cast<float>(p[3]) / 255.0f;
-                        p[0] = static_cast<unsigned char>(p[0] * alphaFactor);
-                        p[1] = static_cast<unsigned char>(p[1] * alphaFactor);
-                        p[2] = static_cast<unsigned char>(p[2] * alphaFactor);
+            // Load Textures
+            int textureCount = _modelSetting->GetTextureCount();
+            LOGI("Loading %d textures for Live2D model...", textureCount);
+            for (int i = 0; i < textureCount; i++) {
+                std::string texFile = _modelSetting->GetTextureFileName(i);
+                if (texFile.empty()) continue;
+                std::string texPath = _modelDir + texFile;
+
+                std::vector<char> texBuffer;
+                if (LoadFileBuffer(texPath, texBuffer)) {
+                    int w, h, comp;
+                    unsigned char* pixels = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(texBuffer.data()), static_cast<int>(texBuffer.size()), &w, &h, &comp, STBI_rgb_alpha);
+                    if (pixels) {
+                        for (int pIdx = 0; pIdx < w * h; pIdx++) {
+                            unsigned char* p = pixels + pIdx * 4;
+                            float alphaFactor = static_cast<float>(p[3]) / 255.0f;
+                            p[0] = static_cast<unsigned char>(p[0] * alphaFactor);
+                            p[1] = static_cast<unsigned char>(p[1] * alphaFactor);
+                            p[2] = static_cast<unsigned char>(p[2] * alphaFactor);
+                        }
+
+                        GLuint texId;
+                        glGenTextures(1, &texId);
+                        glBindTexture(GL_TEXTURE_2D, texId);
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+                        glGenerateMipmap(GL_TEXTURE_2D);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                        glBindTexture(GL_TEXTURE_2D, 0);
+                        stbi_image_free(pixels);
+
+                        GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->BindTexture(i, texId);
+                        _textureIds.push_back(texId);
+                    } else {
+                        LOGE("Failed to decode PNG texture via stb_image: %s", texPath.c_str());
                     }
-
-                    GLuint texId;
-                    glGenTextures(1, &texId);
-                    glBindTexture(GL_TEXTURE_2D, texId);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-                    glGenerateMipmap(GL_TEXTURE_2D);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                    glBindTexture(GL_TEXTURE_2D, 0);
-                    stbi_image_free(pixels);
-
-                    GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->BindTexture(i, texId);
-                    _textureIds.push_back(texId);
-                } else {
-                    LOGE("Failed to decode PNG texture via stb_image: %s", texPath.c_str());
                 }
-            } else {
-                LOGE("Failed to load texture file buffer: %s", texPath.c_str());
             }
         }
 
@@ -550,6 +593,85 @@ public:
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->DrawModel();
     }
 
+    void EnsureFBO(int w, int h) {
+        if (w <= 0 || h <= 0) return;
+        if (_fbo != 0 && _fboW == w && _fboH == h) return;
+
+        if (_fbo != 0) {
+            glDeleteFramebuffers(1, &_fbo);
+            glDeleteTextures(1, &_fboColorTex);
+            glDeleteRenderbuffers(1, &_fboDepthRb);
+            _fbo = 0;
+        }
+
+        _fboW = w;
+        _fboH = h;
+
+        glGenFramebuffers(1, &_fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+
+        glGenTextures(1, &_fboColorTex);
+        glBindTexture(GL_TEXTURE_2D, _fboColorTex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _fboColorTex, 0);
+
+        glGenRenderbuffers(1, &_fboDepthRb);
+        glBindRenderbuffer(GL_RENDERBUFFER, _fboDepthRb);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, w, h);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _fboDepthRb);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    bool RenderToPixels(int w, int h, uint32_t* outPixels) {
+        if (w <= 0 || h <= 0 || !outPixels) return false;
+        std::lock_guard<std::recursive_mutex> lock(_mutex);
+
+        EnsureFBO(w, h);
+        if (_fbo == 0) return false;
+
+        OnSurfaceCreated();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+        glViewport(0, 0, w, h);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        OnSurfaceChanged(w, h);
+        OnDrawFrame();
+
+        glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, outPixels);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Convert GL_RGBA to Java TYPE_INT_ARGB_PRE and flip Y vertically in-place
+        for (int y = 0; y < h / 2; ++y) {
+            uint32_t* rowTop = outPixels + y * w;
+            uint32_t* rowBottom = outPixels + (h - 1 - y) * w;
+            for (int x = 0; x < w; ++x) {
+                uint32_t top = rowTop[x];
+                uint32_t bot = rowBottom[x];
+
+                uint32_t topArgb = (top & 0xFF00FF00) | ((top & 0x00FF0000) >> 16) | ((top & 0x000000FF) << 16);
+                uint32_t botArgb = (bot & 0xFF00FF00) | ((bot & 0x00FF0000) >> 16) | ((bot & 0x000000FF) << 16);
+
+                rowTop[x] = botArgb;
+                rowBottom[x] = topArgb;
+            }
+        }
+        if (h % 2 != 0) {
+            int midY = h / 2;
+            uint32_t* rowMid = outPixels + midY * w;
+            for (int x = 0; x < w; ++x) {
+                uint32_t val = rowMid[x];
+                rowMid[x] = (val & 0xFF00FF00) | ((val & 0x00FF0000) >> 16) | ((val & 0x000000FF) << 16);
+            }
+        }
+
+        return true;
+    }
+
 private:
     std::string _modelDir;
     ICubismModelSetting* _modelSetting;
@@ -562,6 +684,11 @@ private:
     int _viewportWidth;
     int _viewportHeight;
     int _frameCount;
+    GLuint _fbo = 0;
+    GLuint _fboColorTex = 0;
+    GLuint _fboDepthRb = 0;
+    int _fboW = 0;
+    int _fboH = 0;
     std::recursive_mutex _mutex;
 };
 
@@ -572,9 +699,8 @@ Live2DHandle live2d_create() {
 }
 
 void live2d_destroy(Live2DHandle handle) {
-    if (handle) {
-        delete static_cast<Live2DModelWrapper*>(handle);
-    }
+    if (!handle) return;
+    delete static_cast<Live2DModelWrapper*>(handle);
 }
 
 bool live2d_load_model(Live2DHandle handle, const char* model_dir, const char* model_json_name) {
@@ -799,7 +925,103 @@ const char* live2d_get_expression_id_at(Live2DHandle handle, int index) {
     return "";
 }
 
+#if defined(_WIN32) || defined(WIN32)
+#include <windows.h>
+#include <GL/gl.h>
+static HGLRC g_wglContext = NULL;
+static HDC g_wglDC = NULL;
+static HWND g_dummyHwnd = NULL;
+
+static bool InitOffscreenDesktopGLContext() {
+    if (g_wglContext != NULL) {
+        wglMakeCurrent(g_wglDC, g_wglContext);
+        return true;
+    }
+    WNDCLASS wc = {0};
+    wc.lpfnWndProc = DefWindowProc;
+    wc.hInstance = GetModuleHandle(NULL);
+    wc.lpszClassName = "Live2DDummyWindow";
+    RegisterClass(&wc);
+
+    g_dummyHwnd = CreateWindow("Live2DDummyWindow", "Live2D", WS_OVERLAPPEDWINDOW, 0, 0, 1, 1, NULL, NULL, wc.hInstance, NULL);
+    g_wglDC = GetDC(g_dummyHwnd);
+
+    PIXELFORMATDESCRIPTOR pfd = { sizeof(PIXELFORMATDESCRIPTOR), 1, PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER, PFD_TYPE_RGBA, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, PFD_MAIN_PLANE, 0, 0, 0, 0 };
+    int pf = ChoosePixelFormat(g_wglDC, &pfd);
+    SetPixelFormat(g_wglDC, pf, &pfd);
+
+    g_wglContext = wglCreateContext(g_wglDC);
+    wglMakeCurrent(g_wglDC, g_wglContext);
+    return true;
+}
+#elif defined(__linux__) && !defined(__ANDROID__)
+#include <X11/Xlib.h>
+#include <GL/glx.h>
+static GLXContext g_glxContext = NULL;
+static Display* g_xDisplay = NULL;
+static Window g_dummyWin = 0;
+
+static bool InitOffscreenDesktopGLContext() {
+    if (g_glxContext != NULL) {
+        glXMakeCurrent(g_xDisplay, g_dummyWin, g_glxContext);
+        return true;
+    }
+    g_xDisplay = XOpenDisplay(NULL);
+    if (!g_xDisplay) return false;
+    int screen = DefaultScreen(g_xDisplay);
+    int attribs[] = { GLX_RGBA, GLX_DEPTH_SIZE, 16, None };
+    XVisualInfo* vi = glXChooseVisual(g_xDisplay, screen, attribs);
+    if (!vi) return false;
+
+    g_dummyWin = XCreateSimpleWindow(g_xDisplay, RootWindow(g_xDisplay, screen), 0, 0, 1, 1, 0, 0, 0);
+    g_glxContext = glXCreateContext(g_xDisplay, vi, NULL, GL_TRUE);
+    glXMakeCurrent(g_xDisplay, g_dummyWin, g_glxContext);
+    return true;
+}
+#elif defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
+static CGLContextObj g_offscreenCGLContext = nullptr;
+
+static bool InitOffscreenDesktopGLContext() {
+    if (g_offscreenCGLContext != nullptr) {
+        CGLSetCurrentContext(g_offscreenCGLContext);
+        return true;
+    }
+
+    CGLPixelFormatAttribute attribs[] = {
+        kCGLPFAAccelerated,
+        kCGLPFAColorSize, (CGLPixelFormatAttribute)24,
+        kCGLPFAAlphaSize, (CGLPixelFormatAttribute)8,
+        kCGLPFADepthSize, (CGLPixelFormatAttribute)16,
+        (CGLPixelFormatAttribute)0
+    };
+
+    CGLPixelFormatObj pix = nullptr;
+    GLint npix = 0;
+    CGLError err = CGLChoosePixelFormat(attribs, &pix, &npix);
+    if (err != kCGLNoError || !pix) {
+        LOGE("CGLChoosePixelFormat failed: %d", err);
+        return false;
+    }
+
+    err = CGLCreateContext(pix, nullptr, &g_offscreenCGLContext);
+    CGLDestroyPixelFormat(pix);
+
+    if (err != kCGLNoError || !g_offscreenCGLContext) {
+        LOGE("CGLCreateContext failed: %d", err);
+        return false;
+    }
+
+    CGLSetCurrentContext(g_offscreenCGLContext);
+    LOGI("Created offscreen CGL context successfully for Desktop Live2D!");
+    return true;
+}
+#else
+static bool InitOffscreenDesktopGLContext() { return true; }
+#endif
+
 void live2d_on_surface_created(Live2DHandle handle) {
+    if (!InitOffscreenDesktopGLContext()) return;
+
     InitCubismFrameworkInitializeIfNeeded();
     Rendering::CubismShader_OpenGLES2::DeleteInstance();
     Rendering::CubismShader_OpenGLES2::GetInstance();
@@ -813,15 +1035,26 @@ void live2d_on_surface_created(Live2DHandle handle) {
 }
 
 void live2d_on_surface_changed(Live2DHandle handle, int width, int height) {
+    if (!InitOffscreenDesktopGLContext()) return;
+
     if (!handle) return;
     static_cast<Live2DModelWrapper*>(handle)->OnSurfaceChanged(width, height);
 }
 
 void live2d_on_draw_frame(Live2DHandle handle) {
+    if (!InitOffscreenDesktopGLContext()) return;
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (!handle) return;
     static_cast<Live2DModelWrapper*>(handle)->OnDrawFrame();
+}
+
+bool live2d_render_pixels(Live2DHandle handle, int width, int height, unsigned int* out_pixels) {
+    if (!handle || !out_pixels || width <= 0 || height <= 0) return false;
+    if (!InitOffscreenDesktopGLContext()) return false;
+
+    return static_cast<Live2DModelWrapper*>(handle)->RenderToPixels(width, height, out_pixels);
 }
 
 void live2d_on_touch(Live2DHandle handle, float x, float y, int phase) {

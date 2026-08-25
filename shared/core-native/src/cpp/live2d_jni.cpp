@@ -116,6 +116,19 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnDrawFrame(
     live2d_on_draw_frame(reinterpret_cast<Live2DHandle>(handle));
 }
 
+JNIEXPORT jboolean JNICALL
+Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeRenderPixels(
+        JNIEnv *env, jobject thiz, jlong handle, jint width, jint height, jintArray out_pixels) {
+    if (!handle || width <= 0 || height <= 0 || !out_pixels) return JNI_FALSE;
+    jint *pixels = env->GetIntArrayElements(out_pixels, nullptr);
+    if (!pixels) return JNI_FALSE;
+
+    bool result = live2d_render_pixels(reinterpret_cast<Live2DHandle>(handle), width, height, reinterpret_cast<unsigned int*>(pixels));
+
+    env->ReleaseIntArrayElements(out_pixels, pixels, 0);
+    return result ? JNI_TRUE : JNI_FALSE;
+}
+
 JNIEXPORT void JNICALL
 Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnTouch(
         JNIEnv *env, jobject thiz, jlong handle, jfloat x, jfloat y, jint phase) {
