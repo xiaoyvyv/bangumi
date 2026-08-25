@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <string>
+#include <cstring>
 #include <vector>
 #include "live2d_renderer.h"
 

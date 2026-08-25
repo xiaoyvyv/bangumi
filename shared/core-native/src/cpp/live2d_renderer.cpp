@@ -20,6 +20,10 @@
 
 #include <mutex>
 #include <chrono>
+#include <cstring>
+#if !defined(_WIN32)
+#include <strings.h>
+#endif
 
 #if defined(ANDROID) || defined(__ANDROID__)
 #include <GLES2/gl2.h>

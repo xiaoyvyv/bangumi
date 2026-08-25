@@ -113,7 +113,7 @@ fun Live2DSplash(onClick: () -> Unit) {
                 val workDir = (FileKit.filesDir / "live2d").also {
                     it.createDirectories()
                 }
-                val name = "haru"
+                val name = "bangumi_black_musume_2026_parts"
                 val path = withContext(Dispatchers.IO) {
                     val bytes = Res.readBytes("files/live2d/$name.zip")
                     val targetFile = workDir / "$name.zip"
