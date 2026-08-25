@@ -374,7 +374,7 @@ public:
         return true;
     }
 
-    void StartMotion(const std::string& group, int index, int priority = 2) {
+    void StartMotion(const std::string& group, int index, int priority = 3) {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
         if (!_motionManager || _motions.empty()) return;
 
@@ -403,12 +403,8 @@ public:
 
         if (it == _motions.end()) return;
 
-        if (priority == 3 /* PriorityForce */) {
-            _motionManager->SetReservePriority(priority);
-        } else if (!_motionManager->ReserveMotion(priority)) {
-            return;
-        }
-
+        // 立即中断前面播放中的动作，启动新动作
+        _motionManager->StopAllMotions();
         _motionManager->StartMotionPriority(it->second, false, priority);
     }
 
@@ -416,6 +412,8 @@ public:
         std::lock_guard<std::recursive_mutex> lock(_mutex);
         auto it = _expressions.find(expressionId);
         if (it != _expressions.end()) {
+            // 立即中断前面播放中的表情，切入新表情
+            _expressionManager->StopAllMotions();
             _expressionManager->StartMotion(it->second, false);
         }
     }
