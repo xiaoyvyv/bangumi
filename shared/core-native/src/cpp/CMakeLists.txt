@@ -135,7 +135,11 @@ elseif(LINUX_DESKTOP_BUILD OR (UNIX AND NOT APPLE AND NOT ANDROID))
 
     find_package(OpenGL REQUIRED)
     find_package(X11 REQUIRED)
+    find_package(GLEW QUIET)
     include_directories(${OPENGL_INCLUDE_DIR} ${X11_INCLUDE_DIR})
+    if(GLEW_FOUND)
+        include_directories(${GLEW_INCLUDE_DIRS})
+    endif()
 
     if(DEFINED ENV{JAVA_HOME})
         include_directories(
@@ -161,12 +165,23 @@ elseif(LINUX_DESKTOP_BUILD OR (UNIX AND NOT APPLE AND NOT ANDROID))
         ${FRAMEWORK_SOURCES}
     )
 
-    target_link_libraries(live2d_native
-        Live2DCubismCore
-        ${OPENGL_LIBRARIES}
-        ${X11_LIBRARIES}
-        GL
-    )
+    if(GLEW_FOUND)
+        target_link_libraries(live2d_native
+            Live2DCubismCore
+            ${OPENGL_LIBRARIES}
+            ${GLEW_LIBRARIES}
+            ${X11_LIBRARIES}
+            GL
+        )
+    else()
+        target_link_libraries(live2d_native
+            Live2DCubismCore
+            ${OPENGL_LIBRARIES}
+            ${X11_LIBRARIES}
+            GL
+            GLEW
+        )
+    endif()
 
 else()
     # Android

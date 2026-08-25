@@ -96,7 +96,7 @@ jobs:
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake libgl1-mesa-dev libx11-dev
+          sudo apt-get install -y build-essential cmake libgl1-mesa-dev libglew-dev libx11-dev
 
       - name: Build Linux so
         run: ./shared/core-native/scripts/build_linux.sh
