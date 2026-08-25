@@ -8,11 +8,17 @@ import android.opengl.EGLContext
 import android.opengl.EGLDisplay
 import android.opengl.EGLSurface
 import android.opengl.GLES20
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.view.TextureView
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -24,6 +30,30 @@ private const val TAG = "Live2DState"
 actual class Live2DState actual constructor(actual var workDir: String) {
     val bridge = Live2DNativeBridge()
     var textureView: Live2DTextureView? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    private var _isLoading by mutableStateOf(false)
+    actual val isLoading: Boolean get() = _isLoading
+
+    private var _isLoaded by mutableStateOf(false)
+    actual val isLoaded: Boolean get() = _isLoaded
+
+    private var _modelName by mutableStateOf("")
+    actual val modelName: String get() = _modelName
+
+    private var _currentMotion by mutableStateOf("")
+    actual val currentMotion: String get() = _currentMotion
+
+    private var _currentExpression by mutableStateOf("")
+    actual val currentExpression: String get() = _currentExpression
+
+    private var _availableMotions by mutableStateOf(emptyList<String>())
+    actual val availableMotions: List<String> get() = _availableMotions
+
+    private var _availableExpressions by mutableStateOf(emptyList<String>())
+    actual val availableExpressions: List<String> get() = _availableExpressions
+
+    actual var onHitAreaClick: ((hitArea: String) -> Unit)? = null
 
     private var currentModelInfo: Pair<String, String>? = null
     var isSurfaceCreated = false
@@ -34,6 +64,9 @@ actual class Live2DState actual constructor(actual var workDir: String) {
         val cleanName = modelName.trim()
 
         Log.d(TAG, "loadModel requested: zipFilePath=$cleanZip, modelName=$cleanName, workDir=$workDir, isSurfaceCreated=$isSurfaceCreated")
+        this._modelName = cleanName
+        this._isLoading = true
+        this._isLoaded = false
         currentModelInfo = Pair(cleanZip, cleanName)
         checkAndExecutePendingLoad()
     }
@@ -60,7 +93,15 @@ actual class Live2DState actual constructor(actual var workDir: String) {
         val (zip, name) = info
         Log.d(TAG, "Executing queued bridge.loadModelFromZip: zip=$zip, workDir=$workDir, modelName=$name")
         view.queueEvent {
-            bridge.loadModelFromZip(zip, workDir, name)
+            val success = bridge.loadModelFromZip(zip, workDir, name)
+            val motions = bridge.getMotions()
+            val expressions = bridge.getExpressions()
+            mainHandler.post {
+                this._isLoading = false
+                this._isLoaded = success
+                this._availableMotions = motions
+                this._availableExpressions = expressions
+            }
         }
     }
 
@@ -70,23 +111,29 @@ actual class Live2DState actual constructor(actual var workDir: String) {
     }
 
     actual fun setMotion(group: String, index: Int) {
+        _currentMotion = group
         textureView?.queueEvent {
             bridge.setMotion(group, index)
         }
     }
 
     actual fun setExpression(expressionId: String) {
+        _currentExpression = expressionId
         textureView?.queueEvent {
             bridge.setExpression(expressionId)
         }
     }
 
+    actual fun hitTest(x: Float, y: Float): String? {
+        return bridge.hitTest(x, y)
+    }
+
     actual fun getMotions(): List<String> {
-        return bridge.getMotions()
+        return availableMotions.ifEmpty { bridge.getMotions() }
     }
 
     actual fun getExpressions(): List<String> {
-        return bridge.getExpressions()
+        return availableExpressions.ifEmpty { bridge.getExpressions() }
     }
 
     fun release() {
@@ -95,6 +142,8 @@ actual class Live2DState actual constructor(actual var workDir: String) {
         }
         textureView = null
         isSurfaceCreated = false
+        _isLoading = false
+        _isLoaded = false
     }
 }
 
@@ -142,7 +191,15 @@ class Live2DTextureView(
         when (event.action) {
             MotionEvent.ACTION_DOWN -> queueEvent { state.bridge.onTouch(x, y, 0) }
             MotionEvent.ACTION_MOVE -> queueEvent { state.bridge.onTouch(x, y, 1) }
-            MotionEvent.ACTION_UP -> queueEvent { state.bridge.onTouch(x, y, 2) }
+            MotionEvent.ACTION_UP -> {
+                queueEvent {
+                    state.bridge.onTouch(x, y, 2)
+                    val hit = state.bridge.hitTest(x, y)
+                    if (!hit.isNullOrEmpty()) {
+                        post { state.onHitAreaClick?.invoke(hit) }
+                    }
+                }
+            }
         }
         return true
     }
@@ -329,8 +386,15 @@ private class Live2DRenderThread(
 @Composable
 actual fun Live2D(
     modifier: Modifier,
-    state: Live2DState
+    state: Live2DState,
+    onHitAreaClick: ((hitArea: String) -> Unit)?
 ) {
+    SideEffect {
+        if (onHitAreaClick != null) {
+            state.onHitAreaClick = onHitAreaClick
+        }
+    }
+
     AndroidView(
         modifier = modifier,
         factory = { context ->

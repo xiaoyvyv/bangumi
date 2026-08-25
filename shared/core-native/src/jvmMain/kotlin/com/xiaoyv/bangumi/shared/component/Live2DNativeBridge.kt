@@ -101,6 +101,16 @@ class Live2DNativeBridge {
         }
     }
 
+    fun hitTest(x: Float, y: Float): String? {
+        if (nativeHandle == 0L) return null
+        return try {
+            nativeHitTest(nativeHandle, x, y)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     fun destroy() {
         if (nativeHandle != 0L) {
             try { nativeDestroy(nativeHandle) } catch (e: Throwable) { e.printStackTrace() }
@@ -131,6 +141,7 @@ class Live2DNativeBridge {
     private external fun nativeOnDrawFrame(handle: Long)
     private external fun nativeRenderPixels(handle: Long, width: Int, height: Int, outPixels: IntArray): Boolean
     private external fun nativeOnTouch(handle: Long, x: Float, y: Float, phase: Int)
+    private external fun nativeHitTest(handle: Long, x: Float, y: Float): String?
 
     companion object {
         private var isLoaded = false

@@ -697,6 +697,38 @@ public:
         return true;
     }
 
+    const char* HitTest(float px, float py) {
+        std::lock_guard<std::recursive_mutex> lock(_mutex);
+        if (!_modelSetting || !_model || _viewportWidth <= 0 || _viewportHeight <= 0) {
+            return "";
+        }
+
+        float projX = (px / static_cast<float>(_viewportWidth)) * 2.0f - 1.0f;
+        float projY = 1.0f - (py / static_cast<float>(_viewportHeight)) * 2.0f;
+
+        float displayRatio = static_cast<float>(_viewportHeight) / static_cast<float>(_viewportWidth);
+        float canvasWidth = _model->GetCanvasWidth();
+        float canvasHeight = _model->GetCanvasHeight();
+        float canvasRatio = (canvasWidth > 0.0f) ? (canvasHeight / canvasWidth) : 1.0f;
+
+        float x = projX;
+        float y = projY;
+        if (canvasRatio < displayRatio) {
+            y = y * (static_cast<float>(_viewportHeight) / static_cast<float>(_viewportWidth));
+        } else {
+            x = x * (static_cast<float>(_viewportWidth) / static_cast<float>(_viewportHeight));
+        }
+
+        const csmInt32 count = _modelSetting->GetHitAreasCount();
+        for (csmInt32 i = 0; i < count; i++) {
+            const CubismIdHandle drawId = _modelSetting->GetHitAreaId(i);
+            if (IsHit(drawId, x, y)) {
+                return _modelSetting->GetHitAreaName(i);
+            }
+        }
+        return "";
+    }
+
 private:
     std::string _modelDir;
     ICubismModelSetting* _modelSetting;
@@ -1098,5 +1130,19 @@ bool live2d_render_pixels(Live2DHandle handle, int width, int height, unsigned i
 
 void live2d_on_touch(Live2DHandle handle, float x, float y, int phase) {
     if (!handle) return;
-    static_cast<Live2DModelWrapper*>(handle)->StartMotion("Tap", 0);
+    auto* model = static_cast<Live2DModelWrapper*>(handle);
+    if (phase == 2) {
+        const char* hitArea = model->HitTest(x, y);
+        if (hitArea && strlen(hitArea) > 0) {
+            std::string hitMotion = std::string("Tap") + hitArea;
+            model->StartMotion(hitMotion.c_str(), 0, 2);
+        } else {
+            model->StartMotion("Tap", 0, 2);
+        }
+    }
+}
+
+const char* live2d_hit_test(Live2DHandle handle, float x, float y) {
+    if (!handle) return "";
+    return static_cast<Live2DModelWrapper*>(handle)->HitTest(x, y);
 }

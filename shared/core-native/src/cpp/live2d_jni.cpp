@@ -135,4 +135,13 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnTouch(
     live2d_on_touch(reinterpret_cast<Live2DHandle>(handle), x, y, phase);
 }
 
+JNIEXPORT jstring JNICALL
+Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeHitTest(
+        JNIEnv *env, jobject thiz, jlong handle, jfloat x, jfloat y) {
+    if (!handle) return nullptr;
+    const char *hitArea = live2d_hit_test(reinterpret_cast<Live2DHandle>(handle), x, y);
+    if (!hitArea || strlen(hitArea) == 0) return nullptr;
+    return env->NewStringUTF(hitArea);
+}
+
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,12 +20,37 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import java.awt.image.BufferedImage
 
 @Stable
 actual class Live2DState actual constructor(actual var workDir: String) {
     val bridge = Live2DNativeBridge()
+
+    private var _isLoading by mutableStateOf(false)
+    actual val isLoading: Boolean get() = _isLoading
+
+    private var _isLoaded by mutableStateOf(false)
+    actual val isLoaded: Boolean get() = _isLoaded
+
+    private var _modelName by mutableStateOf("")
+    actual val modelName: String get() = _modelName
+
+    private var _currentMotion by mutableStateOf("")
+    actual val currentMotion: String get() = _currentMotion
+
+    private var _currentExpression by mutableStateOf("")
+    actual val currentExpression: String get() = _currentExpression
+
+    private var _availableMotions by mutableStateOf(emptyList<String>())
+    actual val availableMotions: List<String> get() = _availableMotions
+
+    private var _availableExpressions by mutableStateOf(emptyList<String>())
+    actual val availableExpressions: List<String> get() = _availableExpressions
+
+    actual var onHitAreaClick: ((hitArea: String) -> Unit)? = null
 
     private var currentModelInfo: Pair<String, String>? = null
     var isSurfaceCreated = true
@@ -34,6 +60,9 @@ actual class Live2DState actual constructor(actual var workDir: String) {
         val cleanZip = zipFilePath.trim()
         val cleanName = modelName.trim()
 
+        this._modelName = cleanName
+        this._isLoading = true
+        this._isLoaded = false
         currentModelInfo = Pair(cleanZip, cleanName)
         checkAndExecutePendingLoad()
     }
@@ -41,23 +70,33 @@ actual class Live2DState actual constructor(actual var workDir: String) {
     private fun checkAndExecutePendingLoad() {
         val info = currentModelInfo ?: return
         val (zip, name) = info
-        bridge.loadModelFromZip(zip, workDir, name)
+        val success = bridge.loadModelFromZip(zip, workDir, name)
+        this._isLoading = false
+        this._isLoaded = success
+        this._availableMotions = bridge.getMotions()
+        this._availableExpressions = bridge.getExpressions()
     }
 
     actual fun setMotion(group: String, index: Int) {
+        _currentMotion = group
         bridge.setMotion(group, index)
     }
 
     actual fun setExpression(expressionId: String) {
+        _currentExpression = expressionId
         bridge.setExpression(expressionId)
     }
 
+    actual fun hitTest(x: Float, y: Float): String? {
+        return bridge.hitTest(x, y)
+    }
+
     actual fun getMotions(): List<String> {
-        return bridge.getMotions()
+        return availableMotions.ifEmpty { bridge.getMotions() }
     }
 
     actual fun getExpressions(): List<String> {
-        return bridge.getExpressions()
+        return availableExpressions.ifEmpty { bridge.getExpressions() }
     }
 
     fun onTouch(x: Float, y: Float, phase: Int) {
@@ -66,16 +105,25 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 
     fun release() {
         bridge.destroy()
+        _isLoading = false
+        _isLoaded = false
     }
 }
 
 @Composable
 actual fun Live2D(
     modifier: Modifier,
-    state: Live2DState
+    state: Live2DState,
+    onHitAreaClick: ((hitArea: String) -> Unit)?
 ) {
     val density = LocalDensity.current
     var frameBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+
+    SideEffect {
+        if (onHitAreaClick != null) {
+            state.onHitAreaClick = onHitAreaClick
+        }
+    }
 
     DisposableEffect(state) {
         onDispose {
@@ -89,8 +137,14 @@ actual fun Live2D(
                 detectTapGestures(
                     onPress = { offset ->
                         state.onTouch(offset.x, offset.y, 0)
-                        tryAwaitRelease()
-                        state.onTouch(offset.x, offset.y, 2)
+                        val released = tryAwaitRelease()
+                        if (released) {
+                            state.onTouch(offset.x, offset.y, 2)
+                            val hit = state.hitTest(offset.x, offset.y)
+                            if (!hit.isNullOrEmpty()) {
+                                state.onHitAreaClick?.invoke(hit)
+                            }
+                        }
                     }
                 )
             }
@@ -108,11 +162,12 @@ actual fun Live2D(
         LaunchedEffect(state, widthPx, heightPx) {
             val pixelCount = widthPx * heightPx
             val pixelBuffer = IntArray(pixelCount)
-
             val currentImage = BufferedImage(widthPx, heightPx, BufferedImage.TYPE_INT_ARGB_PRE)
 
             while (isActive) {
-                val ok = state.bridge.renderPixels(widthPx, heightPx, pixelBuffer)
+                val ok = withContext(Dispatchers.Default) {
+                    state.bridge.renderPixels(widthPx, heightPx, pixelBuffer)
+                }
                 if (ok) {
                     currentImage.setRGB(0, 0, widthPx, heightPx, pixelBuffer, 0, widthPx)
                     frameBitmap = currentImage.toComposeImageBitmap()
