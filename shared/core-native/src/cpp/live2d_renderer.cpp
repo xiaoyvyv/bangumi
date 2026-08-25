@@ -374,7 +374,7 @@ public:
         return true;
     }
 
-    void StartMotion(const std::string& group, int index, int priority = 3) {
+    void StartMotion(const std::string& group, int index, int priority = 3 /* PriorityForce */) {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
         if (!_motionManager || _motions.empty()) return;
 
@@ -403,17 +403,21 @@ public:
 
         if (it == _motions.end()) return;
 
-        // 立即中断前面播放中的动作，启动新动作
-        _motionManager->StopAllMotions();
+        if (priority == 3 /* PriorityForce */) {
+            _motionManager->SetReservePriority(priority);
+        } else if (!_motionManager->ReserveMotion(priority)) {
+            return;
+        }
+
+        // 官方 Cubism SDK 优雅平滑过渡：FadeOut 前一个动作并 FadeIn 新动作，保留部件透明度与 Pose
         _motionManager->StartMotionPriority(it->second, false, priority);
     }
 
     void SetExpression(const std::string& expressionId) {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
         auto it = _expressions.find(expressionId);
-        if (it != _expressions.end()) {
-            // 立即中断前面播放中的表情，切入新表情
-            _expressionManager->StopAllMotions();
+        if (it != _expressions.end() && _expressionManager) {
+            // 官方 Cubism SDK 表情管理器自动渐变切换，不重置基本参数
             _expressionManager->StartMotion(it->second, false);
         }
     }
