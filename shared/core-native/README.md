@@ -126,53 +126,53 @@ target_link_options(live2d_native PRIVATE "-Wl,-z,max-page-size=16384")
 ```bash
 export ANDROID_NDK_HOME=$HOME/Library/Android/sdk/ndk/26.3.11579264
 
-rm -rf shared/core-native/build/android-arm64-v8a
-cmake -S shared/core-native/src/cpp -B shared/core-native/build/android-arm64-v8a \
+rm -rf shared/core-native/build/live2d/android-arm64-v8a
+cmake -S shared/core-native/src/cpp -B shared/core-native/build/live2d/android-arm64-v8a \
   -DANDROID_ABI=arm64-v8a \
   -DANDROID_NDK=$ANDROID_NDK_HOME \
   -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
   -DANDROID_PLATFORM=android-21 \
   -DCMAKE_BUILD_TYPE=Release
 
-cmake --build shared/core-native/build/android-arm64-v8a --config Release
+cmake --build shared/core-native/build/live2d/android-arm64-v8a --config Release
 
 # 复制产物到 jniLibs
 mkdir -p shared/core-native/src/androidMain/jniLibs/arm64-v8a
-cp shared/core-native/build/android-arm64-v8a/liblive2d_native.so shared/core-native/src/androidMain/jniLibs/arm64-v8a/
+cp shared/core-native/build/live2d/android-arm64-v8a/liblive2d_native.so shared/core-native/src/androidMain/jniLibs/arm64-v8a/
 ```
 
 **2. 构建 x86_64 (`x86_64`)**
 ```bash
-rm -rf shared/core-native/build/android-x86_64
-cmake -S shared/core-native/src/cpp -B shared/core-native/build/android-x86_64 \
+rm -rf shared/core-native/build/live2d/android-x86_64
+cmake -S shared/core-native/src/cpp -B shared/core-native/build/live2d/android-x86_64 \
   -DANDROID_ABI=x86_64 \
   -DANDROID_NDK=$ANDROID_NDK_HOME \
   -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
   -DANDROID_PLATFORM=android-21 \
   -DCMAKE_BUILD_TYPE=Release
 
-cmake --build shared/core-native/build/android-x86_64 --config Release
+cmake --build shared/core-native/build/live2d/android-x86_64 --config Release
 
 # 复制产物到 jniLibs
 mkdir -p shared/core-native/src/androidMain/jniLibs/x86_64
-cp shared/core-native/build/android-x86_64/liblive2d_native.so shared/core-native/src/androidMain/jniLibs/x86_64/
+cp shared/core-native/build/live2d/android-x86_64/liblive2d_native.so shared/core-native/src/androidMain/jniLibs/x86_64/
 ```
 
 **3. 构建 x86 (`x86`)**
 ```bash
-rm -rf shared/core-native/build/android-x86
-cmake -S shared/core-native/src/cpp -B shared/core-native/build/android-x86 \
+rm -rf shared/core-native/build/live2d/android-x86
+cmake -S shared/core-native/src/cpp -B shared/core-native/build/live2d/android-x86 \
   -DANDROID_ABI=x86 \
   -DANDROID_NDK=$ANDROID_NDK_HOME \
   -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
   -DANDROID_PLATFORM=android-21 \
   -DCMAKE_BUILD_TYPE=Release
 
-cmake --build shared/core-native/build/android-x86 --config Release
+cmake --build shared/core-native/build/live2d/android-x86 --config Release
 
 # 复制产物到 jniLibs
 mkdir -p shared/core-native/src/androidMain/jniLibs/x86
-cp shared/core-native/build/android-x86/liblive2d_native.so shared/core-native/src/androidMain/jniLibs/x86/
+cp shared/core-native/build/live2d/android-x86/liblive2d_native.so shared/core-native/src/androidMain/jniLibs/x86/
 ```
 
 ---
@@ -188,8 +188,8 @@ Live2D SDK 核心 C 语言函数（如 `csmGetDrawableBlendModes`）位于官方
 
 **构建 iOS 模拟器 (`iphonesimulator` arm64)**
 ```bash
-rm -rf shared/core-native/build/ios-iphonesimulator
-cmake -S shared/core-native/src/cpp -B shared/core-native/build/ios-iphonesimulator \
+rm -rf shared/core-native/build/live2d/ios-iphonesimulator
+cmake -S shared/core-native/src/cpp -B shared/core-native/build/live2d/ios-iphonesimulator \
   -DCMAKE_SYSTEM_NAME=iOS \
   -DCMAKE_OSX_SYSROOT=iphonesimulator \
   -DCMAKE_OSX_ARCHITECTURES=arm64 \
@@ -198,19 +198,19 @@ cmake -S shared/core-native/src/cpp -B shared/core-native/build/ios-iphonesimula
   -DIOS_PLATFORM=SIMULATORARM64 \
   -DCMAKE_BUILD_TYPE=Release
 
-cmake --build shared/core-native/build/ios-iphonesimulator --config Release
+cmake --build shared/core-native/build/live2d/ios-iphonesimulator --config Release
 
 # 使用 libtool 合并 Live2D Cubism Core
 mkdir -p shared/core-native/native/ios/iphonesimulator
 libtool -static -o shared/core-native/native/ios/iphonesimulator/liblive2d_native.a \
-  shared/core-native/build/ios-iphonesimulator/liblive2d_native.a \
+  shared/core-native/build/live2d/ios-iphonesimulator/liblive2d_native.a \
   shared/core-native/native/CubismSdkForNative-5-r.5/Core/lib/ios/Release-iphonesimulator-arm64/libLive2DCubismCore.a
 ```
 
 **构建 iOS 真机 (`iphoneos` arm64)**
 ```bash
-rm -rf shared/core-native/build/ios-iphoneos
-cmake -S shared/core-native/src/cpp -B shared/core-native/build/ios-iphoneos \
+rm -rf shared/core-native/build/live2d/ios-iphoneos
+cmake -S shared/core-native/src/cpp -B shared/core-native/build/live2d/ios-iphoneos \
   -DCMAKE_SYSTEM_NAME=iOS \
   -DCMAKE_OSX_SYSROOT=iphoneos \
   -DCMAKE_OSX_ARCHITECTURES=arm64 \
@@ -219,12 +219,12 @@ cmake -S shared/core-native/src/cpp -B shared/core-native/build/ios-iphoneos \
   -DIOS_PLATFORM=OS \
   -DCMAKE_BUILD_TYPE=Release
 
-cmake --build shared/core-native/build/ios-iphoneos --config Release
+cmake --build shared/core-native/build/live2d/ios-iphoneos --config Release
 
 # 使用 libtool 合并 Live2D Cubism Core
 mkdir -p shared/core-native/native/ios/iphoneos
 libtool -static -o shared/core-native/native/ios/iphoneos/liblive2d_native.a \
-  shared/core-native/build/ios-iphoneos/liblive2d_native.a \
+  shared/core-native/build/live2d/ios-iphoneos/liblive2d_native.a \
   shared/core-native/native/CubismSdkForNative-5-r.5/Core/lib/ios/Release-iphoneos/libLive2DCubismCore.a
 ```
 

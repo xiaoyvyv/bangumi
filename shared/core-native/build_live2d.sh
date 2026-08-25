@@ -3,10 +3,10 @@ set -e
 
 # Bangumi Multiplatform - Live2D Core Native Cross-Platform Build Script
 # This script compiles liblive2d_native for Android (arm64-v8a, x86_64, x86) and iOS (iphonesimulator, iphoneos).
-# All CMake build output data is saved under shared/core-native/build/ with platform prefix naming.
+# All CMake build output data is saved under shared/core-native/build/live2d/ with platform prefix naming.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BUILD_BASE_DIR="${SCRIPT_DIR}/build"
+BUILD_BASE_DIR="${SCRIPT_DIR}/build/live2d"
 mkdir -p "${BUILD_BASE_DIR}"
 
 # -----------------------------------------------------------------------------
@@ -160,7 +160,7 @@ fi
 
 echo "=========================================================="
 echo " All Live2D Native Libraries Built Successfully!          "
-echo " Build Data -> shared/core-native/build/                 "
+echo " Build Data -> shared/core-native/build/live2d/          "
 echo " Android .so -> src/androidMain/jniLibs/                 "
 if [[ "${OS_NAME}" == Darwin* ]]; then
   echo " iOS .a     -> native/ios/                               "
