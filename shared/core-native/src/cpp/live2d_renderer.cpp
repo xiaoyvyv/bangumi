@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #if defined(_WIN32)
 #include <windows.h>
+#include <direct.h>
 #else
 #include <dirent.h>
 #endif
@@ -165,17 +166,25 @@ public:
     }
 
     void* AllocateAligned(const csmSizeType size, const csmUint32 alignment) override {
+#if defined(_WIN32)
+        return _aligned_malloc(size, alignment < sizeof(void*) ? sizeof(void*) : alignment);
+#else
         void* ptr = nullptr;
         size_t align = alignment < sizeof(void*) ? sizeof(void*) : alignment;
         if (posix_memalign(&ptr, align, size) != 0) {
             return nullptr;
         }
         return ptr;
+#endif
     }
 
     void DeallocateAligned(void* memory) override {
         if (memory) {
+#if defined(_WIN32)
+            _aligned_free(memory);
+#else
             free(memory);
+#endif
         }
     }
 };
@@ -740,7 +749,11 @@ static bool CreateDirectoryRecursive(const std::string& path) {
     if (path.empty()) return false;
     struct stat st;
     if (stat(path.c_str(), &st) == 0) {
+#if defined(_WIN32)
+        return (st.st_mode & _S_IFDIR) != 0;
+#else
         return S_ISDIR(st.st_mode);
+#endif
     }
     size_t pos = 0;
     while ((pos = path.find_first_of("/\\", pos + 1)) != std::string::npos) {
