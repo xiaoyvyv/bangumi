@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Build macOS dylib
         run: ./shared/core-native/scripts/build_macos.sh
@@ -28,13 +28,13 @@ jobs:
         run: ./shared/core-native/scripts/build_ios.sh
 
       - name: Upload macOS Native Library
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: live2d-native-macos
           path: shared/core-native/src/jvmMain/resources/native/macos/liblive2d_native.dylib
 
       - name: Upload iOS Native Library
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: live2d-native-ios
           path: shared/core-native/native/ios/
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
@@ -59,7 +59,7 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Upload Android Native Libraries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: live2d-native-android
           path: shared/core-native/src/androidMain/jniLibs/
@@ -69,16 +69,20 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Setup MSVC & CMake
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup MSVC Environment
+        shell: cmd
+        run: |
+          for /f "tokens=*" %%i in ('vswhere -latest -property installationPath') do set VS_PATH=%%i
+          call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
+          set >> "%GITHUB_ENV%"
 
       - name: Install GLEW via vcpkg
+        shell: bash
         run: |
           vcpkg install glew:x64-windows
           echo "GLEW_DIR=C:/vcpkg/installed/x64-windows" >> $GITHUB_ENV
-        shell: bash
 
       - name: Build Windows dll
         shell: bash
@@ -88,7 +92,7 @@ jobs:
           VCPKG_TARGET_TRIPLET: x64-windows
 
       - name: Upload Windows Native Library
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: live2d-native-windows
           path: shared/core-native/src/jvmMain/resources/native/windows/live2d_native.dll
@@ -98,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Linux Dependencies
         run: |
@@ -109,7 +113,7 @@ jobs:
         run: ./shared/core-native/scripts/build_linux.sh
 
       - name: Upload Linux Native Library
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: live2d-native-linux
           path: shared/core-native/src/jvmMain/resources/native/linux/liblive2d_native.so
