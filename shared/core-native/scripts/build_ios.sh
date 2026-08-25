@@ -6,6 +6,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_BASE_DIR="${SCRIPT_DIR}/build/live2d"
 mkdir -p "${BUILD_BASE_DIR}"
 
+"${SCRIPT_DIR}/scripts/setup_sdk.sh"
+
 IOS_DEPLOYMENT_TARGET="${IOS_DEPLOYMENT_TARGET:-14.0}"
 CUBISM_SDK_NAME="${CUBISM_SDK_NAME:-CubismSdkForNative-5-r.5}"
 SHOW_WARNINGS="${SHOW_WARNINGS:-false}"

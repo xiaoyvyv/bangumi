@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# CubismSdkForNative SDK
+# https://cubism.live2d.com/sdk-native/bin/CubismSdkForNative-5-r.5.zip
+
 # Bangumi Multiplatform - Live2D Core Native Master Build Script
 # Usage:
 #   ./build_live2d.sh            # Builds all target platforms supported by current OS

@@ -6,6 +6,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_BASE_DIR="${SCRIPT_DIR}/build/live2d"
 mkdir -p "${BUILD_BASE_DIR}"
 
+"${SCRIPT_DIR}/scripts/setup_sdk.sh"
+
 if [[ -z "${JAVA_HOME}" ]] && command -v /usr/libexec/java_home &>/dev/null; then
   export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null || true)"
 fi

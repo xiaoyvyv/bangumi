@@ -6,6 +6,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_BASE_DIR="${SCRIPT_DIR}/build/live2d"
 mkdir -p "${BUILD_BASE_DIR}"
 
+"${SCRIPT_DIR}/scripts/setup_sdk.sh"
+
 NDK_VERSION="${NDK_VERSION:-26.3.11579264}"
 ANDROID_PLATFORM="${ANDROID_PLATFORM:-android-21}"
 SHOW_WARNINGS="${SHOW_WARNINGS:-false}"
