@@ -115,6 +115,16 @@ actual class Live2DState actual constructor(actual var workDir: String) {
         live2d_on_touch(handle, x, y, phase)
     }
 
+    fun onDrag(x: Float, y: Float) {
+        val handle = nativeHandle ?: return
+        live2d_on_drag(handle, x, y)
+    }
+
+    fun resetDrag() {
+        val handle = nativeHandle ?: return
+        live2d_reset_drag(handle)
+    }
+
     private fun getMotionsInternal(handle: Live2DHandle): List<String> {
         val count = live2d_get_motion_count(handle)
         val list = mutableListOf<String>()
@@ -190,8 +200,10 @@ actual fun Live2D(
                 detectTapGestures(
                     onPress = { offset ->
                         state.onTouch(offset.x, offset.y, 0)
+                        state.onDrag(offset.x, offset.y)
                         val released = tryAwaitRelease()
                         if (released) {
+                            state.resetDrag()
                             state.onTouch(offset.x, offset.y, 2)
                             val hit = state.hitTest(offset.x, offset.y)
                             if (!hit.isNullOrEmpty()) {
@@ -205,6 +217,13 @@ actual fun Live2D(
                 detectDragGestures(
                     onDrag = { change, _ ->
                         state.onTouch(change.position.x, change.position.y, 1)
+                        state.onDrag(change.position.x, change.position.y)
+                    },
+                    onDragEnd = {
+                        state.resetDrag()
+                    },
+                    onDragCancel = {
+                        state.resetDrag()
                     }
                 )
             }

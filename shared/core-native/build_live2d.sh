@@ -20,7 +20,7 @@ if [[ -z "${JAVA_HOME}" ]] && command -v /usr/libexec/java_home &>/dev/null; the
   export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null || true)"
 fi
 
-chmod +x "${SCRIPT_DIR}"/scripts/*.sh "${SCRIPT_DIR}/src/cpp/generate_shaders.sh"
+chmod +x "${SCRIPT_DIR}"/scripts/*.sh "${SCRIPT_DIR}/scripts/generate_shaders.sh"
 
 case "${TARGET}" in
   android)

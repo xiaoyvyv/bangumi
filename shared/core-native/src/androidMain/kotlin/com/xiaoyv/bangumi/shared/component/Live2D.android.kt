@@ -189,10 +189,17 @@ class Live2DTextureView(
         val x = event.x
         val y = event.y
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> queueEvent { state.bridge.onTouch(x, y, 0) }
-            MotionEvent.ACTION_MOVE -> queueEvent { state.bridge.onTouch(x, y, 1) }
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_DOWN -> queueEvent {
+                state.bridge.onTouch(x, y, 0)
+                state.bridge.onDrag(x, y)
+            }
+            MotionEvent.ACTION_MOVE -> queueEvent {
+                state.bridge.onTouch(x, y, 1)
+                state.bridge.onDrag(x, y)
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 queueEvent {
+                    state.bridge.resetDrag()
                     state.bridge.onTouch(x, y, 2)
                     val hit = state.bridge.hitTest(x, y)
                     if (!hit.isNullOrEmpty()) {

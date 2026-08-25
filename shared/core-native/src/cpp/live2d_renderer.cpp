@@ -19,6 +19,7 @@
 #include "miniz.h"
 
 #include <mutex>
+#include <chrono>
 
 #if defined(ANDROID) || defined(__ANDROID__)
 #include <GLES2/gl2.h>
@@ -26,34 +27,40 @@
 #include <android/asset_manager.h>
 #define LOG_TAG "Live2DNative"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #elif defined(IOS_BUILD) || defined(CSM_TARGET_IPHONE_ES2)
 #include <OpenGLES/ES2/gl.h>
 #include <cstdio>
 #define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGW(...) do { printf("[Live2DNative WARN] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
 #elif defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
 #include <OpenGL/gl.h>
 #include <OpenGL/OpenGL.h>
 #include <cstdio>
 #define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGW(...) do { printf("[Live2DNative WARN] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
 #elif defined(WINDOWS_DESKTOP_BUILD) || defined(_WIN32)
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <cstdio>
 #define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGW(...) do { printf("[Live2DNative WARN] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
 #elif defined(LINUX_DESKTOP_BUILD) || defined(__linux__)
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <cstdio>
 #define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGW(...) do { printf("[Live2DNative WARN] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
 #else
 #include <OpenGLES/ES2/gl.h>
 #include <cstdio>
 #define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGW(...) do { printf("[Live2DNative WARN] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
 #define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
 #endif
 
@@ -69,6 +76,7 @@
 #include <Rendering/OpenGL/CubismRenderer_OpenGLES2.hpp>
 #include <Utils/CubismString.hpp>
 #include <Id/CubismIdManager.hpp>
+#include <CubismDefaultParameterId.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -231,25 +239,42 @@ static void InitCubismFrameworkInitializeIfNeeded() {
     }
 }
 
+static void OnMotionEventCallback(const CubismMotionQueueManager* caller, const csmString& eventValue, void* customData) {
+    LOGI("Live2D Motion Event Fired: %s", eventValue.GetRawString());
+}
+
 // Custom Live2D Model Wrapper following Cubism SDK LAppMinimumModel
 class Live2DModelWrapper : public CubismUserModel {
 public:
     Live2DModelWrapper() : _modelSetting(nullptr), _mocBuffer(nullptr), _viewportWidth(1024), _viewportHeight(1024), _frameCount(0) {
+        _lastFrameTime = std::chrono::high_resolution_clock::now();
         _motionManager = CSM_NEW CubismMotionManager();
+        _motionManager->SetEventCallback(OnMotionEventCallback, nullptr);
         _expressionManager = CSM_NEW CubismExpressionMotionManager();
     }
 
     ~Live2DModelWrapper() {
         ReleaseModel();
+        if (_motionManager) {
+            CSM_DELETE(_motionManager);
+            _motionManager = nullptr;
+        }
+        if (_expressionManager) {
+            CSM_DELETE(_expressionManager);
+            _expressionManager = nullptr;
+        }
     }
 
     void ReleaseModel() {
         if (_motionManager) {
             _motionManager->StopAllMotions();
-            _motionManager->SetReservePriority(0);
+            CSM_DELETE(_motionManager);
+            _motionManager = nullptr;
         }
         if (_expressionManager) {
             _expressionManager->StopAllMotions();
+            CSM_DELETE(_expressionManager);
+            _expressionManager = nullptr;
         }
         DeleteRenderer();
         if (_modelSetting) {
@@ -278,10 +303,22 @@ public:
             CubismMoc::Delete(_moc);
             _moc = nullptr;
         }
+        if (_physics) {
+            CubismPhysics::Delete(_physics);
+            _physics = nullptr;
+        }
+        if (_pose) {
+            CubismPose::Delete(_pose);
+            _pose = nullptr;
+        }
         if (_mocBuffer) {
             CubismFramework::DeallocateAligned(_mocBuffer);
             _mocBuffer = nullptr;
         }
+
+        _motionManager = CSM_NEW CubismMotionManager();
+        _motionManager->SetEventCallback(OnMotionEventCallback, nullptr);
+        _expressionManager = CSM_NEW CubismExpressionMotionManager();
     }
 
     bool LoadAssets(const std::string& modelDir, const std::string& modelJsonName) {
@@ -436,7 +473,7 @@ public:
                 std::vector<char> mbuf;
                 if (LoadFileBuffer(mpath, mbuf)) {
                     std::string key = groupName + "_" + std::to_string(j);
-                    ACubismMotion* motion = LoadMotion(reinterpret_cast<csmByte*>(mbuf.data()), static_cast<csmSizeInt>(mbuf.size()), key.c_str());
+                    ACubismMotion* motion = LoadMotion(reinterpret_cast<csmByte*>(mbuf.data()), static_cast<csmSizeInt>(mbuf.size()), key.c_str(), nullptr, nullptr, _modelSetting, groupName.c_str(), j, false);
                     if (motion) {
                         _motions[key] = motion;
                     }
@@ -453,7 +490,10 @@ public:
 
     void StartMotion(const std::string& group, int index, int priority = 3 /* PriorityForce */) {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
-        if (!_motionManager || _motions.empty()) return;
+        if (!_motionManager || _motions.empty()) {
+            LOGW("[Live2D] StartMotion failed: _motionManager is null or _motions is empty");
+            return;
+        }
 
         std::string key = group + "_" + std::to_string(index);
         auto it = _motions.find(key);
@@ -473,21 +513,74 @@ public:
             }
         }
 
-        // Fallback to first available motion if requested group was not found
-        if (it == _motions.end() && !_motions.empty()) {
-            it = _motions.begin();
+        if (it == _motions.end()) {
+            LOGW("[Live2D] StartMotion: Key '%s' (group='%s', index=%d) not found in loaded motions", key.c_str(), group.c_str(), index);
+            return;
         }
-
-        if (it == _motions.end()) return;
 
         if (priority == 3 /* PriorityForce */) {
             _motionManager->SetReservePriority(priority);
         } else if (!_motionManager->ReserveMotion(priority)) {
+            LOGI("[Live2D] StartMotion rejected by ReserveMotion priority constraint: key='%s', priority=%d", it->first.c_str(), priority);
             return;
         }
 
-        // 官方 Cubism SDK 优雅平滑过渡：FadeOut 前一个动作并 FadeIn 新动作，保留部件透明度与 Pose
+        LOGI("[Live2D] >>> Playing Motion: '%s' (Group: '%s', Index: %d, Priority: %d)", it->first.c_str(), group.c_str(), index, priority);
         _motionManager->StartMotionPriority(it->second, false, priority);
+    }
+
+    void StartRandomMotion(const std::string& group, int priority = 2 /* PriorityNormal */) {
+        std::lock_guard<std::recursive_mutex> lock(_mutex);
+        if (!_motionManager || !_modelSetting) return;
+
+        std::vector<std::string> candidateGroups;
+        candidateGroups.push_back(group);
+        if (group.rfind("Tap", 0) != 0 && group.rfind("Flick", 0) != 0) {
+            candidateGroups.push_back("Tap@" + group);
+            candidateGroups.push_back("Tap" + group);
+            candidateGroups.push_back("Flick@" + group);
+            candidateGroups.push_back("Flick" + group);
+        }
+        candidateGroups.push_back("Tap");
+
+        std::string resolvedGroup;
+        int motionCount = 0;
+
+        for (const auto& cand : candidateGroups) {
+            motionCount = _modelSetting->GetMotionCount(cand.c_str());
+            if (motionCount > 0) {
+                resolvedGroup = cand;
+                break;
+            }
+            int groupCount = _modelSetting->GetMotionGroupCount();
+            for (int i = 0; i < groupCount; i++) {
+                std::string gName = _modelSetting->GetMotionGroupName(i);
+                #if defined(_WIN32)
+                if (_stricmp(gName.c_str(), cand.c_str()) == 0)
+                #else
+                if (strcasecmp(gName.c_str(), cand.c_str()) == 0)
+                #endif
+                {
+                    motionCount = _modelSetting->GetMotionCount(gName.c_str());
+                    if (motionCount > 0) {
+                        resolvedGroup = gName;
+                        break;
+                    }
+                }
+            }
+            if (motionCount > 0) break;
+        }
+
+        if (resolvedGroup.empty() || motionCount <= 0) {
+            LOGW("[Live2D] StartRandomMotion: No motions found for candidate groups of: '%s'", group.c_str());
+            return;
+        }
+
+        int randomIndex = rand() % motionCount;
+        LOGI("[Live2D] StartRandomMotion: requested='%s' -> resolvedGroup='%s', totalCount=%d, selectedIndex=%d",
+             group.c_str(), resolvedGroup.c_str(), motionCount, randomIndex);
+
+        StartMotion(resolvedGroup, randomIndex, priority);
     }
 
     void SetExpression(const std::string& expressionId) {
@@ -569,16 +662,23 @@ public:
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-        float deltaTime = 0.016f; // ~60fps
-        _model->LoadParameters();
-
-        if (_motionManager->IsFinished()) {
-            StartMotion("Idle", 0, 1);
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        float deltaTime = std::chrono::duration<float>(currentTime - _lastFrameTime).count();
+        _lastFrameTime = currentTime;
+        if (deltaTime <= 0.0f || deltaTime > 0.1f) {
+            deltaTime = 0.016f;
         }
 
-        _motionManager->UpdateMotion(_model, deltaTime);
+        _model->LoadParameters();
 
-        if (_expressionManager) {
+        if (_motionManager && !_motions.empty()) {
+            if (_motionManager->IsFinished()) {
+                StartMotion("Idle", 0, 1);
+            }
+            _motionManager->UpdateMotion(_model, deltaTime);
+        }
+
+        if (_expressionManager && !_expressions.empty()) {
             _expressionManager->UpdateMotion(_model, deltaTime);
         }
 
@@ -588,6 +688,20 @@ public:
 
         if (_pose) {
             _pose->UpdateParameters(_model, deltaTime);
+        }
+
+        EnsureParameterIds();
+        if (_dragManager) {
+            _dragManager->Update(deltaTime);
+            float dragX = _dragManager->GetX();
+            float dragY = _dragManager->GetY();
+
+            if (_idParamAngleX) _model->AddParameterValue(_idParamAngleX, dragX * 30.0f);
+            if (_idParamAngleY) _model->AddParameterValue(_idParamAngleY, dragY * 30.0f);
+            if (_idParamAngleZ) _model->AddParameterValue(_idParamAngleZ, dragX * dragY * -30.0f);
+            if (_idParamBodyAngleX) _model->AddParameterValue(_idParamBodyAngleX, dragX * 10.0f);
+            if (_idParamEyeBallX) _model->AddParameterValue(_idParamEyeBallX, dragX);
+            if (_idParamEyeBallY) _model->AddParameterValue(_idParamEyeBallY, dragY);
         }
 
         _model->SaveParameters();
@@ -729,7 +843,27 @@ public:
         return "";
     }
 
+    void SetDragPosition(float px, float py) {
+        std::lock_guard<std::recursive_mutex> lock(_mutex);
+        if (_viewportWidth <= 0 || _viewportHeight <= 0) return;
+
+        float projX = (px / static_cast<float>(_viewportWidth)) * 2.0f - 1.0f;
+        float projY = 1.0f - (py / static_cast<float>(_viewportHeight)) * 2.0f;
+
+        SetDragging(projX, projY);
+    }
+
 private:
+    void EnsureParameterIds() {
+        if (!_idParamAngleX && CubismFramework::IsInitialized()) {
+            _idParamAngleX = CubismFramework::GetIdManager()->GetId(DefaultParameterId::ParamAngleX);
+            _idParamAngleY = CubismFramework::GetIdManager()->GetId(DefaultParameterId::ParamAngleY);
+            _idParamAngleZ = CubismFramework::GetIdManager()->GetId(DefaultParameterId::ParamAngleZ);
+            _idParamBodyAngleX = CubismFramework::GetIdManager()->GetId(DefaultParameterId::ParamBodyAngleX);
+            _idParamEyeBallX = CubismFramework::GetIdManager()->GetId(DefaultParameterId::ParamEyeBallX);
+            _idParamEyeBallY = CubismFramework::GetIdManager()->GetId(DefaultParameterId::ParamEyeBallY);
+        }
+    }
     std::string _modelDir;
     ICubismModelSetting* _modelSetting;
     csmByte* _mocBuffer;
@@ -747,6 +881,14 @@ private:
     int _fboW = 0;
     int _fboH = 0;
     std::recursive_mutex _mutex;
+
+    const CubismId* _idParamAngleX = nullptr;
+    const CubismId* _idParamAngleY = nullptr;
+    const CubismId* _idParamAngleZ = nullptr;
+    const CubismId* _idParamBodyAngleX = nullptr;
+    const CubismId* _idParamEyeBallX = nullptr;
+    const CubismId* _idParamEyeBallY = nullptr;
+    std::chrono::high_resolution_clock::time_point _lastFrameTime;
 };
 
 // C API implementation
@@ -960,7 +1102,13 @@ bool live2d_load_model_from_zip(Live2DHandle handle, const char* zip_file_path, 
 
 void live2d_set_motion(Live2DHandle handle, const char* group, int index) {
     if (!handle || !group) return;
-    static_cast<Live2DModelWrapper*>(handle)->StartMotion(group, index);
+    LOGI("[Live2D] C API live2d_set_motion: group='%s', index=%d", group, index);
+    auto* model = static_cast<Live2DModelWrapper*>(handle);
+    if (index < 0) {
+        model->StartRandomMotion(group, 2);
+    } else {
+        model->StartMotion(group, index, 3);
+    }
 }
 
 void live2d_set_expression(Live2DHandle handle, const char* expression_id) {
@@ -1131,15 +1279,29 @@ bool live2d_render_pixels(Live2DHandle handle, int width, int height, unsigned i
 void live2d_on_touch(Live2DHandle handle, float x, float y, int phase) {
     if (!handle) return;
     auto* model = static_cast<Live2DModelWrapper*>(handle);
-    if (phase == 2) {
+    if (phase == 0 || phase == 1) {
+        model->SetDragPosition(x, y);
+    } else if (phase == 2) {
+        model->SetDragging(0.0f, 0.0f);
         const char* hitArea = model->HitTest(x, y);
-        if (hitArea && strlen(hitArea) > 0) {
-            std::string hitMotion = std::string("Tap") + hitArea;
-            model->StartMotion(hitMotion.c_str(), 0, 2);
+        std::string areaName = (hitArea && strlen(hitArea) > 0) ? hitArea : "";
+        LOGI("[Live2D] Touch Tap Event at (%.3f, %.3f) -> HitArea: '%s'", x, y, areaName.c_str());
+        if (!areaName.empty()) {
+            model->StartRandomMotion(areaName, 2 /* PriorityNormal */);
         } else {
-            model->StartMotion("Tap", 0, 2);
+            model->StartRandomMotion("Tap", 2 /* PriorityNormal */);
         }
     }
+}
+
+void live2d_on_drag(Live2DHandle handle, float x, float y) {
+    if (!handle) return;
+    static_cast<Live2DModelWrapper*>(handle)->SetDragPosition(x, y);
+}
+
+void live2d_reset_drag(Live2DHandle handle) {
+    if (!handle) return;
+    static_cast<Live2DModelWrapper*>(handle)->SetDragging(0.0f, 0.0f);
 }
 
 const char* live2d_hit_test(Live2DHandle handle, float x, float y) {

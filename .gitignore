@@ -39,3 +39,11 @@ captures
 /shared/core-native/src/cpp/build_ios_dev/
 /shared/core-native/src/cpp/build_ios_sim/
 /shared/core-native/src/cpp/build_x86_64/
+/shared/core-resource/src/androidMain/res/files/live2d/haru.zip
+/shared/core-resource/src/androidMain/res/files/live2d/Hiyori.zip
+/shared/core-resource/src/androidMain/res/files/live2d/Mao.zip
+/shared/core-resource/src/androidMain/res/files/live2d/Mark.zip
+/shared/core-resource/src/androidMain/res/files/live2d/Natori.zip
+/shared/core-resource/src/androidMain/res/files/live2d/Ren.zip
+/shared/core-resource/src/androidMain/res/files/live2d/Rice.zip
+/shared/core-resource/src/androidMain/res/files/live2d/Wanko.zip

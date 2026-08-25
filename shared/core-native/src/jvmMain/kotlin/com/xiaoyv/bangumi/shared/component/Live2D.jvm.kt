@@ -18,6 +18,8 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import kotlinx.coroutines.Dispatchers
@@ -137,8 +139,10 @@ actual fun Live2D(
                 detectTapGestures(
                     onPress = { offset ->
                         state.onTouch(offset.x, offset.y, 0)
+                        state.bridge.onDrag(offset.x, offset.y)
                         val released = tryAwaitRelease()
                         if (released) {
+                            state.bridge.resetDrag()
                             state.onTouch(offset.x, offset.y, 2)
                             val hit = state.hitTest(offset.x, offset.y)
                             if (!hit.isNullOrEmpty()) {
@@ -152,8 +156,24 @@ actual fun Live2D(
                 detectDragGestures(
                     onDrag = { change, _ ->
                         state.onTouch(change.position.x, change.position.y, 1)
+                        state.bridge.onDrag(change.position.x, change.position.y)
+                    },
+                    onDragEnd = {
+                        state.bridge.resetDrag()
+                    },
+                    onDragCancel = {
+                        state.bridge.resetDrag()
                     }
                 )
+            }
+            .onPointerEvent(PointerEventType.Move) { event ->
+                val position = event.changes.firstOrNull()?.position
+                if (position != null) {
+                    state.bridge.onDrag(position.x, position.y)
+                }
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                state.bridge.resetDrag()
             }
     ) {
         val widthPx = with(density) { constraints.maxWidth.coerceAtLeast(1) }

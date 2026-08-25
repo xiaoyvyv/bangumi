@@ -85,7 +85,11 @@ fun SplashRoute(
 @Composable
 fun Live2DSplash(onClick: () -> Unit) {
     val scope = rememberCoroutineScope()
-    val live2DState = rememberLive2DState()
+    val live2DState = rememberLive2DState(
+        onHitAreaClick = {
+            debugLog { "OnHit:$it" }
+        }
+    )
 
     var isLoaded by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
@@ -109,14 +113,15 @@ fun Live2DSplash(onClick: () -> Unit) {
                 val workDir = (FileKit.filesDir / "live2d").also {
                     it.createDirectories()
                 }
+                val name = "haru"
                 val path = withContext(Dispatchers.IO) {
-                    val bytes = Res.readBytes("files/live2d/bangumi_musume_2026_parts_grouped.zip")
-                    val targetFile = workDir / "bangumi_musume_2026_parts_grouped.zip"
+                    val bytes = Res.readBytes("files/live2d/$name.zip")
+                    val targetFile = workDir / "$name.zip"
                     targetFile.write(bytes)
                     targetFile.absolutePath()
                 }
                 live2DState.workDir = workDir.absolutePath()
-                live2DState.loadModel(path, "bangumi_musume_2026_parts_grouped")
+                live2DState.loadModel(path, name)
 
                 // 稍微延时等待 Native 渲染线程完成模型解压与初始化
                 kotlinx.coroutines.delay(600)
@@ -137,7 +142,7 @@ fun Live2DSplash(onClick: () -> Unit) {
             .fillMaxSize()
             .background(colorScheme.background)
             .systemBarsPadding()
-            .verticalScroll(rememberScrollState())
+//            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -192,7 +197,7 @@ fun Live2DSplash(onClick: () -> Unit) {
                 .clip(MaterialTheme.shapes.large)
                 .border(2.dp, colorScheme.primary.copy(alpha = 0.3f), MaterialTheme.shapes.large)
                 .background(colorScheme.surfaceVariant.copy(alpha = 0.3f))
-                .width(280.dp)
+                .width(180.dp)
                 .aspectRatio(202 / 308f),
             contentAlignment = Alignment.Center
         ) {

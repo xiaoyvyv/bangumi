@@ -135,6 +135,18 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnTouch(
     live2d_on_touch(reinterpret_cast<Live2DHandle>(handle), x, y, phase);
 }
 
+JNIEXPORT void JNICALL
+Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnDrag(
+        JNIEnv *env, jobject thiz, jlong handle, jfloat x, jfloat y) {
+    live2d_on_drag(reinterpret_cast<Live2DHandle>(handle), x, y);
+}
+
+JNIEXPORT void JNICALL
+Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeResetDrag(
+        JNIEnv *env, jobject thiz, jlong handle) {
+    live2d_reset_drag(reinterpret_cast<Live2DHandle>(handle));
+}
+
 JNIEXPORT jstring JNICALL
 Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeHitTest(
         JNIEnv *env, jobject thiz, jlong handle, jfloat x, jfloat y) {

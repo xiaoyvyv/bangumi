@@ -61,6 +61,14 @@ class Live2DNativeBridge {
         if (nativeHandle != 0L) nativeOnTouch(nativeHandle, x, y, phase)
     }
 
+    fun onDrag(x: Float, y: Float) {
+        if (nativeHandle != 0L) nativeOnDrag(nativeHandle, x, y)
+    }
+
+    fun resetDrag() {
+        if (nativeHandle != 0L) nativeResetDrag(nativeHandle)
+    }
+
     fun hitTest(x: Float, y: Float): String? {
         if (nativeHandle == 0L) return null
         return nativeHitTest(nativeHandle, x, y)
@@ -84,6 +92,8 @@ class Live2DNativeBridge {
     private external fun nativeOnSurfaceChanged(handle: Long, width: Int, height: Int)
     private external fun nativeOnDrawFrame(handle: Long)
     private external fun nativeOnTouch(handle: Long, x: Float, y: Float, phase: Int)
+    private external fun nativeOnDrag(handle: Long, x: Float, y: Float)
+    private external fun nativeResetDrag(handle: Long)
     private external fun nativeHitTest(handle: Long, x: Float, y: Float): String?
 
     companion object {
