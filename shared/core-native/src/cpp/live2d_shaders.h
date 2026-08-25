@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-// Auto-generated 36 GLSL StandardES Framework Shaders from Cubism SDK
+// Auto-generated 36 GLSL StandardES Framework Shaders from src/cpp/shaders/
 static const std::map<std::string, std::string> g_embeddedShaders = {
     {"FragShaderSrc.frag", R"(
 /**

@@ -4,7 +4,7 @@ set -e
 # Bangumi Multiplatform - Auto Download & Setup Live2D Cubism SDK for Native
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NATIVE_DIR="${SCRIPT_DIR}/native"
-SDK_NAME="CubismSdkForNative-5-r.5"
+SDK_NAME="${CUBISM_SDK_NAME:-CubismSdkForNative-5-r.5}"
 SDK_DIR="${NATIVE_DIR}/${SDK_NAME}"
 SDK_ZIP_URL="https://cubism.live2d.com/sdk-native/bin/${SDK_NAME}.zip"
 ZIP_FILE="${NATIVE_DIR}/${SDK_NAME}.zip"

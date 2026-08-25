@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.22.1)
 project("live2d_native")
 
-set(SDK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../native/CubismSdkForNative-5-r.5")
+set(CUBISM_SDK_NAME "CubismSdkForNative-5-r.5" CACHE STRING "Cubism SDK Directory Name")
+set(SDK_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../native/${CUBISM_SDK_NAME}")
 
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
