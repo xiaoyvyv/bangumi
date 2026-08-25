@@ -16,18 +16,31 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d
-import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_voice
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_auto
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_black_musume
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_musume
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_100
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_150
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_200
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_50
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dEvent
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dState
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
+import com.xiaoyv.bangumi.shared.ui.component.settings.SettingOptionItem
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingSwitchItem
+import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
+import kotlinx.collections.immutable.persistentListOf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -100,20 +113,47 @@ private fun SettingsLive2dScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_live2d)) }) {
             SettingSwitchItem(
                 title = stringResource(Res.string.settings_live2d),
-                shape = ListItemDefaults.segmentedShapes(0, 2),
+                shape = ListItemDefaults.segmentedShapes(0, 3),
                 value = settings.live2d.enable,
                 onValueChange = {
                     onActionEvent(SettingsLive2dEvent.Action.OnUpdate(settings.live2d.copy(enable = it)))
                 }
             )
-            SettingSwitchItem(
-                title = stringResource(Res.string.settings_live2d_voice),
-                shape = ListItemDefaults.segmentedShapes(1, 2),
-                value = settings.live2d.voiceEnable,
-                onValueChange = {
-                    onActionEvent(SettingsLive2dEvent.Action.OnUpdate(settings.live2d.copy(voiceEnable = it)))
+            SettingOptionItem(
+                title = stringResource(Res.string.settings_live2d_shell),
+                shape = ListItemDefaults.segmentedShapes(1, 3),
+                value = stringResource(getLive2dShellStringRes(settings.live2d.shell)),
+                items = state.shellItems,
+                onClick = {
+                    onActionEvent(SettingsLive2dEvent.Action.OnUpdate(settings.live2d.copy(shell = it)))
+                }
+            )
+            SettingOptionItem(
+                title = stringResource(Res.string.settings_live2d_size),
+                shape = ListItemDefaults.segmentedShapes(2, 3),
+                value = stringResource(getLive2dSizeStringRes(settings.live2d.size)),
+                items = state.sizeItems,
+                onClick = {
+                    onActionEvent(SettingsLive2dEvent.Action.OnUpdate(settings.live2d.copy(size = it)))
                 }
             )
         }
+    }
+}
+
+private fun getLive2dShellStringRes(shell: Int): StringResource {
+    return when (shell) {
+        ComposeSetting.Live2dConfig.Shell.MUSUME -> Res.string.settings_live2d_shell_musume
+        ComposeSetting.Live2dConfig.Shell.BLACK_MUSUME -> Res.string.settings_live2d_shell_black_musume
+        else -> Res.string.settings_live2d_shell_auto
+    }
+}
+
+private fun getLive2dSizeStringRes(size: Int): StringResource {
+    return when (size) {
+        ComposeSetting.Live2dConfig.Size.SIZE_50 -> Res.string.settings_live2d_size_50
+        ComposeSetting.Live2dConfig.Size.SIZE_150 -> Res.string.settings_live2d_size_150
+        ComposeSetting.Live2dConfig.Size.SIZE_200 -> Res.string.settings_live2d_size_200
+        else -> Res.string.settings_live2d_size_100
     }
 }

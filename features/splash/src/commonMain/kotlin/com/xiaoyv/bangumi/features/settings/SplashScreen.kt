@@ -46,6 +46,9 @@ import com.xiaoyv.bangumi.shared.component.Live2D
 import com.xiaoyv.bangumi.shared.component.rememberLive2DState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.joinToString
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
+import com.xiaoyv.bangumi.shared.ui.theme.currentInDarkTheme
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.resource.copyToDir
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -107,7 +110,7 @@ fun Live2DSplash(onClick: () -> Unit) {
         debugLog { "Fetched expressions (${expressions.size}): ${expressions.joinToString(",")}" }
     }
 
-    fun loadModel() {
+    fun loadModel(shell: Int, inDark: Boolean) {
         if (isLoading) return
         isLoading = true
         scope.launch {
@@ -115,7 +118,11 @@ fun Live2DSplash(onClick: () -> Unit) {
                 val workDir = (FileKit.filesDir / "live2d").also {
                     it.createDirectories()
                 }
-                val name = "bangumi_black_musume_2026_parts"
+                val name = when (shell) {
+                    ComposeSetting.Live2dConfig.Shell.MUSUME -> "bangumi_musume_2026_parts_grouped"
+                    ComposeSetting.Live2dConfig.Shell.BLACK_MUSUME -> "bangumi_black_musume_2026_parts"
+                    else -> if (inDark) "bangumi_black_musume_2026_parts" else "bangumi_musume_2026_parts_grouped"
+                }
                 val targetFile = Res.copyToDir("files/live2d/$name.zip", workDir)
                 val path = targetFile.absolutePath()
                 live2DState.workDir = workDir.absolutePath()
@@ -245,15 +252,18 @@ fun Live2DSplash(onClick: () -> Unit) {
             }
         }
 
-        // --- Action Buttons Bar ---
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+    val shell = currentSettings().live2d.shell
+    val inDark = currentInDarkTheme()
+
+    // --- Action Buttons Bar ---
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+    ) {
+        Button(
+            onClick = { loadModel(shell, inDark) },
+            enabled = !isLoading
         ) {
-            Button(
-                onClick = { loadModel() },
-                enabled = !isLoading
-            ) {
                 Text(if (isLoaded) "重新加载模型" else "加载 Live2D 模型")
             }
 

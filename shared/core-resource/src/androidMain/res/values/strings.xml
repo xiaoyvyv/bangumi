@@ -355,6 +355,15 @@
     <string name="settings_block_user">绝交用户</string>
     <string name="settings_common">通用</string>
     <string name="settings_live2d">Bangumi 娘</string>
+    <string name="settings_live2d_shell">角色</string>
+    <string name="settings_live2d_shell_auto">自动娘</string>
+    <string name="settings_live2d_shell_musume">Bangumi 娘</string>
+    <string name="settings_live2d_shell_black_musume">布莱克·樱</string>
+    <string name="settings_live2d_size">角色尺寸</string>
+    <string name="settings_live2d_size_50">迷你 (50dp)</string>
+    <string name="settings_live2d_size_100">标准 (100dp)</string>
+    <string name="settings_live2d_size_150">大号 (150dp)</string>
+    <string name="settings_live2d_size_200">特大号 (200dp)</string>
     <string name="settings_ui">UI 配置</string>
     <string name="settings_bar">底栏配置</string>
     <string name="settings_network">网络配置</string>

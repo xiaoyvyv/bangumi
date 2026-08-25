@@ -400,10 +400,12 @@ public:
                     if (pixels) {
                         for (int pIdx = 0; pIdx < w * h; pIdx++) {
                             unsigned char* p = pixels + pIdx * 4;
-                            float alphaFactor = static_cast<float>(p[3]) / 255.0f;
-                            p[0] = static_cast<unsigned char>(p[0] * alphaFactor);
-                            p[1] = static_cast<unsigned char>(p[1] * alphaFactor);
-                            p[2] = static_cast<unsigned char>(p[2] * alphaFactor);
+                            unsigned int a = p[3];
+                            if (a == 255) continue;
+                            if (a == 0) { p[0] = p[1] = p[2] = 0; continue; }
+                            p[0] = static_cast<unsigned char>((static_cast<unsigned int>(p[0]) * a + 127) / 255);
+                            p[1] = static_cast<unsigned char>((static_cast<unsigned int>(p[1]) * a + 127) / 255);
+                            p[2] = static_cast<unsigned char>((static_cast<unsigned int>(p[2]) * a + 127) / 255);
                         }
 
                         GLuint texId;
@@ -622,10 +624,12 @@ public:
                     if (pixels) {
                         for (int pIdx = 0; pIdx < w * h; pIdx++) {
                             unsigned char* p = pixels + pIdx * 4;
-                            float alphaFactor = static_cast<float>(p[3]) / 255.0f;
-                            p[0] = static_cast<unsigned char>(p[0] * alphaFactor);
-                            p[1] = static_cast<unsigned char>(p[1] * alphaFactor);
-                            p[2] = static_cast<unsigned char>(p[2] * alphaFactor);
+                            unsigned int a = p[3];
+                            if (a == 255) continue;
+                            if (a == 0) { p[0] = p[1] = p[2] = 0; continue; }
+                            p[0] = static_cast<unsigned char>((static_cast<unsigned int>(p[0]) * a + 127) / 255);
+                            p[1] = static_cast<unsigned char>((static_cast<unsigned int>(p[1]) * a + 127) / 255);
+                            p[2] = static_cast<unsigned char>((static_cast<unsigned int>(p[2]) * a + 127) / 255);
                         }
 
                         GLuint texId;

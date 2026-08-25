@@ -27,8 +27,22 @@ data class ComposeSetting(
     @Immutable
     data class Live2dConfig(
         @SerialName("enable") val enable: Boolean = false,
-        @SerialName("voiceEnable") val voiceEnable: Boolean = false,
+        @SerialName("shell") val shell: Int = Shell.AUTO,
+        @SerialName("size") val size: Int = Size.SIZE_100,
     ) {
+        object Shell {
+            const val AUTO = 0
+            const val MUSUME = 1
+            const val BLACK_MUSUME = 2
+        }
+
+        object Size {
+            const val SIZE_50 = 50
+            const val SIZE_100 = 100
+            const val SIZE_150 = 150
+            const val SIZE_200 = 200
+        }
+
         companion object {
             val Default = Live2dConfig()
         }
