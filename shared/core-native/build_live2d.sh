@@ -18,6 +18,10 @@ IOS_DEPLOYMENT_TARGET="${IOS_DEPLOYMENT_TARGET:-14.0}"
 CUBISM_SDK_NAME="${CUBISM_SDK_NAME:-CubismSdkForNative-5-r.5}"
 SHOW_WARNINGS="${SHOW_WARNINGS:-false}"
 
+if [[ -z "${JAVA_HOME}" ]] && command -v /usr/libexec/java_home &>/dev/null; then
+  export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null || true)"
+fi
+
 # -----------------------------------------------------------------------------
 # Warning Suppression Flags
 # -----------------------------------------------------------------------------
@@ -152,9 +156,22 @@ if [[ "${OS_NAME}" == Darwin* ]]; then
   libtool -static -o "${SCRIPT_DIR}/native/ios/iphoneos/liblive2d_native.a" \
     "${BUILD_BASE_DIR}/ios-iphoneos/liblive2d_native.a" \
     "${SCRIPT_DIR}/native/${CUBISM_SDK_NAME}/Core/lib/ios/Release-iphoneos/libLive2DCubismCore.a"
+
+  echo "=========================================="
+  echo " 7. Building macOS Desktop arm64 (.dylib)  "
+  echo "=========================================="
+  rm -rf "${BUILD_BASE_DIR}/macos-arm64"
+  cmake -S "${SCRIPT_DIR}/src/cpp" -B "${BUILD_BASE_DIR}/macos-arm64" \
+    "${EXTRA_CMAKE_FLAGS[@]}" \
+    -DMACOS_DESKTOP_BUILD=ON \
+    -DCMAKE_OSX_ARCHITECTURES=arm64 \
+    -DCMAKE_BUILD_TYPE=Release
+  cmake --build "${BUILD_BASE_DIR}/macos-arm64" --config Release
+  mkdir -p "${SCRIPT_DIR}/native/macos"
+  cp "${BUILD_BASE_DIR}/macos-arm64/liblive2d_native.dylib" "${SCRIPT_DIR}/native/macos/"
 else
   echo "=========================================="
-  echo " Skipping iOS builds on non-macOS system (${OS_NAME}) "
+  echo " Skipping iOS/macOS builds on non-macOS system (${OS_NAME}) "
   echo "=========================================="
 fi
 
@@ -164,5 +181,6 @@ echo " Build Data -> shared/core-native/build/live2d/          "
 echo " Android .so -> src/androidMain/jniLibs/                 "
 if [[ "${OS_NAME}" == Darwin* ]]; then
   echo " iOS .a     -> native/ios/                               "
+  echo " macOS .dylib -> native/macos/                           "
 fi
 echo "=========================================================="

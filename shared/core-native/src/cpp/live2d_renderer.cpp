@@ -22,6 +22,16 @@
 #define LOG_TAG "Live2DNative"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+#elif defined(IOS_BUILD) || defined(CSM_TARGET_IPHONE_ES2)
+#include <OpenGLES/ES2/gl.h>
+#include <cstdio>
+#define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
+#elif defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
+#include <OpenGL/gl.h>
+#include <cstdio>
+#define LOGI(...) do { printf("[Live2DNative] "); printf(__VA_ARGS__); printf("\n"); fflush(stdout); } while(0)
+#define LOGE(...) do { fprintf(stderr, "[Live2DNative] "); fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); fflush(stderr); } while(0)
 #else
 #include <OpenGLES/ES2/gl.h>
 #include <cstdio>

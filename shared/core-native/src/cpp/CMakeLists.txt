@@ -22,7 +22,7 @@ list(FILTER FRAMEWORK_SOURCES EXCLUDE REGEX ".*/Rendering/Metal.*")
 
 if(IOS_BUILD)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0" CACHE STRING "Minimum OS version" FORCE)
-    add_compile_definitions(CSM_TARGET_IPHONE_ES2)
+    add_compile_definitions(CSM_TARGET_IPHONE_ES2 IOS_BUILD)
 
     if(IOS_PLATFORM STREQUAL "SIMULATORARM64")
         set(PLATFORM_NAME Release-iphonesimulator-arm64)
@@ -41,6 +41,45 @@ if(IOS_BUILD)
         live2d_renderer.cpp
         miniz.c
         ${FRAMEWORK_SOURCES}
+    )
+elseif(MACOS_DESKTOP_BUILD)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum OS version" FORCE)
+    add_compile_definitions(CSM_TARGET_MAC_GL CSM_TARGET_COCOS MACOS_DESKTOP_BUILD)
+
+    if(DEFINED ENV{JAVA_HOME})
+        include_directories(
+            "$ENV{JAVA_HOME}/include"
+            "$ENV{JAVA_HOME}/include/darwin"
+        )
+    else()
+        find_package(JNI REQUIRED)
+        include_directories(${JNI_INCLUDE_DIRS})
+    endif()
+
+    find_package(OpenGL REQUIRED)
+    include_directories(${OPENGL_INCLUDE_DIR})
+
+    if(CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64")
+        set(MAC_ARCH x86_64)
+    else()
+        set(MAC_ARCH arm64)
+    endif()
+
+    add_library(Live2DCubismCore STATIC IMPORTED)
+    set_target_properties(Live2DCubismCore PROPERTIES IMPORTED_LOCATION
+        "${SDK_ROOT}/Core/lib/macos/${MAC_ARCH}/libLive2DCubismCore.a"
+    )
+
+    add_library(live2d_native SHARED
+        live2d_renderer.cpp
+        live2d_jni.cpp
+        miniz.c
+        ${FRAMEWORK_SOURCES}
+    )
+
+    target_link_libraries(live2d_native
+        Live2DCubismCore
+        ${OPENGL_LIBRARIES}
     )
 else()
     add_compile_definitions(CSM_TARGET_ANDROID_ES2)

@@ -230,7 +230,28 @@ libtool -static -o shared/core-native/native/ios/iphoneos/liblive2d_native.a \
 
 ---
 
-### 5.3 一键完整编译构建脚本 (`build_live2d.sh`)
+### 5.3 构建 macOS Desktop 动态库 (.dylib)
+
+Desktop JVM (Compose Desktop) 平台需要 macOS 原生动态库 `liblive2d_native.dylib`。
+
+#### 手动编译步骤：
+```bash
+rm -rf shared/core-native/build/live2d/macos-arm64
+cmake -S shared/core-native/src/cpp -B shared/core-native/build/live2d/macos-arm64 \
+  -DMACOS_DESKTOP_BUILD=ON \
+  -DCMAKE_OSX_ARCHITECTURES=arm64 \
+  -DCMAKE_BUILD_TYPE=Release
+
+cmake --build shared/core-native/build/live2d/macos-arm64 --config Release
+
+# 复制产物到 native/macos
+mkdir -p shared/core-native/native/macos
+cp shared/core-native/build/live2d/macos-arm64/liblive2d_native.dylib shared/core-native/native/macos/
+```
+
+---
+
+### 5.4 一键完整编译构建脚本 (`build_live2d.sh`)
 
 预制件根目录下已提供预建的自动化编译脚本 [`build_live2d.sh`](file:///Users/why/AndroidStudioProjects/bangumi-multiplatform/shared/core-native/build_live2d.sh)。
 
@@ -241,8 +262,9 @@ libtool -static -o shared/core-native/native/ios/iphoneos/liblive2d_native.a \
 
 该脚本将按顺序自动完成：
 1. 自动生成最新的 GLSL 着色器 C++ 头文件 `live2d_shaders.h`；
-2. 编译 Android `arm64-v8a` 和 `x86_64` 的 `.so` 库，并自动复制到 `src/androidMain/jniLibs/`；
-3. 编译 iOS `iphonesimulator` 和 `iphoneos` 的 `.a` 库，通过 `libtool` 自动合并官方 Core 并复制到 `native/ios/`。
+2. 编译 Android `arm64-v8a`、`x86_64` 与 `x86` 的 `.so` 库，并自动复制到 `src/androidMain/jniLibs/`；
+3. 编译 iOS `iphonesimulator` 和 `iphoneos` 的 `.a` 库，通过 `libtool` 自动合并官方 Core 并复制到 `native/ios/`；
+4. 编译 macOS Desktop `arm64` 的 `liblive2d_native.dylib` 动态库并自动复制到 `native/macos/`。
 
 ---
 
