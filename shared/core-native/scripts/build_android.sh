@@ -15,12 +15,18 @@ SHOW_WARNINGS="${SHOW_WARNINGS:-false}"
 
 OS_NAME="$(uname -s 2>/dev/null || echo "Unknown")"
 if [ -z "${ANDROID_NDK_HOME}" ]; then
-  case "${OS_NAME}" in
-    Darwin*) export ANDROID_NDK_HOME="$HOME/Library/Android/sdk/ndk/${NDK_VERSION}" ;;
-    MINGW*|CYGWIN*|MSYS*|Windows_NT) export ANDROID_NDK_HOME="C:/Users/${USERNAME:-$USER}/AppData/Local/Android/Sdk/ndk/${NDK_VERSION}" ;;
-    Linux*) export ANDROID_NDK_HOME="$HOME/Android/Sdk/ndk/${NDK_VERSION}" ;;
-    *) export ANDROID_NDK_HOME="$HOME/Library/Android/sdk/ndk/${NDK_VERSION}" ;;
-  esac
+  if [ -n "${ANDROID_NDK_ROOT}" ]; then
+    export ANDROID_NDK_HOME="${ANDROID_NDK_ROOT}"
+  elif [ -n "${ANDROID_NDK}" ]; then
+    export ANDROID_NDK_HOME="${ANDROID_NDK}"
+  else
+    case "${OS_NAME}" in
+      Darwin*) export ANDROID_NDK_HOME="$HOME/Library/Android/sdk/ndk/${NDK_VERSION}" ;;
+      MINGW*|CYGWIN*|MSYS*|Windows_NT) export ANDROID_NDK_HOME="C:/Users/${USERNAME:-$USER}/AppData/Local/Android/Sdk/ndk/${NDK_VERSION}" ;;
+      Linux*) export ANDROID_NDK_HOME="$HOME/Android/Sdk/ndk/${NDK_VERSION}" ;;
+      *) export ANDROID_NDK_HOME="$HOME/Library/Android/sdk/ndk/${NDK_VERSION}" ;;
+    esac
+  fi
 fi
 
 EXTRA_CMAKE_FLAGS=()
