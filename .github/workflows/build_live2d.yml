@@ -14,30 +14,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-macos-ios-android:
-    name: Build macOS, iOS & Android Native Libraries
+  build-macos-ios:
+    name: Build macOS & iOS Native Libraries
     runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Android NDK
-        uses: nttld/setup-ndk@v1
-        id: setup-ndk
-        with:
-          ndk-version: r26b
-          add-to-path: false
 
       - name: Build macOS dylib
         run: ./shared/core-native/scripts/build_macos.sh
 
       - name: Build iOS static library (.a)
         run: ./shared/core-native/scripts/build_ios.sh
-
-      - name: Build Android shared libraries (.so)
-        run: ./shared/core-native/scripts/build_android.sh
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Upload macOS Native Library
         uses: actions/upload-artifact@v4
@@ -50,6 +38,25 @@ jobs:
         with:
           name: live2d-native-ios
           path: shared/core-native/native/ios/
+
+  build-android:
+    name: Build Android Native Libraries (.so)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r26b
+          add-to-path: false
+
+      - name: Build Android shared libraries (.so)
+        run: ./shared/core-native/scripts/build_android.sh
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Upload Android Native Libraries
         uses: actions/upload-artifact@v4
