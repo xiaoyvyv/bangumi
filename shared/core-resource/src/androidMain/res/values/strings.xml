@@ -361,9 +361,12 @@
     <string name="settings_live2d_shell_black_musume">布莱克·樱</string>
     <string name="settings_live2d_size">角色尺寸</string>
     <string name="settings_live2d_size_50">迷你 (50dp)</string>
+    <string name="settings_live2d_size_75">较小 (75dp)</string>
     <string name="settings_live2d_size_100">标准 (100dp)</string>
+    <string name="settings_live2d_size_125">较大 (125dp)</string>
     <string name="settings_live2d_size_150">大号 (150dp)</string>
-    <string name="settings_live2d_size_200">特大号 (200dp)</string>
+    <string name="settings_live2d_size_175">特大 (175dp)</string>
+    <string name="settings_live2d_size_200">超大 (200dp)</string>
     <string name="settings_ui">UI 配置</string>
     <string name="settings_bar">底栏配置</string>
     <string name="settings_network">网络配置</string>

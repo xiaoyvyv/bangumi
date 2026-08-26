@@ -28,6 +28,21 @@ expect class Live2DState(workDir: String = "") {
     var onHitAreaClick: ((hitArea: String) -> Unit)?
 
     /**
+     * 发送触摸事件 (action: 0=DOWN, 1=MOVE, 2=UP)
+     */
+    fun onTouch(x: Float, y: Float, action: Int)
+
+    /**
+     * 发送拖拽追踪点坐标
+     */
+    fun onDrag(x: Float, y: Float)
+
+    /**
+     * 重置拖拽/触摸追踪状态
+     */
+    fun resetDrag()
+
+    /**
      * 从 ZIP 文件加载 Live2D 模型
      * @param zipFilePath 可读写的 ZIP 完整路径
      * @param modelName 模型名称（解压后存放在 workDir/modelName 下）

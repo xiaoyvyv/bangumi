@@ -6,9 +6,12 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_auto
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_black_musume
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_musume
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_100
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_125
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_150
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_175
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_200
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_50
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_75
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
@@ -30,8 +33,11 @@ data class SettingsLive2dState(
     ),
     val sizeItems: SerializeList<ComposeTextTab<Int>> = persistentListOf(
         ComposeTextTab(ComposeSetting.Live2dConfig.Size.SIZE_50, Res.string.settings_live2d_size_50),
+        ComposeTextTab(ComposeSetting.Live2dConfig.Size.SIZE_75, Res.string.settings_live2d_size_75),
         ComposeTextTab(ComposeSetting.Live2dConfig.Size.SIZE_100, Res.string.settings_live2d_size_100),
+        ComposeTextTab(ComposeSetting.Live2dConfig.Size.SIZE_125, Res.string.settings_live2d_size_125),
         ComposeTextTab(ComposeSetting.Live2dConfig.Size.SIZE_150, Res.string.settings_live2d_size_150),
+        ComposeTextTab(ComposeSetting.Live2dConfig.Size.SIZE_175, Res.string.settings_live2d_size_175),
         ComposeTextTab(ComposeSetting.Live2dConfig.Size.SIZE_200, Res.string.settings_live2d_size_200),
     ),
 )

@@ -22,9 +22,12 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_black_mu
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_shell_musume
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_100
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_125
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_150
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_175
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_200
 import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_50
+import com.xiaoyv.bangumi.core_resource.resources.settings_live2d_size_75
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dEvent
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dState
 import com.xiaoyv.bangumi.features.settings.live2d.business.SettingsLive2dViewModel
@@ -152,7 +155,10 @@ private fun getLive2dShellStringRes(shell: Int): StringResource {
 private fun getLive2dSizeStringRes(size: Int): StringResource {
     return when (size) {
         ComposeSetting.Live2dConfig.Size.SIZE_50 -> Res.string.settings_live2d_size_50
+        ComposeSetting.Live2dConfig.Size.SIZE_75 -> Res.string.settings_live2d_size_75
+        ComposeSetting.Live2dConfig.Size.SIZE_125 -> Res.string.settings_live2d_size_125
         ComposeSetting.Live2dConfig.Size.SIZE_150 -> Res.string.settings_live2d_size_150
+        ComposeSetting.Live2dConfig.Size.SIZE_175 -> Res.string.settings_live2d_size_175
         ComposeSetting.Live2dConfig.Size.SIZE_200 -> Res.string.settings_live2d_size_200
         else -> Res.string.settings_live2d_size_100
     }

@@ -78,9 +78,15 @@
 #include <Motion/CubismExpressionMotionManager.hpp>
 #include <Motion/CubismMotionQueueEntry.hpp>
 #include <Rendering/OpenGL/CubismRenderer_OpenGLES2.hpp>
+#include <Physics/CubismPhysics.hpp>
+#include <Effect/CubismPose.hpp>
+#include <Effect/CubismBreath.hpp>
+#include <Effect/CubismEyeBlink.hpp>
 #include <Utils/CubismString.hpp>
 #include <Id/CubismIdManager.hpp>
 #include <CubismDefaultParameterId.hpp>
+
+static bool InitOffscreenDesktopGLContext();
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -281,6 +287,15 @@ public:
             _expressionManager = nullptr;
         }
         DeleteRenderer();
+        InitOffscreenDesktopGLContext();
+        if (_fbo != 0) {
+            glDeleteFramebuffers(1, &_fbo);
+            glDeleteTextures(1, &_fboColorTex);
+            glDeleteRenderbuffers(1, &_fboDepthRb);
+            _fbo = 0;
+            _fboColorTex = 0;
+            _fboDepthRb = 0;
+        }
         if (_modelSetting) {
             delete _modelSetting;
             _modelSetting = nullptr;
@@ -294,7 +309,9 @@ public:
         }
         _expressions.clear();
         for (GLuint texId : _textureIds) {
-            glDeleteTextures(1, &texId);
+            if (texId != 0) {
+                glDeleteTextures(1, &texId);
+            }
         }
         _textureIds.clear();
         _motionGroupNames.clear();
@@ -371,60 +388,53 @@ public:
             _modelMatrix->SetupFromLayout(layout);
         }
 
-#if defined(MACOS_DESKTOP_BUILD) || defined(CSM_TARGET_MAC_GL)
-        bool hasGLContext = (CGLGetCurrentContext() != nullptr);
-#else
-        bool hasGLContext = true;
-#endif
+        InitOffscreenDesktopGLContext();
+        Rendering::CubismShader_OpenGLES2::GetInstance();
 
-        if (hasGLContext) {
-            // Ensure static shaders are initialized for current GL context
-            Rendering::CubismShader_OpenGLES2::GetInstance();
+        // Create Renderer & Initialize Shaders
+        CreateRenderer(_viewportWidth, _viewportHeight);
+        GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
 
-            // Create Renderer & Initialize Shaders
-            CreateRenderer(_viewportWidth, _viewportHeight);
-            GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
+        // Load Textures
+        int textureCount = _modelSetting->GetTextureCount();
+        LOGI("Loading %d textures for Live2D model...", textureCount);
+        for (int i = 0; i < textureCount; i++) {
+            std::string texFile = _modelSetting->GetTextureFileName(i);
+            if (texFile.empty()) continue;
+            std::string texPath = _modelDir + texFile;
 
-            // Load Textures
-            int textureCount = _modelSetting->GetTextureCount();
-            LOGI("Loading %d textures for Live2D model...", textureCount);
-            for (int i = 0; i < textureCount; i++) {
-                std::string texFile = _modelSetting->GetTextureFileName(i);
-                if (texFile.empty()) continue;
-                std::string texPath = _modelDir + texFile;
-
-                std::vector<char> texBuffer;
-                if (LoadFileBuffer(texPath, texBuffer)) {
-                    int w, h, comp;
-                    unsigned char* pixels = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(texBuffer.data()), static_cast<int>(texBuffer.size()), &w, &h, &comp, STBI_rgb_alpha);
-                    if (pixels) {
-                        for (int pIdx = 0; pIdx < w * h; pIdx++) {
-                            unsigned char* p = pixels + pIdx * 4;
-                            unsigned int a = p[3];
-                            if (a == 255) continue;
-                            if (a == 0) { p[0] = p[1] = p[2] = 0; continue; }
-                            p[0] = static_cast<unsigned char>((static_cast<unsigned int>(p[0]) * a + 127) / 255);
-                            p[1] = static_cast<unsigned char>((static_cast<unsigned int>(p[1]) * a + 127) / 255);
-                            p[2] = static_cast<unsigned char>((static_cast<unsigned int>(p[2]) * a + 127) / 255);
-                        }
-
-                        GLuint texId;
-                        glGenTextures(1, &texId);
-                        glBindTexture(GL_TEXTURE_2D, texId);
-                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-                        glGenerateMipmap(GL_TEXTURE_2D);
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                        glBindTexture(GL_TEXTURE_2D, 0);
-                        stbi_image_free(pixels);
-
-                        GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->BindTexture(i, texId);
-                        _textureIds.push_back(texId);
-                    } else {
-                        LOGE("Failed to decode PNG texture via stb_image: %s", texPath.c_str());
+            std::vector<char> texBuffer;
+            if (LoadFileBuffer(texPath, texBuffer)) {
+                int w, h, comp;
+                unsigned char* pixels = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(texBuffer.data()), static_cast<int>(texBuffer.size()), &w, &h, &comp, STBI_rgb_alpha);
+                if (pixels) {
+                    for (int pIdx = 0; pIdx < w * h; pIdx++) {
+                        unsigned char* p = pixels + pIdx * 4;
+                        unsigned int a = p[3];
+                        if (a == 255) continue;
+                        if (a == 0) { p[0] = p[1] = p[2] = 0; continue; }
+                        p[0] = static_cast<unsigned char>((static_cast<unsigned int>(p[0]) * a + 127) / 255);
+                        p[1] = static_cast<unsigned char>((static_cast<unsigned int>(p[1]) * a + 127) / 255);
+                        p[2] = static_cast<unsigned char>((static_cast<unsigned int>(p[2]) * a + 127) / 255);
                     }
+
+                    GLuint texId;
+                    glGenTextures(1, &texId);
+                    glBindTexture(GL_TEXTURE_2D, texId);
+                    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+                    glGenerateMipmap(GL_TEXTURE_2D);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    stbi_image_free(pixels);
+
+                    GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->BindTexture(i, texId);
+                    _textureIds.push_back(texId);
+                } else {
+                    LOGE("Failed to decode PNG texture via stb_image: %s", texPath.c_str());
                 }
             }
         }
@@ -605,11 +615,20 @@ public:
         std::lock_guard<std::recursive_mutex> lock(_mutex);
         Rendering::CubismShader_OpenGLES2::GetInstance();
 
+        if (!_textureIds.empty()) {
+            return;
+        }
+
         if (_modelSetting && _model) {
             DeleteRenderer();
             CreateRenderer(_viewportWidth, _viewportHeight);
             GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->IsPremultipliedAlpha(true);
 
+            for (GLuint texId : _textureIds) {
+                if (texId != 0) {
+                    glDeleteTextures(1, &texId);
+                }
+            }
             _textureIds.clear();
             int textureCount = _modelSetting->GetTextureCount();
             for (int i = 0; i < textureCount; i++) {
@@ -635,6 +654,7 @@ public:
                         GLuint texId;
                         glGenTextures(1, &texId);
                         glBindTexture(GL_TEXTURE_2D, texId);
+                        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
                         glGenerateMipmap(GL_TEXTURE_2D);
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -724,20 +744,32 @@ public:
             float canvasRatio = (canvasWidth > 0.0f) ? (canvasHeight / canvasWidth) : 1.0f;
 
             if (canvasRatio < displayRatio) {
-                _modelMatrix->SetWidth(2.0f);
                 projection.Scale(1.0f, static_cast<float>(_viewportWidth) / static_cast<float>(_viewportHeight));
             } else {
-                _modelMatrix->SetHeight(2.0f);
                 projection.Scale(static_cast<float>(_viewportHeight) / static_cast<float>(_viewportWidth), 1.0f);
             }
         }
 
         projection.MultiplyByMatrix(_modelMatrix);
 
+        // Reset OpenGL states & VBO/IBO bindings so client-side vertex arrays work properly
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glActiveTexture(GL_TEXTURE0);
+        glDisable(GL_SCISSOR_TEST);
+        glDisable(GL_STENCIL_TEST);
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
         while (glGetError() != GL_NO_ERROR); // Clear pre-existing GL errors
 
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->SetMvpMatrix(&projection);
         GetRenderer<Rendering::CubismRenderer_OpenGLES2>()->DrawModel();
+
+        // Restore VBO/IBO buffer bindings to 0
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void EnsureFBO(int w, int h) {
@@ -779,20 +811,34 @@ public:
         EnsureFBO(w, h);
         if (_fbo == 0) return false;
 
-        OnSurfaceCreated();
+        if (_textureIds.empty()) {
+            OnSurfaceCreated();
+        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
         glViewport(0, 0, w, h);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        OnSurfaceChanged(w, h);
+        if (_viewportWidth != w || _viewportHeight != h) {
+            OnSurfaceChanged(w, h);
+        }
+
         OnDrawFrame();
 
         glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, outPixels);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // Convert GL_RGBA to Java TYPE_INT_ARGB_PRE and flip Y vertically in-place
+        auto convertPixel = [](uint32_t p) -> uint32_t {
+            uint32_t r = p & 0xFF;
+            uint32_t g = (p >> 8) & 0xFF;
+            uint32_t b = (p >> 16) & 0xFF;
+            uint32_t a = (p >> 24) & 0xFF;
+
+            return (a << 24) | (r << 16) | (g << 8) | b;
+        };
+
         for (int y = 0; y < h / 2; ++y) {
             uint32_t* rowTop = outPixels + y * w;
             uint32_t* rowBottom = outPixels + (h - 1 - y) * w;
@@ -800,19 +846,15 @@ public:
                 uint32_t top = rowTop[x];
                 uint32_t bot = rowBottom[x];
 
-                uint32_t topArgb = (top & 0xFF00FF00) | ((top & 0x00FF0000) >> 16) | ((top & 0x000000FF) << 16);
-                uint32_t botArgb = (bot & 0xFF00FF00) | ((bot & 0x00FF0000) >> 16) | ((bot & 0x000000FF) << 16);
-
-                rowTop[x] = botArgb;
-                rowBottom[x] = topArgb;
+                rowTop[x] = convertPixel(bot);
+                rowBottom[x] = convertPixel(top);
             }
         }
         if (h % 2 != 0) {
             int midY = h / 2;
             uint32_t* rowMid = outPixels + midY * w;
             for (int x = 0; x < w; ++x) {
-                uint32_t val = rowMid[x];
-                rowMid[x] = (val & 0xFF00FF00) | ((val & 0x00FF0000) >> 16) | ((val & 0x000000FF) << 16);
+                rowMid[x] = convertPixel(rowMid[x]);
             }
         }
 
@@ -907,6 +949,7 @@ Live2DHandle live2d_create() {
 
 void live2d_destroy(Live2DHandle handle) {
     if (!handle) return;
+    InitOffscreenDesktopGLContext();
     delete static_cast<Live2DModelWrapper*>(handle);
 }
 
@@ -1287,10 +1330,7 @@ bool live2d_render_pixels(Live2DHandle handle, int width, int height, unsigned i
 void live2d_on_touch(Live2DHandle handle, float x, float y, int phase) {
     if (!handle) return;
     auto* model = static_cast<Live2DModelWrapper*>(handle);
-    if (phase == 0 || phase == 1) {
-        model->SetDragPosition(x, y);
-    } else if (phase == 2) {
-        model->SetDragging(0.0f, 0.0f);
+    if (phase == 2) {
         const char* hitArea = model->HitTest(x, y);
         std::string areaName = (hitArea && strlen(hitArea) > 0) ? hitArea : "";
         LOGI("[Live2D] Touch Tap Event at (%.3f, %.3f) -> HitArea: '%s'", x, y, areaName.c_str());

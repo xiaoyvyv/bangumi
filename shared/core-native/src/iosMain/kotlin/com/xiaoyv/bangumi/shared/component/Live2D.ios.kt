@@ -1,27 +1,47 @@
 package com.xiaoyv.bangumi.shared.component
 
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.interop.UIKitView
-import kotlinx.cinterop.*
-import platform.EAGL.*
-import platform.GLKit.*
-import platform.UIKit.*
-import platform.CoreGraphics.*
-import platform.darwin.NSObject
-import platform.Foundation.*
+import androidx.compose.ui.viewinterop.UIKitInteropProperties
+import androidx.compose.ui.viewinterop.UIKitView
+import com.xiaoyv.bangumi.shared.component.live2d.Live2DHandle
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_create
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_destroy
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_get_expression_count
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_get_expression_id_at
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_get_motion_count
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_get_motion_group_at
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_hit_test
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_load_model_from_zip
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_on_drag
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_on_draw_frame
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_on_surface_changed
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_on_touch
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_reset_drag
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_set_expression
+import com.xiaoyv.bangumi.shared.component.live2d.live2d_set_motion
+import kotlinx.cinterop.CValue
+import kotlinx.cinterop.readValue
+import kotlinx.cinterop.toKString
+import platform.CoreGraphics.CGRect
+import platform.CoreGraphics.CGRectZero
+import platform.EAGL.EAGLContext
+import platform.EAGL.kEAGLRenderingAPIOpenGLES2
+import platform.Foundation.NSRunLoop
+import platform.Foundation.NSRunLoopCommonModes
+import platform.Foundation.NSSelectorFromString
+import platform.GLKit.GLKView
+import platform.GLKit.GLKViewDelegateProtocol
+import platform.GLKit.GLKViewDrawableDepthFormat16
 import platform.QuartzCore.CADisplayLink
-import com.xiaoyv.bangumi.shared.component.live2d.*
+import platform.UIKit.UIColor
+import platform.darwin.NSObject
 
 @Stable
 actual class Live2DState actual constructor(actual var workDir: String) {
@@ -53,6 +73,8 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 
     private var currentModelInfo: Pair<String, String>? = null
     internal var glkDelegate: Live2DGLKViewDelegate? = null
+    internal var eaglContext: EAGLContext? = null
+    internal var displayLink: CADisplayLink? = null
 
     init {
         ensureNativeCreated()
@@ -64,6 +86,7 @@ actual class Live2DState actual constructor(actual var workDir: String) {
             nativeHandle = handle
             currentModelInfo?.let { (zip, name) ->
                 if (handle != null) {
+                    eaglContext?.let { EAGLContext.setCurrentContext(it) }
                     val ok = live2d_load_model_from_zip(handle, zip, workDir, name)
                     this._isLoading = false
                     this._isLoaded = ok
@@ -84,6 +107,7 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 
         ensureNativeCreated()
         val handle = nativeHandle ?: return
+        eaglContext?.let { EAGLContext.setCurrentContext(it) }
         val ok = live2d_load_model_from_zip(handle, cleanZip, workDir, cleanName)
         this._isLoading = false
         this._isLoaded = ok
@@ -110,17 +134,17 @@ actual class Live2DState actual constructor(actual var workDir: String) {
         return if (hit.isNullOrEmpty()) null else hit
     }
 
-    fun onTouch(x: Float, y: Float, phase: Int) {
+    actual fun onTouch(x: Float, y: Float, action: Int) {
         val handle = nativeHandle ?: return
-        live2d_on_touch(handle, x, y, phase)
+        live2d_on_touch(handle, x, y, action)
     }
 
-    fun onDrag(x: Float, y: Float) {
+    actual fun onDrag(x: Float, y: Float) {
         val handle = nativeHandle ?: return
         live2d_on_drag(handle, x, y)
     }
 
-    fun resetDrag() {
+    actual fun resetDrag() {
         val handle = nativeHandle ?: return
         live2d_reset_drag(handle)
     }
@@ -160,7 +184,10 @@ actual class Live2DState actual constructor(actual var workDir: String) {
     }
 
     fun release() {
+        displayLink?.invalidate()
+        displayLink = null
         glkDelegate = null
+        eaglContext = null
         nativeHandle?.let {
             live2d_destroy(it)
             nativeHandle = null
@@ -172,6 +199,8 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 
 internal class Live2DGLKViewDelegate(private val state: Live2DState) : NSObject(), GLKViewDelegateProtocol {
     override fun glkView(view: GLKView, drawInRect: CValue<CGRect>) {
+        EAGLContext.setCurrentContext(view.context)
+        state.ensureNativeCreated()
         val handle = state.nativeHandle ?: return
         val width = view.drawableWidth.toInt()
         val height = view.drawableHeight.toInt()
@@ -194,69 +223,40 @@ actual fun Live2D(
         }
     }
 
-    Box(
-        modifier = modifier
-            .pointerInput(state) {
-                detectTapGestures(
-                    onPress = { offset ->
-                        state.onTouch(offset.x, offset.y, 0)
-                        state.onDrag(offset.x, offset.y)
-                        val released = tryAwaitRelease()
-                        if (released) {
-                            state.resetDrag()
-                            state.onTouch(offset.x, offset.y, 2)
-                            val hit = state.hitTest(offset.x, offset.y)
-                            if (!hit.isNullOrEmpty()) {
-                                state.onHitAreaClick?.invoke(hit)
-                            }
-                        }
-                    }
-                )
-            }
-            .pointerInput(state) {
-                detectDragGestures(
-                    onDrag = { change, _ ->
-                        state.onTouch(change.position.x, change.position.y, 1)
-                        state.onDrag(change.position.x, change.position.y)
-                    },
-                    onDragEnd = {
-                        state.resetDrag()
-                    },
-                    onDragCancel = {
-                        state.resetDrag()
-                    }
-                )
-            }
-    ) {
-        UIKitView(
-            modifier = Modifier.fillMaxSize(),
-            factory = {
-                state.ensureNativeCreated()
-                val eaglContext = EAGLContext(kEAGLRenderingAPIOpenGLES2)
-                val glkView = GLKView(frame = CGRectZero.readValue(), context = eaglContext)
-                glkView.backgroundColor = UIColor.clearColor
-                glkView.drawableDepthFormat = GLKViewDrawableDepthFormat16
+    UIKitView(
+        factory = {
+            val eaglContext = EAGLContext(kEAGLRenderingAPIOpenGLES2)
+            state.eaglContext = eaglContext
+            state.ensureNativeCreated()
 
-                EAGLContext.setCurrentContext(eaglContext)
-                state.nativeHandle?.let { handle ->
-                    live2d_on_surface_created(handle)
-                }
+            val glkView = GLKView(frame = CGRectZero.readValue(), context = eaglContext)
+            glkView.userInteractionEnabled = false
+            glkView.backgroundColor = UIColor.clearColor
+            glkView.drawableDepthFormat = GLKViewDrawableDepthFormat16
 
-                val delegate = Live2DGLKViewDelegate(state)
-                state.glkDelegate = delegate
-                glkView.delegate = delegate
+            EAGLContext.setCurrentContext(eaglContext)
 
-                val displayLink = CADisplayLink.displayLinkWithTarget(
-                    target = glkView,
-                    selector = NSSelectorFromString("setNeedsDisplay")
-                )
-                displayLink.addToRunLoop(NSRunLoop.currentRunLoop, NSRunLoopCommonModes)
+            val delegate = Live2DGLKViewDelegate(state)
+            state.glkDelegate = delegate
+            glkView.delegate = delegate
 
-                glkView
-            },
-            onRelease = {
-                state.release()
-            }
+            val displayLink = CADisplayLink.displayLinkWithTarget(
+                target = glkView,
+                selector = NSSelectorFromString("setNeedsDisplay")
+            )
+            displayLink.addToRunLoop(NSRunLoop.currentRunLoop(), NSRunLoopCommonModes)
+            state.displayLink = displayLink
+
+            glkView
+        },
+        modifier = modifier,
+        onRelease = {
+            state.release()
+        },
+        properties = UIKitInteropProperties(
+            interactionMode = null,
+            isNativeAccessibilityEnabled = false,
+            placedAsOverlay = true,
         )
-    }
+    )
 }

@@ -23,11 +23,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerEventTimeoutCancellationException
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
+import com.xiaoyv.bangumi.shared.ui.component.live2d.BgmLive2DOverlay
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import coil3.ImageLoader
@@ -163,96 +165,7 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
     HandleShareContent(navigator)
 }
 
-@Composable
-private fun BoxScope.BgmLive2DOverlay(
-    live2dConfig: ComposeSetting.Live2dConfig,
-) {
-    if (!live2dConfig.enable) return
 
-    val inDark = currentInDarkTheme()
-    val modelName = remember(live2dConfig.shell, inDark) {
-        when (live2dConfig.shell) {
-            ComposeSetting.Live2dConfig.Shell.MUSUME -> "bangumi_musume_2026_parts_grouped"
-            ComposeSetting.Live2dConfig.Shell.BLACK_MUSUME -> "bangumi_black_musume_2026_parts"
-            else -> if (inDark) "bangumi_black_musume_2026_parts" else "bangumi_musume_2026_parts_grouped"
-        }
-    }
-    val live2DState = rememberLive2DState()
-
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-
-    Box(
-        modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .systemBarsPadding()
-            .padding(bottom = 80.dp)
-            .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-            .pointerInput(Unit) {
-                awaitEachGesture {
-                    val down = awaitFirstDown(requireUnconsumed = false)
-                    val downPosition = down.position
-                    val downTime = down.uptimeMillis
-                    val pointerId = down.id
-                    var isLongPress = false
-
-                    while (true) {
-                        val event = awaitPointerEvent(PointerEventPass.Main)
-                        val change = event.changes.firstOrNull { it.id == pointerId } ?: break
-
-                        if (!change.pressed) {
-                            break
-                        }
-
-                        val distance = (change.position - downPosition).getDistance()
-                        val duration = change.uptimeMillis - downTime
-
-                        // 如果在长按等待时间内移动距离超过 TouchSlop，说明是 Live2D 的交互滑动而非长按拖拽
-                        if (distance > viewConfiguration.touchSlop) {
-                            break
-                        }
-
-                        // 保持长按静止达到 LongPress 阈值
-                        if (duration >= viewConfiguration.longPressTimeoutMillis) {
-                            isLongPress = true
-                            break
-                        }
-                    }
-
-                    if (isLongPress) {
-                        while (true) {
-                            val event = awaitPointerEvent(PointerEventPass.Main)
-                            val change = event.changes.firstOrNull { it.id == pointerId } ?: break
-                            if (!change.pressed) break
-
-                            val dragAmount = change.positionChange()
-                            offsetX += dragAmount.x
-                            offsetY += dragAmount.y
-                            change.consume()
-                        }
-                    }
-                }
-            }
-            .width(live2dConfig.size.dp)
-            .aspectRatio(202 / 308f)
-    ) {
-        Live2D(
-            modifier = Modifier.fillMaxSize(),
-            state = live2DState
-        )
-    }
-
-    LaunchedEffect(modelName) {
-        val workDir = (FileKit.filesDir / "live2d").also {
-            it.createDirectories()
-        }
-
-        val targetFile = Res.copyToDir(resourcePath = "files/live2d/$modelName.zip", workDir)
-
-        live2DState.workDir = workDir.absolutePath()
-        live2DState.loadModel(targetFile.absolutePath(), modelName)
-    }
-}
 
 @Composable
 private fun HandleShareContent(navigator: Navigator) {

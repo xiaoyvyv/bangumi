@@ -1,8 +1,6 @@
 package com.xiaoyv.bangumi.shared.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -16,12 +14,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
@@ -55,8 +54,6 @@ actual class Live2DState actual constructor(actual var workDir: String) {
     actual var onHitAreaClick: ((hitArea: String) -> Unit)? = null
 
     private var currentModelInfo: Pair<String, String>? = null
-    var isSurfaceCreated = true
-        private set
 
     actual fun loadModel(zipFilePath: String, modelName: String) {
         val cleanZip = zipFilePath.trim()
@@ -101,8 +98,16 @@ actual class Live2DState actual constructor(actual var workDir: String) {
         return availableExpressions.ifEmpty { bridge.getExpressions() }
     }
 
-    fun onTouch(x: Float, y: Float, phase: Int) {
-        bridge.onTouch(x, y, phase)
+    actual fun onTouch(x: Float, y: Float, action: Int) {
+        bridge.onTouch(x, y, action)
+    }
+
+    actual fun onDrag(x: Float, y: Float) {
+        bridge.onDrag(x, y)
+    }
+
+    actual fun resetDrag() {
+        bridge.resetDrag()
     }
 
     fun release() {
@@ -118,9 +123,6 @@ actual fun Live2D(
     state: Live2DState,
     onHitAreaClick: ((hitArea: String) -> Unit)?
 ) {
-    val density = LocalDensity.current
-    var frameBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-
     SideEffect {
         if (onHitAreaClick != null) {
             state.onHitAreaClick = onHitAreaClick
@@ -137,17 +139,11 @@ actual fun Live2D(
         modifier = modifier
             .pointerInput(state) {
                 detectTapGestures(
-                    onPress = { offset ->
-                        state.onTouch(offset.x, offset.y, 0)
-                        state.bridge.onDrag(offset.x, offset.y)
-                        val released = tryAwaitRelease()
-                        if (released) {
-                            state.bridge.resetDrag()
-                            state.onTouch(offset.x, offset.y, 2)
-                            val hit = state.hitTest(offset.x, offset.y)
-                            if (!hit.isNullOrEmpty()) {
-                                state.onHitAreaClick?.invoke(hit)
-                            }
+                    onTap = { offset ->
+                        state.onTouch(offset.x, offset.y, 2)
+                        val hit = state.hitTest(offset.x, offset.y)
+                        if (!hit.isNullOrEmpty()) {
+                            state.onHitAreaClick?.invoke(hit)
                         }
                     }
                 )
@@ -155,34 +151,37 @@ actual fun Live2D(
             .pointerInput(state) {
                 detectDragGestures(
                     onDrag = { change, _ ->
-                        state.onTouch(change.position.x, change.position.y, 1)
-                        state.bridge.onDrag(change.position.x, change.position.y)
+                        state.onDrag(change.position.x, change.position.y)
                     },
                     onDragEnd = {
-                        state.bridge.resetDrag()
+                        state.resetDrag()
                     },
                     onDragCancel = {
-                        state.bridge.resetDrag()
+                        state.resetDrag()
                     }
                 )
             }
             .onPointerEvent(PointerEventType.Move) { event ->
                 val position = event.changes.firstOrNull()?.position
                 if (position != null) {
-                    state.bridge.onDrag(position.x, position.y)
+                    state.onDrag(position.x, position.y)
                 }
             }
             .onPointerEvent(PointerEventType.Exit) {
-                state.bridge.resetDrag()
+                state.resetDrag()
             }
     ) {
-        val widthPx = with(density) { constraints.maxWidth.coerceAtLeast(1) }
-        val heightPx = with(density) { constraints.maxHeight.coerceAtLeast(1) }
+        val widthPx = constraints.maxWidth.coerceAtLeast(1)
+        val heightPx = constraints.maxHeight.coerceAtLeast(1)
+
+        val currentImage = remember(widthPx, heightPx) {
+            BufferedImage(widthPx, heightPx, BufferedImage.TYPE_INT_ARGB_PRE)
+        }
+        var frameBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
 
         LaunchedEffect(state, widthPx, heightPx) {
             val pixelCount = widthPx * heightPx
             val pixelBuffer = IntArray(pixelCount)
-            val currentImage = BufferedImage(widthPx, heightPx, BufferedImage.TYPE_INT_ARGB_PRE)
 
             while (isActive) {
                 val ok = withContext(Dispatchers.Default) {

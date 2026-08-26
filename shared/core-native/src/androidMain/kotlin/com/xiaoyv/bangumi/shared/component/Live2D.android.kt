@@ -13,6 +13,10 @@ import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.view.TextureView
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
@@ -20,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.viewinterop.AndroidView
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
@@ -54,6 +59,24 @@ actual class Live2DState actual constructor(actual var workDir: String) {
     actual val availableExpressions: List<String> get() = _availableExpressions
 
     actual var onHitAreaClick: ((hitArea: String) -> Unit)? = null
+
+    actual fun onTouch(x: Float, y: Float, action: Int) {
+        textureView?.queueEvent {
+            bridge.onTouch(x, y, action)
+        }
+    }
+
+    actual fun onDrag(x: Float, y: Float) {
+        textureView?.queueEvent {
+            bridge.onDrag(x, y)
+        }
+    }
+
+    actual fun resetDrag() {
+        textureView?.queueEvent {
+            bridge.resetDrag()
+        }
+    }
 
     private var currentModelInfo: Pair<String, String>? = null
     var isSurfaceCreated = false
@@ -183,32 +206,6 @@ class Live2DTextureView(
 
     fun queueEvent(runnable: () -> Unit) {
         renderThread?.queueEvent(runnable)
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> queueEvent {
-                state.bridge.onTouch(x, y, 0)
-                state.bridge.onDrag(x, y)
-            }
-            MotionEvent.ACTION_MOVE -> queueEvent {
-                state.bridge.onTouch(x, y, 1)
-                state.bridge.onDrag(x, y)
-            }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                queueEvent {
-                    state.bridge.resetDrag()
-                    state.bridge.onTouch(x, y, 2)
-                    val hit = state.bridge.hitTest(x, y)
-                    if (!hit.isNullOrEmpty()) {
-                        post { state.onHitAreaClick?.invoke(hit) }
-                    }
-                }
-            }
-        }
-        return true
     }
 }
 

@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class ComposeSetting(
-    @SerialName("v") val live2d: Live2dConfig = Live2dConfig.Default,
+    @SerialName("live2d") val live2d: Live2dConfig = Live2dConfig.Default,
     @SerialName("ui") val ui: UIConfig = UIConfig.Default,
     @SerialName("homeTab") val homeTab: HomeTabConfig = HomeTabConfig.Default,
     @SerialName("network") val network: NetworkConfig = NetworkConfig.Default,
@@ -38,8 +38,11 @@ data class ComposeSetting(
 
         object Size {
             const val SIZE_50 = 50
+            const val SIZE_75 = 75
             const val SIZE_100 = 100
+            const val SIZE_125 = 125
             const val SIZE_150 = 150
+            const val SIZE_175 = 175
             const val SIZE_200 = 200
         }
 
