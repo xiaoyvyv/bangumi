@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.rounded.BookmarkAdd
 import androidx.compose.material.icons.rounded.BookmarkAdded
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -26,19 +27,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.drop
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_image
-import com.xiaoyv.bangumi.core_resource.resources.ic_add_index
 import com.xiaoyv.bangumi.core_resource.resources.subject_action_more
 import com.xiaoyv.bangumi.features.index.page.dialog.IndexDialog
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailEvent
@@ -58,6 +59,7 @@ import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.MonoDetailTab
 import com.xiaoyv.bangumi.shared.core.types.MonoType
+import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
@@ -75,16 +77,14 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -178,16 +178,22 @@ private fun MonoDetailScreen(
 
                         IconButton(
                             onClick = {
-                                if (sharedState.isLogin) sheetDialogState.show() else {
-                                    onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SignIn))
-                                }
+                                onUiEvent(
+                                    MonoDetailEvent.UI.OnNavScreen(
+                                        Screen.PublishMain(
+                                            type = if (type == MonoType.PERSON) PublishPostType.COMMENT_PERSON else PublishPostType.COMMENT_CHARACTER,
+                                            targetId = mono.id.toString()
+                                        )
+                                    )
+                                )
                             }
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_add_index),
+                                imageVector = BgmIcons.Edit,
                                 contentDescription = stringResource(Res.string.subject_action_more)
                             )
                         }
+
 
                         IconButton(onClick = { onActionEvent(MonoDetailEvent.Action.OnToggleBookmarkMono) }) {
                             Icon(
@@ -199,12 +205,19 @@ private fun MonoDetailScreen(
 
                         DropMenuActionButton(
                             options = rememberButtonTypeMenu {
+                                add(ButtonType.AddToIndex)
                                 add(ButtonType.Share)
                                 add(ButtonType.CopyLink)
                                 add(ButtonType.OpenInBrowser)
                             }
                         ) { item ->
                             when (item.type) {
+                                ButtonType.AddToIndex -> {
+                                    if (sharedState.isLogin) sheetDialogState.show() else {
+                                        onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SignIn))
+                                    }
+                                }
+
                                 ButtonType.Share -> actionHandler.shareContent(mono.shareUrl(type))
                                 ButtonType.OpenInBrowser -> actionHandler.openInBrowser(mono.shareUrl(type))
                                 ButtonType.CopyLink -> actionHandler.copyContent(mono.shareUrl(type))

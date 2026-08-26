@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.xiaoyv.bangumi.features.timeline.add"
+        namespace = "com.xiaoyv.bangumi.features.publish.main"
     }
     sourceSets {
         commonMain.dependencies {

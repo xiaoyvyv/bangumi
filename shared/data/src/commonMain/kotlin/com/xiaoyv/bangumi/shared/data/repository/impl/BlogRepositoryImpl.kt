@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
+import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogEntryRequest
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
@@ -47,6 +48,20 @@ class BlogRepositoryImpl(
                 content = content,
                 turnstileToken = turnstile,
                 replyTo = replyTo ?: 0
+            )
+        )
+    }
+
+    override suspend fun submitCreateBlog(
+        title: String,
+        content: String,
+        turnstile: String
+    ): Result<ComposeId> = client.requestNextBlogApi {
+        createBlogEntry(
+            param = CreateBlogEntryRequest(
+                title = title,
+                content = content,
+                turnstileToken = turnstile
             )
         )
     }

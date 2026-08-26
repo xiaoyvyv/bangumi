@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
+import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogEntryRequest
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
@@ -26,6 +27,12 @@ interface BlogApi {
         @Path("entryID") entryID: Long,
         @Body param: CreateCommentParam? = null
     ): ComposeId
+
+    /**
+     * 发布日志
+     */
+    @POST("p1/blogs")
+    suspend fun createBlogEntry(@Body param: CreateBlogEntryRequest): ComposeId
 
     /**
      * 删除日志的吐槽

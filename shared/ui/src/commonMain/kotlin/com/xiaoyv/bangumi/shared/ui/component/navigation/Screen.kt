@@ -6,6 +6,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
+import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
@@ -35,7 +36,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.Main::class, Screen.Main.serializer())
             subclass(Screen.SignIn::class, Screen.SignIn.serializer())
             subclass(Screen.Timeline::class, Screen.Timeline.serializer())
-            subclass(Screen.TimelineAdd::class, Screen.TimelineAdd.serializer())
+            subclass(Screen.PublishMain::class, Screen.PublishMain.serializer())
             subclass(Screen.TimelineDetail::class, Screen.TimelineDetail.serializer())
             subclass(Screen.RaKuen::class, Screen.RaKuen.serializer())
             subclass(Screen.Tracking::class, Screen.Tracking.serializer())
@@ -119,7 +120,11 @@ sealed class Screen(
     data object Timeline : Screen(SCREEN_ROUTE_TIMELINE)
 
     @Serializable
-    data object TimelineAdd : Screen(SCREEN_ROUTE_TIMELINE_ADD)
+    data class PublishMain(
+        @PublishPostType val type: Int,
+        val targetId: String = "",
+        val title: String = "",
+    ) : Screen(SCREEN_ROUTE_PUBLISH_MAIN)
 
     @Serializable
     data class TimelineDetail(val timeline: ComposeTimeline) : Screen(SCREEN_ROUTE_TIMELINE_DETAIL)

@@ -43,6 +43,7 @@ import com.xiaoyv.bangumi.features.pixiv.user.setting.pixivUserSettingModule
 import com.xiaoyv.bangumi.features.preivew.album.previewAlbumModule
 import com.xiaoyv.bangumi.features.preivew.gallery.previewTextModule
 import com.xiaoyv.bangumi.features.preivew.main.previewMainModule
+import com.xiaoyv.bangumi.features.publish.main.publishMainModule
 import com.xiaoyv.bangumi.features.report.reportModule
 import com.xiaoyv.bangumi.features.search.input.searchInputModule
 import com.xiaoyv.bangumi.features.search.result.searchResultModule
@@ -63,7 +64,6 @@ import com.xiaoyv.bangumi.features.subject.detail.subjectDetailModule
 import com.xiaoyv.bangumi.features.subject.page.subjectPageModule
 import com.xiaoyv.bangumi.features.tag.detail.tagDetailModule
 import com.xiaoyv.bangumi.features.tag.page.tagPageModule
-import com.xiaoyv.bangumi.features.timeline.add.timelineAddModule
 import com.xiaoyv.bangumi.features.timeline.detail.timelineDetailModule
 import com.xiaoyv.bangumi.features.timeline.page.timelinePageModule
 import com.xiaoyv.bangumi.features.topic.detail.topicDetailModule
@@ -127,7 +127,7 @@ internal val navigationModule = module {
         subjectPageModule,
         tagPageModule,
         timelinePageModule,
-        timelineAddModule,
+        publishMainModule,
         timelineDetailModule,
         topicPageModule,
         receiveImageModule,

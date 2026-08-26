@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.features.timeline.add
+package com.xiaoyv.bangumi.features.publish.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,13 +23,14 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_add
 import com.xiaoyv.bangumi.core_resource.resources.timeline_add_placeholder
 import com.xiaoyv.bangumi.core_resource.resources.timeline_add_publish
-import com.xiaoyv.bangumi.features.timeline.add.business.TimelineAddEvent
-import com.xiaoyv.bangumi.features.timeline.add.business.TimelineAddSideEffect
-import com.xiaoyv.bangumi.features.timeline.add.business.TimelineAddState
-import com.xiaoyv.bangumi.features.timeline.add.business.TimelineAddViewModel
+import com.xiaoyv.bangumi.features.publish.main.business.PublishMainEvent
+import com.xiaoyv.bangumi.features.publish.main.business.PublishMainSideEffect
+import com.xiaoyv.bangumi.features.publish.main.business.PublishMainState
+import com.xiaoyv.bangumi.features.publish.main.business.PublishMainViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.ImePanelColumn
 import com.xiaoyv.bangumi.shared.core.utils.rememberImePanelState
@@ -53,8 +54,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
-fun TimelineAddRoute(
-    viewModel: TimelineAddViewModel,
+fun PublishMainRoute(
+    viewModel: PublishMainViewModel,
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -62,36 +63,38 @@ fun TimelineAddRoute(
 
     viewModel.collectBaseSideEffect {
         when (it) {
-            is TimelineAddSideEffect.OnCreateTimelineSuccess -> onNavUp()
+            is PublishMainSideEffect.OnCreatePostSuccess -> onNavUp()
         }
     }
 
-    TimelineAddScreen(
+    PublishMainScreen(
         uiState = uiState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = { event ->
             when (event) {
-                is TimelineAddEvent.UI.OnNavUp -> onNavUp()
-                is TimelineAddEvent.UI.OnNavScreen -> onNavScreen(event.screen)
+                is PublishMainEvent.UI.OnNavUp -> onNavUp()
+                is PublishMainEvent.UI.OnNavScreen -> onNavScreen(event.screen)
             }
         },
     )
 }
 
 @Composable
-private fun TimelineAddScreen(
-    uiState: UiState<TimelineAddState>,
-    onUiEvent: (TimelineAddEvent.UI) -> Unit,
-    onActionEvent: (TimelineAddEvent.Action) -> Unit
+private fun PublishMainScreen(
+    uiState: UiState<PublishMainState>,
+    onUiEvent: (PublishMainEvent.UI) -> Unit,
+    onActionEvent: (PublishMainEvent.Action) -> Unit
 ) {
     val state = uiState.data
+
+    val title = stringResource(state.title)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = stringResource(Res.string.timeline_add),
-                onNavigationClick = { onUiEvent(TimelineAddEvent.UI.OnNavUp) },
+                title = title,
+                onNavigationClick = { onUiEvent(PublishMainEvent.UI.OnNavUp) },
                 actions = {
                     Button(
                         modifier = Modifier
@@ -100,7 +103,7 @@ private fun TimelineAddScreen(
                         enabled = state.canPublish,
                         shape = MaterialTheme.shapes.small,
                         contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 6.dp),
-                        onClick = { onActionEvent(TimelineAddEvent.Action.OnPublish) },
+                        onClick = { onActionEvent(PublishMainEvent.Action.OnPublish) },
                     ) {
                         Text(
                             text = stringResource(Res.string.timeline_add_publish),
@@ -115,10 +118,10 @@ private fun TimelineAddScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            onRefresh = { loading -> onActionEvent(TimelineAddEvent.Action.OnRefresh(loading)) },
+            onRefresh = { loading -> onActionEvent(PublishMainEvent.Action.OnRefresh(loading)) },
             uiState = uiState,
         ) { currentState ->
-            TimelineAddScreenContent(
+            PublishMainScreenContent(
                 state = currentState,
                 onUiEvent = onUiEvent,
                 onActionEvent = onActionEvent
@@ -129,22 +132,36 @@ private fun TimelineAddScreen(
 }
 
 @Composable
-private fun TimelineAddScreenContent(
-    state: TimelineAddState,
-    onUiEvent: (TimelineAddEvent.UI) -> Unit,
-    onActionEvent: (TimelineAddEvent.Action) -> Unit
+private fun PublishMainScreenContent(
+    state: PublishMainState,
+    onUiEvent: (PublishMainEvent.UI) -> Unit,
+    onActionEvent: (PublishMainEvent.Action) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxWidth()) {
+            if (state.needsTitle) {
+                BmgTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = textFieldTransparentColors(),
+                    value = state.subject,
+                    autoFocus = true,
+                    maxLines = 1,
+                    contentPadding = PaddingValues(ContentMargin),
+                    onValueChange = { onActionEvent(PublishMainEvent.Action.OnTitleChange(it)) },
+                    placeholder = { Text(text = stringResource(Res.string.global_title)) },
+                )
+                HorizontalDivider(modifier = Modifier.padding(horizontal = ContentMargin))
+            }
+
             BmgTextField(
                 modifier = Modifier.fillMaxWidth(),
                 colors = textFieldTransparentColors(),
                 value = state.content,
-                autoFocus = true,
+                autoFocus = state.needsTitle.not(),
                 maxLines = 20,
                 minLines = 10,
                 contentPadding = PaddingValues(ContentMargin),
-                onValueChange = { onActionEvent(TimelineAddEvent.Action.OnContentChange(it)) },
+                onValueChange = { onActionEvent(PublishMainEvent.Action.OnContentChange(it)) },
                 placeholder = { Text(text = stringResource(Res.string.timeline_add_placeholder)) },
             )
 
@@ -156,13 +173,13 @@ private fun TimelineAddScreenContent(
                     url = WebConstant.URL_BGM_TURNSTILE,
                     callback = "bangumi://",
                     onToken = {
-                        onActionEvent(TimelineAddEvent.Action.OnReceiveTurnstileToken(it))
+                        onActionEvent(PublishMainEvent.Action.OnReceiveTurnstileToken(it))
                     }
                 )
             }
         }
 
-        TimelineAddToolbar(
+        PublishMainToolbar(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
@@ -175,15 +192,15 @@ private fun TimelineAddScreenContent(
 }
 
 @Composable
-fun TimelineAddToolbar(
+fun PublishMainToolbar(
     modifier: Modifier,
-    state: TimelineAddState,
-    onUiEvent: (TimelineAddEvent.UI) -> Unit,
-    onActionEvent: (TimelineAddEvent.Action) -> Unit
+    state: PublishMainState,
+    onUiEvent: (PublishMainEvent.UI) -> Unit,
+    onActionEvent: (PublishMainEvent.Action) -> Unit
 ) {
     val launcher = rememberFilePickerLauncher(FileKitType.Image) {
         if (it != null) {
-            onActionEvent(TimelineAddEvent.Action.OnImagePickResult(it))
+            onActionEvent(PublishMainEvent.Action.OnImagePickResult(it))
         }
     }
 
@@ -206,7 +223,7 @@ fun TimelineAddToolbar(
                 showEmojiPanel = showEmojiPanel,
                 showPreviewPanel = showPreviewPanel,
                 value = state.content,
-                onValueChange = { onActionEvent(TimelineAddEvent.Action.OnContentChange(it)) }
+                onValueChange = { onActionEvent(PublishMainEvent.Action.OnContentChange(it)) }
             )
         }
     ) {
@@ -217,7 +234,7 @@ fun TimelineAddToolbar(
                 .fillMaxWidth()
                 .padding(ContentMarginHalf),
             value = state.content,
-            onValueChange = { onActionEvent(TimelineAddEvent.Action.OnContentChange(it)) },
+            onValueChange = { onActionEvent(PublishMainEvent.Action.OnContentChange(it)) },
             onPickImage = { launcher.launch() },
             showEmojiPanel = panelState.showPanel && showEmojiPanel,
             onToggleEmojiPanel = {
@@ -240,11 +257,11 @@ fun TimelineAddToolbar(
 
 @Preview
 @Composable
-private fun PreviewTimelineAddScreenScreen() {
+private fun PreviewPublishMainScreenScreen() {
     PreviewColumn(modifier = Modifier.fillMaxSize()) {
-        TimelineAddScreen(
+        PublishMainScreen(
             uiState = UiState(
-                TimelineAddState()
+                PublishMainState(title = Res.string.timeline_add)
             ),
             onUiEvent = {},
             onActionEvent = {}

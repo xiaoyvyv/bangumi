@@ -5,7 +5,9 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListGroupType
 import com.xiaoyv.bangumi.shared.core.utils.requireNoError
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
+import com.xiaoyv.bangumi.shared.data.model.request.CreateGroupTopicRequest
 import com.xiaoyv.bangumi.shared.data.model.request.list.group.ListGroupParam
+import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.repository.GroupRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
@@ -57,4 +59,20 @@ class GroupRepositoryImpl(
         }
         client.nextGroupApi.getGroup(name)
     }
+
+    override suspend fun submitCreateGroupTopic(
+        groupName: String,
+        title: String,
+        content: String,
+        turnstile: String
+    ): Result<ComposeId> = client.requestNextGroupApi {
+        createGroupTopic(
+            groupName = groupName,
+            createGroupTopicRequest = CreateGroupTopicRequest(
+                title = title,
+                content = content,
+                turnstileToken = turnstile
+            )
+        )
+    }.map { ComposeId(it.id) }
 }

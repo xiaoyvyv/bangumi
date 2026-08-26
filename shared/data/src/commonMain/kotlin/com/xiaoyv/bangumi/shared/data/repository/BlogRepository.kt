@@ -21,4 +21,10 @@ interface BlogRepository {
         turnstile: String,
         replyTo: Long? = null
     ): Result<ComposeId>
+
+    suspend fun submitCreateBlog(
+        title: String,
+        content: String,
+        turnstile: String,
+    ): Result<ComposeId>
 }

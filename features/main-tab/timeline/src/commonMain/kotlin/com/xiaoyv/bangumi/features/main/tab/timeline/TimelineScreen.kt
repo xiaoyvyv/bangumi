@@ -22,6 +22,7 @@ import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineState
 import com.xiaoyv.bangumi.features.main.tab.timeline.business.TimelineViewModel
 import com.xiaoyv.bangumi.features.timeline.page.TimelinePageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.core.types.list.ListTimelineType
@@ -89,7 +90,7 @@ private fun TimelineScreen(
                         IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
                             Icon(BgmIcons.Search, contentDescription = null)
                         }
-                        IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.TimelineAdd)) }) {
+                        IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.PublishMain(PublishPostType.TIMELINE_STATUS))) }) {
                             Icon(BgmIcons.Create, contentDescription = null)
                         }
                         DropMenuActionButton(

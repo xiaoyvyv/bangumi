@@ -6,6 +6,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.action_report
+import com.xiaoyv.bangumi.core_resource.resources.global_add_to_index
 import com.xiaoyv.bangumi.core_resource.resources.global_copy
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_link
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_name
@@ -23,6 +24,7 @@ enum class ButtonType(val label: StringResource) {
     OpenInBrowser(Res.string.global_open_browser),
     CopyLink(Res.string.global_copy_link),
     Netabare(Res.string.global_netabare),
+    AddToIndex(Res.string.global_add_to_index),
     Reaction(Res.string.global_reaction),
     Copy(Res.string.global_copy),
     CopyName(Res.string.global_copy_name),

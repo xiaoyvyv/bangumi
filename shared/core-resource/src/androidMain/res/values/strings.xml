@@ -232,6 +232,7 @@
     <string name="global_grid">网格</string>
     <string name="global_show">显示</string>
     <string name="global_hide">隐藏</string>
+    <string name="global_title">标题</string>
     <string name="global_no_content">没有内容哦~</string>
     <string name="global_empty_comments_tag">沙发待领取</string>
     <string name="global_empty_comments_title">还没有讨论</string>
@@ -243,6 +244,7 @@
     <string name="global_set_wallpaper">设置壁纸</string>
     <string name="global_set_wallpaper_success">设置壁纸成功</string>
     <string name="global_choose">请选择</string>
+    <string name="global_add_to_index">添加到目录</string>
 
     <string name="emoji_tv">TV</string>
     <string name="emoji_tv_1">TV-1</string>
@@ -570,6 +572,11 @@
     <string name="timeline_add_visibility_part">部分可见</string>
     <string name="timeline_add_visibility_none">不给谁看</string>
     <string name="timeline_add_sync_none">未选择</string>
+
+    <string name="publish_title_blog">发布日志</string>
+    <string name="publish_title_group">发表小组讨论</string>
+    <string name="publish_title_subject">发表条目讨论</string>
+    <string name="publish_title_comment">发表我的评论</string>
 
 
     <string name="topic_title">详情</string>

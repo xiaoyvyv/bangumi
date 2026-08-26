@@ -6,6 +6,7 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.CreateGroupTopicRequest
 import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
@@ -161,4 +162,20 @@ class TopicRepositoryImpl(
             )
         )
     }
+
+    override suspend fun submitCreateSubjectTopic(
+        subjectId: Int,
+        title: String,
+        content: String,
+        turnstile: String
+    ): Result<ComposeId> = client.requestNextSubjectApi {
+        createSubjectTopic(
+            subjectID = subjectId,
+            createGroupTopicRequest = CreateGroupTopicRequest(
+                title = title,
+                content = content,
+                turnstileToken = turnstile
+            )
+        )
+    }.map { ComposeId(it.id) }
 }

@@ -25,4 +25,11 @@ interface TopicRepository {
     suspend fun submitSubjectComment(topicId: Long, content: String, turnstile: String, replyTo: Long? = null): Result<ComposeId>
 
     suspend fun submitSubjectEpisodeComment(episodeId: Long, content: String, turnstile: String, replyTo: Long? = null): Result<ComposeId>
+
+    suspend fun submitCreateSubjectTopic(
+        subjectId: Int,
+        title: String,
+        content: String,
+        turnstile: String,
+    ): Result<ComposeId>
 }
