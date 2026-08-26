@@ -209,7 +209,7 @@ fun MonoDetailMainScreen(
                         onActionEvent(MonoDetailEvent.Action.OnReactionClick(item, it))
                     }
                 )
-                HorizontalDivider()
+                if (index != state.comments.lastIndex) HorizontalDivider()
             }
 
             itemKey(ItemNoMore) {

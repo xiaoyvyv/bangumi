@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.MonoType
+import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
@@ -34,9 +35,8 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax
 
@@ -82,15 +82,27 @@ class MonoDetailViewModel(
         .cachedIn(viewModelScope)
 
     init {
-        personalStateStore.onMonoUpdated
-            .filter { it.id == args.id }
-            .onEach { event ->
-                intent {
-                    reduceData { state.copy(mono = event.data) }
-                    saveCache()
+        viewModelScope.launch {
+            personalStateStore.onMonoUpdated
+                .filter { it.id == args.id }
+                .collect { event ->
+                    intent {
+                        reduceData { state.copy(mono = event.data) }
+                        saveCache()
+                    }
                 }
-            }
-            .launchIn(viewModelScope)
+        }
+
+        viewModelScope.launch {
+            personalStateStore.publishSuccess
+                .filter {
+                    it.type == PublishPostType.COMMENT_CHARACTER && args.type == MonoType.CHARACTER && it.publishAttachId.toLongOrNull() == args.id
+                            || it.type == PublishPostType.COMMENT_PERSON && args.type == MonoType.PERSON && it.publishAttachId.toLongOrNull() == args.id
+                }
+                .collect {
+                    onRefreshComments()
+                }
+        }
     }
 
     override fun initBaseState() = readViewModelCache(
@@ -196,6 +208,16 @@ class MonoDetailViewModel(
             .onSuccess { tags ->
                 animePicTag.update { tags.joinToString("||") }
             }
+    }
+
+    private fun onRefreshComments() = intent {
+        if (args.type == MonoType.CHARACTER) {
+            monoRepository.fetchMonoComments(args.id, MonoType.CHARACTER)
+        } else {
+            monoRepository.fetchMonoComments(args.id, MonoType.PERSON)
+        }.onSuccess {
+            reduceData { state.copy(comments = it.toPersistentList()) }
+        }
     }
 
 

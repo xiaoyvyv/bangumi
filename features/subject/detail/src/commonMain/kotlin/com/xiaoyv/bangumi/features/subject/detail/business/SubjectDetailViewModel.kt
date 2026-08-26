@@ -35,8 +35,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax
 
@@ -57,19 +56,19 @@ class SubjectDetailViewModel(
 ) : BaseViewModel<SubjectDetailState, SubjectDetailSideEffect, SubjectDetailEvent.Action>() {
 
 
-
     private val cacheKey = stringPreferencesKey(name = "subject_detail_" + args.subjectId)
 
     init {
-        personalStateStore.onSubjectUpdated
-            .filter { it.id == args.subjectId }
-            .onEach { event ->
-                intent {
-                    reduceData { state.copy(subject = event.data) }
-                    saveCache()
+        viewModelScope.launch {
+            personalStateStore.onSubjectUpdated
+                .filter { it.id == args.subjectId }
+                .collect { event ->
+                    intent {
+                        reduceData { state.copy(subject = event.data) }
+                        saveCache()
+                    }
                 }
-            }
-            .launchIn(viewModelScope)
+        }
     }
 
     override fun initBaseState() = readViewModelCache(

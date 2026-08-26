@@ -20,8 +20,7 @@ import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.Syntax
 
 /**
@@ -38,12 +37,13 @@ class TimelineDetailViewModel(
 ) : BaseViewModel<TimelineDetailState, TimelineDetailSideEffect, TimelineDetailEvent.Action>() {
 
     init {
-        personalStateStore.onTimelineUpdated
-            .filter { it.id == args.timeline.id }
-            .onEach { event ->
-                intent { reduceData { state.copy(timeline = event.data) } }
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            personalStateStore.onTimelineUpdated
+                .filter { it.id == args.timeline.id }
+                .collect { event ->
+                    intent { reduceData { state.copy(timeline = event.data) } }
+                }
+        }
     }
 
     override fun initBaseState(): UiState<TimelineDetailState> = UiState(
