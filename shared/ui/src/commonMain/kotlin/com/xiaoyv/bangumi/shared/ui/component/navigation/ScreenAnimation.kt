@@ -20,11 +20,11 @@ private val IosTransitionEasing = CubicBezierEasing(0.2833f, 0.99f, 0.31833f, 0.
 private val SPEC_OFFSET = tween<IntOffset>(DURATION, easing = IosTransitionEasing)
 private val SPEC_FLOAT = tween<Float>(DURATION, easing = IosTransitionEasing)
 
-private fun AnimatedContentTransitionScope<Scene<NavKey>>.initialStateIsNavKey(screen: KClass<*>): Boolean {
+internal fun AnimatedContentTransitionScope<Scene<NavKey>>.initialStateIsNavKey(screen: KClass<*>): Boolean {
     return initialState.key.toString().startsWith(screen.simpleName.orEmpty())
 }
 
-private fun AnimatedContentTransitionScope<Scene<NavKey>>.targetStateIsNavKey(screen: KClass<*>): Boolean {
+internal fun AnimatedContentTransitionScope<Scene<NavKey>>.targetStateIsNavKey(screen: KClass<*>): Boolean {
     return targetState.key.toString().startsWith(screen.simpleName.orEmpty())
 }
 

@@ -31,15 +31,27 @@ fun ScreenNavHost(
         ),
         entryProvider = koinEntryProvider(),
         sceneStrategies = listOf(listDetailStrategy),
-        transitionSpec = when (settings.ui.navigationAnimation) {
-            SettingNavigationAnimation.FADE -> FadeNavTransitions.transitionSpec
-            SettingNavigationAnimation.SLIDE -> DefaultNavTransitions.transitionSpec
-            else -> EmptyNavTransitions.transitionSpec
+        transitionSpec = {
+            if (initialStateIsNavKey(Screen.Splash::class)) {
+                FadeNavTransitions.transitionSpec(this)
+            } else {
+                when (settings.ui.navigationAnimation) {
+                    SettingNavigationAnimation.FADE -> FadeNavTransitions.transitionSpec(this)
+                    SettingNavigationAnimation.SLIDE -> DefaultNavTransitions.transitionSpec(this)
+                    else -> EmptyNavTransitions.transitionSpec(this)
+                }
+            }
         },
-        popTransitionSpec = when (settings.ui.navigationAnimation) {
-            SettingNavigationAnimation.FADE -> FadeNavTransitions.popTransitionSpec
-            SettingNavigationAnimation.SLIDE -> DefaultNavTransitions.popTransitionSpec
-            else -> EmptyNavTransitions.popTransitionSpec
+        popTransitionSpec = {
+            if (initialStateIsNavKey(Screen.Splash::class)) {
+                FadeNavTransitions.popTransitionSpec(this)
+            } else {
+                when (settings.ui.navigationAnimation) {
+                    SettingNavigationAnimation.FADE -> FadeNavTransitions.popTransitionSpec(this)
+                    SettingNavigationAnimation.SLIDE -> DefaultNavTransitions.popTransitionSpec(this)
+                    else -> EmptyNavTransitions.popTransitionSpec(this)
+                }
+            }
         }
     )
 }
