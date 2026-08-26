@@ -6,6 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
+import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
@@ -16,9 +17,12 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.update
 
 val LocalPersonalState = staticCompositionLocalOf { PersonalState() }
@@ -26,6 +30,51 @@ val LocalPersonalState = staticCompositionLocalOf { PersonalState() }
 @ReadOnlyComposable
 @Composable
 fun currentPersonalState() = LocalPersonalState.current
+
+/**
+ * [AppEvent]
+ *
+ * 全局应用事件
+ */
+sealed interface AppEvent {
+    /**
+     * 发布成功事件
+     *
+     * @param type 发布类型 [PublishPostType]
+     * @param publishAttachId 目标 ID（如小组 ID、条目 ID 等）
+     * @param publishSuccessId 发布成功后的内容 ID（如帖子 ID、评论 ID 等）
+     */
+    data class PublishSuccess(
+        @PublishPostType val type: Int,
+        val publishAttachId: String,
+        val publishSuccessId: String
+    ) : AppEvent
+
+    /**
+     * 通用刷新事件
+     */
+    data object Refresh : AppEvent
+
+    /**
+     * 条目数据更新事件
+     */
+    data class SubjectUpdated(val id: Long, val data: ComposeSubject) : AppEvent
+
+    /**
+     * 角色/人物数据更新事件
+     */
+    data class MonoUpdated(val id: Long, val data: ComposeMono) : AppEvent
+
+    /**
+     * 动态/时间线数据更新事件
+     */
+    data class TimelineUpdated(val id: Long, val data: ComposeTimeline) : AppEvent
+
+    /**
+     * 动态/时间线数据删除事件
+     */
+    data class TimelineDeleted(val id: Long) : AppEvent
+}
 
 /**
  * [PersonalState]
@@ -53,6 +102,7 @@ data class PersonalState(
 @Stable
 class PersonalStateStore {
     private val _state = MutableStateFlow(PersonalState())
+    private val _events = MutableSharedFlow<AppEvent>(extraBufferCapacity = 64)
 
     /**
      * 全局个人状态 Flow
@@ -60,13 +110,50 @@ class PersonalStateStore {
     val state: StateFlow<PersonalState> = _state.asStateFlow()
 
     /**
+     * 全局事件 Flow
+     */
+    val events = _events.asSharedFlow()
+
+    /**
+     * 发布成功事件 Flow
+     */
+    val publishSuccess = events.filterIsInstance<AppEvent.PublishSuccess>()
+
+    /**
+     * 数据更新事件 Flow
+     */
+    val onSubjectUpdated = events.filterIsInstance<AppEvent.SubjectUpdated>()
+    val onMonoUpdated = events.filterIsInstance<AppEvent.MonoUpdated>()
+    val onTimelineUpdated = events.filterIsInstance<AppEvent.TimelineUpdated>()
+    val onTimelineDeleted = events.filterIsInstance<AppEvent.TimelineDeleted>()
+
+    /**
+     * 发送事件
+     */
+    suspend fun emitAppEvent(event: AppEvent) {
+        _events.emit(event)
+    }
+
+    /**
+     * 发送发布成功事件
+     */
+    fun emitPublishSuccess(
+        @PublishPostType type: Int,
+        publishAttachId: String,
+        publishSuccessId: String
+    ) {
+        _events.tryEmit(AppEvent.PublishSuccess(type, publishAttachId, publishSuccessId))
+    }
+
+    /**
      * 更新条目数据状态
      *
      * @param id 条目 ID
      * @param data 新的条目数据对象
      */
-    fun updateSubject(id: Long, data: ComposeSubject) {
+    fun emitSubjectUpdated(id: Long, data: ComposeSubject) {
         _state.update { it.copy(subjects = it.subjects.plus(id to data).toPersistentMap()) }
+        _events.tryEmit(AppEvent.SubjectUpdated(id, data))
     }
 
     /**
@@ -75,8 +162,9 @@ class PersonalStateStore {
      * @param id 角色/人物 ID
      * @param data 新的角色/人物数据对象
      */
-    fun updateMono(id: Long, data: ComposeMono) {
+    fun emitMonoUpdated(id: Long, data: ComposeMono) {
         _state.update { it.copy(monos = it.monos.plus(id to data).toPersistentMap()) }
+        _events.tryEmit(AppEvent.MonoUpdated(id, data))
     }
 
     /**
@@ -85,22 +173,24 @@ class PersonalStateStore {
      * @param id 动态 ID
      * @param data 新的动态数据对象
      */
-    fun updateTimeline(id: Long, data: ComposeTimeline) {
+    fun emitTimelineUpdated(id: Long, data: ComposeTimeline) {
         _state.update { it.copy(timelines = it.timelines.plus(id to data).toPersistentMap()) }
+        _events.tryEmit(AppEvent.TimelineUpdated(id, data))
     }
 
     /**
-     * 删除指定的动态/时间线数据
+     * 标记指定的动态/时间线数据为已删除
      *
      * @param id 动态 ID
      */
-    fun deleteTimeline(id: Long) {
+    fun emitTimelineDeleted(id: Long) {
         _state.update {
             it.copy(
                 timelines = it.timelines.minus(id).toPersistentMap(),
                 deletedTimelineIds = (it.deletedTimelineIds + id).toPersistentSet()
             )
         }
+        _events.tryEmit(AppEvent.TimelineDeleted(id))
     }
 
     /**
@@ -110,7 +200,7 @@ class PersonalStateStore {
      * @param episodeIds 变化的章节 ID 列表
      * @param type 新的章节收藏状态 [CollectionEpisodeType]
      */
-    fun updateCollectionEpisode(subject: ComposeSubject, episodeIds: List<Long>, @CollectionEpisodeType type: Int) {
+    fun emitSubjectEpisodeCollection(subject: ComposeSubject, episodeIds: List<Long>, @CollectionEpisodeType type: Int) {
         val episodes = subject.episodes.map {
             if (!episodeIds.contains(it.id)) it else it.copy(
                 collection = it.collection.copy(
@@ -119,7 +209,7 @@ class PersonalStateStore {
                 )
             )
         }
-        updateSubject(
+        emitSubjectUpdated(
             id = subject.id,
             data = subject.copy(
                 episodes = episodes.toPersistentList(),
@@ -136,8 +226,8 @@ class PersonalStateStore {
      * @param subject 条目数据对象
      * @param update 条目收藏更新请求参数 [CollectionSubjectUpdate]
      */
-    fun updateCollectionSubject(subject: ComposeSubject, update: CollectionSubjectUpdate) {
-        updateSubject(
+    fun emitSubjectCollection(subject: ComposeSubject, update: CollectionSubjectUpdate) {
+        emitSubjectUpdated(
             id = subject.id,
             data = subject.copy(
                 interest = subject.interest.copy(

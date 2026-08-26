@@ -7,19 +7,24 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.collections.immutable.toImmutableList
 
 fun MemoryPagingController<ComposeTimeline, Long>.bindTimelinePersonalState(
     scope: CoroutineScope,
     personalStateStore: PersonalStateStore,
 ): Job = scope.launch {
-    personalStateStore.state.collect { state ->
-        state.timelines.forEach { (id, timeline) -> replaceById(id, timeline) }
-        state.deletedTimelineIds.forEach { removeById(it) }
+    launch {
+        personalStateStore.onTimelineUpdated.collect { event ->
+            replaceById(event.id, event.data)
+        }
+    }
+    launch {
+        personalStateStore.onTimelineDeleted.collect { event ->
+            removeById(event.id)
+        }
     }
 }
 
@@ -27,10 +32,8 @@ fun MemoryPagingController<ComposeSubjectDisplay, Long>.bindSubjectDisplayPerson
     scope: CoroutineScope,
     personalStateStore: PersonalStateStore,
 ): Job = scope.launch {
-    personalStateStore.state.collect { state ->
-        state.subjects.forEach { (id, subject) ->
-            updateById(id) { display -> display.copy(subject = subject) }
-        }
+    personalStateStore.onSubjectUpdated.collect { event ->
+        updateById(event.id) { display -> display.copy(subject = event.data) }
     }
 }
 
@@ -38,16 +41,15 @@ fun MemoryPagingController<ComposeSubject, Long>.bindCollectionSubjectPersonalSt
     scope: CoroutineScope,
     personalStateStore: PersonalStateStore,
 ): Job = scope.launch {
-    personalStateStore.state.collect { state ->
-        state.subjects.forEach { (id, subject) ->
-            updateById(id) { current ->
-                subject.copy(
-                    episodes = current.episodes.map { episode ->
-                        if (episode.splitter != null) episode
-                        else subject.episodes.find { it.id == episode.id } ?: episode
-                    }.toImmutableList().grouped()
-                )
-            }
+    personalStateStore.onSubjectUpdated.collect { event ->
+        val subject = event.data
+        updateById(event.id) { current ->
+            subject.copy(
+                episodes = current.episodes.map { episode ->
+                    if (episode.splitter != null) episode
+                    else subject.episodes.find { it.id == episode.id } ?: episode
+                }.toImmutableList().grouped()
+            )
         }
     }
 }
@@ -56,11 +58,9 @@ fun MemoryPagingController<ComposeMonoDisplay, String>.bindMonoDisplayPersonalSt
     scope: CoroutineScope,
     personalStateStore: PersonalStateStore,
 ): Job = scope.launch {
-    personalStateStore.state.collect { state ->
-        state.monos.forEach { (id, mono) ->
-            updateWhere(predicate = { it.mono.id == id }) { display ->
-                display.copy(info = display.info.copy(mono = mono))
-            }
+    personalStateStore.onMonoUpdated.collect { event ->
+        updateWhere(predicate = { it.mono.id == event.id }) { display ->
+            display.copy(info = display.info.copy(mono = event.data))
         }
     }
 }
@@ -69,9 +69,7 @@ fun MemoryPagingController<ComposeMonoInfo, Long>.bindMonoInfoPersonalState(
     scope: CoroutineScope,
     personalStateStore: PersonalStateStore,
 ): Job = scope.launch {
-    personalStateStore.state.collect { state ->
-        state.monos.forEach { (id, mono) ->
-            updateById(id) { info -> info.copy(mono = mono) }
-        }
+    personalStateStore.onMonoUpdated.collect { event ->
+        updateById(event.id) { info -> info.copy(mono = event.data) }
     }
 }

@@ -40,4 +40,6 @@ internal class DefaultMemoryPagingController<T : Any, Id : Any>(
     override suspend fun sortWith(comparator: Comparator<in T>) = store.sortWith(comparator)
 
     override suspend fun replaceAll(transform: (List<T>) -> List<T>) = store.replaceAll(transform)
+
+    override fun refresh() = store.refresh()
 }

@@ -71,7 +71,7 @@ class TrackingPageViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            personalStateStore.updateCollectionSubject(subject, update)
+            personalStateStore.emitSubjectCollection(subject, update)
         }
     }
 
@@ -85,7 +85,7 @@ class TrackingPageViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            personalStateStore.updateCollectionEpisode(subject, episodes.map { it.id }, type)
+            personalStateStore.emitSubjectEpisodeCollection(subject, episodes.map { it.id }, type)
         }
     }
 }

@@ -19,7 +19,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelin
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.orbitmvi.orbit.syntax.Syntax
@@ -38,12 +38,10 @@ class TimelineDetailViewModel(
 ) : BaseViewModel<TimelineDetailState, TimelineDetailSideEffect, TimelineDetailEvent.Action>() {
 
     init {
-        personalStateStore.state
-            .drop(1)
-            .onEach { personalState ->
-                personalState.timelines[args.timeline.id]?.let { timeline ->
-                    intent { reduceData { state.copy(timeline = timeline) } }
-                }
+        personalStateStore.onTimelineUpdated
+            .filter { it.id == args.timeline.id }
+            .onEach { event ->
+                intent { reduceData { state.copy(timeline = event.data) } }
             }
             .launchIn(viewModelScope)
     }
@@ -72,7 +70,7 @@ class TimelineDetailViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            personalStateStore.updateTimeline(timeline.id, timeline.refreshReaction(userManager, reaction))
+            personalStateStore.emitTimelineUpdated(timeline.id, timeline.refreshReaction(userManager, reaction))
         }
     }
 
@@ -82,7 +80,7 @@ class TimelineDetailViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            personalStateStore.deleteTimeline(timeline.id)
+            personalStateStore.emitTimelineDeleted(timeline.id)
             postEffect { TimelineDetailSideEffect.OnNavUp }
         }
     }
@@ -92,7 +90,7 @@ class TimelineDetailViewModel(
             .onFailure { postToast { it.errMsg } }
             .onSuccess { replies ->
                 val updatedTimeline = state.data.timeline.copy(replies = state.data.timeline.replies + 1)
-                personalStateStore.updateTimeline(updatedTimeline.id, updatedTimeline)
+                personalStateStore.emitTimelineUpdated(updatedTimeline.id, updatedTimeline)
                 reduceData { state.copy(replies = replies.toImmutableList()) }
             }
     }

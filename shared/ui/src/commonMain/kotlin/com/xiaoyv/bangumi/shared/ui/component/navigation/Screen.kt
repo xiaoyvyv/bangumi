@@ -122,8 +122,8 @@ sealed class Screen(
     @Serializable
     data class PublishMain(
         @PublishPostType val type: Int,
-        val targetId: String = "",
-        val title: String = "",
+        val publishAttachId: String = "",
+        val publishAttachTitle: String = "",
     ) : Screen(SCREEN_ROUTE_PUBLISH_MAIN)
 
     @Serializable

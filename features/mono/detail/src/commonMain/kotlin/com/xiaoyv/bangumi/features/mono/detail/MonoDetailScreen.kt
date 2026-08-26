@@ -182,7 +182,7 @@ private fun MonoDetailScreen(
                                     MonoDetailEvent.UI.OnNavScreen(
                                         Screen.PublishMain(
                                             type = if (type == MonoType.PERSON) PublishPostType.COMMENT_PERSON else PublishPostType.COMMENT_CHARACTER,
-                                            targetId = mono.id.toString()
+                                            publishAttachId = mono.id.toString()
                                         )
                                     )
                                 )

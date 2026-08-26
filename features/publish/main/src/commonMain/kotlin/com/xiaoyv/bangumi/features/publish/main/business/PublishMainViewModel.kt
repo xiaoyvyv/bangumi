@@ -19,6 +19,7 @@ import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.insertBBCode
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
+import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.GroupRepository
@@ -46,11 +47,12 @@ class PublishMainViewModel(
     private val indexRepository: IndexRepository,
     private val groupRepository: GroupRepository,
     private val subjectRepository: SubjectRepository,
+    private val personalStateStore: PersonalStateStore,
 ) : BaseViewModel<PublishMainState, PublishMainSideEffect, PublishMainEvent.Action>() {
 
     override fun createInitialState() = PublishMainState(
         type = args.type,
-        subject = args.title.asTextFieldValue(),
+        subject = args.publishAttachTitle.asTextFieldValue(),
         title = when (args.type) {
             PublishPostType.TIMELINE_STATUS -> Res.string.timeline_add
             PublishPostType.TOPIC_GROUP -> Res.string.publish_title_group
@@ -112,7 +114,7 @@ class PublishMainViewModel(
             val title = state.subject.text.trim()
             val content = state.content.text.trim()
             val turnstile = state.turnstileToken
-            val targetId = args.targetId
+            val targetId = args.publishAttachId
 
             when (args.type) {
                 PublishPostType.BLOG -> blogRepository.submitCreateBlog(
@@ -169,6 +171,12 @@ class PublishMainViewModel(
                 else -> Result.failure(IllegalStateException("暂不支持"))
             }
         }.onSuccess {
+            personalStateStore.emitPublishSuccess(
+                type = args.type,
+                publishAttachId = args.publishAttachId,
+                publishSuccessId = it.id.toString()
+            )
+
             postEffect { PublishMainSideEffect.OnCreatePostSuccess(it.id) }
         }
     }

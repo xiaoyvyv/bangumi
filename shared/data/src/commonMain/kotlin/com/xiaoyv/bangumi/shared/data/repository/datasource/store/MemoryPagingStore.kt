@@ -201,6 +201,17 @@ internal class MemoryPagingStore<T : Any, Id : Any>(
         }
     }
 
+    /**
+     * 触发网络刷新。
+     */
+    fun refresh() {
+        pendingRefresh.value = true
+        val sources = synchronized(sourcesLock) {
+            activeSources.values.toList()
+        }
+        sources.forEach { it.invalidate() }
+    }
+
     private suspend fun mutateLocked(block: (MutableList<T>) -> Boolean): Boolean {
         val changed = mutex.withLock {
             block(items)

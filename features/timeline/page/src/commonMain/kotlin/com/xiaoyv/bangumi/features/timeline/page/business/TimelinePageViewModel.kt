@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
@@ -14,6 +15,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.refreshReactio
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.bindTimelinePersonalState
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -46,6 +49,14 @@ class TimelinePageViewModel(
 
     init {
         timelineController.bindTimelinePersonalState(viewModelScope, personalStateStore)
+
+        viewModelScope.launch {
+            personalStateStore.publishSuccess
+                .filter { it.type == PublishPostType.TIMELINE_STATUS }
+                .collect {
+                    timelineController.refresh()
+                }
+        }
     }
 
     override fun createInitialState() = TimelinePageState()
@@ -66,7 +77,7 @@ class TimelinePageViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            personalStateStore.updateTimeline(timeline.id, timeline.refreshReaction(userManager, reaction))
+            personalStateStore.emitTimelineUpdated(timeline.id, timeline.refreshReaction(userManager, reaction))
         }
     }
 
@@ -76,7 +87,7 @@ class TimelinePageViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            personalStateStore.deleteTimeline(timeline.id)
+            personalStateStore.emitTimelineDeleted(timeline.id)
         }
     }
 }

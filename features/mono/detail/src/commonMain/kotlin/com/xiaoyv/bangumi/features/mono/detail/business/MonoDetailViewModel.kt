@@ -31,7 +31,7 @@ import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.data.usecase.MonoRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
@@ -54,7 +54,7 @@ class MonoDetailViewModel(
     private val monoRepository: MonoRepository,
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
-    private val userManager: UserManager
+    private val userManager: UserManager,
 ) : BaseViewModel<MonoDetailState, MonoDetailSideEffect, MonoDetailEvent.Action>() {
 
     private val cacheKey = stringPreferencesKey(name = "mono_detail_${args.type}_" + args.id)
@@ -82,12 +82,11 @@ class MonoDetailViewModel(
         .cachedIn(viewModelScope)
 
     init {
-        personalStateStore.state
-            .drop(1)
-            .onEach {
-                val mono = it.monos[args.id]
-                if (mono != null) intent {
-                    reduceData { state.copy(mono = mono) }
+        personalStateStore.onMonoUpdated
+            .filter { it.id == args.id }
+            .onEach { event ->
+                intent {
+                    reduceData { state.copy(mono = event.data) }
                     saveCache()
                 }
             }
@@ -160,7 +159,7 @@ class MonoDetailViewModel(
             }
         }
 
-        personalStateStore.updateMono(args.id, state.data.mono)
+        personalStateStore.emitMonoUpdated(args.id, state.data.mono)
 
         fetchSearchImageTags(state.data.mono)
 
@@ -176,7 +175,7 @@ class MonoDetailViewModel(
                 postToast { toast }
 
                 // 更新
-                personalStateStore.updateMono(args.id, state.data.mono.copy(collectedAt = if (it) System.currentTimeMillis() else 0))
+                personalStateStore.emitMonoUpdated(args.id, state.data.mono.copy(collectedAt = if (it) System.currentTimeMillis() else 0))
             }
     }
 

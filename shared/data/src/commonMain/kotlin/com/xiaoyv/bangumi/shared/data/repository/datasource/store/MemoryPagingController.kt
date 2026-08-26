@@ -115,4 +115,9 @@ interface MemoryPagingController<T : Any, Id : Any> {
      * @return 仅当替换结果发生变化时返回 `true`。
      */
     suspend fun replaceAll(transform: (List<T>) -> List<T>): Boolean
+
+    /**
+     * 触发完整刷新，清除当前内存缓存并重新加载。
+     */
+    fun refresh()
 }

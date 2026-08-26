@@ -2,8 +2,6 @@ package com.xiaoyv.bangumi.features.subject.detail.business
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import androidx.paging.map
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_firstly
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
@@ -23,8 +21,6 @@ import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
@@ -35,17 +31,12 @@ import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax
 
@@ -70,12 +61,11 @@ class SubjectDetailViewModel(
     private val cacheKey = stringPreferencesKey(name = "subject_detail_" + args.subjectId)
 
     init {
-        personalStateStore.state
-            .drop(1)
-            .onEach {
-                val subject = it.subjects[args.subjectId]
-                if (subject != null) intent {
-                    reduceData { state.copy(subject = subject) }
+        personalStateStore.onSubjectUpdated
+            .filter { it.id == args.subjectId }
+            .onEach { event ->
+                intent {
+                    reduceData { state.copy(subject = event.data) }
                     saveCache()
                 }
             }
@@ -169,7 +159,7 @@ class SubjectDetailViewModel(
             }
         }
 
-        personalStateStore.updateSubject(args.subjectId, subject)
+        personalStateStore.emitSubjectUpdated(args.subjectId, subject)
     }
 
     private fun onUpdateEpisodeCollection(episodes: List<ComposeEpisode>, type: Int) = intent {
@@ -181,7 +171,7 @@ class SubjectDetailViewModel(
         withActionLoading { collectionRepository.submitUpdateUserEpisode(args.subjectId, episodes, type) }
             .onFailure { postToast { it.errMsg } }
             .onSuccess {
-                personalStateStore.updateCollectionEpisode(state.data.subject, episodes.map { it.id }, type)
+                personalStateStore.emitSubjectEpisodeCollection(state.data.subject, episodes.map { it.id }, type)
             }
     }
 
@@ -198,7 +188,7 @@ class SubjectDetailViewModel(
                 postToast { getString(Res.string.collect_success) }
                 reduceData { state.copy(loading = LoadingState.NotLoading) }
 
-                personalStateStore.updateSubject(args.subjectId, state.data.run {
+                personalStateStore.emitSubjectUpdated(args.subjectId, state.data.run {
                     subject.copy(interest = subject.interest.updateFrom(update))
                 })
 
@@ -208,7 +198,7 @@ class SubjectDetailViewModel(
     private fun onDeleteCollection() = intent {
         withActionLoading { collectionRepository.submitRemoveSubjectCollection(args.subjectId) }
             .onSuccess {
-                personalStateStore.updateSubject(args.subjectId, state.data.run {
+                personalStateStore.emitSubjectUpdated(args.subjectId, state.data.run {
                     subject.copy(interest = subject.interest.copy(type = CollectionType.UNKNOWN))
                 })
             }
