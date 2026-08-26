@@ -101,12 +101,21 @@ export async function transformTimeline(req: Request, res: Response) {
 		const catAndType = parseTimelineCatAndType(selectElement('span.info, span.info_full', node));
 		const memo = parseTimelineMemo(node, catAndType);
 
+		const isoDate = date
+			.replace(
+				/^(\d{4})-(\d{1,2})-(\d{1,2})/,
+				(_, y, m, d) => `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`
+			)
+			.replace(" ", "T") + "+08:00";
+
+		const timestamp = new Date(isoDate).getTime();
+
 		return {
 			cat: catAndType.cat,
 			type: catAndType.type,
 			batch: imgs != null,
 			id: id,
-			createdAt: new Date(date).getTime(),
+			createdAt: timestamp,
 			replies: commentCnt,
 			source: {
 				name: sourceName,
