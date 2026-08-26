@@ -106,7 +106,7 @@ export async function transformTimeline(req: Request, res: Response) {
 			type: catAndType.type,
 			batch: imgs != null,
 			id: id,
-			createdAt: new Date(date.replace(" ", "T") + "+08:00").getTime(),
+			createdAt: new Date(date).getTime(),
 			replies: commentCnt,
 			source: {
 				name: sourceName,
