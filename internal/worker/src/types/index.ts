@@ -233,3 +233,21 @@ export enum SubjectType {
 	GAME = 4,
 	REAL = 6,
 }
+
+export interface TerminalPersonality {
+	id: number;
+	name: string;
+	speechCount: number;
+	creator: string;
+	createdAt: number;
+}
+
+export interface TerminalSpeech {
+	id: number;
+	speech: string;
+	creator?: string;
+	createdAt?: number;
+}
+
+
+
