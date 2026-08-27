@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
-import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
+import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -17,8 +17,8 @@ fun koinIndexPageViewModel(param: ListIndexParam): IndexPageViewModel {
     )
 }
 
-class IndexPageViewModel(ugcRepository: UgcRepository, param: ListIndexParam) : ViewModel() {
-    private val indexPager = ugcRepository.fetchIndexPager(param)
+class IndexPageViewModel(indexRepository: IndexRepository, param: ListIndexParam) : ViewModel() {
+    private val indexPager = indexRepository.fetchIndexPager(param)
     val index = indexPager.flow.cachedIn(viewModelScope)
 }
 

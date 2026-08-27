@@ -8,7 +8,8 @@ import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
@@ -224,20 +225,36 @@ class PersonalStateStore {
      * 更新条目收藏数据
      *
      * @param subject 条目数据对象
-     * @param update 条目收藏更新请求参数 [CollectionSubjectUpdate]
+     * @param update 条目收藏更新请求参数 [CollectionSubjectParam]
      */
-    fun emitSubjectCollection(subject: ComposeSubject, update: CollectionSubjectUpdate) {
+    fun emitSubjectCollection(subject: ComposeSubject, update: CollectionSubjectParam) {
         emitSubjectUpdated(
             id = subject.id,
             data = subject.copy(
                 interest = subject.interest.copy(
                     type = update.type ?: subject.interest.type,
                     rate = update.rate ?: subject.interest.rate,
-                    epStatus = update.epStatus ?: subject.interest.epStatus,
-                    volStatus = update.volStatus ?: subject.interest.volStatus,
                     comment = update.comment ?: subject.interest.comment,
                     private = update.`private` ?: subject.interest.private,
                     tags = update.tags ?: subject.interest.tags
+                )
+            )
+        )
+    }
+
+    /**
+     * 更新条目收藏进度数据
+     *
+     * @param subject 条目数据对象
+     * @param update 进度 [CollectionSubjectProgressParam]
+     */
+    fun emitSubjectCollection(subject: ComposeSubject, update: CollectionSubjectProgressParam) {
+        emitSubjectUpdated(
+            id = subject.id,
+            data = subject.copy(
+                interest = subject.interest.copy(
+                    epStatus = update.epStatus ?: subject.interest.epStatus,
+                    volStatus = update.volStatus ?: subject.interest.volStatus,
                 )
             )
         )

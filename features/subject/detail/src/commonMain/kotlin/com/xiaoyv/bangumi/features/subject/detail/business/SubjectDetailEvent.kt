@@ -2,10 +2,9 @@ package com.xiaoyv.bangumi.features.subject.detail.business
 
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -25,7 +24,15 @@ sealed class SubjectDetailEvent {
         data class OnRefresh(val loading: Boolean) : Action()
         data object DeleteCollection : Action()
 
-        data class OnUpdateSubjectCollection(val update: CollectionSubjectUpdate, val showLoadingDialog: Boolean) : Action()
+        data class OnUpdateSubjectCollection(
+            val update: CollectionSubjectParam,
+            val showLoadingDialog: Boolean
+        ) : Action()
+
+        data class OnUpdateSubjectProgress(
+            val update: CollectionSubjectProgressParam,
+            val showLoadingDialog: Boolean
+        ) : Action()
 
         data class OnUpdateEpisodeCollection(
             val episodes: List<ComposeEpisode>,

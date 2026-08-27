@@ -2,34 +2,18 @@
 
 package com.xiaoyv.bangumi
 
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.PointerEventTimeoutCancellationException
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import kotlin.math.roundToInt
-import com.xiaoyv.bangumi.shared.ui.component.live2d.BgmLive2DOverlay
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import coil3.ImageLoader
@@ -47,11 +31,7 @@ import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
 import com.xiaoyv.bangumi.shared.avif.AvifDecoderFactory
 import com.xiaoyv.bangumi.shared.component.DetectType
 import com.xiaoyv.bangumi.shared.component.LaunchReceiveShareImageEffect
-import com.xiaoyv.bangumi.shared.component.Live2D
-import com.xiaoyv.bangumi.shared.component.rememberLive2DState
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
-import com.xiaoyv.bangumi.shared.ui.theme.currentInDarkTheme
 import com.xiaoyv.bangumi.shared.data.manager.app.LocalPersonalState
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedModelStoreOwner
@@ -59,12 +39,14 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedViewModel
 import com.xiaoyv.bangumi.shared.data.manager.shared.SharedViewModel
 import com.xiaoyv.bangumi.shared.gif.addPlatformGifSupport
-import com.xiaoyv.bangumi.shared.resource.copyToDir
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.action.rememberAppActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.image.ImageInterceptor
+import com.xiaoyv.bangumi.shared.ui.component.live2d.Live2DOverlay
+import com.xiaoyv.bangumi.shared.ui.component.live2d.LocalLive2DSpeechController
+import com.xiaoyv.bangumi.shared.ui.component.live2d.rememberLive2DSpeechState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupLoadingState
@@ -74,11 +56,6 @@ import com.xiaoyv.bangumi.shared.ui.component.popup.rememberPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.rememberPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmAppTheme
-import io.github.vinceglb.filekit.FileKit
-import io.github.vinceglb.filekit.absolutePath
-import io.github.vinceglb.filekit.createDirectories
-import io.github.vinceglb.filekit.div
-import io.github.vinceglb.filekit.filesDir
 import kotlinx.collections.immutable.persistentListOf
 import okio.FileSystem
 import org.jetbrains.compose.resources.stringResource
@@ -133,6 +110,9 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
     val sharedState by sharedViewModel.collectAsState()
     val personState by personalStateStore.state.collectAsStateWithLifecycle()
 
+    // Live2d Controller
+    val live2dSpeechState = rememberLive2DSpeechState()
+
     CompositionLocalProvider(
         LocalPopupTipState provides popupTipState,
         LocalPopupLoadingState provides popupLoadingState,
@@ -140,7 +120,8 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
         LocalSharedModelStoreOwner provides sharedViewModelStoreOwner,
         LocalSharedState provides sharedState,
         LocalActionHandler provides actionHandler,
-        LocalPersonalState provides personState
+        LocalPersonalState provides personState,
+        LocalLive2DSpeechController provides live2dSpeechState,
     ) {
         BgmAppTheme(modifier = Modifier.fillMaxSize()) {
             BgmScreenNavGraph(navigator = navigator)
@@ -156,7 +137,9 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
                 hostState = popupTipState.state
             )
 
-            BgmLive2DOverlay(
+            // Liv2d
+            Live2DOverlay(
+                state = live2dSpeechState,
                 live2dConfig = LocalSharedState.current.settings.live2d
             )
         }
@@ -164,7 +147,6 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
 
     HandleShareContent(navigator)
 }
-
 
 
 @Composable

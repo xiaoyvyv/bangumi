@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.settings.main.business
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeBangumiStatus
 
 /**
  * [SettingsMainState]
@@ -11,4 +12,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class SettingsMainState(
     val cacheSize: String = "",
+    val bangumiStatus: ComposeBangumiStatus? = null,
+    val statusLoading: Boolean = false,
+    val statusFailed: Boolean = false,
 )

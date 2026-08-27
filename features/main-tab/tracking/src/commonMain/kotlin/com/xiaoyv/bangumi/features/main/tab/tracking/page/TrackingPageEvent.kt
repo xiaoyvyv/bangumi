@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.features.main.tab.tracking.page
 
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 
@@ -14,9 +14,9 @@ sealed class TrackingPageEvent {
             @field:CollectionEpisodeType val type: Int,
         ) : Action()
 
-        data class OnUpdateSubjectCollection(
+        data class OnUpdateSubjectProgress(
             val subject: ComposeSubject,
-            val update: CollectionSubjectUpdate,
+            val update: CollectionSubjectProgressParam,
         ) : Action()
     }
 }

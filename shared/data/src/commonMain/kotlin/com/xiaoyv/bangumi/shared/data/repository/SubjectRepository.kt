@@ -15,7 +15,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
@@ -81,8 +80,6 @@ interface SubjectRepository {
         offset: Int = 0,
         limit: Int = 20,
     ): Result<List<ComposeMonoDisplay>>
-
-    suspend fun fetchSubjectTopic(subjectId: Long): Result<List<ComposeTopic>>
 
     suspend fun fetchSubjectRelated(subjectId: Long): Result<List<ComposeSubjectDisplay>>
 

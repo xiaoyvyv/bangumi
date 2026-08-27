@@ -84,13 +84,13 @@ private val repositoryModules = module {
     single<SubjectRepository> { SubjectRepositoryImpl(get(), get(), get(), get(), get()) }
     single<MonoRepository> { MonoRepositoryImpl(get(), get(), get()) }
     single<BlogRepository> { BlogRepositoryImpl(get(), get()) }
-    single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get(), get()) }
+    single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get()) }
     single<TimelineRepository> { TimelineRepositoryImpl(get(), get(), get()) }
     single<ChoreRepository> { ChoreRepositoryImpl(get()) }
     single<GroupRepository> { GroupRepositoryImpl(get(), get(), get()) }
     single<TopicRepository> { TopicRepositoryImpl(get(), get()) }
     single<CollectionRepository> { CollectionRepositoryImpl(get(), get(), get(), get()) }
-    single<IndexRepository> { IndexRepositoryImpl(get(), get(), get()) }
+    single<IndexRepository> { IndexRepositoryImpl(get(), get(), get(), get()) }
     single<TerminalRepository> { TerminalRepositoryImpl(get()) }
 }
 

@@ -1,6 +1,7 @@
 import { handleTimeline } from './timeline';
 import { handleDnsQuery } from './dns';
 import { handleTerminal } from './terminal';
+import { handleBlogs } from './blogs';
 
 export async function router(req: Request, env: any) {
 	console.log(req.url);
@@ -18,8 +19,9 @@ export async function router(req: Request, env: any) {
 		return handleTerminal(req, env);
 	}
 
+	if (url.pathname.startsWith('/p1/blogs')) {
+		return handleBlogs(req, env);
+	}
 
 	return new Response('Not Found', { status: 404 });
 }
-
-

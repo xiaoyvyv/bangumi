@@ -30,7 +30,7 @@ val blankImageUrlRegex = "https://.*/(info_only\\.png|no_icon\\.jpg|no_photo\\.p
 fun String.sanitizeImageUrl(): String {
     val imageUrl = when {
         startsWith("//") -> "https:$this"
-        startsWith("/") -> "https://bgm.tv$this"
+        startsWith("/") -> "https://lain.bgm.tv$this"
         else -> this
     }
     return imageUrl

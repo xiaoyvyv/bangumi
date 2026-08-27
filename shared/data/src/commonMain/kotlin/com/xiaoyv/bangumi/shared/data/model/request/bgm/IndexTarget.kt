@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.shared.data.model.request
+package com.xiaoyv.bangumi.shared.data.model.request.bgm
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType

@@ -5,9 +5,9 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.CreateGroupTopicRequest
-import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateGroupTopicRequest
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic

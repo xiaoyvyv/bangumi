@@ -3,9 +3,9 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.request.CollectSubject
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateEpisodeProgress
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateSubjectProgress
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateEpisodeProgress
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
@@ -38,7 +38,7 @@ interface CollectionApi {
      * @param indexID
      */
     @PUT("p1/collections/indexes/{indexID}")
-    suspend fun addIndexCollection(@Path("indexID") indexID: Int): HttpResponse
+    suspend fun addIndexCollection(@Path("indexID") indexID: Long): HttpResponse
 
     /**
      * 新增人物收藏
@@ -69,7 +69,7 @@ interface CollectionApi {
      * @param indexID
      */
     @DELETE("p1/collections/indexes/{indexID}")
-    suspend fun deleteIndexCollection(@Path("indexID") indexID: Int): HttpResponse
+    suspend fun deleteIndexCollection(@Path("indexID") indexID: Long): HttpResponse
 
     /**
      * 删除人物收藏
@@ -140,35 +140,35 @@ interface CollectionApi {
      * 更新章节进度
      *
      * @param episodeID
-     * @param updateEpisodeProgress  (optional)
+     * @param param 参数
      */
     @PATCH("p1/collections/episodes/{episodeID}")
     suspend fun updateEpisodeProgress(
         @Path("episodeID") episodeID: Long,
-        @Body updateEpisodeProgress: UpdateEpisodeProgress? = null,
+        @Body param: UpdateEpisodeProgress,
     ): HttpResponse
 
     /**
      * 新增或修改条目收藏
      *
      * @param subjectID
-     * @param collectSubject  (optional)
+     * @param param  参数
      */
     @PUT("p1/collections/subjects/{subjectID}")
     suspend fun updateSubjectCollection(
-        @Path("subjectID") subjectID: Int,
-        @Body collectSubject: CollectSubject? = null,
+        @Path("subjectID") subjectID: Long,
+        @Body param: CollectionSubjectParam,
     ): HttpResponse
 
     /**
      * 更新条目进度
      *
      * @param subjectID
-     * @param updateSubjectProgress  (optional)
+     * @param param 参数
      */
     @PATCH("p1/collections/subjects/{subjectID}")
     suspend fun updateSubjectProgress(
-        @Path("subjectID") subjectID: Int,
-        @Body updateSubjectProgress: UpdateSubjectProgress? = null,
+        @Path("subjectID") subjectID: Long,
+        @Body param: CollectionSubjectProgressParam,
     ): HttpResponse
 }

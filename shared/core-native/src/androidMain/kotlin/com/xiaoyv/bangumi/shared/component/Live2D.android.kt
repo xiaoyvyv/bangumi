@@ -11,20 +11,13 @@ import android.opengl.GLES20
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.MotionEvent
 import android.view.TextureView
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.viewinterop.AndroidView
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
@@ -57,8 +50,6 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 
     private var _availableExpressions by mutableStateOf(emptyList<String>())
     actual val availableExpressions: List<String> get() = _availableExpressions
-
-    actual var onHitAreaClick: ((hitArea: String) -> Unit)? = null
 
     actual fun onTouch(x: Float, y: Float, action: Int) {
         textureView?.queueEvent {
@@ -391,14 +382,7 @@ private class Live2DRenderThread(
 actual fun Live2D(
     modifier: Modifier,
     state: Live2DState,
-    onHitAreaClick: ((hitArea: String) -> Unit)?
 ) {
-    SideEffect {
-        if (onHitAreaClick != null) {
-            state.onHitAreaClick = onHitAreaClick
-        }
-    }
-
     AndroidView(
         modifier = modifier,
         factory = { context ->

@@ -3,14 +3,15 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
@@ -83,6 +84,19 @@ interface PersonApi {
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
     ): ComposePage<ComposeUserDisplay>
+
+
+    /**
+     * 获取人物关联的目录
+     *
+     */
+    @GET("p1/persons/{personID}/indexes")
+    suspend fun getPersonIndexes(
+        @Path("personID") personID: Long,
+        @Query("limit") limit: Int? = 20,
+        @Query("offset") offset: Int? = 0
+    ): ComposePage<ComposeIndex>
+
 
     /**
      * 获取人物的吐槽箱

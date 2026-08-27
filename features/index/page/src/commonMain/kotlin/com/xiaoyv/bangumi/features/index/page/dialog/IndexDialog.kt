@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout

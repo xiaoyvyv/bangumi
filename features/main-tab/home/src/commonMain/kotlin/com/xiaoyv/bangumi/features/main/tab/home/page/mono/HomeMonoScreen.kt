@@ -104,7 +104,7 @@ private fun HomeMonoScreenSection(
             text = item.header.title,
             action = item.header.more,
             onClick = {
-                val jumpUrl = WebConstant.URL_BASE_API.trim('/') + item.header.id
+                val jumpUrl = WebConstant.URL_BASE_WEB.trim('/') + item.header.id
                 val param = MonoBrowserBody.fromUri(jumpUrl)
                 onUiEvent(HomeEvent.UI.OnNavScreen(Screen.MonoBrowser(param.monoType, param)))
             }

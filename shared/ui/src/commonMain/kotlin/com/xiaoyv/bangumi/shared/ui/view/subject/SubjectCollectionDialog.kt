@@ -70,17 +70,17 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingSeekBar
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.text.textFieldTransparentColors
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -95,7 +95,7 @@ fun SubjectCollectionDialog(
     subject: ComposeSubject,
     myTags: SerializeList<ComposeTag> = persistentListOf(),
     loadState: LoadingState = LoadingState.NotLoading,
-    onCollectionUpdate: (CollectionSubjectUpdate) -> Unit,
+    onCollectionUpdate: (CollectionSubjectParam) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val scrollTop by remember { derivedStateOf { scrollState.value } }
@@ -129,7 +129,7 @@ fun SubjectCollectionDialogContent(
     myTags: SerializeList<ComposeTag>,
     loadState: LoadingState,
     scrollState: ScrollState = rememberScrollState(),
-    onCollectionUpdate: (CollectionSubjectUpdate) -> Unit,
+    onCollectionUpdate: (CollectionSubjectParam) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -303,7 +303,7 @@ fun SubjectCollectionDialogContent(
                 enabled = loadState != LoadingState.Loading && type != CollectionType.UNKNOWN,
                 onClick = {
                     onCollectionUpdate(
-                        CollectionSubjectUpdate(
+                        CollectionSubjectParam(
                             type = type,
                             rate = if (rate == 0) null else rate,
                             comment = commentInput.text.takeIf { it.isNotBlank() },

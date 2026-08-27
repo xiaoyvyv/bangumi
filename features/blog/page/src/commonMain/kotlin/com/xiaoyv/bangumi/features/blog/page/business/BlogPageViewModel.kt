@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
-import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
+import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,10 +25,10 @@ fun koinBlogPageViewModel(param: ListBlogParam): BlogPageViewModel {
  */
 class BlogPageViewModel(
     param: ListBlogParam,
-    ugcRepository: UgcRepository,
+    blogRepository: BlogRepository
 ) : BaseViewModel<BlogPageState, BlogPageSideEffect, BlogPageEvent.Action>() {
 
-    private val blogPager = ugcRepository.fetchBlogPager(param)
+    private val blogPager = blogRepository.fetchBlogPager(param)
 
     val blog = blogPager.flow.cachedIn(viewModelScope)
 

@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import com.xiaoyv.bangumi.shared.data.model.request.LoginParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LoginParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginForm
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginResult
 

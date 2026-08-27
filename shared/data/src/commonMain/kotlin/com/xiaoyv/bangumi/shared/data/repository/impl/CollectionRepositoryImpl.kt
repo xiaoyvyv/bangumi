@@ -8,8 +8,9 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionEpisodeUpdate
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateEpisodeProgress
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -72,37 +73,27 @@ class CollectionRepositoryImpl(
         episodes: List<ComposeEpisode>,
         @CollectionEpisodeType type: Int,
     ): Result<Unit> {
-        /* private api 有速率限制，暂时不用
         return client.requestNextCollectionApi {
             if (episodes.size > 1) {
                 updateEpisodeProgress(episodes.last().id, UpdateEpisodeProgress(batch = true))
             } else {
                 updateEpisodeProgress(episodes.first().id, UpdateEpisodeProgress(type = type))
             }
-        }*/
-        return client.requestJsonApi {
-            // API 不支持直接更新已经存在的状态，先全部移除，再更新状态
-            val episodeIds = episodes.map { it.id }
-            if (type != CollectionEpisodeType.UNKNOWN) {
-                // 如果批量处理的数据，有任何EP已经有收藏状态了，先清理掉，没有收藏状态则没必要直接API请求
-                val needReset = episodes.any { it.collection.status != CollectionEpisodeType.UNKNOWN }
-                if (needReset) {
-                    submitUpdateUserEpisodeBatch(subjectId, body = CollectionEpisodeUpdate(episodeIds, CollectionEpisodeType.UNKNOWN))
-                }
-            }
-            if (episodeIds.size == 1) {
-                submitUpdateUserEpisode(episodeIds.first(), body = CollectionEpisodeUpdate(type = type))
-            } else {
-                submitUpdateUserEpisodeBatch(subjectId, body = CollectionEpisodeUpdate(episodeIds, type))
-            }
         }
     }
 
-    override suspend fun submitUpdateUserSubject(
+    override suspend fun submitUpdateSubjectCollection(
         subjectId: Long,
-        update: CollectionSubjectUpdate,
-    ): Result<Unit> = client.requestJsonApi {
-        submitUserSubjectCollection(subjectId, body = update)
+        update: CollectionSubjectParam,
+    ): Result<Unit> = client.requestNextCollectionApi {
+        updateSubjectCollection(subjectId, param = update)
+    }
+
+    override suspend fun submitUpdateSubjectProgress(
+        subjectId: Long,
+        update: CollectionSubjectProgressParam
+    ): Result<Unit> = client.requestNextCollectionApi {
+        updateSubjectProgress(subjectId, param = update)
     }
 
     override suspend fun submitRemoveSubjectCollection(subjectId: Long): Result<Unit> = client.requestWebApi(disableRedirect = true) {
@@ -115,15 +106,15 @@ class CollectionRepositoryImpl(
         offset: Int,
         limit: Int,
         fetchEpisode: Boolean,
-    ): Result<ComposePage<ComposeSubject>> = client.requestJsonApi {
-        val page = client.nextCollectionApi.getMySubjectCollections(
+    ): Result<ComposePage<ComposeSubject>> = client.requestNextCollectionApi {
+        val page = getMySubjectCollections(
             subjectType = subjectType.takeIf { value -> value != SubjectType.UNKNOWN },
             type = type.takeIf { value -> value != CollectionType.UNKNOWN },
             offset = offset,
             limit = limit,
         )
-        if (!fetchEpisode) return@requestJsonApi page
-        if (subjectType != SubjectType.ANIME && subjectType != SubjectType.REAL) return@requestJsonApi page
+        if (!fetchEpisode) return@requestNextCollectionApi page
+        if (subjectType != SubjectType.ANIME && subjectType != SubjectType.REAL) return@requestNextCollectionApi page
 
         // 动画和三次元，请求章节数据，这里收藏 Api 未直接提供详细格子数据，直接并发暴力获取来渲染格子（Sai 不会骂我吧，狗头保命）
         val results = coroutineScope {

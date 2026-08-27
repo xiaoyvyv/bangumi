@@ -24,8 +24,8 @@ import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material.icons.rounded.Source
 import androidx.compose.material.icons.rounded.TableBar
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -63,6 +63,7 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_user_privacy
 import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainEvent
 import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainState
 import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainViewModel
+import com.xiaoyv.bangumi.features.settings.main.component.BangumiStatusTopBarAction
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
@@ -73,7 +74,6 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItem
-import com.xiaoyv.bangumi.features.settings.main.component.BangumiStatusTopBarAction
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
@@ -123,7 +123,10 @@ private fun SettingsMainScreen(
                 title = stringResource(Res.string.settings_title),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    BangumiStatusTopBarAction()
+                    BangumiStatusTopBarAction(
+                        state = uiState.data,
+                        onActionEvent = onActionEvent
+                    )
                 },
                 onNavigationClick = { onUiEvent(SettingsMainEvent.UI.OnNavUp) }
             )

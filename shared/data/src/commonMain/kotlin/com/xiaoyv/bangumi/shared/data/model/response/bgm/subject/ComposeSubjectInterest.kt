@@ -3,7 +3,8 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm.subject
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -20,29 +21,33 @@ data class ComposeSubjectInterest(
     @SerialName("updatedAt") val updatedAt: SerializeDateLong = 0,
     @SerialName("volStatus") val volStatus: Int = 0,
 ) {
-    fun toCollectionSubjectUpdate(): CollectionSubjectUpdate {
-        return CollectionSubjectUpdate(
+    fun toCollectionSubjectUpdate(): CollectionSubjectParam {
+        return CollectionSubjectParam(
             type = type,
             rate = rate,
-            epStatus = epStatus,
-            volStatus = volStatus,
             comment = comment,
             `private` = `private`,
             tags = tags,
         )
     }
 
-    fun updateFrom(update: CollectionSubjectUpdate): ComposeSubjectInterest {
+    fun updateFrom(update: CollectionSubjectParam): ComposeSubjectInterest {
         return copy(
             type = update.type ?: type,
             rate = update.rate ?: rate,
-            epStatus = update.epStatus ?: epStatus,
-            volStatus = update.volStatus ?: volStatus,
             comment = update.comment ?: comment,
             `private` = update.private ?: `private`,
             tags = update.tags ?: tags,
         )
     }
+
+    fun updateFrom(update: CollectionSubjectProgressParam): ComposeSubjectInterest {
+        return copy(
+            epStatus = update.epStatus ?: epStatus,
+            volStatus = update.volStatus ?: volStatus,
+        )
+    }
+
 
     companion object {
         val Empty = ComposeSubjectInterest()

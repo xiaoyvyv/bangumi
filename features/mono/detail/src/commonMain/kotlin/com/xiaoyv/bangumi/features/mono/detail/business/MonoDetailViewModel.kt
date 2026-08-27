@@ -175,6 +175,7 @@ class MonoDetailViewModel(
 
         fetchSearchImageTags(state.data.mono)
 
+        // 获取作品 TAB 下的职位过滤选项的菜单
         if (args.type == MonoType.PERSON) fetchPersonWorkPosition()
     }
 

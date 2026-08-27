@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.repository
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingContentType
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingMode
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.model.request.ChallengeParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.ChallengeParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.IllustSearchBody
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustDetailBody

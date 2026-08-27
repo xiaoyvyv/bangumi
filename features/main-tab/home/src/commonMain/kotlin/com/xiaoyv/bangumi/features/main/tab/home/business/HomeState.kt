@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.features.main.tab.home.business
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
-import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
+import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.core.types.list.ListGroupType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
@@ -55,11 +55,11 @@ data class HomeState(
 ) {
 
     @Composable
-    fun rememberListBlogParam(@SubjectWebPath type: String): ListBlogParam {
+    fun rememberListBlogParam(@SubjectType type: Int): ListBlogParam {
         return remember(type) {
             ListBlogParam(
                 type = ListBlogType.BROWSER,
-                browser = type
+                browserType = type
             )
         }
     }

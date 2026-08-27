@@ -1,9 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply

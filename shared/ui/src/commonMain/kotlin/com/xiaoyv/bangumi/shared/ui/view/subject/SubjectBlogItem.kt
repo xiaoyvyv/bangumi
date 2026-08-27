@@ -18,20 +18,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_timeline
 import com.xiaoyv.bangumi.core_resource.resources.reply_comment
+import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -134,5 +139,27 @@ fun SubjectBlogItem(
             }
         }
         BgmHorizontalDivider()
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSubjectBlogItem() {
+    PreviewColumn {
+        SubjectBlogItem(
+            item = ComposeBlogDisplay(
+                user = ComposeUser(
+                    nickname = "Bangumi User",
+                    avatar = ComposeImages(large = "https://lain.bgm.tv/pic/user/l/icon.jpg")
+                ),
+                blog = ComposeBlogEntry(
+                    title = "Sample Blog Title",
+                    summary = "This is a sample summary for the blog post. It can be multiple lines long and should be truncated if it exceeds the maximum number of lines.",
+                    replies = 10,
+                    updatedAt = System.currentTimeMillis(),
+                    icon = "https://lain.bgm.tv/pic/user/l/icon.jpg"
+                )
+            )
+        )
     }
 }

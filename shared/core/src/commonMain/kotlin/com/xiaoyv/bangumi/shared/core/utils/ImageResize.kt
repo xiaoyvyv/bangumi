@@ -22,6 +22,7 @@ enum class BgmImageVariant {
 }
 
 private val removeResizeRegex = "/lain.bgm.tv/r/\\d+".toRegex()
+private val removeResizeXRegex = "/lain.bgm.tv/r/\\d+x\\d+".toRegex()
 private val removeModeRegex = "/pic/(.*?)/[gcsml]/".toRegex()
 
 /**
@@ -38,6 +39,7 @@ fun String.bgmImageUrl(variant: BgmImageVariant = BgmImageVariant.S): String {
     if (isBlank() || !contains("lain.bgm.tv")) return this
     val url = replace("http://", "https://")
         .substringBeforeLast("?")
+        .replace(removeResizeXRegex, "/lain.bgm.tv")
         .replace(removeResizeRegex, "/lain.bgm.tv")
         .replace(removeModeRegex, "/pic/$1/l/")
 

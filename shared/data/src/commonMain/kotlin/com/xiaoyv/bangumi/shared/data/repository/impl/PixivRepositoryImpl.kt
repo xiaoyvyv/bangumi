@@ -10,13 +10,13 @@ import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
-import com.xiaoyv.bangumi.shared.data.model.request.ChallengeParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.ChallengeParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.IllustSearchBody
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustDetailBody
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustSimple
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivPageInfo
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivTagInfoBody
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustSimple
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivUserInfoBody
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController

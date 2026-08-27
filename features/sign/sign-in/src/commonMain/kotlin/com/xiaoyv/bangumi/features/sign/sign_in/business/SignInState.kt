@@ -25,6 +25,7 @@ data class SignInState(
     val otherForms: SerializeMap<String, String> = persistentMapOf(),
     val loginResult: ComposeLoginResult = ComposeLoginResult.Empty,
     val loggingRunning: Boolean = false,
+    val turnstileToken: String = ""
 ) {
     /**
      * 是否可以登录

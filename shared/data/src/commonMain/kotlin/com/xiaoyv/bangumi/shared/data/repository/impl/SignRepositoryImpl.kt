@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
-import com.xiaoyv.bangumi.shared.data.model.request.LoginParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LoginParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginForm
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginResult
 import com.xiaoyv.bangumi.shared.data.parser.SignParser

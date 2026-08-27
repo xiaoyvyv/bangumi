@@ -2,8 +2,10 @@ package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
+import com.xiaoyv.bangumi.shared.core.types.IndexOrderType
+import com.xiaoyv.bangumi.shared.core.types.IndexType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
@@ -19,6 +21,24 @@ import io.ktor.client.statement.HttpResponse
 
 @AppJsonApiDsl
 interface IndexApi {
+    /**
+     * GET p1/indexes
+     * 获取目录列表
+     * 全站公开目录列表，支持排序、分页和类型过滤
+     *
+     * @param order 排序方式：hot&#x3D;按收藏数，latest&#x3D;按创建时间 (optional, default to Order.latest)
+     * @param type  (optional)
+     * @param limit max 100 (optional, default to 20)
+     * @param offset min 0 (optional, default to 0)
+     */
+    @GET("p1/indexes")
+    suspend fun getIndexes(
+        @Query("order") @IndexOrderType order: String? = null,
+        @Query("type") @IndexType type: Int? = null,
+        @Query("limit") limit: Int? = 20,
+        @Query("offset") offset: Int? = 0
+    ): ComposePage<ComposeIndex>
+
     /**
      * 创建目录的评论
      */

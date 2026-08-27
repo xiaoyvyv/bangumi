@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
-import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.SearchMagnetBody
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanGroup
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
 import com.xiaoyv.bangumi.shared.data.parser.MikanParser

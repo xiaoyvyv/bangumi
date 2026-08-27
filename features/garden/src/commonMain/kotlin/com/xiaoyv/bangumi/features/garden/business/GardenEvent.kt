@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.features.garden.business
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.SearchMagnetBody
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**

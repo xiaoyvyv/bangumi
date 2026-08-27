@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUploadImage
+import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeBangumiStatus
 import io.github.vinceglb.filekit.PlatformFile
 
 interface ChoreRepository {
@@ -16,4 +17,5 @@ interface ChoreRepository {
 
     suspend fun translate(text: String, isHtml: Boolean): Result<String>
 
+    suspend fun fetchBangumiStatus(): Result<ComposeBangumiStatus>
 }

@@ -19,5 +19,6 @@ sealed class SignInEvent {
         data class OnEmailChange(val email: TextFieldValue) : Action()
         data class OnPasswordChange(val password: TextFieldValue) : Action()
         data class OnCodeChange(val code: TextFieldValue) : Action()
+        data class OnReceiveTurnstileToken(val token: String) : Action()
     }
 }

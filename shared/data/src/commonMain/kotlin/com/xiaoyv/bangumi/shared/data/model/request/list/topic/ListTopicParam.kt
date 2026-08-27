@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
-import com.xiaoyv.bangumi.shared.data.model.request.GroupTopicFilter
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.GroupTopicFilter
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

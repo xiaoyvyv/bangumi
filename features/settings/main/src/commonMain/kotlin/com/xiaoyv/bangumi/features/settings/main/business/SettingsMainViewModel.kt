@@ -4,15 +4,13 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.settings_clean_cache_success
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
-import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
+import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
 import org.jetbrains.compose.resources.getString
-import org.orbitmvi.orbit.syntax.Syntax
 
 /**
  * [SettingsMainViewModel]
@@ -23,20 +21,48 @@ import org.orbitmvi.orbit.syntax.Syntax
 class SettingsMainViewModel(
     private val userManager: UserManager,
     private val databaseRepository: DatabaseRepository,
+    private val choreRepository: ChoreRepository,
 ) : BaseViewModel<SettingsMainState, SettingsMainSideEffect, SettingsMainEvent.Action>() {
 
     override fun createInitialState() = SettingsMainState()
+
+    init {
+        fetchBangumiStatus()
+    }
 
     override fun onEvent(event: SettingsMainEvent.Action) {
         when (event) {
             is SettingsMainEvent.Action.OnRefresh -> refresh(event.loading)
             SettingsMainEvent.Action.OnLogout -> onLogout()
             SettingsMainEvent.Action.OnCleanCache -> onCleanCache()
+            SettingsMainEvent.Action.OnFetchBangumiStatus -> fetchBangumiStatus()
         }
     }
 
-    override suspend fun Syntax<UiState<SettingsMainState>, UiSideEffect<SettingsMainSideEffect>>.refreshSync() {
-
+    private fun fetchBangumiStatus() = intent {
+        reduce { state.copy(data = state.data.copy(statusLoading = true, statusFailed = false)) }
+        choreRepository.fetchBangumiStatus()
+            .onSuccess { status ->
+                reduce {
+                    state.copy(
+                        data = state.data.copy(
+                            statusLoading = false,
+                            bangumiStatus = status,
+                            statusFailed = false
+                        )
+                    )
+                }
+            }
+            .onFailure {
+                reduce {
+                    state.copy(
+                        data = state.data.copy(
+                            statusLoading = false,
+                            statusFailed = true
+                        )
+                    )
+                }
+            }
     }
 
     private fun onLogout() = intent {

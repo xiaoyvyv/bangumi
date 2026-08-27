@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseMviViewModel
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
-import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
+import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -19,9 +19,9 @@ fun koinIndexDetailPageViewModel(param: ListIndexRelatedParam): IndexDetailPageV
 
 class IndexDetailPageViewModel(
     param: ListIndexRelatedParam,
-    ugcRepository: UgcRepository,
+    indexRepository: IndexRepository
 ) : BaseMviViewModel<IndexDetailPageState, Any, Any>() {
-    private val indexRelatedPager = ugcRepository.fetchIndexRelatePager(param)
+    private val indexRelatedPager = indexRepository.fetchIndexRelatePager(param)
 
     val indexRelated = indexRelatedPager.flow.cachedIn(viewModelScope)
 

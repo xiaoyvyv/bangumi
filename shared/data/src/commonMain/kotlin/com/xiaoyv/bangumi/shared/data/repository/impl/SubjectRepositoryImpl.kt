@@ -16,7 +16,7 @@ import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
-import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.tag.ListTagParam
@@ -32,7 +32,6 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggestCard
@@ -245,12 +244,6 @@ class SubjectRepositoryImpl(
         }
     }
 
-    override suspend fun fetchSubjectTopic(subjectId: Long): Result<List<ComposeTopic>> = client.requestWebApi {
-        with(topicTableParser) {
-            fetchSubjectTopic(subjectId)
-                .fetchSubjectTopicTableItem()
-        }
-    }
 
     override suspend fun fetchMySubjectTags(subjectId: Long): Result<List<ComposeTag>> = client.requestWebApi {
         with(subjectParser) {
@@ -351,7 +344,7 @@ class SubjectRepositoryImpl(
             else -> error("不支持的列表类型: ${param.type}")
         }
 
-    override suspend fun fetchSubjectParade(subjectId: Long): Result<ComposeParade> = client.requestJsonApi {
+    override suspend fun fetchSubjectParade(subjectId: Long): Result<ComposeParade> = client.requestChoreApi {
         fetchSubjectParade(subjectId)
     }
 

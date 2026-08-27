@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.SearchMagnetBody
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanGroup
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController

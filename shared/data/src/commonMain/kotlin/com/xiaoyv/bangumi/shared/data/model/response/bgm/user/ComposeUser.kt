@@ -21,7 +21,7 @@ import kotlin.jvm.JvmStatic
 @Serializable
 data class ComposeUser(
     @SerialName("id") val id: Long = 0,
-    @SerialName("avatar") val avatar: ComposeImages = ComposeImages.Companion.Empty,
+    @SerialName("avatar") val avatar: ComposeImages = ComposeImages.Empty,
     @SerialName("username") val username: String = "",
     @SerialName("nickname") val nickname: String = "",
     @SerialName("sign") val sign: String = "",
@@ -33,6 +33,7 @@ data class ComposeUser(
     @SerialName("networkServices") val networkServices: SerializeList<ComposeUserNetworkService> = persistentListOf(),
     @SerialName("site") val site: String = "",
     @SerialName("stats") val stats: ComposeUserStats = ComposeUserStats.Empty,
+    @SerialName("isFriend") val isFriend: Boolean = false,
 
     /**
      * 其它非 API 扩展信息
@@ -51,7 +52,7 @@ data class ComposeUser(
         fun from(user: SqlUser?): ComposeUser {
             return if (user == null) Empty else ComposeUser(
                 id = user.id,
-                avatar = ComposeImages.Companion.fromUrl(user.avatar),
+                avatar = ComposeImages.fromUrl(user.avatar),
                 username = user.username,
                 nickname = user.nickname,
                 sign = user.sign,

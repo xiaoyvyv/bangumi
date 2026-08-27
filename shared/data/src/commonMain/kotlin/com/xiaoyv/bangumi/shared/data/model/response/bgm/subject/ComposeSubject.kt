@@ -90,19 +90,19 @@ data class Airtime(
 @Serializable
 data class ComposeSubject(
     @SerialName("airtime") val airtime: Airtime = Airtime(),
-    @SerialName("collection") val collection: ComposeCollectionInfo = ComposeCollectionInfo.Companion.Empty,
+    @SerialName("collection") val collection: ComposeCollectionInfo = ComposeCollectionInfo.Empty,
     @SerialName("eps") val eps: Int = 0,
     @SerialName("volumes") val volumes: Int = 0,
     @SerialName("id") val id: Long = 0,
-    @SerialName("images") val images: ComposeImages = ComposeImages.Companion.Empty,
+    @SerialName("images") val images: ComposeImages = ComposeImages.Empty,
     @SerialName("infobox") val infobox: SerializeList<ComposeInfobox> = persistentListOf(),
     @SerialName("locked") val locked: Boolean = false,
     @SerialName("meta_tags") val metaTags: SerializeList<String> = persistentListOf(),
     @SerialName("name") val name: String = "",
     @SerialName("name_cn") @JsonNames("nameCN", "name_cn") val nameCn: String = "",
     @SerialName("nsfw") val nsfw: Boolean = false,
-    @SerialName("platform") val platform: ComposePlatform = ComposePlatform.Companion.Empty,
-    @SerialName("rating") val rating: ComposeRating = ComposeRating.Companion.Empty,
+    @SerialName("platform") val platform: ComposePlatform = ComposePlatform.Empty,
+    @SerialName("rating") val rating: ComposeRating = ComposeRating.Empty,
     @SerialName("series") val series: Boolean = false,
     @SerialName("seriesEntry") val seriesEntry: Int = 0,
     @SerialName("summary") val summary: String = "",
@@ -146,7 +146,7 @@ data class ComposeSubject(
         return remember(type, platform, airtime) {
             buildString {
                 append(type)
-                if (platform != ComposePlatform.Companion.Empty) {
+                if (platform != ComposePlatform.Empty) {
                     append(" - ")
                     append(platform.typeCN)
                 }
@@ -226,7 +226,7 @@ data class ComposeSubject(
         val aside = CollectionType.string(type, CollectionType.ASIDE)
         val drop = CollectionType.string(type, CollectionType.DROP)
         return remember(collection) {
-            if (collection == ComposeCollectionInfo.Companion.Empty) loading else {
+            if (collection == ComposeCollectionInfo.Empty) loading else {
                 buildString {
                     append(collection.wish).append(wish)
                     append(" / ")

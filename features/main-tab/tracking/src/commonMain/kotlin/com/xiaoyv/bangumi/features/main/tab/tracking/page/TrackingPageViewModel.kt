@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.CollectionRepository
@@ -55,19 +55,19 @@ class TrackingPageViewModel(
                 type = event.type
             )
 
-            is TrackingPageEvent.Action.OnUpdateSubjectCollection -> onUpdateSubjectCollection(
+            is TrackingPageEvent.Action.OnUpdateSubjectProgress -> onUpdateSubjectProgress(
                 subject = event.subject,
                 update = event.update
             )
         }
     }
 
-    private fun onUpdateSubjectCollection(
+    private fun onUpdateSubjectProgress(
         subject: ComposeSubject,
-        update: CollectionSubjectUpdate,
+        update: CollectionSubjectProgressParam,
     ) = intent {
         withActionLoading {
-            collectionRepository.submitUpdateUserSubject(subject.id, update)
+            collectionRepository.submitUpdateSubjectProgress(subject.id, update)
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {

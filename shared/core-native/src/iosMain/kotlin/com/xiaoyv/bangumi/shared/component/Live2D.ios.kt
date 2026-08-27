@@ -1,11 +1,9 @@
 package com.xiaoyv.bangumi.shared.component
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitInteropProperties
@@ -68,8 +66,6 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 
     private var _availableExpressions by mutableStateOf(emptyList<String>())
     actual val availableExpressions: List<String> get() = _availableExpressions
-
-    actual var onHitAreaClick: ((hitArea: String) -> Unit)? = null
 
     private var currentModelInfo: Pair<String, String>? = null
     internal var glkDelegate: Live2DGLKViewDelegate? = null
@@ -215,14 +211,7 @@ internal class Live2DGLKViewDelegate(private val state: Live2DState) : NSObject(
 actual fun Live2D(
     modifier: Modifier,
     state: Live2DState,
-    onHitAreaClick: ((hitArea: String) -> Unit)?
 ) {
-    SideEffect {
-        if (onHitAreaClick != null) {
-            state.onHitAreaClick = onHitAreaClick
-        }
-    }
-
     UIKitView(
         factory = {
             val eaglContext = EAGLContext(kEAGLRenderingAPIOpenGLES2)

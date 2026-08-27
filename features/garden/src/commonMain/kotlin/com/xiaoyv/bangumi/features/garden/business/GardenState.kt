@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.features.garden.business
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
-import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.SearchMagnetBody
 
 /**
  * [GardenState]

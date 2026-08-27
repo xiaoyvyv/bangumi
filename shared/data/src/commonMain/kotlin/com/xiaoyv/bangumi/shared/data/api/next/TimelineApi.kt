@@ -4,8 +4,8 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline

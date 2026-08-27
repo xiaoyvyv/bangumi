@@ -6,12 +6,8 @@ import com.fleeksoft.ksoup.nodes.Document
 import com.xiaoyv.bangumi.shared.core.types.AppWebApiDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionWebPath
 import com.xiaoyv.bangumi.shared.core.types.CollectionWebSortType
-import com.xiaoyv.bangumi.shared.core.types.CommentType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
-import com.xiaoyv.bangumi.shared.core.types.ReportReason
-import com.xiaoyv.bangumi.shared.core.types.ReportType
-import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
@@ -43,9 +39,9 @@ import io.ktor.util.date.getTimeMillis
  */
 @AppWebApiDsl
 interface BgmWebApi {
-    @GET("https://bgm.tv")
-    suspend fun fetchMainPage(): Document
-
+    /**
+     * 获取网页登录表单
+     */
     @GET("login")
     suspend fun fetchLoginForm(): Document
 
@@ -54,7 +50,6 @@ interface BgmWebApi {
      */
     @GET("signup/captcha")
     suspend fun fetchVerifyCodeImage(@QueryMap map: Map<String, String>): HttpResponse
-
 
     /**
      * 获取用户设置
@@ -90,61 +85,10 @@ interface BgmWebApi {
     suspend fun fetchUserMessageDetail(@Path("id", encoded = true) id: Long): Document
 
     /**
-     * 浏览条目
+     * 获取条目详情
      */
-    @GET("{type}/browser")
-    suspend fun fetchBrowser(
-        @Path("type") @SubjectWebPath type: String,
-        @Query("sort") @SubjectSortBrowserType sort: String,
-    ): Document
-
     @GET("subject/{subjectId}")
     suspend fun fetchSubjectDetail(@Path("subjectId") subjectId: Long): Document
-
-    /**
-     * 获取条目吐槽
-     */
-    @GET("subject/{subjectId}/comments")
-    suspend fun fetchSubjectComment(
-        @Path("subjectId") subjectId: Long,
-        @Query("page") page: Int = 1,
-    ): Document
-
-
-    /**
-     * 获取条目角色信息
-     */
-    @GET("subject/{subjectId}/characters")
-    suspend fun fetchSubjectCharacter(@Path("subjectId") subjectId: Long): Document
-
-
-    /**
-     * 获取条目人物信息
-     */
-    @GET("subject/{subjectId}/persons")
-    suspend fun fetchSubjectPerson(@Path("subjectId") subjectId: Long): Document
-
-
-    /**
-     * 获取条目日志信息
-     */
-    @GET("subject/{subjectId}/reviews/{page}.html")
-    suspend fun fetchSubjectBlog(
-        @Path("subjectId") subjectId: Long,
-        @Path("page") page: Int,
-    ): Document
-
-    /**
-     * 获取条目帖子信息
-     */
-    @GET("subject/{subjectId}/board")
-    suspend fun fetchSubjectTopic(@Path("subjectId") subjectId: Long): Document
-
-    /**
-     * 获取条目关联目录
-     */
-    @GET("subject/{subjectId}/index")
-    suspend fun fetchSubjectIndex(@Path("subjectId") subjectId: Long, @Query("page") page: Int): Document
 
     /**
      * 获取条目透视
@@ -183,28 +127,16 @@ interface BgmWebApi {
     suspend fun fetchCharacterAlbum(@Path("monoId") monoId: Long, @Query("page") page: Int): Document
 
     /**
-     * 获取角色关联目录
-     */
-    @GET("character/{monoId}/indices")
-    suspend fun fetchCharacterIndices(@Path("monoId") monoId: Long, @Query("page") page: Int): Document
-
-    /**
      * 获取人物详情信息
      */
     @GET("person/{monoId}")
     suspend fun fetchPersonDetail(@Path("monoId") monoId: Long): Document
 
     /**
-     * 获取人物职位
+     * 获取人物作品的职位过滤项
      */
     @GET("person/{monoId}/works")
     suspend fun fetchPersonWorkPosition(@Path("monoId") monoId: Long): Document
-
-    /**
-     * 获取人物关联目录
-     */
-    @GET("person/{monoId}/indices")
-    suspend fun fetchPersonIndices(@Path("monoId") monoId: Long, @Query("page") page: Int): Document
 
     /**
      * 按条目分类浏览全部日志
@@ -267,44 +199,6 @@ interface BgmWebApi {
     ): List<ComposeDollarItem>
 
     /**
-     * 隐私设置页面
-     */
-    @GET("settings/privacy")
-    suspend fun fetchUserPrivacy(): Document
-
-    /**
-     * 时间胶囊-指定用户
-     *
-     * @param ajax 仅返回嵌套的 html
-     */
-    @GET("user/{username}/timeline")
-    suspend fun fetchTimelineForUser(
-        @Path("username", encoded = true) username: String,
-        @Query("type") type: String,
-        @Query("page") page: Int? = null,
-        @Query("ajax") ajax: Long = 1,
-    ): Document
-
-    /**
-     * 时间胶囊-全部
-     */
-    @GET("timeline")
-    suspend fun fetchTimelineForWhole(
-        @Query("type") type: String,
-        @Query("page") page: Int? = null,
-        @Query("ajax") ajax: Long = 1,
-    ): Document
-
-    /**
-     * 时间胶囊-吐槽回复内容
-     */
-    @GET("user/{username}/timeline/status/{timelineId}")
-    suspend fun fetchTimelineReply(
-        @Path("username", encoded = true) username: String,
-        @Path("timelineId", encoded = true) timelineId: String,
-    ): Document
-
-    /**
      * 时间胶囊-删除时间线
      */
     @GET("erase/tml/{timelineId}")
@@ -315,65 +209,10 @@ interface BgmWebApi {
     ): Document
 
     /**
-     * 小组-全站
-     *
-     * @param category 全部传 `all`
-     */
-    @GET("group/category/{category}")
-    suspend fun fetchAllGroup(
-        @Path("category", encoded = true) category: String,
-        @Query("page") page: Int = 1,
-    ): Document
-
-    /**
-     * 用户加入的小组
-     */
-    @GET("user/{username}/groups")
-    suspend fun fetchUserGroup(@Path("username", encoded = true) username: String): Document
-
-    /**
      * 小组主页
      */
     @GET("group/discover")
     suspend fun fetchGroupHomepage(): Document
-
-    /**
-     * 查询指定用户的日志
-     */
-    @GET("user/{username}/blog")
-    suspend fun fetchUserBlogList(
-        @Path("username", encoded = true) username: String,
-        @Query("page") page: Int = 1,
-    ): Document
-
-    /**
-     * 查询指定用户创建的目录
-     */
-    @GET("user/{username}/index")
-    suspend fun fetchUserIndexCreateList(
-        @Path("username", encoded = true) username: String,
-        @Query("page") page: Int = 1,
-        @Query("ajax") ajax: Long = 1,
-    ): Document
-
-    /**
-     * 查询指定用户收藏的目录
-     */
-    @GET("user/{username}/index/collect")
-    suspend fun fetchUserIndexCollectionList(
-        @Path("username", encoded = true) username: String,
-        @Query("page") page: Int = 1,
-        @Query("ajax") ajax: Long = 1,
-    ): Document
-
-    /**
-     * 查询全站目录
-     */
-    @GET("index/browser")
-    suspend fun fetchIndexBorwser(
-        @Query("orderby") orderby: String,
-        @Query("page") page: Int = 1,
-    ): Document
 
     /**
      * 查询目录首页
@@ -386,7 +225,6 @@ interface BgmWebApi {
      */
     @GET("index/{id}")
     suspend fun fetchIndexDetail(@Path("id") id: Long, @Query("cat") @IndexCatWebTabType cat: String): Document
-
 
     /**
      * Topic 详情
@@ -461,33 +299,6 @@ interface BgmWebApi {
         @Field("submit") submit: String = "授权",
     ): HttpResponse
 
-
-    /**
-     * 贴贴
-     */
-    @GET("like")
-    suspend fun submitReaction(
-        @Query("type") @CommentType type: Int,
-        @Query("main_id") mainId: Long,
-        @Query("id") id: String,
-        @Query("value") value: String,
-        @Query("gh") gh: String,
-        @Query("ajax") ajax: Int = 1,
-    ): HttpResponse
-
-    /**
-     * 举报
-     */
-    @GET("/report")
-    suspend fun submitReport(
-        @Query("id") targetId: Long,
-        @Query("type") @ReportType type: Int,
-        @Query("value") @ReportReason value: Int,
-        @Query("comment") comment: String,
-        @Query("formhash") formhash: String,
-        @Query("update") update: String = "报告疑虑",
-    ): Document
-
     /**
      * 保存用户设置
      */
@@ -499,17 +310,6 @@ interface BgmWebApi {
      */
     @POST("settings/network_services")
     suspend fun submitUpdateUserServicesInfo(@Body body: MultiPartFormDataContent): Document
-
-    /**
-     * 发表评论
-     */
-    @POST("{action}")
-    @FormUrlEncoded
-    suspend fun submitNewReply(
-        @Path("action", encoded = true) action: String,
-        @FieldMap params: Map<String, Any>,
-        @Query("ajax") ajax: Int = 1,
-    ): HttpResponse
 
     /**
      * 发表Dollars
@@ -588,14 +388,6 @@ interface BgmWebApi {
         @Field("action") action: String = "join-bye",
     ): Document
 
-    /**
-     * 添加目录收藏
-     */
-    @GET("index/{indexId}/collect")
-    suspend fun submitCollectionIndexAdd(
-        @Path("indexId") indexId: Long,
-        @Query("gh") formHash: String,
-    ): HttpResponse
 
     /**
      * 移除目录收藏

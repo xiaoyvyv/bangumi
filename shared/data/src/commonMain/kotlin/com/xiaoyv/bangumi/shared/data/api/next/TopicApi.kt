@@ -3,11 +3,11 @@ package com.xiaoyv.bangumi.shared.data.api.next
 import androidx.annotation.IntRange
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateSubjectTopicRequest
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateTopic
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateContent
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateSubjectTopicRequest
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateTopic
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply

@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
-import com.xiaoyv.bangumi.shared.data.model.request.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.getString

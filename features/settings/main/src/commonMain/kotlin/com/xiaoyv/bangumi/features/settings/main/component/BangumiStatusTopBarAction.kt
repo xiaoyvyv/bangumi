@@ -29,7 +29,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +41,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -54,27 +54,16 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_bgm_status_hint_unkno
 import com.xiaoyv.bangumi.core_resource.resources.settings_bgm_status_title
 import com.xiaoyv.bangumi.core_resource.resources.settings_bgm_status_updated_at
 import com.xiaoyv.bangumi.core_resource.resources.settings_bgm_status_view_detail
+import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainEvent
+import com.xiaoyv.bangumi.features.settings.main.business.SettingsMainState
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
-import com.xiaoyv.bangumi.shared.data.api.client.createHttpClient
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
-import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
+import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeBangumiStatus
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
-import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
-import io.ktor.client.call.body
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.request.get
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
-
-@Serializable
-private data class BangumiStatusMini(
-    @SerialName("message") val message: String = "",
-    @SerialName("status") val status: String = "",
-    @SerialName("updated_at") val updatedAt: Long = 0L,
-)
 
 private data class StatusDotInfo(
     val color: Color,
@@ -83,13 +72,16 @@ private data class StatusDotInfo(
 
 @Composable
 fun BangumiStatusTopBarAction(
+    state: SettingsMainState,
+    onActionEvent: (SettingsMainEvent.Action) -> Unit,
     modifier: Modifier = Modifier,
     iconSize: Dp = 22.dp,
 ) {
     val actionHandler = LocalActionHandler.current
-    val networkConfig = currentSettings().network
-    val client = remember(networkConfig) { createHttpClient(config = networkConfig, logLevel = LogLevel.NONE) }
-    DisposableEffect(client) { onDispose { client.close() } }
+
+    val data = state.bangumiStatus
+    val loading = state.statusLoading
+    val requestFailed = state.statusFailed
 
     val titleText = stringResource(Res.string.settings_bgm_status_title)
     val currentStatusText = stringResource(Res.string.settings_bgm_status_current)
@@ -97,26 +89,10 @@ fun BangumiStatusTopBarAction(
     val unknownText = stringResource(Res.string.global_unknown)
 
     var expanded by remember { mutableStateOf(false) }
-    var loading by remember { mutableStateOf(false) }
-    var data by remember { mutableStateOf<BangumiStatusMini?>(null) }
-    var requestFailed by remember { mutableStateOf(false) }
 
-    suspend fun refresh() {
-        if (loading) return
-        loading = true
-        requestFailed = false
-        runCatching {
-            client.get(WebConstant.URL_BGM_STATUS_API).body<BangumiStatusMini>()
-        }.onSuccess {
-            data = it
-        }.onFailure {
-            requestFailed = true
-        }
-        loading = false
+    LaunchedEffect(expanded) {
+        if (expanded) onActionEvent(SettingsMainEvent.Action.OnFetchBangumiStatus)
     }
-
-    LaunchedEffect(Unit) { refresh() }
-    LaunchedEffect(expanded) { if (expanded) refresh() }
 
     Box(modifier = modifier) {
         IconButton(onClick = { expanded = true }) {
@@ -335,4 +311,23 @@ private fun Modifier.breathing(enabled: Boolean): Modifier {
         scaleX = scale,
         scaleY = scale,
     )
+}
+
+@Preview
+@Composable
+private fun PreviewBangumiStatusTopBarAction() {
+    PreviewColumn {
+        BangumiStatusTopBarAction(
+            state = SettingsMainState(
+                bangumiStatus = ComposeBangumiStatus(
+                    message = "Operational",
+                    status = "ok",
+                    updatedAt = 1710000000L,
+                ),
+                statusLoading = false,
+                statusFailed = false
+            ),
+            onActionEvent = {}
+        )
+    }
 }

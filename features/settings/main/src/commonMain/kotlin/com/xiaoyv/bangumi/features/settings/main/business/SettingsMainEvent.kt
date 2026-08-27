@@ -18,5 +18,6 @@ sealed class SettingsMainEvent {
         data class OnRefresh(val loading: Boolean) : Action()
         data object OnLogout : Action()
         data object OnCleanCache : Action()
+        data object OnFetchBangumiStatus : Action()
     }
 }

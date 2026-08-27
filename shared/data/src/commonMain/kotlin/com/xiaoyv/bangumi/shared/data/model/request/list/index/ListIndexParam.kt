@@ -2,6 +2,8 @@ package com.xiaoyv.bangumi.shared.data.model.request.list.index
 
 import androidx.compose.runtime.Immutable
 import com.appmattus.crypto.Algorithm
+import com.xiaoyv.bangumi.shared.core.types.IndexOrderType
+import com.xiaoyv.bangumi.shared.core.types.IndexType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import kotlinx.serialization.SerialName
@@ -32,20 +34,18 @@ data class ListIndexParam(
     /**
      * [ListIndexType.Companion.BROWSER] 浏览全部目录使用的排序方式
      */
-    @SerialName("browserOrder")
-    val browserOrder: String = "",
+    @SerialName("browserOrder") @IndexOrderType val browserOrder: String? = null,
+    @SerialName("browserType") @IndexType val browserType: Int? = null,
 
     /**
      * [ListIndexType.Companion.SEARCH] 搜索目录
      */
-    @SerialName("search")
-    val search: IndexSearchBody = IndexSearchBody.Empty,
+    @SerialName("search") val search: IndexSearchBody = IndexSearchBody.Empty,
 
     /**
      * 相关的
      */
-    @SerialName("related")
-    val related: IndexRelatedBody = IndexRelatedBody.Empty,
+    @SerialName("related") val related: IndexRelatedBody = IndexRelatedBody.Empty,
 ) {
     val uniqueKey = Algorithm.SHA_1.hash(toString().encodeToByteArray()).toHexString()
 

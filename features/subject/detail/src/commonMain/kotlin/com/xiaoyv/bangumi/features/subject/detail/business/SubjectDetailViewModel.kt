@@ -18,7 +18,8 @@ import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -97,8 +98,9 @@ class SubjectDetailViewModel(
         when (event) {
             is SubjectDetailEvent.Action.OnRefresh -> refresh(event.loading)
             is SubjectDetailEvent.Action.DeleteCollection -> onDeleteCollection()
-            is SubjectDetailEvent.Action.OnUpdateSubjectCollection -> onUpdateSubjectCollection(event.update, event.showLoadingDialog)
             is SubjectDetailEvent.Action.OnUpdateEpisodeCollection -> onUpdateEpisodeCollection(event.episodes, event.type)
+            is SubjectDetailEvent.Action.OnUpdateSubjectCollection -> onUpdateSubjectCollection(event.update, event.showLoadingDialog)
+            is SubjectDetailEvent.Action.OnUpdateSubjectProgress -> onUpdateSubjectProgress(event.update, event.showLoadingDialog)
         }
     }
 
@@ -174,10 +176,10 @@ class SubjectDetailViewModel(
             }
     }
 
-    private fun onUpdateSubjectCollection(update: CollectionSubjectUpdate, showLoadingDialog: Boolean) = intent {
+    private fun onUpdateSubjectCollection(update: CollectionSubjectParam, showLoadingDialog: Boolean) = intent {
         reduceData { state.copy(loading = LoadingState.Loading) }
 
-        withActionLoading(enable = showLoadingDialog) { collectionRepository.submitUpdateUserSubject(args.subjectId, update) }
+        withActionLoading(enable = showLoadingDialog) { collectionRepository.submitUpdateSubjectCollection(args.subjectId, update) }
             .onFailure {
                 postToast { it.errMsg }
 
@@ -191,6 +193,24 @@ class SubjectDetailViewModel(
                     subject.copy(interest = subject.interest.updateFrom(update))
                 })
 
+            }
+    }
+
+    private fun onUpdateSubjectProgress(update: CollectionSubjectProgressParam, showLoadingDialog: Boolean) = intent {
+        reduceData { state.copy(loading = LoadingState.Loading) }
+
+        withActionLoading(enable = showLoadingDialog) { collectionRepository.submitUpdateSubjectProgress(args.subjectId, update) }
+            .onFailure {
+                postToast { it.errMsg }
+
+                reduceData { state.copy(loading = LoadingState.Error(it)) }
+            }
+            .onSuccess {
+                reduceData { state.copy(loading = LoadingState.NotLoading) }
+
+                personalStateStore.emitSubjectUpdated(args.subjectId, state.data.run {
+                    subject.copy(interest = subject.interest.updateFrom(update))
+                })
             }
     }
 

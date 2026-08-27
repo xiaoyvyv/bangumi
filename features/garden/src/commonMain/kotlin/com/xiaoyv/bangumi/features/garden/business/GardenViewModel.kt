@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
-import com.xiaoyv.bangumi.shared.data.model.request.SearchMagnetBody
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.SearchMagnetBody
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import kotlinx.coroutines.flow.flatMapLatest

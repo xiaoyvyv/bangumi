@@ -8,14 +8,12 @@ typealias BgmLive2DState = Live2DState
 @Composable
 fun rememberBgmLive2DState(
     workDir: String = "",
-    onHitAreaClick: ((hitArea: String) -> Unit)? = null
-): BgmLive2DState = rememberLive2DState(workDir, onHitAreaClick)
+): BgmLive2DState = rememberLive2DState(workDir)
 
 @Composable
 fun BgmLive2DView(
     modifier: Modifier = Modifier,
     state: BgmLive2DState = rememberBgmLive2DState(),
-    onHitAreaClick: ((hitArea: String) -> Unit)? = null
 ) {
-    Live2D(modifier = modifier, state = state, onHitAreaClick = onHitAreaClick)
+    Live2D(modifier = modifier, state = state)
 }

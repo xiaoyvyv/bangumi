@@ -5,8 +5,8 @@ package com.xiaoyv.bangumi.shared.data.api.client
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.api.AuthApi
-import com.xiaoyv.bangumi.shared.data.api.BgmJsonApi
 import com.xiaoyv.bangumi.shared.data.api.BgmWebApi
+import com.xiaoyv.bangumi.shared.data.api.ChoreApi
 import com.xiaoyv.bangumi.shared.data.api.DouBanApi
 import com.xiaoyv.bangumi.shared.data.api.ImageApi
 import com.xiaoyv.bangumi.shared.data.api.TraceApi
@@ -17,8 +17,8 @@ import com.xiaoyv.bangumi.shared.data.api.client.cookie.EmptyCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthPixivAjaxPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.BmoPlugin
 import com.xiaoyv.bangumi.shared.data.api.createAuthApi
-import com.xiaoyv.bangumi.shared.data.api.createBgmJsonApi
 import com.xiaoyv.bangumi.shared.data.api.createBgmWebApi
+import com.xiaoyv.bangumi.shared.data.api.createChoreApi
 import com.xiaoyv.bangumi.shared.data.api.createDouBanApi
 import com.xiaoyv.bangumi.shared.data.api.createImageApi
 import com.xiaoyv.bangumi.shared.data.api.createTraceApi
@@ -130,10 +130,6 @@ class ApiClient(
         createApiKtorfit(bgmHttpClientNoRedirect, WebConstant.URL_BASE_NEXT_API)
     }
 
-    private val publicApiKtorfit by lazy {
-        createApiKtorfit(bgmHttpClientNoRedirect, WebConstant.URL_BASE_API)
-    }
-
     private val appApiKtorfit by lazy {
         createDocumentKtorfit(createHttpClient(config), WebConstant.URL_BASE_APP_API)
     }
@@ -181,7 +177,6 @@ class ApiClient(
 
     val bgmWebApi by lazy { webKtorfit.createBgmWebApi() }
     val bgmWebApiNoRedirect by lazy { webKtorfitNoRedirect.createBgmWebApi() }
-    val bgmJsonApi by lazy { publicApiKtorfit.createBgmJsonApi() }
 
     val nextRelationshipApi by lazy { nextApiKtorfit.createRelationshipApi() }
     val nextUserApi by lazy { nextApiKtorfit.createUserApi() }
@@ -208,9 +203,11 @@ class ApiClient(
     val pixivApi: PixivApi by lazy { pixivKtorfit.createPixivApi() }
     val pixivAjaxApi: PixivAjaxApi by lazy { pixivAjaxKtorfit.createPixivAjaxApi() }
     val dbApi: DouBanApi by lazy { dbApiKtorfit.createDouBanApi() }
+    val choreApi: ChoreApi by lazy { appApiKtorfit.createChoreApi() }
 
     suspend fun <R> requestAuthApi(block: suspend AuthApi.() -> R) = requestApi(authApi, block = block)
 
+    suspend fun <R> requestChoreApi(block: suspend ChoreApi.() -> R) = requestApi(choreApi, block = block)
     suspend fun <R> requestTraceApi(block: suspend TraceApi.() -> R) = requestApi(traceApi, block = block)
     suspend fun <R> requestImageApi(block: suspend ImageApi.() -> R) = requestApi(imageApi, block = block)
     suspend fun <R> requestDouBanApi(block: suspend DouBanApi.() -> R) = requestApi(dbApi, block = block)
@@ -232,15 +229,6 @@ class ApiClient(
     suspend fun <R> requestNextTopicApi(block: suspend TopicApi.() -> R) = requestApi(nextTopicApi, block = block)
     suspend fun <R> requestNextBlogApi(block: suspend BlogApi.() -> R) = requestApi(nextBlogApi, block = block)
     suspend fun <R> requestNextTerminalApi(block: suspend TerminalApi.() -> R) = requestApi(nextTerminalApi, block = block)
-
-
-    /**
-     * 请求 BgmJsonApi 数据 DSL
-     */
-    suspend fun <R> requestJsonApi(
-        context: CoroutineContext = Dispatchers.IO,
-        block: suspend BgmJsonApi.() -> R,
-    ) = requestApi(bgmJsonApi, context, block)
 
 
     /**

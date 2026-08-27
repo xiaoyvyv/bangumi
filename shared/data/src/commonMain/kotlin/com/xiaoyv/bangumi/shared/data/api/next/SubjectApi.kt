@@ -6,8 +6,8 @@ import com.xiaoyv.bangumi.shared.core.types.EpisodeType
 import com.xiaoyv.bangumi.shared.core.types.ModeType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateGroupTopicRequest
-import com.xiaoyv.bangumi.shared.data.model.request.LikeCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateGroupTopicRequest
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
@@ -176,6 +177,16 @@ interface SubjectApi {
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
     ): ComposePage<ComposeSubjectDisplay>
+
+    /**
+     * 获取条目关联的目录
+     */
+    @GET("p1/subjects/{subjectID}/indexes")
+    suspend fun getSubjectIndexes(
+        @Path("subjectID") subjectID: Long,
+        @Query("limit") limit: Int? = 20,
+        @Query("offset") offset: Int? = 0
+    ): ComposePage<ComposeIndex>
 
     /**
      * 获取条目的评论

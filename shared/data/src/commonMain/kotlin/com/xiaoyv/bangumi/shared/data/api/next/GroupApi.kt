@@ -4,8 +4,8 @@ import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupFilterMode
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupMemberRole
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupSortType
-import com.xiaoyv.bangumi.shared.data.model.request.CreateGroupTopicRequest
-import com.xiaoyv.bangumi.shared.data.model.request.GroupTopicFilter
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateGroupTopicRequest
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.GroupTopicFilter
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus

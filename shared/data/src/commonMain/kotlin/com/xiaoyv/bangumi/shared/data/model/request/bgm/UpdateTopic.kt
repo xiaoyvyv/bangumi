@@ -1,7 +1,9 @@
-package com.xiaoyv.bangumi.shared.data.model.request
+package com.xiaoyv.bangumi.shared.data.model.request.bgm
 
 
-import kotlinx.serialization.*
+import kotlinx.serialization.Required
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * @param content bbcode

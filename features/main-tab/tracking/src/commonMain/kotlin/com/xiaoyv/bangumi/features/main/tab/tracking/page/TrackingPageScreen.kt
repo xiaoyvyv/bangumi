@@ -31,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingEvent
@@ -43,14 +45,12 @@ import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeSubjectLazyItems
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
@@ -246,17 +246,17 @@ private fun TrackingPageScreenContentItem(
 
                         onInputChangeConfirm = {
                             onActionEvent(
-                                TrackingPageEvent.Action.OnUpdateSubjectCollection(
+                                TrackingPageEvent.Action.OnUpdateSubjectProgress(
                                     subject = item,
-                                    update = CollectionSubjectUpdate(epStatus = it)
+                                    update = CollectionSubjectProgressParam(epStatus = it)
                                 )
                             )
                         },
                         onClickIncrease = {
                             onActionEvent(
-                                TrackingPageEvent.Action.OnUpdateSubjectCollection(
+                                TrackingPageEvent.Action.OnUpdateSubjectProgress(
                                     subject = item,
-                                    update = CollectionSubjectUpdate(epStatus = nextEp)
+                                    update = CollectionSubjectProgressParam(epStatus = nextEp)
                                 )
                             )
                         }
@@ -274,17 +274,17 @@ private fun TrackingPageScreenContentItem(
                         },
                         onInputChangeConfirm = {
                             onActionEvent(
-                                TrackingPageEvent.Action.OnUpdateSubjectCollection(
+                                TrackingPageEvent.Action.OnUpdateSubjectProgress(
                                     subject = item,
-                                    update = CollectionSubjectUpdate(volStatus = it)
+                                    update = CollectionSubjectProgressParam(volStatus = it)
                                 )
                             )
                         },
                         onClickIncrease = {
                             onActionEvent(
-                                TrackingPageEvent.Action.OnUpdateSubjectCollection(
+                                TrackingPageEvent.Action.OnUpdateSubjectProgress(
                                     subject = item,
-                                    update = CollectionSubjectUpdate(volStatus = nextVol)
+                                    update = CollectionSubjectProgressParam(volStatus = nextVol)
                                 )
                             )
                         }

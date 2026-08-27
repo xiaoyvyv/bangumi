@@ -1,11 +1,13 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
-import com.xiaoyv.bangumi.shared.data.model.request.CreateBlogEntryRequest
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.UpdateContent
+import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateBlogEntryRequest
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateContent
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import de.jensklingenberg.ktorfit.http.Body
@@ -19,6 +21,21 @@ import io.ktor.client.statement.HttpResponse
 
 @AppJsonApiDsl
 interface BlogApi {
+
+    /**
+     * 获取频道日志
+     *
+     * @param type
+     * @param limit max 100 (optional, default to 6)
+     * @param offset min 0 (optional, default to 0)
+     */
+    @GET("p1/channels/{type}/blogs")
+    suspend fun getChannelBlogs(
+        @Path("type") @SubjectType type: Int,
+        @Query("limit") limit: Int? = 100,
+        @Query("offset") offset: Int? = 0
+    ): ComposePage<ComposeBlogEntry>
+
     /**
      * 创建日志的吐槽
      */

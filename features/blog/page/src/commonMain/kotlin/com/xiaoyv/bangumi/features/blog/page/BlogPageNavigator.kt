@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val blogPageModule = module {
     viewModel { (param: ListBlogParam) ->
-        BlogPageViewModel(ugcRepository = get(), param = param)
+        BlogPageViewModel(param = param, blogRepository = get())
     }
 }

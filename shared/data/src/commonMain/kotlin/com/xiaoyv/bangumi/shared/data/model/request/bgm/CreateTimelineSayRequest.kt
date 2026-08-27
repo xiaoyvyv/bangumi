@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.shared.data.model.request
+package com.xiaoyv.bangumi.shared.data.model.request.bgm
 
 import kotlinx.serialization.Required
 import kotlinx.serialization.SerialName

@@ -4,7 +4,8 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
@@ -36,9 +37,20 @@ interface CollectionRepository {
         @CollectionEpisodeType type: Int,
     ): Result<Unit>
 
-    suspend fun submitUpdateUserSubject(
+    /**
+     * 添加或更新条目收藏
+     */
+    suspend fun submitUpdateSubjectCollection(
         subjectId: Long,
-        update: CollectionSubjectUpdate,
+        update: CollectionSubjectParam,
+    ): Result<Unit>
+
+    /**
+     * 更新条目收藏的格子进度
+     */
+    suspend fun submitUpdateSubjectProgress(
+        subjectId: Long,
+        update: CollectionSubjectProgressParam,
     ): Result<Unit>
 
     suspend fun submitRemoveSubjectCollection(subjectId: Long): Result<Unit>

@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.model.request.list.blog
 
 import androidx.compose.runtime.Immutable
 import com.appmattus.crypto.Algorithm
-import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
+import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import kotlinx.serialization.SerialName
@@ -38,9 +38,8 @@ data class ListBlogParam(
     /**
      * [ListBlogType.BROWSER] 浏览全站日志
      */
-    @field:SubjectWebPath
     @SerialName("browser")
-    val browser: String = "",
+    @SubjectType val browserType: Int = SubjectType.UNKNOWN,
 ) {
     val uniqueKey = Algorithm.SHA_1.hash(toString().encodeToByteArray()).toHexString()
 

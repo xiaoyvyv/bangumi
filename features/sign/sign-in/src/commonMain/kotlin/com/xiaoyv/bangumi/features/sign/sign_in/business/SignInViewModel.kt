@@ -11,7 +11,7 @@ import com.xiaoyv.bangumi.shared.core.types.LoadingState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
-import com.xiaoyv.bangumi.shared.data.model.request.LoginParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.LoginParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginResult
 import com.xiaoyv.bangumi.shared.data.repository.SignRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
@@ -43,7 +43,12 @@ class SignInViewModel(
             is SignInEvent.Action.OnCodeChange -> onCodeChange(event.code)
             is SignInEvent.Action.OnSignIn -> onSignIn()
             is SignInEvent.Action.OnRefreshVerifyCode -> onRefreshVerifyCodeImage()
+            is SignInEvent.Action.OnReceiveTurnstileToken -> onReceiveTurnstileToken(event.token)
         }
+    }
+
+    private fun onReceiveTurnstileToken(token: String) = intent {
+        reduceData { state.copy(turnstileToken = token) }
     }
 
     private fun onCodeChange(value: TextFieldValue) = intent {
@@ -113,6 +118,15 @@ class SignInViewModel(
 
     private fun onSignIn() = intent {
         reduceData { state.copy(loggingRunning = true) }
+        /*      userRepository.submitLogin(
+                  NextWebLoginParam(
+                      email = state.data.email.text,
+                      password = state.data.password.text,
+                      turnstileToken = state.data.turnstileToken
+                  )
+              ).map {
+                  ComposeLoginResult(success = true, composeUser = it, message = "登录成功~")
+              }*/
 
         signRepo.sendLogin(
             param = state.data.let {

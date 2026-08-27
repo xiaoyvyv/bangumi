@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.NextWebLoginParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
@@ -36,6 +37,7 @@ interface UserRepository {
 
     fun fetchUserPager(param: ListUserParam): MemoryPagingController<ComposeUserDisplay, String>
 
+
     suspend fun fetchUserInfo(username: String): Result<ComposeUser>
 
     suspend fun fetchSelfFriends(): Result<List<ComposeFriend>>
@@ -50,7 +52,6 @@ interface UserRepository {
 
     suspend fun fetchUserPrivacy(): Result<ComposeUserPrivacy>
 
-    suspend fun submitUserPrivacy(privacy: ComposeUserPrivacy): Result<ComposeUserPrivacy>
 
     suspend fun fetchUserUnreadNotification(): Result<ComposeUnRead>
 
@@ -67,6 +68,10 @@ interface UserRepository {
         offset: Int = 0,
         limit: Int = 20,
     ): Result<List<ComposeSubject>>
+
+    suspend fun submitLogin(param: NextWebLoginParam): Result<ComposeUser>
+
+    suspend fun submitUserPrivacy(privacy: ComposeUserPrivacy): Result<ComposeUserPrivacy>
 
     suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken>
 

@@ -18,7 +18,8 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
-import com.xiaoyv.bangumi.shared.data.model.request.CreateReportParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateReportParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.NextWebLoginParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
@@ -111,15 +112,9 @@ class UserRepositoryImpl(
             }
 
             ListUserType.USER_BLOCKLIST -> {
-                with(userParser) {
-                    client.bgmWebApi.fetchUserPrivacy()
-                        .fetchUserPrivacyConverted().blocklist
-                        .map { user -> ComposeUserDisplay(user = user) }
-                        .let { ComposePage(result = it, total = it.size) }
-                }
-//                client.nextRelationshipApi.getBlocklist().blocklist
-//                    .map { id -> ComposeUserDisplay(user = ComposeUser(id = id, nickname = "ID:$id")) }
-//                    .let { ComposePage(result = it, total = it.size) }
+                client.nextRelationshipApi.getBlocklist().blocklist
+                    .map { id -> ComposeUserDisplay(user = ComposeUser(id = id, nickname = "ID:$id")) }
+                    .let { ComposePage(result = it, total = it.size) }
             }
 
             ListUserType.GROUP_MEMBER -> {
@@ -185,8 +180,8 @@ class UserRepositoryImpl(
             .apply { require(isNotEmpty()) { "这里没有人哦~" } }
     }
 
-    override suspend fun fetchUserProfile(): Result<ComposeUser> = client.requestJsonApi {
-        fetchUserProfile()
+    override suspend fun fetchUserProfile(): Result<ComposeUser> = client.requestNextUserApi {
+        getMe()
     }
 
     override suspend fun fetchUserEditInfo(): Result<ResultZip2<ComposeUserEdit, ComposeUserServicesEdit>> {
@@ -256,6 +251,10 @@ class UserRepositoryImpl(
             offset = offset,
             limit = limit
         ).result
+    }
+
+    override suspend fun submitLogin(param: NextWebLoginParam): Result<ComposeUser> = client.requestNextUserApi {
+        login(param)
     }
 
     override suspend fun submitUserInfoUpdate(

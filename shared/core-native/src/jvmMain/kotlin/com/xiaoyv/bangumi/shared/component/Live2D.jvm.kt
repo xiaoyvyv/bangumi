@@ -1,12 +1,13 @@
 package com.xiaoyv.bangumi.shared.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,8 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -50,8 +49,6 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 
     private var _availableExpressions by mutableStateOf(emptyList<String>())
     actual val availableExpressions: List<String> get() = _availableExpressions
-
-    actual var onHitAreaClick: ((hitArea: String) -> Unit)? = null
 
     private var currentModelInfo: Pair<String, String>? = null
 
@@ -121,14 +118,7 @@ actual class Live2DState actual constructor(actual var workDir: String) {
 actual fun Live2D(
     modifier: Modifier,
     state: Live2DState,
-    onHitAreaClick: ((hitArea: String) -> Unit)?
 ) {
-    SideEffect {
-        if (onHitAreaClick != null) {
-            state.onHitAreaClick = onHitAreaClick
-        }
-    }
-
     DisposableEffect(state) {
         onDispose {
             state.release()
@@ -141,10 +131,6 @@ actual fun Live2D(
                 detectTapGestures(
                     onTap = { offset ->
                         state.onTouch(offset.x, offset.y, 2)
-                        val hit = state.hitTest(offset.x, offset.y)
-                        if (!hit.isNullOrEmpty()) {
-                            state.onHitAreaClick?.invoke(hit)
-                        }
                     }
                 )
             }

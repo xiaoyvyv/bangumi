@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,15 +24,12 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.size.Size
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.usecase.ImageRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.currentKoinScope
 import kotlin.math.sqrt
 
@@ -46,32 +41,24 @@ fun IndexFocusCard(
     modifier: Modifier = Modifier,
 ) {
     val koinScope = currentKoinScope()
-    val images by produceState(
-        UiState(data = persistentListOf(), status = PageStatus.Loading),
-        item.id,
-        koinScope,
-    ) {
-        value = UiState(koinScope.get<ImageRepoUseCase>().fetchIndexBlogCover(item.id))
-    }
-    val payload = images.data
 
     Box(
         modifier = modifier
             .border(4.dp, MaterialTheme.colorScheme.onSurface)
             .shadow(1.dp)
     ) {
-        if (payload.isNullOrEmpty()) {
+//        if (payload.isNullOrEmpty()) {
             BlurImage(
                 modifier = Modifier.matchParentSize(),
                 model = item.creator.avatar.displayMediumImage,
                 contentDescription = null
             )
-        } else {
-            IndexFocusCard(
-                modifier = modifier,
-                images = payload
-            )
-        }
+//        } else {
+//            IndexFocusCard(
+//                modifier = modifier,
+//                images = payload
+//            )
+//        }
         Text(
             modifier = Modifier
                 .fillMaxWidth()

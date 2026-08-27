@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -73,7 +72,7 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
-import com.xiaoyv.bangumi.shared.data.model.request.CollectionSubjectUpdate
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.chart.RatingBarChart
@@ -299,8 +298,8 @@ private fun SubjectDetailEpisode(
                         onInputChangeConfirm = {
                             // 直接更新进度值
                             onActionEvent(
-                                SubjectDetailEvent.Action.OnUpdateSubjectCollection(
-                                    update = CollectionSubjectUpdate(epStatus = it),
+                                SubjectDetailEvent.Action.OnUpdateSubjectProgress(
+                                    update = CollectionSubjectProgressParam(epStatus = it),
                                     showLoadingDialog = true
                                 )
                             )
@@ -308,8 +307,8 @@ private fun SubjectDetailEpisode(
                         onClickIncrease = {
                             // 直接更新进度值
                             onActionEvent(
-                                SubjectDetailEvent.Action.OnUpdateSubjectCollection(
-                                    update = CollectionSubjectUpdate(epStatus = nextEp),
+                                SubjectDetailEvent.Action.OnUpdateSubjectProgress(
+                                    update = CollectionSubjectProgressParam(epStatus = nextEp),
                                     showLoadingDialog = true
                                 )
                             )
@@ -332,8 +331,8 @@ private fun SubjectDetailEpisode(
                         onInputChangeConfirm = {
                             // 直接更新进度值
                             onActionEvent(
-                                SubjectDetailEvent.Action.OnUpdateSubjectCollection(
-                                    update = CollectionSubjectUpdate(volStatus = it),
+                                SubjectDetailEvent.Action.OnUpdateSubjectProgress(
+                                    update = CollectionSubjectProgressParam(volStatus = it),
                                     showLoadingDialog = true
                                 )
                             )
@@ -341,8 +340,8 @@ private fun SubjectDetailEpisode(
                         onClickIncrease = {
                             // 直接更新进度值
                             onActionEvent(
-                                SubjectDetailEvent.Action.OnUpdateSubjectCollection(
-                                    update = CollectionSubjectUpdate(volStatus = nextVol),
+                                SubjectDetailEvent.Action.OnUpdateSubjectProgress(
+                                    update = CollectionSubjectProgressParam(volStatus = nextVol),
                                     showLoadingDialog = true
                                 )
                             )

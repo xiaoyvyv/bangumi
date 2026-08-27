@@ -120,7 +120,7 @@ import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.CollectionWebSortType
 import com.xiaoyv.bangumi.shared.core.types.FeatureType
 import com.xiaoyv.bangumi.shared.core.types.HomeTab
-import com.xiaoyv.bangumi.shared.core.types.IndexHomepageType
+import com.xiaoyv.bangumi.shared.core.types.IndexOrderType
 import com.xiaoyv.bangumi.shared.core.types.LayoutType
 import com.xiaoyv.bangumi.shared.core.types.MagnetGardenSort
 import com.xiaoyv.bangumi.shared.core.types.MagnetGardenTeam
@@ -129,11 +129,10 @@ import com.xiaoyv.bangumi.shared.core.types.MonoCastType
 import com.xiaoyv.bangumi.shared.core.types.ReportReason
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
-import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTab
-import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchOrder
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivArtworkSearchType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchOrder
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
@@ -338,12 +337,11 @@ object TabTokens {
     )
 
     val mainHomeBlogFilters = persistentListOf(
-        ComposeTextTab("", Res.string.global_all),
-        ComposeTextTab(SubjectWebPath.BOOK, Res.string.global_book),
-        ComposeTextTab(SubjectWebPath.ANIME, Res.string.global_anime),
-        ComposeTextTab(SubjectWebPath.MUSIC, Res.string.global_music),
-        ComposeTextTab(SubjectWebPath.GAME, Res.string.global_game),
-        ComposeTextTab(SubjectWebPath.REAL, Res.string.global_real),
+        ComposeTextTab(SubjectType.ANIME, Res.string.global_anime),
+        ComposeTextTab(SubjectType.BOOK, Res.string.global_book),
+        ComposeTextTab(SubjectType.MUSIC, Res.string.global_music),
+        ComposeTextTab(SubjectType.GAME, Res.string.global_game),
+        ComposeTextTab(SubjectType.REAL, Res.string.global_real),
     )
     val mainHomeGroupFilters = persistentListOf(
         ComposeTextTab(TAB_GROUP_HOMEPAGE, Res.string.global_hot_group),
@@ -352,8 +350,8 @@ object TabTokens {
         ComposeTextTab(GroupSortType.CREATED, Res.string.type_group_created),
     )
     val mainHomeIndexFilters = persistentListOf(
-        ComposeTextTab(IndexHomepageType.HOT, Res.string.global_hot),
-        ComposeTextTab(IndexHomepageType.NEWEST, Res.string.global_newest),
+        ComposeTextTab(IndexOrderType.HOT, Res.string.global_hot),
+        ComposeTextTab(IndexOrderType.LATEST, Res.string.global_newest),
     )
 
     val subjectTypeFilters = persistentListOf(

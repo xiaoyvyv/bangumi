@@ -1,14 +1,14 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
+import androidx.compose.runtime.Stable
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.terminal.ComposeTerminalMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.terminal.ComposeTerminalPersonality
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.terminal.ComposeTerminalSpeech
 import com.xiaoyv.bangumi.shared.data.repository.TerminalRepository
 
-class TerminalRepositoryImpl(
-    private val client: ApiClient,
-) : TerminalRepository {
+@Stable
+class TerminalRepositoryImpl(private val client: ApiClient) : TerminalRepository {
 
     override suspend fun fetchPersonalities(creator: String?): Result<List<ComposeTerminalPersonality>> =
         client.requestNextTerminalApi {

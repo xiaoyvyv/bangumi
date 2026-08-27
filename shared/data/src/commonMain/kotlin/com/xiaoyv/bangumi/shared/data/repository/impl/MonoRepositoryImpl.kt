@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
-import com.xiaoyv.bangumi.shared.data.model.request.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListPersonCastParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId

@@ -1,9 +1,11 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
+import androidx.compose.runtime.Stable
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.terminal.ComposeTerminalMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.terminal.ComposeTerminalPersonality
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.terminal.ComposeTerminalSpeech
 
+@Stable
 interface TerminalRepository {
     suspend fun fetchPersonalities(creator: String? = null): Result<List<ComposeTerminalPersonality>>
 
