@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
+import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
@@ -224,6 +225,9 @@ sealed class Screen(
 
     @Serializable
     data class TopicDetail(val id: Long, @field:TopicType val type: String) : Screen(SCREEN_ROUTE_TOPIC_DETAIL)
+
+    @Serializable
+    data class TopicPage(val param: ListTopicParam) : Screen(SCREEN_ROUTE_TOPIC_PAGE)
 
     @Serializable
     data class DetectImage(@field:DetectType val type: Int, val path: String = "") : Screen(SCREEN_ROUTE_RECEIVE)

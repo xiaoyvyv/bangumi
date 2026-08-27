@@ -88,7 +88,7 @@ interface GroupApi {
     /**
      * 获取最新的小组话题
      *
-     * @param mode 登录时默认为 joined, 未登录或没有加入小组时始终为 all
+     * @param mode joined,all,created,replied
      * @param limit  (optional, default to 20)
      * @param offset  (optional, default to 0)
      */

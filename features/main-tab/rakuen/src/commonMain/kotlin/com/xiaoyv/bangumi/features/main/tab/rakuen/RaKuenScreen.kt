@@ -17,6 +17,9 @@ import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenState
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenViewModel
 import com.xiaoyv.bangumi.features.main.tab.rakuen.page.RaKuenPageScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.GroupTopicFilter
+import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -79,13 +82,27 @@ private fun RaKuenScreen(
                             options = state.actions,
                             onOptionClick = {
                                 when (it.type) {
-                                    0 -> {
-//                                        onActionEvent(RaKuenEvent.Action.OnChangeType(it.type))
-                                    }
+                                    0 -> onUiEvent(
+                                        RaKuenEvent.UI.OnNavScreen(
+                                            Screen.TopicPage(
+                                                ListTopicParam(
+                                                    type = ListTopicType.GROUP_ALL,
+                                                    mode = GroupTopicFilter.CREATED
+                                                )
+                                            )
+                                        )
+                                    )
 
-                                    1 -> {
-//                                        onActionEvent(RaKuenEvent.Action.OnChangeType(it.type))
-                                    }
+                                    1 -> onUiEvent(
+                                        RaKuenEvent.UI.OnNavScreen(
+                                            Screen.TopicPage(
+                                                ListTopicParam(
+                                                    type = ListTopicType.GROUP_ALL,
+                                                    mode = GroupTopicFilter.REPLIED
+                                                )
+                                            )
+                                        )
+                                    )
                                 }
                             }
                         )
