@@ -34,6 +34,7 @@ import com.xiaoyv.bangumi.shared.data.api.next.PersonApi
 import com.xiaoyv.bangumi.shared.data.api.next.RelationshipApi
 import com.xiaoyv.bangumi.shared.data.api.next.SearchApi
 import com.xiaoyv.bangumi.shared.data.api.next.SubjectApi
+import com.xiaoyv.bangumi.shared.data.api.next.TerminalApi
 import com.xiaoyv.bangumi.shared.data.api.next.TimelineApi
 import com.xiaoyv.bangumi.shared.data.api.next.TopicApi
 import com.xiaoyv.bangumi.shared.data.api.next.UserApi
@@ -47,6 +48,7 @@ import com.xiaoyv.bangumi.shared.data.api.next.createPersonApi
 import com.xiaoyv.bangumi.shared.data.api.next.createRelationshipApi
 import com.xiaoyv.bangumi.shared.data.api.next.createSearchApi
 import com.xiaoyv.bangumi.shared.data.api.next.createSubjectApi
+import com.xiaoyv.bangumi.shared.data.api.next.createTerminalApi
 import com.xiaoyv.bangumi.shared.data.api.next.createTimelineApi
 import com.xiaoyv.bangumi.shared.data.api.next.createTopicApi
 import com.xiaoyv.bangumi.shared.data.api.next.createUserApi
@@ -194,6 +196,7 @@ class ApiClient(
     val nextIndexApi by lazy { nextApiKtorfit.createIndexApi() }
     val nextTopicApi by lazy { nextApiKtorfit.createTopicApi() }
     val nextBlogApi by lazy { nextApiKtorfit.createBlogApi() }
+    val nextTerminalApi by lazy { nextApiKtorfit.createTerminalApi() }
 
     /**
      * 第三方 API
@@ -228,6 +231,7 @@ class ApiClient(
     suspend fun <R> requestNextIndexApi(block: suspend IndexApi.() -> R) = requestApi(nextIndexApi, block = block)
     suspend fun <R> requestNextTopicApi(block: suspend TopicApi.() -> R) = requestApi(nextTopicApi, block = block)
     suspend fun <R> requestNextBlogApi(block: suspend BlogApi.() -> R) = requestApi(nextBlogApi, block = block)
+    suspend fun <R> requestNextTerminalApi(block: suspend TerminalApi.() -> R) = requestApi(nextTerminalApi, block = block)
 
 
     /**

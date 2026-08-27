@@ -67,8 +67,6 @@ fun BoxScope.BgmLive2DOverlay(
                     val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
                     val pointerId = down.id
 
-                    println("[Live2D-Overlay] DOWN detected at pos=(${down.position.x}, ${down.position.y}), id=$pointerId")
-
                     live2DState.onTouch(down.position.x, down.position.y, 0)
 
                     var isLongPress = false
@@ -76,26 +74,22 @@ fun BoxScope.BgmLive2DOverlay(
 
                     val longPressResult = try {
                         withTimeout(viewConfiguration.longPressTimeoutMillis) {
-                            println("[Live2D-Overlay] Waiting for long press timeout (${viewConfiguration.longPressTimeoutMillis}ms)... touchSlop=${viewConfiguration.touchSlop}")
                             while (true) {
                                 val event = awaitPointerEvent(PointerEventPass.Initial)
                                 val change = event.changes.firstOrNull { it.id == pointerId } ?: break
 
                                 if (!change.pressed) {
-                                    println("[Live2D-Overlay] Long press CANCELLED: finger released before timeout")
                                     return@withTimeout false
                                 }
 
                                 val distance = (change.position - down.position).getDistance()
                                 if (distance > viewConfiguration.touchSlop) {
-                                    println("[Live2D-Overlay] Long press CANCELLED: moved distance=$distance > touchSlop=${viewConfiguration.touchSlop}")
                                     return@withTimeout false
                                 }
                             }
                             false
                         }
-                    } catch (e: PointerEventTimeoutCancellationException) {
-                        println("[Live2D-Overlay] Long press TIMEOUT EXCEPTION caught! Long press SUCCESS!")
+                    } catch (_: PointerEventTimeoutCancellationException) {
                         true
                     }
 
@@ -103,7 +97,6 @@ fun BoxScope.BgmLive2DOverlay(
                         isLongPress = true
                         down.consume()
                         live2DState.resetDrag()
-                        println("[Live2D-Overlay] Starting container position drag loop...")
                     }
 
                     if (isLongPress) {
@@ -113,7 +106,6 @@ fun BoxScope.BgmLive2DOverlay(
                                 val change = event.changes.firstOrNull { it.id == pointerId } ?: break
 
                                 if (!change.pressed) {
-                                    println("[Live2D-Overlay] Container position drag FINISHED: finger released")
                                     break
                                 }
 
@@ -122,25 +114,21 @@ fun BoxScope.BgmLive2DOverlay(
 
                                 offsetX += dragAmount.x
                                 offsetY += dragAmount.y
-                                println("[Live2D-Overlay] Dragging container: dx=${dragAmount.x}, dy=${dragAmount.y} -> newOffset=($offsetX, $offsetY)")
                             }
                         } finally {
                             live2DState.resetDrag()
                         }
                     } else {
-                        println("[Live2D-Overlay] Entering normal touch / model drag loop...")
                         while (true) {
                             val event = awaitPointerEvent()
                             val change = event.changes.firstOrNull { it.id == pointerId } ?: break
 
                             if (!change.pressed) {
-                                println("[Live2D-Overlay] Normal touch RELEASED: isDrag=$isDrag")
                                 live2DState.onTouch(change.position.x, change.position.y, 2)
                                 live2DState.resetDrag()
 
                                 if (!isDrag) {
                                     val hit = live2DState.hitTest(change.position.x, change.position.y)
-                                    println("[Live2D-Overlay] Hit test result: $hit")
                                     if (!hit.isNullOrEmpty()) {
                                         live2DState.onHitAreaClick?.invoke(hit)
                                     }

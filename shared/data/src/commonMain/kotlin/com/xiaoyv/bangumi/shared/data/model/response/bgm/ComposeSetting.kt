@@ -28,7 +28,7 @@ data class ComposeSetting(
     data class Live2dConfig(
         @SerialName("enable") val enable: Boolean = false,
         @SerialName("shell") val shell: Int = Shell.AUTO,
-        @SerialName("size") val size: Int = Size.SIZE_100,
+        @SerialName("size") val size: Int = Size.SIZE_75,
     ) {
         object Shell {
             const val AUTO = 0

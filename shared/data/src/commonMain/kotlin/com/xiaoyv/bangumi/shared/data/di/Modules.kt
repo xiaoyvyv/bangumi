@@ -29,6 +29,7 @@ import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.data.repository.SignRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
+import com.xiaoyv.bangumi.shared.data.repository.TerminalRepository
 import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.data.repository.TraceRepository
@@ -48,6 +49,7 @@ import com.xiaoyv.bangumi.shared.data.repository.impl.MonoRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.PixivRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.SignRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.SubjectRepositoryImpl
+import com.xiaoyv.bangumi.shared.data.repository.impl.TerminalRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.TimelineRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.TopicRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.TraceRepositoryImpl
@@ -89,6 +91,7 @@ private val repositoryModules = module {
     single<TopicRepository> { TopicRepositoryImpl(get(), get()) }
     single<CollectionRepository> { CollectionRepositoryImpl(get(), get(), get(), get()) }
     single<IndexRepository> { IndexRepositoryImpl(get(), get(), get()) }
+    single<TerminalRepository> { TerminalRepositoryImpl(get()) }
 }
 
 private val useCaseModules = module {
