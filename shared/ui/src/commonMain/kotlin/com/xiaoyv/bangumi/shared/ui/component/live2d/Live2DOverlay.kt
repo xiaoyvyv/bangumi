@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +36,8 @@ import kotlin.math.roundToInt
 @Composable
 fun BoxScope.Live2DOverlay(
     state: Live2DSpeechState,
-    live2dConfig: ComposeSetting.Live2dConfig
+    live2dConfig: ComposeSetting.Live2dConfig,
+    onBubbleClick: (payload: Live2DPayload) -> Unit = {}
 ) {
     if (!live2dConfig.enable) return
 
@@ -50,9 +52,18 @@ fun BoxScope.Live2DOverlay(
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
 
-    // 自动拉取看板娘服务端语料库
+    /**
+     * 自动拉取看板娘服务端语料库并启动休眠计时
+     */
     LaunchedEffect(Unit) {
         state.fetchSpeeches(curPsn = 1L)
+        state.startSleepTimer()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            state.dismiss()
+        }
     }
 
     Box(
@@ -66,7 +77,8 @@ fun BoxScope.Live2DOverlay(
             // 说话气泡紧贴角色头部
             Live2DSpeechBubble(
                 modifier = Modifier,
-                state = state
+                state = state,
+                onClick = onBubbleClick
             )
 
             // Live2D 角色区域
@@ -77,8 +89,11 @@ fun BoxScope.Live2DOverlay(
                         onDragOffset = { dx, dy ->
                             offsetX += dx
                             offsetY += dy
+                            state.wakeUp()
                         },
                         onClick = { _ ->
+                            state.wakeUp()
+                            state.playRandomVoice()
                             state.speakRandom()
                             true
                         }

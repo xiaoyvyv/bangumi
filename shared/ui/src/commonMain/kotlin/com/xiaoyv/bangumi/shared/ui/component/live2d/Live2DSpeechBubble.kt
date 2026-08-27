@@ -26,16 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 
 /**
- * 看板娘说话对话气泡组件
+ * 看板娘 Live2D 说话对话气泡组件
  */
 @Composable
 fun Live2DSpeechBubble(
     state: Live2DSpeechState,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: (payload: Live2DPayload) -> Unit = {}
 ) {
-    // 给阴影在 AnimatedVisibility 的布局范围内预留空间，
-    // 避免进入 / 退出动画过程中被边界裁剪。
     val shadowSpace = 20.dp
 
     AnimatedVisibility(
@@ -62,14 +60,14 @@ fun Live2DSpeechBubble(
                 )
         ) {
             Column(
-                modifier = Modifier
-                    .widthIn(max = 220.dp),
+                modifier = Modifier.widthIn(max = 220.dp),
                 horizontalAlignment = Alignment.End
             ) {
                 Surface(
                     modifier = Modifier.clickWithoutRipped {
+                        val payload = state.speechContent.payload
                         state.dismiss()
-                        onClick()
+                        onClick(payload)
                     },
                     shape = MaterialTheme.shapes.medium.copy(bottomEnd = CornerSize(4.dp)),
                     color = bubbleBgColor,
@@ -83,7 +81,9 @@ fun Live2DSpeechBubble(
                     )
                 }
 
-                // 气泡指引小尾巴
+                /**
+                 * 气泡指引小尾巴
+                 */
                 Canvas(
                     modifier = Modifier
                         .padding(end = 24.dp)
