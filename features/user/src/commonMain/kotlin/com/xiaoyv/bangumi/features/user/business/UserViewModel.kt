@@ -2,11 +2,15 @@ package com.xiaoyv.bangumi.features.user.business
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.viewModelScope
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.user_no_collection_type
+import com.xiaoyv.bangumi.core_resource.resources.user_subject_title
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
@@ -162,7 +166,7 @@ class UserViewModel(
             if (collection.onHold > 0) add(CollectionType.stringSync(type, CollectionType.ASIDE) + " " + collection.onHold)
             if (collection.dropped > 0) add(CollectionType.stringSync(type, CollectionType.DROP) + " " + collection.dropped)
         }
-        val collectionInfoText = if (collectionInfo.isEmpty()) "暂时没有收藏该类型" else collectionInfo.joinToString("、")
+        val collectionInfoText = if (collectionInfo.isEmpty()) getString(Res.string.user_no_collection_type) else collectionInfo.joinToString("、")
 
         // 有数据才添加块头
         if (result.data1.isNotEmpty() || result.data2.isNotEmpty()) {
@@ -171,7 +175,7 @@ class UserViewModel(
                     key = type.toString(),
                     header = ComposeSectionTitle(
                         id = type.toString(),
-                        title = "Ta的${getString(SubjectType.string(type))}",
+                        title = getString(Res.string.user_subject_title, getString(SubjectType.string(type))),
                         subtitle = collectionInfoText
                     ),
                     item = ComposeSubject.Empty

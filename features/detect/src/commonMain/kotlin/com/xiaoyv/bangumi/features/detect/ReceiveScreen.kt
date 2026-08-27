@@ -74,11 +74,14 @@ import com.attafitamim.krop.core.crop.LocalCropperStyle
 import com.attafitamim.krop.core.crop.cropperStyle
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_close
+import com.xiaoyv.bangumi.core_resource.resources.image_detect_anime_prefix
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_character_change_model
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_character_choose_model
+import com.xiaoyv.bangumi.core_resource.resources.image_detect_character_prefix
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_engine
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_pick
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_running
+import com.xiaoyv.bangumi.core_resource.resources.image_detect_similarity_prefix
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_start
 import com.xiaoyv.bangumi.features.detect.business.ReceiveEvent
 import com.xiaoyv.bangumi.features.detect.business.ReceiveState
@@ -588,7 +591,7 @@ private fun DetectSubjectItem(
                     )
                 ) {
                     Text(text = "Ep." + item.episode)
-                    Text(text = "匹配度：" + (item.similarity * 100).toFixed(1) + "%")
+                    Text(text = stringResource(Res.string.image_detect_similarity_prefix) + (item.similarity * 100).toFixed(1) + "%")
                     Text(text = item.from.roundToLong().formatHMS() + " - " + item.to.roundToLong().formatHMS())
                 }
             }
@@ -639,10 +642,10 @@ private inline fun DetectCharacterItem(
                             .clickable { expanded = true }
                             .padding(ContentMarginHalf),
                         text = buildAnnotatedString {
-                            withStyle(spanStyle) { append("人物：") }
+                            withStyle(spanStyle) { append(stringResource(Res.string.image_detect_character_prefix)) }
                             append(character.character.orEmpty())
                             appendLine()
-                            withStyle(spanStyle) { append("动画：") }
+                            withStyle(spanStyle) { append(stringResource(Res.string.image_detect_anime_prefix)) }
                             append(character.work.orEmpty())
                         },
                         style = MaterialTheme.typography.bodyLarge,

@@ -1,7 +1,32 @@
 package com.xiaoyv.bangumi.features.mono.browser.business
 
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.mono_cat_character
+import com.xiaoyv.bangumi.core_resource.resources.mono_cat_mecha
+import com.xiaoyv.bangumi.core_resource.resources.mono_cat_organization
+import com.xiaoyv.bangumi.core_resource.resources.mono_cat_ship
 import com.xiaoyv.bangumi.core_resource.resources.mono_character_list
+import com.xiaoyv.bangumi.core_resource.resources.mono_gender_female
+import com.xiaoyv.bangumi.core_resource.resources.mono_gender_male
+import com.xiaoyv.bangumi.core_resource.resources.mono_job_actor
+import com.xiaoyv.bangumi.core_resource.resources.mono_job_cv
+import com.xiaoyv.bangumi.core_resource.resources.mono_job_illustrator
+import com.xiaoyv.bangumi.core_resource.resources.mono_job_mangaka
+import com.xiaoyv.bangumi.core_resource.resources.mono_job_musician
+import com.xiaoyv.bangumi.core_resource.resources.mono_job_producer
+import com.xiaoyv.bangumi.core_resource.resources.mono_job_writer
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_1
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_10
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_11
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_12
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_2
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_3
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_4
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_5
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_6
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_7
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_8
+import com.xiaoyv.bangumi.core_resource.resources.mono_month_9
 import com.xiaoyv.bangumi.core_resource.resources.mono_person_list
 import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_collect
 import com.xiaoyv.bangumi.core_resource.resources.type_mono_query_comment
@@ -33,8 +58,8 @@ class MonoBrowserViewModel(
         param = initParam(),
         typeFilters = createTypeFilters(args.type),
         genderFilters = persistentListOf(
-            ComposeTextTab(labelText = "男性", type = "1"),
-            ComposeTextTab(labelText = "女性", type = "2")
+            ComposeTextTab(label = Res.string.mono_gender_male, type = "1"),
+            ComposeTextTab(label = Res.string.mono_gender_female, type = "2")
         ),
         bloodFilters = persistentListOf(
             ComposeTextTab(labelText = "A", type = "1"),
@@ -43,18 +68,18 @@ class MonoBrowserViewModel(
             ComposeTextTab(labelText = "O", type = "4")
         ),
         monthFilters = persistentListOf(
-            ComposeTextTab(labelText = "一月", type = "1"),
-            ComposeTextTab(labelText = "二月", type = "2"),
-            ComposeTextTab(labelText = "三月", type = "3"),
-            ComposeTextTab(labelText = "四月", type = "4"),
-            ComposeTextTab(labelText = "五月", type = "5"),
-            ComposeTextTab(labelText = "六月", type = "6"),
-            ComposeTextTab(labelText = "七月", type = "7"),
-            ComposeTextTab(labelText = "八月", type = "8"),
-            ComposeTextTab(labelText = "九月", type = "9"),
-            ComposeTextTab(labelText = "十月", type = "10"),
-            ComposeTextTab(labelText = "十一月", type = "11"),
-            ComposeTextTab(labelText = "十二月", type = "12"),
+            ComposeTextTab(label = Res.string.mono_month_1, type = "1"),
+            ComposeTextTab(label = Res.string.mono_month_2, type = "2"),
+            ComposeTextTab(label = Res.string.mono_month_3, type = "3"),
+            ComposeTextTab(label = Res.string.mono_month_4, type = "4"),
+            ComposeTextTab(label = Res.string.mono_month_5, type = "5"),
+            ComposeTextTab(label = Res.string.mono_month_6, type = "6"),
+            ComposeTextTab(label = Res.string.mono_month_7, type = "7"),
+            ComposeTextTab(label = Res.string.mono_month_8, type = "8"),
+            ComposeTextTab(label = Res.string.mono_month_9, type = "9"),
+            ComposeTextTab(label = Res.string.mono_month_10, type = "10"),
+            ComposeTextTab(label = Res.string.mono_month_11, type = "11"),
+            ComposeTextTab(label = Res.string.mono_month_12, type = "12"),
         ),
         sortFilters = persistentListOf(
             ComposeTextTab(type = MonoOrderByType.TYPE_DATELINE, label = Res.string.type_mono_query_dateline),
@@ -130,20 +155,20 @@ class MonoBrowserViewModel(
     private fun createTypeFilters(@MonoType type: Int): SerializeList<ComposeTextTab<String>> {
         return if (type == MonoType.CHARACTER) {
             persistentListOf(
-                ComposeTextTab(labelText = "角色", type = "1"),
-                ComposeTextTab(labelText = "机体", type = "2"),
-                ComposeTextTab(labelText = "船舰", type = "3"),
-                ComposeTextTab(labelText = "组织机构", type = "4"),
+                ComposeTextTab(label = Res.string.mono_cat_character, type = "1"),
+                ComposeTextTab(label = Res.string.mono_cat_mecha, type = "2"),
+                ComposeTextTab(label = Res.string.mono_cat_ship, type = "3"),
+                ComposeTextTab(label = Res.string.mono_cat_organization, type = "4"),
             )
         } else {
             persistentListOf(
-                ComposeTextTab(labelText = "声优", type = "1"),
-                ComposeTextTab(labelText = "漫画家", type = "2"),
-                ComposeTextTab(labelText = "绘师", type = "7"),
-                ComposeTextTab(labelText = "制作人", type = "3"),
-                ComposeTextTab(labelText = "音乐人", type = "4"),
-                ComposeTextTab(labelText = "作家", type = "8"),
-                ComposeTextTab(labelText = "演员", type = "6"),
+                ComposeTextTab(label = Res.string.mono_job_cv, type = "1"),
+                ComposeTextTab(label = Res.string.mono_job_mangaka, type = "2"),
+                ComposeTextTab(label = Res.string.mono_job_illustrator, type = "7"),
+                ComposeTextTab(label = Res.string.mono_job_producer, type = "3"),
+                ComposeTextTab(label = Res.string.mono_job_musician, type = "4"),
+                ComposeTextTab(label = Res.string.mono_job_writer, type = "8"),
+                ComposeTextTab(label = Res.string.mono_job_actor, type = "6"),
             )
         }
     }

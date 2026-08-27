@@ -30,6 +30,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_delete
 import com.xiaoyv.bangumi.core_resource.resources.global_done
 import com.xiaoyv.bangumi.core_resource.resources.global_edit
 import com.xiaoyv.bangumi.core_resource.resources.global_message
+import com.xiaoyv.bangumi.core_resource.resources.message_unread_by_recipient
 import com.xiaoyv.bangumi.features.friend.FriendRoute
 import com.xiaoyv.bangumi.features.message.business.MessageMainEvent
 import com.xiaoyv.bangumi.features.message.business.MessageMainSideEffect
@@ -311,7 +312,7 @@ private fun MessageMainScreenPageItem(
                 )
                 if (item.unread && type == MessageBoxType.TYPE_OUTBOX) Badge(
                     containerColor = StarColor,
-                    content = { Text(text = "对方未读", color = MaterialTheme.colorScheme.onPrimary) }
+                    content = { Text(text = stringResource(Res.string.message_unread_by_recipient), color = MaterialTheme.colorScheme.onPrimary) }
                 )
             }
         },

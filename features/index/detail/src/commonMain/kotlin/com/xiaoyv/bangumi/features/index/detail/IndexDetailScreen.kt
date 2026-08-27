@@ -40,6 +40,10 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.core_resource.resources.global_bookmark
+import com.xiaoyv.bangumi.core_resource.resources.index_detail_collect_suffix
+import com.xiaoyv.bangumi.core_resource.resources.index_detail_created_label
+import com.xiaoyv.bangumi.core_resource.resources.index_detail_fav_suffix
+import com.xiaoyv.bangumi.core_resource.resources.index_detail_updated_label
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailEvent
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailState
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailViewModel
@@ -250,9 +254,9 @@ private fun IndexDetailScreenHeader(
                             modifier = Modifier.padding(vertical = ContentMarginHalf),
                             text = buildString {
                                 append(state.index.total)
-                                append("个收录 ")
+                                append(stringResource(Res.string.index_detail_collect_suffix))
                                 append(state.index.collects)
-                                append("人收藏")
+                                append(stringResource(Res.string.index_detail_fav_suffix))
                             }
                         )
                         Text(
@@ -260,9 +264,9 @@ private fun IndexDetailScreenHeader(
                                 withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = LocalContentColor.current)) {
                                     append(state.index.creator.nickname)
                                 }
-                                append(" 创建 ")
+                                append(stringResource(Res.string.index_detail_created_label))
                                 append(state.index.createdAt.formatDate("yyyy-MM-dd"))
-                                append(" 更新 ")
+                                append(stringResource(Res.string.index_detail_updated_label))
                                 append(state.index.updatedAt.formatDate("yyyy-MM-dd"))
                             }
                         )

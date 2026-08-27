@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.app_name
 import com.xiaoyv.bangumi.core_resource.resources.global_search
+import com.xiaoyv.bangumi.core_resource.resources.home_logged_in
 import com.xiaoyv.bangumi.core_resource.resources.ic_logo_riff
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeState
@@ -89,11 +90,12 @@ private fun HomeScreen(
                 },
                 actions = {
                     if (LocalSharedState.current.isLogin) {
+                        val loggedInText = stringResource(Res.string.home_logged_in)
                         Text(
                             modifier = Modifier
                                 .alpha(0f)
-                                .semantics { contentDescription = "已登录" },
-                            text = "已登录",
+                                .semantics { contentDescription = loggedInText },
+                            text = loggedInText,
                         )
                     }
                     IconButton(onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SearchInput())) }) {

@@ -1,5 +1,13 @@
 package com.xiaoyv.bangumi.features.groups.detail.business
 
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_blocked
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_creator
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_member
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_moderator
+import com.xiaoyv.bangumi.core_resource.resources.group_tab_intro
+import com.xiaoyv.bangumi.core_resource.resources.group_tab_members
+import com.xiaoyv.bangumi.core_resource.resources.group_tab_recent_topics
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
@@ -32,15 +40,15 @@ class GroupsDetailViewModel(
 
     override fun createInitialState() = GroupsDetailState(
         tabs = persistentListOf(
-            ComposeTextTab(0, labelText = "简介"),
-            ComposeTextTab(1, labelText = "最新讨论"),
-            ComposeTextTab(2, labelText = "成员"),
+            ComposeTextTab(0, label = Res.string.group_tab_intro),
+            ComposeTextTab(1, label = Res.string.group_tab_recent_topics),
+            ComposeTextTab(2, label = Res.string.group_tab_members),
         ),
         memberFilters = persistentListOf(
-            ComposeTextTab(GroupMemberRole.Member, labelText = "成员"),
-            ComposeTextTab(GroupMemberRole.Creator, labelText = "创建者"),
-            ComposeTextTab(GroupMemberRole.Moderator, labelText = "管理员"),
-            ComposeTextTab(GroupMemberRole.Blocked, labelText = "禁言"),
+            ComposeTextTab(GroupMemberRole.Member, label = Res.string.group_member_role_member),
+            ComposeTextTab(GroupMemberRole.Creator, label = Res.string.group_member_role_creator),
+            ComposeTextTab(GroupMemberRole.Moderator, label = Res.string.group_member_role_moderator),
+            ComposeTextTab(GroupMemberRole.Blocked, label = Res.string.group_member_role_blocked),
         )
     )
 

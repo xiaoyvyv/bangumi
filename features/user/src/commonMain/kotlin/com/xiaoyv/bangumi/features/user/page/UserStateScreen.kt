@@ -41,8 +41,16 @@ import com.patrykandpatrick.vico.multiplatform.cartesian.data.CartesianValueForm
 import com.patrykandpatrick.vico.multiplatform.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.multiplatform.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.multiplatform.cartesian.rememberCartesianChart
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.user_stat_average_score
+import com.xiaoyv.bangumi.core_resource.resources.user_stat_collect
+import com.xiaoyv.bangumi.core_resource.resources.user_stat_completion_rate
+import com.xiaoyv.bangumi.core_resource.resources.user_stat_done
+import com.xiaoyv.bangumi.core_resource.resources.user_stat_score_count
+import com.xiaoyv.bangumi.core_resource.resources.user_stat_standard_deviation
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
+import org.jetbrains.compose.resources.stringResource
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -112,20 +120,20 @@ fun UserStateScreen(
         ) {
             CardInfo(
                 modifier = Modifier.fillMaxWidth(),
-                title = "收藏",
+                title = stringResource(Res.string.user_stat_collect),
                 value = collection.total.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsCollect)
             )
             CardInfo(
                 modifier = Modifier.fillMaxWidth(),
-                title = "完成",
+                title = stringResource(Res.string.user_stat_done),
                 value = collection.collect.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsFinish)
 
             )
             CardInfo(
                 modifier = Modifier.fillMaxWidth(),
-                title = "完成率",
+                title = stringResource(Res.string.user_stat_completion_rate),
                 value = collection
                     .let { if (it.total > 0) it.collect / it.total.toFloat() * 100f else 0f }
                     .toFixed(2).toString() + "%",
@@ -134,21 +142,21 @@ fun UserStateScreen(
             )
             CardInfo(
                 modifier = Modifier.fillMaxWidth(),
-                title = "平均分",
+                title = stringResource(Res.string.user_stat_average_score),
                 value = rating.averageScore.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsAverage)
 
             )
             CardInfo(
                 modifier = Modifier.fillMaxWidth(),
-                title = "标准差",
+                title = stringResource(Res.string.user_stat_standard_deviation),
                 value = rating.standardDeviation.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsStander)
 
             )
             CardInfo(
                 modifier = Modifier.fillMaxWidth(),
-                title = "评分数",
+                title = stringResource(Res.string.user_stat_score_count),
                 value = rating.ratingCount.toString(),
                 colors = CardDefaults.cardColors(containerColor = colorChartStatisticsComments)
             )

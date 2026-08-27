@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_topic
+import com.xiaoyv.bangumi.core_resource.resources.subject_ep_resource_search
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
 import com.xiaoyv.bangumi.shared.core.types.TopicType
@@ -120,7 +121,7 @@ fun SubjectDetailEpisodeScreen(
                                         )
                                     },
                                     text = {
-                                        Text(text = "资源检索")
+                                        Text(text = stringResource(Res.string.subject_ep_resource_search))
                                     }
                                 )
                             }

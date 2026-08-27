@@ -18,6 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.mono_detail_collab_count
+import com.xiaoyv.bangumi.core_resource.resources.mono_detail_no_collab
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailEvent
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.shared.core.types.MonoType
@@ -27,6 +30,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * [MonoDetailCollabsScreen]
@@ -53,7 +57,7 @@ fun MonoDetailCollabsScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "暂无合作信息",
+                text = stringResource(Res.string.mono_detail_no_collab),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -118,7 +122,7 @@ private fun CollabItem(
 
         if (collab.count.isNotBlank()) {
             Text(
-                text = "${collab.count}次合作",
+                text = stringResource(Res.string.mono_detail_collab_count, collab.count),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

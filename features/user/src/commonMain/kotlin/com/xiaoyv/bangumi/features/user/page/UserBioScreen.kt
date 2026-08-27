@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_success
 import com.xiaoyv.bangumi.core_resource.resources.profile_network_service
+import com.xiaoyv.bangumi.core_resource.resources.user_bio_title
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.System
@@ -45,7 +46,7 @@ fun UserBioScreen(
     onUiEvent: (UserEvent.UI) -> Unit,
     onActionEvent: (UserEvent.Action) -> Unit,
 ) {
-    val summary by produceState("个人简介", state.user.bio) {
+    val summary by produceState(stringResource(Res.string.user_bio_title), state.user.bio) {
         value = state.user.bio.bbcodeToHtml()
     }
     Column(

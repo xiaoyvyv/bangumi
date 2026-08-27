@@ -22,6 +22,8 @@ import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.home_recent_featured_prefix
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.drop
@@ -138,7 +140,7 @@ class HomeViewModel(
     private suspend fun List<ComposeHomeSection>.toHomeSectionCard(@SubjectType type: Int): ComposeHomepageCard {
         return ComposeHomepageCard(
             type = type,
-            title = "近期注目" + getString(SubjectType.string(type)),
+            title = getString(Res.string.home_recent_featured_prefix) + getString(SubjectType.string(type)),
             subjects = map { it.subject }.toPersistentList()
         )
     }

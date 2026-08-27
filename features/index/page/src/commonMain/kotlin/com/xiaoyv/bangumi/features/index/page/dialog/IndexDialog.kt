@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.index_collect_to_my_catalog
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
@@ -24,6 +26,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexDialogItem
+import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 
@@ -87,7 +90,7 @@ fun IndexDialogContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(ContentMargin),
-            text = "收集至我的目录",
+            text = stringResource(Res.string.index_collect_to_my_catalog),
             style = MaterialTheme.typography.bodyLarge,
         )
 

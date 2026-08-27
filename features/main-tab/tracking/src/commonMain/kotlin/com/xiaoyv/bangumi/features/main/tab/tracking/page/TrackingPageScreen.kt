@@ -35,6 +35,13 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
+import com.xiaoyv.bangumi.core_resource.resources.tracking_action_comment
+import com.xiaoyv.bangumi.core_resource.resources.tracking_action_discuss
+import com.xiaoyv.bangumi.core_resource.resources.tracking_action_review
+import com.xiaoyv.bangumi.core_resource.resources.tracking_chap_all_completed
+import com.xiaoyv.bangumi.core_resource.resources.tracking_doing_count
+import com.xiaoyv.bangumi.core_resource.resources.tracking_ep_all_watched
+import com.xiaoyv.bangumi.core_resource.resources.tracking_vol_all_read
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingEvent
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
@@ -191,7 +198,7 @@ private fun TrackingPageScreenContentItem(
                 verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
             ) {
                 Text(
-                    text = "${item.collection.doing}人在看",
+                    text = stringResource(Res.string.tracking_doing_count, item.collection.doing),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -209,7 +216,7 @@ private fun TrackingPageScreenContentItem(
                         status = item.interest.epStatus,
                         total = item.eps,
                         button = buildString {
-                            if (firstUnCollectEp == null) append("Ep.已看完") else {
+                            if (firstUnCollectEp == null) append(stringResource(Res.string.tracking_ep_all_watched)) else {
                                 append("Ep.")
                                 append(firstUnCollectEp.sortOrder.toTrimString())
                                 append(doneActionText)
@@ -239,7 +246,7 @@ private fun TrackingPageScreenContentItem(
                         button = buildString {
                             when {
                                 item.eps == 0 -> append("Chap.$nextEp$doneActionText")
-                                nextEp >= item.eps -> append("Chap.已完成")
+                                nextEp >= item.eps -> append(stringResource(Res.string.tracking_chap_all_completed))
                                 else -> append("Chap.$nextEp$doneActionText")
                             }
                         },
@@ -268,7 +275,7 @@ private fun TrackingPageScreenContentItem(
                         button = buildString {
                             when {
                                 item.volumes == 0 -> append("Vol.$nextVol$doneActionText")
-                                nextVol >= item.volumes -> append("Vol.已看完")
+                                nextVol >= item.volumes -> append(stringResource(Res.string.tracking_vol_all_read))
                                 else -> append("Vol.$nextVol$doneActionText")
                             }
                         },
@@ -307,7 +314,7 @@ private fun TrackingPageScreenContentItem(
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
                     onClick = {}
                 ) {
-                    Text(text = "参与讨论")
+                    Text(text = stringResource(Res.string.tracking_action_discuss))
                 }
                 TextButton(
                     modifier = Modifier.resetSize(),
@@ -315,7 +322,7 @@ private fun TrackingPageScreenContentItem(
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
                     onClick = {},
                 ) {
-                    Text(text = "观吐槽")
+                    Text(text = stringResource(Res.string.tracking_action_comment))
                 }
                 TextButton(
                     modifier = Modifier.resetSize(),
@@ -323,7 +330,7 @@ private fun TrackingPageScreenContentItem(
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
                     onClick = {}
                 ) {
-                    Text(text = "写长评")
+                    Text(text = stringResource(Res.string.tracking_action_review))
                 }
             }
         }

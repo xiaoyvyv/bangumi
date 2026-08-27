@@ -25,6 +25,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.user_score_unit
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
@@ -41,6 +43,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import org.jetbrains.compose.resources.stringResource
 
 private const val CONTENT_TYPE_SUBJECT_SECTION = "CONTENT_TYPE_SUBJECT_SECTION"
 
@@ -120,7 +123,7 @@ private fun UserMainScreenSection(
                         if (item.item.interest.rate > 0) {
                             withSpanStyle(color = StarColor, fontWeight = FontWeight.SemiBold) {
                                 append(item.item.interest.rate.toString())
-                                append("分")
+                                append(stringResource(Res.string.user_score_unit))
                             }
                         }
                     },

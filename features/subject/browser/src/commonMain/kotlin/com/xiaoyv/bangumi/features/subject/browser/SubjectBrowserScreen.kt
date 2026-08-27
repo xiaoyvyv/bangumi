@@ -30,6 +30,8 @@ import com.xiaoyv.bangumi.core_resource.resources.global_date
 import com.xiaoyv.bangumi.core_resource.resources.global_kind
 import com.xiaoyv.bangumi.core_resource.resources.global_search
 import com.xiaoyv.bangumi.core_resource.resources.global_sort
+import com.xiaoyv.bangumi.core_resource.resources.subject_browser_month_unit
+import com.xiaoyv.bangumi.core_resource.resources.subject_browser_year_unit
 import com.xiaoyv.bangumi.core_resource.resources.type_path_browser
 import com.xiaoyv.bangumi.features.subject.browser.business.SubjectBrowserEvent
 import com.xiaoyv.bangumi.features.subject.browser.business.SubjectBrowserState
@@ -223,8 +225,8 @@ private fun SubjectBrowserScreenContent(
                                 if (year == 0 && month == 0) {
                                     append(stringResource(Res.string.global_all))
                                 } else {
-                                    if (year > 0) append("${year}年")
-                                    if (month > 0) append("${month}月")
+                                    if (year > 0) append("$year${stringResource(Res.string.subject_browser_year_unit)}")
+                                    if (month > 0) append("$month${stringResource(Res.string.subject_browser_month_unit)}")
                                 }
                             }
                         )

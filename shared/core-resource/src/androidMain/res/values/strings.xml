@@ -972,4 +972,124 @@
     <string name="type_collection_score_9">神作（9）</string>
     <string name="type_collection_score_10">超神作（10）</string>
     <string name="type_collection_score_unset">未评分</string>
+    <!-- 图像识别 -->
+    <string name="image_detect_similarity_prefix">匹配度：</string>
+    <string name="image_detect_character_prefix">人物：</string>
+    <string name="image_detect_anime_prefix">动画：</string>
+
+    <!-- 小组页面 -->
+    <string name="group_member_role_member">成员</string>
+    <string name="group_member_role_creator">创建者</string>
+    <string name="group_member_role_moderator">管理员</string>
+    <string name="group_member_role_blocked">禁言</string>
+    <string name="group_tab_intro">简介</string>
+    <string name="group_tab_recent_topics">最新讨论</string>
+    <string name="group_tab_members">成员</string>
+    <string name="group_members_suffix"> 位成员</string>
+    <string name="group_topics_suffix"> 条讨论</string>
+    <string name="group_created_at_prefix">成立于 </string>
+
+    <!-- 目录相关 -->
+    <string name="index_detail_collect_suffix">个收录 </string>
+    <string name="index_detail_fav_suffix">人收藏</string>
+    <string name="index_detail_created_label"> 创建 </string>
+    <string name="index_detail_updated_label"> 更新 </string>
+    <string name="index_collect_to_my_catalog">收集至我的目录</string>
+
+    <!-- 首页模块 -->
+    <string name="home_logged_in">已登录</string>
+    <string name="home_recent_featured_prefix">近期注目</string>
+
+    <!-- 追番进度 / 进度管理 -->
+    <string name="tracking_doing_count">%1$d人在看</string>
+    <string name="tracking_ep_all_watched">Ep.已看完</string>
+    <string name="tracking_chap_all_completed">Chap.已完成</string>
+    <string name="tracking_vol_all_read">Vol.已看完</string>
+    <string name="tracking_action_discuss">参与讨论</string>
+    <string name="tracking_action_comment">观吐槽</string>
+    <string name="tracking_action_review">写长评</string>
+
+    <!-- 消息中心 -->
+    <string name="message_unread_by_recipient">对方未读</string>
+
+    <!-- 人物 / 角色 / 浏览与详情 -->
+    <string name="mono_sort">排序</string>
+    <string name="mono_type">类型</string>
+    <string name="mono_blood_type">血型</string>
+    <string name="mono_gender">性别</string>
+    <string name="mono_birth_month">出生月份</string>
+    <string name="mono_gender_male">男性</string>
+    <string name="mono_gender_female">女性</string>
+    <string name="mono_month_1">一月</string>
+    <string name="mono_month_2">二月</string>
+    <string name="mono_month_3">三月</string>
+    <string name="mono_month_4">四月</string>
+    <string name="mono_month_5">五月</string>
+    <string name="mono_month_6">六月</string>
+    <string name="mono_month_7">七月</string>
+    <string name="mono_month_8">八月</string>
+    <string name="mono_month_9">九月</string>
+    <string name="mono_month_10">十月</string>
+    <string name="mono_month_11">十一月</string>
+    <string name="mono_month_12">十二月</string>
+    <string name="mono_cat_character">角色</string>
+    <string name="mono_cat_mecha">机体</string>
+    <string name="mono_cat_ship">船舰</string>
+    <string name="mono_cat_organization">组织机构</string>
+    <string name="mono_job_cv">声优</string>
+    <string name="mono_job_mangaka">漫画家</string>
+    <string name="mono_job_illustrator">绘师</string>
+    <string name="mono_job_producer">制作人</string>
+    <string name="mono_job_musician">音乐人</string>
+    <string name="mono_job_writer">作家</string>
+    <string name="mono_job_actor">演员</string>
+    <string name="mono_detail_tietie_not_available">暂未开通贴贴哦~</string>
+    <string name="mono_detail_no_collab">暂无合作信息</string>
+    <string name="mono_detail_collab_count">%1$s次合作</string>
+    <string name="mono_collect_count">%1$d人收藏</string>
+
+    <!-- 发布模块 -->
+    <string name="publish_not_supported">暂不支持</string>
+
+    <!-- 高级搜索过滤 -->
+    <string name="search_advanced_filter">高级过滤</string>
+    <string name="search_filter_date_title">播出日期/发售日期</string>
+    <string name="search_filter_date_hint">YYYY-MM-DD，多个空格分隔</string>
+    <string name="search_filter_date_desc">日期必需为 YYYY-MM-DD 格式，多值之间为 且 关系，多个使用空格分隔。\n示例：&gt;=2020-07-01 &lt;2020-10-01</string>
+    <string name="search_filter_public_tag_title">公共标签</string>
+    <string name="search_filter_public_tag_hint">公共标签，多个空格分隔</string>
+    <string name="search_filter_public_tag_desc">公共标签，多个值之间为 且 关系，多个使用空格分隔。可以用 - 排除标签。\n示例：日本 原创 -科幻</string>
+    <string name="search_filter_tag_title">标签</string>
+    <string name="search_filter_tag_hint">标签，多个空格分隔</string>
+    <string name="search_filter_tag_desc">标签，可以多次出现。多值之间为 且 关系，多个使用空格分隔。\n示例：日漫 日常</string>
+    <string name="search_filter_rank_title">排名</string>
+    <string name="search_filter_rank_hint">排名，多个空格分隔</string>
+    <string name="search_filter_rank_desc">用于搜索指定排名的条目，多值之间为 且 关系，多个使用空格分隔。\n示例：&gt;100 &lt;=200</string>
+    <string name="search_filter_score_title">评分</string>
+    <string name="search_filter_score_hint">评分，多个空格分隔</string>
+    <string name="search_filter_score_desc">用于搜索指定评分的条目，多值之间为 且 关系，多个使用空格分隔。\n示例：&gt;6 &lt;=10</string>
+
+    <!-- 登录模块 -->
+    <string name="login_success">登录成功~</string>
+
+    <!-- 条目模块 -->
+    <string name="subject_browser_year_unit">年</string>
+    <string name="subject_browser_month_unit">月</string>
+    <string name="subject_ep_resource_search">资源检索</string>
+
+    <!-- 用户中心与统计 -->
+    <string name="user_no_collection_type">暂时没有收藏该类型</string>
+    <string name="user_subject_title">Ta的%1$s</string>
+    <string name="user_bio_title">个人简介</string>
+    <string name="user_score_unit">分</string>
+    <string name="user_stat_collect">收藏</string>
+    <string name="user_stat_done">完成</string>
+    <string name="user_stat_completion_rate">完成率</string>
+    <string name="user_stat_average_score">平均分</string>
+    <string name="user_stat_standard_deviation">标准差</string>
+    <string name="user_stat_score_count">评分数</string>
+
+    <!-- Web 网页浏览 -->
+    <string name="web_unsupported_protocol">暂不支持处理该协议的链接（%1$s）</string>
 </resources>
+

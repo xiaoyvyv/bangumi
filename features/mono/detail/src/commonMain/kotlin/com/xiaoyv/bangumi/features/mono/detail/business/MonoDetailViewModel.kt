@@ -6,6 +6,8 @@ import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
+import com.xiaoyv.bangumi.core_resource.resources.mono_detail_tietie_not_available
+import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
@@ -226,6 +228,6 @@ class MonoDetailViewModel(
         val isLiked = reaction.users.any { it.username == userManager.userInfo.username }
         val self = userManager.userInfo.username
 
-        postToast { "暂未开通贴贴哦~" }
+        postToast { getString(Res.string.mono_detail_tietie_not_available) }
     }
 }

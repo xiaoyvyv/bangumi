@@ -14,10 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.mono_collect_count
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TopicDetailScreenMonoBar(
@@ -47,7 +50,7 @@ internal fun TopicDetailScreenMonoBar(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "${mono.mono.collects}人收藏",
+                    text = stringResource(Res.string.mono_collect_count, mono.mono.collects),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

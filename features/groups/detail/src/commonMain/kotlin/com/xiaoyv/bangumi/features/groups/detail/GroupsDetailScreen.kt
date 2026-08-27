@@ -36,8 +36,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.group_created_at_prefix
 import com.xiaoyv.bangumi.core_resource.resources.group_join
 import com.xiaoyv.bangumi.core_resource.resources.group_joined
+import com.xiaoyv.bangumi.core_resource.resources.group_members_suffix
+import com.xiaoyv.bangumi.core_resource.resources.group_topics_suffix
 import com.xiaoyv.bangumi.features.friend.FriendRoute
 import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailEvent
 import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailState
@@ -245,13 +248,13 @@ private fun GroupsDetailScreenHeader(
                             modifier = Modifier.padding(vertical = ContentMarginHalf),
                             text = buildString {
                                 append(state.group.members)
-                                append(" 位成员")
+                                append(stringResource(Res.string.group_members_suffix))
                                 append(" ")
                                 append(state.group.topics)
-                                append(" 条讨论")
+                                append(stringResource(Res.string.group_topics_suffix))
                             }
                         )
-                        Text(text = "成立于 " + state.group.createdAt.formatDate("yyyy-MM-dd"))
+                        Text(text = stringResource(Res.string.group_created_at_prefix) + state.group.createdAt.formatDate("yyyy-MM-dd"))
                     }
                 },
                 trailingContent = {

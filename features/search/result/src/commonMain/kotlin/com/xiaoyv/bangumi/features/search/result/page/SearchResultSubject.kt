@@ -43,6 +43,22 @@ import com.xiaoyv.bangumi.core_resource.resources.global_done
 import com.xiaoyv.bangumi.core_resource.resources.global_nsfw
 import com.xiaoyv.bangumi.core_resource.resources.global_sort
 import com.xiaoyv.bangumi.core_resource.resources.global_type
+import com.xiaoyv.bangumi.core_resource.resources.search_advanced_filter
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_date_desc
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_date_hint
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_date_title
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_public_tag_desc
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_public_tag_hint
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_public_tag_title
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_rank_desc
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_rank_hint
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_rank_title
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_score_desc
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_score_hint
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_score_title
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_tag_desc
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_tag_hint
+import com.xiaoyv.bangumi.core_resource.resources.search_filter_tag_title
 import com.xiaoyv.bangumi.features.search.result.business.SearchResultEvent
 import com.xiaoyv.bangumi.features.search.result.business.SearchResultState
 import com.xiaoyv.bangumi.features.subject.page.SubjectPageRoute
@@ -93,7 +109,7 @@ fun SearchResultSubject(
 
             AssistChip(
                 onClick = { advanceDialogState.show() },
-                label = { Text("高级过滤") }
+                label = { Text(stringResource(Res.string.search_advanced_filter)) }
             )
 
             DropMenuChip(
@@ -198,7 +214,7 @@ fun SearchResultSubjectAdvanceFilter(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "高级过滤",
+                text = stringResource(Res.string.search_advanced_filter),
                 style = MaterialTheme.typography.titleLarge
             )
             Button(
@@ -255,9 +271,9 @@ fun SearchResultSubjectAdvanceFilter(
                     modifier = Modifier.fillMaxWidth(),
                     value = fieldStates[0].value,
                     onValueChange = { fieldStates[0].value = it },
-                    title = "播出日期/发售日期",
-                    hint = "YYYY-MM-DD，多个空格分隔",
-                    description = "日期必需为 YYYY-MM-DD 格式，多值之间为 且 关系，多个使用空格分隔。\n示例：>=2020-07-01 <2020-10-01",
+                    title = stringResource(Res.string.search_filter_date_title),
+                    hint = stringResource(Res.string.search_filter_date_hint),
+                    description = stringResource(Res.string.search_filter_date_desc),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Next
@@ -269,9 +285,9 @@ fun SearchResultSubjectAdvanceFilter(
                     modifier = Modifier.fillMaxWidth(),
                     value = fieldStates[1].value,
                     onValueChange = { fieldStates[1].value = it },
-                    title = "公共标签",
-                    hint = "公共标签，多个空格分隔",
-                    description = "公共标签，多个值之间为 且 关系，多个使用空格分隔。可以用 - 排除标签。\n示例：日本 原创 -科幻",
+                    title = stringResource(Res.string.search_filter_public_tag_title),
+                    hint = stringResource(Res.string.search_filter_public_tag_hint),
+                    description = stringResource(Res.string.search_filter_public_tag_desc),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Next
@@ -283,9 +299,9 @@ fun SearchResultSubjectAdvanceFilter(
                     modifier = Modifier.fillMaxWidth(),
                     value = fieldStates[2].value,
                     onValueChange = { fieldStates[2].value = it },
-                    title = "标签",
-                    hint = "标签，多个空格分隔",
-                    description = "标签，可以多次出现。多值之间为 且 关系，多个使用空格分隔。\n示例：日漫 日常",
+                    title = stringResource(Res.string.search_filter_tag_title),
+                    hint = stringResource(Res.string.search_filter_tag_hint),
+                    description = stringResource(Res.string.search_filter_tag_desc),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Next
@@ -297,13 +313,13 @@ fun SearchResultSubjectAdvanceFilter(
                     modifier = Modifier.fillMaxWidth(),
                     value = fieldStates[3].value,
                     onValueChange = { fieldStates[3].value = it },
-                    title = "排名",
-                    hint = "排名，多个空格分隔",
+                    title = stringResource(Res.string.search_filter_rank_title),
+                    hint = stringResource(Res.string.search_filter_rank_hint),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Next
                     ),
-                    description = "用于搜索指定排名的条目，多值之间为 且 关系，多个使用空格分隔。\n示例：>100 <=200",
+                    description = stringResource(Res.string.search_filter_rank_desc),
                     onFocusChanged = { if (it) focusedIndex = 3 }
                 )
 
@@ -311,9 +327,9 @@ fun SearchResultSubjectAdvanceFilter(
                     modifier = Modifier.fillMaxWidth(),
                     value = fieldStates[4].value,
                     onValueChange = { fieldStates[4].value = it },
-                    title = "评分",
-                    hint = "评分，多个空格分隔",
-                    description = "用于搜索指定评分的条目，多值之间为 且 关系，多个使用空格分隔。\n示例：>6 <=10",
+                    title = stringResource(Res.string.search_filter_score_title),
+                    hint = stringResource(Res.string.search_filter_score_hint),
+                    description = stringResource(Res.string.search_filter_score_desc),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Done

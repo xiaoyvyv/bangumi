@@ -36,6 +36,12 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.mono_birth_month
+import com.xiaoyv.bangumi.core_resource.resources.mono_blood_type
+import com.xiaoyv.bangumi.core_resource.resources.mono_gender
+import com.xiaoyv.bangumi.core_resource.resources.mono_sort
+import com.xiaoyv.bangumi.core_resource.resources.mono_type
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -115,14 +121,14 @@ private fun MonoBrowserScreenHeader(
     ) {
         MonoBrowserChipGroup(
             modifier = Modifier.fillMaxWidth(),
-            title = "排序",
+            title = stringResource(Res.string.mono_sort),
             current = state.param.orderBy,
             items = state.sortFilters,
             onClick = { onActionEvent(MonoBrowserEvent.Action.OnChangeFilterOrderBy(it.type)) }
         )
         MonoBrowserChipGroup(
             modifier = Modifier.fillMaxWidth(),
-            title = "类型",
+            title = stringResource(Res.string.mono_type),
             current = state.param.mutexParam.type,
             items = state.typeFilters,
             onClick = { onActionEvent(MonoBrowserEvent.Action.OnChangeFilterType(it.type)) }
@@ -130,7 +136,7 @@ private fun MonoBrowserScreenHeader(
 
         MonoBrowserChipGroup(
             modifier = Modifier.fillMaxWidth(),
-            title = "血型",
+            title = stringResource(Res.string.mono_blood_type),
             current = state.param.mutexParam.gender,
             items = state.genderFilters,
             onClick = { onActionEvent(MonoBrowserEvent.Action.OnChangeFilterGender(it.type)) }
@@ -138,7 +144,7 @@ private fun MonoBrowserScreenHeader(
 
         MonoBrowserChipGroup(
             modifier = Modifier.fillMaxWidth(),
-            title = "性别",
+            title = stringResource(Res.string.mono_gender),
             current = state.param.mutexParam.bloodType,
             items = state.bloodFilters,
             onClick = { onActionEvent(MonoBrowserEvent.Action.OnChangeFilterBloodType(it.type)) }
@@ -146,7 +152,7 @@ private fun MonoBrowserScreenHeader(
 
         MonoBrowserChipGroup(
             modifier = Modifier.fillMaxWidth(),
-            title = "出生月份",
+            title = stringResource(Res.string.mono_birth_month),
             current = state.param.mutexParam.month,
             items = state.monthFilters,
             onClick = { onActionEvent(MonoBrowserEvent.Action.OnChangeFilterMonth(it.type)) }

@@ -2,11 +2,13 @@ package com.xiaoyv.bangumi.features.publish.main.business
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.publish_not_supported
 import com.xiaoyv.bangumi.core_resource.resources.publish_title_blog
 import com.xiaoyv.bangumi.core_resource.resources.publish_title_comment
 import com.xiaoyv.bangumi.core_resource.resources.publish_title_group
 import com.xiaoyv.bangumi.core_resource.resources.publish_title_subject
 import com.xiaoyv.bangumi.core_resource.resources.timeline_add
+import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -168,7 +170,7 @@ class PublishMainViewModel(
                     turnstile = turnstile
                 )
 
-                else -> Result.failure(IllegalStateException("暂不支持"))
+                else -> Result.failure(IllegalStateException(getString(Res.string.publish_not_supported)))
             }
         }.onSuccess {
             personalStateStore.emitPublishSuccess(

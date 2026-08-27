@@ -61,6 +61,9 @@ import com.xiaoyv.bangumi.core_resource.resources.subject_action_more
 import com.xiaoyv.bangumi.core_resource.resources.subject_action_score
 import com.xiaoyv.bangumi.core_resource.resources.subject_standard_deviation
 import com.xiaoyv.bangumi.core_resource.resources.subject_standard_deviation_tip
+import com.xiaoyv.bangumi.core_resource.resources.tracking_chap_all_completed
+import com.xiaoyv.bangumi.core_resource.resources.tracking_ep_all_watched
+import com.xiaoyv.bangumi.core_resource.resources.tracking_vol_all_read
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
@@ -258,7 +261,7 @@ private fun SubjectDetailEpisode(
                         status = subject.interest.epStatus,
                         total = subject.eps,
                         button = buildString {
-                            if (firstUnCollectEp == null) append("Ep.已看完") else {
+                            if (firstUnCollectEp == null) append(stringResource(Res.string.tracking_ep_all_watched)) else {
                                 append("Ep.")
                                 append(firstUnCollectEp.sortOrder.toTrimString())
                                 append(doneActionText)
@@ -291,7 +294,7 @@ private fun SubjectDetailEpisode(
                         button = buildString {
                             when {
                                 subject.eps == 0 -> append("Chap.$nextEp$doneActionText")
-                                nextEp >= subject.eps -> append("Chap.已完成")
+                                nextEp >= subject.eps -> append(stringResource(Res.string.tracking_chap_all_completed))
                                 else -> append("Chap.$nextEp$doneActionText")
                             }
                         },
@@ -324,7 +327,7 @@ private fun SubjectDetailEpisode(
                         button = buildString {
                             when {
                                 subject.volumes == 0 -> append("Vol.$nextVol$doneActionText")
-                                nextVol >= subject.volumes -> append("Vol.已看完")
+                                nextVol >= subject.volumes -> append(stringResource(Res.string.tracking_vol_all_read))
                                 else -> append("Vol.$nextVol$doneActionText")
                             }
                         },

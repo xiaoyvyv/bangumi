@@ -4,10 +4,13 @@ package com.xiaoyv.bangumi.features.web.business
 
 import com.multiplatform.webview.cookie.WebViewCookieManager
 import com.multiplatform.webview.request.WebRequest
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.web_unsupported_protocol
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -72,7 +75,7 @@ class WebViewModel(
         when (url.protocol.name.lowercase()) {
             "pixiv" -> onHandleProtocolForPixiv(url)
             else -> {
-                postToast { "暂不支持处理该协议的链接（${url.protocol.name}）" }
+                postToast { getString(Res.string.web_unsupported_protocol, url.protocol.name) }
             }
         }
     }
