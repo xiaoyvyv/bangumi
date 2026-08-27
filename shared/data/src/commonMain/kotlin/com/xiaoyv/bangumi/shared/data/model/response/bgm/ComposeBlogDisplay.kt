@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.shared.core.utils.addUrl
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.constant.blogCover
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -98,7 +99,7 @@ data class ComposeBlogEntry(
 
     fun normalized(): ComposeBlogEntry {
         return copy(
-            icon = if (icon.isBlank()) icon else icon.sanitizeImageUrl(),
+            icon = if (icon.isBlank() || icon.contains("no_photo")) blogCover(id) else icon.sanitizeImageUrl(),
             content = content.bbcodeToHtml()
         )
     }

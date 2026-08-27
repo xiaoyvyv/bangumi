@@ -37,3 +37,4 @@ fun subjectImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/subj
 fun characterImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/characters/$id/image?type=$type"
 fun personImage(id: Long, type: String = "large") = "https://api.bgm.tv/v0/persons/$id/image?type=$type"
 fun userImage(username: String, type: String = "large") = "https://api.bgm.tv/v0/users/$username/avatar?type=$type"
+fun blogCover(id: Long) = WebConstant.URL_BGM_PROXY + "p1/blogs/$id/cover"

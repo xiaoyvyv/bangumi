@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.pixiv.illust.page.business.IllustPageEvent
@@ -31,9 +33,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.pixiv.PixivRankingItem
-import androidx.paging.PagingData
 import kotlinx.coroutines.flow.flowOf
-import androidx.compose.ui.tooling.preview.Preview
 import org.orbitmvi.orbit.compose.collectAsState
 
 private const val ITEM_HEADER = "Header"
@@ -102,7 +102,7 @@ private fun IllustPageScreenContent(
     if (state.param.ui.gridLayout) {
         StateLazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Adaptive(150.dp),
             pagingItems = pagingItems,
             header = {
                 if (header != null) {
