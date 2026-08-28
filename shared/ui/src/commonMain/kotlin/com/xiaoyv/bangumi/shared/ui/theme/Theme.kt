@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,9 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.component.SideEffectForStatusBar
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
@@ -120,10 +123,11 @@ fun currentInDarkTheme(): Boolean {
 
 @Composable
 fun BgmAppTheme(
+    minWidthDp: Dp = 375.dp,
     darkTheme: Boolean = currentInDarkTheme(),
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit,
-) {
+) = MinWidthDensityProvider(minWidthDp) {
     SideEffectForStatusBar(darkTheme)
 
     MaterialTheme(
@@ -153,6 +157,33 @@ fun BgmAppTheme(
     )
 }
 
+/**
+ * 某些设备最小宽度逻辑单位会被修改，这里强制恢复
+ */
+@Composable
+fun MinWidthDensityProvider(
+    minWidthDp: Dp,
+    content: @Composable () -> Unit,
+) {
+    BoxWithConstraints {
+        val currentDensity = LocalDensity.current
+        val currentWidthDp = maxWidth
+        if (currentWidthDp < minWidthDp) {
+            val scale = currentWidthDp.value / minWidthDp.value
+            val targetDensity = Density(
+                density = currentDensity.density * scale,
+                fontScale = currentDensity.fontScale,
+            )
+
+            CompositionLocalProvider(LocalDensity provides targetDensity) {
+                content()
+            }
+        } else {
+            content()
+        }
+    }
+}
+
 @Composable
 fun PreviewColumn(
     modifier: Modifier = Modifier,
@@ -162,7 +193,8 @@ fun PreviewColumn(
 ) {
     KoinApplicationPreview(application = { module(moduleDeclaration = module) }) {
         BgmAppTheme(
-            darkTheme,
+            minWidthDp = 375.dp,
+            darkTheme = darkTheme,
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
