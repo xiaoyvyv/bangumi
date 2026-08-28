@@ -67,10 +67,11 @@ describe('mono homepage handler', () => {
 				}),
 			}),
 		]);
-		expect(body[0]).not.toHaveProperty('item');
-		expect(body[2]).not.toHaveProperty('item');
+		expect(body[0].item).toEqual({ type: 0, info: { mono: { id: 0, images: {}, name: '', nameCN: '' } } });
+		expect(body[2].item).toEqual({ type: 0, info: { mono: { id: 0, images: {}, name: '', nameCN: '' } } });
 		expect(body[1]).not.toHaveProperty('header');
 		expect(body[3]).not.toHaveProperty('header');
+		expect(response.headers.get('cache-control')).toBe('public, max-age=3600, s-maxage=3600');
 	});
 
 	it('returns 404 for unknown mono endpoints', async () => {
@@ -80,6 +81,26 @@ describe('mono homepage handler', () => {
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(404);
+	});
+
+	it('caches a successful homepage response for one hour', async () => {
+		fetchMock.get('https://bgm.tv').intercept({ path: '/mono' }).reply(
+			200,
+			'<div class="mainWrapper"><div id="columnSubjectBrowserA"></div></div>',
+		);
+
+		const request = new IncomingRequest('http://example.com/p1/mono/home?cache-test=1');
+		const firstCtx = createExecutionContext();
+		const first = await worker.fetch(request, env, firstCtx);
+		await waitOnExecutionContext(firstCtx);
+
+		const secondCtx = createExecutionContext();
+		const second = await worker.fetch(request, env, secondCtx);
+		await waitOnExecutionContext(secondCtx);
+
+		expect(await first.json()).toEqual([]);
+		expect(await second.json()).toEqual([]);
+		expect(second.headers.get('cache-control')).toBe('public, max-age=3600, s-maxage=3600');
 	});
 
 	it('treats absent homepage columns as empty sections', () => {

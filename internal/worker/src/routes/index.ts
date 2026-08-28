@@ -4,7 +4,7 @@ import { handleTerminal } from './terminal';
 import { handleBlogs } from './blogs';
 import { handleMono } from './mono';
 
-export async function router(req: Request, env: any) {
+export async function router(req: Request, env: any, ctx?: ExecutionContext) {
 	console.log(req.url);
 	const url = new URL(req.url);
 
@@ -25,7 +25,7 @@ export async function router(req: Request, env: any) {
 	}
 
 	if (url.pathname.startsWith('/p1/mono')) {
-		return handleMono(req, env);
+		return handleMono(req, env, ctx);
 	}
 
 	return new Response('Not Found', { status: 404 });

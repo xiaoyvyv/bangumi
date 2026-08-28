@@ -1,11 +1,16 @@
+import { CacheOptions, withCache } from './cache';
+
 export async function proxy(
 	req: Request,
 	target: string,
 	opt: {
 		transform?: (req: Request, res: Response) => Promise<Response> | Response
+		cache?: CacheOptions
 	},
 	anonymous: boolean = false,
+	ctx?: ExecutionContext,
 ) {
+	const load = async () => {
 	const url = new URL(target);
 
 	const headers = new Headers(req.headers);
@@ -28,4 +33,7 @@ export async function proxy(
 	});
 
 	return opt.transform ? opt.transform(req, resp) : resp;
+	};
+
+	return opt.cache ? withCache(req, opt.cache, load, ctx) : load();
 }

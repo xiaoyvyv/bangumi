@@ -260,7 +260,7 @@ export interface ComposeMonoDisplay {
 export interface ComposeSection<T> {
 	key: string;
 	header?: ComposeSectionTitle;
-	item?: T;
+	item: T;
 }
 
 export enum SubjectType {
@@ -285,4 +285,3 @@ export interface TerminalSpeech {
 	creator?: string;
 	createdAt?: number;
 }
-

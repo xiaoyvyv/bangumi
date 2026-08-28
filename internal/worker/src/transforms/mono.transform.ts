@@ -14,6 +14,11 @@ import {
 } from '../config/util';
 import { ComposeMonoDisplay, ComposeSection, MonoType } from '../types';
 
+const emptyMonoDisplay: ComposeMonoDisplay = {
+	type: MonoType.UNKNOWN,
+	info: { mono: { id: 0, images: {}, name: '', nameCN: '' } },
+};
+
 export async function transformMonoHomepage(_req: Request, res: Response): Promise<Response> {
 	const html = await res.text();
 	const items = parseMonoHomepage(html);
@@ -76,7 +81,7 @@ export function parseMonoHomepage(html: string): ComposeSection<ComposeMonoDispl
 }
 
 function header(key: string, title: string, more: string, id = key): ComposeSection<ComposeMonoDisplay> {
-	return { key, header: { id, title, subtitle: '', more } };
+	return { key, header: { id, title, subtitle: '', more }, item: emptyMonoDisplay };
 }
 
 function monoSection(
