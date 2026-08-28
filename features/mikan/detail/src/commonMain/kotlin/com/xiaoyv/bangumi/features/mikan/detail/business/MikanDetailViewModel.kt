@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.features.mikan.detail.business
 
 import androidx.compose.ui.util.fastForEach
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_success
 import com.xiaoyv.bangumi.shared.System
@@ -34,7 +34,7 @@ class MikanDetailViewModel(
 ) : BaseViewModel<MikanDetailState, MikanDetailSideEffect, MikanDetailEvent.Action>() {
 
     private val cacheKey =
-        stringPreferencesKey(name = "mikan_detail_" + args.mikanId + "_" + args.groupId)
+        byteArrayPreferencesKey(name = "mikan_detail:${args.mikanId}:${args.groupId}")
 
     override fun initBaseState(): UiState<MikanDetailState> = readViewModelCache(
         cacheRepository = cacheRepository,

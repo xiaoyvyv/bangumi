@@ -31,7 +31,6 @@ sealed class SubjectDetailEvent {
 
         data class OnUpdateSubjectProgress(
             val update: CollectionSubjectProgressParam,
-            val showLoadingDialog: Boolean
         ) : Action()
 
         data class OnUpdateEpisodeCollection(

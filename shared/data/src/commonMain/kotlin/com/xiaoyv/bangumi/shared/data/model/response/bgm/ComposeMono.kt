@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.MonoType
+import com.xiaoyv.bangumi.shared.core.utils.serialization.JsonElementSerializer
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
@@ -35,7 +36,7 @@ data class ComposeMono(
     /**
      * Only for person
      */
-    @SerialName("career") val career: JsonElement = JsonObject(emptyMap()),
+    @SerialName("career") @Serializable(JsonElementSerializer::class) val career: JsonElement = JsonObject(emptyMap()),
     @SerialName("type") val type: Int = 0,
 
     /**

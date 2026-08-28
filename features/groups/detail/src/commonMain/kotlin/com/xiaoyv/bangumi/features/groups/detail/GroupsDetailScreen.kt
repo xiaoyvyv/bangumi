@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
@@ -35,11 +38,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_loading
 import com.xiaoyv.bangumi.core_resource.resources.group_created_at_prefix
 import com.xiaoyv.bangumi.core_resource.resources.group_join
 import com.xiaoyv.bangumi.core_resource.resources.group_joined
 import com.xiaoyv.bangumi.core_resource.resources.group_members_suffix
 import com.xiaoyv.bangumi.core_resource.resources.group_topics_suffix
+import com.xiaoyv.bangumi.core_resource.resources.subject_action_more
 import com.xiaoyv.bangumi.features.friend.FriendRoute
 import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailEvent
 import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailState
@@ -47,12 +52,14 @@ import com.xiaoyv.bangumi.features.groups.detail.business.GroupsDetailViewModel
 import com.xiaoyv.bangumi.features.topic.page.TopicPageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
+import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTopicType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMembership
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
@@ -72,7 +79,10 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.groupMemberFilters
+import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.groupTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.flow.drop
@@ -111,7 +121,7 @@ private fun GroupsDetailScreen(
 ) {
     val imageColorState = rememberImageColorState()
     val collapsingState = rememberCollapsingScaffoldState()
-    val pagerState = rememberPagerState { uiState.data.tabs.size }
+    val pagerState = rememberPagerState { groupTabs.size }
 
     LaunchedEffect(pagerState, collapsingState) {
         snapshotFlow { pagerState.currentPage }
@@ -144,6 +154,17 @@ private fun GroupsDetailScreen(
                 actions = {
                     uiState.data.run {
                         val actionHandler = LocalActionHandler.current
+
+                        if (group != ComposeGroup.Empty) IconButton(
+                            onClick = {
+                                onUiEvent(GroupsDetailEvent.UI.OnNavScreen(Screen.PublishMain(type = PublishPostType.TOPIC_GROUP, publishAttachId = group.name)))
+                            }
+                        ) {
+                            Icon(
+                                imageVector = BgmIcons.Edit,
+                                contentDescription = stringResource(Res.string.subject_action_more)
+                            )
+                        }
 
                         DropMenuActionButton(
                             options = rememberButtonTypeMenu {
@@ -215,9 +236,7 @@ private fun GroupsDetailScreenHeader(
                     )
                 )
         )
-        CompositionLocalProvider(
-            LocalContentColor provides imageColorState.contentColor
-        ) {
+        CompositionLocalProvider(LocalContentColor provides imageColorState.contentColor) {
             ListItem(
                 modifier = Modifier
                     .padding(padding)
@@ -237,28 +256,30 @@ private fun GroupsDetailScreenHeader(
                 },
                 headlineContent = {
                     Text(
-                        text = state.group.title,
+                        text = state.group.title.ifBlank { stringResource(Res.string.global_loading) },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
                 },
                 supportingContent = {
                     Column {
-                        Text(
-                            modifier = Modifier.padding(vertical = ContentMarginHalf),
-                            text = buildString {
-                                append(state.group.members)
-                                append(stringResource(Res.string.group_members_suffix))
-                                append(" ")
-                                append(state.group.topics)
-                                append(stringResource(Res.string.group_topics_suffix))
-                            }
-                        )
-                        Text(text = stringResource(Res.string.group_created_at_prefix) + state.group.createdAt.formatDate("yyyy-MM-dd"))
+                        if (state.group != ComposeGroup.Empty) {
+                            Text(
+                                modifier = Modifier.padding(vertical = ContentMarginHalf),
+                                text = buildString {
+                                    append(state.group.members)
+                                    append(stringResource(Res.string.group_members_suffix))
+                                    append(" ")
+                                    append(state.group.topics)
+                                    append(stringResource(Res.string.group_topics_suffix))
+                                }
+                            )
+                            Text(text = stringResource(Res.string.group_created_at_prefix) + state.group.createdAt.formatDate("yyyy-MM-dd"))
+                        }
                     }
                 },
                 trailingContent = {
-                    OutlinedButton(
+                    if (state.group != ComposeGroup.Empty) OutlinedButton(
                         shape = MaterialTheme.shapes.small,
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = if (state.group.isJoined) LocalContentColor.current else StarColor,
@@ -290,7 +311,7 @@ private fun GroupsDetailScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         pagerState = pagerState,
-        tabs = state.tabs
+        tabs = groupTabs
     ) {
         when (it) {
             0 -> GroupsDetailScreenSummary(state, onUiEvent, onActionEvent)
@@ -325,9 +346,9 @@ private fun GroupsDetailScreenMembers(
 ) {
     BgmChipHorizontalPager(
         modifier = Modifier.fillMaxSize(),
-        tabs = state.memberFilters
+        tabs = groupMemberFilters
     ) {
-        val role = state.memberFilters[it].type
+        val role = groupMemberFilters[it].type
         FriendRoute(
             param = remember(state.group.name, role) {
                 ListUserParam(

@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.features.subject.browser.business
 
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
@@ -24,7 +24,7 @@ class SubjectBrowserViewModel(
     private val cacheRepository: CacheRepository,
 ) : BaseViewModel<SubjectBrowserState, SubjectBrowserSideEffect, SubjectBrowserEvent.Action>() {
 
-    private val cacheKey = stringPreferencesKey(name = "subject_browser_${args.body.uniqueKey}")
+    private val cacheKey = byteArrayPreferencesKey(name = "subject_browser:${args.body.uniqueKey}")
 
     override fun initBaseState() = readViewModelCache(
         cacheRepository = cacheRepository,

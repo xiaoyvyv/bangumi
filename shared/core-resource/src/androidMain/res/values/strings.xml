@@ -23,6 +23,7 @@
     <string name="global_login">登录</string>
     <string name="global_next">下一步</string>
     <string name="global_image">图片</string>
+    <string name="global_create">新建</string>
     <string name="global_search">搜索</string>
     <string name="global_year">年份</string>
     <string name="global_month">月份</string>
@@ -247,6 +248,7 @@
     <string name="global_add_to_index">添加到目录</string>
     <string name="global_translate">翻译</string>
     <string name="global_translate_off">原文</string>
+    <string name="global_too_many_request">超出速率限制，请稍后再试</string>
 
     <string name="emoji_tv">TV</string>
     <string name="emoji_tv_1">TV-1</string>
@@ -461,6 +463,11 @@
     <string name="subject_score_empty">0人评分</string>
     <string name="subject_score_format">%1$s%（%2$d人）</string>
     <string name="subject_track_input_disable_tip">请点击格子使用「看到」功能批量修改</string>
+    <string name="episode_action_done">看过</string>
+    <string name="episode_action_skip_to">看到</string>
+    <string name="episode_action_wish">想看</string>
+    <string name="episode_action_drop">抛弃</string>
+    <string name="episode_action_remove">撤销</string>
     <string name="subject_home_calendar">今日上映 %1$d 部，共 %2$d 人收看今日番组</string>
 
     <string name="subject_tab_overview">概览</string>
@@ -1009,9 +1016,9 @@
 
     <!-- 追番进度 / 进度管理 -->
     <string name="tracking_doing_count">%1$d人在看</string>
-    <string name="tracking_ep_all_watched">Ep.已看完</string>
-    <string name="tracking_chap_all_completed">Chap.已完成</string>
-    <string name="tracking_vol_all_read">Vol.已看完</string>
+    <string name="tracking_ep_all_watched">标记看完</string>
+    <string name="tracking_chap_all_completed">标记读完</string>
+    <string name="tracking_vol_all_read">标记读完</string>
     <string name="tracking_action_discuss">参与讨论</string>
     <string name="tracking_action_comment">观吐槽</string>
     <string name="tracking_action_review">写长评</string>
@@ -1099,4 +1106,3 @@
     <!-- Web 网页浏览 -->
     <string name="web_unsupported_protocol">暂不支持处理该协议的链接（%1$s）</string>
 </resources>
-

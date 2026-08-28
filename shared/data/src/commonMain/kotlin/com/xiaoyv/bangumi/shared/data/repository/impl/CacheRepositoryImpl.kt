@@ -24,7 +24,7 @@ class CacheRepositoryImpl : CacheRepository {
         return System.datastore.data.map { it[key] }.firstOrNull()
     }
 
-    override suspend fun <T : Any> write(key: Preferences.Key<T>, value: T) {
-        System.datastore.edit { it[key] = value }
+    override suspend fun <T : Any> write(key: Preferences.Key<T>, value: T): Result<Unit> {
+        return runCatching { System.datastore.edit { it[key] = value } }
     }
 }

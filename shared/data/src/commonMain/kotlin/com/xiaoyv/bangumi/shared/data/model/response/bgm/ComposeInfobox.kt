@@ -3,6 +3,7 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.utils.serialization.JsonElementSerializer
 import com.xiaoyv.bangumi.shared.core.utils.withChinese
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -20,7 +21,7 @@ import kotlinx.serialization.json.jsonPrimitive
 @Serializable
 data class ComposeInfobox(
     @SerialName("key") val key: String? = null,
-    @SerialName("value") @JsonNames("values", "value") val value: JsonElement? = null,
+    @SerialName("value") @JsonNames("values", "value") @Serializable(JsonElementSerializer::class) val value: JsonElement? = null,
 ) {
     val displayInfo: String
         get() = "$key：$displayValue"

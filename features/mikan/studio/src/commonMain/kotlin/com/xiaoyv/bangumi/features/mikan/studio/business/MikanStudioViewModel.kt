@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.features.mikan.studio.business
 
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -25,7 +25,7 @@ class MikanStudioViewModel(
     private val mikanRepository: MikanRepository,
     private val cacheRepository: CacheRepository,
 ) : BaseViewModel<MikanStudioState, MikanStudioSideEffect, MikanStudioEvent.Action>() {
-    private val cacheKey = stringPreferencesKey(name = "mikan_studio_" + args.subjectId)
+    private val cacheKey = byteArrayPreferencesKey(name = "mikan_studio:${args.subjectId}")
 
     override fun initBaseState() = readViewModelCache(
         cacheRepository = cacheRepository,

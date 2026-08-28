@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.utils.serialization.JsonElementSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
@@ -20,7 +21,7 @@ data class ComposeRating(
      * private api 结构为 list
      * public  api 结构为 map
      */
-    @SerialName("count") val element: JsonElement? = null,
+    @SerialName("count") @Serializable(JsonElementSerializer::class) val element: JsonElement? = null,
 ) {
 
     val count: List<Int>

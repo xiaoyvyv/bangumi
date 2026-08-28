@@ -43,10 +43,13 @@ import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingEvent
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.core.utils.toTrimString
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
@@ -82,24 +85,33 @@ fun TrackingPageScreen(
             items = items,
             key = { it.subject.id },
             contentType = { CONTENT_TYPE_PROGRESS_SUBJECT_ITEM }
-        ) {
+        ) { item ->
             TrackingPageItem(
-                item = it,
+                item = item,
                 subjectType = subjectType,
                 onClickSubject = {
-                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id)))
+                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id)))
                 },
                 onClickSubjectComments = {
-                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id, selectedTab = SubjectDetailTab.RANT)))
+                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id, selectedTab = SubjectDetailTab.RANT)))
                 },
                 onClickCreateTopic = {
-                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id, selectedTab = SubjectDetailTab.TOPIC)))
+                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id, selectedTab = SubjectDetailTab.TOPIC)))
                 },
                 onClickCreateBlog = {
-                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id, selectedTab = SubjectDetailTab.BLOG)))
+                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id, selectedTab = SubjectDetailTab.BLOG)))
                 },
-                onClickIncreaseEpStatus = {
-
+                onClickEpisode = { episode ->
+                    onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.TopicDetail(episode.id, TopicType.TYPE_EP)))
+                },
+                onUpdateCollect = {
+                    onActionEvent(TrackingEvent.Action.OnUpdateSubjectCollection(item.subject, it))
+                },
+                onUpdateProgress = {
+                    onActionEvent(TrackingEvent.Action.OnUpdateSubjectProgress(item.subject, it))
+                },
+                onUpdateEpisode = { eps, type ->
+                    onActionEvent(TrackingEvent.Action.OnUpdateEpisode(item.subject, eps, type))
                 }
             )
         }
@@ -113,7 +125,10 @@ private fun TrackingPageItem(
     onClickSubjectComments: () -> Unit = {},
     onClickCreateTopic: () -> Unit = {},
     onClickCreateBlog: () -> Unit = {},
-    onClickIncreaseEpStatus: () -> Unit = {},
+    onClickEpisode: (ComposeEpisode) -> Unit = {},
+    onUpdateEpisode: (List<ComposeEpisode>, Int) -> Unit = { _, _ -> },
+    onUpdateProgress: (CollectionSubjectProgressParam) -> Unit = {},
+    onUpdateCollect: (CollectionSubjectParam) -> Unit = {},
     subjectType: Int
 ) {
     val subject = item.subject
@@ -193,6 +208,11 @@ private fun TrackingPageItem(
                     )
 
                     val doneActionText = CollectionType.string(subject.type, CollectionType.DONE)
+                    val nextEp = item.interest.epStatus + 1
+                    val nextVol = item.interest.volStatus + 1
+
+                    val isEpCompleted = nextEp > subject.eps && subject.eps != 0
+                    val isVolCompleted = nextVol > subject.volumes && subject.volumes != 0
 
                     // 动画或三次元
                     if (subject.type == SubjectType.ANIME || subject.type == SubjectType.REAL) {
@@ -201,50 +221,47 @@ private fun TrackingPageItem(
                             status = item.interest.epStatus,
                             total = subject.eps,
                             button = buildString {
-                                if (item.lastUnwatchedEp == ComposeEpisode.Empty) append(stringResource(Res.string.tracking_ep_all_watched)) else {
-                                    append("Ep.")
-                                    append(item.lastUnwatchedEp.sortOrder.toTrimString())
-                                    append(doneActionText)
+                                when {
+                                    isEpCompleted -> append(stringResource(Res.string.tracking_ep_all_watched))
+                                    else -> {
+                                        append("Ep.")
+                                        append(nextEp)
+                                        append(doneActionText)
+                                    }
                                 }
                             },
                             onClickIncrease = {
-                                // 进度加一
-                                if (item.lastUnwatchedEp == ComposeEpisode.Empty) {
-                                    onClickIncreaseEpStatus()
+                                if (isEpCompleted) {
+                                    onUpdateCollect(CollectionSubjectParam(type = CollectionType.DONE))
+                                } else {
+                                    onUpdateProgress(CollectionSubjectProgressParam(epStatus = nextEp))
                                 }
                             }
                         )
                     } else {
-                        val nextEp = item.interest.epStatus + 1
-                        val nextVol = item.interest.volStatus + 1
-
                         SubjectTrackingBar(
                             modifier = Modifier.fillMaxWidth(),
                             status = item.interest.epStatus,
                             total = subject.eps,
                             button = buildString {
                                 when {
-                                    subject.eps == 0 -> append("Chap.$nextEp$doneActionText")
-                                    nextEp >= subject.eps -> append(stringResource(Res.string.tracking_chap_all_completed))
-                                    else -> append("Chap.$nextEp$doneActionText")
+                                    isEpCompleted -> append(stringResource(Res.string.tracking_chap_all_completed))
+                                    else -> {
+                                        append("Chp.")
+                                        append(nextEp)
+                                        append(doneActionText)
+                                    }
                                 }
                             },
-
                             onInputChangeConfirm = {
-                                /*                  onActionEvent(
-                                                      TrackingPageEvent.Action.OnUpdateSubjectProgress(
-                                                          subject = subject,
-                                                          update = CollectionSubjectProgressParam(epStatus = it)
-                                                      )
-                                                  )*/
+                                onUpdateProgress(CollectionSubjectProgressParam(epStatus = it))
                             },
                             onClickIncrease = {
-/*                            onActionEvent(
-                                TrackingPageEvent.Action.OnUpdateSubjectProgress(
-                                    subject = subject,
-                                    update = CollectionSubjectProgressParam(epStatus = nextEp)
-                                )
-                            )*/
+                                if (isEpCompleted) {
+                                    onUpdateCollect(CollectionSubjectParam(type = CollectionType.DONE))
+                                } else {
+                                    onUpdateProgress(CollectionSubjectProgressParam(epStatus = nextEp))
+                                }
                             }
                         )
                         SubjectTrackingBar(
@@ -253,26 +270,23 @@ private fun TrackingPageItem(
                             total = subject.volumes,
                             button = buildString {
                                 when {
-                                    subject.volumes == 0 -> append("Vol.$nextVol$doneActionText")
-                                    nextVol >= subject.volumes -> append(stringResource(Res.string.tracking_vol_all_read))
-                                    else -> append("Vol.$nextVol$doneActionText")
+                                    isVolCompleted -> append(stringResource(Res.string.tracking_vol_all_read))
+                                    else -> {
+                                        append("Vol.")
+                                        append(nextVol)
+                                        append(doneActionText)
+                                    }
                                 }
                             },
                             onInputChangeConfirm = {
-/*                            onActionEvent(
-                                TrackingPageEvent.Action.OnUpdateSubjectProgress(
-                                    subject = subject,
-                                    update = CollectionSubjectProgressParam(volStatus = it)
-                                )
-                            )*/
+                                onUpdateProgress(CollectionSubjectProgressParam(volStatus = it))
                             },
                             onClickIncrease = {
-/*                            onActionEvent(
-                                TrackingPageEvent.Action.OnUpdateSubjectProgress(
-                                    subject = subject,
-                                    update = CollectionSubjectProgressParam(volStatus = nextVol)
-                                )
-                            )*/
+                                if (isEpCompleted) {
+                                    onUpdateCollect(CollectionSubjectParam(type = CollectionType.DONE))
+                                } else {
+                                    onUpdateProgress(CollectionSubjectProgressParam(volStatus = nextVol))
+                                }
                             }
                         )
                     }
@@ -315,19 +329,14 @@ private fun TrackingPageItem(
             }
         )
 
-        EpisodeGrid(
+        if (subjectType != SubjectType.BOOK) EpisodeGrid(
             episodes = item.eps,
             maxRows = 1000,
-            onEpisodeChange = { epIds, type ->
-                // onActionEvent(TrackingPageEvent.Action.OnUpdateEpisodeCollection(item, epIds, type))
-            },
-            onClickEpisode = {
-                // onUiEvent(TrackingEvent.UI.OnNavScreen(Screen.TopicDetail(it.id, TopicType.TYPE_EP)))
-            }
+            onEpisodeChange = onUpdateEpisode,
+            onClickEpisode = onClickEpisode
         )
     }
 }
-
 
 @Composable
 @Preview

@@ -16,13 +16,13 @@ import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
-import com.xiaoyv.bangumi.shared.core.utils.fromJson
-import com.xiaoyv.bangumi.shared.core.utils.measureBlockTimeMillis
-import com.xiaoyv.bangumi.shared.core.utils.toJson
+import com.xiaoyv.bangumi.shared.core.utils.defaultProtoBuf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import kotlin.properties.ReadWriteProperty
@@ -37,44 +37,43 @@ interface CacheRepository {
     fun <T : Any> readSync(key: Preferences.Key<T>): T?
     fun <T : Any> readSync(key: Preferences.Key<T>, default: T): T
     suspend fun <T : Any> read(key: Preferences.Key<T>): T?
-    suspend fun <T : Any> write(key: Preferences.Key<T>, value: T)
+    suspend fun <T : Any> write(key: Preferences.Key<T>, value: T): Result<Unit>
 }
 
 inline fun <reified T : Any> BaseViewModelWithUiState<T, *, *, *>.writeViewModelCache(
     cacheRepository: CacheRepository,
-    cacheKey: Preferences.Key<String>,
+    cacheKey: Preferences.Key<ByteArray>,
     crossinline saveCondition: (T) -> Boolean = { true },
-) {
-    val baseState = container.stateFlow.value
+) = intent {
     viewModelScope.launch {
-        if (baseState.status == PageStatus.Idle && saveCondition(baseState.data)) {
-//                cacheRepository.write(cacheKey, defaultProtoBuf.encodeToHexString(baseState.data))
-            cacheRepository.write(cacheKey, baseState.data.toJson())
+        if (state.status == PageStatus.Idle && saveCondition(state.data)) {
+            cacheRepository.write(cacheKey, defaultProtoBuf.encodeToByteArray(state.data))
         }
     }
 }
 
 inline fun <reified T : Any> BaseViewModelWithUiState<T, *, *, *>.readViewModelCache(
     cacheRepository: CacheRepository,
-    cacheKey: Preferences.Key<String>,
+    cacheKey: Preferences.Key<ByteArray>,
     loadWhenEmpty: Boolean = false,
     enable: Boolean = true,
     transform: (T) -> T = { it },
 ): UiState<T> {
-    val text = if (enable) measureBlockTimeMillis { cacheRepository.readSync(cacheKey) } else null
-    val cacheState = if (enable) measureBlockTimeMillis { text.fromJson<T>()?.let { transform(it) } } else null
-//    val cacheState =
-//        measureBlockTimeMillis {
-//            runCatching { defaultProtoBuf.decodeFromHexString<T>(text.orEmpty()) }.onFailure { debugLog { it } }.getOrNull()
-//                ?.let { transform(it) }
-//        }
-    debugLog { "$cacheState ,loadWhenEmpty=$loadWhenEmpty" }
-    if (cacheState != null) return UiState(cacheState)
-    return UiState(
+    val cacheState = if (enable) cacheRepository.readProtoCache<T>(cacheKey)?.let(transform) else null
+    return cacheState?.let(::UiState) ?: UiState(
         data = createInitialState(),
         status = if (loadWhenEmpty) PageStatus.Loading else PageStatus.Idle,
     )
 }
+
+@PublishedApi
+internal inline fun <reified T : Any> CacheRepository.readProtoCache(
+    cacheKey: Preferences.Key<ByteArray>,
+): T? = runCatching {
+    readSync(cacheKey)?.let { defaultProtoBuf.decodeFromByteArray<T>(it) }
+}.onFailure {
+    debugLog { it }
+}.getOrNull()
 
 
 fun CacheRepository.string(key: String, default: String = ""): ReadWriteProperty<Any, String> {

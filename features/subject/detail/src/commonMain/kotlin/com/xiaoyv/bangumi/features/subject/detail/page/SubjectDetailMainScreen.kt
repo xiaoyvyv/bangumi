@@ -302,8 +302,7 @@ private fun SubjectDetailEpisode(
                             // 直接更新进度值
                             onActionEvent(
                                 SubjectDetailEvent.Action.OnUpdateSubjectProgress(
-                                    update = CollectionSubjectProgressParam(epStatus = it),
-                                    showLoadingDialog = true
+                                    update = CollectionSubjectProgressParam(epStatus = it)
                                 )
                             )
                         },
@@ -311,8 +310,7 @@ private fun SubjectDetailEpisode(
                             // 直接更新进度值
                             onActionEvent(
                                 SubjectDetailEvent.Action.OnUpdateSubjectProgress(
-                                    update = CollectionSubjectProgressParam(epStatus = nextEp),
-                                    showLoadingDialog = true
+                                    update = CollectionSubjectProgressParam(epStatus = nextEp)
                                 )
                             )
                         }
@@ -335,8 +333,7 @@ private fun SubjectDetailEpisode(
                             // 直接更新进度值
                             onActionEvent(
                                 SubjectDetailEvent.Action.OnUpdateSubjectProgress(
-                                    update = CollectionSubjectProgressParam(volStatus = it),
-                                    showLoadingDialog = true
+                                    update = CollectionSubjectProgressParam(volStatus = it)
                                 )
                             )
                         },
@@ -344,8 +341,7 @@ private fun SubjectDetailEpisode(
                             // 直接更新进度值
                             onActionEvent(
                                 SubjectDetailEvent.Action.OnUpdateSubjectProgress(
-                                    update = CollectionSubjectProgressParam(volStatus = nextVol),
-                                    showLoadingDialog = true
+                                    update = CollectionSubjectProgressParam(volStatus = nextVol)
                                 )
                             )
                         }

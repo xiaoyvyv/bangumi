@@ -1,13 +1,13 @@
 package com.xiaoyv.bangumi.shared.ui.view.episode
 
 import androidx.annotation.IntRange
-import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.automirrored.rounded.Undo
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Done
@@ -32,6 +33,7 @@ import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,6 +52,11 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.episode_action_done
+import com.xiaoyv.bangumi.core_resource.resources.episode_action_drop
+import com.xiaoyv.bangumi.core_resource.resources.episode_action_remove
+import com.xiaoyv.bangumi.core_resource.resources.episode_action_skip_to
+import com.xiaoyv.bangumi.core_resource.resources.episode_action_wish
 import com.xiaoyv.bangumi.core_resource.resources.global_topic
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.EpisodeActionMenu
@@ -73,37 +81,44 @@ import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionWishContainer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
-private fun tab(@EpisodeActionMenu action: Int, label: String) = ComposeTextTab(action, labelText = label)
+private fun tab(@EpisodeActionMenu action: Int, label: StringResource) = ComposeTextTab(action, label = label)
+
+private val episodeNumberAutoSize = TextAutoSize.StepBased(
+    minFontSize = 6.sp,
+    maxFontSize = 12.sp,
+    stepSize = 0.5.sp,
+)
 
 val episodeOptions: Map<Int, ImmutableList<ComposeTextTab<Int>>> =
     mapOf(
         CollectionEpisodeType.UNKNOWN to persistentListOf(
-            tab(EpisodeActionMenu.DONE, "看过"),
-            tab(EpisodeActionMenu.SKIP_TO, "看到"),
-            tab(EpisodeActionMenu.WISH, "想看"),
-            tab(EpisodeActionMenu.DROP, "抛弃"),
+            tab(EpisodeActionMenu.DONE, Res.string.episode_action_done),
+            tab(EpisodeActionMenu.SKIP_TO, Res.string.episode_action_skip_to),
+            tab(EpisodeActionMenu.WISH, Res.string.episode_action_wish),
+            tab(EpisodeActionMenu.DROP, Res.string.episode_action_drop),
         ),
         CollectionEpisodeType.WISH to persistentListOf(
-            tab(EpisodeActionMenu.DONE, "看过"),
-            tab(EpisodeActionMenu.SKIP_TO, "看到"),
-            tab(EpisodeActionMenu.DROP, "抛弃"),
-            tab(EpisodeActionMenu.REMOVE, "撤销"),
+            tab(EpisodeActionMenu.DONE, Res.string.episode_action_done),
+            tab(EpisodeActionMenu.SKIP_TO, Res.string.episode_action_skip_to),
+            tab(EpisodeActionMenu.DROP, Res.string.episode_action_drop),
+            tab(EpisodeActionMenu.REMOVE, Res.string.episode_action_remove),
         ),
         CollectionEpisodeType.DONE to persistentListOf(
-            tab(EpisodeActionMenu.DONE, "看过"),
-            tab(EpisodeActionMenu.WISH, "想看"),
-            tab(EpisodeActionMenu.DROP, "抛弃"),
-            tab(EpisodeActionMenu.REMOVE, "撤销"),
+            tab(EpisodeActionMenu.DONE, Res.string.episode_action_done),
+            tab(EpisodeActionMenu.WISH, Res.string.episode_action_wish),
+            tab(EpisodeActionMenu.DROP, Res.string.episode_action_drop),
+            tab(EpisodeActionMenu.REMOVE, Res.string.episode_action_remove),
         ),
         CollectionEpisodeType.DROPPED to persistentListOf(
-            tab(EpisodeActionMenu.DONE, "看过"),
-            tab(EpisodeActionMenu.SKIP_TO, "看到"),
-            tab(EpisodeActionMenu.WISH, "想看"),
-            tab(EpisodeActionMenu.REMOVE, "撤销"),
+            tab(EpisodeActionMenu.DONE, Res.string.episode_action_done),
+            tab(EpisodeActionMenu.SKIP_TO, Res.string.episode_action_skip_to),
+            tab(EpisodeActionMenu.WISH, Res.string.episode_action_wish),
+            tab(EpisodeActionMenu.REMOVE, Res.string.episode_action_remove),
         ),
     )
 
@@ -113,7 +128,7 @@ fun EpisodeGrid(
     episodes: SerializeList<ComposeEpisode>,
     modifier: Modifier = Modifier,
     minItemSize: Dp = 32.dp,
-    @IntRange(from = 1) maxRows: Int = 5,
+    @IntRange(from = 1) maxRows: Int = 10,
     verticalSpacing: Dp = ContentMarginHalf,
     horizontalSpacing: Dp = ContentMarginHalf,
     contentPadding: PaddingValues = PaddingValues(
@@ -147,50 +162,15 @@ fun EpisodeGrid(
                 .padding(contentPadding),
         ) {
             items.forEach {
-                Box(modifier = Modifier.size(itemSize)) {
-                    val buttonColors = episodeCollectionButtonColors(it.collection.status, it.isAiring, it.isAired)
-                    var expanded by remember { mutableStateOf(false) }
-
-                    Box(
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clip(MaterialTheme.shapes.small)
-                            .background(if (it.splitter != null) Color.Transparent else buttonColors.containerColor)
-                            .border(1.dp, buttonColors.borderColor, MaterialTheme.shapes.small)
-                            .clickable { expanded = true },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            modifier = Modifier.basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(4.dp)),
-                            text = it.splitter ?: it.sortOrder.toTrimString(),
-                            color = buttonColors.contentColor,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Normal,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                key(it.key) {
+                    Box(modifier = Modifier.size(itemSize)) {
+                        EpisodeCell(
+                            episodes = episodes,
+                            item = it,
+                            onEpisodeChange = onEpisodeChange,
+                            onClickEpisode = onClickEpisode,
+                            textStyle = MaterialTheme.typography.bodySmall,
                         )
-
-                        if (it.splitter == null) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .align(Alignment.TopStart),
-                                text = EpisodeType.toAbbrType(it.episodeType),
-                                color = buttonColors.contentColor,
-                                fontSize = 6.sp,
-                                lineHeight = 8.sp,
-                                fontWeight = FontWeight.Normal
-                            )
-
-                            EpisodeDropMenu(
-                                episodes = episodes,
-                                item = it,
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false },
-                                onEpisodeChange = onEpisodeChange,
-                                onClickEpisode = { onClickEpisode(it) }
-                            )
-                        }
                     }
                 }
             }
@@ -215,46 +195,81 @@ fun EpisodePager(
         maxRows = maxRows,
         contentPadding = PaddingValues(start = ContentMargin, top = ContentMarginHalf, end = ContentMargin, bottom = ContentMargin)
     ) {
-        val buttonColors = episodeCollectionButtonColors(it.collection.status, it.isAiring, it.isAired)
-        var expanded by remember { mutableStateOf(false) }
+        EpisodeCell(
+            episodes = episodes,
+            item = it,
+            onEpisodeChange = onEpisodeChange,
+            onClickEpisode = onClickEpisode,
+            textStyle = MaterialTheme.typography.bodyMedium,
+        )
+    }
+}
 
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .clip(MaterialTheme.shapes.small)
-                .background(if (it.splitter != null) Color.Transparent else buttonColors.containerColor)
-                .border(1.dp, buttonColors.borderColor, MaterialTheme.shapes.small)
-                .clickable { expanded = true },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = it.splitter ?: it.sortOrder.toTrimString(),
-                color = buttonColors.contentColor,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Normal
-            )
+@Composable
+private fun BoxScope.EpisodeCell(
+    episodes: SerializeList<ComposeEpisode>,
+    item: ComposeEpisode,
+    onEpisodeChange: (List<ComposeEpisode>, Int) -> Unit,
+    onClickEpisode: (ComposeEpisode) -> Unit,
+    textStyle: TextStyle,
+) {
+    val buttonColors = episodeCollectionButtonColors(item.collection.status, item.isAiring, item.isAired)
+    val isSplitter = item.splitter != null
+    val showTypeBadge = !isSplitter && item.episodeType != EpisodeType.TYPE_MAIN
+    var expanded by remember { mutableStateOf(false) }
 
-            if (it.splitter == null) {
+    Box(
+        modifier = Modifier
+            .matchParentSize()
+            .clip(MaterialTheme.shapes.small)
+            .background(if (isSplitter) MaterialTheme.colorScheme.secondaryContainer else buttonColors.containerColor)
+            .border(1.dp, if (isSplitter) Color.Transparent else buttonColors.borderColor, MaterialTheme.shapes.small)
+            .clickable(enabled = !isSplitter) { expanded = true },
+        contentAlignment = Alignment.Center
+    ) {
+        if (showTypeBadge) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .align(Alignment.TopStart),
-                    text = EpisodeType.toAbbrType(it.episodeType),
+                    text = EpisodeType.toAbbrType(item.episodeType),
                     color = buttonColors.contentColor,
-                    fontSize = 8.sp,
-                    lineHeight = 8.sp,
-                    fontWeight = FontWeight.Normal
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontSize = 8.sp,
+                        lineHeight = 10.sp
+                    ),
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
                 )
-
-                EpisodeDropMenu(
-                    episodes = episodes,
-                    item = it,
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    onEpisodeChange = onEpisodeChange,
-                    onClickEpisode = { onClickEpisode(it) }
+                Text(
+                    text = item.sortOrder.toTrimString(),
+                    color = buttonColors.contentColor,
+                    style = textStyle,
+                    autoSize = episodeNumberAutoSize,
+                    fontWeight = FontWeight.Normal,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
+        } else {
+            Text(
+                text = item.splitter ?: item.sortOrder.toTrimString(),
+                color = if (isSplitter) MaterialTheme.colorScheme.onSecondaryContainer else buttonColors.contentColor,
+                style = if (isSplitter) MaterialTheme.typography.labelMedium else textStyle,
+                autoSize = if (isSplitter) null else episodeNumberAutoSize,
+                fontWeight = if (isSplitter) FontWeight.Medium else FontWeight.Normal,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        if (!isSplitter) {
+            EpisodeDropMenu(
+                episodes = episodes,
+                item = item,
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                onEpisodeChange = onEpisodeChange,
+                onClickEpisode = { onClickEpisode(item) }
+            )
         }
     }
 }

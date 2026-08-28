@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.features.user.business
 
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.user_no_collection_type
@@ -49,7 +49,7 @@ class UserViewModel(
     private val personalStateStore: PersonalStateStore,
     private val userManager: UserManager,
 ) : BaseViewModel<UserState, UserSideEffect, UserEvent.Action>() {
-    private val cacheKey = stringPreferencesKey(name = "user_detail_" + args.username)
+    private val cacheKey = byteArrayPreferencesKey(name = "user:${args.username}")
 
     init {
         personalStateStore.state

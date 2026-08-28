@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.home.business
 
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.home_recent_featured_prefix
@@ -45,7 +45,7 @@ class HomeViewModel(
     personalStateStore: PersonalStateStore,
 ) : BaseViewModel<HomeState, HomeSideEffect, HomeEvent.Action>() {
 
-    private val cacheKey = stringPreferencesKey(name = "home_main")
+    private val cacheKey = byteArrayPreferencesKey(name = "home:main")
 
     init {
         personalStateStore.state

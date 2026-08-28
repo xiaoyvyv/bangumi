@@ -58,6 +58,13 @@ import com.xiaoyv.bangumi.core_resource.resources.global_sort_rating
 import com.xiaoyv.bangumi.core_resource.resources.global_sort_title
 import com.xiaoyv.bangumi.core_resource.resources.global_sort_trends
 import com.xiaoyv.bangumi.core_resource.resources.global_sort_update
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_blocked
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_creator
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_member
+import com.xiaoyv.bangumi.core_resource.resources.group_member_role_moderator
+import com.xiaoyv.bangumi.core_resource.resources.group_tab_intro
+import com.xiaoyv.bangumi.core_resource.resources.group_tab_members
+import com.xiaoyv.bangumi.core_resource.resources.group_tab_recent_topics
 import com.xiaoyv.bangumi.core_resource.resources.ic_bottom_rank
 import com.xiaoyv.bangumi.core_resource.resources.ic_calendar
 import com.xiaoyv.bangumi.core_resource.resources.ic_chat
@@ -138,6 +145,7 @@ import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
+import com.xiaoyv.bangumi.shared.data.model.emnu.GroupMemberRole
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupSortType
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -193,6 +201,19 @@ object TabTokens {
     val searchMatchTabs = persistentListOf(
         ComposeTextTab(false, Res.string.search_match_m),
         ComposeTextTab(true, Res.string.search_match_e),
+    )
+
+    val groupTabs = persistentListOf(
+        ComposeTextTab(0, label = Res.string.group_tab_intro),
+        ComposeTextTab(1, label = Res.string.group_tab_recent_topics),
+        ComposeTextTab(2, label = Res.string.group_tab_members),
+    )
+
+    val groupMemberFilters = persistentListOf(
+        ComposeTextTab(GroupMemberRole.Member, label = Res.string.group_member_role_member),
+        ComposeTextTab(GroupMemberRole.Creator, label = Res.string.group_member_role_creator),
+        ComposeTextTab(GroupMemberRole.Moderator, label = Res.string.group_member_role_moderator),
+        ComposeTextTab(GroupMemberRole.Blocked, label = Res.string.group_member_role_blocked),
     )
 
     val layoutTabs = persistentListOf(

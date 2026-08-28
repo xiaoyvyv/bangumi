@@ -1,13 +1,12 @@
 package com.xiaoyv.bangumi.features.mono.detail.business
 
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.collect_cancel_success
 import com.xiaoyv.bangumi.core_resource.resources.collect_success
 import com.xiaoyv.bangumi.core_resource.resources.mono_detail_tietie_not_available
-import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
@@ -59,7 +58,7 @@ class MonoDetailViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<MonoDetailState, MonoDetailSideEffect, MonoDetailEvent.Action>() {
 
-    private val cacheKey = stringPreferencesKey(name = "mono_detail_${args.type}_" + args.id)
+    private val cacheKey = byteArrayPreferencesKey(name = "mono:${args.type}:${args.id}")
 
     /**
      * 来自 anime-pictures.net 的图片数据

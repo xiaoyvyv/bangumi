@@ -4,18 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -52,9 +47,9 @@ sealed interface AppEvent {
     ) : AppEvent
 
     /**
-     * 通用刷新事件
+     * 条目进度更新事件
      */
-    data object Refresh : AppEvent
+    data class UpdateTrackingSuccess(val id: Long) : AppEvent
 
     /**
      * 条目数据更新事件
@@ -119,6 +114,7 @@ class PersonalStateStore {
      * 发布成功事件 Flow
      */
     val publishSuccess = events.filterIsInstance<AppEvent.PublishSuccess>()
+    val updateTrackingSuccess = events.filterIsInstance<AppEvent.UpdateTrackingSuccess>()
 
     /**
      * 数据更新事件 Flow
@@ -127,13 +123,6 @@ class PersonalStateStore {
     val onMonoUpdated = events.filterIsInstance<AppEvent.MonoUpdated>()
     val onTimelineUpdated = events.filterIsInstance<AppEvent.TimelineUpdated>()
     val onTimelineDeleted = events.filterIsInstance<AppEvent.TimelineDeleted>()
-
-    /**
-     * 发送事件
-     */
-    suspend fun emitAppEvent(event: AppEvent) {
-        _events.emit(event)
-    }
 
     /**
      * 发送发布成功事件
@@ -145,6 +134,16 @@ class PersonalStateStore {
     ) {
         _events.tryEmit(AppEvent.PublishSuccess(type, publishAttachId, publishSuccessId))
     }
+
+    /**
+     * 发送更新条目进度事件
+     *
+     * @param id 条目 ID
+     */
+    fun emitUpdateTrackingSuccess(id: Long) {
+        _events.tryEmit(AppEvent.UpdateTrackingSuccess(id))
+    }
+
 
     /**
      * 更新条目数据状态
@@ -192,71 +191,5 @@ class PersonalStateStore {
             )
         }
         _events.tryEmit(AppEvent.TimelineDeleted(id))
-    }
-
-    /**
-     * 修改了章节收藏状态，刷新条目
-     *
-     * @param subject 条目数据对象
-     * @param episodeIds 变化的章节 ID 列表
-     * @param type 新的章节收藏状态 [CollectionEpisodeType]
-     */
-    fun emitSubjectEpisodeCollection(subject: ComposeSubject, episodeIds: List<Long>, @CollectionEpisodeType type: Int) {
-        val episodes = subject.episodes.map {
-            if (!episodeIds.contains(it.id)) it else it.copy(
-                collection = it.collection.copy(
-                    status = type,
-                    updatedAt = System.currentTimeMillis()
-                )
-            )
-        }
-        emitSubjectUpdated(
-            id = subject.id,
-            data = subject.copy(
-                episodes = episodes.toPersistentList(),
-                interest = subject.interest.copy(
-                    epStatus = episodes.count { it.collection.status != CollectionEpisodeType.UNKNOWN }
-                )
-            )
-        )
-    }
-
-    /**
-     * 更新条目收藏数据
-     *
-     * @param subject 条目数据对象
-     * @param update 条目收藏更新请求参数 [CollectionSubjectParam]
-     */
-    fun emitSubjectCollection(subject: ComposeSubject, update: CollectionSubjectParam) {
-        emitSubjectUpdated(
-            id = subject.id,
-            data = subject.copy(
-                interest = subject.interest.copy(
-                    type = update.type ?: subject.interest.type,
-                    rate = update.rate ?: subject.interest.rate,
-                    comment = update.comment ?: subject.interest.comment,
-                    private = update.`private` ?: subject.interest.private,
-                    tags = update.tags ?: subject.interest.tags
-                )
-            )
-        )
-    }
-
-    /**
-     * 更新条目收藏进度数据
-     *
-     * @param subject 条目数据对象
-     * @param update 进度 [CollectionSubjectProgressParam]
-     */
-    fun emitSubjectCollection(subject: ComposeSubject, update: CollectionSubjectProgressParam) {
-        emitSubjectUpdated(
-            id = subject.id,
-            data = subject.copy(
-                interest = subject.interest.copy(
-                    epStatus = update.epStatus ?: subject.interest.epStatus,
-                    volStatus = update.volStatus ?: subject.interest.volStatus,
-                )
-            )
-        )
     }
 }

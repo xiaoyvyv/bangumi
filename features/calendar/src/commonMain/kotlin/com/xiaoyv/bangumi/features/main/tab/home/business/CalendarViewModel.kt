@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.home.business
 
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -26,7 +26,7 @@ class CalendarViewModel(
     private val subjectRepository: SubjectRepository,
 ) : BaseViewModel<CalendarState, CalendarSideEffect, CalendarEvent.Action>() {
 
-    private val cacheKey = stringPreferencesKey(name = "calendar_${args.isToday}")
+    private val cacheKey = byteArrayPreferencesKey(name = "calendar:${args.isToday}")
 
 
     override fun initBaseState() = readViewModelCache(
