@@ -1,0 +1,88 @@
+import {
+	createExecutionContext,
+	env,
+	fetchMock,
+	waitOnExecutionContext,
+} from 'cloudflare:test';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import worker from '../src/index';
+import { parseMonoHomepage } from '../src/transforms/mono.transform';
+
+const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
+
+describe('mono homepage handler', () => {
+	beforeEach(() => {
+		fetchMock.activate();
+		fetchMock.disableNetConnect();
+	});
+
+	afterEach(() => {
+		fetchMock.assertNoPendingInterceptors();
+	});
+
+	it('parses GET /p1/mono/home into ComposeSection<ComposeMonoDisplay> items', async () => {
+		fetchMock.get('https://bgm.tv').intercept({ path: '/mono' }).reply(200, `
+			<div id="main" class="mainWrapper"></div>
+			<div class="mainWrapper">
+				<div id="columnSubjectBrowserA">
+					<div class="section"><h2>热门角色</h2><a href="/character">更多 »</a>
+						<ul><li><a href="/character/123" title="角色名"><img src="//lain.bgm.tv/pic/crt/l/a/b/123_crt.jpg"></a><p><small>角色中文名</small></p></li></ul>
+					</div>
+				</div>
+				<div id="columnSubjectBrowserB"><div class="sideInner">
+					<div class="subtitle">最近人物 <small><a href="/person">更多</a></small></div>
+					<div><dl><dt><a class="avatar" href="/person/456" title="人物名"><span style="background-image:url('//lain.bgm.tv/pic/crt/g/a/b/456_prsn.jpg')"></span></a></dt></dl></div>
+				</div></div>
+			</div>
+		`);
+
+		const request = new IncomingRequest('http://example.com/p1/mono/home');
+		const ctx = createExecutionContext();
+		const response = await worker.fetch(request, env, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(200);
+		const body = await response.json() as any[];
+		expect(body).toEqual([
+			expect.objectContaining({
+				key: '/character',
+				header: { id: '/character', title: '热门角色', subtitle: '', more: '更多' },
+			}),
+			expect.objectContaining({
+				key: '/character-123',
+				item: expect.objectContaining({
+					type: 2,
+					info: { mono: expect.objectContaining({ id: 123, name: '角色名', nameCN: '角色中文名' }) },
+				}),
+			}),
+			expect.objectContaining({
+				key: 'sideInner-/person',
+				header: { id: '/person', title: '最近人物', subtitle: '', more: '更多' },
+			}),
+			expect.objectContaining({
+				key: '/person-456',
+				item: expect.objectContaining({
+					type: 0,
+					info: { mono: expect.objectContaining({ id: 456, name: '人物名', nameCN: '人物名', type: 1 }) },
+				}),
+			}),
+		]);
+		expect(body[0]).not.toHaveProperty('item');
+		expect(body[2]).not.toHaveProperty('item');
+		expect(body[1]).not.toHaveProperty('header');
+		expect(body[3]).not.toHaveProperty('header');
+	});
+
+	it('returns 404 for unknown mono endpoints', async () => {
+		const request = new IncomingRequest('http://example.com/p1/mono/unknown');
+		const ctx = createExecutionContext();
+		const response = await worker.fetch(request, env, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(404);
+	});
+
+	it('treats absent homepage columns as empty sections', () => {
+		expect(parseMonoHomepage('<div class="mainWrapper"></div>')).toEqual([]);
+	});
+});
