@@ -39,7 +39,7 @@ class PixivMainViewModel(
 
     override fun onEvent(event: PixivMainEvent.Action) {
         when (event) {
-            is PixivMainEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PixivMainEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 }

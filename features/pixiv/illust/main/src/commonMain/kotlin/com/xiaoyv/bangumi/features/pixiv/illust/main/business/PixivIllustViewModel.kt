@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.pixiv.illust.main.business
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -23,13 +22,13 @@ class PixivIllustViewModel(
 ) : BaseViewModel<PixivIllustState, PixivIllustSideEffect, PixivIllustEvent.Action>() {
 
     override fun initBaseState(): UiState<PixivIllustState> =
-        UiState(data = createInitialState(), status = PageStatus.Loading)
+        initBaseLoadingState()
 
     override fun createInitialState() = PixivIllustState(illustId = illustId)
 
     override fun onEvent(event: PixivIllustEvent.Action) {
         when (event) {
-            is PixivIllustEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PixivIllustEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 

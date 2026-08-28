@@ -124,9 +124,12 @@ class BgmCollapsingScaffoldState(
 }
 
 @Composable
-fun rememberBgmCollapsingScaffoldState(): BgmCollapsingScaffoldState {
+fun rememberCollapsingScaffoldState(
+    initialOffset: Float = 0f,
+    initialOffsetLimit: Int = 0,
+): BgmCollapsingScaffoldState {
     return rememberSaveable(saver = BgmCollapsingScaffoldState.Saver) {
-        BgmCollapsingScaffoldState()
+        BgmCollapsingScaffoldState(initialOffset, initialOffsetLimit)
     }
 }
 
@@ -134,7 +137,7 @@ fun rememberBgmCollapsingScaffoldState(): BgmCollapsingScaffoldState {
 fun BgmCollapsingScaffold(
     modifier: Modifier = Modifier,
     state: ScrollState = rememberScrollState(),
-    collapsingState: BgmCollapsingScaffoldState = rememberBgmCollapsingScaffoldState(),
+    collapsingState: BgmCollapsingScaffoldState = rememberCollapsingScaffoldState(),
     windowInsets: WindowInsets = WindowInsets.navigationBars,
     collapse: @Composable BoxScope.(pinPadding: PaddingValues) -> Unit,
     topBar: @Composable (BoxScope.(progress: () -> Float) -> Unit)? = null,

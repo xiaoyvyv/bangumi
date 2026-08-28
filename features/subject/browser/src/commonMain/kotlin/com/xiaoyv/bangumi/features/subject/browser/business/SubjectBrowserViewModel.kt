@@ -54,7 +54,7 @@ class SubjectBrowserViewModel(
 
     override fun onEvent(event: SubjectBrowserEvent.Action) {
         when (event) {
-            is SubjectBrowserEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is SubjectBrowserEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is SubjectBrowserEvent.Action.OnUpdateBrowserSubjectParam -> onUpdateBrowserSubjectParam(event.body)
             SubjectBrowserEvent.Action.OnChangeLayoutMode -> onChangeLayoutMode()
         }

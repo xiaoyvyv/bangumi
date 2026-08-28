@@ -46,7 +46,7 @@ class PreviewMainViewModel(
 
     override fun onEvent(event: PreviewMainEvent.Action) {
         when (event) {
-            is PreviewMainEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PreviewMainEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is PreviewMainEvent.Action.OnPageSelected -> onPageSelected(event.index)
             is PreviewMainEvent.Action.OnSaveMedia -> onSaveMedia()
             is PreviewMainEvent.Action.OnSetWallpaper -> onSetWallpaper()

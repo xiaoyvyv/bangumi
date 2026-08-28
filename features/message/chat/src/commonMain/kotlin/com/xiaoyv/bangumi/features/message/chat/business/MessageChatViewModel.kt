@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.message.chat.business
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -17,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.Syntax
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * [MessageChatViewModel]
@@ -32,13 +32,13 @@ class MessageChatViewModel(
     init {
         viewModelScope.launch {
             while (isActive) {
-                delay(5000)
-                refresh(loading = false)
+                delay(5000.milliseconds)
+                refresh(contentLoading = false)
             }
         }
     }
 
-    override fun initBaseState(): UiState<MessageChatState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<MessageChatState> = initBaseLoadingState()
 
     override fun createInitialState() = MessageChatState()
 

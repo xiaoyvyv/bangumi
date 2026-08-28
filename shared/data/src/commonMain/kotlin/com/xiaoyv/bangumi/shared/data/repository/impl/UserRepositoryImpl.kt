@@ -28,6 +28,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.transform
@@ -78,6 +79,10 @@ class UserRepositoryImpl(
                 fetchUserListByPage(param, it, pagingConfig.pageSize).result
             }
         )
+    }
+
+    override suspend fun fetchUserHomeInfo(): Result<ComposeHome> = client.requestNextUserApi {
+        getHome()
     }
 
     override suspend fun submitReport(

@@ -10,7 +10,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateGroupTopicRequest
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
@@ -20,7 +20,7 @@ class TopicRepositoryImpl(
     private val pagingConfig: PagingConfig,
 ) : TopicRepository {
 
-    override fun fetchTopicPager(param: ListTopicParam): MemoryPagingController<ComposeTopic, Long> {
+    override fun fetchTopicPager(param: ListTopicParam): MemoryPagingController<ComposeTopicDetail, Long> {
         return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
             idSelector = { it.id },
@@ -67,7 +67,7 @@ class TopicRepositoryImpl(
     override suspend fun fetchTopicDetail(
         topicId: Long,
         @TopicType type: String
-    ): Result<ComposeTopic> = client.requestNextTopicApi {
+    ): Result<ComposeTopicDetail> = client.requestNextTopicApi {
         when (type) {
             TopicType.TYPE_SUBJECT -> getSubjectTopic(topicId)
             TopicType.TYPE_GROUP -> getGroupTopic(topicId)

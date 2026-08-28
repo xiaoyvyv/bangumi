@@ -1,6 +1,8 @@
 package com.xiaoyv.bangumi.features.topic.page
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.xiaoyv.bangumi.features.topic.page.business.TopicPageViewModel
@@ -30,10 +32,12 @@ val topicPageModule = module {
                     )
                 },
             ) {
-                TopicPageRoute(
-                    param = key.param,
-                    onNavScreen = { navigator.navigate(it) }
-                )
+                Box(modifier = Modifier.padding(it)) {
+                    TopicPageRoute(
+                        param = key.param,
+                        onNavScreen = { screen -> navigator.navigate(screen) }
+                    )
+                }
             }
         }
     }

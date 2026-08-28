@@ -23,7 +23,7 @@ class PixivUserSettingViewModel :
 
     override fun onEvent(event: PixivUserSettingEvent.Action) {
         when (event) {
-            is PixivUserSettingEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PixivUserSettingEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is PixivUserSettingEvent.Action.OnShowR18Changed -> onShowR18Changed(event.value)
             is PixivUserSettingEvent.Action.OnShowAiWorksChanged -> onShowAiWorksChanged(event.value)
             is PixivUserSettingEvent.Action.OnAutoplayUgoiraChanged -> onAutoplayUgoiraChanged(event.value)

@@ -6,7 +6,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -45,7 +44,7 @@ class FriendViewModel(
     override fun initBaseState(): UiState<FriendState> = if (param.ui.pageMode) {
         UiState(createInitialState())
     } else {
-        UiState(data = createInitialState(), status = PageStatus.Loading)
+        initBaseLoadingState()
     }
 
     override fun createInitialState() = FriendState(param = param)

@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.constant.userImage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -27,8 +27,8 @@ data class ComposeSearchTopic(
     /**
      * 搜索的帖子全部是小组帖
      */
-    fun toComposeTopic(): ComposeTopic {
-        return ComposeTopic(
+    fun toComposeTopic(): ComposeTopicDetail {
+        return ComposeTopicDetail(
             id = id,
             title = title,
             summary = summary,

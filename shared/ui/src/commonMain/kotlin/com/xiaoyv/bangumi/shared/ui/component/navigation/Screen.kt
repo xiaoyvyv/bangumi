@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
 import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.core.types.ReportType
+import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
@@ -256,7 +257,7 @@ sealed class Screen(
     data class Garden(val query: String = "") : Screen(SCREEN_ROUTE_GARDEN)
 
     @Serializable
-    data class SubjectDetail(val subjectId: Long) : Screen(SCREEN_ROUTE_SUBJECT)
+    data class SubjectDetail(val subjectId: Long, @SubjectDetailTab val selectedTab: Int = SubjectDetailTab.OVERVIEW) : Screen(SCREEN_ROUTE_SUBJECT)
 
     @Serializable
     data class SubjectBrowser(

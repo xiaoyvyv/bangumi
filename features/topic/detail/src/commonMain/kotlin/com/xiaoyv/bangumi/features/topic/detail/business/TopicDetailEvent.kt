@@ -26,5 +26,7 @@ sealed class TopicDetailEvent {
         data class OnCommentSortChange(@field:SortType val type: Int) : Action()
         data class OnAppendComment(val replyId: Long) : Action()
         data class OnDeleteComment(val commentId: Long) : Action()
+
+        data class OnTranslateContent(val translate: Boolean) : Action()
     }
 }

@@ -52,13 +52,13 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 @Composable
-fun rememberBgmPagerState(
+fun rememberPagerState(
     initialPage: Int = 0,
     @FloatRange(from = -0.5, to = 0.5) initialPageOffsetFraction: Float = 0f,
     onPageChange: (Int) -> Unit = {},
     pageCount: () -> Int,
 ): PagerState {
-    val pagerState = rememberPagerState(initialPage, initialPageOffsetFraction, pageCount)
+    val pagerState = rememberPagerState(initialPage.coerceAtLeast(0), initialPageOffsetFraction, pageCount)
     LaunchedEffect(Unit) {
         snapshotFlow { pagerState.currentPage }.collect {
             onPageChange(it)
@@ -227,7 +227,7 @@ fun <Key : Any> BgmChipHorizontalPager(
     onTabSelected: (Int) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope(),
     listState: LazyListState = rememberLazyListState(),
-    pagerState: PagerState = rememberBgmPagerState(
+    pagerState: PagerState = rememberPagerState(
         onPageChange = { scope.launch { listState.animateScrollToItem(it) } },
         initialPage = initialPage.coerceAtLeast(0),
         pageCount = { tabs.size }

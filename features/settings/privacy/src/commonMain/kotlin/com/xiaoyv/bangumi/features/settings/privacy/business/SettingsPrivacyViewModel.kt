@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.settings.privacy.business
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_ok
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -26,7 +25,7 @@ class SettingsPrivacyViewModel(
 ) : BaseViewModel<SettingsPrivacyState, SettingsPrivacySideEffect, SettingsPrivacyEvent.Action>() {
 
     override fun initBaseState(): UiState<SettingsPrivacyState> =
-        UiState(data = createInitialState(), status = PageStatus.Loading)
+        initBaseLoadingState()
 
     override fun createInitialState() = SettingsPrivacyState()
 
@@ -40,7 +39,7 @@ class SettingsPrivacyViewModel(
 
     override fun onEvent(event: SettingsPrivacyEvent.Action) {
         when (event) {
-            is SettingsPrivacyEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is SettingsPrivacyEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is SettingsPrivacyEvent.Action.OnUpdatePrivacy -> onUpdatePrivacy(event.privacy)
         }
     }

@@ -23,7 +23,7 @@ class PixivUserEditViewModel :
 
     override fun onEvent(event: PixivUserEditEvent.Action) {
         when (event) {
-            is PixivUserEditEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PixivUserEditEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is PixivUserEditEvent.Action.OnDisplayNameChanged -> onDisplayNameChanged(event.value)
             is PixivUserEditEvent.Action.OnIntroductionChanged -> onIntroductionChanged(event.value)
             is PixivUserEditEvent.Action.OnWebsiteChanged -> onWebsiteChanged(event.value)

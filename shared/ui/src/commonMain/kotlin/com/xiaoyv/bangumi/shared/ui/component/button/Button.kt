@@ -4,6 +4,8 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
 import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDoingContainer
@@ -16,6 +18,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionOnHoldContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionOnHoldText
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionWishContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionWishText
+import com.xiaoyv.bangumi.shared.ui.theme.colorStateAiredBorder
 import com.xiaoyv.bangumi.shared.ui.theme.colorStateAiredContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorStateAiredText
 import com.xiaoyv.bangumi.shared.ui.theme.colorStateAiringContainer
@@ -59,35 +62,48 @@ fun episodeCollectionButtonColors(
     @CollectionEpisodeType type: Int,
     isAiring: Boolean,
     isAired: Boolean,
-): ButtonColors = when {
+): EpisodeButtonColors = when {
     // 看过
-    type == CollectionEpisodeType.DONE -> ButtonDefaults.textButtonColors(
+    type == CollectionEpisodeType.DONE -> EpisodeButtonColors(
         contentColor = colorCollectionDoneText,
-        containerColor = colorCollectionDoneContainer
+        containerColor = colorCollectionDoneContainer,
+        borderColor = Color.Transparent
     )
     // 想看
-    type == CollectionEpisodeType.WISH -> ButtonDefaults.textButtonColors(
+    type == CollectionEpisodeType.WISH -> EpisodeButtonColors(
         contentColor = colorCollectionWishText,
-        containerColor = colorCollectionWishContainer
+        containerColor = colorCollectionWishContainer,
+        borderColor = Color.Transparent
     )
     // 抛弃
-    type == CollectionEpisodeType.DROPPED -> ButtonDefaults.textButtonColors(
+    type == CollectionEpisodeType.DROPPED -> EpisodeButtonColors(
         contentColor = colorCollectionDroppedText,
-        containerColor = colorCollectionDroppedContainer
+        containerColor = colorCollectionDroppedContainer,
+        borderColor = Color.Transparent
     )
 
-    isAiring -> ButtonDefaults.textButtonColors(
+    isAiring -> EpisodeButtonColors(
         contentColor = colorStateAiringText,
         containerColor = colorStateAiringContainer,
+        borderColor = Color.Transparent
     )
 
-    isAired -> ButtonDefaults.textButtonColors(
+    isAired -> EpisodeButtonColors(
         contentColor = colorStateAiredText,
-        containerColor = colorStateAiredContainer
+        containerColor = colorStateAiredContainer,
+        borderColor = colorStateAiredBorder
     )
 
-    else -> ButtonDefaults.textButtonColors(
+    else -> EpisodeButtonColors(
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        containerColor = MaterialTheme.colorScheme.surfaceContainer
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        borderColor = Color.Transparent
     )
 }
+
+@Immutable
+data class EpisodeButtonColors(
+    val containerColor: Color,
+    val contentColor: Color,
+    val borderColor: Color,
+)

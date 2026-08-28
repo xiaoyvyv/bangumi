@@ -116,6 +116,7 @@ val colorStateAiringContainer = Color(0xFF4CAF50)
 val colorStateAiringText = Color.White
 val colorStateAiredContainer = Color(0xFFDAEAFF)
 val colorStateAiredText = Color(0xFF0066CC)
+val colorStateAiredBorder = Color(0xFF00a8ff)
 val colorChartC1 = Color(0xFF67B7DC)
 val colorChartC2 = Color(0xFF6794DC)
 val colorChartC3 = Color(0xFF6771DC)

@@ -5,15 +5,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenEvent
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.rakuen.RakuenPageItem
 import com.xiaoyv.bangumi.shared.ui.view.topic.TopicPageItem
@@ -55,7 +55,7 @@ fun PreviewRaKuenPageItem() {
     PreviewColumn {
         TopicPageItem(
             modifier = Modifier.fillMaxWidth(),
-            item = ComposeTopic(
+            item = ComposeTopicDetail(
                 creator = ComposeUser(nickname = "小夜"),
                 replyCount = 100,
                 title = "葬送的芙莉莲",

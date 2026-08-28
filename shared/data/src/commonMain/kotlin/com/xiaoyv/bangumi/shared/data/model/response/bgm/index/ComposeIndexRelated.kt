@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,11 +24,11 @@ data class ComposeIndexRelated(
     @SerialName("rid") val rid: Long = 0,
     @SerialName("sid") val sid: Long = 0,
     @SerialName("type") @field:SubjectType val type: Int = SubjectType.UNKNOWN,
-    @SerialName("subject") val subject: ComposeSubject = ComposeSubject.Companion.Empty,
-    @SerialName("episode") val episode: ComposeEpisode = ComposeEpisode.Companion.Empty,
-    @SerialName("groupTopic") val groupTopic: ComposeTopic = ComposeTopic.Companion.Empty,
-    @SerialName("subjectTopic") val subjectTopic: ComposeTopic = ComposeTopic.Companion.Empty,
-    @SerialName("person") val person: ComposeMono = ComposeMono.Companion.Empty,
-    @SerialName("character") val character: ComposeMono = ComposeMono.Companion.Empty,
-    @SerialName("blog") val blog: ComposeBlogEntry = ComposeBlogEntry.Companion.Empty,
+    @SerialName("subject") val subject: ComposeSubject = ComposeSubject.Empty,
+    @SerialName("episode") val episode: ComposeEpisode = ComposeEpisode.Empty,
+    @SerialName("groupTopic") val groupTopic: ComposeTopicDetail = ComposeTopicDetail.Empty,
+    @SerialName("subjectTopic") val subjectTopic: ComposeTopicDetail = ComposeTopicDetail.Empty,
+    @SerialName("person") val person: ComposeMono = ComposeMono.Empty,
+    @SerialName("character") val character: ComposeMono = ComposeMono.Empty,
+    @SerialName("blog") val blog: ComposeBlogEntry = ComposeBlogEntry.Empty,
 )

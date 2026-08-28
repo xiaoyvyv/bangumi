@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.bgm.GroupTopicFilter
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
@@ -67,7 +67,7 @@ interface GroupApi {
         @Path("groupName") groupName: String,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeTopic>
+    ): ComposePage<ComposeTopicDetail>
 
     /**
      * 获取小组列表
@@ -97,5 +97,5 @@ interface GroupApi {
         @Query("mode") @GroupTopicFilter mode: String,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeTopic>
+    ): ComposePage<ComposeTopicDetail>
 }

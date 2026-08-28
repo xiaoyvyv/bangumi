@@ -32,6 +32,8 @@ abstract class BaseViewModelWithUiState<INTERNAL_STATE : Any, UI_STATE : Any, SI
 
     open fun initBaseState(): UiState<INTERNAL_STATE> = UiState(data = createInitialState())
 
+    protected fun initBaseLoadingState() = UiState(data = createInitialState(), status = PageStatus.Loading)
+
     abstract fun createInitialState(): INTERNAL_STATE
 
     abstract fun onEvent(event: EVENT)
@@ -54,8 +56,8 @@ abstract class BaseViewModelWithUiState<INTERNAL_STATE : Any, UI_STATE : Any, SI
 
     }
 
-    open fun refresh(loading: Boolean) = intent {
-        if (loading) reduceStatus { PageStatus.Loading }
+    open fun refresh(contentLoading: Boolean) = intent {
+        if (contentLoading) reduceStatus { PageStatus.Loading }
         runRefresh()
     }
 

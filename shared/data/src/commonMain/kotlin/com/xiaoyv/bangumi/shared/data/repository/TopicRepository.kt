@@ -3,14 +3,14 @@ package com.xiaoyv.bangumi.shared.data.repository
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 interface TopicRepository {
-    fun fetchTopicPager(param: ListTopicParam): MemoryPagingController<ComposeTopic, Long>
+    fun fetchTopicPager(param: ListTopicParam): MemoryPagingController<ComposeTopicDetail, Long>
 
 
-    suspend fun fetchTopicDetail(topicId: Long, @TopicType type: String): Result<ComposeTopic>
+    suspend fun fetchTopicDetail(topicId: Long, @TopicType type: String): Result<ComposeTopicDetail>
 
     suspend fun deleteComment(@TopicType type: String, commentId: Long): Result<Unit>
 

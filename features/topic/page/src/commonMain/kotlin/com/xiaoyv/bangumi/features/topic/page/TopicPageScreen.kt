@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.topic.page.business.TopicPageEvent
 import com.xiaoyv.bangumi.features.topic.page.business.TopicPageState
 import com.xiaoyv.bangumi.features.topic.page.business.TopicPageViewModel
@@ -13,13 +15,11 @@ import com.xiaoyv.bangumi.features.topic.page.business.rememberTopicPageViewMode
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.topic.TopicPageItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -52,7 +52,7 @@ fun TopicPageRoute(
 @Composable
 private fun TopicPageScreen(
     uiState: UiState<TopicPageState>,
-    pagingItems: LazyPagingItems<ComposeTopic>,
+    pagingItems: LazyPagingItems<ComposeTopicDetail>,
     onUiEvent: (TopicPageEvent.UI) -> Unit,
     onActionEvent: (TopicPageEvent.Action) -> Unit,
 ) {
@@ -69,7 +69,7 @@ private fun TopicPageScreen(
 @Composable
 private fun TopicPageScreenContent(
     state: TopicPageState,
-    pagingItems: LazyPagingItems<ComposeTopic>,
+    pagingItems: LazyPagingItems<ComposeTopicDetail>,
     onUiEvent: (TopicPageEvent.UI) -> Unit,
     onActionEvent: (TopicPageEvent.Action) -> Unit,
 ) {

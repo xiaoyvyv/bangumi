@@ -55,7 +55,7 @@ class TimelineDetailViewModel(
 
     override fun onEvent(event: TimelineDetailEvent.Action) {
         when (event) {
-            is TimelineDetailEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is TimelineDetailEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is TimelineDetailEvent.Action.OnClickReaction -> onClickReaction(event.timeline, event.reaction)
             is TimelineDetailEvent.Action.OnDeleteTimeline -> onDeleteTimeline(event.timeline)
             TimelineDetailEvent.Action.OnAppendComment -> onAppendComment()

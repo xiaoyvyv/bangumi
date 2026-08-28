@@ -10,7 +10,6 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
-import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
@@ -83,7 +82,7 @@ class UserViewModel(
 
     override fun onEvent(event: UserEvent.Action) {
         when (event) {
-            is UserEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is UserEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is UserEvent.Action.OnChangeSubjectTypeFilter -> onChangeSubjectTypeFilter(event.type)
             is UserEvent.Action.OnChangeCollectionTypeFilter -> onChangeCollectionTypeFilter(event.type)
             is UserEvent.Action.OnChangeCollectionSortFilter -> onChangeCollectionSortFilter(event.type)

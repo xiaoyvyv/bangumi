@@ -63,7 +63,7 @@ class TimelinePageViewModel(
 
     override fun onEvent(event: TimelinePageEvent.Action) {
         when (event) {
-            is TimelinePageEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is TimelinePageEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is TimelinePageEvent.Action.OnClickRecation -> onClickRecation(event.timeline, event.reaction)
             is TimelinePageEvent.Action.OnDeleteTimeline -> onDeleteTimeline(event.timeline)
         }

@@ -16,6 +16,8 @@ import com.xiaoyv.bangumi.core_resource.resources.global_netabare
 import com.xiaoyv.bangumi.core_resource.resources.global_open_browser
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.global_share
+import com.xiaoyv.bangumi.core_resource.resources.global_translate
+import com.xiaoyv.bangumi.core_resource.resources.global_translate_off
 import org.jetbrains.compose.resources.StringResource
 
 enum class ButtonType(val label: StringResource) {
@@ -25,6 +27,8 @@ enum class ButtonType(val label: StringResource) {
     CopyLink(Res.string.global_copy_link),
     Netabare(Res.string.global_netabare),
     AddToIndex(Res.string.global_add_to_index),
+    Translate(Res.string.global_translate),
+    TranslateOff(Res.string.global_translate_off),
     Reaction(Res.string.global_reaction),
     Copy(Res.string.global_copy),
     CopyName(Res.string.global_copy_name),

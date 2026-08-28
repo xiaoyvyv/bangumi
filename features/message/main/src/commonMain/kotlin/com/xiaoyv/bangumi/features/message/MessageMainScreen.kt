@@ -25,6 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_delete
 import com.xiaoyv.bangumi.core_resource.resources.global_done
@@ -49,13 +51,11 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -159,7 +159,7 @@ private fun MessageMainScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         tabs = state.tabs,
-        pagerState = rememberBgmPagerState(
+        pagerState = rememberPagerState(
             onPageChange = { onActionEvent(MessageMainEvent.Action.OnTabSelected(state.tabs[it].type)) },
             pageCount = { state.tabs.size }
         )

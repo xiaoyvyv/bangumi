@@ -55,7 +55,7 @@ class MikanStudioViewModel(
 
     override fun onEvent(event: MikanStudioEvent.Action) {
         when (event) {
-            is MikanStudioEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is MikanStudioEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 

@@ -34,7 +34,7 @@ import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -50,8 +50,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun TopicPageItem(
     modifier: Modifier,
-    item: ComposeTopic = ComposeTopic.Empty,
-    onClick: (ComposeTopic) -> Unit = {},
+    item: ComposeTopicDetail = ComposeTopicDetail.Empty,
+    onClick: (ComposeTopicDetail) -> Unit = {},
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
     onClickMono: (ComposeMonoDisplay) -> Unit = {},
@@ -96,7 +96,7 @@ fun TopicPageItem(
 }
 
 @Composable
-fun TopicPageItemHeadline(item: ComposeTopic) {
+fun TopicPageItemHeadline(item: ComposeTopicDetail) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -159,7 +159,7 @@ fun TopicPageItemHeadline(item: ComposeTopic) {
 
 @Composable
 private fun TopicPageItemTrailing(
-    item: ComposeTopic,
+    item: ComposeTopicDetail,
     onReport: () -> Unit,
 ) {
     when (item.topicType) {
@@ -202,7 +202,7 @@ private fun TopicPageItemTrailing(
 
 @Composable
 private fun TopicPageItemOverline(
-    item: ComposeTopic,
+    item: ComposeTopicDetail,
     onClickUser: (ComposeUser) -> Unit,
     onClickMono: (ComposeMonoDisplay) -> Unit,
     onClickSubject: (ComposeSubject) -> Unit,
@@ -275,7 +275,7 @@ private fun TopicPageItemOverline(
 }
 
 @Composable
-private fun TopicPageFlag(item: ComposeTopic) {
+private fun TopicPageFlag(item: ComposeTopicDetail) {
     item.flags.forEach {
         when (it) {
             RakuenFlagType.TYPE_HOT -> Text(
@@ -323,7 +323,7 @@ private fun TopicPageFlag(item: ComposeTopic) {
 
 @Composable
 private fun TopicPageItemAvatar(
-    item: ComposeTopic,
+    item: ComposeTopicDetail,
     onClickUser: (ComposeUser) -> Unit,
     onClickMono: (ComposeMonoDisplay) -> Unit,
     onClickSubject: (ComposeSubject) -> Unit,

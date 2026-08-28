@@ -23,10 +23,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.drop
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -61,11 +60,11 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
-import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
@@ -74,6 +73,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.drop
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -108,8 +108,8 @@ private fun IndexDetailScreen(
     onActionEvent: (IndexDetailEvent.Action) -> Unit,
 ) {
     val imageColorState = rememberImageColorState()
-    val collapsingState = rememberBgmCollapsingScaffoldState()
-    val pagerState = rememberBgmPagerState { uiState.data.tabs.size }
+    val collapsingState = rememberCollapsingScaffoldState()
+    val pagerState = rememberPagerState { uiState.data.tabs.size }
 
     LaunchedEffect(pagerState, collapsingState) {
         snapshotFlow { pagerState.currentPage }

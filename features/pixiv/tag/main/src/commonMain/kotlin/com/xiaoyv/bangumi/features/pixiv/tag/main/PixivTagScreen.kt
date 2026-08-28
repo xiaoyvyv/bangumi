@@ -36,11 +36,11 @@ import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
-import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -85,7 +85,7 @@ private fun PixivTagScreen(
     onActionEvent: (PixivTagEvent.Action) -> Unit,
 ) {
     val scrollState = rememberScrollState()
-    val collapsingState = rememberBgmCollapsingScaffoldState()
+    val collapsingState = rememberCollapsingScaffoldState()
 
     StateLayout(
         modifier = Modifier.fillMaxSize(),

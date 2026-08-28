@@ -10,7 +10,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_oldest
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.global_self
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -26,17 +25,17 @@ import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.refreshReaction
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
+import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -58,10 +57,11 @@ class TopicDetailViewModel(
     private val blogRepository: BlogRepository,
     private val indexRepository: IndexRepository,
     private val topicRepository: TopicRepository,
+    private val choreRepository: ChoreRepository,
     private val userManager: UserManager
 ) : BaseViewModel<TopicDetailState, TopicDetailSideEffect, TopicDetailEvent.Action>() {
 
-    override fun initBaseState(): UiState<TopicDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<TopicDetailState> = initBaseLoadingState()
 
     override fun createInitialState() = TopicDetailState(
         type = args.type,
@@ -91,6 +91,7 @@ class TopicDetailViewModel(
             is TopicDetailEvent.Action.OnCommentSortChange -> onCommentSortChange(event.type)
             is TopicDetailEvent.Action.OnAppendComment -> onAppendComment(event.replyId)
             is TopicDetailEvent.Action.OnDeleteComment -> onDeleteComment(event.commentId)
+            is TopicDetailEvent.Action.OnTranslateContent -> onTranslateContent(event.translate)
         }
     }
 
@@ -240,6 +241,18 @@ class TopicDetailViewModel(
                     displayReplies = displayReplies
                 )
             }
+        }
+    }
+
+    private fun onTranslateContent(translate: Boolean) = intent {
+        if (translate) {
+            withActionLoading { choreRepository.translate(state.displayContentText, true) }
+                .onFailure { postToast { it.errMsg } }
+                .onSuccess {
+                    reduceData { state.copy(translateContent = it) }
+                }
+        } else {
+            reduceData { state.copy(translateContent = "") }
         }
     }
 

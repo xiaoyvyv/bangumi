@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.home.page.group
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -12,7 +11,7 @@ import org.orbitmvi.orbit.syntax.Syntax
 class HomeGroupViewModel(
     private val ugcRepository: UgcRepository,
 ) : BaseViewModel<HomeGroupState, Any, Any>() {
-    override fun initBaseState(): UiState<HomeGroupState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<HomeGroupState> = initBaseLoadingState()
 
     override fun createInitialState(): HomeGroupState {
         return HomeGroupState()

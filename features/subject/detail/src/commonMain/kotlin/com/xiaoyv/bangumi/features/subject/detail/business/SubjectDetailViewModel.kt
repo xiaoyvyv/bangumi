@@ -77,11 +77,13 @@ class SubjectDetailViewModel(
         cacheKey = cacheKey,
         loadWhenEmpty = true,
         enable = userManager.settings.ui.cacheState,
+        transform = { it.copy(selectedTab = args.selectedTab) }
     )
 
     override fun createInitialState(): SubjectDetailState {
         return SubjectDetailState(
             id = args.subjectId,
+            selectedTab = args.selectedTab,
             subject = ComposeSubject.Empty,
         )
     }

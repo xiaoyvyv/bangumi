@@ -43,7 +43,7 @@ class AlmanacViewModel(
 
     override fun onEvent(event: AlmanacEvent.Action) {
         when (event) {
-            is AlmanacEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is AlmanacEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 }

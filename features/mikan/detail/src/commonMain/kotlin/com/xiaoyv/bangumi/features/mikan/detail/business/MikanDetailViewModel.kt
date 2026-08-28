@@ -69,7 +69,7 @@ class MikanDetailViewModel(
 
     override fun onEvent(event: MikanDetailEvent.Action) {
         when (event) {
-            is MikanDetailEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is MikanDetailEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is MikanDetailEvent.Action.OnToggleCheckMode -> onToggleCheckList()
             is MikanDetailEvent.Action.OnToggleItem -> onToggleItem(event.index)
             is MikanDetailEvent.Action.OnCopy -> onShareOrCopyItem(false)

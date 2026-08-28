@@ -19,7 +19,7 @@ class TagDetailViewModel(
 
     override fun onEvent(event: TagDetailEvent.Action) {
         when (event) {
-            is TagDetailEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is TagDetailEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 }

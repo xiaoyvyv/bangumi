@@ -7,10 +7,8 @@ import com.multiplatform.webview.request.WebRequest
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.web_unsupported_protocol
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -26,6 +24,7 @@ import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.ktor.http.Url
 import kotlinx.collections.immutable.toPersistentList
+import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax
 
 /**
@@ -44,7 +43,7 @@ class WebViewModel(
 ) : BaseViewModel<WebState, WebSideEffect, WebEvent.Action>() {
     private val webViewCookieManager = WebViewCookieManager()
 
-    override fun initBaseState(): UiState<WebState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<WebState> = initBaseLoadingState()
 
     override fun createInitialState() = WebState(
         url = args.url,

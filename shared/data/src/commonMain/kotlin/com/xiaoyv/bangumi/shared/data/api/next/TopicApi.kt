@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -92,7 +92,7 @@ interface TopicApi {
      * 获取小组话题详情
      */
     @GET("p1/groups/-/topics/{topicID}")
-    suspend fun getGroupTopic(@Path("topicID") topicID: Long): ComposeTopic
+    suspend fun getGroupTopic(@Path("topicID") topicID: Long): ComposeTopicDetail
 
     /**
      * 获取条目讨论回复详情
@@ -104,7 +104,7 @@ interface TopicApi {
      * 获取条目讨论详情
      */
     @GET("p1/subjects/-/topics/{topicID}")
-    suspend fun getSubjectTopic(@Path("topicID") topicID: Long): ComposeTopic
+    suspend fun getSubjectTopic(@Path("topicID") topicID: Long): ComposeTopicDetail
 
     /**
      * 给小组话题回复点赞

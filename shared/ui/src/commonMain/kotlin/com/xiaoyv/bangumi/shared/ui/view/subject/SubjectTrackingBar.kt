@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.shared.ui.view.subject
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -31,6 +33,7 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertInputDia
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDoneContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDoneText
 import org.jetbrains.compose.resources.stringResource
@@ -73,7 +76,10 @@ fun SubjectTrackingBar(
             modifier = Modifier
                 .wrapContentWidth()
                 .height(strokeWidth)
-                .border(ButtonDefaults.outlinedButtonBorder(), shape = MaterialTheme.shapes.small)
+                .border(
+                    BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant),
+                    shape = MaterialTheme.shapes.small
+                )
                 .clip(MaterialTheme.shapes.small)
                 .clickable(onClick = {
                     if (onInputChangeConfirm != null) inputDialogState.show {
@@ -135,5 +141,33 @@ fun SubjectTrackingBar(
                 )
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSubjectTrackingBar() {
+    PreviewColumn {
+        SubjectTrackingBar(
+            modifier = Modifier.padding(16.dp),
+            status = 5,
+            total = 12,
+            button = "看到 5",
+            onClickIncrease = {}
+        )
+        SubjectTrackingBar(
+            modifier = Modifier.padding(16.dp),
+            status = 12,
+            total = 12,
+            button = "看到 12",
+            onClickIncrease = {}
+        )
+        SubjectTrackingBar(
+            modifier = Modifier.padding(16.dp),
+            status = 5,
+            total = 0,
+            button = "看到 5",
+            onClickIncrease = {}
+        )
     }
 }

@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.notification.business
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.notification_no_data
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
@@ -31,7 +30,7 @@ import org.orbitmvi.orbit.syntax.Syntax
 class NotificationViewModel(
     private val userRepository: UserRepository,
 ) : BaseViewModel<NotificationState, NotificationSideEffect, NotificationEvent.Action>() {
-    override fun initBaseState(): UiState<NotificationState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<NotificationState> = initBaseLoadingState()
 
     override fun createInitialState() = NotificationState(
         pageUrl = WebConstant.URL_BASE_WEB + "notify/all"

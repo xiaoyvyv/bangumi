@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -12,5 +12,5 @@ import kotlinx.serialization.Serializable
 data class ComposeGroupHomepage(
     @SerialName("hotGroups") val hotGroups: SerializeList<ComposeGroup> = persistentListOf(),
     @SerialName("newestGroups") val newestGroups: SerializeList<ComposeGroup> = persistentListOf(),
-    @SerialName("newestTopics") val newestTopics: SerializeList<ComposeTopic> = persistentListOf(),
+    @SerialName("newestTopics") val newestTopics: SerializeList<ComposeTopicDetail> = persistentListOf(),
 )

@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.settings.account.business
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_ok
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
@@ -34,7 +33,7 @@ class SettingsAccountViewModel(
     private val userRepository: UserRepository,
     private val userManager: UserManager,
 ) : BaseViewModel<SettingsAccountState, SettingsAccountSideEffect, SettingsAccountEvent.Action>() {
-    override fun initBaseState(): UiState<SettingsAccountState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<SettingsAccountState> = initBaseLoadingState()
 
     override fun createInitialState() = SettingsAccountState()
 

@@ -97,7 +97,7 @@ data class ComposeSubject(
     @SerialName("images") val images: ComposeImages = ComposeImages.Empty,
     @SerialName("infobox") val infobox: SerializeList<ComposeInfobox> = persistentListOf(),
     @SerialName("locked") val locked: Boolean = false,
-    @SerialName("meta_tags") val metaTags: SerializeList<String> = persistentListOf(),
+    @SerialName("meta_tags") @JsonNames("metaTags") val metaTags: SerializeList<String> = persistentListOf(),
     @SerialName("name") val name: String = "",
     @SerialName("name_cn") @JsonNames("nameCN", "name_cn") val nameCn: String = "",
     @SerialName("nsfw") val nsfw: Boolean = false,
@@ -111,6 +111,13 @@ data class ComposeSubject(
     @SerialName("type") @field:SubjectType val type: Int = 0,
     @SerialName("interest") val interest: ComposeSubjectInterest = ComposeSubjectInterest.Empty,
     @SerialName("redirect") val redirect: Int = 0,
+
+    /**
+     * 首页的追踪进度的条目复用填充的数据
+     */
+    @SerialName("doing") val doing: Int = 0,
+    @SerialName("airDate") val airDate: String = "",
+    @SerialName("weekday") val weekday: Int = 0,
 
     /**
      * Index 目录内复用填充的数据

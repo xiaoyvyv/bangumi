@@ -50,7 +50,7 @@ class CalendarViewModel(
 
     override fun onEvent(event: CalendarEvent.Action) {
         when (event) {
-            is CalendarEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is CalendarEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             CalendarEvent.Action.OnChangeLayoutMode -> onChangeLayoutMode()
         }
     }

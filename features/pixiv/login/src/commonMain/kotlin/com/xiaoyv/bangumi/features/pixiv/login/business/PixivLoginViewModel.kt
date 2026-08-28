@@ -40,7 +40,7 @@ class PixivLoginViewModel(
 
     override fun onEvent(event: PixivLoginEvent.Action) {
         when (event) {
-            is PixivLoginEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PixivLoginEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             PixivLoginEvent.Action.OnOpenLogin -> onOpenLogin()
             PixivLoginEvent.Action.OnCheckLogin -> onCheckLogin()
         }

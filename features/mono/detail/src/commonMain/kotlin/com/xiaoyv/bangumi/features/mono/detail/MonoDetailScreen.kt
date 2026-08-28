@@ -72,11 +72,11 @@ import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
-import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -126,9 +126,9 @@ private fun MonoDetailScreen(
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
 ) {
     val imageColorState = rememberImageColorState()
-    val collapsingState = rememberBgmCollapsingScaffoldState()
+    val collapsingState = rememberCollapsingScaffoldState()
     val tabs = uiState.data.rememberTabs()
-    val pagerState = rememberBgmPagerState { tabs.size }
+    val pagerState = rememberPagerState { tabs.size }
 
     LaunchedEffect(pagerState, collapsingState) {
         snapshotFlow { pagerState.currentPage }

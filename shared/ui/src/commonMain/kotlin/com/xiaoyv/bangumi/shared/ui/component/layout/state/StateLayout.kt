@@ -44,7 +44,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_empty_comments_title
 import com.xiaoyv.bangumi.core_resource.resources.global_no_more
 import com.xiaoyv.bangumi.core_resource.resources.global_no_more_comments_subtitle
 import com.xiaoyv.bangumi.core_resource.resources.global_refresh
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -61,17 +60,13 @@ import org.jetbrains.compose.resources.stringResource
 fun rememberCacheWindowLazyListState(
     @FloatRange(from = 0.0) aheadFraction: Float = 1f,
     @FloatRange(from = 0.0) behindFraction: Float = 1f,
-): LazyListState {
-    return rememberLazyListState()
-}
+): LazyListState = rememberLazyListState()
 
 @Composable
 fun rememberCacheWindowLazyGridState(
     @FloatRange(from = 0.0) aheadFraction: Float = 10f,
     @FloatRange(from = 0.0) behindFraction: Float = 10f,
-): LazyGridState {
-    return rememberLazyGridState()
-}
+): LazyGridState = rememberLazyGridState()
 
 /**
  * The state layout
@@ -97,6 +92,7 @@ fun <T> StateLayout(
         LaunchedEffect(uiState) {
             if (uiState.status !is PageStatus.Loading) isRefreshing = false
         }
+
         PullToRefreshBox(
             modifier = modifier,
             state = pullRefreshState,
@@ -278,7 +274,7 @@ fun PagingAppendErrorLayout(
 }
 
 @Composable
-fun  CommentNoDataTip(
+fun CommentNoDataTip(
     isEmpty: Boolean,
     modifier: Modifier = Modifier
 ) {

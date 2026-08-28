@@ -5,6 +5,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.topic_list_all
+import com.xiaoyv.bangumi.core_resource.resources.topic_list_created
 import com.xiaoyv.bangumi.core_resource.resources.topic_list_joined
 import com.xiaoyv.bangumi.core_resource.resources.topic_list_replied
 import com.xiaoyv.bangumi.core_resource.resources.topic_list_title
@@ -60,7 +61,7 @@ data class ListTopicParam(
             ListTopicType.GROUP_ALL -> when (mode) {
                 GroupTopicFilter.ALL -> Res.string.topic_list_all
                 GroupTopicFilter.JOINED -> Res.string.topic_list_joined
-                GroupTopicFilter.CREATED -> Res.string.topic_list_joined
+                GroupTopicFilter.CREATED -> Res.string.topic_list_created
                 GroupTopicFilter.REPLIED -> Res.string.topic_list_replied
                 else -> Res.string.topic_list_title
             }

@@ -92,7 +92,7 @@ class MonoBrowserViewModel(
 
     override fun onEvent(event: MonoBrowserEvent.Action) {
         when (event) {
-            is MonoBrowserEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is MonoBrowserEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is MonoBrowserEvent.Action.OnChangeFilterOrderBy -> onChangeFilterOrderBy(event.orderBy)
             is MonoBrowserEvent.Action.OnChangeFilterType -> onChangeFilterType(event.type)
             is MonoBrowserEvent.Action.OnChangeFilterGender -> onChangeFilterGender(event.gender)

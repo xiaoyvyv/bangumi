@@ -44,7 +44,7 @@ class DollarsViewModel(
 
     override fun onEvent(event: DollarsEvent.Action) {
         when (event) {
-            is DollarsEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is DollarsEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is DollarsEvent.Action.OnValueChange -> onValueChange(event.value)
             DollarsEvent.Action.OnSendMessage -> onSendMessage()
         }

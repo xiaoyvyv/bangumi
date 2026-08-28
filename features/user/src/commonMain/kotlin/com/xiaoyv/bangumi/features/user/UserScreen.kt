@@ -1,46 +1,23 @@
 package com.xiaoyv.bangumi.features.user
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.drop
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.global_image
-import com.xiaoyv.bangumi.core_resource.resources.pixiv_illust_stat_bookmarks
-import com.xiaoyv.bangumi.core_resource.resources.pixiv_illust_stat_likes
-import com.xiaoyv.bangumi.core_resource.resources.pixiv_illust_stat_views
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.features.user.business.UserViewModel
@@ -56,23 +33,19 @@ import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
-import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
 import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
-import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
-import com.xiaoyv.bangumi.shared.ui.component.layout.rememberBgmCollapsingScaffoldState
+import com.xiaoyv.bangumi.shared.ui.component.layout.rememberCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.pager.rememberBgmPagerState
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -110,13 +83,13 @@ private fun UserScreen(
 ) {
     val scrollState = rememberScrollState()
     val imageColorState = rememberImageColorState()
-    val collapsingState = rememberBgmCollapsingScaffoldState()
+    val collapsingState = rememberCollapsingScaffoldState()
     val tabs = uiState.data.rememberTabs()
     val initialPage = remember(initialTab, tabs) {
         val idx = tabs.indexOfFirst { it.type == initialTab }
         if (idx >= 0) idx else 0
     }
-    val pagerState = rememberBgmPagerState(
+    val pagerState = rememberPagerState(
         initialPage = initialPage.coerceAtLeast(0),
         pageCount = { tabs.size }
     )

@@ -245,6 +245,8 @@
     <string name="global_set_wallpaper_success">设置壁纸成功</string>
     <string name="global_choose">请选择</string>
     <string name="global_add_to_index">添加到目录</string>
+    <string name="global_translate">翻译</string>
+    <string name="global_translate_off">原文</string>
 
     <string name="emoji_tv">TV</string>
     <string name="emoji_tv_1">TV-1</string>
@@ -582,7 +584,7 @@
     <string name="topic_title">详情</string>
     <string name="topic_list_title">话题列表</string>
     <string name="topic_list_all">全站</string>
-    <string name="topic_list_joined">已加入</string>
+    <string name="topic_list_joined">已加入的小组话题</string>
     <string name="topic_list_created">我创建的</string>
     <string name="topic_list_replied">我回复的</string>
     <string name="topic_ep_info">时长：%1$s / 首播：%2$s</string>

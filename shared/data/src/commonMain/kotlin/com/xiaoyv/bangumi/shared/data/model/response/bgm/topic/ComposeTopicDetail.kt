@@ -22,7 +22,7 @@ import kotlinx.serialization.Serializable
 
 @Immutable
 @Serializable
-data class ComposeTopic(
+data class ComposeTopicDetail(
     @SerialName("updatedAt") val updatedAt: SerializeDateLong = 0,
     @SerialName("createdAt") val createdAt: SerializeDateLong = 0,
     @SerialName("creatorID") val creatorID: Long = 0,
@@ -95,7 +95,7 @@ data class ComposeTopic(
         }
     }
 
-    fun normalized(@TopicType topicType: String): ComposeTopic {
+    fun normalized(@TopicType topicType: String): ComposeTopicDetail {
         return copy(
             topicType = topicType,
             summary = summary.bbcodeToHtml(),
@@ -104,6 +104,6 @@ data class ComposeTopic(
     }
 
     companion object {
-        val Empty = ComposeTopic()
+        val Empty = ComposeTopicDetail()
     }
 }

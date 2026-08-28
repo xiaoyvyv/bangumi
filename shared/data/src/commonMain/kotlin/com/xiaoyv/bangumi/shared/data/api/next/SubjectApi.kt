@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
@@ -58,7 +58,7 @@ interface SubjectApi {
     suspend fun createSubjectTopic(
         @Path("subjectID") subjectID: Int,
         @Body createGroupTopicRequest: CreateGroupTopicRequest? = null,
-    ): ComposeTopic
+    ): ComposeTopicDetail
 
     /**
      * 获取最新的条目讨论
@@ -70,7 +70,7 @@ interface SubjectApi {
     suspend fun getRecentSubjectTopics(
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeTopic>
+    ): ComposePage<ComposeTopicDetail>
 
     /**
      * 获取条目
@@ -244,7 +244,7 @@ interface SubjectApi {
         @Path("subjectID") subjectID: Long,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeTopic>
+    ): ComposePage<ComposeTopicDetail>
 
     /**
      * 获取条目列表

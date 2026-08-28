@@ -13,14 +13,14 @@ import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 
 @AppParserDsl
 class TopicTableParser : BaseParser() {
 
-    suspend fun Element.fetchIndexTopicConverted(): List<ComposeTopic> {
+    suspend fun Element.fetchIndexTopicConverted(): List<ComposeTopicDetail> {
         requireNoError()
 
         return select(".topic-list > li").map { item ->
@@ -63,7 +63,7 @@ class TopicTableParser : BaseParser() {
                 }
             }
 
-            ComposeTopic(
+            ComposeTopicDetail(
                 creator = ComposeUser(
                     id = avatarUrl.avatarUrlId(username),
                     username = username,
@@ -80,12 +80,12 @@ class TopicTableParser : BaseParser() {
         }
     }
 
-    suspend fun Element.fetchSubjectTopicTableItem(): List<ComposeTopic> {
+    suspend fun Element.fetchSubjectTopicTableItem(): List<ComposeTopicDetail> {
         requireNoError()
         return select(".topic_list > tbody > tr").map {
             val tds = it.select("tr td")
             val time = tds.getOrNull(3)?.text().orEmpty()
-            ComposeTopic(
+            ComposeTopicDetail(
                 id = it.select(".subject a").hrefLongId(),
                 topicType = TopicType.TYPE_SUBJECT,
                 title = it.select(".subject").text(),
@@ -99,14 +99,14 @@ class TopicTableParser : BaseParser() {
         }
     }
 
-    suspend fun Element.fetchGroupTopicTableItem(): List<ComposeTopic> {
+    suspend fun Element.fetchGroupTopicTableItem(): List<ComposeTopicDetail> {
         requireNoError()
         return select(".topic_list > tbody > tr").mapNotNull {
             val tds = it.select("tr td")
             if (tds.size < 4) return@mapNotNull null
             val time = tds[3].text()
 
-            ComposeTopic(
+            ComposeTopicDetail(
                 id = tds[0].select("a").hrefLongId(),
                 topicType = TopicType.TYPE_GROUP,
                 replyCount = tds[0].select("small").text().parseCount(),

@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.pixiv.tag.main.business
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -18,7 +17,7 @@ class PixivTagViewModel(
 ) : BaseViewModel<PixivTagState, PixivTagSideEffect, PixivTagEvent.Action>() {
 
     override fun initBaseState(): UiState<PixivTagState> =
-        UiState(data = createInitialState(), status = PageStatus.Loading)
+        initBaseLoadingState()
 
     override fun createInitialState() = PixivTagState(tag = tag)
 
@@ -34,7 +33,7 @@ class PixivTagViewModel(
 
     override fun onEvent(event: PixivTagEvent.Action) {
         when (event) {
-            is PixivTagEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PixivTagEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 }

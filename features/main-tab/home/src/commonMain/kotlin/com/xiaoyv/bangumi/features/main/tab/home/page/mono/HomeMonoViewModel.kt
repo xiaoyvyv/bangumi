@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.main.tab.home.page.mono
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -13,7 +12,7 @@ import org.orbitmvi.orbit.syntax.Syntax
 class HomeMonoViewModel(
     private val monoRepository: MonoRepository,
 ) : BaseViewModel<HomeMonoState, Any, Any>() {
-    override fun initBaseState(): UiState<HomeMonoState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<HomeMonoState> = initBaseLoadingState()
 
     override fun createInitialState(): HomeMonoState {
         return HomeMonoState()

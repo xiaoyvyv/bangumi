@@ -9,7 +9,6 @@ import com.xiaoyv.bangumi.core_resource.resources.group_tab_intro
 import com.xiaoyv.bangumi.core_resource.resources.group_tab_members
 import com.xiaoyv.bangumi.core_resource.resources.group_tab_recent_topics
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -36,7 +35,7 @@ class GroupsDetailViewModel(
     private val groupRepository: GroupRepository,
 ) : BaseViewModel<GroupsDetailState, GroupsDetailSideEffect, GroupsDetailEvent.Action>() {
 
-    override fun initBaseState(): UiState<GroupsDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<GroupsDetailState> = initBaseLoadingState()
 
     override fun createInitialState() = GroupsDetailState(
         tabs = persistentListOf(

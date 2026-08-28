@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.subject.detail.page.chart
 
 import androidx.compose.runtime.Composable
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -25,7 +24,7 @@ class SubjectDetailChartViewModel(
     private val subjectRepository: SubjectRepository,
     private val subjectId: Long,
 ) : BaseViewModel<SubjectDetailChartState, Any, Any>() {
-    override fun initBaseState(): UiState<SubjectDetailChartState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<SubjectDetailChartState> = initBaseLoadingState()
 
     override fun createInitialState() = SubjectDetailChartState()
 

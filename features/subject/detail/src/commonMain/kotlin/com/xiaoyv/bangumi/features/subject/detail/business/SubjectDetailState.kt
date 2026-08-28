@@ -56,6 +56,9 @@ data class SubjectDetailState(
     @SerialName("myTags") val myTags: SerializeList<ComposeTag> = persistentListOf(),
 
     @Transient
+    @SubjectDetailTab
+    val selectedTab: Int = SubjectDetailTab.OVERVIEW,
+    @Transient
     val loading: LoadingState = LoadingState.NotLoading,
     @Transient
     val previewLoading: LoadingState = LoadingState.Loading,

@@ -11,6 +11,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
@@ -40,6 +41,16 @@ interface UserApi {
      */
     @GET("p1/me")
     suspend fun getMe(): ComposeUser
+
+    /**
+     * 聚合首页所需的全部数据：进度管理、好友时间线、小组话题、热门小组、热门条目讨论与每日放送。
+     *
+     * 根据登录状态分发：
+     * - 未登录时个人区块（进度/时间线/小组话题）为空，仅返回公开区块；
+     * - 已登录时返回全部区块。各个区块独立计算，单个区块失败时返回空数据，不影响其他区块。
+     */
+    @GET("p1/home")
+    suspend fun getHome(): ComposeHome
 
     /**
      * 获取用户信息

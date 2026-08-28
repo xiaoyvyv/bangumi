@@ -4,7 +4,6 @@ import androidx.annotation.IntDef
 import androidx.compose.runtime.Composable
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
-import com.xiaoyv.bangumi.core_resource.resources.global_unknown
 import com.xiaoyv.bangumi.core_resource.resources.type_interest_doing
 import com.xiaoyv.bangumi.core_resource.resources.type_interest_done
 import com.xiaoyv.bangumi.core_resource.resources.type_interest_drop
@@ -42,18 +41,6 @@ annotation class CollectionType {
         const val DOING = 3
         const val ASIDE = 4
         const val DROP = 5
-
-        @CollectionType
-        fun from(text: String): Int {
-            return when (text.trim()) {
-                "想看", "想玩", "想读", "想听" -> WISH
-                "看过", "玩过", "读过", "听过" -> DONE
-                "在看", "在玩", "在读", "在听" -> DOING
-                "搁置" -> ASIDE
-                "抛弃" -> DROP
-                else -> UNKNOWN
-            }
-        }
 
         @Composable
         fun string(@SubjectType subjectType: Int, @CollectionType collectType: Int) =

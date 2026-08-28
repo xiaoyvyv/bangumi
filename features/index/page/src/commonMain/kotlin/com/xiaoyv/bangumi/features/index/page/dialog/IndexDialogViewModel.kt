@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.index_add_related_success
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
@@ -42,7 +41,7 @@ class IndexDialogViewModel(
     private val target: IndexTarget,
     private val userManager: UserManager,
 ) : BaseViewModel<IndexDialogState, IndexDialogSideEffect, IndexDialogEvent.Action>() {
-    override fun initBaseState(): UiState<IndexDialogState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<IndexDialogState> = initBaseLoadingState()
 
     override fun createInitialState() = IndexDialogState()
 

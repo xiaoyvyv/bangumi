@@ -21,7 +21,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT))
-        setContent { App() }
+        setContent {
+            App()
+        }
         handleIncomingImage(intent)
         handlePixivUri(intent)
     }

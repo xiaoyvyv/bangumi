@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
@@ -52,7 +52,7 @@ data class ComposeIndex(
      */
     @SerialName("category") val category: SerializeMap<String, Int> = persistentMapOf(),
     @SerialName("subjects") val subjects: SerializeList<ComposeSubject> = persistentListOf(),
-    @SerialName("topics") val topics: SerializeList<ComposeTopic> = persistentListOf(),
+    @SerialName("topics") val topics: SerializeList<ComposeTopicDetail> = persistentListOf(),
     @SerialName("eps") val eps: SerializeList<ComposeIndexEp> = persistentListOf(),
     @SerialName("blogs") val blogs: SerializeList<ComposeBlogDisplay> = persistentListOf(),
     @SerialName("monos") val monos: SerializeList<ComposeMonoDisplay> = persistentListOf(),

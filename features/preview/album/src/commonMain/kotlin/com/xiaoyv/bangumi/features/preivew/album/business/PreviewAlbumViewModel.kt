@@ -37,7 +37,7 @@ class PreviewAlbumViewModel(
 
     override fun onEvent(event: PreviewAlbumEvent.Action) {
         when (event) {
-            is PreviewAlbumEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PreviewAlbumEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 

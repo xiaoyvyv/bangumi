@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.pixiv.user.main.business
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
@@ -28,7 +27,7 @@ class PixivUserViewModel(
         get() = userId > 0 && userId == preferenceStore.pixivTokenData.currentUser.id.toLongOrNull()
 
     override fun initBaseState(): UiState<PixivUserState> =
-        UiState(data = createInitialState(), status = PageStatus.Loading)
+        initBaseLoadingState()
 
     override fun createInitialState() = PixivUserState(
         userId = userId,
@@ -52,7 +51,7 @@ class PixivUserViewModel(
 
     override fun onEvent(event: PixivUserEvent.Action) {
         when (event) {
-            is PixivUserEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PixivUserEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             PixivUserEvent.Action.OnLogout -> onLogout()
         }
     }

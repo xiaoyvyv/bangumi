@@ -37,7 +37,7 @@ class TagPageViewModel(
 
     override fun onEvent(event: TagPageEvent.Action) {
         when (event) {
-            is TagPageEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is TagPageEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 }

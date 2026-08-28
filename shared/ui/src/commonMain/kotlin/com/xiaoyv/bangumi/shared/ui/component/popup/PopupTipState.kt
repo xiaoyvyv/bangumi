@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Stable
@@ -39,6 +40,6 @@ fun rememberPopupTipState(): PopupTipState {
     return remember { PopupTipState(scope, hostState) }
 }
 
-val LocalPopupTipState = staticCompositionLocalOf<PopupTipState> {
-    throw IllegalStateException()
+val LocalPopupTipState = staticCompositionLocalOf {
+    PopupTipState(CoroutineScope(Dispatchers.Main), SnackbarHostState())
 }

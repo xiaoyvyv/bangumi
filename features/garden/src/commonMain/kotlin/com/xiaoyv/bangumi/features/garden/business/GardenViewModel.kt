@@ -38,7 +38,7 @@ class GardenViewModel(
 
     override fun onEvent(event: GardenEvent.Action) {
         when (event) {
-            is GardenEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is GardenEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is GardenEvent.Action.OnChangeParamBody -> onChangeParamBody(event.param)
             is GardenEvent.Action.OnTextChanged -> onTextChanged(event.value)
             is GardenEvent.Action.OnSearch -> onSearch()

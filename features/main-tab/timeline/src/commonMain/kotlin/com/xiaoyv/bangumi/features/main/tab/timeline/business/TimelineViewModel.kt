@@ -28,7 +28,7 @@ class TimelineViewModel : BaseViewModel<TimelineState, TimelineSideEffect, Timel
 
     override fun onEvent(event: TimelineEvent.Action) {
         when (event) {
-            is TimelineEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is TimelineEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is TimelineEvent.Action.OnChangeTimeline -> onChangeTimeline(event.mode)
         }
     }

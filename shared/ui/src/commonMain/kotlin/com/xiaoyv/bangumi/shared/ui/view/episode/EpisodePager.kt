@@ -1,7 +1,10 @@
 package com.xiaoyv.bangumi.shared.ui.view.episode
 
 import androidx.annotation.IntRange
+import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -40,6 +43,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -62,11 +66,13 @@ import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDoneContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionDroppedContainer
 import com.xiaoyv.bangumi.shared.ui.theme.colorCollectionWishContainer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -106,7 +112,7 @@ val episodeOptions: Map<Int, ImmutableList<ComposeTextTab<Int>>> =
 fun EpisodeGrid(
     episodes: SerializeList<ComposeEpisode>,
     modifier: Modifier = Modifier,
-    minItemSize: Dp = 38.dp,
+    minItemSize: Dp = 32.dp,
     @IntRange(from = 1) maxRows: Int = 5,
     verticalSpacing: Dp = ContentMarginHalf,
     horizontalSpacing: Dp = ContentMarginHalf,
@@ -119,7 +125,6 @@ fun EpisodeGrid(
     onEpisodeChange: (List<ComposeEpisode>, Int) -> Unit = { _, _ -> },
     onClickEpisode: (ComposeEpisode) -> Unit = {},
 ) {
-
     BoxWithConstraints(modifier = modifier) {
         val screenWidth = maxWidth -
                 contentPadding.calculateStartPadding(LocalLayoutDirection.current) -
@@ -151,14 +156,18 @@ fun EpisodeGrid(
                             .matchParentSize()
                             .clip(MaterialTheme.shapes.small)
                             .background(if (it.splitter != null) Color.Transparent else buttonColors.containerColor)
+                            .border(1.dp, buttonColors.borderColor, MaterialTheme.shapes.small)
                             .clickable { expanded = true },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
+                            modifier = Modifier.basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(4.dp)),
                             text = it.splitter ?: it.sortOrder.toTrimString(),
                             color = buttonColors.contentColor,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Normal
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Normal,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
 
                         if (it.splitter == null) {
@@ -168,7 +177,7 @@ fun EpisodeGrid(
                                     .align(Alignment.TopStart),
                                 text = EpisodeType.toAbbrType(it.episodeType),
                                 color = buttonColors.contentColor,
-                                fontSize = 8.sp,
+                                fontSize = 6.sp,
                                 lineHeight = 8.sp,
                                 fontWeight = FontWeight.Normal
                             )
@@ -214,6 +223,7 @@ fun EpisodePager(
                 .matchParentSize()
                 .clip(MaterialTheme.shapes.small)
                 .background(if (it.splitter != null) Color.Transparent else buttonColors.containerColor)
+                .border(1.dp, buttonColors.borderColor, MaterialTheme.shapes.small)
                 .clickable { expanded = true },
             contentAlignment = Alignment.Center
         ) {
@@ -355,5 +365,29 @@ fun EpisodeDropMenu(
         )
 
         if (content != null) content()
+    }
+}
+
+@Preview
+@Composable
+fun EpisodeGridPreview() {
+    val episodes = remember {
+        (1..24).map {
+            ComposeEpisode(
+                id = it.toLong(),
+                sortOrder = it.toDouble(),
+                collection = ComposeEpisode.EpCollection(
+                    status = if (it <= 5) CollectionEpisodeType.DONE
+                    else if (it <= 8) CollectionEpisodeType.WISH
+                    else if (it <= 10) CollectionEpisodeType.DROPPED
+                    else CollectionEpisodeType.UNKNOWN
+                ),
+                airdate = "2023-01-01",
+            )
+        }.toPersistentList()
+    }
+
+    PreviewColumn {
+        EpisodeGrid(episodes = episodes)
     }
 }

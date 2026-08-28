@@ -24,7 +24,7 @@ class NewestViewModel :
 
     override fun onEvent(event: NewestEvent.Action) {
         when (event) {
-            is NewestEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is NewestEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is NewestEvent.Action.OnChangeYear -> onChangeYear(event.year)
         }
     }

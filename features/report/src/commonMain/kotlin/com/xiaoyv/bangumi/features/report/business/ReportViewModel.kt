@@ -32,7 +32,7 @@ class ReportViewModel(
 
     override fun onEvent(event: ReportEvent.Action) {
         when (event) {
-            is ReportEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is ReportEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is ReportEvent.Action.OnReasonChange -> onReasonChange(event.reason)
             is ReportEvent.Action.OnCommentChange -> onCommentChange(event.comment)
             ReportEvent.Action.OnReport -> onReport()

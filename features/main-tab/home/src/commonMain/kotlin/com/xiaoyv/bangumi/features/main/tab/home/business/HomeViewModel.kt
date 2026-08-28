@@ -2,6 +2,8 @@ package com.xiaoyv.bangumi.features.main.tab.home.business
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.viewModelScope
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.home_recent_featured_prefix
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -22,8 +24,6 @@ import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
-import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.home_recent_featured_prefix
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.drop
@@ -126,7 +126,7 @@ class HomeViewModel(
 
     override fun onEvent(event: HomeEvent.Action) {
         when (event) {
-            is HomeEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is HomeEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is HomeEvent.Action.OnRefreshIndexHomepage -> onRefreshIndexHomepage()
         }
     }

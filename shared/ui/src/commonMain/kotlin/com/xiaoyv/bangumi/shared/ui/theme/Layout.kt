@@ -26,8 +26,8 @@ internal val LocalContentMargins = compositionLocalOf {
 internal fun rememberContentMargins(): ContentMargins {
     val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
     val full = when {
-        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> 64.dp
-        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> 32.dp
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> 24.dp
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> 20.dp
         else -> 16.dp
     }
     return remember(full) { ContentMargins(full = full, half = full / 2) }

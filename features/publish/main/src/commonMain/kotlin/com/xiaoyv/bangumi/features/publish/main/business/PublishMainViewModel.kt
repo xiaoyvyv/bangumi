@@ -8,7 +8,6 @@ import com.xiaoyv.bangumi.core_resource.resources.publish_title_comment
 import com.xiaoyv.bangumi.core_resource.resources.publish_title_group
 import com.xiaoyv.bangumi.core_resource.resources.publish_title_subject
 import com.xiaoyv.bangumi.core_resource.resources.timeline_add
-import org.jetbrains.compose.resources.getString
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -32,6 +31,7 @@ import com.xiaoyv.bangumi.shared.data.repository.TimelineRepository
 import com.xiaoyv.bangumi.shared.data.repository.TopicRepository
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.github.vinceglb.filekit.PlatformFile
+import org.jetbrains.compose.resources.getString
 
 /**
  * [PublishMainViewModel]
@@ -70,7 +70,7 @@ class PublishMainViewModel(
 
     override fun onEvent(event: PublishMainEvent.Action) {
         when (event) {
-            is PublishMainEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PublishMainEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is PublishMainEvent.Action.OnTitleChange -> onTitleChange(event.title)
             is PublishMainEvent.Action.OnContentChange -> onContentChange(event.content)
             is PublishMainEvent.Action.OnReceiveTurnstileToken -> onReceiveTurnstileToken(event.token)

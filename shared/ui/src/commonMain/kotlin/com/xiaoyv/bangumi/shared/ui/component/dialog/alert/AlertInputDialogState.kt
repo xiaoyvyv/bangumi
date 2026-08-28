@@ -11,8 +11,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.DialogProperties
-import com.xiaoyv.bangumi.shared.core.utils.defaultJson
-import kotlinx.serialization.Serializable
 
 @Composable
 fun rememberAlertInputDialogState(
@@ -22,7 +20,7 @@ fun rememberAlertInputDialogState(
 }
 
 /**
- * [AlertDialogState]
+ * [AlertInputDialogState]
  *
  * @author why
  * @since 2025/1/14
@@ -45,7 +43,6 @@ class AlertInputDialogState(val properties: DialogProperties) {
     }
 
     @Immutable
-    @Serializable
     data class Data(
         val value: String = "",
         val title: String? = null,
@@ -61,11 +58,33 @@ class AlertInputDialogState(val properties: DialogProperties) {
     companion object {
 
         fun Saver(properties: DialogProperties): Saver<AlertInputDialogState, *> = Saver(
-            save = { listOf(it.showing, defaultJson.encodeToString(it.data)) },
-            restore = {
+            save = { state ->
+                val d = state.data
+                listOf(
+                    state.showing,
+                    d.value,
+                    d.title,
+                    d.singleLine,
+                    d.onlyNumber,
+                    d.minLines,
+                    d.maxLines,
+                    d.extraInt,
+                    d.extraString
+                )
+            },
+            restore = { list ->
                 AlertInputDialogState(properties = properties).apply {
-                    showing = it.first() as Boolean
-                    data = defaultJson.decodeFromString(it.last() as String)
+                    showing = list[0] as Boolean
+                    data = Data(
+                        value = list[1] as String,
+                        title = list[2] as? String,
+                        singleLine = list[3] as Boolean,
+                        onlyNumber = list[4] as Boolean,
+                        minLines = list[5] as Int,
+                        maxLines = list[6] as Int,
+                        extraInt = list[7] as Int,
+                        extraString = list[8] as String
+                    )
                 }
             }
         )

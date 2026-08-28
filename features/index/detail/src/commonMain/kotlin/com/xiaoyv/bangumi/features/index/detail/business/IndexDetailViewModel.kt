@@ -15,7 +15,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_person
 import com.xiaoyv.bangumi.core_resource.resources.global_real
 import com.xiaoyv.bangumi.core_resource.resources.global_subject_topic
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -47,13 +46,13 @@ class IndexDetailViewModel(
     private val userManager: UserManager,
 ) : BaseViewModel<IndexDetailState, IndexDetailSideEffect, IndexDetailEvent.Action>() {
 
-    override fun initBaseState(): UiState<IndexDetailState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<IndexDetailState> = initBaseLoadingState()
 
     override fun createInitialState() = IndexDetailState()
 
     override fun onEvent(event: IndexDetailEvent.Action) {
         when (event) {
-            is IndexDetailEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is IndexDetailEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is IndexDetailEvent.Action.OnToggleBookmarkIndex -> onToggleBookmarkIndex()
         }
     }

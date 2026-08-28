@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.features.preivew.gallery.business
 
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -23,13 +22,13 @@ class PreviewTextViewModel(
     private val args: Screen.PreviewText,
     private val choreRepository: ChoreRepository,
 ) : BaseViewModel<PreviewTextState, PreviewTextSideEffect, PreviewTextEvent.Action>() {
-    override fun initBaseState(): UiState<PreviewTextState> = UiState(data = createInitialState(), status = PageStatus.Loading)
+    override fun initBaseState(): UiState<PreviewTextState> = initBaseLoadingState()
 
     override fun createInitialState() = PreviewTextState()
 
     override fun onEvent(event: PreviewTextEvent.Action) {
         when (event) {
-            is PreviewTextEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is PreviewTextEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
             is PreviewTextEvent.Action.OnToggleTranslate -> onToggleTranslate()
         }
     }

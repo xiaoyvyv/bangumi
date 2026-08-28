@@ -7,10 +7,10 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogEntry
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -29,11 +29,12 @@ data class TopicDetailState(
     val currentUsername: String = "",
     @field:TopicType
     val type: String = TopicType.TYPE_UNKNOWN,
-    val topic: ComposeTopic = ComposeTopic.Empty,
+    val topic: ComposeTopicDetail = ComposeTopicDetail.Empty,
     val episode: ComposeEpisode = ComposeEpisode.Empty,
     val mono: ComposeMonoDisplay = ComposeMonoDisplay.Empty,
     val index: ComposeIndex = ComposeIndex.Empty,
     val blog: ComposeBlogEntry = ComposeBlogEntry.Empty,
+    val translateContent: String = "",
 
     val selectedCommentSortFilter: Int = 0,
     val selectedCommentTypeFilter: Int = 0,
@@ -84,7 +85,7 @@ data class TopicDetailState(
     val isLoadSuccess: Boolean
         get() = when (type) {
             TopicType.TYPE_SUBJECT,
-            TopicType.TYPE_GROUP -> topic != ComposeTopic.Empty
+            TopicType.TYPE_GROUP -> topic != ComposeTopicDetail.Empty
 
             TopicType.TYPE_EP -> episode != ComposeEpisode.Empty
             TopicType.TYPE_CRT,

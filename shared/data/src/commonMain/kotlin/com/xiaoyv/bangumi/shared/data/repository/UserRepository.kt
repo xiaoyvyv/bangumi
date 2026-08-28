@@ -17,6 +17,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
@@ -37,6 +38,7 @@ interface UserRepository {
 
     fun fetchUserPager(param: ListUserParam): MemoryPagingController<ComposeUserDisplay, String>
 
+    suspend fun fetchUserHomeInfo(): Result<ComposeHome>
 
     suspend fun fetchUserInfo(username: String): Result<ComposeUser>
 

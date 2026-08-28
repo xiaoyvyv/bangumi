@@ -58,7 +58,7 @@ import com.xiaoyv.bangumi.shared.core.utils.animateScrollToItem
 import com.xiaoyv.bangumi.shared.core.utils.nodesIndexed
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.reaction.ComposeReaction
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopic
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -133,37 +133,53 @@ private fun TopicDetailScreen(
             BgmTopAppBar(
                 title = stringResource(Res.string.topic_title),
                 actions = {
-                    uiState.data.run {
-                        val actionHandler = LocalActionHandler.current
+                    val actionHandler = LocalActionHandler.current
 
-                        DropMenuActionButton(
-                            options = rememberButtonTypeMenu(type) {
-                                add(ButtonType.OpenInBrowser)
-                                add(ButtonType.CopyLink)
-                                add(ButtonType.Share)
-
-                                // 仅以下几种话题才显示举报
-                                when (type) {
-                                    TopicType.TYPE_SUBJECT,
-                                    TopicType.TYPE_GROUP,
-                                    TopicType.TYPE_BLOG,
-                                    TopicType.TYPE_INDEX -> add(ButtonType.Report)
-                                }
-                            },
-                            onOptionClick = {
-                                when (it.type) {
-                                    ButtonType.Share -> actionHandler.shareContent(shareUrl)
-                                    ButtonType.CopyLink -> actionHandler.copyContent(shareUrl)
-                                    ButtonType.OpenInBrowser -> actionHandler.openInBrowser(shareUrl)
-                                    ButtonType.Report -> {
-                                        onUiEvent(TopicDetailEvent.UI.OnNavScreen(Screen.Report(uiState.data.reportType, uiState.data.id)))
-                                    }
-
-                                    else -> Unit
+                    DropMenuActionButton(
+                        options = rememberButtonTypeMenu(uiState.data) {
+                            // EP、人物、角色 显示翻译功能
+                            when (uiState.data.type) {
+                                TopicType.TYPE_EP,
+                                TopicType.TYPE_CRT,
+                                TopicType.TYPE_PERSON,
+                                TopicType.TYPE_INDEX -> {
+                                    add(if (uiState.data.translateContent.isNotBlank()) ButtonType.TranslateOff else ButtonType.Translate)
                                 }
                             }
-                        )
-                    }
+
+                            add(ButtonType.OpenInBrowser)
+                            add(ButtonType.CopyLink)
+                            add(ButtonType.Share)
+
+                            // 仅以下几种话题才显示举报
+                            when (uiState.data.type) {
+                                TopicType.TYPE_SUBJECT,
+                                TopicType.TYPE_GROUP,
+                                TopicType.TYPE_BLOG,
+                                TopicType.TYPE_INDEX -> add(ButtonType.Report)
+                            }
+                        },
+                        onOptionClick = {
+                            when (it.type) {
+                                ButtonType.Share -> actionHandler.shareContent(uiState.data.shareUrl)
+                                ButtonType.CopyLink -> actionHandler.copyContent(uiState.data.shareUrl)
+                                ButtonType.OpenInBrowser -> actionHandler.openInBrowser(uiState.data.shareUrl)
+                                ButtonType.Report -> {
+                                    onUiEvent(TopicDetailEvent.UI.OnNavScreen(Screen.Report(uiState.data.reportType, uiState.data.id)))
+                                }
+
+                                ButtonType.Translate -> {
+                                    onActionEvent(TopicDetailEvent.Action.OnTranslateContent(true))
+                                }
+
+                                ButtonType.TranslateOff -> {
+                                    onActionEvent(TopicDetailEvent.Action.OnTranslateContent(false))
+                                }
+
+                                else -> Unit
+                            }
+                        }
+                    )
                 },
                 onNavigationClick = { onUiEvent(TopicDetailEvent.UI.OnNavUp) }
             )
@@ -339,7 +355,9 @@ fun TopicDetailScreenHeader(
 
         BgmLinkedText(
             modifier = Modifier.fillMaxWidth(),
-            text = state.displayContentText.ifBlank { stringResource(Res.string.global_no_content) },
+            text = state.translateContent
+                .ifBlank { state.displayContentText }
+                .ifBlank { stringResource(Res.string.global_no_content) },
         )
 
         // 支持贴贴表情的话题
@@ -590,7 +608,7 @@ private fun ArticleScreenPreview() {
             uiState = UiState(
                 TopicDetailState(
                     id = 111,
-                    topic = ComposeTopic(
+                    topic = ComposeTopicDetail(
                         replies = persistentListOf(ComposeReply(content = ""))
                     )
                 )

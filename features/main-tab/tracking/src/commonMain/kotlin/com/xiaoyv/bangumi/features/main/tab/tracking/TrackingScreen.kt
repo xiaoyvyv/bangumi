@@ -9,8 +9,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_search
 import com.xiaoyv.bangumi.core_resource.resources.title_process
@@ -19,6 +19,7 @@ import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingState
 import com.xiaoyv.bangumi.features.main.tab.tracking.business.TrackingViewModel
 import com.xiaoyv.bangumi.features.main.tab.tracking.page.TrackingPageScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -26,6 +27,7 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -35,11 +37,14 @@ fun TrackingRoute(
     onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
-    val baseState by viewModel.collectAsState()
-    viewModel.collectBaseSideEffect { }
+    val uiState by viewModel.collectAsState()
+
+    viewModel.collectBaseSideEffect {
+
+    }
 
     TrackingScreen(
-        uiState = baseState,
+        uiState = uiState,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -77,6 +82,9 @@ private fun TrackingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
+            enablePullRefresh = true,
+            pullRefreshIndicatorPaddingTop = 48.dp,
+            onRefresh = { loading -> onActionEvent(TrackingEvent.Action.OnRefresh(loading)) },
             uiState = uiState,
         ) { state ->
             TrackingScreenContent(state, onUiEvent, onActionEvent)
@@ -95,12 +103,17 @@ private fun TrackingScreenContent(
         modifier = Modifier.fillMaxSize(),
         tabs = state.tabs
     ) {
-        if (!LocalInspectionMode.current) {
-            TrackingPageScreen(
-                subjectType = state.tabs[it].type,
-                onUiEvent = onUiEvent,
-            )
-        }
+        TrackingPageScreen(
+            subjectType = state.tabs[it].type,
+            items = when (state.tabs[it].type) {
+                SubjectType.ANIME -> state.progressAnime
+                SubjectType.REAL -> state.progressReal
+                SubjectType.BOOK -> state.progressBook
+                else -> persistentListOf()
+            },
+            onUiEvent = onUiEvent,
+            onActionEvent = onActionEvent
+        )
     }
 }
 
@@ -110,9 +123,7 @@ private fun PreviewTrackingScreen() {
     PreviewColumn(modifier = Modifier.fillMaxSize()) {
         TrackingScreen(
             uiState = UiState(
-                TrackingState(
-
-                )
+                TrackingState()
             ),
             onActionEvent = {},
             onUiEvent = {}

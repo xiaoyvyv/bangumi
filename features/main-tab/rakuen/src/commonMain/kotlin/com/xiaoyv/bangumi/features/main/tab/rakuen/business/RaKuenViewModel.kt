@@ -42,7 +42,7 @@ class RaKuenViewModel :
 
     override fun onEvent(event: RaKuenEvent.Action) {
         when (event) {
-            is RaKuenEvent.Action.OnRefresh -> refresh(loading = event.loading)
+            is RaKuenEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
         }
     }
 }

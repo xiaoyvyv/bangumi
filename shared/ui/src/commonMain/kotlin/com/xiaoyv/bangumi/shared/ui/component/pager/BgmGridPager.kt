@@ -39,7 +39,7 @@ import kotlin.math.roundToInt
 fun <T> BgmGridPager(
     items: List<T>,
     modifier: Modifier = Modifier,
-    minItemSize: Dp = 38.dp,
+    minItemSize: Dp = 32.dp,
     @IntRange(from = 1) maxRows: Int = 5,
     verticalSpacing: Dp = ContentMarginHalf,
     horizontalSpacing: Dp = ContentMarginHalf,
