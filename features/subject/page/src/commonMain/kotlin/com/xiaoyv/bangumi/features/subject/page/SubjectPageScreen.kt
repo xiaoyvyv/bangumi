@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageEvent
 import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageState
 import com.xiaoyv.bangumi.features.subject.page.business.SubjectPageViewModel
@@ -20,16 +23,16 @@ import com.xiaoyv.bangumi.features.subject.page.business.koinSubjectPageViewMode
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.request.list.subject.LocalListSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectLineItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -42,8 +45,7 @@ fun SubjectPageRoute(
     header: (@Composable () -> Unit)? = null,
     headerSticky: Boolean = false,
     onNavScreen: (Screen) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
+) = HideInPreview {
     val viewModel: SubjectPageViewModel = koinSubjectPageViewModel(param)
     val baseState by viewModel.collectAsState()
     val pagingItems = viewModel.subjects.collectAsLazyPagingItems()
@@ -52,24 +54,26 @@ fun SubjectPageRoute(
 
     }
 
-    SubjectPageScreen(
-        uiState = baseState,
-        pagingItems = pagingItems,
-        header = header,
-        headerSticky = headerSticky,
-        onActionEvent = viewModel::onEvent,
-        onUiEvent = {
-            when (it) {
-                is SubjectPageEvent.UI.OnNavScreen -> onNavScreen(it.screen)
+    CompositionLocalProvider(LocalListSubjectParam provides param) {
+        SubjectPageScreen(
+            uiState = baseState,
+            pagingItems = pagingItems,
+            header = header,
+            headerSticky = headerSticky,
+            onActionEvent = viewModel::onEvent,
+            onUiEvent = {
+                when (it) {
+                    is SubjectPageEvent.UI.OnNavScreen -> onNavScreen(it.screen)
+                }
             }
-        },
-    )
+        )
+    }
 }
 
 @Composable
 private fun SubjectPageScreen(
     uiState: UiState<SubjectPageState>,
-    pagingItems: LazyPagingItems<ComposeSubjectDisplay>,
+    pagingItems: LazyPagingItems<ComposeSubjectRelation>,
     header: (@Composable () -> Unit)? = null,
     headerSticky: Boolean = false,
     onUiEvent: (SubjectPageEvent.UI) -> Unit,
@@ -95,7 +99,7 @@ private fun SubjectPageScreen(
 @Composable
 private fun SubjectPageScreenContent(
     state: SubjectPageState,
-    pagingItems: LazyPagingItems<ComposeSubjectDisplay>,
+    pagingItems: LazyPagingItems<ComposeSubjectRelation>,
     header: (@Composable () -> Unit)? = null,
     headerSticky: Boolean = false,
     onUiEvent: (SubjectPageEvent.UI) -> Unit,
@@ -152,10 +156,11 @@ private fun SubjectPageScreenContent(
         ) { item, _ ->
             SubjectLineItem(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
+                contentPadding = PaddingValues(ContentMargin),
                 display = item,
                 onClick = { onUiEvent(SubjectPageEvent.UI.OnNavScreen(Screen.SubjectDetail(item.subject.id))) }
             )
+            HorizontalDivider()
         }
     }
 }

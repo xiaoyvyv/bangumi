@@ -225,7 +225,7 @@ private fun TrackingPageItem(
                                     item.lastUnwatchedEp == ComposeEpisode.Empty -> append(stringResource(Res.string.tracking_ep_all_watched))
                                     else -> {
                                         append("Ep.")
-                                        append(nextEp)
+                                        append(item.lastUnwatchedEp.sortOrder.toTrimString())
                                         append(doneActionText)
                                     }
                                 }
@@ -282,7 +282,7 @@ private fun TrackingPageItem(
                                 onUpdateProgress(CollectionSubjectProgressParam(volStatus = it))
                             },
                             onClickIncrease = {
-                                if (isEpCompleted) {
+                                if (isVolCompleted) {
                                     onUpdateCollect(CollectionSubjectParam(type = CollectionType.DONE))
                                 } else {
                                     onUpdateProgress(CollectionSubjectProgressParam(volStatus = nextVol))

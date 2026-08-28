@@ -5,7 +5,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +28,7 @@ fun MemoryPagingController<ComposeTimeline, Long>.bindTimelinePersonalState(
     }
 }
 
-fun MemoryPagingController<ComposeSubjectDisplay, Long>.bindSubjectDisplayPersonalState(
+fun MemoryPagingController<ComposeSubjectRelation, Long>.bindSubjectDisplayPersonalState(
     scope: CoroutineScope,
     personalStateStore: PersonalStateStore,
 ): Job = scope.launch {

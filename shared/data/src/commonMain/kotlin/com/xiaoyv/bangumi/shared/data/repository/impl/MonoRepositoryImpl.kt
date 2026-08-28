@@ -20,7 +20,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.parser.bgm.MonoParser
 import com.xiaoyv.bangumi.shared.data.repository.MonoRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
@@ -73,7 +73,7 @@ class MonoRepositoryImpl(
     override suspend fun fetchPersonWorks(
         monoId: Long,
         limit: Int,
-    ): Result<List<ComposeSubjectDisplay>> = client.requestNextPersonApi {
+    ): Result<List<ComposeSubjectRelation>> = client.requestNextPersonApi {
         getPersonWorks(monoId, limit = limit).result
     }
 
@@ -230,11 +230,8 @@ class MonoRepositoryImpl(
             client.requestNextPersonApi { getPersonComments(monoId).normalizedReplies() }
         }
 
-    override suspend fun fetchMonoHomepage(): Result<List<ComposeSection<ComposeMonoDisplay>>> = client.requestWebApi {
-        with(monoParser) {
-            fetchMonoHomepage()
-                .fetchMonoHomepageConverted()
-        }
+    override suspend fun fetchMonoHomepage(): Result<List<ComposeSection<ComposeMonoDisplay>>> = client.requestNextHomeApi {
+        getMonoHome()
     }
 
     override suspend fun submitMonoComment(

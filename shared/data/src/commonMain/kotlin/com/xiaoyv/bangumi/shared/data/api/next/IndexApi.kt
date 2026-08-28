@@ -6,6 +6,8 @@ import com.xiaoyv.bangumi.shared.core.types.IndexOrderType
 import com.xiaoyv.bangumi.shared.core.types.IndexType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
@@ -14,7 +16,9 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelat
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.statement.HttpResponse
@@ -55,6 +59,22 @@ interface IndexApi {
     suspend fun deleteIndexComment(@Path("commentID") commentID: Long): HttpResponse
 
     /**
+     * 删除目录
+     */
+    @DELETE("p1/indexes/{indexID}")
+    suspend fun deleteIndex(@Path("indexID") indexID: Long): HttpResponse
+
+    /**
+     * 删除目录关联内容
+     */
+    @DELETE("p1/indexes/{indexID}/related/{id}")
+    suspend fun deleteIndexRelated(
+        @Path("indexID") indexID: Long,
+        @Path("id") id: Long
+    ): HttpResponse
+
+
+    /**
      * 获取目录详情
      *
      * @param indexID
@@ -85,4 +105,23 @@ interface IndexApi {
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
     ): ComposePage<ComposeIndexRelated>
+
+    /**
+     * 更新目录关联内容
+     */
+    @PATCH("p1/indexes/{indexID}/related/{id}")
+    suspend fun patchIndexRelated(
+        @Path("indexID") indexID: Long,
+        @Path("id") id: Long,
+        @Body param: UpdateIndexRelatedParam
+    ): HttpResponse
+
+    /**
+     * 添加目录关联内容
+     */
+    @PUT("p1/indexes/{indexID}/related")
+    suspend fun putIndexRelated(
+        @Path("indexID") indexID: Long,
+        @Body param: IndexCreateParam
+    ): ComposeId
 }

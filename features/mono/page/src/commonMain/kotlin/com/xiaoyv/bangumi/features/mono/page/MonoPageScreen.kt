@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.mono.page.business.MonoPageEvent
 import com.xiaoyv.bangumi.features.mono.page.business.MonoPageState
 import com.xiaoyv.bangumi.features.mono.page.business.MonoPageViewModel
@@ -23,10 +25,8 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoCardItem
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoLineItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -142,9 +142,9 @@ private fun MonoPageGridLayout(
     StateLazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(100.dp),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = ContentMarginHalf),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         header = {
             if (header != null) {

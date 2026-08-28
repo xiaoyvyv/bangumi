@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
@@ -69,7 +69,7 @@ interface UserRepository {
         @CollectionType type: Int = 0,
         offset: Int = 0,
         limit: Int = 20,
-    ): Result<List<ComposeSubject>>
+    ): Result<List<ComposeSubjectRelation>>
 
     suspend fun submitLogin(param: NextWebLoginParam): Result<ComposeUser>
 

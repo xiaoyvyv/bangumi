@@ -2,6 +2,7 @@ import { handleTimeline } from './timeline';
 import { handleDnsQuery } from './dns';
 import { handleTerminal } from './terminal';
 import { handleBlogs } from './blogs';
+import { handleMono } from './mono';
 
 export async function router(req: Request, env: any) {
 	console.log(req.url);
@@ -21,6 +22,10 @@ export async function router(req: Request, env: any) {
 
 	if (url.pathname.startsWith('/p1/blogs')) {
 		return handleBlogs(req, env);
+	}
+
+	if (url.pathname.startsWith('/p1/mono')) {
+		return handleMono(req, env);
 	}
 
 	return new Response('Not Found', { status: 404 });

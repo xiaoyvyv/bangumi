@@ -28,7 +28,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.chineseNames
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
@@ -52,7 +52,7 @@ data class SubjectDetailState(
     @SerialName("parade") val parade: ComposeParade = ComposeParade.Empty,
     @SerialName("characters") val characters: SerializeList<ComposeMonoDisplay> = persistentListOf(),
     @SerialName("persons") val persons: SerializeList<ComposeMonoDisplay> = persistentListOf(),
-    @SerialName("related") val related: SerializeList<ComposeSubjectDisplay> = persistentListOf(),
+    @SerialName("related") val related: SerializeList<ComposeSubjectRelation> = persistentListOf(),
     @SerialName("myTags") val myTags: SerializeList<ComposeTag> = persistentListOf(),
 
     @Transient

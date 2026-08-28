@@ -5,7 +5,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.blog.page.business.BlogPageEvent
 import com.xiaoyv.bangumi.features.blog.page.business.BlogPageState
 import com.xiaoyv.bangumi.features.blog.page.business.BlogPageViewModel
@@ -17,8 +18,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectBlogItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -29,8 +29,7 @@ private const val CONTENT_TYPE_BLOG_ITEM = "CONTENT_TYPE_BLOG_ITEM"
 fun BlogPageRoute(
     param: ListBlogParam,
     onNavScreen: (Screen) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
+) = HideInPreview {
     val viewModel: BlogPageViewModel = koinBlogPageViewModel(param)
     val baseState by viewModel.collectAsState()
     val pagingItems = viewModel.blog.collectAsLazyPagingItems()

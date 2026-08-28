@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +37,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.friend.business.FriendEvent
 import com.xiaoyv.bangumi.features.friend.business.FriendItem
 import com.xiaoyv.bangumi.features.friend.business.FriendState
@@ -52,9 +53,8 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.launch
@@ -67,8 +67,7 @@ private const val CONTENT_TYPE_FRIEND_ITEM = "CONTENT_TYPE_FRIEND_ITEM"
 fun FriendRoute(
     param: ListUserParam,
     onNavScreen: (Screen) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
+) = HideInPreview {
     val viewModel: FriendViewModel = koinFriendViewModel(param)
     val baseState by viewModel.collectAsState()
     val pagingItems = viewModel.users.collectAsLazyPagingItems()

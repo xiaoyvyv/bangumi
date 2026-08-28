@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -30,10 +29,10 @@ import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.features.subject.page.SubjectPageRoute
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
 
@@ -51,7 +50,7 @@ fun MonoDetailWorksScreen(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         var selectedSubjectType by rememberSaveable { mutableIntStateOf(SubjectType.UNKNOWN) }
-        var selectedPosition by rememberSaveable { mutableLongStateOf(0) }
+        var selectedPosition by rememberSaveable { mutableIntStateOf(0) }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,7 +72,7 @@ fun MonoDetailWorksScreen(
             DropMenuChip(
                 options = remember(state.positions.size) {
                     state.positions
-                        .map { ComposeTextTab(type = it.type.id, labelText = it.type.displayName) }
+                        .map { ComposeTextTab(type = it.type.id.toInt(), labelText = it.type.displayName) }
                         .toPersistentList()
                 },
                 labelPrefix = stringResource(Res.string.global_staff),

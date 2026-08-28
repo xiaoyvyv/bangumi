@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
 import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.getString
@@ -22,11 +22,11 @@ import org.orbitmvi.orbit.syntax.Syntax
 
 @Composable
 fun koinIndexDialogViewModel(
-    target: IndexTarget,
+    param: IndexCreateParam,
 ): IndexDialogViewModel {
     return koinViewModel(
-        key = target.uniqueKey,
-        parameters = { parametersOf(target) }
+        key = param.uniqueKey,
+        parameters = { parametersOf(param) }
     )
 }
 
@@ -38,7 +38,7 @@ fun koinIndexDialogViewModel(
  */
 class IndexDialogViewModel(
     private val indexRepository: IndexRepository,
-    private val target: IndexTarget,
+    private val param: IndexCreateParam,
     private val userManager: UserManager,
 ) : BaseViewModel<IndexDialogState, IndexDialogSideEffect, IndexDialogEvent.Action>() {
     override fun initBaseState(): UiState<IndexDialogState> = initBaseLoadingState()
@@ -70,7 +70,7 @@ class IndexDialogViewModel(
     }
 
     private fun onSaveToCollection(indexId: Long) = intent {
-        withActionLoading { indexRepository.submitIndexAddRelated(indexId, target) }
+        withActionLoading { indexRepository.submitIndexAddRelated(indexId, param) }
             .onSuccess {
                 postToast { getString(Res.string.index_add_related_success) }
 

@@ -220,10 +220,47 @@ export interface User {
 }
 
 export interface Images {
+	common?: string;
 	grid?: string;
 	large?: string;
 	medium?: string;
 	small?: string;
+}
+
+export enum MonoType {
+	UNKNOWN = 0,
+	PERSON = 1,
+	CHARACTER = 2,
+}
+
+export interface ComposeSectionTitle {
+	id: string;
+	title: string;
+	subtitle: string;
+	more: string;
+}
+
+export interface ComposeMono {
+	id: number;
+	images: Images;
+	name: string;
+	nameCN: string;
+	type?: MonoType;
+}
+
+export interface ComposeMonoInfo {
+	mono: ComposeMono;
+}
+
+export interface ComposeMonoDisplay {
+	type: MonoType;
+	info: ComposeMonoInfo;
+}
+
+export interface ComposeSection<T> {
+	key: string;
+	header?: ComposeSectionTitle;
+	item?: T;
 }
 
 export enum SubjectType {
@@ -248,6 +285,4 @@ export interface TerminalSpeech {
 	creator?: string;
 	createdAt?: number;
 }
-
-
 

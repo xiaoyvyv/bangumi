@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.group_hot
 import com.xiaoyv.bangumi.core_resource.resources.group_newest
@@ -25,6 +24,7 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.TAB_GROUP_HOMEPAGE
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeGroupFilters
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.group.GroupPageItem
@@ -70,8 +70,7 @@ fun HomeGroupScreen(
 private fun HomeGroupHotScreen(
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
+) = HideInPreview {
     val viewModel = koinViewModel<HomeGroupViewModel>()
     val baseState by viewModel.collectAsState()
 

@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface SubjectRepository {
 
-    fun fetchSubjectPager(param: ListSubjectParam): MemoryPagingController<ComposeSubjectDisplay, Long>
+    fun fetchSubjectPager(param: ListSubjectParam): MemoryPagingController<ComposeSubjectRelation, Long>
 
     fun fetchSubjectCommentPager(subjectId: Long, @CollectionType collectionType: Int): MemoryPagingController<ComposeReply, Long>
 
@@ -76,14 +76,14 @@ interface SubjectRepository {
 
     suspend fun fetchSubjectPerson(
         subjectId: Long,
-        position: Long? = null,
+        position: Int? = null,
         offset: Int = 0,
         limit: Int = 20,
     ): Result<List<ComposeMonoDisplay>>
 
-    suspend fun fetchSubjectRelated(subjectId: Long): Result<List<ComposeSubjectDisplay>>
+    suspend fun fetchSubjectRelated(subjectId: Long): Result<List<ComposeSubjectRelation>>
 
-    suspend fun fetchSubjectList(param: ListSubjectParam, offset: Int, pageSize: Int): Result<List<ComposeSubjectDisplay>>
+    suspend fun fetchSubjectList(param: ListSubjectParam, offset: Int, pageSize: Int): Result<List<ComposeSubjectRelation>>
 
     suspend fun fetchMySubjectTags(subjectId: Long): Result<List<ComposeTag>>
 

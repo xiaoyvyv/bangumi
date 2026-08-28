@@ -61,7 +61,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoDetailTab
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.PublishPostType
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -168,10 +168,10 @@ private fun MonoDetailScreen(
                         IndexDialog(
                             state = sheetDialogState,
                             target = remember(mono) {
-                                IndexTarget(
+                                IndexCreateParam(
                                     cat = if (type == MonoType.PERSON) IndexCatType.PERSON else IndexCatType.CHARACTER,
                                     displayName = mono.displayName,
-                                    relateId = mono.id
+                                    sid = mono.id
                                 )
                             }
                         )

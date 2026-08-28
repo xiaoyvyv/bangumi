@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.subject.detail.page
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Explore
@@ -16,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +40,7 @@ import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
 import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
+import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
@@ -54,6 +57,7 @@ import org.jetbrains.compose.resources.stringResource
  *
  * @since 2025/5/11
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SubjectDetailEpisodeScreen(
     state: SubjectDetailState,
@@ -74,58 +78,66 @@ fun SubjectDetailEpisodeScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = if (showSlider) 120.dp else 0.dp)
         ) {
-            items(items) { episode ->
+            items.forEach { episode ->
                 if (!episode.splitter.isNullOrBlank()) {
-                    DetailSectionTitle(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = ContentMargin),
-                        title = episode.splitter.orEmpty(),
-                        divider = true
-                    )
+                    stickyHeader(key = "header_${episode.splitter}") {
+                        DetailSectionTitle(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.surface)
+                                .padding(top = ContentMargin),
+                            title = episode.splitter.orEmpty(),
+                            divider = true
+                        )
+                    }
                 }
+
                 if (episode.id != 0L) {
-                    var expanded by remember { mutableStateOf(false) }
+                    item(key = episode.id) {
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            var expanded by remember { mutableStateOf(false) }
 
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        EpisodeItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            subjectType = state.subject.type,
-                            item = episode,
-                            contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
-                            onClick = { expanded = true }
-                        )
+                            EpisodeItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                subjectType = state.subject.type,
+                                item = episode,
+                                contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
+                                onClick = { expanded = true }
+                            )
 
-                        EpisodeDropMenu(
-                            episodes = items,
-                            item = episode,
-                            offset = DpOffset(x = 120.dp, y = 0.dp),
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            onEpisodeChange = { eps, type ->
-                                onActionEvent(SubjectDetailEvent.Action.OnUpdateEpisodeCollection(eps, type))
-                            },
-                            onClickEpisode = {
-                                onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.TopicDetail(episode.id, TopicType.TYPE_EP)))
-                            },
-                            content = {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        expanded = false
-                                        onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Garden(state.magnetQuery(episode))))
-                                    },
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = BgmDefaultIcons.Explore,
-                                            contentDescription = stringResource(Res.string.global_topic)
-                                        )
-                                    },
-                                    text = {
-                                        Text(text = stringResource(Res.string.subject_ep_resource_search))
-                                    }
-                                )
-                            }
-                        )
+                            EpisodeDropMenu(
+                                episodes = items,
+                                item = episode,
+                                offset = DpOffset(x = 120.dp, y = 0.dp),
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                                onEpisodeChange = { eps, type ->
+                                    onActionEvent(SubjectDetailEvent.Action.OnUpdateEpisodeCollection(eps, type))
+                                },
+                                onClickEpisode = {
+                                    onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.TopicDetail(episode.id, TopicType.TYPE_EP)))
+                                },
+                                content = {
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            expanded = false
+                                            onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Garden(state.magnetQuery(episode))))
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                imageVector = BgmDefaultIcons.Explore,
+                                                contentDescription = stringResource(Res.string.global_topic)
+                                            )
+                                        },
+                                        text = {
+                                            Text(text = stringResource(Res.string.subject_ep_resource_search))
+                                        }
+                                    )
+                                }
+                            )
+                        }
+
+                        BgmHorizontalDivider()
                     }
                 }
             }
@@ -141,6 +153,7 @@ fun SubjectDetailEpisodeScreen(
 private fun BoxScope.EpisodeBottomSlider(
     listState: LazyListState,
     totalCount: Int,
+    maxSteps: Int = 20,
 ) {
     // 是否正在拖动 Slider
     var isUserDragging by remember { mutableStateOf(false) }
@@ -184,7 +197,7 @@ private fun BoxScope.EpisodeBottomSlider(
             },
             onValueChangeFinished = { isUserDragging = false },
             valueRange = 0f..(totalCount - 1).toFloat(),
-            steps = totalCount - 2,
+            steps = (totalCount - 2).coerceAtMost(maxSteps),
         )
     }
 }

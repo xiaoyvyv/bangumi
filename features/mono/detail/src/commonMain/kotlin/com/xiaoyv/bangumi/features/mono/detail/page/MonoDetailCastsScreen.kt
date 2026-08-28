@@ -17,12 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailEvent
 import com.xiaoyv.bangumi.features.mono.detail.business.MonoDetailState
 import com.xiaoyv.bangumi.shared.core.types.MonoCastType
@@ -37,7 +37,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
@@ -75,9 +75,7 @@ fun MonoDetailCastsScreen(
     state: MonoDetailState,
     onUiEvent: (MonoDetailEvent.UI) -> Unit,
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
-
+) = HideInPreview {
     if (state.type == MonoType.CHARACTER) {
         // 角色类型：数据已在 MonoDetailViewModel 中加载到 state.casts
         LazyColumn(modifier = Modifier.fillMaxSize()) {

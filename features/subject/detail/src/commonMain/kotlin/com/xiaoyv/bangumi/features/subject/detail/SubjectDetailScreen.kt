@@ -70,7 +70,7 @@ import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentMikanId
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -192,10 +192,10 @@ private fun SubjectDetailScreen(
                         IndexDialog(
                             state = sheetDialogState,
                             target = remember(subject) {
-                                IndexTarget(
+                                IndexCreateParam(
                                     cat = IndexCatType.SUBJECT,
                                     displayName = subject.displayName,
-                                    relateId = subject.id
+                                    sid = subject.id
                                 )
                             }
                         )

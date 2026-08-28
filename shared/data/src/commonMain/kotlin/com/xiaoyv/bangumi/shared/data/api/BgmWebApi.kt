@@ -328,18 +328,6 @@ interface BgmWebApi {
     suspend fun submitUploadImage(@Body body: MultiPartFormDataContent): ComposeUploadImage
 
     /**
-     * 标记通知已读，
-     *
-     * @param notification all 则为全部已读，具体 id 就是单条已读
-     */
-    @GET("erase/notify/{notification}")
-    suspend fun submitMarkNotificationRead(
-        @Path("notification") notification: String,
-        @Query("gh") gh: String,
-        @Query("ajax") ajax: Int = 1,
-    ): ComposeStatus
-
-    /**
      * 创建或回复短信
      */
     @FormUrlEncoded
@@ -424,17 +412,4 @@ interface BgmWebApi {
         @Path("characterId") personId: Long,
         @Query("gh") formHash: String,
     ): HttpResponse
-
-    /**
-     * 向目录添加内容
-     */
-    @GET("index/{indexId}/add_related")
-    suspend fun submitIndexRelatedAdd(
-        @Path("indexId") indexId: Long,
-        @Query("add_related") addRelated: Long,
-        @Query("cat") @IndexCatWebTabType cat: Int,
-        @Query("gh") formHash: String,
-        @Query("referer") referer: String = "ajax",
-    ): HttpResponse
-
 }

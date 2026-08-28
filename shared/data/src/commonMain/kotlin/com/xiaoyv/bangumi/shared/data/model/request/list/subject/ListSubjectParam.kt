@@ -1,10 +1,13 @@
 package com.xiaoyv.bangumi.shared.data.model.request.list.subject
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.appmattus.crypto.Algorithm
 import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import kotlinx.serialization.Serializable
+
+val LocalListSubjectParam = staticCompositionLocalOf { ListSubjectParam.Empty }
 
 /**
  * [SubjectSearchBody]

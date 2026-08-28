@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
@@ -29,6 +28,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -45,8 +45,7 @@ fun IllustPageRoute(
     header: (@Composable () -> Unit)? = null,
     headerSticky: Boolean = false,
     onNavScreen: (Screen) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
+) = HideInPreview {
     val viewModel: IllustPageViewModel = koinIllustPageViewModel(param)
     val baseState by viewModel.collectAsState()
     val pagingItems = viewModel.illusts.collectAsLazyPagingItems()

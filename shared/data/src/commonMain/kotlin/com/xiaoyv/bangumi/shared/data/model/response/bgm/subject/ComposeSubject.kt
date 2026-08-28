@@ -280,7 +280,10 @@ data class ComposeSubject(
     }
 
     fun normalized(): ComposeSubject {
-        return copy(summary = summary.bbcodeToHtml())
+        return copy(
+            summary = summary.bbcodeToHtml(),
+            airtime = Airtime.fromInfo(info)
+        )
     }
 
     companion object {

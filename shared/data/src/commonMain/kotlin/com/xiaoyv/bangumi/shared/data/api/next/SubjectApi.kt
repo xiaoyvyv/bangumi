@@ -17,7 +17,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
@@ -176,7 +176,7 @@ interface SubjectApi {
         @Query("offprint") offprint: Boolean? = false,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeSubjectDisplay>
+    ): ComposePage<ComposeSubjectRelation>
 
     /**
      * 获取条目关联的目录
@@ -213,7 +213,7 @@ interface SubjectApi {
     @GET("p1/subjects/{subjectID}/staffs/persons")
     suspend fun getSubjectStaffPersons(
         @Path("subjectID") subjectID: Long,
-        @Query("position") position: Long? = null,
+        @Query("position") position: Int? = null,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
     ): ComposePage<ComposeMonoInfo>

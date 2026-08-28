@@ -1,19 +1,19 @@
 package com.xiaoyv.bangumi.shared.ui.view.mono
 
-import androidx.compose.foundation.MarqueeSpacing
-import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -25,6 +25,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_comments_cnt
 import com.xiaoyv.bangumi.shared.core.types.MonoCastType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
@@ -33,10 +36,11 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
+import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.view.tag.TagItem
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
@@ -166,34 +170,58 @@ fun MonoCardItemCharacter(
     modifier: Modifier = Modifier,
     onClick: (Long, Int) -> Unit = { _, _ -> },
 ) {
-    Column(modifier = modifier) {
+    OutlinedCard(
+        modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        onClick = { onClick(item.mono.id, MonoType.CHARACTER) }
+    ) {
         InfoImage(
             modifier = Modifier.fillMaxWidth(),
             model = item.mono.images.displayMediumImage,
-            text = item.mono.displayName,
-            onClick = { onClick(item.mono.id, MonoType.CHARACTER) }
-        )
+            aspectRatio = 1f,
+            shape = MaterialTheme.shapes.small.copy(
+                bottomStart = CornerSize(0.dp),
+                bottomEnd = CornerSize(0.dp)
+            )
+        ) {
+            if (item.mono.comment > 0) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .background(
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                            shape = MaterialTheme.shapes.extraSmall.copy(
+                                bottomStart = CornerSize(0.dp),
+                                topEnd = CornerSize(0.dp),
+                                bottomEnd = CornerSize(0.dp)
+                            )
+                        )
+                        .padding(paddingValues = PaddingValues(vertical = 1.dp, horizontal = 4.dp)),
+                    text = stringResource(Res.string.global_comments_cnt, item.mono.comment),
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                    color = StarColor
+                )
+            }
+        }
 
-        Spacer(modifier = Modifier.height(ContentMarginHalf))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(ContentMarginHalf),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
         ) {
             Text(
-                modifier = Modifier
-                    .weight(1f, false)
-                    .basicMarquee(Int.MAX_VALUE, spacing = MarqueeSpacing(ContentMarginHalf)),
-                text = item.mono.name,
-                style = MaterialTheme.typography.bodyLarge,
+                text = item.mono.displayName,
                 color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
             )
-            if (item.mono.comment > 0) Text(
-                text = "（${item.mono.comment}）",
-                color = StarColor,
-                style = MaterialTheme.typography.bodyMedium,
+
+            Text(
+                text = MonoCastType.string(item.mono.role),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

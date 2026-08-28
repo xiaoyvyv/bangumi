@@ -18,6 +18,7 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.ClearNoticeRequest
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.NextWebLoginParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
@@ -30,7 +31,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.transform
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
@@ -48,6 +49,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * [UserRepositoryImpl]
@@ -81,7 +83,7 @@ class UserRepositoryImpl(
         )
     }
 
-    override suspend fun fetchUserHomeInfo(): Result<ComposeHome> = client.requestNextUserApi {
+    override suspend fun fetchUserHomeInfo(): Result<ComposeHome> = client.requestNextHomeApi {
         getHome()
     }
 
@@ -248,14 +250,14 @@ class UserRepositoryImpl(
         type: Int,
         offset: Int,
         limit: Int,
-    ): Result<List<ComposeSubject>> = client.requestNextUserApi {
+    ): Result<List<ComposeSubjectRelation>> = client.requestNextUserApi {
         getUserSubjectCollections(
             username = username,
             subjectType = subjectType,
             type = type,
             offset = offset,
             limit = limit
-        ).result
+        ).result.map { ComposeSubjectRelation(subject = it.normalized()) }
     }
 
     override suspend fun submitLogin(param: NextWebLoginParam): Result<ComposeUser> = client.requestNextUserApi {
@@ -308,18 +310,12 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun submitMarkNotificationRead(notificationId: Long): Result<Unit> = client.requestWebApi {
-        submitMarkNotificationRead(
-            notification = notificationId.toString(),
-            gh = preferenceStore.userInfo.formHash,
-        )
+    override suspend fun submitMarkNotificationRead(notificationId: Long): Result<Unit> = client.requestNextUserApi {
+        clearNotice(ClearNoticeRequest(persistentListOf(notificationId)))
     }
 
-    override suspend fun submitMarkAllNotificationRead(): Result<Unit> = client.requestWebApi {
-        submitMarkNotificationRead(
-            notification = "all",
-            gh = preferenceStore.userInfo.formHash,
-        )
+    override suspend fun submitMarkAllNotificationRead(): Result<Unit> = client.requestNextUserApi {
+        clearNotice(ClearNoticeRequest())
     }
 
     override suspend fun submitDeleteMessage(ids: SerializeList<Long>, @MessageBoxType type: String): Result<Unit> =

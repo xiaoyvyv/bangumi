@@ -50,7 +50,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.adaptive.AdaptiveGrid
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -284,7 +284,7 @@ fun HomeMainCalendar(
                     modifier = Modifier
                         .width(LayoutGridWidth)
                         .semantics { contentDescription = "calendar_card_item" },
-                    display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
+                    display = remember(it.subject.id) { ComposeSubjectRelation(it.subject) },
                     maxLine = 1,
                     onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) },
                 )
@@ -317,7 +317,7 @@ fun HomeMainCalendar(
                     modifier = Modifier
                         .width(LayoutGridWidth)
                         .semantics { contentDescription = "calendar_card_item" },
-                    display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
+                    display = remember(it.subject.id) { ComposeSubjectRelation(it.subject) },
                     maxLine = 1,
                     onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) },
                 )
@@ -369,7 +369,7 @@ fun HomeMainOverview(
                     modifier = Modifier
                         .width(LayoutGridWidth)
                         .semantics { contentDescription = "overview_card_item" },
-                    display = remember(it.id) { ComposeSubjectDisplay(it) },
+                    display = remember(it.id) { ComposeSubjectRelation(it) },
                     maxLine = 1,
                     onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
                 )

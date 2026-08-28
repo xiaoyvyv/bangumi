@@ -2,20 +2,19 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.CollectionWebPath
 import com.xiaoyv.bangumi.shared.core.types.EpisodeType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
+import com.xiaoyv.bangumi.shared.core.types.PersonType
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListTagType
-import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.fetchAllPages
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
+import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectSearchBody
@@ -27,16 +26,14 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggestCard
 import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
-import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicTableParser
 import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
@@ -60,11 +57,11 @@ class SubjectRepositoryImpl(
     private val client: ApiClient,
     private val pagingConfig: PagingConfig,
     private val subjectParser: SubjectParser,
-    private val topicTableParser: TopicTableParser,
     private val databaseRepository: DatabaseRepository,
+    private val userManager: UserManager
 ) : SubjectRepository {
 
-    override fun fetchSubjectPager(param: ListSubjectParam): MemoryPagingController<ComposeSubjectDisplay, Long> {
+    override fun fetchSubjectPager(param: ListSubjectParam): MemoryPagingController<ComposeSubjectRelation, Long> {
         return createMemoryOffsetLimitPagingController(
             pagingConfig = pagingConfig,
             idSelector = { it.subject.id },
@@ -238,7 +235,7 @@ class SubjectRepositoryImpl(
         }
     }
 
-    override suspend fun fetchSubjectPerson(subjectId: Long, position: Long?, offset: Int, limit: Int) = client.requestNextSubjectApi {
+    override suspend fun fetchSubjectPerson(subjectId: Long, position: Int?, offset: Int, limit: Int) = client.requestNextSubjectApi {
         getSubjectStaffPersons(subjectID = subjectId, position = position, limit = limit).result.map {
             ComposeMonoDisplay(type = MonoType.PERSON, info = it)
         }
@@ -252,9 +249,9 @@ class SubjectRepositoryImpl(
         }
     }
 
-    override suspend fun fetchSubjectRelated(subjectId: Long): Result<List<ComposeSubjectDisplay>> = client.requestNextSubjectApi {
+    override suspend fun fetchSubjectRelated(subjectId: Long): Result<List<ComposeSubjectRelation>> = client.requestNextSubjectApi {
         getSubjectRelations(subjectID = subjectId).result.map {
-            it.copy(subject = it.subject.copy(airtime = Airtime.fromInfo(it.subject.info)))
+            it.copy(subject = it.subject.normalized())
         }
     }
 
@@ -264,7 +261,7 @@ class SubjectRepositoryImpl(
                 getPersonWorks(
                     personID = param.personWork.personId,
                     subjectType = param.personWork.subjectType.takeIf { it != SubjectType.UNKNOWN },
-                    position = param.personWork.position.takeIf { it != PersonPositionType.UNKNOWN },
+                    position = param.personWork.position.takeIf { it != PersonType.UNKNOWN },
                     offset = offset,
                     limit = pagingConfig.pageSize
                 ).result
@@ -279,18 +276,17 @@ class SubjectRepositoryImpl(
             }
 
             ListSubjectType.SEARCH -> {
-                debugLog { "Search:${param.search}" }
                 client.requestNextSearchApi {
                     searchSubjects(
                         body = param.search,
                         offset = offset,
                         limit = pagingConfig.pageSize
-                    ).result.map { ComposeSubjectDisplay(subject = it) }
+                    ).result.map { ComposeSubjectRelation(subject = it) }
                 }
             }
 
             ListSubjectType.BROWSER -> {
-                // 浏览API有TAG时有BUG，暂时用搜索接口替代
+                // TODO 浏览API有TAG时有BUG，暂时用搜索接口替代
                 if (param.browser.tags.isNotEmpty()) {
                     client.requestNextSearchApi {
                         searchSubjects(
@@ -306,7 +302,7 @@ class SubjectRepositoryImpl(
                             ),
                             offset = offset,
                             limit = pagingConfig.pageSize
-                        ).result.map { ComposeSubjectDisplay(subject = it) }
+                        ).result.map { ComposeSubjectRelation(subject = it.normalized()) }
                     }
                 } else {
                     client.requestNextSubjectApi {
@@ -320,24 +316,32 @@ class SubjectRepositoryImpl(
                             month = param.browser.month,
                             page = offset.toApiPage(pageSize),
                         ).result.map {
-                            ComposeSubjectDisplay(subject = it.copy(airtime = Airtime.fromInfo(it.info)))
+                            ComposeSubjectRelation(subject = it.normalized())
                         }
                     }
                 }
             }
 
-            ListSubjectType.USER_COLLECTION -> client.requestWebApi {
-                with(subjectParser) {
-                    fetchUserCollection(
-                        username = param.collection.username,
-                        type = CollectionWebPath.from(param.collection.collectionType),
-                        subjectType = SubjectWebPath.from(param.collection.subjectType),
-                        sortType = param.collection.collectionSort,
-                        page = (offset / pageSize) + 1,
-                    ).fetchUserCollectionCoverted(
-                        collectionType = param.collection.collectionType,
-                        subjectType = param.collection.subjectType,
-                    )
+            ListSubjectType.USER_COLLECTION -> {
+                if (userManager.isLogin && userManager.userInfo.username == param.collection.username) {
+                    client.requestNextCollectionApi {
+                        getMySubjectCollections(
+                            subjectType = param.collection.subjectType,
+                            type = param.collection.collectionType,
+                            offset = offset,
+                            limit = pagingConfig.pageSize
+                        ).result.map { ComposeSubjectRelation(subject = it.normalized()) }
+                    }
+                } else {
+                    client.requestNextUserApi {
+                        getUserSubjectCollections(
+                            username = param.collection.username,
+                            subjectType = param.collection.subjectType,
+                            type = param.collection.collectionType,
+                            offset = offset,
+                            limit = pagingConfig.pageSize
+                        ).result.map { ComposeSubjectRelation(subject = it.normalized()) }
+                    }
                 }
             }
 

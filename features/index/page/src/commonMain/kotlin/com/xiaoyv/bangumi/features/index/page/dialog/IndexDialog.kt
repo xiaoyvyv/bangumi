@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.index_collect_to_my_catalog
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
@@ -33,7 +33,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun IndexDialog(
     state: BottomSheetDialogState,
-    target: IndexTarget,
+    target: IndexCreateParam,
 ) {
     BottomSheetDialog(
         modifier = Modifier
@@ -42,7 +42,7 @@ fun IndexDialog(
         state = state,
         contentWindowInsets = { WindowInsets() },
     ) {
-        val viewModel = koinIndexDialogViewModel(target = target)
+        val viewModel = koinIndexDialogViewModel(param = target)
         val baseState by viewModel.collectAsState()
 
         viewModel.collectBaseSideEffect {
@@ -73,7 +73,7 @@ fun IndexDialog(
 @Composable
 fun IndexDialogContent(
     state: IndexDialogState,
-    target: IndexTarget,
+    target: IndexCreateParam,
     onActionEvent: (IndexDialogEvent.Action) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {

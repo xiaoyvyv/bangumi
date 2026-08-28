@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.timeline.page.business.TimelinePageEvent
@@ -16,6 +15,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimelin
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.timeline.TimelinePageItem
 
@@ -25,9 +25,7 @@ private const val CONTENT_TYPE_TIMELINE = "CONTENT_TYPE_TIMELINE"
 fun TimelinePageRoute(
     param: ListTimelineParam,
     onNavScreen: (Screen) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
-
+) = HideInPreview {
     val viewModel: TimelinePageViewModel = koinTimelinePageViewModel(param)
     val pagingItems = viewModel.timelines.collectAsLazyPagingItems()
 

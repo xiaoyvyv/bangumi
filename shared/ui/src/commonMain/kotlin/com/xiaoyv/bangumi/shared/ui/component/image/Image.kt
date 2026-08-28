@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,11 +15,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImagePainter.Companion.DefaultTransform
 import coil3.compose.AsyncImagePainter.State
 import coil3.compose.SubcomposeAsyncImage
@@ -196,6 +200,7 @@ fun InfoImage(
     contentDescription: String? = text,
     aspectRatio: Float = 32 / 45f,
     onClick: (() -> Unit)? = null,
+    content: @Composable (BoxScope.() -> Unit)? = null
 ) {
     Box(
         modifier = modifier
@@ -220,9 +225,19 @@ fun InfoImage(
                 .padding(bottom = textPadding, top = textPadding * 3)
                 .align(Alignment.BottomCenter),
             text = text,
+            autoSize = remember(textStyle) {
+                TextAutoSize.StepBased(
+                    minFontSize = 6.sp,
+                    maxFontSize = textStyle.fontSize,
+                    stepSize = 0.5.sp,
+                )
+            },
             style = textStyle,
             maxLines = textMaxLines,
             overflow = TextOverflow.Ellipsis,
         )
+
+        content?.invoke(this)
     }
 }
+

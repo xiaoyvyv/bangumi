@@ -4,7 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.groups.page.business.GroupsPageEvent
 import com.xiaoyv.bangumi.features.groups.page.business.GroupsPageState
 import com.xiaoyv.bangumi.features.groups.page.business.GroupsPageViewModel
@@ -16,8 +17,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.group.GroupPageItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -26,8 +26,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun GroupsPageRoute(
     param: ListGroupParam,
     onNavScreen: (Screen) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
+) = HideInPreview {
     val viewModel: GroupsPageViewModel = koinGroupsPageViewModel(param)
     val baseState by viewModel.collectAsState()
     val pagingItems = viewModel.group.collectAsLazyPagingItems()

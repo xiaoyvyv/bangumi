@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
@@ -27,7 +27,7 @@ interface IndexRepository {
 
     suspend fun submitBookmarkOrCancelIndex(indexId: Long, bookmarked: Boolean): Result<Boolean>
 
-    suspend fun submitIndexAddRelated(indexId: Long, target: IndexTarget): Result<Unit>
+    suspend fun submitIndexAddRelated(indexId: Long, param: IndexCreateParam): Result<Unit>
 
     suspend fun submitIndexComment(
         indexId: Long,

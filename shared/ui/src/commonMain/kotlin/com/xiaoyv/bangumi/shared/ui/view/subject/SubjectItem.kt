@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +32,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -41,24 +42,32 @@ import com.xiaoyv.bangumi.core_resource.resources.global_timeline
 import com.xiaoyv.bangumi.core_resource.resources.subject_rate_count
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
+import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.core.utils.noNull
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
+import com.xiaoyv.bangumi.shared.core.utils.toTrimString
+import com.xiaoyv.bangumi.shared.data.model.PreviewComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.request.list.subject.ListSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.request.list.subject.LocalListSubjectParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectInterest
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.ui.component.bar.RatingBar
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.tag.TagItems
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SubjectCardItem(
-    display: ComposeSubjectDisplay,
+    display: ComposeSubjectRelation,
     modifier: Modifier = Modifier,
     maxLine: Int = 2,
     style: TextStyle = MaterialTheme.typography.bodyLarge,
@@ -152,7 +161,7 @@ fun SubjectCardItem(
 
 @Composable
 fun SubjectLineItem(
-    display: ComposeSubjectDisplay,
+    display: ComposeSubjectRelation,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onClick: () -> Unit,
@@ -165,15 +174,13 @@ fun SubjectLineItem(
     ) {
         SubjectInfoCover(
             modifier = Modifier
-                .height(140.dp)
+                .height(120.dp)
                 .aspectRatio(3 / 4f),
             subject = display.subject,
         )
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .heightIn(min = 140.dp),
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             Text(
@@ -188,79 +195,47 @@ fun SubjectLineItem(
                 text = display.subject.info.ifBlank { display.subject.summary },
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Normal,
-                maxLines = 3,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 lineHeight = 24.sp
             )
 
-            // 全站评分
-            val score = display.subject.rating.score
-            if (score > 0) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    RatingBar(
-                        value = score,
-                        starSize = 20.dp
-                    )
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    Text(
-                        text = score.toString(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFFFFAA00)
-                    )
-
-                    Spacer(modifier = Modifier.width(ContentMarginHalf))
-
-                    // 总评人数
-                    if (display.subject.displayRateTotalCount > 0) {
-                        Text(
-                            text = stringResource(
-                                Res.string.subject_rate_count,
-                                display.subject.displayRateTotalCount
-                            ),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+            when {
+                // 如果在收藏列表，优先展示收藏的数据
+                LocalListSubjectParam.current.type == ListSubjectType.USER_COLLECTION -> {
+                    SubjectLineCollectionItem(display.subject, onClick)
+                }
+                // 其次展示全站评分
+                display.subject.rating.score > 0 -> {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RatingBar(
+                            value = display.subject.rating.score,
+                            starSize = 20.dp
                         )
+
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text = display.subject.rating.score.toTrimString(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFFFFAA00)
+                        )
+
+                        Spacer(modifier = Modifier.width(ContentMarginHalf))
+
+                        // 总评人数
+                        if (display.subject.displayRateTotalCount > 0) {
+                            Text(
+                                text = stringResource(
+                                    Res.string.subject_rate_count,
+                                    display.subject.displayRateTotalCount
+                                ),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
-                }
-            }
-
-            // 收藏
-            val collection = display.collection
-            if (collection != ComposeCollection.Empty) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val buttonColors = collectionButtonColors(collection.type)
-                    Text(
-                        modifier = Modifier
-                            .background(buttonColors.containerColor, MaterialTheme.shapes.extraSmall)
-                            .padding(horizontal = 4.dp, vertical = 2.dp),
-                        text = CollectionType.string(collection.subjectType, collection.type),
-                        color = buttonColors.contentColor,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    Spacer(Modifier.weight(1f))
-                    Icon(
-                        modifier = Modifier.size(16.dp),
-                        imageVector = BgmIcons.CalendarMonth,
-                        contentDescription = stringResource(Res.string.global_timeline),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = collection.updatedAt,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                // 收藏的评分，吐槽，标签
-                if (collection.rate > 0 || collection.comment.isNotBlank() || collection.tags.isNotEmpty()) {
-                    SubjectLineCollectionItem(collection, onClick)
                 }
             }
         }
@@ -268,7 +243,10 @@ fun SubjectLineItem(
 }
 
 @Composable
-private fun SubjectLineCollectionItem(collection: ComposeCollection, onClick: () -> Unit) {
+private fun SubjectLineCollectionItem(
+    subject: ComposeSubject,
+    onClick: () -> Unit
+) {
     OutlinedCard(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.small,
@@ -280,46 +258,80 @@ private fun SubjectLineCollectionItem(collection: ComposeCollection, onClick: ()
                 .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
-            // 评分
-            if (collection.rate > 0) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
-                ) {
-                    RatingBar(
-                        value = collection.rate.toDouble(),
-                        starSize = 16.dp
-                    )
+            val collection = subject.interest
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val buttonColors = collectionButtonColors(collection.type)
+                Text(
+                    modifier = Modifier
+                        .background(buttonColors.containerColor, MaterialTheme.shapes.extraSmall)
+                        .padding(horizontal = 4.dp, vertical = 2.dp),
+                    text = CollectionType.string(subject.type, collection.type),
+                    color = buttonColors.contentColor,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    imageVector = BgmIcons.CalendarMonth,
+                    contentDescription = stringResource(Res.string.global_timeline),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = collection.updatedAt.formatDate("yyyy/MM/dd"),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            // 收藏的评分，吐槽，标签
+            if (collection.rate > 0 || collection.comment.isNotBlank() || collection.tags.isNotEmpty()) {
+
+                // 评分
+                if (collection.rate > 0) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                    ) {
+                        RatingBar(
+                            value = collection.rate.toDouble(),
+                            starSize = 16.dp
+                        )
+                        Text(
+                            text = "(${collection.rate})",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = StarColor,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
+                }
+
+                // 收藏填写的标签
+                if (collection.tags.isNotEmpty()) {
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    ) {
+                        TagItems(collection.tags, color = MaterialTheme.colorScheme.primary)
+                    }
+                }
+
+                // 收藏填写的吐槽
+                if (collection.comment.isNotBlank()) {
                     Text(
-                        text = "(${collection.rate})",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = StarColor,
-                            fontWeight = FontWeight.SemiBold
+                        text = collection.comment,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            lineHeight = 22.sp
                         )
                     )
                 }
-            }
-
-            // 收藏填写的标签
-            if (collection.tags.isNotEmpty()) {
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                ) {
-                    TagItems(collection.tags, color = MaterialTheme.colorScheme.primary)
-                }
-            }
-
-            // 收藏填写的吐槽
-            if (collection.comment.isNotBlank()) {
-                Text(
-                    text = collection.comment,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        lineHeight = 22.sp
-                    )
-                )
             }
         }
     }
@@ -331,7 +343,7 @@ private fun SubjectLineCollectionItem(collection: ComposeCollection, onClick: ()
  */
 @Composable
 fun SubjectWorkItem(
-    display: ComposeSubjectDisplay,
+    display: ComposeSubjectRelation,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -436,6 +448,54 @@ fun SubjectInfoCover(
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun SubjectItemPreview() {
+    PreviewColumn {
+        SubjectCardItem(
+            modifier = Modifier
+                .width(120.dp)
+                .padding(ContentMargin),
+            display = ComposeSubjectRelation(
+                subject = PreviewComposeSubject,
+                relation = ComposeRelation(cn = "导演", desc = "制作人")
+            ),
+            onClick = {}
+        )
+        HorizontalDivider()
+
+        SubjectLineItem(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(ContentMargin),
+            display = ComposeSubjectRelation(
+                subject = PreviewComposeSubject
+            ),
+            onClick = {}
+        )
+        HorizontalDivider()
+
+        CompositionLocalProvider(LocalListSubjectParam provides ListSubjectParam(type = ListSubjectType.USER_COLLECTION)) {
+            SubjectLineItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(ContentMargin),
+                display = ComposeSubjectRelation(
+                    subject = PreviewComposeSubject.copy(
+                        interest = ComposeSubjectInterest(
+                            comment = "测试评论",
+                            rate = 7,
+                            type = CollectionType.DONE
+                        )
+                    )
+                ),
+                onClick = {}
             )
         }
     }

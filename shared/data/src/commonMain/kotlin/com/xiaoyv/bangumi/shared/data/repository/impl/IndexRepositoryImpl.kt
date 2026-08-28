@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.core.utils.toApiOffset
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
-import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexTarget
+import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
@@ -152,13 +152,8 @@ class IndexRepositoryImpl(
         bookmarked
     }
 
-    override suspend fun submitIndexAddRelated(indexId: Long, target: IndexTarget): Result<Unit> = client.requestWebApi {
-        submitIndexRelatedAdd(
-            indexId = indexId,
-            cat = target.cat,
-            addRelated = target.relateId,
-            formHash = preferenceStore.userInfo.formHash
-        )
+    override suspend fun submitIndexAddRelated(indexId: Long, param: IndexCreateParam): Result<Unit> = client.requestNextIndexApi {
+        putIndexRelated(indexID = indexId, param = param)
     }
 
     override suspend fun submitIndexComment(

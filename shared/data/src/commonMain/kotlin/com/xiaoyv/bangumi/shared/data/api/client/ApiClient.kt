@@ -29,6 +29,7 @@ import com.xiaoyv.bangumi.shared.data.api.next.CharacterApi
 import com.xiaoyv.bangumi.shared.data.api.next.CollectionApi
 import com.xiaoyv.bangumi.shared.data.api.next.EpisodeApi
 import com.xiaoyv.bangumi.shared.data.api.next.GroupApi
+import com.xiaoyv.bangumi.shared.data.api.next.HomeApi
 import com.xiaoyv.bangumi.shared.data.api.next.IndexApi
 import com.xiaoyv.bangumi.shared.data.api.next.PersonApi
 import com.xiaoyv.bangumi.shared.data.api.next.RelationshipApi
@@ -43,6 +44,7 @@ import com.xiaoyv.bangumi.shared.data.api.next.createCharacterApi
 import com.xiaoyv.bangumi.shared.data.api.next.createCollectionApi
 import com.xiaoyv.bangumi.shared.data.api.next.createEpisodeApi
 import com.xiaoyv.bangumi.shared.data.api.next.createGroupApi
+import com.xiaoyv.bangumi.shared.data.api.next.createHomeApi
 import com.xiaoyv.bangumi.shared.data.api.next.createIndexApi
 import com.xiaoyv.bangumi.shared.data.api.next.createPersonApi
 import com.xiaoyv.bangumi.shared.data.api.next.createRelationshipApi
@@ -181,6 +183,7 @@ class ApiClient(
     val nextRelationshipApi by lazy { nextApiKtorfit.createRelationshipApi() }
     val nextUserApi by lazy { nextApiKtorfit.createUserApi() }
     val nextGroupApi by lazy { nextApiKtorfit.createGroupApi() }
+    val nextHomeApi by lazy { nextApiKtorfit.createHomeApi() }
     val nextCharacterApi by lazy { nextApiKtorfit.createCharacterApi() }
     val nextSubjectApi by lazy { nextApiKtorfit.createSubjectApi() }
     val nextPersonApi by lazy { nextApiKtorfit.createPersonApi() }
@@ -215,6 +218,7 @@ class ApiClient(
     suspend fun <R> requestPixivAjaxApi(block: suspend PixivAjaxApi.() -> R) = requestApi(pixivAjaxApi, block = block)
     suspend fun <R> requestMikanApi(block: suspend MikanApi.() -> R) = requestApi(mikanApi, block = block)
 
+    suspend fun <R> requestNextHomeApi(block: suspend HomeApi.() -> R) = requestApi(nextHomeApi, block = block)
     suspend fun <R> requestNextGroupApi(block: suspend GroupApi.() -> R) = requestApi(nextGroupApi, block = block)
     suspend fun <R> requestNextUserApi(block: suspend UserApi.() -> R) = requestApi(nextUserApi, block = block)
     suspend fun <R> requestNextRelationshipApi(block: suspend RelationshipApi.() -> R) = requestApi(nextRelationshipApi, block = block)

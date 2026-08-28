@@ -24,7 +24,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
@@ -43,7 +43,7 @@ data class MonoDetailState(
     @SerialName("type") @field:MonoType val type: Int = MonoType.UNKNOWN,
     @SerialName("mono") val mono: ComposeMono = ComposeMono.Empty,
     @SerialName("casts") val casts: SerializeList<ComposeMonoInfo> = persistentListOf(),
-    @SerialName("works") val works: SerializeList<ComposeSubjectDisplay> = persistentListOf(),
+    @SerialName("works") val works: SerializeList<ComposeSubjectRelation> = persistentListOf(),
     @SerialName("positions") val positions: SerializeList<ComposePersonPosition> = persistentListOf(),
     @SerialName("comments") val comments: SerializeList<ComposeReply> = persistentListOf(),
 ) {
@@ -74,7 +74,7 @@ data class MonoDetailState(
 
 
     @Composable
-    fun rememberPersonWorkParam(@SubjectType subjectType: Int, position: Long): ListSubjectParam {
+    fun rememberPersonWorkParam(@SubjectType subjectType: Int, position: Int): ListSubjectParam {
         return remember(subjectType, position) {
             ListSubjectParam(
                 type = ListSubjectType.PERSON_WORK,

@@ -114,7 +114,7 @@ class UserViewModel(
         saveCache()
     }
 
-    private suspend fun refreshTimeMachine() = intent {
+    private fun refreshTimeMachine() = intent {
         val user = state.data.user
         val batchSize = userManager.settings.ui.timeMachineGridLimit
 
@@ -185,18 +185,18 @@ class UserViewModel(
         result.data1.forEach {
             sections.add(
                 ComposeSection(
-                    key = it.id.toString(),
+                    key = it.subject.id.toString(),
                     header = ComposeSectionTitle.Empty,
-                    item = it
+                    item = it.subject
                 )
             )
         }
         result.data2.forEach {
             sections.add(
                 ComposeSection(
-                    key = it.id.toString(),
+                    key = it.subject.id.toString(),
                     header = ComposeSectionTitle.Empty,
-                    item = it
+                    item = it.subject
                 )
             )
         }

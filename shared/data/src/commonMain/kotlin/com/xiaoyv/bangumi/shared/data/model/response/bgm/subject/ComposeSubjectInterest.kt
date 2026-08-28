@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm.subject
 
+import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -9,12 +10,18 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * [ComposeSubjectInterest]
+ *
+ * @since 2025/5/8
+ */
+@Immutable
 @Serializable
 data class ComposeSubjectInterest(
     @SerialName("comment") val comment: String = "",
     @SerialName("epStatus") val epStatus: Int = 0,
     @SerialName("id") val id: Int = 0,
-    @SerialName("private") val `private`: Boolean = false,
+    @SerialName("private") val isPrivate: Boolean = false,
     @SerialName("rate") val rate: Int = 0,
     @SerialName("tags") val tags: SerializeList<String> = persistentListOf(),
     @SerialName("type") @field:CollectionType val type: Int = CollectionType.UNKNOWN,
@@ -26,7 +33,7 @@ data class ComposeSubjectInterest(
             type = type,
             rate = rate,
             comment = comment,
-            `private` = `private`,
+            isPrivate = isPrivate,
             tags = tags,
         )
     }
@@ -36,7 +43,7 @@ data class ComposeSubjectInterest(
             type = update.type ?: type,
             rate = update.rate ?: rate,
             comment = update.comment ?: comment,
-            `private` = update.private ?: `private`,
+            isPrivate = update.isPrivate ?: isPrivate,
             tags = update.tags ?: tags,
         )
     }
@@ -47,7 +54,6 @@ data class ComposeSubjectInterest(
             volStatus = update.volStatus ?: volStatus,
         )
     }
-
 
     companion object {
         val Empty = ComposeSubjectInterest()

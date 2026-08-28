@@ -11,7 +11,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
 /**
@@ -38,7 +38,7 @@ interface MonoRepository {
 
     suspend fun fetchPersonCast(monoId: Long, limit: Int): Result<List<ComposeMonoInfo>>
 
-    suspend fun fetchPersonWorks(monoId: Long, limit: Int): Result<List<ComposeSubjectDisplay>>
+    suspend fun fetchPersonWorks(monoId: Long, limit: Int): Result<List<ComposeSubjectRelation>>
 
     suspend fun fetchPersonWorkPosition(monoId: Long): Result<List<ComposePersonPosition>>
 

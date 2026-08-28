@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm.subject
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePersonPosition
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
@@ -10,9 +9,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Immutable
-data class ComposeSubjectDisplay(
+data class ComposeSubjectRelation(
     @SerialName("subject") val subject: ComposeSubject = ComposeSubject.Empty,
-    @SerialName("collection") val collection: ComposeCollection = ComposeCollection.Companion.Empty,
+
+    /**
+     * 查询人物作品时填充
+     */
     @SerialName("positions") val positions: SerializeList<ComposePersonPosition> = persistentListOf(),
 
     /**
@@ -22,7 +24,7 @@ data class ComposeSubjectDisplay(
     @SerialName("relation") val relation: ComposeRelation = ComposeRelation.Empty,
 ) {
     companion object {
-        val Empty = ComposeSubjectDisplay()
+        val Empty = ComposeSubjectRelation()
     }
 }
 

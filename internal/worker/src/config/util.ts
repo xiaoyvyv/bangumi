@@ -28,7 +28,8 @@ export function html2bbcode(html: string): string {
 	return bbcodeConverter.feed(processed).toString().trim();
 }
 
-export function selectElements(q: string, root: any): Element[] {
+export function selectElements(q: string, root: any | null | undefined): Element[] {
+	if (root == null) return [];
 	return selectAll(q, root).filter(isTag);
 }
 
@@ -65,6 +66,54 @@ export function spanStyleAvatar(element: Element | null): string {
 		url = 'https:' + url;
 	}
 	return url;
+}
+
+export function elementHref(element: Element | null): string {
+	return element?.attribs.href ?? '';
+}
+
+export function hrefId(value: string): string {
+	return value.replace(/\/$/, '').split('/').at(-1) ?? '';
+}
+
+export function hrefLongId(value: string): number {
+	return Number(hrefId(value)) || 0;
+}
+
+export function elementSrc(element: Element | null): string {
+	const value = element?.attribs.src ?? '';
+	return value.startsWith('//') ? `https:${value}` : value;
+}
+
+export function elementText(element: Element | null): string {
+	return element ? textContent(element).trim() : '';
+}
+
+export function firstTextNode(element: Element): string {
+	return element.children.find((node) => node.type === 'text')?.data.trim() ?? '';
+}
+
+export function nextElementSibling(element: Element): Element | null {
+	let sibling = element.nextSibling;
+	while (sibling && sibling.type !== 'tag') sibling = sibling.nextSibling;
+	return sibling instanceof Element ? sibling : null;
+}
+
+export function bgmImageVariants(rawUrl: string): Images {
+	if (!rawUrl) return {};
+	const url = rawUrl
+		.replace(/^http:\/\//, 'https://')
+		.replace(/\?.*$/, '')
+		.replace(/\/r\/\d+(?:x\d+)?\//, '/')
+		.replace(/\/pic\/(.*?)\/[gcsml]\//, '/pic/$1/l/');
+
+	return {
+		grid: url.includes('crt') ? url.replace('/l/', '/g/') : url.replace('/pic/', '/r/100/pic/'),
+		small: url.replace('/pic/', '/r/200/pic/'),
+		common: url.replace('/pic/', '/r/400/pic/'),
+		medium: url.replace('/pic/', '/r/400/pic/'),
+		large: url.replace('/pic/', '/r/800/pic/'),
+	};
 }
 
 /**

@@ -6,7 +6,7 @@ import com.xiaoyv.bangumi.features.mono.page.MonoPageRoute
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
+import com.xiaoyv.bangumi.shared.core.types.PersonType
 import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoSubjectBody
@@ -24,7 +24,7 @@ fun SubjectDetailPersonScreen(
                 subject = MonoSubjectBody(
                     subjectId = state.id,
                     monoType = MonoType.PERSON,
-                    personPosition = PersonPositionType.UNKNOWN
+                    personPosition = PersonType.UNKNOWN
                 )
             )
         },

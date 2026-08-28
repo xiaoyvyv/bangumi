@@ -2,14 +2,15 @@ package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.utils.serialization.JsonElementSerializer
+import com.xiaoyv.bangumi.shared.core.types.PersonCareerType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
 
 @Immutable
 @Serializable
@@ -36,8 +37,15 @@ data class ComposeMono(
     /**
      * Only for person
      */
-    @SerialName("career") @Serializable(JsonElementSerializer::class) val career: JsonElement = JsonObject(emptyMap()),
     @SerialName("type") val type: Int = 0,
+
+    /**
+     * Only for person
+     *
+     * value: "seiyu" or ["seiyu","artist"]
+     */
+    @SerialName("career")
+    val career: SerializeList<String> = persistentListOf(),
 
     /**
      * Only for character
@@ -50,7 +58,14 @@ data class ComposeMono(
     @SerialName("webInfo")
     val webInfo: ComposeMonoWebInfo = ComposeMonoWebInfo.Empty,
 ) {
-    val displayName: String get() = nameCN.ifBlank { name }
+    val displayName = nameCN.ifBlank { name }
+
+    /**
+     * 职业
+     */
+    val displayCareer = career
+        .map { PersonCareerType.string(it) }
+        .toImmutableList()
 
     fun shareUrl(@MonoType type: Int): String {
         return if (type == MonoType.PERSON) {

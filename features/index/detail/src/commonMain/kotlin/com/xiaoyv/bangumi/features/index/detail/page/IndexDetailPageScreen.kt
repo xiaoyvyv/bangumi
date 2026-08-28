@@ -12,9 +12,10 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
@@ -24,11 +25,10 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -42,8 +42,7 @@ import com.xiaoyv.bangumi.shared.ui.view.topic.TopicPageItem
 fun IndexDetailPageScreen(
     param: ListIndexRelatedParam,
     onNavScreen: (Screen) -> Unit,
-) {
-    if (LocalInspectionMode.current) return
+) = HideInPreview {
     val viewModel = koinIndexDetailPageViewModel(param)
     val pagingItems = viewModel.indexRelated.collectAsLazyPagingItems()
 
@@ -91,7 +90,7 @@ fun IndexDetailPageRelatedContent(
         IndexCatType.SUBJECT -> {
             SubjectLineItem(
                 modifier = Modifier.fillMaxWidth(),
-                display = ComposeSubjectDisplay(subject = item.subject),
+                display = ComposeSubjectRelation(subject = item.subject),
                 contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
                 onClick = {
                     onNavScreen(Screen.SubjectDetail(item.subject.id))

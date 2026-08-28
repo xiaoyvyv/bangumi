@@ -134,6 +134,7 @@
     <string name="global_book">书籍</string>
     <string name="global_anime">动画</string>
     <string name="global_game">游戏</string>
+    <string name="global_comments_cnt">讨论%1$d</string>
     <string name="global_real">三次元</string>
     <string name="global_tag">标签</string>
     <string name="global_music">音乐</string>

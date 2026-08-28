@@ -18,7 +18,6 @@ import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthDayRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthRegex
 import com.xiaoyv.bangumi.shared.core.utils.parseStar
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
@@ -26,7 +25,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexEp
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.Airtime
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectInterest
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectWebInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
@@ -159,7 +159,7 @@ class SubjectParser : BaseParser() {
     suspend fun Element.fetchUserCollectionCoverted(
         @SubjectType subjectType: Int,
         @CollectionType collectionType: Int,
-    ): List<ComposeSubjectDisplay> {
+    ): List<ComposeSubjectRelation> {
         requireNoError()
 
         return select("#browserItemList > li").map { item ->
@@ -188,7 +188,7 @@ class SubjectParser : BaseParser() {
                 .split(" ")
                 .filter { it.isNotBlank() }
 
-            ComposeSubjectDisplay(
+            ComposeSubjectRelation(
                 subject = ComposeSubject(
                     id = id,
                     images = ComposeImages.fromUrl(coverImage),
@@ -198,19 +198,19 @@ class SubjectParser : BaseParser() {
                     info = info,
                     airtime = Airtime(date = yearMonth.ifBlank { monthDay }),
                     eps = eps,
+                    interest = if (collectInfo.isEmpty()) ComposeSubjectInterest.Empty else ComposeSubjectInterest(
+                        comment = collectionComment,
+                        type = collectionType,
+                        tags = collectionTags.toPersistentList(),
+//                        subjectType = subjectType,
+                        rate = collectionRate,
+//                        updatedAt = collectionTime
+                    ),
                     webInfo = ComposeSubjectWebInfo(
                         info = info,
                         shortInfo = info,
                     )
                 ),
-                collection = if (collectInfo.isEmpty()) ComposeCollection.Empty else ComposeCollection(
-                    comment = collectionComment,
-                    type = collectionType,
-                    tags = collectionTags.toPersistentList(),
-                    subjectType = subjectType,
-                    rate = collectionRate,
-                    updatedAt = collectionTime
-                )
             )
         }
     }

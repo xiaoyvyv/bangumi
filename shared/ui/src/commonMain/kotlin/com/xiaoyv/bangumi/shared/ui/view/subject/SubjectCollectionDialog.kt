@@ -158,7 +158,7 @@ fun SubjectCollectionDialogContent(
         var commentInput by remember { mutableStateOf(value.comment.orEmpty().asTextFieldValue()) }
         var rate by remember { mutableStateOf(value.rate ?: 0) }
         var type by remember { mutableStateOf(value.type ?: CollectionType.UNKNOWN) }
-        var private by remember { mutableStateOf(value.private ?: false) }
+        var private by remember { mutableStateOf(value.isPrivate ?: false) }
 
         Column(
             modifier = Modifier
@@ -307,7 +307,7 @@ fun SubjectCollectionDialogContent(
                             type = type,
                             rate = if (rate == 0) null else rate,
                             comment = commentInput.text.takeIf { it.isNotBlank() },
-                            private = private,
+                            isPrivate = private,
                             tags = tagInput.text.split(" ")
                                 .mapNotNull { it.trim().takeIf { tag -> tag.isNotBlank() } }
                                 .take(10)

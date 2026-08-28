@@ -16,7 +16,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -33,7 +33,7 @@ data class HomeState(
     /**
      * 首页
      */
-    @SerialName("hotSubjects") val hotSubjects: SerializeList<ComposeSubjectDisplay> = persistentListOf(),
+    @SerialName("hotSubjects") val hotSubjects: SerializeList<ComposeSubjectRelation> = persistentListOf(),
 
     /**
      * 下发横向条目数据

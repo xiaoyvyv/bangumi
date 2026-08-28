@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
-import com.xiaoyv.bangumi.shared.core.types.PersonPositionType
+import com.xiaoyv.bangumi.shared.core.types.PersonType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateContent
@@ -12,7 +12,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
@@ -119,10 +119,10 @@ interface PersonApi {
     suspend fun getPersonWorks(
         @Path("personID") personID: Long,
         @Query("subjectType") @SubjectType subjectType: Int? = null,
-        @Query("position") @PersonPositionType position: Long? = null,
+        @Query("position") @PersonType position: Int? = null,
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeSubjectDisplay>
+    ): ComposePage<ComposeSubjectRelation>
 
     /**
      * 编辑人物的吐槽

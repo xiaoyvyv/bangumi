@@ -97,6 +97,7 @@ class CollectionRepositoryImpl(
     }
 
     override suspend fun submitRemoveSubjectCollection(subjectId: Long): Result<Unit> = client.requestWebApi(disableRedirect = true) {
+        // TODO API有问题，暂时用WEB代替
         submitCollectionSubjectRemove(subjectId, formHash = preferenceStore.userInfo.formHash)
     }
 

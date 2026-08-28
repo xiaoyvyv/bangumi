@@ -128,7 +128,7 @@ class NotificationViewModel(
     private fun onAgreeFriendRequest(item: ComposeNotice) = intent {
         withActionLoading {
             userRepository.submitMarkNotificationRead(item.id)
-            userRepository.fetchUserNotify(false)
+                .mapCatching { userRepository.fetchUserNotify(null).getOrThrow() }
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
@@ -140,7 +140,7 @@ class NotificationViewModel(
     private fun onMarkRead(item: ComposeNotice, showLoading: Boolean) = intent {
         withActionLoading(enable = showLoading) {
             userRepository.submitMarkNotificationRead(item.id)
-            userRepository.fetchUserNotify(false)
+                .mapCatching { userRepository.fetchUserNotify(null).getOrThrow() }
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {

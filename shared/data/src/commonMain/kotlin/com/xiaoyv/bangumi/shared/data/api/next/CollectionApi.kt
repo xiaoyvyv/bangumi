@@ -6,10 +6,10 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateEpisodeProgress
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeCollection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectInterest
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -92,7 +92,7 @@ interface CollectionApi {
     suspend fun getMyCharacterCollections(
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeCollection>
+    ): ComposePage<ComposeSubjectInterest>
 
     /**
      * 获取当前用户的目录收藏
@@ -104,7 +104,7 @@ interface CollectionApi {
     suspend fun getMyIndexCollections(
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeCollection>
+    ): ComposePage<ComposeSubjectInterest>
 
     /**
      * 获取当前用户的人物收藏
@@ -116,7 +116,7 @@ interface CollectionApi {
     suspend fun getMyPersonCollections(
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): ComposePage<ComposeCollection>
+    ): ComposePage<ComposeSubjectInterest>
 
     /**
      * 获取当前用户的条目收藏

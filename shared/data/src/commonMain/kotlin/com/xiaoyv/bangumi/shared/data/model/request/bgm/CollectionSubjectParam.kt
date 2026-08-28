@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 /**
  * @param comment 评价
- * @param private 仅自己可见
+ * @param isPrivate 仅自己可见
  * @param progress 是否自动完成条目进度，仅在 `type` 为 `看过` 时有效，并且不会产生对应的时间线记录：           - 书籍条目会检查总的话数和卷数，并更新收藏进度到最新;           - 动画和三次元会标记所有正片章节为已完成，并同时更新收藏进度
  * @param rate 评分，0 表示删除评分
  * @param tags
@@ -24,7 +24,7 @@ data class CollectionSubjectParam(
     /**
      * 仅自己可见
      */
-    @SerialName(value = "private") val `private`: Boolean? = null,
+    @SerialName(value = "private") val isPrivate: Boolean? = null,
 
     /**
      * 是否自动完成条目进度，仅在 `type` 为 `看过` 时有效，并且不会产生对应的时间线记录

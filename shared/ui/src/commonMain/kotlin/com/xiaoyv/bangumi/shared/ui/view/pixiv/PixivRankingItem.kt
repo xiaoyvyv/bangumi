@@ -15,10 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,11 +26,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlin.math.abs
 
 @Composable
@@ -45,12 +46,9 @@ fun PixivRankingItem(
     val rankDiff = item.yes_rank - item.rank
     val isUgoira = item.illust_type == "2"
 
-    Card(
+    OutlinedCard(
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        ),
         onClick = { onClick(item) }
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -208,5 +206,38 @@ fun PixivRankingItem(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PixivRankingItemPreview() {
+    PreviewColumn {
+        PixivRankingItem(
+            modifier = Modifier.padding(ContentMarginHalf),
+            item = ComposePixivRankingContent(
+                title = "作品标题作品标题作品标题作品标题",
+                user_name = "画师名称",
+                url = "",
+                profile_img = "",
+                rank = 1,
+                yes_rank = 2,
+                illust_page_count = "3",
+                illust_type = "0"
+            )
+        )
+        PixivRankingItem(
+            modifier = Modifier.padding(ContentMarginHalf),
+            item = ComposePixivRankingContent(
+                title = "动图作品示例",
+                user_name = "画师名称",
+                url = "",
+                profile_img = "",
+                rank = 4,
+                yes_rank = 0,
+                illust_page_count = "1",
+                illust_type = "2"
+            )
+        )
     }
 }

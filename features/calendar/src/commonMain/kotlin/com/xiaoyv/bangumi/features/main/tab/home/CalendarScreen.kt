@@ -31,7 +31,7 @@ import com.xiaoyv.bangumi.features.main.tab.home.business.CalendarViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.currentWeekDay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectDisplay
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -146,7 +146,7 @@ private fun CalendarScreenPage(
             items(sections) {
                 SubjectCardItem(
                     modifier = Modifier.fillMaxWidth(),
-                    display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
+                    display = remember(it.subject.id) { ComposeSubjectRelation(it.subject) },
                     style = MaterialTheme.typography.bodyMedium,
                     onClick = { onUiEvent(CalendarEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) }
                 )
@@ -163,7 +163,7 @@ private fun CalendarScreenPage(
                 SubjectLineItem(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
-                    display = remember(it.subject.id) { ComposeSubjectDisplay(it.subject) },
+                    display = remember(it.subject.id) { ComposeSubjectRelation(it.subject) },
                     onClick = { onUiEvent(CalendarEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) }
                 )
             }
