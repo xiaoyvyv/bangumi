@@ -75,7 +75,7 @@ private fun HomeMonoScreenContent(
     ) {
         items(
             items = state.sections,
-            key = { it.key },
+            key = { it.key + ":" + it.item.key },
             span = { if (it.isHeader) GridItemSpan(maxLineSpan) else GridItemSpan(1) },
             contentType = { CONTENT_TYPE_MONO_SECTION }
         ) {

@@ -72,7 +72,6 @@ export function parseMonoHomepage(html: string): ComposeSection<ComposeMonoDispl
 				name,
 				bgmImageVariants(spanStyleAvatar(selectOne('.avatar', item))),
 				true,
-				0,
 			));
 		}
 	}

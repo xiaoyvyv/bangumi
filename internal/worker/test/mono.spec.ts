@@ -62,7 +62,7 @@ describe('mono homepage handler', () => {
 			expect.objectContaining({
 				key: '/person-456',
 				item: expect.objectContaining({
-					type: 0,
+					type: 1,
 					info: { mono: expect.objectContaining({ id: 456, name: '人物名', nameCN: '人物名', type: 1 }) },
 				}),
 			}),
