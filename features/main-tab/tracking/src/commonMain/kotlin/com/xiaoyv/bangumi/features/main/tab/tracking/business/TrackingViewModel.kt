@@ -14,6 +14,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
@@ -76,15 +77,7 @@ class TrackingViewModel(
     private suspend fun onRefreshTrackingData() = subIntent {
         queryTrackingData()
             .onFailure { reduceError { it } }
-            .onSuccess {
-                reduceData(forceRefresh = true) {
-                    state.copy(
-                        progressAnime = it.first,
-                        progressBook = it.second,
-                        progressReal = it.third,
-                    )
-                }
-            }
+            .onSuccess { updateTrackingState(it) }
     }
 
     private fun onUpdateSubjectCollection(subject: ComposeSubject, param: CollectionSubjectParam) = intent {
@@ -94,13 +87,7 @@ class TrackingViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            reduceData(forceRefresh = true) {
-                state.copy(
-                    progressAnime = it.first,
-                    progressBook = it.second,
-                    progressReal = it.third,
-                )
-            }
+            updateTrackingState(it)
             personalStateStore.emitUpdateTrackingSuccess(subject.id)
         }
     }
@@ -112,13 +99,7 @@ class TrackingViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            reduceData(forceRefresh = true) {
-                state.copy(
-                    progressAnime = it.first,
-                    progressBook = it.second,
-                    progressReal = it.third,
-                )
-            }
+            updateTrackingState(it)
             personalStateStore.emitUpdateTrackingSuccess(subject.id)
         }
     }
@@ -131,15 +112,50 @@ class TrackingViewModel(
         }.onFailure {
             postToast { it.errMsg }
         }.onSuccess {
-            reduceData(forceRefresh = true) {
-                state.copy(
-                    progressAnime = it.first,
-                    progressBook = it.second,
-                    progressReal = it.third,
-                )
-            }
+            updateTrackingState(it)
             personalStateStore.emitUpdateTrackingSuccess(subject.id)
         }
+    }
+
+    private suspend fun Syntax<UiState<TrackingState>, UiSideEffect<TrackingSideEffect>>.updateTrackingState(
+        data: Triple<ImmutableList<ComposeHomeProgress>, ImmutableList<ComposeHomeProgress>, ImmutableList<ComposeHomeProgress>>,
+    ) {
+        reduceData(forceRefresh = true) {
+            // 对每一类数据进行稳定排序，保证条目位置不会因状态更新而乱跳
+            val (anime, animeOrder) = data.first.stableSort(state.animeOrder)
+            val (book, bookOrder) = data.second.stableSort(state.bookOrder)
+            val (real, realOrder) = data.third.stableSort(state.realOrder)
+
+            state.copy(
+                progressAnime = anime,
+                progressBook = book,
+                progressReal = real,
+                animeOrder = animeOrder,
+                bookOrder = bookOrder,
+                realOrder = realOrder,
+            )
+        }
+    }
+
+    /**
+     * 稳定排序逻辑：
+     * 1. 首次加载时（oldOrder 为空），完全遵循服务端返回的顺序。
+     * 2. 后续刷新时，已存在的条目固定在原位，新条目追加到列表末尾。
+     */
+    private fun List<ComposeHomeProgress>.stableSort(
+        oldOrder: List<Long>,
+    ): Pair<ImmutableList<ComposeHomeProgress>, SerializeList<Long>> {
+        val currentIds = map { it.subject.id }
+        // 过滤出当前列表里不在旧顺序中的新 ID
+        val newIds = currentIds.filter { it !in oldOrder }
+        // 合并顺序：旧顺序 + 新条目 ID
+        val newOrder = (oldOrder + newIds).toImmutableList()
+
+        // 构建 ID 到索引的映射，用于快速排序
+        val idToIndex = newOrder.withIndex().associate { it.value to it.index }
+        val sortedList = sortedBy { idToIndex[it.subject.id] ?: Int.MAX_VALUE }.toImmutableList()
+
+        return sortedList to newOrder
     }
 
     private suspend fun queryTrackingData(): Result<Triple<ImmutableList<ComposeHomeProgress>, ImmutableList<ComposeHomeProgress>, ImmutableList<ComposeHomeProgress>>> {

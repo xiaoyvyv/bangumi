@@ -222,7 +222,7 @@ private fun TrackingPageItem(
                             total = subject.eps,
                             button = buildString {
                                 when {
-                                    isEpCompleted -> append(stringResource(Res.string.tracking_ep_all_watched))
+                                    item.lastUnwatchedEp == ComposeEpisode.Empty -> append(stringResource(Res.string.tracking_ep_all_watched))
                                     else -> {
                                         append("Ep.")
                                         append(nextEp)
@@ -231,10 +231,10 @@ private fun TrackingPageItem(
                                 }
                             },
                             onClickIncrease = {
-                                if (isEpCompleted) {
+                                if (item.lastUnwatchedEp == ComposeEpisode.Empty) {
                                     onUpdateCollect(CollectionSubjectParam(type = CollectionType.DONE))
                                 } else {
-                                    onUpdateProgress(CollectionSubjectProgressParam(epStatus = nextEp))
+                                    onUpdateEpisode(listOf(item.lastUnwatchedEp), CollectionType.DONE)
                                 }
                             }
                         )

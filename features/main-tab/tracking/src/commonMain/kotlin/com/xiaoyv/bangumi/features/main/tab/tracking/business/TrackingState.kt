@@ -18,4 +18,17 @@ data class TrackingState(
     val progressAnime: SerializeList<ComposeHomeProgress> = persistentListOf(),
     val progressBook: SerializeList<ComposeHomeProgress> = persistentListOf(),
     val progressReal: SerializeList<ComposeHomeProgress> = persistentListOf(),
+
+    /**
+     * 用于固定条目显示位置的 ID 顺序列表 (Anime)
+     */
+    val animeOrder: SerializeList<Long> = persistentListOf(),
+    /**
+     * 用于固定条目显示位置的 ID 顺序列表 (Book)
+     */
+    val bookOrder: SerializeList<Long> = persistentListOf(),
+    /**
+     * 用于固定条目显示位置的 ID 顺序列表 (Real)
+     */
+    val realOrder: SerializeList<Long> = persistentListOf(),
 )
