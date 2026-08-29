@@ -21,9 +21,9 @@ import com.xiaoyv.bangumi.features.subject.page.SubjectPageRoute
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuChip
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -50,11 +50,13 @@ fun ProfileCollectionScreen(
                     horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     DropMenuChip(
-                        options = TabTokens.collectionSortFilters,
-                        current = state.selectedCollectSort,
+                        options = TabTokens.collectionTypeFilters
+                            .map { it.copy(labelText = CollectionType.string(state.selectedSubjectType, it.type)) }
+                            .toPersistentList(),
+                        current = state.selectedCollectType,
                         trailingIcon = { Icon(BgmIcons.ArrowDropDown, contentDescription = null) },
                         onOptionClick = {
-                            onActionEvent(ProfileEvent.Action.OnChangeCollectionSortFilter(it.type))
+                            onActionEvent(ProfileEvent.Action.OnChangeCollectionTypeFilter(it.type))
                         }
                     )
 
@@ -64,17 +66,6 @@ fun ProfileCollectionScreen(
                         trailingIcon = { Icon(BgmIcons.ArrowDropDown, contentDescription = null) },
                         onOptionClick = {
                             onActionEvent(ProfileEvent.Action.OnChangeSubjectTypeFilter(it.type))
-                        }
-                    )
-
-                    DropMenuChip(
-                        options = TabTokens.collectionTypeFilters
-                            .map { it.copy(labelText = CollectionType.string(state.selectedSubjectType, it.type)) }
-                            .toPersistentList(),
-                        current = state.selectedCollectType,
-                        trailingIcon = { Icon(BgmIcons.ArrowDropDown, contentDescription = null) },
-                        onOptionClick = {
-                            onActionEvent(ProfileEvent.Action.OnChangeCollectionTypeFilter(it.type))
                         }
                     )
                 }

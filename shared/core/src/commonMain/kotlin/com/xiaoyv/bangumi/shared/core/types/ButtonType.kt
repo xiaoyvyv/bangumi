@@ -16,6 +16,8 @@ import com.xiaoyv.bangumi.core_resource.resources.global_netabare
 import com.xiaoyv.bangumi.core_resource.resources.global_open_browser
 import com.xiaoyv.bangumi.core_resource.resources.global_reaction
 import com.xiaoyv.bangumi.core_resource.resources.global_share
+import com.xiaoyv.bangumi.core_resource.resources.global_sort_asc
+import com.xiaoyv.bangumi.core_resource.resources.global_sort_desc
 import com.xiaoyv.bangumi.core_resource.resources.global_translate
 import com.xiaoyv.bangumi.core_resource.resources.global_translate_off
 import org.jetbrains.compose.resources.StringResource
@@ -33,6 +35,8 @@ enum class ButtonType(val label: StringResource) {
     Copy(Res.string.global_copy),
     CopyName(Res.string.global_copy_name),
     CopyNameCn(Res.string.global_copy_name_cn),
+    SortDesc(Res.string.global_sort_desc),
+    SortAsc(Res.string.global_sort_asc),
     Delete(Res.string.global_delete);
 
     fun contentColor(colorScheme: ColorScheme): Color {

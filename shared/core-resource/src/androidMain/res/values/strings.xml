@@ -176,6 +176,8 @@
     <string name="global_netabare">Netabare 趋势</string>
     <string name="global_open_browser">在浏览器中打开</string>
     <string name="global_drama">舞台剧</string>
+    <string name="global_sort_desc">使用倒序</string>
+    <string name="global_sort_asc">使用正序</string>
     <string name="global_movie">影视</string>
     <string name="global_aired">已放送</string>
     <string name="global_not_aired">未放送</string>
@@ -402,6 +404,8 @@
     <string name="settings_theme_light">明亮</string>
     <string name="settings_theme_dark">黑暗</string>
     <string name="settings_time_machine_grid_limit">时光机格子限制</string>
+    <string name="settings_tracking_desc">进度追踪倒序</string>
+    <string name="settings_tracking_desc_desc">开启后，首次加载进度追踪列表，会按修改时间倒序排列，不会影响今日放送中的条目置顶</string>
     <string name="settings_navigation_animation">导航动画</string>
     <string name="settings_navigation_animation_none">关闭</string>
     <string name="settings_navigation_animation_fade">渐入渐出</string>

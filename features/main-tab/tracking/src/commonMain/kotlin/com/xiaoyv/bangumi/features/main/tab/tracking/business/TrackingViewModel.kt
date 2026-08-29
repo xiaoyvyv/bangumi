@@ -12,10 +12,14 @@ import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
+import com.xiaoyv.bangumi.shared.core.types.CollectionEpisodeType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
+import com.xiaoyv.bangumi.shared.core.utils.formatMills
+import com.xiaoyv.bangumi.shared.core.utils.isToday
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
+import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
@@ -41,6 +45,7 @@ class TrackingViewModel(
     private val userRepository: UserRepository,
     private val collectionRepository: CollectionRepository,
     private val personalStateStore: PersonalStateStore,
+    private val userManager: UserManager,
 ) : BaseViewModel<TrackingState, TrackingSideEffect, TrackingEvent.Action>() {
 
     init {
@@ -160,13 +165,30 @@ class TrackingViewModel(
 
     private suspend fun queryTrackingData(): Result<Triple<ImmutableList<ComposeHomeProgress>, ImmutableList<ComposeHomeProgress>, ImmutableList<ComposeHomeProgress>>> {
         return userRepository.fetchUserHomeInfo().map {
-            val progressAnime = it.progress
+            val trackingDesc = userManager.settings.ui.trackingDesc
+            val progresses = if (trackingDesc) it.progress.reversed() else it.progress
+            val subjectProgress = progresses.sortedBy { progress ->
+                val airingTodayEp = progress.eps.find { episode -> episode.airdate.formatMills().isToday() }
+
+                when {
+                    // 今日放送放、且还没有点的格子放在最前面
+                    progress.todayOnAir && airingTodayEp != null && airingTodayEp.collection.status == CollectionEpisodeType.UNKNOWN -> 0
+                    // 今日放送放、点过格子的其次
+                    progress.todayOnAir && airingTodayEp != null -> 1
+                    // 今日放送放但未匹配到对应的 EP
+                    progress.todayOnAir -> 2
+                    // 其它的按默认顺序
+                    else -> 3
+                }
+            }
+
+            val progressAnime = subjectProgress
                 .filter { progress -> progress.subject.type == SubjectType.ANIME }
                 .toImmutableList()
-            val progressBook = it.progress
+            val progressBook = subjectProgress
                 .filter { progress -> progress.subject.type == SubjectType.BOOK }
                 .toImmutableList()
-            val progressReal = it.progress
+            val progressReal = subjectProgress
                 .filter { progress -> progress.subject.type == SubjectType.REAL }
                 .toImmutableList()
             Triple(progressAnime, progressBook, progressReal)

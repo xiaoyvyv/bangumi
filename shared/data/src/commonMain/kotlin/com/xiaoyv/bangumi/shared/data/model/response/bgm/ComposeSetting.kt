@@ -62,6 +62,8 @@ data class ComposeSetting(
         @SerialName("forceOpenUrlInBrowser") val forceOpenUrlInBrowser: Boolean = false,
         @SerialName("cacheState") val cacheState: Boolean = true,
 
+        @SerialName("trackingDesc") val trackingDesc: Boolean = false,
+
         @field:SettingIndication
         @SerialName("indication")
         val indication: Int = SettingIndication.RIPPLE,
