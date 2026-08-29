@@ -3,6 +3,7 @@
 package com.xiaoyv.bangumi
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
@@ -50,10 +51,11 @@ import com.xiaoyv.bangumi.shared.ui.component.live2d.LocalLive2DSpeechController
 import com.xiaoyv.bangumi.shared.ui.component.live2d.rememberLive2DSpeechState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.popup.AppUpdatePopup
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.popup.PopupLoadingScreen
+import com.xiaoyv.bangumi.shared.ui.component.popup.PopupTipContent
+import com.xiaoyv.bangumi.shared.ui.component.popup.PopupUpdateDialog
 import com.xiaoyv.bangumi.shared.ui.component.popup.rememberPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.rememberPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
@@ -138,7 +140,7 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
             BgmScreenNavGraph(navigator = navigator)
 
             // Update
-            AppUpdatePopup(
+            PopupUpdateDialog(
                 release = sharedState.appRelease,
                 state = appUpdatePopupState,
                 onDownload = { actionHandler.openInBrowser(it.htmlUrl) },
@@ -150,9 +152,11 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
             // Toast
             SnackbarHost(
                 modifier = Modifier
-                    .padding(bottom = 60.dp)
+                    .navigationBarsPadding()
+                    .padding(bottom = 56.dp)
                     .align(Alignment.BottomCenter),
-                hostState = popupTipState.state
+                hostState = popupTipState.state,
+                snackbar = { PopupTipContent(it) }
             )
 
             // Liv2d

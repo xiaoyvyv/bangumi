@@ -53,8 +53,8 @@ val surfaceContainerHighestLight = Color(0xFFF2F2F2)
 // ===================
 // Dark Theme
 // ===================
-val primaryDark = Color(0xFFFFB1C8)
-val onPrimaryDark = Color(0xFF5F1134)
+val primaryDark = Color(0xFFFF80AB)
+val onPrimaryDark = Color(0xFFFFFFFF)
 val primaryContainerDark = Color(0xFF7D2C4C)
 val onPrimaryContainerDark = Color(0xFFFFD9E2)
 
@@ -68,18 +68,18 @@ val onTertiaryDark = Color(0xFF2A2A2A)
 val tertiaryContainerDark = Color(0xFF2A2A2A)
 val onTertiaryContainerDark = Color(0xFFF0F0F0)
 
-val errorDark = Color(0xFFFFB4AB)
-val onErrorDark = Color(0xFF690005)
-val errorContainerDark = Color(0xFF93000A)
-val onErrorContainerDark = Color(0xFFFFDAD6)
+val errorDark = Color(0xFFBA1A1A)
+val onErrorDark = Color(0xFFFFFFFF)
+val errorContainerDark = Color(0xFFFFDAD6)
+val onErrorContainerDark = Color(0xFF93000A)
 
-val backgroundDark = Color(0xFF121212)
-val onBackgroundDark = Color(0xFFF0F0F0)
-val surfaceDark = Color(0xFF222222)
-val onSurfaceDark = Color(0xFFF0F0F0)
+val backgroundDark = Color(0xFF000000)
+val onBackgroundDark = Color(0xFFFFFFFF)
+val surfaceDark = Color(0xFF000000)
+val onSurfaceDark = Color(0xFFFFFFFF)
 
-val surfaceVariantDark = Color(0xFF222222)
-val onSurfaceVariantDark = Color(0xFFF0F0F0)
+val surfaceVariantDark = Color(0xFF333333)
+val onSurfaceVariantDark = Color(0xFFFFFFFF)
 
 val outlineDark = Color(0xFF3A3A3A)
 val outlineVariantDark = Color(0xFF2A2A2A)

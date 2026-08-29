@@ -33,7 +33,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * @param onDownload 点击下载后的回调。
  */
 @Composable
-fun AppUpdatePopup(
+fun PopupUpdateDialog(
     release: ComposeAppRelease,
     state: AlertDialogState,
     onDownload: (ComposeAppRelease) -> Unit,
