@@ -22,6 +22,8 @@ object WebConstant {
     const val URL_BGM_TURNSTILE = "https://next.bgm.tv/p1/turnstile?theme=auto&redirect_uri=bangumi://"
     const val URL_BGM_SIGN = "https://bgm.tv/signup"
     const val URL_BGM_PROXY = "https://01b8c1cd4205405eb3d1d4d9850cec7a.xiaoyv.com.cn/"
+    const val URL_GITHUB_RELEASE_LATEST = "https://api.github.com/repos/xiaoyvyv/bangumi/releases/latest"
+    const val URL_GITHUB_RELEASE_PRE_RELEASE = "https://api.github.com/repos/xiaoyvyv/bangumi/releases/tags/pre-release"
 
     val pixivCookieUrls = listOf(
         URL_BASE_PIXIV,

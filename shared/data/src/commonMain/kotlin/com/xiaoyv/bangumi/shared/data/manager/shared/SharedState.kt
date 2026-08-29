@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 
 /**
@@ -18,6 +19,7 @@ data class SharedState(
     val user: ComposeUser = ComposeUser.Empty,
     val pixivToken: ComposePixivToken = ComposePixivToken.Empty,
     val settings: ComposeSetting = ComposeSetting.Default,
+    val appRelease: ComposeAppRelease = ComposeAppRelease.Empty,
     val mikanIdMap: Map<String, String> = emptyMap(),
     val unread: ComposeUnRead = ComposeUnRead.Empty,
 ) {

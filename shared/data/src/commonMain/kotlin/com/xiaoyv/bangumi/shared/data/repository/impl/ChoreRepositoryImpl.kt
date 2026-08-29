@@ -5,6 +5,7 @@ import coil3.annotation.ExperimentalCoilApi
 import coil3.request.ErrorResult
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.isIpv4Address
 import com.xiaoyv.bangumi.shared.core.utils.runResult
@@ -12,6 +13,7 @@ import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUploadImage
 import com.xiaoyv.bangumi.shared.data.model.response.chore.CloudflareDnsResponse
+import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeBangumiStatus
 import com.xiaoyv.bangumi.shared.data.model.response.trace.MicrosoftTranslate
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
@@ -171,4 +173,12 @@ class ChoreRepositoryImpl(private val client: ApiClient) : ChoreRepository {
 
     override suspend fun fetchBangumiStatus(): Result<ComposeBangumiStatus> =
         client.requestChoreApi { fetchBangumiStatus() }
+
+    override suspend fun fetchAppRelease(@SettingUpdateChannel channel: Int): Result<ComposeAppRelease> =
+        client.requestChoreApi {
+            when (channel) {
+                SettingUpdateChannel.PREVIEW -> fetchPreReleaseAppRelease()
+                else -> fetchLatestAppRelease()
+            }
+        }
 }

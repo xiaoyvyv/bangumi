@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
+import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import kotlinx.collections.immutable.toImmutableMap
@@ -26,6 +27,7 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 class SharedViewModel(
     private val userManager: UserManager,
+    private val choreRepository: ChoreRepository,
     private val mikanRepository: MikanRepository,
     private val userRepository: UserRepository,
 ) : OrbitContainerHost<SharedState, SharedState, SharedEvent>, ViewModel() {
@@ -71,8 +73,19 @@ class SharedViewModel(
 
     private suspend fun onCreate() {
         coroutineScope {
+            launch { onRefreshAppRelease() }
             launch { onRefreshMikanIds() }
         }
+    }
+
+    /**
+     * 根据当前更新渠道刷新应用发布信息。
+     */
+    private suspend fun onRefreshAppRelease() = subIntent {
+        choreRepository.fetchAppRelease(state.settings.network.updateChannel)
+            .onSuccess { release ->
+                reduce { state.copy(appRelease = release) }
+            }
     }
 
     /**

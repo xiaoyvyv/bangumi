@@ -67,7 +67,7 @@ jobs:
           java-version: '21'
 
       - name: Setup Gradle cache
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - name: Build desktop package
         run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS "-PappVersionCode=${{ needs.prepare-version.outputs.version_code }}" "-PappVersionName=${{ needs.prepare-version.outputs.version_name }}"
@@ -88,7 +88,7 @@ jobs:
       contents: write
     steps:
       - name: Download desktop packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: desktop-*
           path: desktop-release
@@ -96,49 +96,49 @@ jobs:
 
       - name: Upload packages to rolling pre-release
         if: needs.prepare-version.outputs.channel == 'pre-release'
-        uses: softprops/action-gh-release@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: pre-release
-          name: Pre-release
-          prerelease: true
-          make_latest: false
-          overwrite_files: true
-          body: |
-            自动构建自 [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+          GH_TOKEN: ${{ github.token }}
+          VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
+          VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          RELEASE_TAG="pre-release"
+          RELEASE_NAME="Pre-release"
+          RELEASE_BODY="自动构建自 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
 
-            - channel：pre-release
-            - versionCode：${{ needs.prepare-version.outputs.version_code }}
-            - versionName：${{ needs.prepare-version.outputs.version_name }}
+          - channel：pre-release
+          - versionCode：${VERSION_CODE}
+          - versionName：${VERSION_NAME}
 
-            ### 本次提交
-            ${{ github.event.head_commit.message }}
-          files: |
-            desktop-release/*.deb
-            desktop-release/*.dmg
-            desktop-release/*.msi
+          ### 本次提交
+          ${COMMIT_MESSAGE}"
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --notes "${RELEASE_BODY}"
+          else
+            gh release create "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
+          fi
+          gh release upload "${RELEASE_TAG}" desktop-release/*.deb desktop-release/*.dmg desktop-release/*.msi --clobber
 
       - name: Upload packages to release
         if: needs.prepare-version.outputs.channel == 'release'
-        uses: softprops/action-gh-release@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ needs.prepare-version.outputs.version_name }}
-          prerelease: false
-          make_latest: true
-          overwrite_files: true
-          body: |
-            正式版本 [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+          GH_TOKEN: ${{ github.token }}
+          VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
+          VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          RELEASE_TAG="${GITHUB_REF_NAME}"
+          RELEASE_NAME="Release ${VERSION_NAME}"
+          RELEASE_BODY="正式版本 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
 
-            - versionCode：${{ needs.prepare-version.outputs.version_code }}
-            - versionName：${{ needs.prepare-version.outputs.version_name }}
+          - versionCode：${VERSION_CODE}
+          - versionName：${VERSION_NAME}
 
-            ### 本次提交
-            ${{ github.event.head_commit.message }}
-          files: |
-            desktop-release/*.deb
-            desktop-release/*.dmg
-            desktop-release/*.msi
+          ### 本次提交
+          ${COMMIT_MESSAGE}"
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --latest --notes "${RELEASE_BODY}"
+          else
+            gh release create "${RELEASE_TAG}" --title "${RELEASE_NAME}" --latest --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
+          fi
+          gh release upload "${RELEASE_TAG}" desktop-release/*.deb desktop-release/*.dmg desktop-release/*.msi --clobber

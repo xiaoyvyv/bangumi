@@ -10,16 +10,17 @@ import androidx.annotation.IntDef
  */
 @IntDef(
     SettingUpdateChannel.RELEASE,
-    SettingUpdateChannel.ACTION,
+    SettingUpdateChannel.PREVIEW,
 )
 @Retention(AnnotationRetention.SOURCE)
 annotation class SettingUpdateChannel {
     companion object {
         const val RELEASE = 0
-        const val ACTION = 1
+        const val PREVIEW = 1
+
         fun string(@SettingUpdateChannel channel: Int): String = when (channel) {
             RELEASE -> "Release"
-            ACTION -> "Action"
+            PREVIEW -> "Preview"
             else -> "Unknown"
         }
     }

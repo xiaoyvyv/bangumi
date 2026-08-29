@@ -491,7 +491,7 @@ object TabTokens {
 
     val settingUpdateChannels = persistentListOf(
         ComposeTextTab(SettingUpdateChannel.RELEASE, labelText = "Release"),
-        ComposeTextTab(SettingUpdateChannel.ACTION, labelText = "Action"),
+        ComposeTextTab(SettingUpdateChannel.PREVIEW, labelText = "Action"),
     )
 
     val settingThemeItems = persistentListOf(
