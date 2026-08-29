@@ -1,4 +1,4 @@
-name: Compose Desktop CI
+name: iOS CI
 
 on:
   push:
@@ -40,26 +40,10 @@ jobs:
           echo "version_name=${VERSION_NAME}" >> "$GITHUB_OUTPUT"
           echo "channel=${CHANNEL}" >> "$GITHUB_OUTPUT"
 
-  build-desktop:
-    name: Build Desktop (${{ matrix.name }})
+  build-ios:
+    name: Build iOS IPA
     needs: prepare-version
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Linux
-            os: ubuntu-latest
-            platform: linux
-            format: deb
-          - name: macOS
-            os: macos-latest
-            platform: macos
-            format: dmg
-          - name: Windows
-            os: windows-latest
-            platform: windows
-            format: msi
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -73,40 +57,57 @@ jobs:
       - name: Setup Gradle cache
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Build desktop package
-        run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS "-PappVersionCode=${{ needs.prepare-version.outputs.version_code }}" "-PappVersionName=${{ needs.prepare-version.outputs.version_name }}"
+      - name: Install CocoaPods dependencies
+        run: pod install --project-directory=iosApp
 
-      - name: Rename desktop package
-        shell: bash
+      - name: Build unsigned IPA
+        env:
+          VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
+          VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
         run: |
-          package_dir="composeApp/build/compose/binaries/main-release/${{ matrix.format }}"
-          package_path="$(find "${package_dir}" -maxdepth 1 -type f -name "*.${{ matrix.format }}" -print -quit)"
-          test -n "${package_path}"
-          cp "${package_path}" "${package_dir}/bangumi-${{ matrix.platform }}.${{ matrix.format }}"
+          ARCHIVE_PATH="$PWD/build/ios/iosApp.xcarchive"
+          xcodebuild \
+            -workspace iosApp/iosApp.xcworkspace \
+            -scheme iosApp \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath "${ARCHIVE_PATH}" \
+            archive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            APP_VERSION_CODE="${VERSION_CODE}" \
+            APP_VERSION_NAME="${VERSION_NAME}"
 
-      - name: Upload desktop package
+          APP_PATH="$(find "${ARCHIVE_PATH}/Products/Applications" -maxdepth 1 -type d -name '*.app' -print -quit)"
+          test -n "${APP_PATH}"
+          mkdir -p build/ios/ipa/Payload
+          cp -R "${APP_PATH}" build/ios/ipa/Payload/
+          ditto -c -k --sequesterRsrc --keepParent build/ios/ipa/Payload build/ios/bangumi-ios.ipa
+
+      - name: Upload unsigned IPA
         uses: actions/upload-artifact@v6
         with:
-          name: desktop-${{ matrix.platform }}
-          path: composeApp/build/compose/binaries/main-release/${{ matrix.format }}/bangumi-${{ matrix.platform }}.${{ matrix.format }}
+          name: ios-ipa
+          path: build/ios/bangumi-ios.ipa
           if-no-files-found: error
 
-  publish-desktop:
-    name: Publish Desktop packages
-    needs: [ prepare-version, build-desktop ]
+  publish-ios:
+    name: Publish iOS IPA
+    needs: [ prepare-version, build-ios ]
     if: github.event_name == 'push' && success()
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Download desktop packages
+      - name: Download IPA
         uses: actions/download-artifact@v6
         with:
-          pattern: desktop-*
-          path: desktop-release
-          merge-multiple: true
+          name: ios-ipa
+          path: ios-release
 
-      - name: Upload packages to rolling pre-release
+      - name: Upload IPA to rolling pre-release
         if: needs.prepare-version.outputs.channel == 'pre-release'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -130,9 +131,9 @@ jobs:
           else
             gh release create "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
           fi
-          gh release upload "${RELEASE_TAG}" desktop-release/*.deb desktop-release/*.dmg desktop-release/*.msi --clobber
+          gh release upload "${RELEASE_TAG}" ios-release/*.ipa --clobber
 
-      - name: Upload packages to release
+      - name: Upload IPA to release
         if: needs.prepare-version.outputs.channel == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -155,4 +156,4 @@ jobs:
           else
             gh release create "${RELEASE_TAG}" --title "${RELEASE_NAME}" --latest --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
           fi
-          gh release upload "${RELEASE_TAG}" desktop-release/*.deb desktop-release/*.dmg desktop-release/*.msi --clobber
+          gh release upload "${RELEASE_TAG}" ios-release/*.ipa --clobber
