@@ -1,8 +1,9 @@
 name: Build documentation
 
 on:
-  push:
-    branches: [ "main" ]
+  schedule:
+    # GitHub Actions cron uses UTC: 21:00 UTC is 05:00 in Asia/Shanghai.
+    - cron: '0 21 * * *'
   workflow_dispatch:
 
 permissions:

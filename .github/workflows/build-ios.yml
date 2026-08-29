@@ -2,10 +2,10 @@ name: iOS CI
 
 on:
   push:
-    branches: [ 'main' ]
     tags: [ 'v*' ]
-  pull_request:
-    branches: [ 'main' ]
+  schedule:
+    # GitHub Actions cron uses UTC: 21:00 UTC is 05:00 in Asia/Shanghai.
+    - cron: '0 21 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -44,6 +44,7 @@ jobs:
     name: Build iOS IPA
     needs: prepare-version
     runs-on: macos-15-intel
+    timeout-minutes: 45
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -67,18 +68,17 @@ jobs:
         env:
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
-          GRADLE_OPTS: >-
-            -Dorg.gradle.jvmargs='-Xmx2g -Dkotlin.daemon.jvm.options="-Xmx1g" -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8'
-            -Dorg.gradle.project.kotlin.native.jvmArgs='-Xmx8g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC'
-            -Dorg.gradle.workers.max=1
-            -Dorg.gradle.parallel=false
         run: |
           ARCHIVE_PATH="$PWD/build/ios/iosApp.xcarchive"
+          LOG_PATH="$PWD/build/ios/xcodebuild.log"
+          mkdir -p "$(dirname "${LOG_PATH}")"
+
           xcodebuild \
             -workspace iosApp/iosApp.xcworkspace \
             -scheme iosApp \
             -configuration Release \
             -sdk iphoneos \
+            -jobs 1 \
             -archivePath "${ARCHIVE_PATH}" \
             -derivedDataPath "$PWD/build/ios/DerivedData" \
             archive \
@@ -87,7 +87,23 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             DEVELOPMENT_TEAM="" \
             APP_VERSION_CODE="${VERSION_CODE}" \
-            APP_VERSION_NAME="${VERSION_NAME}"
+            APP_VERSION_NAME="${VERSION_NAME}" > "${LOG_PATH}" 2>&1 &
+          XCODEBUILD_PID=$!
+
+          while kill -0 "${XCODEBUILD_PID}" 2>/dev/null; do
+            sleep 60
+            echo "::notice::xcodebuild is still running; recent log output follows."
+            ps -o pid,etime,%mem,command -p "${XCODEBUILD_PID}" || true
+            pgrep -alf 'GradleDaemon|konanc|xcodebuild' || true
+            tail -n 60 "${LOG_PATH}" || true
+          done
+
+          if ! wait "${XCODEBUILD_PID}"; then
+            echo "::error::xcodebuild failed; final log output follows."
+            tail -n 200 "${LOG_PATH}" || true
+            exit 1
+          fi
+          tail -n 60 "${LOG_PATH}"
 
           APP_PATH="$(find "${ARCHIVE_PATH}/Products/Applications" -maxdepth 1 -type d -name '*.app' -print -quit)"
           test -n "${APP_PATH}"
@@ -105,11 +121,14 @@ jobs:
   publish-ios:
     name: Publish iOS IPA
     needs: [ prepare-version, build-ios ]
-    if: github.event_name == 'push' && success()
+    if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - name: Download IPA
         uses: actions/download-artifact@v6
         with:
@@ -123,8 +142,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
+          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="pre-release"
           RELEASE_NAME="Pre-release"
           RELEASE_BODY="自动构建自 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
@@ -149,8 +168,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
+          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="${GITHUB_REF_NAME}"
           RELEASE_NAME="Release ${VERSION_NAME}"
           RELEASE_BODY="正式版本 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})

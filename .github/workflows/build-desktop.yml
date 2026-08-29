@@ -2,10 +2,10 @@ name: Compose Desktop CI
 
 on:
   push:
-    branches: [ 'main' ]
     tags: [ 'v*' ]
-  pull_request:
-    branches: [ 'main' ]
+  schedule:
+    # GitHub Actions cron uses UTC: 21:00 UTC is 05:00 in Asia/Shanghai.
+    - cron: '0 21 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -94,11 +94,14 @@ jobs:
   publish-desktop:
     name: Publish Desktop packages
     needs: [ prepare-version, build-desktop ]
-    if: github.event_name == 'push' && success()
+    if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - name: Download desktop packages
         uses: actions/download-artifact@v6
         with:
@@ -113,8 +116,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
+          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="pre-release"
           RELEASE_NAME="Pre-release"
           RELEASE_BODY="自动构建自 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
@@ -139,8 +142,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
+          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="${GITHUB_REF_NAME}"
           RELEASE_NAME="Release ${VERSION_NAME}"
           RELEASE_BODY="正式版本 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})

@@ -2,10 +2,10 @@ name: Compose Multiplatform CI
 
 on:
   push:
-    branches: [ 'main' ]
     tags: [ 'v*' ]
-  pull_request:
-    branches: [ 'main' ]
+  schedule:
+    # GitHub Actions cron uses UTC: 21:00 UTC is 05:00 in Asia/Shanghai.
+    - cron: '0 21 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -75,16 +75,16 @@ jobs:
           path: android/build/outputs/apk/release/*-x86_64-release.apk
           if-no-files-found: error
 
-      # Keep a single rolling pre-release available for testers on the main branch.
+      # Keep a single rolling pre-release available for testers every morning.
       - name: Upload APKs to rolling pre-release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
+        if: github.event_name == 'schedule' && success()
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           VERSION_CODE: ${{ steps.build.outputs.version_code }}
           VERSION_NAME: ${{ steps.build.outputs.version_name }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
+          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="pre-release"
           RELEASE_NAME="Pre-release"
           RELEASE_BODY="自动构建自 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
@@ -103,14 +103,14 @@ jobs:
           gh release upload "${RELEASE_TAG}" android/build/outputs/apk/release/*-release.apk --clobber
 
       - name: Upload APKs to release
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && success()
+        if: startsWith(github.ref, 'refs/tags/v') && success()
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           VERSION_CODE: ${{ steps.build.outputs.version_code }}
           VERSION_NAME: ${{ steps.build.outputs.version_name }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
+          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="${GITHUB_REF_NAME}"
           RELEASE_NAME="Release ${VERSION_NAME}"
           RELEASE_BODY="正式版本 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
