@@ -1,5 +1,8 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+val appVersionCode = providers.gradleProperty("appVersionCode").get().toInt()
+val appVersionName = providers.gradleProperty("appVersionName").get()
+
 plugins {
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.compose")
@@ -27,8 +30,8 @@ android {
         applicationId = "com.xiaoyv.bangumi.multiplatform"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "2.0.1"
+        versionCode = appVersionCode
+        versionName = appVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "false"

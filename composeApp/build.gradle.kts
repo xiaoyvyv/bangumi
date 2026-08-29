@@ -1,5 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
+val appVersionName = providers.gradleProperty("appVersionName").get()
+
 plugins {
     id("bgm.library")
     id("org.jetbrains.compose.hot-reload")
@@ -118,7 +120,7 @@ compose.desktop {
             modules("java.base", "java.desktop", "java.sql", "java.logging", "java.naming", "java.prefs", "java.management", "jdk.unsupported")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.xiaoyv.bangumi"
-            packageVersion = "1.0.0"
+            packageVersion = appVersionName
         }
     }
 }

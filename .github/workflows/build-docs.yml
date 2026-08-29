@@ -10,6 +10,10 @@ permissions:
   id-token: write
   pages: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   INSTANCE: 'Writerside/bgm-doc'
   DOCKER_VERSION: '2025.04.8412'

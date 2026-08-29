@@ -1,0 +1,144 @@
+name: Compose Desktop CI
+
+on:
+  push:
+    branches: [ 'main' ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ 'main' ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-version:
+    name: Prepare version
+    runs-on: ubuntu-latest
+    outputs:
+      version_code: ${{ steps.version.outputs.version_code }}
+      version_name: ${{ steps.version.outputs.version_name }}
+      channel: ${{ steps.version.outputs.channel }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Resolve version
+        id: version
+        run: |
+          VERSION_CODE="$(git show -s --format=%ct HEAD)"
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            VERSION_NAME="${GITHUB_REF_NAME#v}"
+            CHANNEL="release"
+          else
+            VERSION_NAME="$(awk -F= '/^appVersionName=/{print $2; exit}' gradle.properties)"
+            CHANNEL="pre-release"
+          fi
+          echo "version_code=${VERSION_CODE}" >> "$GITHUB_OUTPUT"
+          echo "version_name=${VERSION_NAME}" >> "$GITHUB_OUTPUT"
+          echo "channel=${CHANNEL}" >> "$GITHUB_OUTPUT"
+
+  build-desktop:
+    name: Build Desktop (${{ matrix.name }})
+    needs: prepare-version
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-latest
+            format: deb
+          - name: macOS
+            os: macos-latest
+            format: dmg
+          - name: Windows
+            os: windows-latest
+            format: msi
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build desktop package
+        run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS -PappVersionCode=${{ needs.prepare-version.outputs.version_code }} -PappVersionName=${{ needs.prepare-version.outputs.version_name }}
+
+      - name: Upload desktop package
+        uses: actions/upload-artifact@v6
+        with:
+          name: desktop-${{ matrix.format }}
+          path: composeApp/build/compose/binaries/main-release/${{ matrix.format }}/*
+          if-no-files-found: error
+
+  publish-desktop:
+    name: Publish Desktop packages
+    needs: [ prepare-version, build-desktop ]
+    if: github.event_name == 'push' && success()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download desktop packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: desktop-*
+          path: desktop-release
+          merge-multiple: true
+
+      - name: Upload packages to rolling pre-release
+        if: needs.prepare-version.outputs.channel == 'pre-release'
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: pre-release
+          name: Pre-release
+          prerelease: true
+          make_latest: false
+          overwrite_files: true
+          body: |
+            自动构建自 [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+
+            - channel：pre-release
+            - versionCode：${{ needs.prepare-version.outputs.version_code }}
+            - versionName：${{ needs.prepare-version.outputs.version_name }}
+
+            ### 本次提交
+            ${{ github.event.head_commit.message }}
+          files: |
+            desktop-release/*.deb
+            desktop-release/*.dmg
+            desktop-release/*.msi
+
+      - name: Upload packages to release
+        if: needs.prepare-version.outputs.channel == 'release'
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ needs.prepare-version.outputs.version_name }}
+          prerelease: false
+          make_latest: true
+          overwrite_files: true
+          body: |
+            正式版本 [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+
+            - versionCode：${{ needs.prepare-version.outputs.version_code }}
+            - versionName：${{ needs.prepare-version.outputs.version_name }}
+
+            ### 本次提交
+            ${{ github.event.head_commit.message }}
+          files: |
+            desktop-release/*.deb
+            desktop-release/*.dmg
+            desktop-release/*.msi
