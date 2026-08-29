@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -16,17 +15,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.app_name
 import com.xiaoyv.bangumi.core_resource.resources.global_search
-import com.xiaoyv.bangumi.core_resource.resources.home_logged_in
 import com.xiaoyv.bangumi.core_resource.resources.ic_logo_riff
 import com.xiaoyv.bangumi.core_resource.resources.update_badge_new
-import com.xiaoyv.bangumi.core_resource.resources.update_open_release
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeState
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeViewModel
@@ -35,8 +32,10 @@ import com.xiaoyv.bangumi.features.main.tab.home.page.HomeIndexScreen
 import com.xiaoyv.bangumi.features.main.tab.home.page.HomeMainScreen
 import com.xiaoyv.bangumi.features.main.tab.home.page.group.HomeGroupScreen
 import com.xiaoyv.bangumi.features.main.tab.home.page.mono.HomeMonoScreen
+import com.xiaoyv.bangumi.shared.core.mvi.PageStatus
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.HomeTab
+import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
@@ -47,6 +46,7 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -89,45 +89,25 @@ private fun HomeScreen(
         topBar = {
             BgmTopAppBar(
                 titleContent = {
-                    Icon(
-                        modifier = Modifier
-                            .height(32.dp)
-                            .aspectRatio(27 / 7f),
-                        painter = painterResource(Res.drawable.ic_logo_riff),
-                        tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = stringResource(Res.string.app_name),
-                    )
-                },
-                actions = {
-                    if (sharedState.isLogin) {
-                        val loggedInText = stringResource(Res.string.home_logged_in)
-                        Text(
-                            modifier = Modifier
-                                .alpha(0f)
-                                .semantics { contentDescription = loggedInText },
-                            text = loggedInText,
-                        )
-                    }
-                    if (sharedState.appRelease != ComposeAppRelease.Empty) {
-                        BadgedBox(
-                            badge = {
-                                Badge {
-                                    Text(text = stringResource(Res.string.update_badge_new))
-                                }
-                            }
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    actionHandler.openInBrowser(sharedState.appRelease.htmlUrl)
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = BgmIcons.Info,
-                                    contentDescription = stringResource(Res.string.update_open_release),
-                                )
+                    BadgedBox(
+                        badge = {
+                            if (sharedState.appRelease != ComposeAppRelease.Empty) {
+                                Badge { Text(text = stringResource(Res.string.update_badge_new)) }
                             }
                         }
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .clickWithoutRipped { actionHandler.openInBrowser(sharedState.appRelease.htmlUrl) }
+                                .height(32.dp)
+                                .aspectRatio(27 / 7f),
+                            painter = painterResource(Res.drawable.ic_logo_riff),
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = stringResource(Res.string.app_name),
+                        )
                     }
+                },
+                actions = {
                     IconButton(onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
                         Icon(
                             imageVector = BgmIcons.Search,
@@ -171,5 +151,17 @@ private fun HomeScreenContent(
             HomeTab.INDEX -> HomeIndexScreen(state, onUiEvent, onActionEvent)
             HomeTab.BLOG -> HomeBlogScreen(state, onUiEvent, onActionEvent)
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewHomeScreen() {
+    PreviewColumn(modifier = Modifier.fillMaxSize()) {
+        HomeScreen(
+            uiState = UiState(data = HomeState(), status = PageStatus.Idle),
+            onUiEvent = {},
+            onActionEvent = {}
+        )
     }
 }

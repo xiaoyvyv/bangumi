@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.shared.AppVersion
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
+import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
@@ -82,19 +83,14 @@ class SharedViewModel(
     /**
      * 根据当前更新渠道刷新应用发布信息。
      */
-    private suspend fun onRefreshAppRelease() = subIntent {
-        val updateChannel = state.settings.network.updateChannel
-        choreRepository.fetchAppRelease(updateChannel)
-            .onSuccess { release ->
-                if (release.isNewerThan(
-                        channel = updateChannel,
-                        currentVersionCode = AppVersion.versionCode,
-                        currentVersionName = AppVersion.versionName,
-                    )
-                ) {
-                    reduce { state.copy(appRelease = release) }
-                }
+    suspend fun onRefreshAppRelease() = subIntent {
+        choreRepository.fetchAppRelease(state.settings.network.updateChannel).onSuccess { release ->
+            if (release.isNewerThan(currentVersionCode = AppVersion.versionCode)) {
+                reduce { state.copy(appRelease = release) }
+            } else {
+                reduce { state.copy(appRelease = ComposeAppRelease.Empty) }
             }
+        }
     }
 
     /**
