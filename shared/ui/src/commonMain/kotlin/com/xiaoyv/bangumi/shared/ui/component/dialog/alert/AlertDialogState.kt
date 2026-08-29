@@ -24,7 +24,7 @@ fun rememberAlertDialogState(
  */
 @Stable
 class AlertDialogState(val properties: DialogProperties) {
-    internal var showing by mutableStateOf(false)
+    var showing by mutableStateOf(false)
         private set
 
     fun show() {

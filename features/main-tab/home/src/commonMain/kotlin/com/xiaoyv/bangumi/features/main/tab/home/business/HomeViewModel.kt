@@ -20,7 +20,6 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserB
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
-import com.xiaoyv.bangumi.shared.data.repository.IndexRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
@@ -41,7 +40,6 @@ import org.orbitmvi.orbit.syntax.Syntax
 class HomeViewModel(
     private val subjectRepository: SubjectRepository,
     private val cacheRepository: CacheRepository,
-    private val indexRepository: IndexRepository,
     personalStateStore: PersonalStateStore,
 ) : BaseViewModel<HomeState, HomeSideEffect, HomeEvent.Action>() {
 

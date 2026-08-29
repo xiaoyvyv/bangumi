@@ -37,6 +37,7 @@ import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedModelStoreOwner
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedViewModel
+import com.xiaoyv.bangumi.shared.data.manager.shared.SharedEvent
 import com.xiaoyv.bangumi.shared.data.manager.shared.SharedViewModel
 import com.xiaoyv.bangumi.shared.gif.addPlatformGifSupport
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
@@ -49,6 +50,7 @@ import com.xiaoyv.bangumi.shared.ui.component.live2d.LocalLive2DSpeechController
 import com.xiaoyv.bangumi.shared.ui.component.live2d.rememberLive2DSpeechState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.popup.AppUpdatePopup
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.popup.PopupLoadingScreen
@@ -64,6 +66,7 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.dsl.koinConfiguration
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 
 @OptIn(ExperimentalCoilApi::class)
@@ -109,6 +112,14 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
     val sharedViewModel = koinViewModel<SharedViewModel>(viewModelStoreOwner = requireNotNull(sharedViewModelStoreOwner))
     val sharedState by sharedViewModel.collectAsState()
     val personState by personalStateStore.state.collectAsStateWithLifecycle()
+    val appUpdatePopupState = rememberAlertDialogState()
+
+    sharedViewModel.collectSideEffect { event ->
+        when (event) {
+            SharedEvent.OnShowAppUpdate -> appUpdatePopupState.show()
+            is SharedEvent.OnRefresh -> Unit
+        }
+    }
 
     // Live2d Controller
     val live2dSpeechState = rememberLive2DSpeechState()
@@ -125,6 +136,13 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
     ) {
         BgmAppTheme(modifier = Modifier.fillMaxSize()) {
             BgmScreenNavGraph(navigator = navigator)
+
+            // Update
+            AppUpdatePopup(
+                release = sharedState.appRelease,
+                state = appUpdatePopupState,
+                onDownload = { actionHandler.openInBrowser(it.htmlUrl) },
+            )
 
             // Loading
             PopupLoadingScreen(popupLoadingState)
@@ -188,4 +206,3 @@ private fun HandleShareContent(navigator: Navigator) {
         }
     )
 }
-

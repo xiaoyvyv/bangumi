@@ -12,6 +12,7 @@ sealed class HomeEvent {
     sealed class UI : HomeEvent() {
         data object OnNavUp : UI()
         data class OnNavScreen(val screen: Screen) : UI()
+        data object OnShowAppUpdate : UI()
     }
 
     sealed class Action : HomeEvent() {

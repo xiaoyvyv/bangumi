@@ -8,4 +8,6 @@ package com.xiaoyv.bangumi.shared.data.manager.shared
  */
 sealed class SharedEvent {
     data class OnRefresh(val loading: Boolean) : SharedEvent()
+
+    data object OnShowAppUpdate : SharedEvent()
 }
