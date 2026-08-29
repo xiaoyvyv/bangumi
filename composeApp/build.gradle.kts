@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 val appVersionName = providers.gradleProperty("appVersionName").get()
 val desktopPackageVersion = appVersionName
@@ -22,6 +23,12 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
+        iosTarget.binaries.configureEach {
+            if (buildType == NativeBuildType.RELEASE) {
+                freeCompilerArgs += "-Xdisable-phases=DevirtualizationAnalysis"
+            }
+        }
+
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
