@@ -241,15 +241,23 @@ export interface ComposeSectionTitle {
 }
 
 export interface ComposeMono extends Pick<Character, 'id' | 'images' | 'name' | 'nameCN'> {
+	career?: string[];
+	collects?: number;
+	comment?: number;
 	images: Images;
 	infobox?: ComposeInfobox[];
+	lock?: boolean;
+	nsfw?: boolean;
+	redirect?: number;
+	role?: number;
+	summary?: string;
 	type?: MonoType;
 	webInfo?: ComposeMonoWebInfo;
 }
 
 export interface ComposeInfobox {
 	key: string;
-	value: string;
+	value: unknown;
 }
 
 export interface ComposeMonoWebInfo {

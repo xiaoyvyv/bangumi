@@ -1,17 +1,14 @@
 import { selectOne } from 'css-select';
 import { parseDocument } from 'htmlparser2';
 import {
-	bgmImageVariants,
 	elementHref,
-	elementSrc,
 	elementText,
 	firstTextNode,
-	hrefId,
 	hrefLongId,
 	nextElementSibling,
 	selectElements,
-	spanStyleAvatar,
 } from '../config/util';
+import { displayKey, fetchMonoDisplays, MonoReference } from '../core/mono-graphql';
 import { ComposeMonoDisplay, ComposeSection, MonoType } from '../types';
 
 const emptyMonoDisplay: ComposeMonoDisplay = {
@@ -19,37 +16,52 @@ const emptyMonoDisplay: ComposeMonoDisplay = {
 	info: { mono: { id: 0, images: {}, name: '', nameCN: '' } },
 };
 
+interface MonoHomepageEntry {
+	key: string;
+	header?: ComposeSection<ComposeMonoDisplay>['header'];
+	reference?: MonoReference;
+}
+
 export async function transformMonoHomepage(_req: Request, res: Response): Promise<Response> {
-	return Response.json(parseMonoHomepage(await res.text()));
+	try {
+		const entries = parseMonoHomepage(await res.text());
+		const displays = await fetchMonoDisplays(entries.flatMap((entry) => entry.reference ?? []));
+		return Response.json(entries.map((entry) => toSection(entry, displays)));
+	} catch (error) {
+		return graphQlFailure(error);
+	}
 }
 
-export async function transformMonoBrowser(_req: Request, res: Response): Promise<Response> {
-	return Response.json(parseMonoBrowser(await res.text()));
+export function transformMonoBrowser(type: MonoType) {
+	return async (_req: Request, res: Response): Promise<Response> => {
+		try {
+			const references = parseMonoBrowser(await res.text(), type);
+			const displays = await fetchMonoDisplays(references);
+			return Response.json(references.flatMap((reference) => {
+				const display = displays.get(displayKey(reference.type, reference.id));
+				return display ? [display] : [];
+			}));
+		} catch (error) {
+			return graphQlFailure(error);
+		}
+	};
 }
 
-export function parseMonoHomepage(html: string): ComposeSection<ComposeMonoDisplay>[] {
+/** HTML is only used to retain homepage structure and locate the Mono IDs. */
+export function parseMonoHomepage(html: string): MonoHomepageEntry[] {
 	const doc = parseDocument(html);
-	const sections: ComposeSection<ComposeMonoDisplay>[] = [];
-	// The page begins with an empty #main.mainWrapper before the actual columns.
-	// Select the uniquely identified columns from the document rather than the first wrapper.
+	const entries: MonoHomepageEntry[] = [];
 	const columnSubjectBrowserA = selectOne('#columnSubjectBrowserA', doc);
 	for (const section of selectElements('.section', columnSubjectBrowserA)) {
 		const moreLink = selectOne(':scope > a', section);
 		const sectionId = elementHref(moreLink);
-		sections.push(header(sectionId, elementText(selectOne('h2', section)), elementText(moreLink).replace('»', '').trim()));
-
+		entries.push({
+			key: sectionId,
+			header: { id: sectionId, title: elementText(selectOne('h2', section)), subtitle: '', more: elementText(moreLink).replace('»', '').trim() },
+		});
 		for (const item of selectElements('ul > li', section)) {
-			const link = selectOne('a[title]', item);
-			if (!link) continue;
-			const linkHref = elementHref(link);
-			sections.push(monoSection(
-				`${sectionId}-${hrefId(linkHref)}`,
-				linkHref.includes('character') ? MonoType.CHARACTER : MonoType.PERSON,
-				hrefLongId(linkHref),
-				link.attribs.title ?? '',
-				elementText(selectOne('p > small', item)),
-				bgmImageVariants(elementSrc(selectOne('img', item))),
-			));
+			const reference = monoReference(elementHref(selectOne('a[title]', item)));
+			if (reference) entries.push({ key: `${sectionId}-${reference.id}`, reference });
 		}
 	}
 
@@ -58,73 +70,41 @@ export function parseMonoHomepage(html: string): ComposeSection<ComposeMonoDispl
 		const side = nextElementSibling(title);
 		if (!side) continue;
 		const sectionId = elementHref(selectOne('a', title));
-		sections.push(header(`sideInner-${sectionId}`, firstTextNode(title), elementText(selectOne('small', title)), sectionId));
-
+		entries.push({
+			key: `sideInner-${sectionId}`,
+			header: { id: sectionId, title: firstTextNode(title), subtitle: '', more: elementText(selectOne('small', title)) },
+		});
 		for (const item of selectElements('dl', side)) {
-			const link = selectOne('a[title]', item);
-			if (!link) continue;
-			const linkHref = elementHref(link);
-			const name = link.attribs.title ?? '';
-			sections.push(monoSection(
-				`${sectionId}-${hrefId(linkHref)}`,
-				linkHref.includes('character') ? MonoType.CHARACTER : MonoType.PERSON,
-				hrefLongId(linkHref),
-				name,
-				name,
-				bgmImageVariants(spanStyleAvatar(selectOne('.avatar', item))),
-				true,
-			));
+			const reference = monoReference(elementHref(selectOne('a[title]', item)));
+			if (reference) entries.push({ key: `${sectionId}-${reference.id}`, reference });
 		}
 	}
-
-	return sections;
+	return entries;
 }
 
-export function parseMonoBrowser(html: string): ComposeMonoDisplay[] {
+function parseMonoBrowser(html: string, type: MonoType): MonoReference[] {
 	const doc = parseDocument(html);
 	const column = selectOne('#columnCrtBrowserB', doc);
-
-	return selectElements('.browserCrtList > div', column).map((item) => {
-		const type = item.attribs.id?.includes('character') ? MonoType.CHARACTER : MonoType.PERSON;
-		const avatar = selectOne('a.avatar', item);
-		const info = elementText(selectOne('.prsn_info .tip', item));
-		const mono = {
-			id: hrefLongId(elementHref(avatar)),
-			images: bgmImageVariants(elementSrc(selectOne('.avatar > img', item))),
-			name: elementText(selectOne('h3', item)),
-			nameCN: '',
-			infobox: parseMonoInfobox(info),
-			webInfo: { info, shortInfo: info },
-		};
-
-		return { type, info: { mono } };
-	});
+	return selectElements('.browserCrtList > div a.avatar', column)
+		.map((avatar) => hrefLongId(elementHref(avatar)))
+		.filter(Boolean)
+		.map((id) => ({ id, type }));
 }
 
-function header(key: string, title: string, more: string, id = key): ComposeSection<ComposeMonoDisplay> {
-	return { key, header: { id, title, subtitle: '', more }, item: emptyMonoDisplay };
+function monoReference(href: string): MonoReference | null {
+	const id = hrefLongId(href);
+	if (!id) return null;
+	return { id, type: href.includes('/character/') ? MonoType.CHARACTER : MonoType.PERSON };
 }
 
-function monoSection(
-	key: string,
-	type: MonoType,
-	id: number,
-	name: string,
-	nameCN: string,
-	images: ComposeMonoDisplay['info']['mono']['images'],
-	includeMonoType = false,
-	displayType: MonoType = type,
-): ComposeSection<ComposeMonoDisplay> {
-	const mono = { id, images, name, nameCN, ...(includeMonoType ? { type } : {}) };
-	return { key, item: { type: displayType, info: { mono } } };
+function toSection(entry: MonoHomepageEntry, displays: Map<string, ComposeMonoDisplay>): ComposeSection<ComposeMonoDisplay> {
+	return {
+		key: entry.key,
+		...(entry.header ? { header: entry.header, item: emptyMonoDisplay } : { item: displays.get(displayKey(entry.reference!.type, entry.reference!.id)) ?? emptyMonoDisplay }),
+	};
 }
 
-function parseMonoInfobox(info: string) {
-	return info
-		.split(' / ')
-		.map((item) => {
-			const values = item.split(' ');
-			return { key: values[0] ?? '', value: values.at(-1) ?? '' };
-		})
-		.filter((item) => item.key && item.value);
+function graphQlFailure(error: unknown): Response {
+	const message = error instanceof Error ? error.message : 'Mono GraphQL request failed';
+	return Response.json({ message }, { status: 502 });
 }

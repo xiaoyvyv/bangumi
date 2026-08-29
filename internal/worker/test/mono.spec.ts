@@ -10,6 +10,14 @@ import { parseMonoHomepage } from '../src/transforms/mono.transform';
 
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
 
+function mockGraphql(data: Record<string, unknown>, itemId: number) {
+	fetchMock.get('https://api.bgm.tv').intercept({
+		path: '/v0/graphql',
+		method: 'POST',
+		body: (body) => body.includes(`item_${itemId}`),
+	}).reply(200, { data });
+}
+
 describe('mono homepage handler', () => {
 	beforeEach(() => {
 		fetchMock.activate();
@@ -35,6 +43,20 @@ describe('mono homepage handler', () => {
 				</div></div>
 			</div>
 		`);
+		mockGraphql({
+			item_123: {
+				id: 123, name: 'GraphQL 角色名', comment: 932, collects: 20, lock: 0, nsfw: false, redirect: 0, role: 1,
+				images: { grid: 'https://img/123-grid', large: 'https://img/123-large', medium: 'https://img/123-medium', small: 'https://img/123-small' },
+				infobox: [{ key: '简体中文名', values: [{ k: null, v: '角色中文名' }] }], summary: '角色简介',
+			},
+		}, 123);
+		mockGraphql({
+			item_456: {
+				id: 456, name: 'GraphQL 人物名', comment: 12, collects: 34, lock: 0, nsfw: false, redirect: 0, type: 1, career: ['seiyu'],
+				images: { grid: 'https://img/456-grid', large: 'https://img/456-large', medium: 'https://img/456-medium', small: 'https://img/456-small' },
+				infobox: [{ key: '职业', values: [{ k: null, v: '声优' }] }], summary: '人物简介',
+			},
+		}, 456);
 
 		const request = new IncomingRequest('http://example.com/p1/mono/home');
 		const ctx = createExecutionContext();
@@ -52,7 +74,7 @@ describe('mono homepage handler', () => {
 				key: '/character-123',
 				item: expect.objectContaining({
 					type: 2,
-					info: { mono: expect.objectContaining({ id: 123, name: '角色名', nameCN: '角色中文名' }) },
+					info: { mono: expect.objectContaining({ id: 123, name: 'GraphQL 角色名', nameCN: '角色中文名', comment: 932, summary: '角色简介' }) },
 				}),
 			}),
 			expect.objectContaining({
@@ -63,7 +85,7 @@ describe('mono homepage handler', () => {
 				key: '/person-456',
 				item: expect.objectContaining({
 					type: 1,
-					info: { mono: expect.objectContaining({ id: 456, name: '人物名', nameCN: '人物名', type: 1 }) },
+					info: { mono: expect.objectContaining({ id: 456, name: 'GraphQL 人物名', nameCN: '', type: 1, career: ['seiyu'] }) },
 				}),
 			}),
 		]);
@@ -86,7 +108,7 @@ describe('mono homepage handler', () => {
 	it('parses character and person browser pages while forwarding supported filters', async () => {
 		fetchMock.get('https://bgm.tv').intercept({ path: '/character?page=2&type=anime&gender=female' }).reply(200, `
 			<div id="columnCrtBrowserB"><div class="browserCrtList">
-				<div id="item_character123"><a class="avatar" href="/character/123"><img src="//lain.bgm.tv/pic/crt/m/a/b/123_crt.jpg"></a><h3>角色名</h3><div class="prsn_info"><span class="tip">性别 女 / 血型 A</span></div></div>
+				<div id="item_character123"><a class="avatar" href="/character/123"><img src="//lain.bgm.tv/pic/crt/m/a/b/123_crt.jpg"></a><h3>角色名</h3><div class="rr"><small class="na">(+932)</small></div><div class="prsn_info"><span class="tip">性别 女 / 血型 A</span></div></div>
 			</div></div>
 		`);
 		fetchMock.get('https://bgm.tv').intercept({ path: '/person?page=3&orderby=collects' }).reply(200, `
@@ -94,6 +116,18 @@ describe('mono homepage handler', () => {
 				<div id="item_person456"><a class="avatar" href="/person/456"><img src="//lain.bgm.tv/pic/crt/m/a/b/456_prsn.jpg"></a><h3>人物名</h3><div class="prsn_info"><span class="tip">职业 声优</span></div></div>
 			</div></div>
 		`);
+		mockGraphql({
+			item_123: {
+				id: 123, name: 'GraphQL 角色', comment: 932, collects: 1, lock: 0, nsfw: false, redirect: 0, role: 2,
+				images: null, infobox: [], summary: '角色 GraphQL 简介',
+			},
+		}, 123);
+		mockGraphql({
+			item_456: {
+				id: 456, name: 'GraphQL 人物', comment: 4, collects: 2, lock: 0, nsfw: false, redirect: 0, type: 1, career: ['artist'],
+				images: null, infobox: [], summary: '人物 GraphQL 简介',
+			},
+		}, 456);
 
 		const characterCtx = createExecutionContext();
 		const characterResponse = await worker.fetch(
@@ -114,13 +148,13 @@ describe('mono homepage handler', () => {
 		expect(await characterResponse.json()).toEqual([
 			expect.objectContaining({
 				type: 2,
-				info: { mono: expect.objectContaining({ id: 123, name: '角色名', nameCN: '' }) },
+				info: { mono: expect.objectContaining({ id: 123, name: 'GraphQL 角色', nameCN: '', comment: 932, summary: '角色 GraphQL 简介' }) },
 			}),
 		]);
 		expect(await personResponse.json()).toEqual([
 			expect.objectContaining({
 				type: 1,
-				info: { mono: expect.objectContaining({ id: 456, name: '人物名', nameCN: '' }) },
+				info: { mono: expect.objectContaining({ id: 456, name: 'GraphQL 人物', nameCN: '', career: ['artist'] }) },
 			}),
 		]);
 	});

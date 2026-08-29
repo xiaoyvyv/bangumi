@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.types.MonoOrderByType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
-import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import io.ktor.http.parseUrlEncodedParameters
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,8 +17,6 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Serializable
 data class MonoBrowserBody(
-    @SerialName("ui") val ui: PageUI = PageUI(),
-
     /**
      * 列表条目请求数据类型
      */

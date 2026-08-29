@@ -195,14 +195,13 @@ fun MonoCardItemPerson(
                 maxLines = 1,
             )
 
-
             Text(
-                text = remember(item.mono) {
+                text = let {
                     val texts = mutableListOf<String>()
                     if (item.mono.type != PersonType.MAIN && item.mono.type != PersonType.UNKNOWN) {
                         texts.add(PersonType.string(item.mono.type))
                     }
-                    texts.addAll(item.mono.displayCareer)
+                    texts.addAll(item.mono.displayCareer.map { stringResource(it) })
                     texts.joinToString(" · ").ifBlank { item.mono.name }
                 },
                 maxLines = 1,

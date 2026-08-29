@@ -22,6 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.mono_birth_month
+import com.xiaoyv.bangumi.core_resource.resources.mono_blood_type
+import com.xiaoyv.bangumi.core_resource.resources.mono_gender
+import com.xiaoyv.bangumi.core_resource.resources.mono_sort
+import com.xiaoyv.bangumi.core_resource.resources.mono_type
 import com.xiaoyv.bangumi.features.mono.browser.business.MonoBrowserEvent
 import com.xiaoyv.bangumi.features.mono.browser.business.MonoBrowserState
 import com.xiaoyv.bangumi.features.mono.browser.business.MonoBrowserViewModel
@@ -30,18 +36,13 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
+import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
-import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.mono_birth_month
-import com.xiaoyv.bangumi.core_resource.resources.mono_blood_type
-import com.xiaoyv.bangumi.core_resource.resources.mono_gender
-import com.xiaoyv.bangumi.core_resource.resources.mono_sort
-import com.xiaoyv.bangumi.core_resource.resources.mono_type
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -94,6 +95,7 @@ private fun MonoBrowserScreen(
             MonoPageRoute(
                 param = remember(state.param) {
                     ListMonoParam(
+                        ui = PageUI(gridLayout = true),
                         type = ListMonoType.BROWSER,
                         browser = state.param,
                     )

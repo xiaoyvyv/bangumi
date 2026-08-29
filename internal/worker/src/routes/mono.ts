@@ -1,6 +1,7 @@
 import { UPSTREAM } from '../config';
 import { proxy } from '../core/proxy';
 import { transformMonoBrowser, transformMonoHomepage } from '../transforms/mono.transform';
+import { MonoType } from '../types';
 
 type MonoRouteHandler = (req: Request, ctx?: ExecutionContext) => Promise<Response>;
 
@@ -39,5 +40,6 @@ async function handleMonoBrowser(req: Request, type: 'character' | 'person'): Pr
 	}
 	const suffix = query.size ? `?${query}` : '';
 
-	return proxy(req, `${UPSTREAM.WEB_API}/${type}${suffix}`, { transform: transformMonoBrowser }, true);
+	const monoType = type === 'character' ? MonoType.CHARACTER : MonoType.PERSON;
+	return proxy(req, `${UPSTREAM.WEB_API}/${type}${suffix}`, { transform: transformMonoBrowser(monoType) }, true);
 }

@@ -1,8 +1,10 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_unknown
+import com.xiaoyv.bangumi.shared.core.types.CareerType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
-import com.xiaoyv.bangumi.shared.core.types.PersonCareerType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
@@ -64,7 +66,7 @@ data class ComposeMono(
      * 职业
      */
     val displayCareer = career
-        .mapNotNull { PersonCareerType.string(it).takeIf { it.isNotBlank() } }
+        .mapNotNull { CareerType.string(it).takeIf { resource -> resource != Res.string.global_unknown } }
         .toImmutableList()
 
     fun shareUrl(@MonoType type: Int): String {

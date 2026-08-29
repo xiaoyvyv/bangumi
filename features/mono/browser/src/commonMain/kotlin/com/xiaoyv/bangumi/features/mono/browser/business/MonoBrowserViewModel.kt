@@ -38,7 +38,6 @@ import com.xiaoyv.bangumi.shared.core.types.MonoOrderByType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
-import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
@@ -147,7 +146,6 @@ class MonoBrowserViewModel(
 
     private fun initParam(): MonoBrowserBody {
         return args.param.copy(
-            ui = PageUI(gridLayout = false),
             orderBy = args.param.orderBy.ifBlank { MonoOrderByType.TYPE_DATELINE }
         )
     }
