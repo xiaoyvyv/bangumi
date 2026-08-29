@@ -44,7 +44,7 @@ jobs:
     name: Build iOS IPA
     needs: prepare-version
     runs-on: macos-15-intel
-    timeout-minutes: 45
+    timeout-minutes: 50
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
