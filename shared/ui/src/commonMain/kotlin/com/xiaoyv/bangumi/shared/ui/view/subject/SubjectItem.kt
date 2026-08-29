@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,6 +57,7 @@ import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -173,15 +172,12 @@ fun SubjectLineItem(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         SubjectInfoCover(
-            modifier = Modifier
-                .height(120.dp)
-                .aspectRatio(3 / 4f),
-            subject = display.subject,
+            subject = display.subject
         )
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
         ) {
             Text(
                 text = display.subject.displayName,
@@ -207,7 +203,10 @@ fun SubjectLineItem(
                 }
                 // 其次展示全站评分
                 display.subject.rating.score > 0 -> {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    FlowRow(
+                        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2, Alignment.CenterVertically),
+                        itemVerticalAlignment = Alignment.CenterVertically
+                    ) {
                         RatingBar(
                             value = display.subject.rating.score,
                             starSize = 20.dp
@@ -356,7 +355,7 @@ fun SubjectWorkItem(
             horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             InfoImage(
-                modifier = Modifier.width(80.dp),
+                modifier = Modifier.width(ContentCoverWidth),
                 model = display.subject.images.displayMediumImage,
                 text = stringResource(SubjectType.string(display.subject.type)),
                 textStyle = MaterialTheme.typography.bodySmall,
@@ -415,7 +414,7 @@ fun SubjectInfoCover(
 ) {
     Box(modifier = modifier.noNull(onClick) { clickable(onClick = it) }) {
         InfoImage(
-            modifier = Modifier.matchParentSize(),
+            modifier = Modifier.width(ContentCoverWidth),
             model = subject.images.displayMediumImage,
             shape = MaterialTheme.shapes.small,
             text = subject.airtime.date

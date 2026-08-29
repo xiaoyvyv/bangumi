@@ -24,6 +24,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 internal const val CONTENT_TYPE_TIMELINE_SUBJECT = "CONTENT_TYPE_TIMELINE_SUBJECT"
@@ -64,7 +65,7 @@ internal fun TimelinePageItemSubject(
                         contentType = { CONTENT_TYPE_TIMELINE_SUBJECT }
                     ) { entry ->
                         InfoImage(
-                            modifier = Modifier.width(85.dp),
+                            modifier = Modifier.width(ContentCoverWidth),
                             model = entry.subject.images.displayMediumImage,
                             text = entry.subject.displayName,
                             textPadding = 4.dp,
@@ -97,7 +98,7 @@ internal fun TimelinePageItemSubjectItem(
             horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             InfoImage(
-                modifier = Modifier.width(65.dp),
+                modifier = Modifier.width(ContentCoverWidth),
                 model = subject.images.displayMediumImage,
                 onClick = { onClick(subject) }
             )

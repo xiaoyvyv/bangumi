@@ -32,6 +32,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.tag.TagItem
@@ -42,6 +43,7 @@ import org.jetbrains.compose.resources.stringResource
 fun MonoLineItemPerson(
     display: ComposeMonoDisplay,
     modifier: Modifier = Modifier,
+    showDivider: Boolean = true,
     onClick: (Long, Int) -> Unit = { _, _ -> },
 ) {
     val item = display.info
@@ -54,7 +56,7 @@ fun MonoLineItemPerson(
         InfoImage(
             modifier = Modifier
                 .padding(ContentMargin)
-                .width(100.dp),
+                .width(ContentCoverWidth),
             model = item.mono.images.displayMediumImage,
             onClick = { onClick(item.mono.id, MonoType.PERSON) }
         )
@@ -137,7 +139,7 @@ fun MonoLineItemPerson(
             }
         }
     }
-    BgmHorizontalDivider()
+    if (showDivider) BgmHorizontalDivider()
 }
 
 

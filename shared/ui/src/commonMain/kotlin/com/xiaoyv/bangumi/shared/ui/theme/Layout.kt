@@ -16,30 +16,45 @@ import androidx.window.core.layout.WindowSizeClass
 internal data class ContentMargins(
     val full: Dp,
     val half: Dp,
+    val coverWidth: Dp
 )
 
 internal val LocalContentMargins = compositionLocalOf {
-    ContentMargins(full = 16.dp, half = 8.dp)
+    ContentMargins(
+        full = 16.dp,
+        half = 8.dp,
+        coverWidth = 85.dp,
+    )
 }
 
 @Composable
 internal fun rememberContentMargins(): ContentMargins {
     val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
-    val full = when {
-        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> 24.dp
-        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> 20.dp
-        else -> 16.dp
+
+    return remember(windowSizeClass) {
+        when {
+            windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) -> ContentMargins(full = 24.dp, half = 12.dp, 110.dp)
+            windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) -> ContentMargins(full = 20.dp, half = 10.dp, 100.dp)
+            else -> ContentMargins(full = 16.dp, half = 8.dp, 90.dp)
+        }
     }
-    return remember(full) { ContentMargins(full = full, half = full / 2) }
 }
 
 val ContentMargin: Dp
-    @Composable
+    @Composable @ReadOnlyComposable
     get() = LocalContentMargins.current.full
 
 val ContentMarginHalf: Dp
-    @Composable
+    @Composable @ReadOnlyComposable
     get() = LocalContentMargins.current.half
+
+val ContentMarginGrid: Dp
+    @Composable @ReadOnlyComposable
+    get() = LocalContentMargins.current.half + LocalContentMargins.current.half / 2
+
+val ContentCoverWidth: Dp
+    @Composable @ReadOnlyComposable
+    get() = LocalContentMargins.current.coverWidth
 
 val MinTabWidth: Dp
     @Composable

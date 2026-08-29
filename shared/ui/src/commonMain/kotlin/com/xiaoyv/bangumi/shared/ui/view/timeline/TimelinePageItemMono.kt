@@ -15,6 +15,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 internal const val CONTENT_TYPE_TIMELINE_MONO = "CONTENT_TYPE_TIMELINE_MONO"
@@ -35,7 +36,7 @@ internal fun TimelinePageItemMono(
                     contentType = { CONTENT_TYPE_TIMELINE_MONO }
                 ) { mono ->
                     InfoImage(
-                        modifier = Modifier.width(85.dp),
+                        modifier = Modifier.width(ContentCoverWidth),
                         model = mono.images.displayMediumImage,
                         text = mono.displayName,
                         textPadding = 4.dp,
@@ -51,7 +52,7 @@ internal fun TimelinePageItemMono(
                     contentType = { CONTENT_TYPE_TIMELINE_MONO }
                 ) { mono ->
                     InfoImage(
-                        modifier = Modifier.width(85.dp),
+                        modifier = Modifier.width(ContentCoverWidth),
                         model = mono.images.displayMediumImage,
                         text = mono.displayName,
                         textPadding = 4.dp,

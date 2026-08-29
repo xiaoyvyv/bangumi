@@ -30,15 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
 import com.xiaoyv.bangumi.core_resource.resources.global_bookmark
+import com.xiaoyv.bangumi.core_resource.resources.global_loading
 import com.xiaoyv.bangumi.core_resource.resources.index_detail_collect_suffix
 import com.xiaoyv.bangumi.core_resource.resources.index_detail_created_label
 import com.xiaoyv.bangumi.core_resource.resources.index_detail_fav_suffix
@@ -52,6 +50,7 @@ import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -140,13 +139,13 @@ private fun IndexDetailScreen(
                     actionIconContentColor = iconColor.copy(alpha = 0.75f)
                 ),
                 actions = {
-                    uiState.data.run {
+                    if (uiState.data.index != ComposeIndex.Empty) {
                         val actionHandler = LocalActionHandler.current
                         IconButton(onClick = { onActionEvent(IndexDetailEvent.Action.OnToggleBookmarkIndex) }) {
                             Icon(
-                                imageVector = if (index.isBookmarked) BgmIcons.BookmarkAdded else BgmIcons.BookmarkAdd,
+                                imageVector = if (uiState.data.index.isBookmarked) BgmIcons.BookmarkAdded else BgmIcons.BookmarkAdd,
                                 contentDescription = stringResource(Res.string.global_bookmark),
-                                tint = if (index.isBookmarked) StarColor else LocalContentColor.current
+                                tint = if (uiState.data.index.isBookmarked) StarColor else LocalContentColor.current
                             )
                         }
 
@@ -158,9 +157,9 @@ private fun IndexDetailScreen(
                             }
                         ) { item ->
                             when (item.type) {
-                                ButtonType.Share -> actionHandler.shareContent(index.shareUrl)
-                                ButtonType.OpenInBrowser -> actionHandler.openInBrowser(index.shareUrl)
-                                ButtonType.CopyLink -> actionHandler.copyContent(index.shareUrl)
+                                ButtonType.Share -> actionHandler.shareContent(uiState.data.index.shareUrl)
+                                ButtonType.OpenInBrowser -> actionHandler.openInBrowser(uiState.data.index.shareUrl)
+                                ButtonType.CopyLink -> actionHandler.copyContent(uiState.data.index.shareUrl)
                                 else -> Unit
                             }
                         }
@@ -170,15 +169,13 @@ private fun IndexDetailScreen(
             )
         },
         collapse = {
-            uiState.data.run {
-                IndexDetailScreenHeader(
-                    state = this,
-                    padding = it,
-                    imageColorState = imageColorState,
-                    onUiEvent = onUiEvent,
-                    onActionEvent = onActionEvent
-                )
-            }
+            IndexDetailScreenHeader(
+                state = uiState.data,
+                padding = it,
+                imageColorState = imageColorState,
+                onUiEvent = onUiEvent,
+                onActionEvent = onActionEvent
+            )
         }
     ) { _ ->
         StateLayout(
@@ -219,9 +216,8 @@ private fun IndexDetailScreenHeader(
                     )
                 )
         )
-        CompositionLocalProvider(
-            LocalContentColor provides imageColorState.contentColor
-        ) {
+
+        CompositionLocalProvider(LocalContentColor provides imageColorState.contentColor) {
             ListItem(
                 modifier = Modifier
                     .padding(padding)
@@ -243,7 +239,7 @@ private fun IndexDetailScreenHeader(
                 },
                 headlineContent = {
                     Text(
-                        text = state.index.title,
+                        text = if (state.index == ComposeIndex.Empty) stringResource(Res.string.global_loading) else state.index.title,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -252,22 +248,17 @@ private fun IndexDetailScreenHeader(
                     Column {
                         Text(
                             modifier = Modifier.padding(vertical = ContentMarginHalf),
-                            text = buildString {
-                                append(state.index.total)
-                                append(stringResource(Res.string.index_detail_collect_suffix))
-                                append(state.index.collects)
-                                append(stringResource(Res.string.index_detail_fav_suffix))
+                            text = if (state.index == ComposeIndex.Empty) "\u3000" else buildString {
+                                append(stringResource(Res.string.index_detail_collect_suffix, state.index.total))
+                                append("\u3000")
+                                append(stringResource(Res.string.index_detail_fav_suffix, state.index.collects))
                             }
                         )
                         Text(
-                            text = buildAnnotatedString {
-                                withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = LocalContentColor.current)) {
-                                    append(state.index.creator.nickname)
-                                }
-                                append(stringResource(Res.string.index_detail_created_label))
-                                append(state.index.createdAt.formatDate("yyyy-MM-dd"))
-                                append(stringResource(Res.string.index_detail_updated_label))
-                                append(state.index.updatedAt.formatDate("yyyy-MM-dd"))
+                            text = if (state.index == ComposeIndex.Empty) "\u3000" else buildString {
+                                append(stringResource(Res.string.index_detail_created_label, state.index.createdAt.formatDate("yyyy-MM-dd")))
+                                append("\u3000")
+                                append(stringResource(Res.string.index_detail_updated_label, state.index.updatedAt.formatDate("yyyy-MM-dd")))
                             }
                         )
                     }

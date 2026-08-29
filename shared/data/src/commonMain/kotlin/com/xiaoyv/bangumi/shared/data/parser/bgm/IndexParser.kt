@@ -65,7 +65,7 @@ class IndexParser(
                     nickname = nickname,
                     username = username
                 ),
-                category = webStateMap.toImmutableMap()
+//                category = webStateMap.toImmutableMap()
             )
         }
     }
@@ -125,12 +125,12 @@ class IndexParser(
                 username = username
             ),
             total = collectCount,
-            category = cats,
-            subjects = subjects.toPersistentList(),
-            eps = eps.toPersistentList(),
-            blogs = blogs.toPersistentList(),
-            monos = monos.toPersistentList(),
-            topics = topics.toPersistentList(),
+//            category = cats,
+//            subjects = subjects.toPersistentList(),
+//            eps = eps.toPersistentList(),
+//            blogs = blogs.toPersistentList(),
+//            monos = monos.toPersistentList(),
+//            topics = topics.toPersistentList(),
         )
     }
 }

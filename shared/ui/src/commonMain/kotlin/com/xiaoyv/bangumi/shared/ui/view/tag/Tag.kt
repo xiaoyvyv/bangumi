@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.ui.view.tag
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.ui.theme.BorderStrokeVariant
 
 @Composable
 fun TagItems(
@@ -47,7 +47,7 @@ fun TagItem(
     Text(
         modifier = Modifier
             .clip(shape)
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant), shape)
+            .border(BorderStrokeVariant, shape)
             .clickable(onClick = { onClick(tag) })
             .padding(contentPadding),
         text = tag,

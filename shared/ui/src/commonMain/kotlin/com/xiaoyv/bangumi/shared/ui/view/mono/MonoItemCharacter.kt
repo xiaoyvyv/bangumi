@@ -37,6 +37,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.tag.TagItem
@@ -47,6 +48,7 @@ import org.jetbrains.compose.resources.stringResource
 fun MonoLineItemCharacter(
     display: ComposeMonoDisplay,
     modifier: Modifier = Modifier,
+    showDivider: Boolean = true,
     onClick: (Long, Int) -> Unit = { _, _ -> },
 ) {
     val item = display.info
@@ -60,7 +62,7 @@ fun MonoLineItemCharacter(
         InfoImage(
             modifier = Modifier
                 .padding(ContentMargin)
-                .width(100.dp),
+                .width(ContentCoverWidth),
             model = item.mono.images.displayMediumImage,
             text = MonoCastType.string(item.type),
             onClick = { onClick(item.mono.id, MonoType.CHARACTER) }
@@ -160,7 +162,7 @@ fun MonoLineItemCharacter(
             }
         }
     }
-    BgmHorizontalDivider()
+    if (showDivider) BgmHorizontalDivider()
 }
 
 

@@ -46,6 +46,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -333,7 +334,7 @@ private fun MonoDetailCollabPreviewItem(
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         InfoImage(
-            modifier = Modifier.width(60.dp),
+            modifier = Modifier.width(ContentCoverWidth),
             model = collab.images.displayMediumImage,
             onClick = onClick,
         )

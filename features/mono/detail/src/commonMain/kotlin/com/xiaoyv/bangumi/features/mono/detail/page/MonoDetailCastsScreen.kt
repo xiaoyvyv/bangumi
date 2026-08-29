@@ -38,6 +38,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
@@ -137,7 +138,7 @@ private fun MonoCharacterCastItem(
         ) {
             // 角色出演
             InfoImage(
-                modifier = Modifier.width(60.dp),
+                modifier = Modifier.width(ContentCoverWidth),
                 model = item.subject.images.displayMediumImage,
                 text = stringResource(SubjectType.string(item.subject.type)),
                 textStyle = MaterialTheme.typography.bodySmall,
@@ -193,7 +194,7 @@ private fun MonoCharacterCastItem(
                         )
                     }
                     InfoImage(
-                        modifier = Modifier.width(60.dp),
+                        modifier = Modifier.width(ContentCoverWidth),
                         model = cast.person.images.displayMediumImage,
                         onClick = {
                             onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.MonoDetail(cast.person.id, MonoType.PERSON)))
@@ -223,7 +224,7 @@ private fun MonoPersonCastItem(
         ) {
             // 人物出演
             InfoImage(
-                modifier = Modifier.width(60.dp),
+                modifier = Modifier.width(ContentCoverWidth),
                 model = item.mono.images.displayMediumImage,
                 text = item.mono.name,
                 textStyle = MaterialTheme.typography.bodySmall,
@@ -279,7 +280,7 @@ private fun MonoPersonCastItem(
                         )
                     }
                     InfoImage(
-                        modifier = Modifier.width(60.dp),
+                        modifier = Modifier.width(ContentCoverWidth),
                         model = it.subject.images.displayMediumImage,
                         onClick = {
                             onUiEvent(MonoDetailEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id)))

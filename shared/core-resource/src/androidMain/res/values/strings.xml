@@ -1005,11 +1005,12 @@
     <string name="group_created_at_prefix">成立于 </string>
 
     <!-- 目录相关 -->
-    <string name="index_detail_collect_suffix">个收录 </string>
-    <string name="index_detail_fav_suffix">人收藏</string>
-    <string name="index_detail_created_label"> 创建 </string>
-    <string name="index_detail_updated_label"> 更新 </string>
+    <string name="index_detail_collect_suffix">%1$d个收录</string>
+    <string name="index_detail_fav_suffix">%1$d人收藏</string>
+    <string name="index_detail_created_label">创建于%1$s</string>
+    <string name="index_detail_updated_label">更新于%1$s</string>
     <string name="index_collect_to_my_catalog">收集至我的目录</string>
+    <string name="index_related_comment">目录备注</string>
 
     <!-- 首页模块 -->
     <string name="home_logged_in">已登录</string>

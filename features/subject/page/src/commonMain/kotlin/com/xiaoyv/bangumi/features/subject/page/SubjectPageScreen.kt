@@ -33,6 +33,8 @@ import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginGrid
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectLineItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -128,9 +130,9 @@ private fun SubjectPageScreenContent(
                 }
             },
             showScrollUpBtn = true,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            contentPadding = PaddingValues(ContentMarginGrid)
         ) { item, _ ->
             SubjectCardItem(
                 modifier = Modifier.fillMaxWidth(),

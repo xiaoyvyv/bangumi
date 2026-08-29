@@ -55,6 +55,7 @@ import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.text.textFieldTransparentColors
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.BorderStrokeVariant
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -200,7 +201,7 @@ private fun ReportScreenContent(
                         border = if (isSelected) {
                             BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                         } else {
-                            BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                            BorderStrokeVariant
                         }
                     )
                 }

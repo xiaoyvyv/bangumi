@@ -53,6 +53,7 @@ import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.text.textFieldTransparentColors
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginGrid
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -137,8 +138,8 @@ private fun MessageChatScreenContent(
                 .fillMaxWidth()
                 .weight(1f),
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(12.dp)
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            contentPadding = PaddingValues(ContentMarginGrid)
         ) {
             item {
                 OutlinedCard(modifier = Modifier.fillMaxWidth()) {

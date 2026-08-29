@@ -274,8 +274,10 @@ sealed class Screen(
     data class MonoDetail(val id: Long, @field:MonoType val type: Int) : Screen(SCREEN_ROUTE_MONO)
 
     @Serializable
-    data class MonoBrowser(@field:MonoType val type: Int, val param: MonoBrowserBody = MonoBrowserBody.Empty) :
-        Screen(SCREEN_ROUTE_MONO_BROWSER)
+    data class MonoBrowser(
+        @field:MonoType val type: Int,
+        val param: MonoBrowserBody = MonoBrowserBody.Empty
+    ) : Screen(SCREEN_ROUTE_MONO_BROWSER)
 
     @Serializable
     data class Web(val url: String) : Screen(SCREEN_ROUTE_WEB)

@@ -200,7 +200,7 @@ private fun MonoBrowserChipGroup(
         }
         items(items) {
             FilterChip(
-                modifier = Modifier.padding(start = 4.dp, end = 12.dp),
+                modifier = Modifier.padding(start = ContentMarginHalf / 2, end = ContentMarginHalf),
                 selected = current == it.type,
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -211,7 +211,7 @@ private fun MonoBrowserChipGroup(
                 label = {
                     Text(
                         text = it.displayText(),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 },
                 onClick = { onClick(it) }

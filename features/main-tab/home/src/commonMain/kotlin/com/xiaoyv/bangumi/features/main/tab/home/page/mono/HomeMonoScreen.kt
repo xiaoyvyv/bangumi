@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
+import com.xiaoyv.bangumi.shared.core.types.MonoOrderByType
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
@@ -70,7 +71,7 @@ private fun HomeMonoScreenContent(
         state = rememberCacheWindowLazyGridState(),
         columns = gridCells,
         contentPadding = PaddingValues(horizontal = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         items(
@@ -102,8 +103,11 @@ private fun HomeMonoScreenSection(
             text = item.header.title,
             action = item.header.more,
             onClick = {
-                val jumpUrl = WebConstant.URL_BASE_WEB.trim('/') + item.header.id
-                val param = MonoBrowserBody.fromUri(jumpUrl)
+                // 解析板块跳转链接，跳转人物浏览页面，默认按照收藏排序
+                val jumpUrl = WebConstant.URL_BASE_WEB + item.header.id.trimStart('/')
+                val param = MonoBrowserBody.fromUri(jumpUrl).let {
+                    it.copy(orderBy = it.orderBy.ifBlank { MonoOrderByType.TYPE_COLLECT })
+                }
                 onUiEvent(HomeEvent.UI.OnNavScreen(Screen.MonoBrowser(param.monoType, param)))
             }
         )

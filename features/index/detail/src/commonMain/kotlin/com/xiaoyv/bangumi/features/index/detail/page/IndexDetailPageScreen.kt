@@ -1,19 +1,12 @@
 package com.xiaoyv.bangumi.features.index.detail.page
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.shared.core.types.IndexCatType
@@ -30,14 +23,22 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginGrid
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodeItem
+import com.xiaoyv.bangumi.shared.ui.view.index.IndexRelatedItem
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoLineItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectBlogItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectLineItem
 import com.xiaoyv.bangumi.shared.ui.view.topic.TopicPageItem
 
+/**
+ * Renders one tab of an index detail page as a paged collection of related entries.
+ *
+ * @param param The query parameters for the selected index tab.
+ * @param onNavScreen Handles navigation initiated by a collected entry.
+ */
 @Composable
 fun IndexDetailPageScreen(
     param: ListIndexRelatedParam,
@@ -59,30 +60,34 @@ private fun IndexDetailPageScreenContent(
         pagingItems = pagingItems,
         key = { item, _ -> item.id },
         contentType = { pagingItems.peek(it)?.cat },
+        contentPadding = PaddingValues(ContentMarginGrid),
+        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) { item, _ ->
-        Column(modifier = Modifier.fillMaxWidth()) {
-            IndexDetailPageRelatedContent(item, onNavScreen)
-
-            if (item.comment.isNotBlank()) {
-                OutlinedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = ContentMargin)
-                        .padding(vertical = ContentMarginHalf),
-                    shape = MaterialTheme.shapes.small
-                ) {
-                    Text(
-                        text = item.comment,
-                        modifier = Modifier.padding(12.dp)
-                    )
-                }
-            }
-        }
+        IndexPageItem(item, onNavScreen)
     }
 }
 
 @Composable
-fun IndexDetailPageRelatedContent(
+private fun IndexPageItem(
+    item: ComposeIndexRelated,
+    onNavScreen: (Screen) -> Unit
+) {
+    IndexRelatedItem(comment = item.comment) {
+        IndexPageItemContent(item, onNavScreen)
+    }
+}
+
+/**
+ * Renders the type-specific content of an index entry.
+ *
+ * Navigation remains owned by the feature while the surrounding shared component provides the
+ * consistent index-entry visual treatment.
+ *
+ * @param item The collected entry to display.
+ * @param onNavScreen Handles navigation initiated by the entry.
+ */
+@Composable
+fun IndexPageItemContent(
     item: ComposeIndexRelated,
     onNavScreen: (Screen) -> Unit,
 ) {
@@ -91,7 +96,7 @@ fun IndexDetailPageRelatedContent(
             SubjectLineItem(
                 modifier = Modifier.fillMaxWidth(),
                 display = ComposeSubjectRelation(subject = item.subject),
-                contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
+                contentPadding = PaddingValues(ContentMargin),
                 onClick = {
                     onNavScreen(Screen.SubjectDetail(item.subject.id))
                 }
@@ -105,6 +110,7 @@ fun IndexDetailPageRelatedContent(
                     type = MonoType.CHARACTER,
                     info = ComposeMonoInfo(mono = item.character)
                 ),
+                showDivider = false,
                 onClick = { id, type ->
                     onNavScreen(Screen.MonoDetail(id, type))
                 }
@@ -118,6 +124,7 @@ fun IndexDetailPageRelatedContent(
                     type = MonoType.PERSON,
                     info = ComposeMonoInfo(mono = item.person)
                 ),
+                showDivider = false,
                 onClick = { id, type ->
                     onNavScreen(Screen.MonoDetail(id, type))
                 }
@@ -129,7 +136,7 @@ fun IndexDetailPageRelatedContent(
                 modifier = Modifier.fillMaxWidth(),
                 subjectType = item.type,
                 item = item.episode,
-                contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
+                contentPadding = PaddingValues(ContentMargin),
                 onClick = {
                     onNavScreen(Screen.TopicDetail(item.episode.id, TopicType.TYPE_EP))
                 }
@@ -173,20 +180,6 @@ fun IndexDetailPageRelatedContent(
         }
     }
 }
-
-@Composable
-private fun CardContainer(
-    contentPadding: PaddingValues = PaddingValues(12.dp),
-    content: @Composable BoxScope.() -> Unit,
-) {
-    OutlinedCard(modifier = Modifier.fillMaxWidth()) {
-        Box(
-            modifier = Modifier.padding(contentPadding),
-            content = content
-        )
-    }
-}
-
 
 @Composable
 @Preview

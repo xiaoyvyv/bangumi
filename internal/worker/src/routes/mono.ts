@@ -25,7 +25,7 @@ async function handleMonoHome(req: Request, ctx?: ExecutionContext): Promise<Res
 	return proxy(
 		req,
 		`${UPSTREAM.WEB_API}/mono`,
-		{ transform: transformMonoHomepage, cache: { ttl: 60 * 60 } },
+		{ transform: transformMonoHomepage, cache: { ttl: 1 * 60 } },
 		true,
 		ctx,
 	);

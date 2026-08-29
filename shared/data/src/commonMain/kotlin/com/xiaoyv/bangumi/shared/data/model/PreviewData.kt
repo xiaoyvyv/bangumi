@@ -53,6 +53,7 @@ val PreviewComposeReply = ComposeReply(
 val PreviewComposeIndexRelated = ComposeIndexRelated(
     id = 1111,
     cat = IndexCatType.SUBJECT,
+    comment = "这是一条目录备注，用于说明为什么把这个条目收录在这里。",
     subject = PreviewComposeSubject
 )
 

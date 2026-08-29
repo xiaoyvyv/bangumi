@@ -34,6 +34,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -57,7 +58,7 @@ fun SubjectBlogItem(
             horizontalArrangement = Arrangement.spacedBy(ContentMargin)
         ) {
             InfoImage(
-                modifier = Modifier.width(80.dp),
+                modifier = Modifier.width(ContentCoverWidth),
                 model = item.blog.icon,
                 shape = MaterialTheme.shapes.medium,
                 onClick = onClick

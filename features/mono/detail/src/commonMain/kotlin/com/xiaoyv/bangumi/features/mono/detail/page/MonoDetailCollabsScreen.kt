@@ -28,6 +28,7 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
@@ -105,8 +106,7 @@ private fun CollabItem(
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
         InfoImage(
-            modifier = Modifier
-                .width(70.dp),
+            modifier = Modifier.width(ContentCoverWidth),
             model = collab.images.displayMediumImage,
             onClick = onClick,
         )
