@@ -68,7 +68,8 @@ jobs:
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
           GRADLE_OPTS: >-
-            -Dorg.gradle.jvmargs='-Xmx10g -Dkotlin.daemon.jvm.options="-Xmx1g" -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8'
+            -Dorg.gradle.jvmargs='-Xmx2g -Dkotlin.daemon.jvm.options="-Xmx1g" -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8'
+            -Dorg.gradle.project.kotlin.native.jvmArgs='-Xmx8g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC'
             -Dorg.gradle.workers.max=1
             -Dorg.gradle.parallel=false
         run: |
