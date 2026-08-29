@@ -57,6 +57,9 @@ jobs:
       - name: Setup Gradle cache
         uses: gradle/actions/setup-gradle@v5
 
+      - name: Generate Kotlin framework for CocoaPods
+        run: ./gradlew :shared:core-native:generateDummyFramework
+
       - name: Install CocoaPods dependencies
         run: pod install --project-directory=iosApp
 
@@ -72,6 +75,7 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             -archivePath "${ARCHIVE_PATH}" \
+            -derivedDataPath "$PWD/build/ios/DerivedData" \
             archive \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
