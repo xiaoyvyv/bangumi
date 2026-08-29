@@ -1,6 +1,12 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 val appVersionName = providers.gradleProperty("appVersionName").get()
+val desktopPackageVersion = appVersionName
+    .split(".")
+    .map { it.toInt() }
+    .let {
+        "${it.getOrElse(0) { 0 }}.${it.getOrElse(1) { 0 }}.${it.getOrElse(2) { 0 }}"
+    }
 
 plugins {
     id("bgm.library")
@@ -103,8 +109,7 @@ compose.desktop {
     application {
 
         buildTypes.release.proguard {
-            version.set("7.5.0")
-            configurationFiles.from("proguard.pro")
+            isEnabled.set(false)
         }
 
         jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
@@ -119,8 +124,17 @@ compose.desktop {
         nativeDistributions {
             modules("java.base", "java.desktop", "java.sql", "java.logging", "java.naming", "java.prefs", "java.management", "jdk.unsupported")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.xiaoyv.bangumi"
-            packageVersion = appVersionName
+            packageName = "Bangumi"
+            packageVersion = desktopPackageVersion
+            macOS {
+                iconFile.set(project.file("icons/bangumi.icns"))
+            }
+            windows {
+                iconFile.set(project.file("icons/bangumi.ico"))
+            }
+            linux {
+                iconFile.set(project.file("icons/bangumi.png"))
+            }
         }
     }
 }
