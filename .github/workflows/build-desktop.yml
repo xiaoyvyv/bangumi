@@ -70,7 +70,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build desktop package
-        run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS -PappVersionCode=${{ needs.prepare-version.outputs.version_code }} -PappVersionName=${{ needs.prepare-version.outputs.version_name }}
+        run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS "-PappVersionCode=${{ needs.prepare-version.outputs.version_code }}" "-PappVersionName=${{ needs.prepare-version.outputs.version_name }}"
 
       - name: Upload desktop package
         uses: actions/upload-artifact@v6
