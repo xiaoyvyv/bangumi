@@ -20,7 +20,7 @@ const emptyMonoDisplay: ComposeMonoDisplay = {
 };
 
 export async function transformMonoHomepage(_req: Request, res: Response): Promise<Response> {
-	return Response.json(parseMonoHomepage(res.text()));
+	return Response.json(parseMonoHomepage(await res.text()));
 }
 
 export async function transformMonoBrowser(_req: Request, res: Response): Promise<Response> {
