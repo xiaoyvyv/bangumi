@@ -51,6 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 fun TopicPageItem(
     modifier: Modifier,
     item: ComposeTopicDetail = ComposeTopicDetail.Empty,
+    showMenu: Boolean = true,
     onClick: (ComposeTopicDetail) -> Unit = {},
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
@@ -86,11 +87,13 @@ fun TopicPageItem(
                 )
             )
         },
-        trailingContent = {
-            TopicPageItemTrailing(
-                item = item,
-                onReport = onReport
-            )
+        trailingContent = if (!showMenu) null else {
+            {
+                TopicPageItemTrailing(
+                    item = item,
+                    onReport = onReport
+                )
+            }
         }
     )
 }

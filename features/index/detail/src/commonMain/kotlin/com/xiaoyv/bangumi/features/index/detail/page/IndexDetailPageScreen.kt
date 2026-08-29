@@ -18,6 +18,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlogDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoInfo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -98,7 +99,9 @@ fun IndexPageItemContent(
                 display = ComposeSubjectRelation(subject = item.subject),
                 contentPadding = PaddingValues(ContentMargin),
                 onClick = {
-                    onNavScreen(Screen.SubjectDetail(item.subject.id))
+                    if (item.subject != ComposeSubject.Empty) {
+                        onNavScreen(Screen.SubjectDetail(item.subject.id))
+                    }
                 }
             )
         }
@@ -162,6 +165,7 @@ fun IndexPageItemContent(
         IndexCatType.GROUP_TOPIC -> {
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
+                showMenu = false,
                 item = item.groupTopic.copy(topicType = TopicType.TYPE_GROUP),
                 onClick = {
                     onNavScreen(Screen.TopicDetail(item.groupTopic.id, TopicType.TYPE_GROUP))
@@ -172,6 +176,7 @@ fun IndexPageItemContent(
         IndexCatType.SUBJECT_TOPIC -> {
             TopicPageItem(
                 modifier = Modifier.fillMaxWidth(),
+                showMenu = false,
                 item = item.subjectTopic.copy(topicType = TopicType.TYPE_SUBJECT),
                 onClick = {
                     onNavScreen(Screen.TopicDetail(item.subjectTopic.id, TopicType.TYPE_SUBJECT))

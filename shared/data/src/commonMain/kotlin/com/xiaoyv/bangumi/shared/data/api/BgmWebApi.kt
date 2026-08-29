@@ -187,12 +187,6 @@ interface BgmWebApi {
     suspend fun fetchGroupHomepage(): Document
 
     /**
-     * 查询目录首页
-     */
-    @GET("index")
-    suspend fun fetchIndexHomepage(): Document
-
-    /**
      * 目录详情
      */
     @GET("index/{id}")

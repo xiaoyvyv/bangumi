@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.rounded.BookmarkAdd
 import androidx.compose.material.icons.rounded.BookmarkAdded
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -41,6 +42,7 @@ import com.xiaoyv.bangumi.core_resource.resources.index_detail_collect_suffix
 import com.xiaoyv.bangumi.core_resource.resources.index_detail_created_label
 import com.xiaoyv.bangumi.core_resource.resources.index_detail_fav_suffix
 import com.xiaoyv.bangumi.core_resource.resources.index_detail_updated_label
+import com.xiaoyv.bangumi.core_resource.resources.subject_action_more
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailEvent
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailState
 import com.xiaoyv.bangumi.features.index.detail.business.IndexDetailViewModel
@@ -48,6 +50,7 @@ import com.xiaoyv.bangumi.features.index.detail.page.IndexDetailPageScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
+import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
@@ -141,6 +144,22 @@ private fun IndexDetailScreen(
                 actions = {
                     if (uiState.data.index != ComposeIndex.Empty) {
                         val actionHandler = LocalActionHandler.current
+
+                        IconButton(
+                            onClick = {
+                                onUiEvent(
+                                    IndexDetailEvent.UI.OnNavScreen(
+                                        Screen.TopicDetail(uiState.data.index.id, TopicType.TYPE_INDEX)
+                                    )
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = BgmIcons.Edit,
+                                contentDescription = stringResource(Res.string.subject_action_more)
+                            )
+                        }
+
                         IconButton(onClick = { onActionEvent(IndexDetailEvent.Action.OnToggleBookmarkIndex) }) {
                             Icon(
                                 imageVector = if (uiState.data.index.isBookmarked) BgmIcons.BookmarkAdded else BgmIcons.BookmarkAdd,

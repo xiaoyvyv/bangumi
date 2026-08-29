@@ -119,21 +119,12 @@ class HomeViewModel(
             }
         }
 
-        onRefreshIndexHomepage()
-
         saveCache()
     }
 
     override fun onEvent(event: HomeEvent.Action) {
         when (event) {
             is HomeEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
-            is HomeEvent.Action.OnRefreshIndexHomepage -> onRefreshIndexHomepage()
-        }
-    }
-
-    private fun onRefreshIndexHomepage() = intent {
-        indexRepository.fetchIndexFocus().onSuccess {
-            reduceData(forceRefresh = true) { state.copy(indexFocus = it.toPersistentList()) }
         }
     }
 

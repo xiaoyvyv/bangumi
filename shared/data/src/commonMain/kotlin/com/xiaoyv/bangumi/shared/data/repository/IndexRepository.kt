@@ -6,7 +6,6 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedP
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 
@@ -18,8 +17,6 @@ interface IndexRepository {
     suspend fun fetchUserCreatedIndex(username: String): Result<List<ComposeIndex>>
 
     suspend fun fetchIndexDetail(indexId: Long): Result<ComposeIndex>
-
-    suspend fun fetchIndexFocus(): Result<List<ComposeIndexFocus>>
 
     suspend fun fetchIndexComments(indexId: Long): Result<List<ComposeReply>>
 

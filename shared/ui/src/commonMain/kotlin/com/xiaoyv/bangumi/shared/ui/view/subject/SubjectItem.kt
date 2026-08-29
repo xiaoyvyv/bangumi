@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,8 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_ep_cnt
 import com.xiaoyv.bangumi.core_resource.resources.global_rank_no
 import com.xiaoyv.bangumi.core_resource.resources.global_timeline
+import com.xiaoyv.bangumi.core_resource.resources.subject_content_unavailable
+import com.xiaoyv.bangumi.core_resource.resources.subject_content_unavailable_desc
 import com.xiaoyv.bangumi.core_resource.resources.subject_rate_count
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -158,6 +161,14 @@ fun SubjectCardItem(
     }
 }
 
+/**
+ * Displays a subject in the standard full-width list layout.
+ *
+ * @param display The subject and its relation metadata.
+ * @param modifier The modifier applied to the list item.
+ * @param contentPadding The padding around the item content.
+ * @param onClick Handles navigation to the subject detail page.
+ */
 @Composable
 fun SubjectLineItem(
     display: ComposeSubjectRelation,
@@ -171,68 +182,99 @@ fun SubjectLineItem(
             .padding(contentPadding),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        SubjectInfoCover(
-            subject = display.subject
-        )
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
-        ) {
-            Text(
-                text = display.subject.displayName,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = display.subject.info.ifBlank { display.subject.summary },
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Normal,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                lineHeight = 24.sp
-            )
-
-            when {
-                // 如果在收藏列表，优先展示收藏的数据
-                LocalListSubjectParam.current.type == ListSubjectType.USER_COLLECTION -> {
-                    SubjectLineCollectionItem(display.subject, onClick)
+        if (display.subject == ComposeSubject.Empty) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = ContentMarginHalf),
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    modifier = Modifier.size(ContentMargin + ContentMarginHalf),
+                    imageVector = BgmIcons.Lock,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.subject_content_unavailable),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Text(
+                        text = stringResource(Res.string.subject_content_unavailable_desc),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
-                // 其次展示全站评分
-                display.subject.rating.score > 0 -> {
-                    FlowRow(
-                        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2, Alignment.CenterVertically),
-                        itemVerticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RatingBar(
-                            value = display.subject.rating.score,
-                            starSize = 20.dp
-                        )
+            }
+        } else {
+            SubjectInfoCover(subject = display.subject)
 
-                        Spacer(modifier = Modifier.width(4.dp))
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2)
+            ) {
+                Text(
+                    text = display.subject.displayName,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
 
-                        Text(
-                            text = display.subject.rating.score.toTrimString(),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFFFFAA00)
-                        )
+                Text(
+                    text = display.subject.info.ifBlank { display.subject.summary },
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Normal,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 24.sp
+                )
 
-                        Spacer(modifier = Modifier.width(ContentMarginHalf))
-
-                        // 总评人数
-                        if (display.subject.displayRateTotalCount > 0) {
-                            Text(
-                                text = stringResource(
-                                    Res.string.subject_rate_count,
-                                    display.subject.displayRateTotalCount
-                                ),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                when {
+                    // 如果在收藏列表，优先展示收藏的数据
+                    LocalListSubjectParam.current.type == ListSubjectType.USER_COLLECTION -> {
+                        SubjectLineCollectionItem(display.subject, onClick)
+                    }
+                    // 其次展示全站评分
+                    display.subject.rating.score > 0 -> {
+                        FlowRow(
+                            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2, Alignment.CenterVertically),
+                            itemVerticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RatingBar(
+                                value = display.subject.rating.score,
+                                starSize = 20.dp
                             )
+
+                            Spacer(modifier = Modifier.width(4.dp))
+
+                            Text(
+                                text = display.subject.rating.score.toTrimString(),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFFFFAA00)
+                            )
+
+                            Spacer(modifier = Modifier.width(ContentMarginHalf))
+
+                            // 总评人数
+                            if (display.subject.displayRateTotalCount > 0) {
+                                Text(
+                                    text = stringResource(
+                                        Res.string.subject_rate_count,
+                                        display.subject.displayRateTotalCount
+                                    ),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }

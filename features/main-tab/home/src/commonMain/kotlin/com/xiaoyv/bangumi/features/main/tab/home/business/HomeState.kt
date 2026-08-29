@@ -15,7 +15,6 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.group.ListGroupParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
@@ -47,11 +46,6 @@ data class HomeState(
     @SerialName("todayCalendar") val todayCalendar: SerializeList<ComposeHomeSection> = persistentListOf(),
     @SerialName("tomorrow") val tomorrow: Int = 0,
     @SerialName("tomorrowCalendar") val tomorrowCalendar: SerializeList<ComposeHomeSection> = persistentListOf(),
-
-    /**
-     * 目录TAB首页
-     */
-    @SerialName("indexFocus") val indexFocus: SerializeList<ComposeIndexFocus> = persistentListOf(),
 ) {
 
     @Composable

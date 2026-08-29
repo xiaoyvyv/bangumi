@@ -450,6 +450,8 @@
 
     <string name="subject_rate_count">（%1$d人评分）</string>
     <string name="subject_locked">条目已锁定</string>
+    <string name="subject_content_unavailable">条目暂无法展示</string>
+    <string name="subject_content_unavailable_desc">可能已锁定，或受 R18 内容分级限制，游客可尝试登录后查看</string>
     <string name="subject_action_deleted">删除 >></string>
     <string name="subject_action_more">更多 >></string>
     <string name="subject_action_score">查看评分 >></string>
@@ -1011,6 +1013,10 @@
     <string name="index_detail_updated_label">更新于%1$s</string>
     <string name="index_collect_to_my_catalog">收集至我的目录</string>
     <string name="index_related_comment">目录备注</string>
+    <string name="index_page_item_total">%1$d 个收录</string>
+    <string name="index_page_item_collects">%1$d 人收藏</string>
+    <string name="index_page_item_replies">%1$d 条留言</string>
+    <string name="index_page_item_updated">更新于 %1$s</string>
 
     <!-- 首页模块 -->
     <string name="home_logged_in">已登录</string>

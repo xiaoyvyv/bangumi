@@ -4,12 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Topic
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -24,17 +24,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_index
-import com.xiaoyv.bangumi.core_resource.resources.global_timeline
+import com.xiaoyv.bangumi.core_resource.resources.index_page_item_collects
+import com.xiaoyv.bangumi.core_resource.resources.index_page_item_replies
+import com.xiaoyv.bangumi.core_resource.resources.index_page_item_total
+import com.xiaoyv.bangumi.core_resource.resources.index_page_item_updated
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * Displays a compact directory card for surfaces where several directories are shown together.
+ *
+ * @param item The directory to display.
+ * @param modifier The modifier applied to the card.
+ * @param onClick Handles navigation to the directory.
+ */
 @Composable
 fun IndexCardItem(
     item: ComposeIndex,
@@ -45,7 +56,7 @@ fun IndexCardItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(ContentMargin),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             Text(
@@ -62,7 +73,7 @@ fun IndexCardItem(
                 horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
             ) {
                 StateImage(
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(ContentMargin + ContentMarginHalf),
                     model = item.creator.avatar.displayMediumImage,
                     shape = MaterialTheme.shapes.small
                 )
@@ -79,7 +90,19 @@ fun IndexCardItem(
 
 }
 
+/**
+ * Displays a directory with its author, description, and activity metadata.
+ *
+ * The layout deliberately avoids using the creator avatar as a pseudo cover. A directory does
+ * not have a reliable cover image, so the card instead gives its title, purpose, and activity
+ * enough space to be scanned in a list.
+ *
+ * @param item The directory to display.
+ * @param modifier The modifier applied to the card.
+ * @param onClick Handles navigation to the directory detail page.
+ */
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 fun IndexPageItem(
     item: ComposeIndex,
     modifier: Modifier = Modifier,
@@ -87,96 +110,111 @@ fun IndexPageItem(
 ) {
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
         onClick = onClick
     ) {
-        ListItem(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(vertical = 4.dp),
-            leadingContent = {
-                IndexFocusCard(
-                    modifier = Modifier.size(120.dp),
-                    item = item,
-                )
-            },
-            overlineContent = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
-                ) {
-                    if (item.creator.avatar.displayMediumImage.isNotBlank()) StateImage(
-                        modifier = Modifier.size(24.dp),
-                        model = item.creator.avatar.displayMediumImage,
-                        shape = MaterialTheme.shapes.extraSmall,
-                    )
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = item.creator.nickname,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Medium,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            },
-            headlineContent = {
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = ContentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
-                ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = item.title,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                .padding(ContentMargin),
+            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+        ) {
+            IndexPageItemCreator(item)
 
-                    if (item.desc.isNotBlank()) Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = item.desc,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+            if (item.desc.isNotBlank()) {
+                Text(
+                    text = item.desc,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 3,
+                    lineHeight = 22.sp,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            ) {
+                if (item.total > 0) {
+                    IndexPageItemMetadata(stringResource(Res.string.index_page_item_total, item.total))
                 }
-            },
-            supportingContent = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
-                ) {
-                    if (item.total > 0) Text(
-                        text = "收录：${item.total}",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(Modifier.weight(1f))
-                    Icon(
-                        modifier = Modifier.size(16.dp),
-                        imageVector = BgmIcons.CalendarMonth,
-                        contentDescription = stringResource(Res.string.global_timeline),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = item.updatedAt.formatAgo() + "更新",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                if (item.collects > 0) {
+                    IndexPageItemMetadata(stringResource(Res.string.index_page_item_collects, item.collects))
+                }
+                if (item.replies > 0) {
+                    IndexPageItemMetadata(stringResource(Res.string.index_page_item_replies, item.replies))
                 }
             }
-        )
+        }
     }
+}
+
+/**
+ * Displays the creator and latest activity time in an index list card.
+ *
+ * @param item The directory whose creator metadata is shown.
+ */
+@Composable
+private fun IndexPageItemCreator(item: ComposeIndex) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+    ) {
+        StateImage(
+            modifier = Modifier.size(ContentMargin + ContentMarginHalf),
+            model = item.creator.avatar.displayMediumImage,
+            shape = MaterialTheme.shapes.medium,
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = item.creator.nickname,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = stringResource(Res.string.index_page_item_updated, item.updatedAt.formatAgo()),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+/**
+ * Displays one compact metadata value in an index list card.
+ *
+ * @param text The formatted metadata text.
+ */
+@Composable
+private fun IndexPageItemMetadata(text: String) {
+    Text(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                shape = MaterialTheme.shapes.small,
+            )
+            .padding(horizontal = ContentMarginHalf, vertical = ContentMarginHalf / 2),
+        text = text,
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
 }
 
 

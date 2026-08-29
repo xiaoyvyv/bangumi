@@ -16,6 +16,5 @@ sealed class HomeEvent {
 
     sealed class Action : HomeEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
-        data object OnRefreshIndexHomepage : Action()
     }
 }

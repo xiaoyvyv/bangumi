@@ -13,7 +13,6 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexRelatedP
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexFocus
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndexRelated
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.normalizedReplies
@@ -37,62 +36,62 @@ class IndexRepositoryImpl(
             onlyOnePage = true,
             idSelector = { it.id },
             onLoadData = { page ->
-                with(indexParser) {
-                    when (param.type) {
-                        ListIndexType.USER_CREATE -> client.requestNextUserApi {
-                            getUserIndexes(
-                                username = param.username,
-                                offset = page.toApiOffset(pagingConfig.pageSize)
-                            ).result
-                        }.getOrThrow()
+                when (param.type) {
+                    ListIndexType.USER_CREATE -> client.requestNextUserApi {
+                        val user = client.nextUserApi.getUser(param.username)
 
-                        ListIndexType.USER_COLLECTION -> client.requestNextUserApi {
-                            getUserIndexCollections(
-                                username = param.username,
-                                offset = page.toApiOffset(pagingConfig.pageSize)
-                            ).result
-                        }.getOrThrow()
+                        getUserIndexes(
+                            username = param.username,
+                            offset = page.toApiOffset(pagingConfig.pageSize)
+                        ).result.map { it.copy(creator = user) }
+                    }.getOrThrow()
 
-                        ListIndexType.SUBJECT_RELATED -> client.requestNextSubjectApi {
-                            getSubjectIndexes(
-                                subjectID = param.related.subjectId,
-                                offset = page.toApiOffset(pagingConfig.pageSize)
-                            ).result
-                        }.getOrThrow()
+                    ListIndexType.USER_COLLECTION -> client.requestNextUserApi {
+                        getUserIndexCollections(
+                            username = param.username,
+                            offset = page.toApiOffset(pagingConfig.pageSize)
+                        ).result
+                    }.getOrThrow()
 
-                        ListIndexType.PERSON_RELATED -> client.requestNextPersonApi {
-                            getPersonIndexes(
-                                personID = param.related.monoId,
-                                offset = page.toApiOffset(pagingConfig.pageSize)
-                            ).result
-                        }.getOrThrow()
+                    ListIndexType.SUBJECT_RELATED -> client.requestNextSubjectApi {
+                        getSubjectIndexes(
+                            subjectID = param.related.subjectId,
+                            offset = page.toApiOffset(pagingConfig.pageSize)
+                        ).result
+                    }.getOrThrow()
 
-                        ListIndexType.CHARACTER_RELATED -> client.requestNextCharacterApi {
-                            getCharacterIndexes(
-                                characterID = param.related.monoId,
-                                offset = page.toApiOffset(pagingConfig.pageSize)
-                            ).result
-                        }.getOrThrow()
+                    ListIndexType.PERSON_RELATED -> client.requestNextPersonApi {
+                        getPersonIndexes(
+                            personID = param.related.monoId,
+                            offset = page.toApiOffset(pagingConfig.pageSize)
+                        ).result
+                    }.getOrThrow()
 
-                        ListIndexType.BROWSER -> client.requestNextIndexApi {
-                            getIndexes(
-                                type = param.browserType,
-                                order = param.browserOrder,
-                                offset = page.toApiOffset(pagingConfig.pageSize)
-                            ).result
-                        }.getOrThrow()
+                    ListIndexType.CHARACTER_RELATED -> client.requestNextCharacterApi {
+                        getCharacterIndexes(
+                            characterID = param.related.monoId,
+                            offset = page.toApiOffset(pagingConfig.pageSize)
+                        ).result
+                    }.getOrThrow()
 
-                        ListIndexType.SEARCH -> {
-                            client.appApi.fetchSearchIndex(
-                                keyword = param.search.keyword,
-                                exact = param.search.exact,
-                                page = page,
-                                size = pagingConfig.pageSize
-                            ).data.records.map { it.toComposeIndex() }
-                        }
+                    ListIndexType.BROWSER -> client.requestNextIndexApi {
+                        getIndexes(
+                            type = param.browserType,
+                            order = param.browserOrder,
+                            offset = page.toApiOffset(pagingConfig.pageSize)
+                        ).result
+                    }.getOrThrow()
 
-                        else -> error("暂不支持该类型")
+                    ListIndexType.SEARCH -> {
+                        client.appApi.fetchSearchIndex(
+                            keyword = param.search.keyword,
+                            exact = param.search.exact,
+                            page = page,
+                            size = pagingConfig.pageSize
+                        ).data.records.map { it.toComposeIndex() }
                     }
+
+                    else -> error("暂不支持该类型")
                 }
             }
         )
@@ -122,13 +121,6 @@ class IndexRepositoryImpl(
 
     override suspend fun fetchIndexDetail(indexId: Long): Result<ComposeIndex> = client.requestNextIndexApi {
         getIndex(indexId)
-    }
-
-    override suspend fun fetchIndexFocus(): Result<List<ComposeIndexFocus>> = client.requestWebApi {
-        with(indexParser) {
-            fetchIndexHomepage()
-                .fetchIndexFocusConverted()
-        }
     }
 
     override suspend fun fetchIndexComments(indexId: Long): Result<List<ComposeReply>> = client.requestNextIndexApi {
