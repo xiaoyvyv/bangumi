@@ -1,17 +1,22 @@
 package com.xiaoyv.bangumi.shared.ui.component.dialog.alert
 
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * [BgmAlertDialog]
@@ -66,7 +71,7 @@ fun BgmAlertDialog(
                     onClick = {
                         state.dismiss()
                         scope.launch {
-                            delay(200)
+                            delay(200.milliseconds)
                             onConfirm()
                         }
                     },
@@ -79,7 +84,7 @@ fun BgmAlertDialog(
                         onClick = {
                             state.dismiss()
                             scope.launch {
-                                delay(200)
+                                delay(200.milliseconds)
                                 onCancel()
                             }
                         },
@@ -89,7 +94,14 @@ fun BgmAlertDialog(
             },
             icon = icon,
             title = title?.let { { Text(it) } },
-            text = { Text(text) },
+            text = {
+                Text(
+                    modifier = Modifier
+                        .heightIn(max = 400.dp)
+                        .verticalScroll(rememberScrollState()),
+                    text = text
+                )
+            },
             properties = state.properties
         )
     }

@@ -30,13 +30,11 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_request
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_socket
 import com.xiaoyv.bangumi.core_resource.resources.settings_update_channel
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkEvent
-import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkSideEffect
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkState
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
-import com.xiaoyv.bangumi.shared.data.manager.shared.shareViewModel
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -57,13 +55,8 @@ fun SettingsNetworkRoute(
     onNavScreen: (Screen) -> Unit,
 ) {
     val baseState by viewModel.collectAsState()
-    val shareViewModel = shareViewModel()
 
-    viewModel.collectBaseSideEffect {
-        when (it) {
-            SettingsNetworkSideEffect.OnRefreshUpdateInfo -> shareViewModel.onRefreshAppRelease()
-        }
-    }
+    viewModel.collectBaseSideEffect { }
 
     SettingsNetworkScreen(
         uiState = baseState,

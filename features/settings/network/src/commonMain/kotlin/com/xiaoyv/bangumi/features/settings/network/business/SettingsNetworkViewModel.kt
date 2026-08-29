@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.settings.network.business
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.settings_reboot_active
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
-import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
@@ -35,6 +34,5 @@ class SettingsNetworkViewModel(
         }
 
         postToast { getString(Res.string.settings_reboot_active) }
-        postEffect { SettingsNetworkSideEffect.OnRefreshUpdateInfo }
     }
 }

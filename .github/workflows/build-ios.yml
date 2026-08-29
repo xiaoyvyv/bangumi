@@ -43,7 +43,7 @@ jobs:
   build-ios:
     name: Build iOS IPA
     needs: prepare-version
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -67,6 +67,10 @@ jobs:
         env:
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
+          GRADLE_OPTS: >-
+            -Dorg.gradle.jvmargs='-Xmx10g -Dkotlin.daemon.jvm.options="-Xmx1g" -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8'
+            -Dorg.gradle.workers.max=1
+            -Dorg.gradle.parallel=false
         run: |
           ARCHIVE_PATH="$PWD/build/ios/iosApp.xcarchive"
           xcodebuild \

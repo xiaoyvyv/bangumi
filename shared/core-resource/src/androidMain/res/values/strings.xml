@@ -19,6 +19,7 @@
     <string name="global_clear">清理</string>
     <string name="global_done">完成</string>
     <string name="global_delete">删除</string>
+    <string name="global_download">去下载</string>
     <string name="comment_delete_confirm">确定删除这条评论吗？</string>
     <string name="global_login">登录</string>
     <string name="global_next">下一步</string>

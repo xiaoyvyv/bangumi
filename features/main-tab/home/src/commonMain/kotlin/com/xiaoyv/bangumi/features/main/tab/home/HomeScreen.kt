@@ -21,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.app_name
+import com.xiaoyv.bangumi.core_resource.resources.global_cancel
+import com.xiaoyv.bangumi.core_resource.resources.global_download
 import com.xiaoyv.bangumi.core_resource.resources.global_search
 import com.xiaoyv.bangumi.core_resource.resources.ic_logo_riff
 import com.xiaoyv.bangumi.core_resource.resources.update_badge_new
@@ -40,6 +42,8 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
@@ -89,6 +93,20 @@ private fun HomeScreen(
         topBar = {
             BgmTopAppBar(
                 titleContent = {
+                    val updateDialogState = rememberAlertDialogState()
+                    val state = LocalSharedState.current
+
+                    BgmAlertDialog(
+                        state = updateDialogState,
+                        title = state.appRelease.tagName.uppercase(),
+                        text = state.appRelease.body,
+                        confirm = stringResource(Res.string.global_download),
+                        cancel = stringResource(Res.string.global_cancel),
+                        onConfirm = {
+                            actionHandler.openInBrowser(sharedState.appRelease.htmlUrl)
+                        }
+                    )
+
                     BadgedBox(
                         badge = {
                             if (sharedState.appRelease != ComposeAppRelease.Empty) {
@@ -98,7 +116,7 @@ private fun HomeScreen(
                     ) {
                         Icon(
                             modifier = Modifier
-                                .clickWithoutRipped { actionHandler.openInBrowser(sharedState.appRelease.htmlUrl) }
+                                .clickWithoutRipped { updateDialogState.show() }
                                 .height(32.dp)
                                 .aspectRatio(27 / 7f),
                             painter = painterResource(Res.drawable.ic_logo_riff),
