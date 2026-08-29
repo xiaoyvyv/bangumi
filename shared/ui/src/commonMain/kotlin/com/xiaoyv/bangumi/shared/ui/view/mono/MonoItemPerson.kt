@@ -195,14 +195,15 @@ fun MonoCardItemPerson(
                 maxLines = 1,
             )
 
+
             Text(
                 text = remember(item.mono) {
                     val texts = mutableListOf<String>()
-                    if (item.mono.type != PersonType.MAIN) {
+                    if (item.mono.type != PersonType.MAIN && item.mono.type != PersonType.UNKNOWN) {
                         texts.add(PersonType.string(item.mono.type))
                     }
                     texts.addAll(item.mono.displayCareer)
-                    texts.joinToString(" · ")
+                    texts.joinToString(" · ").ifBlank { item.mono.name }
                 },
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

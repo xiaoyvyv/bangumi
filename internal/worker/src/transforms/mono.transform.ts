@@ -20,10 +20,11 @@ const emptyMonoDisplay: ComposeMonoDisplay = {
 };
 
 export async function transformMonoHomepage(_req: Request, res: Response): Promise<Response> {
-	const html = await res.text();
-	const items = parseMonoHomepage(html);
+	return Response.json(parseMonoHomepage(res.text()));
+}
 
-	return Response.json(items);
+export async function transformMonoBrowser(_req: Request, res: Response): Promise<Response> {
+	return Response.json(parseMonoBrowser(await res.text()));
 }
 
 export function parseMonoHomepage(html: string): ComposeSection<ComposeMonoDisplay>[] {
@@ -79,6 +80,27 @@ export function parseMonoHomepage(html: string): ComposeSection<ComposeMonoDispl
 	return sections;
 }
 
+export function parseMonoBrowser(html: string): ComposeMonoDisplay[] {
+	const doc = parseDocument(html);
+	const column = selectOne('#columnCrtBrowserB', doc);
+
+	return selectElements('.browserCrtList > div', column).map((item) => {
+		const type = item.attribs.id?.includes('character') ? MonoType.CHARACTER : MonoType.PERSON;
+		const avatar = selectOne('a.avatar', item);
+		const info = elementText(selectOne('.prsn_info .tip', item));
+		const mono = {
+			id: hrefLongId(elementHref(avatar)),
+			images: bgmImageVariants(elementSrc(selectOne('.avatar > img', item))),
+			name: elementText(selectOne('h3', item)),
+			nameCN: '',
+			infobox: parseMonoInfobox(info),
+			webInfo: { info, shortInfo: info },
+		};
+
+		return { type, info: { mono } };
+	});
+}
+
 function header(key: string, title: string, more: string, id = key): ComposeSection<ComposeMonoDisplay> {
 	return { key, header: { id, title, subtitle: '', more }, item: emptyMonoDisplay };
 }
@@ -95,4 +117,14 @@ function monoSection(
 ): ComposeSection<ComposeMonoDisplay> {
 	const mono = { id, images, name, nameCN, ...(includeMonoType ? { type } : {}) };
 	return { key, item: { type: displayType, info: { mono } } };
+}
+
+function parseMonoInfobox(info: string) {
+	return info
+		.split(' / ')
+		.map((item) => {
+			const values = item.split(' ');
+			return { key: values[0] ?? '', value: values.at(-1) ?? '' };
+		})
+		.filter((item) => item.key && item.value);
 }

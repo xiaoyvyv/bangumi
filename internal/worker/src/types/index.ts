@@ -240,12 +240,21 @@ export interface ComposeSectionTitle {
 	more: string;
 }
 
-export interface ComposeMono {
-	id: number;
+export interface ComposeMono extends Pick<Character, 'id' | 'images' | 'name' | 'nameCN'> {
 	images: Images;
-	name: string;
-	nameCN: string;
+	infobox?: ComposeInfobox[];
 	type?: MonoType;
+	webInfo?: ComposeMonoWebInfo;
+}
+
+export interface ComposeInfobox {
+	key: string;
+	value: string;
+}
+
+export interface ComposeMonoWebInfo {
+	info: string;
+	shortInfo: string;
 }
 
 export interface ComposeMonoInfo {

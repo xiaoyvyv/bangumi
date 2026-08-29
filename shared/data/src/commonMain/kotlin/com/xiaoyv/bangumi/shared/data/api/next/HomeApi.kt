@@ -6,6 +6,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Query
 
 @AppJsonApiDsl
 interface HomeApi {
@@ -25,4 +26,26 @@ interface HomeApi {
      */
     @GET("${WebConstant.URL_BGM_PROXY}p1/mono/home")
     suspend fun getMonoHome(): List<ComposeSection<ComposeMonoDisplay>>
+
+    @GET("${WebConstant.URL_BGM_PROXY}p1/mono/person")
+    suspend fun getMonoPersons(
+        @Query("page") page: Int,
+        @Query("type") type: String? = null,
+        @Query("gender") gender: String? = null,
+        @Query("bloodtype") bloodtype: String? = null,
+        @Query("month") month: String? = null,
+        @Query("day") day: String? = null,
+        @Query("orderby") sort: String? = null,
+    ): List<ComposeMonoDisplay>
+
+    @GET("${WebConstant.URL_BGM_PROXY}p1/mono/character")
+    suspend fun getMonoCharacters(
+        @Query("page") page: Int,
+        @Query("type") type: String? = null,
+        @Query("gender") gender: String? = null,
+        @Query("bloodtype") bloodtype: String? = null,
+        @Query("month") month: String? = null,
+        @Query("day") day: String? = null,
+        @Query("orderby") sort: String? = null,
+    ): List<ComposeMonoDisplay>
 }

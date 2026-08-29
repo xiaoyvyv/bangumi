@@ -1,11 +1,13 @@
 import { UPSTREAM } from '../config';
 import { proxy } from '../core/proxy';
-import { transformMonoHomepage } from '../transforms/mono.transform';
+import { transformMonoBrowser, transformMonoHomepage } from '../transforms/mono.transform';
 
 type MonoRouteHandler = (req: Request, ctx?: ExecutionContext) => Promise<Response>;
 
 const routes: Record<string, MonoRouteHandler> = {
 	home: handleMonoHome,
+	character: (req) => handleMonoBrowser(req, 'character'),
+	person: (req) => handleMonoBrowser(req, 'person'),
 };
 
 export async function handleMono(req: Request, _env: any, ctx?: ExecutionContext): Promise<Response> {
@@ -26,4 +28,16 @@ async function handleMonoHome(req: Request, ctx?: ExecutionContext): Promise<Res
 		true,
 		ctx,
 	);
+}
+
+async function handleMonoBrowser(req: Request, type: 'character' | 'person'): Promise<Response> {
+	const source = new URL(req.url);
+	const query = new URLSearchParams();
+	for (const key of ['page', 'type', 'gender', 'bloodtype', 'month', 'day', 'orderby']) {
+		const value = source.searchParams.get(key);
+		if (value) query.set(key, value);
+	}
+	const suffix = query.size ? `?${query}` : '';
+
+	return proxy(req, `${UPSTREAM.WEB_API}/${type}${suffix}`, { transform: transformMonoBrowser }, true);
 }

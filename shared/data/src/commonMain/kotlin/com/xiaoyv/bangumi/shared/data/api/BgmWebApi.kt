@@ -160,34 +160,6 @@ interface BgmWebApi {
     suspend fun fetchMonoHomepage(): Document
 
     /**
-     * 浏览人物
-     */
-    @GET("person")
-    suspend fun fetchBrowserMonoPerson(
-        @Query("page") page: Int,
-        @Query("type") type: String? = null,
-        @Query("gender") gender: String? = null,
-        @Query("bloodtype") bloodtype: String? = null,
-        @Query("month") month: String? = null,
-        @Query("day") day: String? = null,
-        @Query("orderby") sort: String? = null,
-    ): Document
-
-    /**
-     * 浏览角色
-     */
-    @GET("character")
-    suspend fun fetchBrowserMonoCharacter(
-        @Query("page") page: Int,
-        @Query("type") type: String? = null,
-        @Query("gender") gender: String? = null,
-        @Query("bloodtype") bloodtype: String? = null,
-        @Query("month") month: String? = null,
-        @Query("day") day: String? = null,
-        @Query("orderby") sort: String? = null,
-    ): Document
-
-    /**
      * 全站闲聊
      *
      * https://bgm.tv/dollars?since_id=1756805557&_=1756806092131

@@ -130,29 +130,27 @@ class MonoRepositoryImpl(
             }
 
             // 人物浏览
-            ListMonoType.BROWSER -> client.requestWebApi {
-                with(monoParser) {
-                    if (param.browser.monoType == MonoType.CHARACTER) {
-                        fetchBrowserMonoCharacter(
-                            page = offset.toApiPage(limit),
-                            type = param.browser.mutexParam.type,
-                            bloodtype = param.browser.mutexParam.bloodType,
-                            gender = param.browser.mutexParam.gender,
-                            month = param.browser.mutexParam.month,
-                            day = param.browser.mutexParam.day,
-                            sort = param.browser.orderBy
-                        ).fetchBrowserMonoConverted()
-                    } else {
-                        fetchBrowserMonoPerson(
-                            page = offset.toApiPage(limit),
-                            type = param.browser.mutexParam.type,
-                            bloodtype = param.browser.mutexParam.bloodType,
-                            gender = param.browser.mutexParam.gender,
-                            month = param.browser.mutexParam.month,
-                            day = param.browser.mutexParam.day,
-                            sort = param.browser.orderBy
-                        ).fetchBrowserMonoConverted()
-                    }
+            ListMonoType.BROWSER -> client.requestNextHomeApi {
+                if (param.browser.monoType == MonoType.CHARACTER) {
+                    getMonoCharacters(
+                        page = offset.toApiPage(limit),
+                        type = param.browser.mutexParam.type,
+                        bloodtype = param.browser.mutexParam.bloodType,
+                        gender = param.browser.mutexParam.gender,
+                        month = param.browser.mutexParam.month,
+                        day = param.browser.mutexParam.day,
+                        sort = param.browser.orderBy
+                    )
+                } else {
+                    getMonoPersons(
+                        page = offset.toApiPage(limit),
+                        type = param.browser.mutexParam.type,
+                        bloodtype = param.browser.mutexParam.bloodType,
+                        gender = param.browser.mutexParam.gender,
+                        month = param.browser.mutexParam.month,
+                        day = param.browser.mutexParam.day,
+                        sort = param.browser.orderBy
+                    )
                 }
             }
             // 用户人物收藏

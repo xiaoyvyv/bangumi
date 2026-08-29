@@ -219,9 +219,11 @@ fun MonoCardItemCharacter(
             )
 
             Text(
-                text = MonoCastType.string(item.mono.role),
+                text = if (item.mono.role != MonoCastType.UNKNOWN) MonoCastType.string(item.mono.role) else item.mono.name,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }

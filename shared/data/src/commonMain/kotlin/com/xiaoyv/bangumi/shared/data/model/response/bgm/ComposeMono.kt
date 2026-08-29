@@ -64,7 +64,7 @@ data class ComposeMono(
      * 职业
      */
     val displayCareer = career
-        .map { PersonCareerType.string(it) }
+        .mapNotNull { PersonCareerType.string(it).takeIf { it.isNotBlank() } }
         .toImmutableList()
 
     fun shareUrl(@MonoType type: Int): String {

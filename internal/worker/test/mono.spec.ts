@@ -83,6 +83,48 @@ describe('mono homepage handler', () => {
 		expect(response.status).toBe(404);
 	});
 
+	it('parses character and person browser pages while forwarding supported filters', async () => {
+		fetchMock.get('https://bgm.tv').intercept({ path: '/character?page=2&type=anime&gender=female' }).reply(200, `
+			<div id="columnCrtBrowserB"><div class="browserCrtList">
+				<div id="item_character123"><a class="avatar" href="/character/123"><img src="//lain.bgm.tv/pic/crt/m/a/b/123_crt.jpg"></a><h3>角色名</h3><div class="prsn_info"><span class="tip">性别 女 / 血型 A</span></div></div>
+			</div></div>
+		`);
+		fetchMock.get('https://bgm.tv').intercept({ path: '/person?page=3&orderby=collects' }).reply(200, `
+			<div id="columnCrtBrowserB"><div class="browserCrtList">
+				<div id="item_person456"><a class="avatar" href="/person/456"><img src="//lain.bgm.tv/pic/crt/m/a/b/456_prsn.jpg"></a><h3>人物名</h3><div class="prsn_info"><span class="tip">职业 声优</span></div></div>
+			</div></div>
+		`);
+
+		const characterCtx = createExecutionContext();
+		const characterResponse = await worker.fetch(
+			new IncomingRequest('http://example.com/p1/mono/character?page=2&type=anime&gender=female&ignored=value'),
+			env,
+			characterCtx,
+		);
+		await waitOnExecutionContext(characterCtx);
+
+		const personCtx = createExecutionContext();
+		const personResponse = await worker.fetch(
+			new IncomingRequest('http://example.com/p1/mono/person?page=3&orderby=collects'),
+			env,
+			personCtx,
+		);
+		await waitOnExecutionContext(personCtx);
+
+		expect(await characterResponse.json()).toEqual([
+			expect.objectContaining({
+				type: 2,
+				info: { mono: expect.objectContaining({ id: 123, name: '角色名', nameCN: '' }) },
+			}),
+		]);
+		expect(await personResponse.json()).toEqual([
+			expect.objectContaining({
+				type: 1,
+				info: { mono: expect.objectContaining({ id: 456, name: '人物名', nameCN: '' }) },
+			}),
+		]);
+	});
+
 	it('caches a successful homepage response for one hour', async () => {
 		fetchMock.get('https://bgm.tv').intercept({ path: '/mono' }).reply(
 			200,
