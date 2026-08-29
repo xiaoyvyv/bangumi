@@ -49,12 +49,15 @@ jobs:
         include:
           - name: Linux
             os: ubuntu-latest
+            platform: linux
             format: deb
           - name: macOS
             os: macos-latest
+            platform: macos
             format: dmg
           - name: Windows
             os: windows-latest
+            platform: windows
             format: msi
     steps:
       - name: Checkout code
@@ -72,11 +75,19 @@ jobs:
       - name: Build desktop package
         run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS "-PappVersionCode=${{ needs.prepare-version.outputs.version_code }}" "-PappVersionName=${{ needs.prepare-version.outputs.version_name }}"
 
+      - name: Rename desktop package
+        shell: bash
+        run: |
+          package_dir="composeApp/build/compose/binaries/main-release/${{ matrix.format }}"
+          package_path="$(find "${package_dir}" -maxdepth 1 -type f -name "*.${{ matrix.format }}" -print -quit)"
+          test -n "${package_path}"
+          cp "${package_path}" "${package_dir}/bangumi-${{ matrix.platform }}-${{ needs.prepare-version.outputs.version_name }}.${{ matrix.format }}"
+
       - name: Upload desktop package
         uses: actions/upload-artifact@v6
         with:
-          name: desktop-${{ matrix.format }}
-          path: composeApp/build/compose/binaries/main-release/${{ matrix.format }}/*
+          name: desktop-${{ matrix.platform }}
+          path: composeApp/build/compose/binaries/main-release/${{ matrix.format }}/bangumi-${{ matrix.platform }}-${{ needs.prepare-version.outputs.version_name }}.${{ matrix.format }}
           if-no-files-found: error
 
   publish-desktop:

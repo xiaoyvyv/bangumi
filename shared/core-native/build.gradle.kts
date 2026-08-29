@@ -1,7 +1,11 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
+import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+val appVersionCode = providers.gradleProperty("appVersionCode").get()
+val appVersionName = providers.gradleProperty("appVersionName").get()
 
 plugins {
     id("bgm.library")
@@ -48,6 +52,13 @@ kotlin {
             implementation(libs.androidx.webkit)
         }
     }
+}
+
+tasks.named<Jar>("jvmJar") {
+    manifest.attributes(
+        "Bgm-Version-Code" to appVersionCode,
+        "Implementation-Version" to appVersionName,
+    )
 }
 
 sqldelight {

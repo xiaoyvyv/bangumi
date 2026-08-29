@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +25,8 @@ import com.xiaoyv.bangumi.core_resource.resources.app_name
 import com.xiaoyv.bangumi.core_resource.resources.global_search
 import com.xiaoyv.bangumi.core_resource.resources.home_logged_in
 import com.xiaoyv.bangumi.core_resource.resources.ic_logo_riff
+import com.xiaoyv.bangumi.core_resource.resources.update_badge_new
+import com.xiaoyv.bangumi.core_resource.resources.update_open_release
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeState
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeViewModel
@@ -33,6 +38,8 @@ import com.xiaoyv.bangumi.features.main.tab.home.page.mono.HomeMonoScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.HomeTab
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
+import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
+import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -74,6 +81,9 @@ private fun HomeScreen(
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
+    val sharedState = LocalSharedState.current
+    val actionHandler = LocalActionHandler.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -89,7 +99,7 @@ private fun HomeScreen(
                     )
                 },
                 actions = {
-                    if (LocalSharedState.current.isLogin) {
+                    if (sharedState.isLogin) {
                         val loggedInText = stringResource(Res.string.home_logged_in)
                         Text(
                             modifier = Modifier
@@ -97,6 +107,26 @@ private fun HomeScreen(
                                 .semantics { contentDescription = loggedInText },
                             text = loggedInText,
                         )
+                    }
+                    if (sharedState.appRelease != ComposeAppRelease.Empty) {
+                        BadgedBox(
+                            badge = {
+                                Badge {
+                                    Text(text = stringResource(Res.string.update_badge_new))
+                                }
+                            }
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    actionHandler.openInBrowser(sharedState.appRelease.htmlUrl)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = BgmIcons.Info,
+                                    contentDescription = stringResource(Res.string.update_open_release),
+                                )
+                            }
+                        }
                     }
                     IconButton(onClick = { onUiEvent(HomeEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
                         Icon(

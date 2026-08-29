@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.manager.shared
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xiaoyv.bangumi.shared.AppVersion
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
@@ -82,9 +83,17 @@ class SharedViewModel(
      * 根据当前更新渠道刷新应用发布信息。
      */
     private suspend fun onRefreshAppRelease() = subIntent {
-        choreRepository.fetchAppRelease(state.settings.network.updateChannel)
+        val updateChannel = state.settings.network.updateChannel
+        choreRepository.fetchAppRelease(updateChannel)
             .onSuccess { release ->
-                reduce { state.copy(appRelease = release) }
+                if (release.isNewerThan(
+                        channel = updateChannel,
+                        currentVersionCode = AppVersion.versionCode,
+                        currentVersionName = AppVersion.versionName,
+                    )
+                ) {
+                    reduce { state.copy(appRelease = release) }
+                }
             }
     }
 

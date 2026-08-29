@@ -810,6 +810,8 @@
     <!-- 更新服务 -->
     <string name="update_none">暂无更新包发布</string>
     <string name="update_newest">当前已经是最新版</string>
+    <string name="update_badge_new">New</string>
+    <string name="update_open_release">打开更新详情</string>
     <string name="update_dialog_title">检测到更新</string>
     <string name="update_dialog_message">检测到有新版本（%1$s），是否下载更新？</string>
     <string name="update_dialog_download">下载</string>
