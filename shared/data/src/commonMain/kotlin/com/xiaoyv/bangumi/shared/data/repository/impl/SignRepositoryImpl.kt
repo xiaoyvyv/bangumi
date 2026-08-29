@@ -21,6 +21,14 @@ class SignRepositoryImpl(
     private val signParser: SignParser,
 ) : SignRepository {
 
+    override suspend fun fetchOnlineCount(): Result<Int> = runResult {
+        with(signParser) {
+            client.bgmWebApi
+                .fetchMain()
+                .fetchMainConverted()
+        }
+    }
+
     override suspend fun fetchLoginForm(): Result<ComposeLoginForm> = runResult {
         with(signParser) {
             client.bgmWebApi

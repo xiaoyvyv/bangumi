@@ -12,6 +12,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.types.SubjectSortBrowserType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.list.ListSubjectType
+import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.currentWeekDay
 import com.xiaoyv.bangumi.shared.core.utils.tomorrowWeekDay
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
@@ -20,14 +21,17 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserB
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomepageCard
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
+import com.xiaoyv.bangumi.shared.data.repository.SignRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax
 
@@ -39,6 +43,7 @@ import org.orbitmvi.orbit.syntax.Syntax
  */
 class HomeViewModel(
     private val subjectRepository: SubjectRepository,
+    private val signRepository: SignRepository,
     private val cacheRepository: CacheRepository,
     personalStateStore: PersonalStateStore,
 ) : BaseViewModel<HomeState, HomeSideEffect, HomeEvent.Action>() {
@@ -71,7 +76,27 @@ class HomeViewModel(
     override fun createInitialState() = HomeState()
 
     override suspend fun Syntax<UiState<HomeState>, UiSideEffect<HomeSideEffect>>.refreshSync() {
-        com.xiaoyv.bangumi.shared.core.utils.awaitAll(
+        coroutineScope {
+            launch { onFetchHomepageInfo() }
+            launch { onFetchOnlineCount() }
+        }
+    }
+
+    override fun onEvent(event: HomeEvent.Action) {
+        when (event) {
+            is HomeEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
+        }
+    }
+
+    private suspend fun onFetchOnlineCount() = subIntent {
+        signRepository.fetchOnlineCount()
+            .onSuccess {
+                reduceData { state.copy(onlineCount = it) }
+            }
+    }
+
+    private suspend fun onFetchHomepageInfo() = subIntent {
+        awaitAll(
             block1 = {
                 subjectRepository.fetchSubjectList(
                     param = ListSubjectParam(
@@ -118,12 +143,6 @@ class HomeViewModel(
         }
 
         saveCache()
-    }
-
-    override fun onEvent(event: HomeEvent.Action) {
-        when (event) {
-            is HomeEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
-        }
     }
 
     private suspend fun List<ComposeHomeSection>.toHomeSectionCard(@SubjectType type: Int): ComposeHomepageCard {

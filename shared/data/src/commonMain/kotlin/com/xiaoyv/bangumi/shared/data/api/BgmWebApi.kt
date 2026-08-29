@@ -39,6 +39,13 @@ import io.ktor.util.date.getTimeMillis
  */
 @AppWebApiDsl
 interface BgmWebApi {
+
+    /**
+     * 主页
+     */
+    @GET("/")
+    suspend fun fetchMain(): Document
+
     /**
      * 获取网页登录表单
      */

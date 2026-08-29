@@ -29,6 +29,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class HomeState(
+    val onlineCount: Int = 0,
     /**
      * 首页
      */

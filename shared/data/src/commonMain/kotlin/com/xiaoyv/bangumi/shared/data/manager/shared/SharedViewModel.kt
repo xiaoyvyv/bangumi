@@ -87,7 +87,9 @@ class SharedViewModel(
         choreRepository.fetchAppRelease(state.settings.network.updateChannel).onSuccess { release ->
             if (release.isNewerThan(currentVersionCode = AppVersion.versionCode)) {
                 reduce { state.copy(appRelease = release) }
-                postSideEffect(SharedEvent.OnShowAppUpdate)
+                if (state.settings.network.updateNotify) {
+                    postSideEffect(SharedEvent.OnShowAppUpdate)
+                }
             } else {
                 reduce { state.copy(appRelease = ComposeAppRelease.Empty) }
             }

@@ -11,6 +11,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeLoginResult
  * @since 2025/1/14
  */
 interface SignRepository {
+    suspend fun fetchOnlineCount(): Result<Int>
 
     suspend fun fetchLoginForm(): Result<ComposeLoginForm>
 

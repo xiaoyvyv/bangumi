@@ -3,6 +3,7 @@
 package com.xiaoyv.bangumi.shared.data.parser
 
 import com.fleeksoft.ksoup.nodes.Element
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
 import com.xiaoyv.bangumi.shared.core.utils.parserFormHash
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
@@ -17,6 +18,14 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
  * @since 2025/1/14
  */
 class SignParser : BaseParser() {
+
+    /**
+     * 在线人数
+     */
+    fun Element.fetchMainConverted(): Int {
+        debugLog { "onlineCount ${text()}" }
+        return select("#header small").text().parseCount()
+    }
 
     /**
      * 解析登录表单

@@ -101,6 +101,7 @@ data class ComposeSetting(
     data class NetworkConfig(
         @SerialName("bgmHost") val bgmHost: String = "https://bgm.tv/",
         @SerialName("updateChannel") @field:SettingUpdateChannel val updateChannel: Int = SettingUpdateChannel.RELEASE,
+        @SerialName("updateNotify") val updateNotify: Boolean = true,
         @SerialName("connectTimeoutMillis") val connectTimeoutMillis: Long = 15_000,
         @SerialName("socketTimeoutMillis") val socketTimeoutMillis: Long = 15_000,
         @SerialName("hosts") val hosts: SerializeMap<String, List<String>> = DefaultHosts,

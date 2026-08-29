@@ -14,11 +14,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.app_name
 import com.xiaoyv.bangumi.core_resource.resources.global_search
@@ -105,6 +107,13 @@ private fun HomeScreen(
                             painter = painterResource(Res.drawable.ic_logo_riff),
                             tint = MaterialTheme.colorScheme.primary,
                             contentDescription = stringResource(Res.string.app_name),
+                        )
+                        if (uiState.data.onlineCount > 0) Text(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart),
+                            text = "Online: " + uiState.data.onlineCount.toString(),
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 6.sp, lineHeight = 6.sp),
                         )
                     }
                 },

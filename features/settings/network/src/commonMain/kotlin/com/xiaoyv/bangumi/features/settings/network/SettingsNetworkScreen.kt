@@ -29,6 +29,7 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_network
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_request
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_socket
 import com.xiaoyv.bangumi.core_resource.resources.settings_update_channel
+import com.xiaoyv.bangumi.core_resource.resources.settings_update_notify
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkEvent
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkState
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkViewModel
@@ -42,6 +43,7 @@ import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingInputItem
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItem
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingOptionItem
+import com.xiaoyv.bangumi.shared.ui.component.settings.SettingSwitchItem
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
@@ -226,9 +228,18 @@ private fun SettingsNetworkScreenContent(
         }
 
         SettingContainer(label = { Text(text = stringResource(Res.string.global_update)) }) {
+            SettingSwitchItem(
+                title = stringResource(Res.string.settings_update_notify),
+                shape = ListItemDefaults.segmentedShapes(0, 2),
+                value = settings.network.updateNotify,
+                onValueChange = {
+                    onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(updateNotify = it)))
+                },
+            )
+
             SettingOptionItem(
                 title = stringResource(Res.string.settings_update_channel),
-                shape = ListItemDefaults.segmentedShapes(0, 1),
+                shape = ListItemDefaults.segmentedShapes(1, 2),
                 value = SettingUpdateChannel.string(settings.network.updateChannel),
                 items = TabTokens.settingUpdateChannels,
                 onClick = {
@@ -251,4 +262,3 @@ private fun PreviewScreen() {
         )
     }
 }
-
