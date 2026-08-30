@@ -69,6 +69,7 @@ actual object System {
     actual fun createHttpClient(
         hosts: Map<String, List<String>>,
         tlsFragmentationDomains: Set<String>,
+        customResolve: Boolean,
         block: HttpClientConfig<*>.() -> Unit
     ): HttpClient {
         return HttpClient(OkHttp) {

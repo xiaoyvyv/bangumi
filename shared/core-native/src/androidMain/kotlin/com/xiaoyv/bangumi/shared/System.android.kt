@@ -18,6 +18,7 @@ import com.xiaoyv.bangumi.shared.native.AppDatabase
 import com.xiaoyv.bangumi.shared.sni.AntiSniDns
 import com.xiaoyv.bangumi.shared.sni.AntiSniSocketFactory
 import com.xiaoyv.bangumi.shared.sni.DomainTlsFragmentationPolicy
+import com.xiaoyv.bangumi.shared.sni.antiSniTlsEngine
 import io.github.vinceglb.filekit.readBytes
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -110,18 +111,20 @@ actual object System {
     actual fun createHttpClient(
         hosts: Map<String, List<String>>,
         tlsFragmentationDomains: Set<String>,
+        customResolve: Boolean,
         block: HttpClientConfig<*>.() -> Unit
     ): HttpClient {
         return HttpClient(OkHttp) {
-            engine {
-                config {
-                    socketFactory(AntiSniSocketFactory(DomainTlsFragmentationPolicy(tlsFragmentationDomains)))
-                    dns(AntiSniDns(hosts))
+            if (customResolve) {
+                engine {
+                    config {
+                        socketFactory(AntiSniSocketFactory(DomainTlsFragmentationPolicy(tlsFragmentationDomains)))
+                        dns(AntiSniDns(hosts))
+                        sslSocketFactory(antiSniTlsEngine.socketFactory, antiSniTlsEngine.trustManager)
+                    }
                 }
             }
             block()
         }
     }
-
-
 }

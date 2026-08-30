@@ -29,7 +29,7 @@ class SplashViewModel(
      */
     suspend fun checkTargetScreen(): Screen {
         val currentTime = kotlin.time.Clock.System.now().toEpochMilliseconds()
-        if (currentTime - userManager.lastBgmHostCheckTime < BGM_HOST_CHECK_INTERVAL_MILLIS) {
+        if (currentTime - userManager.lastBgmHostCheckTime < BGM_HOST_CHECK_INTERVAL_MILLIS || !userManager.settings.network.customResolve) {
             return Screen.Main
         }
 

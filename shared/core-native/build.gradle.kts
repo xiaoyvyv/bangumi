@@ -50,14 +50,19 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.androidx.webkit)
+            implementation(libs.conscrypt.android)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.conscrypt.openjdk)
         }
     }
 }
 
 tasks.named<Jar>("jvmJar") {
     manifest.attributes(
-        "Bgm-Version-Code" to appVersionCode,
         "Implementation-Version" to appVersionName,
+        "Implementation-Version-Code" to appVersionCode,
     )
 }
 

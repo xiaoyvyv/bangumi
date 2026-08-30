@@ -167,6 +167,7 @@ compose.resources {
 }
 
 tasks.register<GenerateMviTask>("generateMvi") {
+    description = "generate mvi files"
     group = "bangumi"
 
     val parentName = project.parent?.name.orEmpty()

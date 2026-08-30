@@ -64,6 +64,7 @@ fun createHttpClient(
 ): HttpClient = System.createHttpClient(
     hosts = config.configHosts,
     tlsFragmentationDomains = config.tlsFragmentationDomains,
+    customResolve = config.customResolve
 ) {
     installRedirect(redirect)
     installCookies(cookieStorage)

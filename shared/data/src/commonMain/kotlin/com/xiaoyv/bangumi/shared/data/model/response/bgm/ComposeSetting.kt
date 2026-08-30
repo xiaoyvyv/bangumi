@@ -106,6 +106,7 @@ data class ComposeSetting(
         @SerialName("socketTimeoutMillis") val socketTimeoutMillis: Long = 15_000,
         @SerialName("hosts") val hosts: SerializeMap<String, List<String>> = DefaultHosts,
         @SerialName("sniHosts") val sniHosts: SerializeMap<String, List<String>> = DefaultSniHosts,
+        @SerialName("customResolve") val customResolve: Boolean = true,
 
         @SerialName("pixivImageHost") val pixivImageHost: String = "https://xget.xiaoyv.com.cn/pximg/",
         @SerialName("pixivClientId") val pixivClientId: String = "MOBrBDS8blbauoSck0ZfDbtuzpyT",

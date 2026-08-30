@@ -36,10 +36,10 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertInputDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertInputDialogState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 /**
  * [SettingContainer]
@@ -99,6 +99,7 @@ fun SettingItem(
     title: String,
     shape: ListItemShapes,
     icon: ImageVector? = null,
+    enabled: Boolean = true,
     leadingContent: @Composable (() -> Unit)? = icon?.let {
         {
             Icon(
@@ -127,6 +128,7 @@ fun SettingItem(
         onClick = onClick,
         shapes = shape,
         colors = colors,
+        enabled = enabled,
         leadingContent = leadingContent,
         trailingContent = trailingContent,
         supportingContent = supportingContent,

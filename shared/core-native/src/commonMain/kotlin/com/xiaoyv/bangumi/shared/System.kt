@@ -37,6 +37,7 @@ expect object System {
     fun createHttpClient(
         hosts: Map<String, List<String>>,
         tlsFragmentationDomains: Set<String> = hosts.keys,
+        customResolve: Boolean,
         block: HttpClientConfig<*>.() -> Unit
     ): HttpClient
 }

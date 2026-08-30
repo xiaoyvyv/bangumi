@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_domain
 import com.xiaoyv.bangumi.core_resource.resources.global_pixiv
+import com.xiaoyv.bangumi.core_resource.resources.global_proxy
 import com.xiaoyv.bangumi.core_resource.resources.global_req_timeout
 import com.xiaoyv.bangumi.core_resource.resources.global_update
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_bgm
@@ -28,6 +29,7 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_dou_ban
 import com.xiaoyv.bangumi.core_resource.resources.settings_network
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_request
 import com.xiaoyv.bangumi.core_resource.resources.settings_timeout_socket
+import com.xiaoyv.bangumi.core_resource.resources.settings_tls_fragment
 import com.xiaoyv.bangumi.core_resource.resources.settings_update_channel
 import com.xiaoyv.bangumi.core_resource.resources.settings_update_notify
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkEvent
@@ -117,22 +119,34 @@ private fun SettingsNetworkScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.global_domain)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_domain_bgm),
-                shape = ListItemDefaults.segmentedShapes(0, 2),
+                shape = ListItemDefaults.segmentedShapes(0, 1),
                 value = settings.network.bgmHost,
                 items = TabTokens.settingBangumiHosts,
                 onClick = {
                     onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(bgmHost = it)))
                 }
             )
+        }
+
+        SettingContainer(label = { Text(text = stringResource(Res.string.global_proxy)) }) {
+            SettingSwitchItem(
+                title = stringResource(Res.string.settings_tls_fragment),
+                shape = ListItemDefaults.segmentedShapes(0, 2),
+                value = settings.network.customResolve,
+                onValueChange = {
+                    onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(customResolve = it)))
+                },
+            )
             SettingItem(
                 title = stringResource(Res.string.settings_domain_resolver),
                 supportingContent = {
                     Text(text = stringResource(Res.string.settings_domain_resolver_desc))
                 },
+                enabled = settings.network.customResolve,
                 shape = ListItemDefaults.segmentedShapes(1, 2),
                 onClick = {
                     onUiEvent(SettingsNetworkEvent.UI.OnNavScreen(Screen.DnsResolver))
-                },
+                }
             )
         }
 

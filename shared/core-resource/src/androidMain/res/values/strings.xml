@@ -212,6 +212,7 @@
     <string name="global_friend">好友</string>
     <string name="global_wiki">维基</string>
     <string name="global_domain">域名</string>
+    <string name="global_proxy">解析</string>
     <string name="global_req_timeout">超时</string>
     <string name="global_host">Host</string>
     <string name="global_resolution">分辨率：%1$sx%2$s</string>
@@ -447,6 +448,7 @@
     <string name="settings_domain_pixiv">图片域</string>
     <string name="settings_update_channel">更新检测通道</string>
     <string name="settings_update_notify">检测到更新时自动提醒</string>
+    <string name="settings_tls_fragment">解析并直连</string>
     <string name="settings_reboot_active">网络配置变更需要冷重启 App 才能生效</string>
     <string name="settings_timeout_request">请求超时</string>
     <string name="settings_timeout_socket">读写超时</string>

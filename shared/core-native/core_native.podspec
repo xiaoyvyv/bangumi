@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
     spec.summary                  = 'Some description for the Shared Module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/core_native.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target    = '14'
+    spec.ios.deployment_target    = '15'
     spec.dependency 'libavif'
     if !Dir.exist?('build/cocoapods/framework/core_native.framework') || Dir.empty?('build/cocoapods/framework/core_native.framework')
         raise "
@@ -36,7 +36,6 @@ Pod::Spec.new do |spec|
                 fi
                 set -ev
                 REPO_ROOT="$PODS_TARGET_SRCROOT"
-                . "$REPO_ROOT/../../iosApp/gradle-ios.sh"
                 "$REPO_ROOT/../../gradlew" -p "$REPO_ROOT" $KOTLIN_PROJECT_PATH:syncFramework \
                     -Pkotlin.native.cocoapods.platform=$PLATFORM_NAME \
                     -Pkotlin.native.cocoapods.archs="$ARCHS" \

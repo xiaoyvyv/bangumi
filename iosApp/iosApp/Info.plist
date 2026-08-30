@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
+        <key>CADisableMinimumFrameDurationOnPhone</key>
+        <true />
         <key>CFBundleDevelopmentRegion</key>
         <string>$(DEVELOPMENT_LANGUAGE)</string>
+        <key>CFBundleDocumentTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeName</key>
+                <string>Image</string>
+                <key>CFBundleTypeRole</key>
+                <string>Viewer</string>
+                <key>LSItemContentTypes</key>
+                <array>
+                    <string>public.image</string>
+                </array>
+            </dict>
+        </array>
         <key>CFBundleExecutable</key>
         <string>$(EXECUTABLE_NAME)</string>
         <key>CFBundleIdentifier</key>
@@ -19,8 +34,10 @@
         <string>$(APP_VERSION_CODE)</string>
         <key>LSRequiresIPhoneOS</key>
         <true />
-        <key>CADisableMinimumFrameDurationOnPhone</key>
-        <true />
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>需要保存图片到系统相册</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>需要访问系统相册以选择或保存图片</string>
         <key>UIApplicationSceneManifest</key>
         <dict>
             <key>UIApplicationSupportsMultipleScenes</key>
@@ -45,22 +62,5 @@
             <string>UIInterfaceOrientationLandscapeLeft</string>
             <string>UIInterfaceOrientationLandscapeRight</string>
         </array>
-        <key>CFBundleDocumentTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleTypeName</key>
-                <string>Image</string>
-                <key>LSItemContentTypes</key>
-                <array>
-                    <string>public.image</string>
-                </array>
-                <key>CFBundleTypeRole</key>
-                <string>Viewer</string>
-            </dict>
-        </array>
-        <key>NSPhotoLibraryAddUsageDescription</key>
-        <string>需要保存图片到系统相册</string>
-        <key>NSPhotoLibraryUsageDescription</key>
-        <string>需要访问系统相册以选择或保存图片</string>
     </dict>
 </plist>

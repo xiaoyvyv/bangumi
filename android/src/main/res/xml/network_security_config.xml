@@ -6,4 +6,14 @@
             <certificates src="user" />
         </trust-anchors>
     </base-config>
+
+    <domain-config>
+        <domain includeSubdomains="true">bgm.tv</domain>
+        <domain includeSubdomains="true">bangumi.tv</domain>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+            <certificates src="@raw/isrg_root_x1" />
+        </trust-anchors>
+    </domain-config>
 </network-security-config>
