@@ -52,7 +52,6 @@ private fun TimelinePageScreen(
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         state = rememberScrollUpLazyListState(),
-        showScrollUpBtn = true,
         key = { item, _ -> item.id },
         contentType = { CONTENT_TYPE_TIMELINE }
     ) { item, _ ->

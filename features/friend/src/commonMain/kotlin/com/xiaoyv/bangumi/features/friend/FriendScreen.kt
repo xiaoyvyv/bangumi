@@ -117,10 +117,9 @@ private fun FriendScreenPage(
     onActionEvent: (FriendEvent.Action) -> Unit,
 ) {
     StateLazyColumn(
-        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
+        state = rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
-        showScrollUpBtn = true
     ) { item, index ->
         FriendScreenItem(
             item = item,

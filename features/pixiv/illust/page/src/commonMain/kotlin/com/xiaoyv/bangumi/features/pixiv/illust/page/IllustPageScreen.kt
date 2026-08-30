@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -120,7 +119,6 @@ private fun IllustPageScreenContent(
                     )
                 }
             },
-            showScrollUpBtn = true,
             horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             contentPadding = PaddingValues(ContentMarginHalf),
@@ -149,7 +147,6 @@ private fun IllustPageScreenContent(
                     else item(key = ITEM_HEADER, contentType = ITEM_HEADER) { header() }
                 }
             },
-            showScrollUpBtn = true,
             modifier = Modifier.fillMaxSize(),
             key = { item, _ -> item.illust_id },
             contentType = { CONTENT_TYPE_PIXIV_RANKING }

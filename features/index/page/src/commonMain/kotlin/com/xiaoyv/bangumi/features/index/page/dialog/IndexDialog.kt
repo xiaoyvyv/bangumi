@@ -23,6 +23,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.sheet.BottomSheetDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexDialogItem
@@ -94,7 +95,10 @@ fun IndexDialogContent(
             style = MaterialTheme.typography.bodyLarge,
         )
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = rememberScrollUpLazyListState()
+        ) {
             items(state.indexList) {
                 IndexDialogItem(
                     modifier = Modifier.fillMaxWidth(),

@@ -44,6 +44,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.box.MaxHeightFadeBox
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.CommentNoDataTip
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
@@ -78,7 +79,10 @@ fun MonoDetailMainScreen(
     onUiEvent: (MonoDetailEvent.UI) -> Unit,
     onActionEvent: (MonoDetailEvent.Action) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        state = rememberScrollUpLazyListState()
+    ) {
         itemKey(ItemSummary) {
             MonoDetailSummary(state, onUiEvent, onActionEvent)
         }

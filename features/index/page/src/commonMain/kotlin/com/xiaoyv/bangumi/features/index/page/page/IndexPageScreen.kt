@@ -41,7 +41,6 @@ private fun IndexPageScreenContent(
         pagingItems = pagingItems,
         columns = GridCells.Adaptive(250.dp),
         modifier = Modifier.fillMaxSize(),
-        showScrollUpBtn = true,
         contentPadding = PaddingValues(ContentMarginHalf),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),

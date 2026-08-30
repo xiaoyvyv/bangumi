@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -132,7 +131,6 @@ private fun SubjectPageScreenContent(
                     )
                 }
             },
-            showScrollUpBtn = true,
             horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             contentPadding = PaddingValues(ContentMarginGrid)
@@ -156,7 +154,6 @@ private fun SubjectPageScreenContent(
                     else item(key = ITEM_HEADER, contentType = ITEM_HEADER) { header() }
                 }
             },
-            showScrollUpBtn = true,
             modifier = Modifier.fillMaxSize()
         ) { item, _ ->
             SubjectLineItem(

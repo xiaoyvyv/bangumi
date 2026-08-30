@@ -37,6 +37,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -79,7 +80,10 @@ fun MonoDetailCastsScreen(
 ) = HideInPreview {
     if (state.type == MonoType.CHARACTER) {
         // 角色类型：数据已在 MonoDetailViewModel 中加载到 state.casts
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = rememberScrollUpLazyListState()
+        ) {
             items(
                 items = state.casts,
                 key = { it.subject.id },
@@ -97,7 +101,7 @@ fun MonoDetailCastsScreen(
         })
 
         StateLazyColumn(
-            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
+            state = rememberScrollUpLazyListState(),
             modifier = Modifier.fillMaxSize(),
             pagingItems = viewModel.casts.collectAsLazyPagingItems()
         ) { item, index ->

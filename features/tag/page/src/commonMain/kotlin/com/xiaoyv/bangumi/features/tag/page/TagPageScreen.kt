@@ -109,7 +109,6 @@ private fun TagPageScreenContent(
         contentPadding = PaddingValues(vertical = ContentMarginHalf, horizontal = ContentMargin),
         contentType = { CONTENT_TAG_ITEM },
         key = { item, _ -> item.name },
-        showScrollUpBtn = true
     ) { item, _ ->
         OutlinedCard(
             modifier = Modifier

@@ -54,6 +54,7 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
@@ -161,23 +162,27 @@ private fun SearchInputScreenContent(
     onActionEvent: (SearchInputEvent.Action) -> Unit,
 ) {
     when {
-        state.suggestions.isNotEmpty() -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(state.suggestions) {
-                Text(
-                    modifier = Modifier
-                        .clickable {
-                            onActionEvent(SearchInputEvent.Action.OnQueryChange(it.asTextFieldValue()))
-                            onActionEvent(SearchInputEvent.Action.OnSearch)
-                        }
-                        .fillMaxWidth()
-                        .padding(horizontal = ContentMargin, vertical = 12.dp),
-                    text = it,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Normal
-                )
+        state.suggestions.isNotEmpty() ->
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = rememberScrollUpLazyListState()
+            ) {
+                items(state.suggestions) {
+                    Text(
+                        modifier = Modifier
+                            .clickable {
+                                onActionEvent(SearchInputEvent.Action.OnQueryChange(it.asTextFieldValue()))
+                                onActionEvent(SearchInputEvent.Action.OnSearch)
+                            }
+                            .fillMaxWidth()
+                            .padding(horizontal = ContentMargin, vertical = 12.dp),
+                        text = it,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
             }
-        }
 
         state.histories.isNotEmpty() && state.query.text.isBlank() -> SearchInputHistory(
             state = state,
@@ -247,7 +252,7 @@ private fun SearchInputHistory(
         }
 
         LazyColumn(
-            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
+            state = rememberScrollUpLazyListState(),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)

@@ -139,7 +139,6 @@ private fun MessageMainScreenContent(
         pagingItems = pagingItems,
         key = { item, _ -> item.id },
         contentPadding = PaddingValues(vertical = ContentMarginHalf),
-        showScrollUpBtn = true,
         contentType = { CONTENT_TYPE_CONVERSATION_ITEM },
     ) { item, _ ->
         MessageMainConversationItem(

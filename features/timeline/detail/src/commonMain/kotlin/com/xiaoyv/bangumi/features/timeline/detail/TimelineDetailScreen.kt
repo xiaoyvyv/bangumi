@@ -39,6 +39,7 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.CommentNoDataTip
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -152,7 +153,10 @@ private fun TimelineDetailScreenContent(
     onReplyClick: (ComposeReply) -> Unit,
 ) {
     CompositionLocalProvider(LocalCommentTargetAuthorUsername provides state.timeline.user.username) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = rememberScrollUpLazyListState()
+        ) {
             item(key = CONTENT_TYPE_TIMELINE, contentType = CONTENT_TYPE_TIMELINE) {
                 TimelinePageItem(
                     modifier = Modifier.fillMaxWidth(),
