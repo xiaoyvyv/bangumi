@@ -1,23 +1,47 @@
 package com.xiaoyv.bangumi.features.user
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.global_avatar
+import com.xiaoyv.bangumi.core_resource.resources.global_blog
+import com.xiaoyv.bangumi.core_resource.resources.global_collection
+import com.xiaoyv.bangumi.core_resource.resources.global_friend
+import com.xiaoyv.bangumi.core_resource.resources.global_group
+import com.xiaoyv.bangumi.core_resource.resources.profile_joined_at
+import com.xiaoyv.bangumi.core_resource.resources.profile_no_sign
 import com.xiaoyv.bangumi.features.user.business.UserEvent
 import com.xiaoyv.bangumi.features.user.business.UserState
 import com.xiaoyv.bangumi.features.user.business.UserViewModel
@@ -30,10 +54,13 @@ import com.xiaoyv.bangumi.features.user.page.UserTimelineScreen
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.ProfileMenu
+import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
+import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
 import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
+import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.rememberCollapsingScaffoldState
@@ -43,9 +70,12 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -148,7 +178,7 @@ private fun UserScreen(
         },
         collapse = {
             uiState.data.run {
-                UserScreenHeader(state = this, it, imageColorState, onUiEvent, onActionEvent)
+                UserScreenHeader(state = this, padding = it, imageColorState = imageColorState)
             }
         }
     ) { _ ->
@@ -167,112 +197,148 @@ private fun UserScreenHeader(
     state: UserState,
     padding: PaddingValues,
     imageColorState: ImageColorState,
-    onUiEvent: (UserEvent.UI) -> Unit,
-    onActionEvent: (UserEvent.Action) -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(440.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer),
+            .heightIn(min = 330.dp)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
-        val imageUrl = state.user.avatar.displayMediumImage.ifBlank {
+        val coverImage = state.user.roomPic.ifBlank { state.user.avatar.displayLargeImage }
 
-        }
-
-        /*StateImage(
-            modifier = Modifier.fillMaxSize(),
-            model = imageUrl,
-            blurLoading = false,
-            contentDescription = detail.title,
+        BlurImage(
+            modifier = Modifier.matchParentSize(),
+            model = coverImage,
+            contentDescription = state.user.nickname,
             contentScale = ContentScale.Crop,
+            onState = imageColorState.onImageState,
         )
-        Column(
+
+        Box(
             modifier = Modifier
-                .align(Alignment.BottomStart)
                 .fillMaxWidth()
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            MaterialTheme.colorScheme.surface,
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.72f),
                             MaterialTheme.colorScheme.surface,
                         )
                     )
                 )
-                .padding(topPadding)
-                .padding(
-                    start = ContentMargin,
-                    top = ContentMargin + ContentMarginHalf,
-                    end = ContentMargin,
-                    bottom = ContentMargin,
-                ),
-            verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-        ) {
-            Text(
-                text = detail.title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 2,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-            )
-            Text(
-                text = detail.userName,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                modifier = Modifier.clickable(onClick = onUserClick),
-            )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                PixivIllustHeaderStat(
-                    value = detail.viewCount,
-                    label = stringResource(Res.string.pixiv_illust_stat_views),
-                )
-                PixivIllustHeaderStat(
-                    value = detail.likeCount,
-                    label = stringResource(Res.string.pixiv_illust_stat_likes),
-                )
-                PixivIllustHeaderStat(
-                    value = detail.bookmarkCount,
-                    label = stringResource(Res.string.pixiv_illust_stat_bookmarks),
-                )
-            }
-            if (detail.tags.tags.isNotEmpty()) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                    verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                    maxLines = 3,
-                ) {
-                    detail.tags.tags.forEachIndexed { index, tag ->
-                        val tagColor = when (index % 4) {
-                            0 -> MaterialTheme.colorScheme.primary
-                            1 -> MaterialTheme.colorScheme.tertiary
-                            2 -> MaterialTheme.colorScheme.error
-                            else -> MaterialTheme.colorScheme.secondary
-                        }
+        )
 
+        CompositionLocalProvider(LocalContentColor provides imageColorState.contentColor) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .fillMaxWidth()
+                    .padding(padding)
+                    .padding(ContentMargin),
+                verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(ContentMargin),
+                ) {
+                    StateImage(
+                        modifier = Modifier
+                            .size(84.dp)
+                            .border(3.dp, MaterialTheme.colorScheme.surface, CircleShape),
+                        model = state.user.avatar.displayMediumImage,
+                        contentDescription = stringResource(Res.string.global_avatar),
+                        shape = CircleShape,
+                    )
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                    ) {
                         Text(
-                            modifier = Modifier
-                                .clip(MaterialTheme.shapes.small)
-                                .background(tagColor.copy(alpha = 0.18f))
-                                .clickable { onTagClick(tag.tag) }
-                                .padding(
-                                    horizontal = ContentMarginHalf,
-                                    vertical = ContentMarginHalf,
-                                ),
-                            text = "#${tag.tag}",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = tagColor,
+                            text = state.user.nickname,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.SemiBold,
                             maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            text = "@${state.user.username}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = LocalContentColor.current.copy(alpha = 0.75f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
+                Text(
+                    text = state.user.sign.ifBlank { stringResource(Res.string.profile_no_sign) },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = LocalContentColor.current.copy(alpha = 0.85f),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    UserScreenHeaderMetric(
+                        modifier = Modifier.weight(1f),
+                        value = state.user.stats.subject.all.total.toString(),
+                        label = stringResource(Res.string.global_collection),
+                    )
+                    UserScreenHeaderMetric(
+                        modifier = Modifier.weight(1f),
+                        value = state.user.stats.friend.toString(),
+                        label = stringResource(Res.string.global_friend),
+                    )
+                    UserScreenHeaderMetric(
+                        modifier = Modifier.weight(1f),
+                        value = state.user.stats.group.toString(),
+                        label = stringResource(Res.string.global_group),
+                    )
+                    UserScreenHeaderMetric(
+                        modifier = Modifier.weight(1f),
+                        value = state.user.stats.blog.toString(),
+                        label = stringResource(Res.string.global_blog),
+                    )
+                }
+                if (state.user.location.isNotBlank() || state.user.joinedAt > 0) {
+                    Text(
+                        text = listOfNotNull(
+                            state.user.location.takeIf { it.isNotBlank() },
+                            state.user.joinedAt.takeIf { it > 0 }?.let {
+                                stringResource(
+                                    Res.string.profile_joined_at,
+                                    it.formatDate("yyyy-MM-dd"),
+                                )
+                            },
+                        ).joinToString(" · "),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = LocalContentColor.current.copy(alpha = 0.72f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
-        }*/
+        }
+    }
+}
+
+@Composable
+private fun UserScreenHeaderMetric(
+    value: String,
+    label: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = value,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = LocalContentColor.current.copy(alpha = 0.75f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 

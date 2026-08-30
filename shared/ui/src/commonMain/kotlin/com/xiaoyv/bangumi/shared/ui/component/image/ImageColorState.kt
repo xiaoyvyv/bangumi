@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.shared.ui.component.image
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -25,11 +26,11 @@ import coil3.compose.AsyncImagePainter
  * ```
  */
 @Stable
-class ImageColorState {
+class ImageColorState(initialColor: Color = Color.White) {
     /**
      * 背景上文字应使用的颜色
      */
-    var contentColor: Color by mutableStateOf(Color.White)
+    var contentColor: Color by mutableStateOf(initialColor)
         private set
 
     /**
@@ -50,7 +51,10 @@ class ImageColorState {
  */
 @Composable
 fun rememberImageColorState(): ImageColorState {
-    return remember { ImageColorState() }
+    val inDarkTheme = isSystemInDarkTheme()
+    return remember(inDarkTheme) {
+        ImageColorState(if (inDarkTheme) Color.White else Color.Black)
+    }
 }
 
 /**
