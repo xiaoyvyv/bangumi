@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.rounded.Edit
@@ -305,7 +305,7 @@ private fun ProfileScreenContent(
             modifier = Modifier.fillMaxSize(),
             pagerState = pagerState,
             onTabSelected = onTabSelected,
-            tabs = state.tabs
+            tabs = state.tabs,
         ) {
             when (state.tabs[it].type) {
                 ProfileTab.COLLECTION -> ProfileCollectionScreen(state, onUiEvent, onActionEvent)

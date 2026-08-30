@@ -13,8 +13,8 @@ import com.xiaoyv.bangumi.features.timeline.page.business.koinTimelinePageViewMo
 import com.xiaoyv.bangumi.shared.data.model.request.list.timeline.ListTimelineParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.view.timeline.TimelinePageItem
@@ -51,7 +51,7 @@ private fun TimelinePageScreen(
     StateLazyColumn(
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
-        state = rememberCacheWindowLazyListState(),
+        state = rememberScrollUpLazyListState(),
         showScrollUpBtn = true,
         key = { item, _ -> item.id },
         contentType = { CONTENT_TYPE_TIMELINE }

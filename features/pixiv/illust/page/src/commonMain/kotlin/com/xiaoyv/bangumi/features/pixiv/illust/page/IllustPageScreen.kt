@@ -28,6 +28,8 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
@@ -100,6 +102,7 @@ private fun IllustPageScreenContent(
 ) {
     if (state.param.ui.gridLayout) {
         StateLazyVerticalGrid(
+            state = rememberScrollUpLazyGridState(),
             modifier = Modifier.fillMaxSize(),
             columns = GridCells.Adaptive(150.dp),
             pagingItems = pagingItems,
@@ -135,7 +138,7 @@ private fun IllustPageScreenContent(
             )
         }
     } else {
-        val lazyListState = rememberLazyListState()
+        val lazyListState = rememberScrollUpLazyListState()
 
         StateLazyColumn(
             state = lazyListState,

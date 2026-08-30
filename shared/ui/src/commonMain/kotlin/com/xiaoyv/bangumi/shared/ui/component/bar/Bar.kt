@@ -1,7 +1,10 @@
 package com.xiaoyv.bangumi.shared.ui.component.bar
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
@@ -13,15 +16,19 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_back
+import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalHideNavIcon
+import com.xiaoyv.bangumi.shared.ui.component.scroll.LocalScrollUpState
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -29,7 +36,7 @@ import org.jetbrains.compose.resources.stringResource
 fun BgmTopAppBar(
     modifier: Modifier = Modifier,
     title: String? = null,
-    titleContent: @Composable () -> Unit = {
+    titleContent: @Composable BoxScope.() -> Unit = {
         if (title != null) Text(
             text = title,
             maxLines = 1,
@@ -53,8 +60,18 @@ fun BgmTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
+    val scrollTopState = LocalScrollUpState.current
+    val scope = rememberCoroutineScope()
+
     TopAppBar(
-        title = titleContent,
+        title = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickWithoutRipped { scope.launch { scrollTopState.scrollTop() } },
+                content = titleContent
+            )
+        },
         modifier = modifier,
         navigationIcon = navigationIcon ?: {},
         actions = actions,
@@ -70,7 +87,7 @@ fun BgmLargeTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     title: String? = null,
-    titleContent: @Composable () -> Unit = {
+    titleContent: @Composable BoxScope.() -> Unit = {
         if (title != null) {
             val progress = scrollBehavior?.state?.collapsedFraction ?: 0f
             Text(
@@ -96,8 +113,18 @@ fun BgmLargeTopAppBar(
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
 ) {
+    val scrollTopState = LocalScrollUpState.current
+    val scope = rememberCoroutineScope()
+
     LargeTopAppBar(
-        title = titleContent,
+        title = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickWithoutRipped { scope.launch { scrollTopState.scrollTop() } },
+                content = titleContent
+            )
+        },
         modifier = modifier,
         navigationIcon = navigationIcon ?: {},
         actions = actions,

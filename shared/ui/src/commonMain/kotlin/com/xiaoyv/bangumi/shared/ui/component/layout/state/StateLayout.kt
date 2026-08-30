@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.ui.component.layout.state
 
-import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -55,18 +50,6 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.refresh.PullToRefreshBox
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
-
-@Composable
-fun rememberCacheWindowLazyListState(
-    @FloatRange(from = 0.0) aheadFraction: Float = 1f,
-    @FloatRange(from = 0.0) behindFraction: Float = 1f,
-): LazyListState = rememberLazyListState()
-
-@Composable
-fun rememberCacheWindowLazyGridState(
-    @FloatRange(from = 0.0) aheadFraction: Float = 10f,
-    @FloatRange(from = 0.0) behindFraction: Float = 10f,
-): LazyGridState = rememberLazyGridState()
 
 /**
  * The state layout

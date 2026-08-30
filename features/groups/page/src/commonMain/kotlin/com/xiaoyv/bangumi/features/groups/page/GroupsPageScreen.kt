@@ -72,6 +72,7 @@ private fun GroupsPageScreenContent(
     onActionEvent: (GroupsPageEvent.Action) -> Unit,
 ) {
     StateLazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
     ) { item, index ->

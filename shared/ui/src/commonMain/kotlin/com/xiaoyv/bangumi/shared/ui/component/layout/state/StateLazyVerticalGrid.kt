@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRefreshBox
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import androidx.paging.compose.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ fun <T : Any> StateLazyVerticalGrid(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
     key: ((T, index: Int) -> Any)? = null,
-    state: LazyGridState = rememberLazyGridState(),
+    state: LazyGridState = rememberScrollUpLazyGridState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     showContentLoadingWhenPullRefresh: Boolean = false,
     showScrollUpBtn: Boolean = false,

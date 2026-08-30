@@ -42,6 +42,7 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.grouped
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.tab.DetailSectionTitle
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -68,7 +69,7 @@ fun SubjectDetailEpisodeScreen(
         value = state.subject.episodes.grouped().toPersistentList()
     }
 
-    val listState = rememberLazyListState()
+    val listState = rememberScrollUpLazyListState()
     val totalCount = items.size
     val showSlider = totalCount > 40
 

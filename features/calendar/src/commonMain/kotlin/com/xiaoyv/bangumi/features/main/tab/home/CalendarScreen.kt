@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.LineStyle
 import androidx.compose.material3.Icon
@@ -36,6 +35,8 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.calendarWeekDays
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
@@ -119,7 +120,7 @@ private fun CalendarScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         tabs = calendarWeekDays,
-        initialPage = currentWeekDay().let { if (state.isToday) it - 1 else if (it == 7) 0 else it }
+        initialPage = currentWeekDay().let { if (state.isToday) it - 1 else if (it == 7) 0 else it },
     ) {
         val type = calendarWeekDays[it].type.toString()
         val sections = state.calendarMap[type].orEmpty()
@@ -137,10 +138,12 @@ private fun CalendarScreenPage(
 ) {
     if (state.isGrid) {
         val gridCells = if (isExtraSmallScreen) GridCells.Fixed(3) else GridCells.Adaptive(100.dp)
+        val lazyGridState = rememberScrollUpLazyGridState()
 
         LazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),
             columns = gridCells,
+            state = lazyGridState,
             horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             contentPadding = PaddingValues(ContentMarginGrid)
@@ -155,7 +158,7 @@ private fun CalendarScreenPage(
             }
         }
     } else {
-        val lazyListState = rememberLazyListState()
+        val lazyListState = rememberScrollUpLazyListState()
 
         LazyColumn(
             state = lazyListState,

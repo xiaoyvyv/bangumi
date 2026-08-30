@@ -363,7 +363,7 @@ private fun MonoDetailScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         pagerState = pagerState,
-        tabs = tabs
+        tabs = tabs,
     ) {
         when (tabs[it].type) {
             MonoDetailTab.OVERVIEW -> MonoDetailMainScreen(

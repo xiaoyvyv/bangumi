@@ -105,6 +105,7 @@ private fun PixivUserEditScreenContent(
     onActionEvent: (PixivUserEditEvent.Action) -> Unit,
 ) {
     LazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(ContentMargin),
         verticalArrangement = Arrangement.spacedBy(ContentMargin),

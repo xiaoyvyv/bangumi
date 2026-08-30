@@ -89,7 +89,7 @@ private fun NewestScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         tabs = state.tabs,
-        initialPage = state.defaultMonth - 1
+        initialPage = state.defaultMonth - 1,
     ) {
         if (!LocalInspectionMode.current) {
             SubjectPageRoute(

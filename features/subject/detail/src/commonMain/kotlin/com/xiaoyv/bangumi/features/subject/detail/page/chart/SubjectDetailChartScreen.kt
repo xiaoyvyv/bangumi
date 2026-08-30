@@ -55,7 +55,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectS
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectStats.GridState
 import com.xiaoyv.bangumi.shared.ui.component.layout.adaptive.AdaptiveGrid
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -109,7 +109,7 @@ fun SubjectDetailChartScreen(
 private fun SubjectDetailChartContent(state: SubjectDetailChartState) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        state = rememberCacheWindowLazyListState(),
+        state = rememberScrollUpLazyListState(),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         contentPadding = PaddingValues(vertical = ContentMargin)
     ) {

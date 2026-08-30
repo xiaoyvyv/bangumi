@@ -29,6 +29,8 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
@@ -112,6 +114,7 @@ private fun SubjectPageScreenContent(
         val gridCells = if (isExtraSmallScreen) GridCells.Fixed(3) else GridCells.Adaptive(100.dp)
 
         StateLazyVerticalGrid(
+            state = rememberScrollUpLazyGridState(),
             modifier = Modifier.fillMaxSize(),
             columns = gridCells,
             pagingItems = pagingItems,
@@ -142,7 +145,7 @@ private fun SubjectPageScreenContent(
             )
         }
     } else {
-        val lazyListState = rememberLazyListState()
+        val lazyListState = rememberScrollUpLazyListState()
 
         StateLazyColumn(
             state = lazyListState,

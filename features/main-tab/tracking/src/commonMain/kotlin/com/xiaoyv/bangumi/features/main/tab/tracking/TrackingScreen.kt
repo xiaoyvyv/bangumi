@@ -101,7 +101,7 @@ private fun TrackingScreenContent(
 ) {
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
-        tabs = state.tabs
+        tabs = state.tabs,
     ) {
         TrackingPageScreen(
             subjectType = state.tabs[it].type,
@@ -130,4 +130,3 @@ private fun PreviewTrackingScreen() {
         )
     }
 }
-

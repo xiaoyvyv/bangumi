@@ -426,7 +426,7 @@ fun SubjectDetailScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         pagerState = pagerState,
-        tabs = tabs
+        tabs = tabs,
     ) {
         when (tabs[it].type) {
             SubjectDetailTab.OVERVIEW -> SubjectDetailMainScreen(

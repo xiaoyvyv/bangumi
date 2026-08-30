@@ -40,6 +40,8 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedViewModel
 import com.xiaoyv.bangumi.shared.data.manager.shared.SharedEvent
 import com.xiaoyv.bangumi.shared.data.manager.shared.SharedViewModel
+import com.xiaoyv.bangumi.shared.ui.component.scroll.LocalScrollUpState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpState
 import com.xiaoyv.bangumi.shared.gif.addPlatformGifSupport
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.action.rememberAppActionHandler
@@ -125,6 +127,7 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
 
     // Live2d Controller
     val live2dSpeechState = rememberLive2DSpeechState()
+    val scrollUpState = rememberScrollUpState()
 
     CompositionLocalProvider(
         LocalPopupTipState provides popupTipState,
@@ -135,6 +138,7 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
         LocalActionHandler provides actionHandler,
         LocalPersonalState provides personState,
         LocalLive2DSpeechController provides live2dSpeechState,
+        LocalScrollUpState provides scrollUpState,
     ) {
         BgmAppTheme(modifier = Modifier.fillMaxSize()) {
             BgmScreenNavGraph(navigator = navigator)

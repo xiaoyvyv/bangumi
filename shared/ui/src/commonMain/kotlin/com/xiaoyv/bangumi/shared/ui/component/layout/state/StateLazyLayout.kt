@@ -54,6 +54,8 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_no_more
 import com.xiaoyv.bangumi.shared.ui.component.layout.BgmRefreshBox
 import com.xiaoyv.bangumi.shared.ui.component.layout.LocalCollapsingPullRefresh
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyStaggeredGridState
 import androidx.paging.compose.LazyPagingItems
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import kotlinx.coroutines.launch
@@ -89,7 +91,7 @@ fun <T : Any> StateLazyColumn(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
     key: ((T, index: Int) -> Any)? = null,
-    state: LazyListState = rememberLazyListState(),
+    state: LazyListState = rememberScrollUpLazyListState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     showContentLoadingWhenRefresh: Boolean = false,
     showScrollUpBtn: Boolean = false,
@@ -167,7 +169,7 @@ fun <T : Any> StateLazyVerticalStaggeredGrid(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
     key: ((T, index: Int) -> Any)? = null,
-    state: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
+    state: LazyStaggeredGridState = rememberScrollUpLazyStaggeredGridState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     showContentLoadingWhenPullRefresh: Boolean = false,
     showScrollUpBtn: Boolean = false,
@@ -603,4 +605,3 @@ inline fun LazyListScope.itemKey(
         content()
     }
 }
-

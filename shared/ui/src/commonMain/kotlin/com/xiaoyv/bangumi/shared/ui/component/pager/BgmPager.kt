@@ -24,6 +24,7 @@ import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -44,6 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
+import com.xiaoyv.bangumi.shared.ui.component.scroll.LocalScrollUpState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpPagerState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.MinTabWidth
@@ -88,6 +91,7 @@ fun <Key : Any> BgmTabHorizontalPager(
 ) {
     val scope = rememberCoroutineScope()
     val currentPage = pagerState.currentPage.coerceAtMost(tabs.size - 1)
+    val scrollUpPagerState = rememberScrollUpPagerState(tabs.size, currentPage)
     var inputType by remember { mutableStateOf(PointerType.Touch) }
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -187,7 +191,9 @@ fun <Key : Any> BgmTabHorizontalPager(
         }
 
         if (tabs.size == 1) {
-            pageContent(0)
+            CompositionLocalProvider(LocalScrollUpState provides scrollUpPagerState.pageState(0)) {
+                pageContent(0)
+            }
         } else {
             divider()
             HorizontalPager(
@@ -209,7 +215,11 @@ fun <Key : Any> BgmTabHorizontalPager(
                 userScrollEnabled = inputType == PointerType.Touch && userScrollEnabled,
                 beyondViewportPageCount = beyondViewportPageCount,
                 key = key,
-                pageContent = { pageContent(it) }
+                pageContent = { page ->
+                    CompositionLocalProvider(LocalScrollUpState provides scrollUpPagerState.pageState(page)) {
+                        pageContent(page)
+                    }
+                }
             )
         }
     }
@@ -235,6 +245,9 @@ fun <Key : Any> BgmChipHorizontalPager(
     extra: @Composable (ColumnScope.() -> Unit)? = null,
     pageContent: @Composable (page: Int) -> Unit,
 ) {
+    val currentPage = pagerState.currentPage.coerceAtMost(tabs.size - 1)
+    val scrollUpPagerState = rememberScrollUpPagerState(tabs.size, currentPage)
+
     Column(modifier = modifier) {
         if (tabs.size > 1) LazyRow(
             modifier = Modifier
@@ -259,7 +272,9 @@ fun <Key : Any> BgmChipHorizontalPager(
         if (extra != null) extra()
 
         if (tabs.size == 1) {
-            pageContent(0)
+            CompositionLocalProvider(LocalScrollUpState provides scrollUpPagerState.pageState(0)) {
+                pageContent(0)
+            }
         } else HorizontalPager(
             modifier = Modifier
                 .fillMaxWidth()
@@ -268,7 +283,11 @@ fun <Key : Any> BgmChipHorizontalPager(
             state = pagerState,
             userScrollEnabled = userScrollEnabled,
             beyondViewportPageCount = beyondViewportPageCount,
-            pageContent = { pageContent(it) }
+            pageContent = { page ->
+                CompositionLocalProvider(LocalScrollUpState provides scrollUpPagerState.pageState(page)) {
+                    pageContent(page)
+                }
+            }
         )
     }
 }

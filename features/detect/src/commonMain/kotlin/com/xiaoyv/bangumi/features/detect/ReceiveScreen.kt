@@ -456,6 +456,7 @@ private fun ReceiveScreenSubjectDialog(
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
+                    state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(ContentMargin),
                     contentPadding = PaddingValues(ContentMargin)
@@ -508,6 +509,7 @@ private fun ReceiveScreenCharacterDialog(
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
+                    state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(ContentMargin),
                     contentPadding = PaddingValues(ContentMargin)

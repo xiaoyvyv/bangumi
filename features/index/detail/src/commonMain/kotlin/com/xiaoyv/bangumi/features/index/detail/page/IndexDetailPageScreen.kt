@@ -57,6 +57,7 @@ private fun IndexDetailPageScreenContent(
     onNavScreen: (Screen) -> Unit,
 ) {
     StateLazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         key = { item, _ -> item.id },

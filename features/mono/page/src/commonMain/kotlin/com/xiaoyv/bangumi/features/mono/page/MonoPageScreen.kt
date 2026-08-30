@@ -25,6 +25,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoCardItem
@@ -96,6 +97,7 @@ private fun MonoPageLineLayout(
     onUiEvent: (MonoPageEvent.UI) -> Unit,
 ) {
     StateLazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         header = {
@@ -140,6 +142,7 @@ private fun MonoPageGridLayout(
     onUiEvent: (MonoPageEvent.UI) -> Unit,
 ) {
     StateLazyVerticalGrid(
+        state = rememberScrollUpLazyGridState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         columns = GridCells.Adaptive(100.dp),

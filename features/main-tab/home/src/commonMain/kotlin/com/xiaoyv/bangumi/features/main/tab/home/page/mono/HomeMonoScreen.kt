@@ -22,8 +22,8 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
@@ -69,7 +69,7 @@ private fun HomeMonoScreenContent(
 
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
-        state = rememberCacheWindowLazyGridState(),
+        state = rememberScrollUpLazyGridState(),
         columns = gridCells,
         contentPadding = PaddingValues(start = ContentMarginGrid, end = ContentMarginGrid, bottom = ContentMarginGrid),
         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),

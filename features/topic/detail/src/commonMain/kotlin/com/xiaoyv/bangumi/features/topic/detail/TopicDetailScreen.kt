@@ -76,6 +76,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.state.CommentNoDataTip
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.itemKey
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -396,7 +397,7 @@ private fun TopicDetailScreenContent(
     onUiEvent: (TopicDetailEvent.UI) -> Unit,
     onActionEvent: (TopicDetailEvent.Action) -> Unit,
 ) {
-    val listState = rememberLazyListState()
+    val listState = rememberScrollUpLazyListState()
     val scope = rememberCoroutineScope()
     val deleteDialogState = rememberAlertDialogState()
     var deletingCommentId by remember { mutableStateOf<Long?>(null) }
@@ -416,7 +417,7 @@ private fun TopicDetailScreenContent(
     CompositionLocalProvider(LocalCommentTargetAuthorUsername provides state.topic.creator.username) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = listState,
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(listState),
         ) {
             item(key = CONTENT_TYPE_ARTICLE, contentType = CONTENT_TYPE_ARTICLE) {
                 TopicDetailScreenHeader(

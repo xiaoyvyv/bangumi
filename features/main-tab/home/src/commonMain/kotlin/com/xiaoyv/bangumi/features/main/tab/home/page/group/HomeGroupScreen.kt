@@ -18,7 +18,7 @@ import com.xiaoyv.bangumi.features.groups.page.GroupsPageRoute
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeEvent
 import com.xiaoyv.bangumi.features.main.tab.home.business.HomeState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
@@ -96,7 +96,7 @@ private fun HomeGroupHotScreenContent(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        state = rememberCacheWindowLazyListState()
+        state = rememberScrollUpLazyListState()
     ) {
         stickyHeader(key = "h1", contentType = CONTENT_TYPE_HEADER) {
             SectionTitle(

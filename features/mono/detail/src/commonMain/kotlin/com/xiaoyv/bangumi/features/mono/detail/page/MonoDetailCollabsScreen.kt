@@ -28,6 +28,7 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoCollab
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import com.xiaoyv.bangumi.shared.ui.theme.ContentCoverWidth
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
@@ -67,6 +68,7 @@ fun MonoDetailCollabsScreen(
     }
 
     LazyVerticalGrid(
+        state = rememberScrollUpLazyGridState(),
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Adaptive(minSize = 100.dp),
         contentPadding = PaddingValues(ContentMargin),

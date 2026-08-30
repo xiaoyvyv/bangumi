@@ -134,6 +134,7 @@ private fun MessageMainScreenContent(
     onActionEvent: (MessageMainEvent.Action) -> Unit,
 ) {
     StateLazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         key = { item, _ -> item.id },

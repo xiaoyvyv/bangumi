@@ -97,6 +97,7 @@ fun MonoDetailCastsScreen(
         })
 
         StateLazyColumn(
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
             modifier = Modifier.fillMaxSize(),
             pagingItems = viewModel.casts.collectAsLazyPagingItems()
         ) { item, index ->

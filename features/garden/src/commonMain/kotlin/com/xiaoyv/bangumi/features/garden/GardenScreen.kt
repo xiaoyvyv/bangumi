@@ -221,6 +221,7 @@ private fun GardenScreenContent(
         }
 
         StateLazyColumn(
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),

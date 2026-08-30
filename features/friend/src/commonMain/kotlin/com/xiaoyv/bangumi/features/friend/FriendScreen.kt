@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +52,7 @@ import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -117,6 +117,7 @@ private fun FriendScreenPage(
     onActionEvent: (FriendEvent.Action) -> Unit,
 ) {
     StateLazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         showScrollUpBtn = true
@@ -136,7 +137,7 @@ private fun FriendScreenContent(
     onUiEvent: (FriendEvent.UI) -> Unit,
     onActionEvent: (FriendEvent.Action) -> Unit,
 ) {
-    val listState = rememberLazyListState()
+    val listState = rememberScrollUpLazyListState()
     var selectedKey by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {

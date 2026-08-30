@@ -123,7 +123,7 @@ private fun TimelineScreenContent(
 ) {
     BgmTabHorizontalPager(
         modifier = modifier.fillMaxSize(),
-        tabs = timelineTabs
+        tabs = timelineTabs,
     ) {
         val cat = timelineTabs[it].type
         val username = currentUser().username

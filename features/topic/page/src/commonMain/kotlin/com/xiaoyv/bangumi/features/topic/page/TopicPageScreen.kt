@@ -75,6 +75,7 @@ private fun TopicPageScreenContent(
 ) {
     CompositionLocalProvider(LocalListTopicParam provides state.param) {
         StateLazyColumn(
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
             modifier = Modifier.fillMaxSize(),
             pagingItems = pagingItems
         ) { item, index ->

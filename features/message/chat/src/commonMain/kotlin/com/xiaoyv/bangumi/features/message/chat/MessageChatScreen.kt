@@ -232,7 +232,7 @@ private fun MessageChatScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            state = listState,
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(listState),
             verticalArrangement = Arrangement.spacedBy(ContentMarginGrid),
             contentPadding = PaddingValues(ContentMarginGrid)
         ) {

@@ -130,7 +130,7 @@ private fun RaKuenScreenContent(
 ) {
     BgmTabHorizontalPager(
         modifier = modifier.fillMaxSize(),
-        tabs = state.tabs
+        tabs = state.tabs,
     ) {
         RaKuenPageScreen(
             type = state.tabs[it].type,
@@ -151,4 +151,3 @@ fun Test() {
         )
     }
 }
-

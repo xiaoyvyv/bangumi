@@ -362,7 +362,7 @@ private fun UserScreenContent(
         modifier = Modifier.fillMaxSize(),
         tabs = tabs,
         initialPage = initialPage,
-        pagerState = pagerState
+        pagerState = pagerState,
     ) {
         when (tabs[it].type) {
             ProfileMenu.TIME_MACHINE -> UserMainScreen(

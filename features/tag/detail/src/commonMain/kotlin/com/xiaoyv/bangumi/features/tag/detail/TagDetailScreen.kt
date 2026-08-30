@@ -100,7 +100,7 @@ private fun TagDetailScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         tabs = subjectTypeTabs,
-        initialPage = subjectTypeTabs.indexOfFirst { it.type == state.type }.coerceAtLeast(0)
+        initialPage = subjectTypeTabs.indexOfFirst { it.type == state.type }.coerceAtLeast(0),
     ) {
         TagPageRoute(
             param = remember(state.type) {
@@ -115,4 +115,3 @@ private fun TagDetailScreenContent(
         )
     }
 }
-

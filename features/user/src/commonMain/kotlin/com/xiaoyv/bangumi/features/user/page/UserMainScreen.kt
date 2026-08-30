@@ -37,12 +37,12 @@ import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
-import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 
 private const val CONTENT_TYPE_SUBJECT_SECTION = "CONTENT_TYPE_SUBJECT_SECTION"
@@ -57,7 +57,7 @@ fun UserMainScreen(
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Adaptive(50.dp),
-        state = rememberCacheWindowLazyGridState(),
+        state = rememberScrollUpLazyGridState(),
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 40.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),

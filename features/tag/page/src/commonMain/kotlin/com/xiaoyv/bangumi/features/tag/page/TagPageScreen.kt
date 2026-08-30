@@ -37,6 +37,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -99,6 +100,7 @@ private fun TagPageScreenContent(
     onActionEvent: (TagPageEvent.Action) -> Unit,
 ) {
     StateLazyVerticalGrid(
+        state = rememberScrollUpLazyGridState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = pagingItems,
         columns = if (isExtraSmallScreen) GridCells.Fixed(4) else GridCells.Adaptive(80.dp),

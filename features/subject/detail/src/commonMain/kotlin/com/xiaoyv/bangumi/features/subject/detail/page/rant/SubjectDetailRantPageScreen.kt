@@ -13,7 +13,7 @@ import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.data.model.PreviewComposeReply
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -57,7 +57,7 @@ fun SubjectDetailRantPageScreen(
     StateLazyColumn(
         modifier = Modifier.fillMaxSize(),
         pagingItems = commentPagingItems,
-        state = rememberCacheWindowLazyListState(),
+        state = rememberScrollUpLazyListState(),
         userScrollEnabled = true,
         key = { item, _ -> item.id },
         contentType = { _ -> ItemCommentItem },

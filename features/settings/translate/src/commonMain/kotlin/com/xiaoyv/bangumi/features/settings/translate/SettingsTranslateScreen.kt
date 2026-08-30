@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.features.settings.translate
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -88,4 +88,3 @@ private fun SettingsTranslateScreenContent(
 ) {
 
 }
-

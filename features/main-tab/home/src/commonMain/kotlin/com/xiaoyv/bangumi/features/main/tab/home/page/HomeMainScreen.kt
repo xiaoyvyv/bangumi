@@ -54,8 +54,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectR
 import com.xiaoyv.bangumi.shared.ui.component.image.InfoImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.adaptive.AdaptiveGrid
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeActions
@@ -92,7 +92,7 @@ fun HomeMainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .semantics { contentDescription = "home_main_list" },
-            state = rememberCacheWindowLazyListState(),
+            state = rememberScrollUpLazyListState(),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             item(key = CONTENT_TYPE_BANNER, contentType = CONTENT_TYPE_BANNER) {

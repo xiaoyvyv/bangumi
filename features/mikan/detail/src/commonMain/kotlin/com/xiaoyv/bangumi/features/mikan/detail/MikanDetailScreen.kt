@@ -165,6 +165,7 @@ private fun MikanDetailScreenContent(
     onActionEvent: (MikanDetailEvent.Action) -> Unit,
 ) {
     LazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(ContentMarginGrid),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)

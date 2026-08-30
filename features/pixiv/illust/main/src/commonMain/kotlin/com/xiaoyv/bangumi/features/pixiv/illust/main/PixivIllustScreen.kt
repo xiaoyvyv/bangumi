@@ -295,6 +295,7 @@ private fun PixivIllustScreenContent(
     onUiEvent: (PixivIllustEvent.UI) -> Unit,
 ) {
     LazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = ContentMargin),
     ) {

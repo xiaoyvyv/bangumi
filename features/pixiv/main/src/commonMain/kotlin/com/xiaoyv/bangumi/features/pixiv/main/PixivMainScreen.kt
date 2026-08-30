@@ -195,7 +195,7 @@ private fun PixivMainScreenContent(
 ) {
     BgmTabHorizontalPager(
         modifier = modifier.fillMaxSize(),
-        tabs = state.tabs
+        tabs = state.tabs,
     ) { page ->
         PixivMainPageScreen(
             content = state.tabs[page].type,

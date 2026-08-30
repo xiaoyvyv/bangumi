@@ -141,7 +141,7 @@ private fun DollarsScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            state = listState
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(listState)
         ) {
             items(state.items) {
                 DollarsScreenContentItem(it, onUiEvent, onActionEvent)

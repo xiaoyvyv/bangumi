@@ -298,7 +298,7 @@ private fun IndexDetailScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         pagerState = pagerState,
-        tabs = state.tabs
+        tabs = state.tabs,
     ) {
         val tab = state.tabs[it]
 

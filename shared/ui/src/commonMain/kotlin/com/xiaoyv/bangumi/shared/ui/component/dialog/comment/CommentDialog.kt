@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.AddLink
@@ -118,6 +118,7 @@ import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
@@ -477,10 +478,12 @@ fun CommentDialogPanel(
                     5 -> rememberBlakeEmojis()
                     else -> persistentListOf()
                 }
+                val lazyGridState = rememberScrollUpLazyGridState()
 
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxSize(),
                     columns = GridCells.Adaptive(if (it == 4 || it == 5) 60.dp else 40.dp),
+                    state = lazyGridState,
                     contentPadding = PaddingValues(ContentMarginHalf),
                     horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
                     verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)

@@ -57,7 +57,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHomeProgres
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectInterest
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
-import com.xiaoyv.bangumi.shared.ui.component.layout.state.rememberCacheWindowLazyListState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
@@ -78,7 +78,7 @@ fun TrackingPageScreen(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        state = rememberCacheWindowLazyListState(),
+        state = rememberScrollUpLazyListState(),
         contentPadding = PaddingValues(vertical = ContentMarginHalf / 2)
     ) {
         items(

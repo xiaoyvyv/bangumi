@@ -29,6 +29,7 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyGridState
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
@@ -94,6 +95,7 @@ private fun AlmanacScreenContent(
     onActionEvent: (AlmanacEvent.Action) -> Unit,
 ) {
     LazyVerticalGrid(
+        state = rememberScrollUpLazyGridState(),
         modifier = Modifier.fillMaxWidth(),
         columns = GridCells.Adaptive(300.dp),
         verticalArrangement = Arrangement.spacedBy(ContentMargin),

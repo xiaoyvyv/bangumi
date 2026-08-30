@@ -9,6 +9,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.features.main.tab.rakuen.business.RaKuenEvent
 import com.xiaoyv.bangumi.shared.core.types.RakuenType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
+import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.topic.ComposeTopicDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
@@ -28,6 +29,7 @@ fun RaKuenPageScreen(
     onActionEvent: (RaKuenEvent.Action) -> Unit,
 ) {
     StateLazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = Modifier.fillMaxSize(),
         pagingItems = viewModel.rakuenFlow.collectAsLazyPagingItems(),
         showScrollUpBtn = true,

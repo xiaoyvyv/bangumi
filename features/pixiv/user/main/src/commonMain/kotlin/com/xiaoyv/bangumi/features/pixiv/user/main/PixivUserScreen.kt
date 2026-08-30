@@ -164,6 +164,7 @@ private fun PixivUserScreenContent(
     onActionEvent: (PixivUserEvent.Action) -> Unit,
 ) {
     LazyColumn(
+        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
         modifier = modifier.fillMaxSize(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(ContentMargin),
         verticalArrangement = Arrangement.spacedBy(ContentMargin),

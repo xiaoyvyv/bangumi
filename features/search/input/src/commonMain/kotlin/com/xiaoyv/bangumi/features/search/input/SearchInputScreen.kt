@@ -247,6 +247,7 @@ private fun SearchInputHistory(
         }
 
         LazyColumn(
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
