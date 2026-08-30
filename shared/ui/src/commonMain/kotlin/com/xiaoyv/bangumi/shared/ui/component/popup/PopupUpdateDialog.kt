@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownColor
@@ -61,7 +64,7 @@ fun PopupUpdateDialog(
                     content = { Text(stringResource(Res.string.global_cancel)) },
                 )
             },
-            title = { Text(release.tagName.uppercase()) },
+            title = { Text(release.tagName.uppercase(), fontWeight = FontWeight.SemiBold) },
             text = {
                 Markdown(
                     modifier = Modifier
@@ -75,8 +78,18 @@ fun PopupUpdateDialog(
                         h4 = MaterialTheme.typography.titleLarge,
                         h5 = MaterialTheme.typography.titleMedium,
                         h6 = MaterialTheme.typography.titleSmall,
+                        textLink = TextLinkStyles(
+                            style = MaterialTheme.typography.bodyLarge
+                                .copy(
+                                    fontWeight = FontWeight.Bold,
+                                    textDecoration = TextDecoration.Underline,
+                                    color = MaterialTheme.colorScheme.primary
+                                ).toSpanStyle()
+                        )
                     ),
-                    colors = markdownColor(text = MaterialTheme.colorScheme.onSurfaceVariant)
+                    colors = markdownColor(
+                        text = MaterialTheme.colorScheme.onSurface,
+                    )
                 )
             },
             properties = state.properties,

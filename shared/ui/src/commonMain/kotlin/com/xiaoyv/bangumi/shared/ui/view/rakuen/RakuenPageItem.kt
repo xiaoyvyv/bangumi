@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.xiaoyv.bangumi.shared.ui.view.rakuen
 
 import androidx.compose.foundation.background
@@ -5,9 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,6 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
 import com.xiaoyv.bangumi.shared.core.types.RakuenFlagType
@@ -30,6 +37,8 @@ import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatAgo
 import com.xiaoyv.bangumi.shared.core.utils.withSpanStyle
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.LocalListTopicParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEpisode
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMonoDisplay
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.rakuen.ComposeRakuenTopic
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
@@ -42,6 +51,7 @@ import com.xiaoyv.bangumi.shared.ui.component.text.HighlightedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.theme.ThinBorderStrokeVariant
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
@@ -55,6 +65,7 @@ fun RakuenPageItem(
     modifier: Modifier = Modifier,
     needShowCategory: Boolean = true,
     onClick: (ComposeRakuenTopic) -> Unit = {},
+    onClickGroup: (ComposeGroup) -> Unit = {},
     onClickUser: (ComposeUser) -> Unit = {},
     onClickSubject: (ComposeSubject) -> Unit = {},
     onClickMono: (ComposeMonoDisplay) -> Unit = {},
@@ -76,6 +87,7 @@ fun RakuenPageItem(
                 showCategory = needShowCategory,
                 onClickUser = onClickUser,
                 onClickMono = onClickMono,
+                onClickGroup = onClickGroup,
                 onClickSubject = onClickSubject
             )
         },
@@ -83,12 +95,30 @@ fun RakuenPageItem(
             TopicPageItemHeadline(item = item)
         },
         supportingContent = {
-            Text(
-                text = item.updatedAt.formatAgo(),
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            Row(modifier = Modifier.fillMaxWidth()) {
+                if (item.creator != ComposeUser.Empty) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = "@" + item.creator.nickname,
+                        maxLines = 1,
+                        textDecoration = TextDecoration.Underline,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    )
+                }
+
+                Text(
+                    modifier = Modifier.offset(x = if (item.creator != ComposeUser.Empty) 38.dp else 0.dp),
+                    text = item.updatedAt.formatAgo(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 )
-            )
+            }
         },
         trailingContent = {
             TopicPageItemTrailing(
@@ -103,6 +133,7 @@ fun RakuenPageItem(
 private fun TopicPageItemOverline(
     item: ComposeRakuenTopic,
     showCategory: Boolean,
+    onClickGroup: (ComposeGroup) -> Unit,
     onClickUser: (ComposeUser) -> Unit,
     onClickMono: (ComposeMonoDisplay) -> Unit,
     onClickSubject: (ComposeSubject) -> Unit,
@@ -114,11 +145,11 @@ private fun TopicPageItemOverline(
         itemVerticalAlignment = Alignment.CenterVertically
     ) {
         when (item.type) {
-            // 展示用户名称
+            // 展示小组名称
             RakuenType.GROUP, RakuenType.MY_GROUP -> {
                 Text(
-                    modifier = Modifier.clickWithoutRipped { onClickUser(item.creator) },
-                    text = item.creator.nickname,
+                    modifier = Modifier.clickWithoutRipped { onClickGroup(item.group) },
+                    text = item.group.title,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Medium
@@ -372,5 +403,50 @@ private fun TopicPageItemAvatar(
         else -> {
             Spacer(modifier = Modifier.size(44.dp))
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewRakuenPageItem() {
+    PreviewColumn {
+        RakuenPageItem(
+            item = ComposeRakuenTopic(
+                type = RakuenType.GROUP,
+                title = "这是一个小组话题标题，非常火热",
+                replyCount = 99,
+                creator = ComposeUser(nickname = "小组成员"),
+                group = ComposeGroup(name = "小组名称", title = "小组中文名称"),
+                updatedAt = 1738000000000L,
+                flags = persistentListOf(RakuenFlagType.TYPE_HOT)
+            )
+        )
+        RakuenPageItem(
+            item = ComposeRakuenTopic(
+                type = RakuenType.SUBJECT,
+                title = "这是一个条目话题标题",
+                replyCount = 5,
+                subject = ComposeSubject(name = "条目名称", nameCn = "条目中文名称"),
+                updatedAt = 1738000000000L - 3600000,
+                flags = persistentListOf(RakuenFlagType.TYPE_NEW)
+            )
+        )
+        RakuenPageItem(
+            item = ComposeRakuenTopic(
+                type = RakuenType.EP,
+                episode = ComposeEpisode(sortOrder = 12.0, chineseName = "最终回"),
+                subject = ComposeSubject(name = "某动画"),
+                updatedAt = 1738000000000L - 86400000,
+            )
+        )
+        RakuenPageItem(
+            item = ComposeRakuenTopic(
+                type = RakuenType.CHARACTER,
+                name = "某个角色",
+                nameCN = "某个角色中文名",
+                replyCount = 1,
+                updatedAt = 1738000000000L - 86400000 * 2,
+            )
+        )
     }
 }

@@ -42,7 +42,8 @@ fun RaKuenPageScreen(
             onClickUser = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.UserDetail(it.username))) },
             onClickSubject = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.SubjectDetail(it.id))) },
             onClickMono = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.MonoDetail(it.id, it.type))) },
-            onReport = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.Report(item.reportType, item.id))) }
+            onClickGroup = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.GroupDetail(it.name))) },
+            onReport = { onUiEvent(RaKuenEvent.UI.OnNavScreen(Screen.Report(item.reportType, item.id))) },
         )
         BgmHorizontalDivider()
     }
