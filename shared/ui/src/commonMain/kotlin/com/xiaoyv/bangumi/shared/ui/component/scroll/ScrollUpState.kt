@@ -113,7 +113,7 @@ fun rememberScrollUpLazyListState(
 fun rememberScrollUpLazyGridState(
     state: LazyGridState = rememberLazyGridState(),
 ): LazyGridState {
-    RegisterScrollUpAction { state.scrollToItem(0) }
+    RegisterScrollUpAction { state.animateScrollToItem(0) }
     return state
 }
 
@@ -124,7 +124,7 @@ fun rememberScrollUpLazyGridState(
 fun rememberScrollUpLazyStaggeredGridState(
     state: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
 ): LazyStaggeredGridState {
-    RegisterScrollUpAction { state.scrollToItem(0) }
+    RegisterScrollUpAction { state.animateScrollToItem(0) }
     return state
 }
 
@@ -135,7 +135,7 @@ fun rememberScrollUpLazyStaggeredGridState(
 fun rememberScrollUpScrollState(
     state: ScrollState = rememberScrollState(),
 ): ScrollState {
-    RegisterScrollUpAction { state.scrollTo(0) }
+    RegisterScrollUpAction { state.animateScrollTo(0) }
     return state
 }
 

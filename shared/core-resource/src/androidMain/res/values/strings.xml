@@ -416,6 +416,8 @@
     <string name="settings_navigation_animation_slide">右入右出</string>
     <string name="settings_cache_state">页面状态缓存</string>
     <string name="settings_cache_state_desc">开启时，跳转条目、人物等页面会立即加载缓存，配合导航动画可能在部分设备有轻微掉帧</string>
+    <string name="settings_top_app_bar_scroll_up">标题栏点击回顶</string>
+    <string name="settings_top_app_bar_scroll_up_desc">点击页面标题时，自动将当前内容滚动到顶部</string>
     <string name="settings_performance">性能</string>
     <string name="settings_indication">触摸反馈</string>
     <string name="settings_indication_none">无</string>

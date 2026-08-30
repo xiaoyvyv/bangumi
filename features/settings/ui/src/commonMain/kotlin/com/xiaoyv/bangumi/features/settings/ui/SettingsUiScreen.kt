@@ -25,6 +25,8 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_indication
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation
 import com.xiaoyv.bangumi.core_resource.resources.settings_performance
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme
+import com.xiaoyv.bangumi.core_resource.resources.settings_top_app_bar_scroll_up
+import com.xiaoyv.bangumi.core_resource.resources.settings_top_app_bar_scroll_up_desc
 import com.xiaoyv.bangumi.core_resource.resources.settings_time_machine_grid_limit
 import com.xiaoyv.bangumi.core_resource.resources.settings_tracking_desc
 import com.xiaoyv.bangumi.core_resource.resources.settings_tracking_desc_desc
@@ -122,7 +124,7 @@ private fun SettingsUiScreenContent(
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_appearance)) }) {
             SettingOptionItem(
                 title = stringResource(Res.string.settings_theme),
-                shape = ListItemDefaults.segmentedShapes(0, 2),
+                shape = ListItemDefaults.segmentedShapes(0, 3),
                 value = stringResource(SettingTheme.string(settings.ui.theme)),
                 items = TabTokens.settingThemeItems,
                 onClick = {
@@ -132,12 +134,22 @@ private fun SettingsUiScreenContent(
 
             SettingOptionItem(
                 title = stringResource(Res.string.settings_indication),
-                shape = ListItemDefaults.segmentedShapes(1, 2),
+                shape = ListItemDefaults.segmentedShapes(1, 3),
                 items = settingIndicationItems,
                 value = stringResource(SettingIndication.string(settings.ui.indication)),
                 onClick = {
                     onActionEvent(SettingsUiEvent.Action.OnUpdate(settings.ui.copy(indication = it)))
                 }
+            )
+
+            SettingSwitchItem(
+                title = stringResource(Res.string.settings_top_app_bar_scroll_up),
+                shape = ListItemDefaults.segmentedShapes(3, 3),
+                description = stringResource(Res.string.settings_top_app_bar_scroll_up_desc),
+                value = settings.ui.topAppBarScrollUp,
+                onValueChange = {
+                    onActionEvent(SettingsUiEvent.Action.OnUpdate(settings.ui.copy(topAppBarScrollUp = it)))
+                },
             )
         }
 

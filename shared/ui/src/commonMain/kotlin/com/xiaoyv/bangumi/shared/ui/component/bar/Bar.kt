@@ -25,6 +25,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_back
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalHideNavIcon
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.scroll.LocalScrollUpState
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -61,6 +62,7 @@ fun BgmTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     val scrollTopState = LocalScrollUpState.current
+    val scrollUpEnabled = currentSettings().ui.topAppBarScrollUp
     val scope = rememberCoroutineScope()
 
     TopAppBar(
@@ -68,7 +70,9 @@ fun BgmTopAppBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickWithoutRipped { scope.launch { scrollTopState.scrollTop() } },
+                    .clickWithoutRipped {
+                        if (scrollUpEnabled) scope.launch { scrollTopState.scrollTop() }
+                    },
                 content = titleContent
             )
         },
@@ -114,6 +118,7 @@ fun BgmLargeTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
 ) {
     val scrollTopState = LocalScrollUpState.current
+    val scrollUpEnabled = currentSettings().ui.topAppBarScrollUp
     val scope = rememberCoroutineScope()
 
     LargeTopAppBar(
@@ -121,7 +126,9 @@ fun BgmLargeTopAppBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickWithoutRipped { scope.launch { scrollTopState.scrollTop() } },
+                    .clickWithoutRipped {
+                        if (scrollUpEnabled) scope.launch { scrollTopState.scrollTop() }
+                    },
                 content = titleContent
             )
         },

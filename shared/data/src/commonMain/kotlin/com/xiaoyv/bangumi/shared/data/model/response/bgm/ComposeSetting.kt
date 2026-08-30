@@ -61,6 +61,7 @@ data class ComposeSetting(
         @SerialName("filterBlockUserComment") val filterBlockUserComment: Boolean = false,
         @SerialName("forceOpenUrlInBrowser") val forceOpenUrlInBrowser: Boolean = false,
         @SerialName("cacheState") val cacheState: Boolean = true,
+        @SerialName("topAppBarScrollUp") val topAppBarScrollUp: Boolean = true,
 
         @SerialName("trackingDesc") val trackingDesc: Boolean = false,
 
