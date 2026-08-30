@@ -11,6 +11,7 @@ import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoSubjectBody
+import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmChipHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.subjectCharacterRoleFilters
 
@@ -28,6 +29,7 @@ fun SubjectDetailCharacterScreen(
         MonoPageRoute(
             param = remember {
                 ListMonoParam(
+                    ui = PageUI(gridLayout = true),
                     type = ListMonoType.SUBJECT_CHARACTER,
                     subject = MonoSubjectBody(
                         subjectId = state.id,

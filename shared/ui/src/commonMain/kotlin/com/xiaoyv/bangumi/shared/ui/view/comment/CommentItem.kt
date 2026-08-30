@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.shared.ui.view.comment
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,6 +44,7 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.theme.BorderStrokeVariant
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
@@ -80,9 +80,9 @@ fun CommentReplyItem(
                 StateImage(
                     modifier = Modifier
                         .size(44.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small)
                         .clickWithoutRipped { onClickUser(item.user.username) },
                     shape = MaterialTheme.shapes.small,
+                    border = BorderStrokeVariant,
                     model = item.user.avatar.displayMediumImage,
                 )
             }
@@ -175,15 +175,15 @@ private fun ComposeReplyItemHeader(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf / 2),
         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-        itemVerticalAlignment = Alignment.CenterVertically
+        itemVerticalAlignment = Alignment.CenterVertically,
     ) {
         // 子评论使用小头像
         if (level > 0) StateImage(
             modifier = Modifier
-                .size(32.dp)
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.small)
+                .size(28.dp)
                 .clickWithoutRipped { onClickUser(item.user.username) },
             shape = MaterialTheme.shapes.small,
+            border = BorderStrokeVariant,
             model = item.user.avatar.displayMediumImage
         )
 

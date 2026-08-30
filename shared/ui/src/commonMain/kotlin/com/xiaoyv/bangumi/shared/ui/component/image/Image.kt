@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.ui.component.image
 
 import androidx.annotation.IntRange
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
@@ -33,11 +37,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -170,19 +172,61 @@ fun StateImage(
             SubcomposeAsyncImageContent()
         },
         error = {
-            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-                Text(
-                    modifier = Modifier.align(Alignment.Center),
-                    style = MaterialTheme.typography.bodyLarge,
-                    text = if (model is String && model.isNotBlank()) "404" else "Empty",
-                    fontStyle = FontStyle.Italic,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.25f),
-                    fontSize = with(LocalDensity.current) { (maxWidth / 8).coerceAtMost(20.dp).toSp() }
-                )
-            }
+            ErrorImagePlaceholder()
         }
     )
+}
+
+/**
+ * 图片加载失败时展示的轻量缺图占位图。
+ *
+ * 图形采用通用的 Broken Image 语义，并保持透明背景，避免干扰页面中的封面布局。
+ */
+@Composable
+private fun ErrorImagePlaceholder() {
+    val color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.32f)
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val iconSize = minOf(size.width, size.height) * 0.34f
+        val center = Offset(size.width / 2f, size.height / 2f)
+        val width = iconSize
+        val height = iconSize * 0.72f
+        val left = center.x - width / 2f
+        val top = center.y - height / 2f
+        val strokeWidth = (iconSize * 0.055f).coerceAtLeast(1f)
+        val cornerRadius = iconSize * 0.08f
+
+        drawRoundRect(
+            color = color,
+            topLeft = Offset(left, top),
+            size = Size(width, height),
+            cornerRadius = CornerRadius(cornerRadius),
+            style = Stroke(width = strokeWidth),
+        )
+        drawCircle(
+            color = color,
+            radius = iconSize * 0.07f,
+            center = Offset(left + width * 0.72f, top + height * 0.28f),
+        )
+        drawLine(
+            color = color,
+            start = Offset(left + width * 0.16f, top + height * 0.76f),
+            end = Offset(left + width * 0.4f, top + height * 0.52f),
+            strokeWidth = strokeWidth,
+        )
+        drawLine(
+            color = color,
+            start = Offset(left + width * 0.4f, top + height * 0.52f),
+            end = Offset(left + width * 0.62f, top + height * 0.74f),
+            strokeWidth = strokeWidth,
+        )
+        drawLine(
+            color = color,
+            start = Offset(left + width * 0.62f, top + height * 0.74f),
+            end = Offset(left + width * 0.78f, top + height * 0.59f),
+            strokeWidth = strokeWidth,
+        )
+    }
 }
 
 
@@ -240,4 +284,3 @@ fun InfoImage(
         content?.invoke(this)
     }
 }
-

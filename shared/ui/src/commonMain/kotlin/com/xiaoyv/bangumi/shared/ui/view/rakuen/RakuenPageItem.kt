@@ -98,7 +98,9 @@ fun RakuenPageItem(
             Row(modifier = Modifier.fillMaxWidth()) {
                 if (item.creator != ComposeUser.Empty) {
                     Text(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.clickWithoutRipped {
+                            onClickUser(item.creator)
+                        },
                         text = "@" + item.creator.nickname,
                         maxLines = 1,
                         textDecoration = TextDecoration.Underline,
@@ -107,6 +109,7 @@ fun RakuenPageItem(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
+                    Spacer(Modifier.weight(1f))
                 }
 
                 Text(
@@ -352,14 +355,12 @@ private fun TopicPageItemAvatar(
         RakuenType.SUBJECT -> {
             StateImage(
                 modifier = Modifier
-                    .size(44.dp)
-                    .clickWithoutRipped {
-                        if (item.subject != ComposeSubject.Empty) onClickSubject(item.subject)
-                        else if (item.creator != ComposeUser.Empty) onClickUser(item.creator)
-                    },
+                    .width(44.dp)
+                    .aspectRatio(3 / 4f)
+                    .clickWithoutRipped { onClickSubject(item.subject) },
                 shape = MaterialTheme.shapes.small,
                 border = ThinBorderStrokeVariant,
-                model = item.creator.avatar.displayMediumImage
+                model = item.subject.images.displayMediumImage
             )
         }
 

@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.shared.core.types.PersonType
 import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoSubjectBody
+import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
 
 @Composable
 fun SubjectDetailPersonScreen(
@@ -20,6 +21,7 @@ fun SubjectDetailPersonScreen(
     MonoPageRoute(
         param = remember {
             ListMonoParam(
+                ui = PageUI(gridLayout = true),
                 type = ListMonoType.SUBJECT_PERSON,
                 subject = MonoSubjectBody(
                     subjectId = state.id,

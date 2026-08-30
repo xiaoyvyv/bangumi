@@ -11,8 +11,6 @@ import io.ktor.http.encodeURLPath
 import org.koin.mp.KoinPlatform
 
 object ImageInterceptor : Interceptor {
-    const val DEFAULT_IMAGE = "https://lain.bgm.tv/pic/photo/l/47/7e/837364_B9CUJ.jpg"
-
     private const val DOU_BAN_UA = "api-client/1 com.douban.frodo/7.65.0(277) " +
             "Android/33 product/coral vendor/Google model/Pixel 4 XL brand/google  rom/android  network/wifi  " +
             "udid/0643fa6abfd3eaff076ff3ee603211ded11fc344  platform/mobile nd/1"
@@ -72,8 +70,8 @@ object ImageInterceptor : Interceptor {
             ).proceed()
         }
 
-        // 替换 Bgm.TV 缺省图
-        val url = if (blankImageUrlRegex.matches(data)) DEFAULT_IMAGE else data
+        // 去除 Bgm.TV 缺省图
+        val url = if (blankImageUrlRegex.matches(data)) "" else data
 
         return chain.withRequest(
             chain.request

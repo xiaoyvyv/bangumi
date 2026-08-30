@@ -28,6 +28,7 @@ import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginGrid
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoCardItem
@@ -70,7 +71,7 @@ private fun HomeMonoScreenContent(
         modifier = Modifier.fillMaxSize(),
         state = rememberCacheWindowLazyGridState(),
         columns = gridCells,
-        contentPadding = PaddingValues(horizontal = 12.dp),
+        contentPadding = PaddingValues(start = ContentMarginGrid, end = ContentMarginGrid, bottom = ContentMarginGrid),
         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {
