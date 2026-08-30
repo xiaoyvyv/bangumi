@@ -85,11 +85,16 @@ suspend fun <T : Element> T.selectLegal(selector: String): Elements {
 fun Elements.href() = attr("href")
 fun Element.href() = attr("href")
 
-fun Element.hrefId() = href().substringAfterLast("/").substringBefore("?")
-fun Elements.hrefId() = href().substringAfterLast("/").substringBefore("?")
+fun Element.hrefId() = href()
+    .substringAfterLast("/")
+    .substringBefore("?")
 
-fun Element.hrefLongId() = hrefId().toLongValue()
-fun Elements.hrefLongId() = hrefId().toLongValue()
+fun Elements.hrefId() = href()
+    .substringAfterLast("/")
+    .substringBefore("?")
+
+fun Element.hrefLongId() = hrefId().parseCount().toLong()
+fun Elements.hrefLongId() = hrefId().parseCount().toLong()
 
 fun Elements.lastTextNode() = textNodes().lastOrNull()?.text().orEmpty()
 fun Element.lastTextNode() = textNodes().lastOrNull()?.text().orEmpty()

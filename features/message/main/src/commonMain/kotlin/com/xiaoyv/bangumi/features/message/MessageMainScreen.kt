@@ -2,66 +2,59 @@ package com.xiaoyv.bangumi.features.message
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.core_resource.resources.global_delete
-import com.xiaoyv.bangumi.core_resource.resources.global_done
-import com.xiaoyv.bangumi.core_resource.resources.global_edit
-import com.xiaoyv.bangumi.core_resource.resources.global_message
-import com.xiaoyv.bangumi.core_resource.resources.message_unread_by_recipient
-import com.xiaoyv.bangumi.features.friend.FriendRoute
+import com.xiaoyv.bangumi.core_resource.resources.global_conversation
 import com.xiaoyv.bangumi.features.message.business.MessageMainEvent
-import com.xiaoyv.bangumi.features.message.business.MessageMainSideEffect
 import com.xiaoyv.bangumi.features.message.business.MessageMainState
 import com.xiaoyv.bangumi.features.message.business.MessageMainViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
-import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
-import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
-import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
+import com.xiaoyv.bangumi.shared.core.utils.formatAgo
+import com.xiaoyv.bangumi.shared.core.utils.formatMills
+import com.xiaoyv.bangumi.shared.data.constant.userImage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmConversation
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
-import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
-import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
-import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
 
+const val TAB_INBOX = "TAB_INBOX"
 const val TAB_FRIEND = "TAB_FRIEND"
 
-private const val CONTENT_TYPE_MESSAGE_ITEM = "CONTENT_TYPE_MESSAGE_ITEM"
+private const val CONTENT_TYPE_CONVERSATION_ITEM = "CONTENT_TYPE_CONVERSATION_ITEM"
 
 @Composable
 fun MessageMainRoute(
@@ -70,24 +63,23 @@ fun MessageMainRoute(
     onNavScreen: (Screen) -> Unit,
 ) {
     val baseState by viewModel.collectAsState()
-    val inboxLazyItems = viewModel.messageInbox.collectAsLazyPagingItems()
-    val outboxLazyItems = viewModel.messageOutbox.collectAsLazyPagingItems()
+    val pagingItems = viewModel.messageInbox.collectAsLazyPagingItems()
 
     viewModel.collectBaseSideEffect {
-        when (it) {
-            is MessageMainSideEffect.OnRefreshList -> {
-                when (it.type) {
-                    MessageBoxType.TYPE_INBOX -> inboxLazyItems.refresh()
-                    MessageBoxType.TYPE_OUTBOX -> outboxLazyItems.refresh()
-                }
-            }
-        }
+
+    }
+
+    var count by rememberSaveable { mutableIntStateOf(0) }
+
+    LifecycleResumeEffect(pagingItems) {
+        count++
+        if (count >= 1) pagingItems.refresh()
+        onPauseOrDispose { }
     }
 
     MessageMainScreen(
         uiState = baseState,
-        inboxLazyItems = inboxLazyItems,
-        outboxLazyItems = outboxLazyItems,
+        pagingItems = pagingItems,
         onActionEvent = viewModel::onEvent,
         onUiEvent = {
             when (it) {
@@ -101,8 +93,7 @@ fun MessageMainRoute(
 @Composable
 private fun MessageMainScreen(
     uiState: UiState<MessageMainState>,
-    inboxLazyItems: LazyPagingItems<ComposeMessage>,
-    outboxLazyItems: LazyPagingItems<ComposeMessage>,
+    pagingItems: LazyPagingItems<ComposePmConversation>,
     onUiEvent: (MessageMainEvent.UI) -> Unit,
     onActionEvent: (MessageMainEvent.Action) -> Unit,
 ) {
@@ -110,21 +101,11 @@ private fun MessageMainScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BgmTopAppBar(
-                title = stringResource(Res.string.global_message),
+                title = stringResource(Res.string.global_conversation),
+                onNavigationClick = { onUiEvent(MessageMainEvent.UI.OnNavUp) },
                 actions = {
-                    uiState.data.run {
-                        if (selectedTabType != TAB_FRIEND) {
-                            TextButton(onClick = { onActionEvent(MessageMainEvent.Action.OnToggleEditMode) }) {
-                                if (editMode) {
-                                    Text(text = stringResource(Res.string.global_done))
-                                } else {
-                                    Text(text = stringResource(Res.string.global_edit))
-                                }
-                            }
-                        }
-                    }
-                },
-                onNavigationClick = { onUiEvent(MessageMainEvent.UI.OnNavUp) }
+
+                }
             )
         }
     ) {
@@ -136,8 +117,7 @@ private fun MessageMainScreen(
         ) { state ->
             MessageMainScreenContent(
                 state = state,
-                inboxLazyItems = inboxLazyItems,
-                outboxLazyItems = outboxLazyItems,
+                pagingItems = pagingItems,
                 onUiEvent = onUiEvent,
                 onActionEvent = onActionEvent
             )
@@ -149,189 +129,86 @@ private fun MessageMainScreen(
 @Composable
 private fun MessageMainScreenContent(
     state: MessageMainState,
-    inboxLazyItems: LazyPagingItems<ComposeMessage>,
-    outboxLazyItems: LazyPagingItems<ComposeMessage>,
+    pagingItems: LazyPagingItems<ComposePmConversation>,
     onUiEvent: (MessageMainEvent.UI) -> Unit,
     onActionEvent: (MessageMainEvent.Action) -> Unit,
 ) {
-    val currentUser = currentUser()
-
-    BgmTabHorizontalPager(
+    StateLazyColumn(
         modifier = Modifier.fillMaxSize(),
-        tabs = state.tabs,
-        pagerState = rememberPagerState(
-            onPageChange = { onActionEvent(MessageMainEvent.Action.OnTabSelected(state.tabs[it].type)) },
-            pageCount = { state.tabs.size }
+        pagingItems = pagingItems,
+        key = { item, _ -> item.id },
+        contentPadding = PaddingValues(vertical = ContentMarginHalf),
+        showScrollUpBtn = true,
+        contentType = { CONTENT_TYPE_CONVERSATION_ITEM },
+    ) { item, _ ->
+        MessageMainConversationItem(
+            item = item,
+            onClick = {
+                onUiEvent(
+                    MessageMainEvent.UI.OnNavScreen(
+                        Screen.MessageChat(item.id, item.user.nickname)
+                    )
+                )
+            }
         )
-    ) {
-        when (state.tabs[it].type) {
-            MessageBoxType.TYPE_INBOX -> MessageMainScreenPage(
-                type = MessageBoxType.TYPE_INBOX,
-                state = state,
-                pagingItems = inboxLazyItems,
-                onUiEvent = onUiEvent,
-                onActionEvent = onActionEvent
-            )
-
-            MessageBoxType.TYPE_OUTBOX -> MessageMainScreenPage(
-                type = MessageBoxType.TYPE_OUTBOX,
-                state = state,
-                pagingItems = outboxLazyItems,
-                onUiEvent = onUiEvent,
-                onActionEvent = onActionEvent
-            )
-
-            TAB_FRIEND -> FriendRoute(
-                param = remember { ListUserParam(type = ListUserType.USER_FRIEND, username = currentUser.username) },
-                onNavScreen = { screen -> onUiEvent(MessageMainEvent.UI.OnNavScreen(screen)) }
-            )
-        }
+        BgmHorizontalDivider(Modifier.padding(start = ContentMargin + 60.dp))
     }
 }
 
-
 @Composable
-private fun MessageMainScreenPage(
-    @MessageBoxType type: String,
-    state: MessageMainState,
-    pagingItems: LazyPagingItems<ComposeMessage>,
-    onUiEvent: (MessageMainEvent.UI) -> Unit,
-    onActionEvent: (MessageMainEvent.Action) -> Unit,
+private fun MessageMainConversationItem(
+    item: ComposePmConversation,
+    onClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        StateLazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            pagingItems = pagingItems,
-            key = { item, _ -> item.id },
-            contentType = { CONTENT_TYPE_MESSAGE_ITEM }
-        ) { item, index ->
-            MessageMainScreenPageItem(
-                state = state,
-                type = type,
-                item = item,
-                onUiEvent = onUiEvent,
-                onActionEvent = onActionEvent
-            )
-            BgmHorizontalDivider()
-        }
-
-        val selectedCount = when (type) {
-            MessageBoxType.TYPE_INBOX -> state.selectedInboxIds.size
-            MessageBoxType.TYPE_OUTBOX -> state.selectedOutboxIds.size
-            else -> 0
-        }
-        if (state.editMode && selectedCount > 0) Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onActionEvent(MessageMainEvent.Action.OnDeleteMessage(type)) }
-                .padding(ContentMargin),
-            text = stringResource(Res.string.global_delete),
-            style = MaterialTheme.typography.bodyLarge.copy(
-                color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.Center
-            )
-        )
-    }
-}
-
-
-@Composable
-private fun MessageMainScreenPageItem(
-    state: MessageMainState,
-    @MessageBoxType type: String,
-    item: ComposeMessage,
-    onUiEvent: (MessageMainEvent.UI) -> Unit,
-    onActionEvent: (MessageMainEvent.Action) -> Unit,
-) {
-    val checked = if (type == MessageBoxType.TYPE_INBOX) {
-        state.selectedInboxIds.contains(item.id)
-    } else {
-        state.selectedOutboxIds.contains(item.id)
-    }
-
     ListItem(
         modifier = Modifier
-            .clickable {
-                if (state.editMode) {
-                    onActionEvent(MessageMainEvent.Action.OnItemCheckChanged(type, item.id, !checked))
-                } else {
-                    onUiEvent(MessageMainEvent.UI.OnNavScreen(Screen.MessageChat(item.id, item.user.username)))
-                }
-            }
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .clickable(onClick = onClick),
         leadingContent = {
             BadgedBox(
                 badge = {
-                    if (item.unread && type == MessageBoxType.TYPE_INBOX) {
-                        Badge(content = { Text(text = "1") })
-                    }
-                },
-                content = {
-                    StateImage(
-                        modifier = Modifier.size(44.dp),
-                        model = item.user.avatar.displayMediumImage,
-                        shape = MaterialTheme.shapes.small,
-                    )
+                    if (item.unread > 0) Badge { Text(text = item.unread.toString()) }
                 }
-            )
+            ) {
+                StateImage(
+                    modifier = Modifier.size(48.dp),
+                    model = item.user.avatar.displayMediumImage.ifBlank { userImage(item.user.username) },
+                    shape = CircleShape,
+                )
+            }
         },
-        overlineContent = {
+        headlineContent = {
             Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf)
+                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
                     text = item.user.nickname,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = if (item.unread > 0) FontWeight.SemiBold else FontWeight.Medium,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
                 )
-                Text(text = item.time)
-            }
-        },
-        headlineContent = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
                 Text(
+                    text = remember(item.time) { item.time.formatMills().formatAgo() },
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(vertical = 4.dp),
-                    text = item.title,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                if (item.unread && type == MessageBoxType.TYPE_OUTBOX) Badge(
-                    containerColor = StarColor,
-                    content = { Text(text = stringResource(Res.string.message_unread_by_recipient), color = MaterialTheme.colorScheme.onPrimary) }
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
                 )
             }
         },
         supportingContent = {
             Text(
+                modifier = Modifier.padding(top = ContentMarginHalf / 2),
                 text = item.content,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-            )
-        },
-        trailingContent = if (!state.editMode) null else {
-            {
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = {
-                        onActionEvent(MessageMainEvent.Action.OnItemCheckChanged(type, item.id, it))
-                    }
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-            }
+            )
         }
     )
 }

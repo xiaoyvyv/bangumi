@@ -20,8 +20,6 @@ interface IndexRepository {
 
     suspend fun fetchIndexComments(indexId: Long): Result<List<ComposeReply>>
 
-    suspend fun fetchIndexIsBookmarked(indexId: Long): Result<Boolean>
-
     suspend fun submitBookmarkOrCancelIndex(indexId: Long, bookmarked: Boolean): Result<Boolean>
 
     suspend fun submitIndexAddRelated(indexId: Long, param: IndexCreateParam): Result<Unit>

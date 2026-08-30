@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.PagingConfig
-import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
 import com.xiaoyv.bangumi.shared.core.types.list.ListIndexType
 import com.xiaoyv.bangumi.shared.core.utils.toApiOffset
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
@@ -127,11 +126,6 @@ class IndexRepositoryImpl(
         getIndexComments(indexId).normalizedReplies()
     }
 
-
-    override suspend fun fetchIndexIsBookmarked(indexId: Long): Result<Boolean> = client.requestWebApi {
-        // 用 EP 类型查询网页详情页数据，判断是否收藏，一般这个比较条目少，快
-        fetchIndexDetail(indexId, IndexCatWebTabType.EP).select("a.btnBlue").isNotEmpty()
-    }
 
     override suspend fun submitBookmarkOrCancelIndex(indexId: Long, bookmarked: Boolean): Result<Boolean> = client.requestNextCollectionApi {
         if (bookmarked) {

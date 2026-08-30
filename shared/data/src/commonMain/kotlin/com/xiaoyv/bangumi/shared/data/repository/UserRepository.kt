@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.repository
 
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
-import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.types.ReportReason
 import com.xiaoyv.bangumi.shared.core.types.ReportType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -13,11 +12,11 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmConversation
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
@@ -34,7 +33,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingControll
  * @since 2025/1/15
  */
 interface UserRepository {
-    fun fetchUserMessagePager(@MessageBoxType type: String): MemoryPagingController<ComposeMessage, Long>
+    fun fetchUserPmConversationPager(): MemoryPagingController<ComposePmConversation, Long>
 
     fun fetchUserPager(param: ListUserParam): MemoryPagingController<ComposeUserDisplay, String>
 
@@ -59,9 +58,9 @@ interface UserRepository {
 
     suspend fun fetchUserNotify(unread: Boolean?): Result<List<ComposeNotice>>
 
-    suspend fun fetchUserMessageList(@MessageBoxType type: String, page: Int): Result<List<ComposeMessage>>
+    suspend fun fetchUserPmConversation(page: Int): Result<List<ComposePmConversation>>
 
-    suspend fun fetchUserMessageDetail(id: Long): Result<ComposeMessageDetail>
+    suspend fun fetchUserPmMessage(id: Long, thread: Long): Result<ComposePmMessageDetail>
 
     suspend fun fetchUserCollectionSubject(
         username: String,
@@ -88,15 +87,12 @@ interface UserRepository {
     suspend fun submitMarkAllNotificationRead(): Result<Unit>
 
     suspend fun submitSendMessage(
-        relatedId: String,
-        currentMsgId: String,
-        username: String,
-        title: String,
         text: String,
-        newChat: Boolean,
-    ): Result<ComposeMessageDetail>
+        topic: String? = null,
+        inputs: Map<String, String>,
+    ): Result<Unit>
 
-    suspend fun submitDeleteMessage(ids: SerializeList<Long>, @MessageBoxType type: String): Result<Unit>
+    suspend fun submitDeleteMessage(ids: SerializeList<Long>): Result<Unit>
 
     suspend fun submitReport(id: Long, @ReportType type: Int, @ReportReason reason: Int, comment: String): Result<ComposeEmptyBody>
 }

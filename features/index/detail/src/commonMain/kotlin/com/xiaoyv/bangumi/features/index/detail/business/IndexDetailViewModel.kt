@@ -14,6 +14,7 @@ import com.xiaoyv.bangumi.core_resource.resources.global_music
 import com.xiaoyv.bangumi.core_resource.resources.global_person
 import com.xiaoyv.bangumi.core_resource.resources.global_real
 import com.xiaoyv.bangumi.core_resource.resources.global_subject_topic
+import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -22,7 +23,6 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.IndexCatWebTabType
-import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
@@ -58,21 +58,16 @@ class IndexDetailViewModel(
     }
 
     override suspend fun Syntax<UiState<IndexDetailState>, UiSideEffect<IndexDetailSideEffect>>.refreshSync() {
-        awaitAll(
-            block1 = { indexRepository.fetchIndexDetail(args.id) },
-            block2 = { if (userManager.isLogin) indexRepository.fetchIndexIsBookmarked(args.id) else Result.success(false) },
-        ).onFailure {
-            reduceError { it }
-        }.onSuccess {
-            val tabs = createTabs(it.data1)
+        indexRepository.fetchIndexDetail(args.id)
+            .onFailure {
+                reduceError { it }
+            }.onSuccess {
+                val tabs = createTabs(it)
 
-            reduceData(forceRefresh = true) {
-                state.copy(
-                    index = it.data1.copy(isBookmarked = it.data2),
-                    tabs = tabs
-                )
+                reduceData(forceRefresh = true) {
+                    state.copy(index = it, tabs = tabs)
+                }
             }
-        }
     }
 
     private fun onToggleBookmarkIndex() = intent {
@@ -82,7 +77,7 @@ class IndexDetailViewModel(
         withActionLoading { indexRepository.submitBookmarkOrCancelIndex(args.id, !isBookmarked) }
             .onFailure { postToast { it.errMsg } }
             .onSuccess {
-                reduceData { state.copy(index = state.index.copy(isBookmarked = it)) }
+                reduceData { state.copy(index = state.index.copy(collectedAt = if (it) System.currentTimeMillis() else 0)) }
 
                 postToast { toast }
             }

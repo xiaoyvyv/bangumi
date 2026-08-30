@@ -90,12 +90,12 @@ val inverseOnSurfaceDark = Color(0xFF121212)
 val inversePrimaryDark = Color(0xFF9C4666)
 
 val surfaceDimDark = Color(0xFF121212)
-val surfaceBrightDark = Color(0xFF1C1C1C)
-val surfaceContainerLowestDark = Color(0xFF222222)
-val surfaceContainerLowDark = Color(0xFF1D1D1D)
-val surfaceContainerDark = Color(0xFF212121)
-val surfaceContainerHighDark = Color(0xFF262626)
-val surfaceContainerHighestDark = Color(0xFF2A2A2A)
+val surfaceBrightDark = Color(0xFF2C2C2C)
+val surfaceContainerLowestDark = Color(0xFF0A0A0A)
+val surfaceContainerLowDark = Color(0xFF121212)
+val surfaceContainerDark = Color(0xFF181818)
+val surfaceContainerHighDark = Color(0xFF222222)
+val surfaceContainerHighestDark = Color(0xFF282828)
 
 
 /**

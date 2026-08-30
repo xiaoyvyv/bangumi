@@ -13,6 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.m3.Markdown
+import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.parseMarkdown
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -75,6 +76,7 @@ fun PopupUpdateDialog(
                         h5 = MaterialTheme.typography.titleMedium,
                         h6 = MaterialTheme.typography.titleSmall,
                     ),
+                    colors = markdownColor(text = MaterialTheme.colorScheme.onSurfaceVariant)
                 )
             },
             properties = state.properties,

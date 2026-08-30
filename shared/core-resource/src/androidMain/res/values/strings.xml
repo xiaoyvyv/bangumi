@@ -120,6 +120,7 @@
     <string name="global_network_service_pixiv_id_error">Pixiv 账户应为纯数字</string>
     <string name="global_notification">通知</string>
     <string name="global_message">消息</string>
+    <string name="global_conversation">会话列表</string>
     <string name="global_subject">条目</string>
     <string name="global_subject_topic">条目话题</string>
     <string name="global_agree">同意</string>
@@ -140,6 +141,7 @@
     <string name="global_tag">标签</string>
     <string name="global_music">音乐</string>
     <string name="global_topic">话题</string>
+    <string name="message_topic_hint">输入主题</string>
     <string name="global_sort">排序</string>
     <string name="global_sort_match">匹配程度</string>
     <string name="global_sort_bookmark">收藏人数</string>

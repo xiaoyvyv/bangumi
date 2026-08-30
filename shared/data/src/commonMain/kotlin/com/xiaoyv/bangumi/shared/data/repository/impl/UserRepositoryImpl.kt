@@ -6,7 +6,6 @@ import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.component.toPinYin
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.types.EditInfoType
-import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
 import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
@@ -25,12 +24,12 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeUnRead
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.home.ComposeHome
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.loadAllData
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmConversation
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.transform
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeNotice
@@ -64,14 +63,13 @@ class UserRepositoryImpl(
     private val pagingConfig: PagingConfig,
 ) : UserRepository {
 
-    override fun fetchUserMessagePager(@MessageBoxType type: String): MemoryPagingController<ComposeMessage, Long> {
+    override fun fetchUserPmConversationPager(): MemoryPagingController<ComposePmConversation, Long> {
         return createMemoryPageLimitPagingController(
             idSelector = { it.id },
             pagingConfig = pagingConfig,
-            onLoadData = { fetchUserMessageList(type, it).getOrThrow() }
+            onLoadData = { fetchUserPmConversation(it).getOrThrow() }
         )
     }
-
 
     override fun fetchUserPager(param: ListUserParam): MemoryPagingController<ComposeUserDisplay, String> {
         return createMemoryOffsetLimitPagingController(
@@ -216,33 +214,33 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun fetchUserPrivacy(): Result<ComposeUserPrivacy> = runResult {
-        client.nextUserApi.getPrivacy()
+    override suspend fun fetchUserPrivacy(): Result<ComposeUserPrivacy> = client.requestNextUserApi {
+        getPrivacy()
     }
 
-    override suspend fun submitUserPrivacy(privacy: ComposeUserPrivacy): Result<ComposeUserPrivacy> = runResult {
-        client.nextUserApi.patchPrivacy(privacy)
+    override suspend fun submitUserPrivacy(privacy: ComposeUserPrivacy): Result<ComposeUserPrivacy> = client.requestNextUserApi {
+        patchPrivacy(privacy)
     }
-
 
     override suspend fun fetchUserNotify(unread: Boolean?): Result<List<ComposeNotice>> = client.requestNextUserApi {
         listNotice(unread = unread).result.map { it.normalized() }
     }
 
-    override suspend fun fetchUserMessageList(@MessageBoxType type: String, page: Int): Result<List<ComposeMessage>> =
+    override suspend fun fetchUserPmConversation(page: Int): Result<List<ComposePmConversation>> =
         client.requestWebApi {
             with(userParser) {
-                fetchUserMessageList(type = type, page = page)
-                    .fetchUserMessageListConverted(type)
+                fetchUserPmCoversation(page = page)
+                    .fetchUserPmCoversationConverted()
             }
         }
 
-    override suspend fun fetchUserMessageDetail(id: Long): Result<ComposeMessageDetail> = client.requestWebApi {
-        with(userParser) {
-            fetchUserMessageDetail(id)
-                .fetchUserMessageDetailConverted()
+    override suspend fun fetchUserPmMessage(id: Long, thread: Long): Result<ComposePmMessageDetail> =
+        client.requestWebApi {
+            with(userParser) {
+                fetchUserPmMessage(id, thread.takeIf { it != 0L })
+                    .fetchUserPmMessageConverted()
+            }
         }
-    }
 
     override suspend fun fetchUserCollectionSubject(
         username: String,
@@ -318,38 +316,26 @@ class UserRepositoryImpl(
         clearNotice(ClearNoticeRequest())
     }
 
-    override suspend fun submitDeleteMessage(ids: SerializeList<Long>, @MessageBoxType type: String): Result<Unit> =
+    override suspend fun submitDeleteMessage(ids: SerializeList<Long>): Result<Unit> =
         client.requestWebApi(disableRedirect = true) {
-            with(userParser) {
-                submitDeleteChii(
-                    ids = ids,
-                    folder = type,
-                    formhash = preferenceStore.userInfo.formHash,
-                )
-            }
-        }
-
-    override suspend fun submitSendMessage(
-        relatedId: String,
-        currentMsgId: String,
-        username: String,
-        title: String,
-        text: String,
-        newChat: Boolean,
-    ): Result<ComposeMessageDetail> = client.requestWebApi(disableRedirect = true) {
-        with(userParser) {
-            submitCreateChii(
-                related = relatedId,
-                currentMsgId = currentMsgId,
-                msgReceivers = username,
-                msgTitle = title,
-                msgBody = text,
-                chat = if (newChat) null else "on",
+            submitDeleteChii(
+                ids = ids,
+                folder = "inbox",
                 formhash = preferenceStore.userInfo.formHash,
             )
-            fetchUserMessageDetail(currentMsgId.toLong())
-                .fetchUserMessageDetailConverted()
         }
+
+    override suspend fun submitSendMessage(text: String, topic: String?, inputs: Map<String, String>): Result<Unit> = client.requestWebApi(disableRedirect = true) {
+        val params = inputs.toMutableMap()
+        if (topic.isNullOrBlank()) {
+            params.remove("new_topic")
+            params.remove("msg_title")
+        } else {
+            params["new_topic"] = "1"
+            params["msg_title"] = topic
+        }
+        params["msg_body"] = text
+        submitCreateChii(params)
     }
 
     override suspend fun submitRequestToken(formHash: String): Result<ComposeAuthToken> = client.createBgmToken(formHash)

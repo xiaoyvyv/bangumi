@@ -4,22 +4,25 @@ package com.xiaoyv.bangumi.shared.data.parser.bgm
 
 import com.fleeksoft.ksoup.nodes.Element
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
-import com.xiaoyv.bangumi.shared.core.types.MessageBoxType
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
-import com.xiaoyv.bangumi.shared.core.utils.parseAsHtml
+import com.xiaoyv.bangumi.shared.core.utils.hrefLongId
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
 import com.xiaoyv.bangumi.shared.data.constant.userImage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessage
-import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePrivacy
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmConversation
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmMessage
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmMessageDetail
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmThread
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserStats
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentMap
 
 /**
  * [UserParser]
@@ -66,26 +69,23 @@ class UserParser : BaseParser() {
     }
 
 
-    suspend fun Element.fetchUserMessageListConverted(@MessageBoxType type: String): List<ComposeMessage> {
+    suspend fun Element.fetchUserPmCoversationConverted(): List<ComposePmConversation> {
         requireNoError()
-        val contentPM = select("#contentPM")
+        val contentPM = select(".pm-conversation-scroll")
 
-        return contentPM.select("table > tbody > tr").filter { it.select("a").isNotEmpty() }.map { item ->
-            val avatarUrl = item.select("img.avatar").src()
-            val nickname = item.select("img.avatar").attr("title")
-            val username = item.select(".sub_title a").hrefId()
-            val unread = item.select(".pm_new").isNotEmpty()
-
-            ComposeMessage(
-                id = item.select("input[value]").value().parseCount().toLong(),
-                title = item.select("a.avatar").text(),
-                content = item.select("span.tip").text(),
-                time = item.select("small.grey").text(),
+        return contentPM.select(".pm-conversation-item ").map { item ->
+            val avatarUrl = item.select(".avatarNeue").styleAvatarUrl()
+            val nickname = item.select(".pm-conversation-name").text()
+            val date = item.select(".pm-conversation-date").text()
+            val lastMsg = item.select(".pm-conversation-desc").text()
+            val unread = item.select(".pm-conversation-unread").text().parseCount()
+            debugLog { "item.hrefLongId()= ${item.hrefLongId()}" }
+            ComposePmConversation(
+                id = item.hrefLongId(),
+                content = lastMsg,
+                time = date,
                 unread = unread,
-                type = type,
                 user = ComposeUser(
-                    id = avatarUrl.avatarUrlId(username),
-                    username = username,
                     nickname = nickname,
                     avatar = ComposeImages.fromUrl(avatarUrl)
                 )
@@ -93,54 +93,80 @@ class UserParser : BaseParser() {
         }
     }
 
-    suspend fun Element.fetchUserMessageDetailConverted(): ComposeMessageDetail {
+    suspend fun Element.fetchUserPmMessageConverted(): ComposePmMessageDetail {
         requireNoError()
-        val contentPM = select("#contentPM")
-        val messages = contentPM.select("#comment_box > .item").map { item ->
-            val avatarUrl = item.select(".avatar > span").styleAvatarUrl()
+        val contentPM = select(".pm-chat-panel")
+        val chatHeader = contentPM.select(".pm-chat-header")
+        val chatMessageList = contentPM.select(".pm-message-list")
 
-            val textPm = item.select(".text_pm")
-            val subjectTitle = textPm.select("hr.board").first()
-                ?.previousElementSibling()?.text().orEmpty()
+        val userLink = chatHeader.select(".pm-chat-title strong > a.l")
+        val username = userLink.hrefId()
+        val avatarUrl = chatHeader.select(".avatarNeue").styleAvatarUrl()
 
-            val (time, id) = textPm.select(".rr").remove().let {
-                val time = it.select(".grey").text().substringBefore("/").trim()
-                val id = it.select("a[onclick]").attr("onclick").parseCount().toLong()
-                time to id
-            }
-
-            val (nickname, username) = textPm.select("a.l").remove()
-                .let { it.text() to it.hrefId() }
-
-            val html = textPm.html()
-                .substringAfter(":")
-                .substringAfter("<hr class=\"board\">")
-
-            ComposeMessage(
-                id = id,
-                title = subjectTitle,
-                time = time,
-                content = html,
-                contentHtml = html.parseAsHtml(),
-                user = ComposeUser(
-                    id = avatarUrl.avatarUrlId(username),
-                    username = username,
-                    nickname = nickname,
-                    avatar = ComposeImages.fromUrl(avatarUrl)
-                )
+        val threadLinks = chatHeader.select(".pm-thread-filter > a")
+        val threads = threadLinks.map { link ->
+            ComposePmThread(
+                id = link.attr("href")
+                    .substringAfter("thread=", "")
+                    .substringBefore("&")
+                    .parseCount()
+                    .toLong(),
+                name = link.text(),
             )
-        }
+        }.toPersistentList()
 
-        val form = contentPM.select("#pmReplyForm")
-        val canReply = form.isNotEmpty()
+        val currentThread = threads.getOrNull(threadLinks.indexOfFirst { it.hasClass("focus") })
+            ?: ComposePmThread.Empty
 
-        return ComposeMessageDetail(
-            messages = messages.toPersistentList(),
-            canReply = canReply,
-            msgReceivers = form.select("input[name=msg_receivers]").value(),
-            related = form.select("input[name=related]").value(),
-            currentMsgId = form.select("input[name=current_msg_id]").value(),
-            title = form.select("input[name=msg_title]").value(),
+        val messages = chatMessageList.select(".pm-thread-label, .pm-message").mapNotNull { item ->
+            when {
+                item.hasClass("pm-thread-label") -> {
+                    ComposePmMessage(title = item.text())
+                }
+
+                item.hasClass("pm-message") -> {
+                    val messageUserLink = item.select("a.avatar")
+                    val messageUsername = messageUserLink.hrefId()
+                    val messageAvatarUrl = item.select(".avatarNeue").styleAvatarUrl()
+                    val messageTime = item.select(".pm-message-info small")
+                        .text()
+                        .substringBefore("/")
+                        .trim()
+
+                    ComposePmMessage(
+                        msgId = item.id().substringAfter("msg_").parseCount().toLong(),
+                        content = item.select(".pm-message-body").html(),
+                        time = messageTime,
+                        user = ComposeUser(
+                            id = messageAvatarUrl.avatarUrlId(messageUsername),
+                            username = messageUsername,
+                            nickname = messageUsername,
+                            avatar = ComposeImages.fromUrl(messageAvatarUrl),
+                        ),
+                    )
+                }
+
+                else -> null
+            }
+        }.toPersistentList()
+
+        val inputs = contentPM.select("#pmReplyForm [name]")
+            .associate { input ->
+                input.attr("name") to if (input.tagName() == "textarea") input.text() else input.attr("value")
+            }
+            .toPersistentMap()
+
+        return ComposePmMessageDetail(
+            user = ComposeUser(
+                id = avatarUrl.avatarUrlId(username),
+                username = username,
+                nickname = userLink.text(),
+                avatar = ComposeImages.fromUrl(avatarUrl),
+            ),
+            threads = threads,
+            messages = messages,
+            currentThread = currentThread,
+            inputs = inputs,
         )
     }
 

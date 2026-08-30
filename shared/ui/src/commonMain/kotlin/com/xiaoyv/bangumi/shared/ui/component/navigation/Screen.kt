@@ -180,7 +180,7 @@ sealed class Screen(
     data object MessageMain : Screen(SCREEN_ROUTE_MESSAGE_MAIN)
 
     @Serializable
-    data class MessageChat(val id: Long, val username: String) : Screen(SCREEN_ROUTE_MESSAGE_CHAT)
+    data class MessageChat(val conversationId: Long, val nickname: String) : Screen(SCREEN_ROUTE_MESSAGE_CHAT)
 
     @Serializable
     data object Newest : Screen(SCREEN_ROUTE_NEWEST)

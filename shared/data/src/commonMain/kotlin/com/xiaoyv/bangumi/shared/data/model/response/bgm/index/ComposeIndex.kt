@@ -24,6 +24,7 @@ data class ComposeIndex(
     @SerialName("collects") val collects: Int = 0,
     @SerialName("createdAt") val createdAt: SerializeDateLong = 0,
     @SerialName("updatedAt") val updatedAt: SerializeDateLong = 0,
+    @SerialName("collectedAt") val collectedAt: SerializeDateLong = 0,
     @SerialName("desc") val desc: String = "",
     @SerialName("id") val id: Long = 0,
     @SerialName("private") val `private`: Boolean = false,
@@ -34,8 +35,9 @@ data class ComposeIndex(
     @SerialName("type") val type: Int = 0,
     @SerialName("uid") val uid: Int = 0,
     @SerialName("user") val creator: ComposeUser = ComposeUser.Empty,
-    @SerialName("isBookmarked") val isBookmarked: Boolean = false
 ) {
+    val isBookmarked get() = collectedAt > 0
+
     val shareUrl: String get() = WebConstant.URL_BASE_WEB + "index/" + id
 
     @Composable

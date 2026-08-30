@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.message.chat.business
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmThread
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 
 /**
@@ -19,5 +20,8 @@ sealed class MessageChatEvent {
         data class OnRefresh(val loading: Boolean) : Action()
         data class OnTextChange(val text: TextFieldValue) : Action()
         data class OnSendReply(val text: String) : Action()
+        data class OnThreadChange(val thread: ComposePmThread) : Action()
+        data class OnEnableTopicInput(val enable: Boolean) : Action()
+        data class OnTopicInputChange(val text: TextFieldValue) : Action()
     }
 }

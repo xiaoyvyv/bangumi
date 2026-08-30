@@ -152,7 +152,7 @@ private fun FriendScreenContent(
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
                                     .padding(horizontal = 16.dp, vertical = 12.dp),
                                 text = item.title,
                                 style = MaterialTheme.typography.bodyMedium.copy(
