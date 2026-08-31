@@ -446,6 +446,8 @@
     <string name="settings_bar_4">首页底栏 Tab-4</string>
     <string name="settings_bar_5">首页底栏 Tab-5</string>
     <string name="settings_domain_bgm">Bangumi 域</string>
+    <string name="settings_domain_bgm_change_title">切换 Bangumi 域名</string>
+    <string name="settings_domain_bgm_change_desc">切换域名后需要重新登录，是否继续？</string>
     <string name="settings_domain_resolver">域名解析与更新</string>
     <string name="settings_domain_resolver_desc">如果 App 使用过程中，碰到数据长时间加载缓慢，请进入重新解析一次即可</string>
     <string name="settings_domain_pixiv">图片域</string>

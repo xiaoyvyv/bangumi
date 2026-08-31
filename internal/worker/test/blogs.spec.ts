@@ -37,7 +37,8 @@ describe('blogs handler under /p1/blogs', () => {
 				origin: 'https://bangumi.tv',
 				referer: 'https://bangumi.tv/blog/create',
 				'content-type': (value) => value.startsWith('multipart/form-data; boundary='),
-				'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:154.0) Gecko/20100101 Firefox/154.0',
+				'user-agent': 'Bangumi-Multiplatform-Test/1.0',
+				'x-client-header': 'keep-me',
 			},
 			body: (value) => [
 				'name="formhash"', 'turnstile-token', 'name="title"', '日志标题', 'name="content"', '日志正文',
@@ -52,6 +53,8 @@ describe('blogs handler under /p1/blogs', () => {
 				Cookie: 'chii_auth=token',
 				'Content-Type': 'application/json',
 				BaseUrl: 'https://bangumi.tv/',
+				'User-Agent': 'Bangumi-Multiplatform-Test/1.0',
+				'X-Client-Header': 'keep-me',
 			},
 			body: JSON.stringify({
 				title: '日志标题', content: '日志正文', turnstileToken: 'turnstile-token',
@@ -82,7 +85,7 @@ describe('blogs handler under /p1/blogs', () => {
 		expect(wrongContentType.status).toBe(415);
 	});
 
-	it('returns the original upstream response when BGM rejects creation', async () => {
+	it('returns a JSON error when BGM rejects creation', async () => {
 		fetchMock.get('https://bgm.tv').intercept({
 			path: '/blog/create',
 			method: 'POST',
@@ -95,8 +98,8 @@ describe('blogs handler under /p1/blogs', () => {
 		}), env, createExecutionContext());
 
 		expect(response.status).toBe(403);
-		expect(response.headers.get('content-type')).toContain('text/html');
-		expect(await response.text()).toBe('formhash error');
+		expect(response.headers.get('content-type')).toContain('application/json');
+		expect(await response.json()).toEqual({ message: 'Blog creation was rejected by upstream' });
 	});
 
 	it('extracts photo icon from photos API and returns 302 redirect', async () => {

@@ -18,5 +18,6 @@ sealed class SettingsNetworkEvent {
     sealed class Action : SettingsNetworkEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
         data class OnUpdate(val settings: ComposeSetting.NetworkConfig) : Action()
+        data class OnUpdateBgmHost(val host: String) : Action()
     }
 }

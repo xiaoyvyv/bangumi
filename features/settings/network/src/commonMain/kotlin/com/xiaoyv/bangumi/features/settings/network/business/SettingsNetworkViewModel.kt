@@ -24,6 +24,7 @@ class SettingsNetworkViewModel(
         when (event) {
             is SettingsNetworkEvent.Action.OnRefresh -> refresh(event.loading)
             is SettingsNetworkEvent.Action.OnUpdate -> onUpdateConfig(event.settings)
+            is SettingsNetworkEvent.Action.OnUpdateBgmHost -> onUpdateBgmHost(event.host)
         }
     }
 
@@ -32,6 +33,15 @@ class SettingsNetworkViewModel(
         userManager.updateSettings {
             it.copy(network = settings)
         }
+
+        postToast { getString(Res.string.settings_reboot_active) }
+    }
+
+    private fun onUpdateBgmHost(host: String) = intent {
+        userManager.updateSettings {
+            it.copy(network = it.network.copy(bgmHost = host))
+        }
+        userManager.logout()
 
         postToast { getString(Res.string.settings_reboot_active) }
     }

@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.settings.network
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Scaffold
@@ -11,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +24,8 @@ import com.xiaoyv.bangumi.core_resource.resources.global_proxy
 import com.xiaoyv.bangumi.core_resource.resources.global_req_timeout
 import com.xiaoyv.bangumi.core_resource.resources.global_update
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_bgm
+import com.xiaoyv.bangumi.core_resource.resources.settings_domain_bgm_change_desc
+import com.xiaoyv.bangumi.core_resource.resources.settings_domain_bgm_change_title
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_pixiv
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_resolver
 import com.xiaoyv.bangumi.core_resource.resources.settings_domain_resolver_desc
@@ -39,6 +43,8 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
@@ -51,6 +57,7 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 
 @Composable
 fun SettingsNetworkRoute(
@@ -114,6 +121,17 @@ private fun SettingsNetworkScreenContent(
     onActionEvent: (SettingsNetworkEvent.Action) -> Unit,
 ) {
     val settings = currentSettings()
+    val changeBgmHostDialog = rememberAlertDialogState()
+    var pendingBgmHost by remember { mutableStateOf("") }
+
+    BgmAlertDialog(
+        state = changeBgmHostDialog,
+        title = stringResource(Res.string.settings_domain_bgm_change_title),
+        text = stringResource(Res.string.settings_domain_bgm_change_desc),
+        onConfirm = {
+            onActionEvent(SettingsNetworkEvent.Action.OnUpdateBgmHost(pendingBgmHost))
+        },
+    )
 
     Column(modifier = Modifier.padding(vertical = 16.dp)) {
         SettingContainer(label = { Text(text = stringResource(Res.string.global_domain)) }) {
@@ -123,7 +141,10 @@ private fun SettingsNetworkScreenContent(
                 value = settings.network.bgmHost,
                 items = TabTokens.settingBangumiHosts,
                 onClick = {
-                    onActionEvent(SettingsNetworkEvent.Action.OnUpdate(settings.network.copy(bgmHost = it)))
+                    if (it != settings.network.bgmHost) {
+                        pendingBgmHost = it
+                        changeBgmHostDialog.show()
+                    }
                 }
             )
         }

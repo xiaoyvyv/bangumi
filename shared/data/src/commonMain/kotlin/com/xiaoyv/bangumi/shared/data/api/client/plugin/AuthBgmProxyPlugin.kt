@@ -27,9 +27,9 @@ class AuthBgmProxyPluginConfig(
 /**
  * [AuthBgmProxyPlugin]
  *
- * 将 [AuthBgmProxyPluginConfig.bgmUrl] 下保存的登录 Cookie 追加到发往
- * [AuthBgmProxyPluginConfig.proxyUrl] 的请求，使代理接口能够复用当前 Bangumi 登录态。
- * 非代理请求不会被修改，已有 Cookie 也会被保留。
+ * 将当前 Bgm 的登录信息以及 BaseUrl 转发给代理域名；
+ *
+ * 配置代理域名仅需要更改域名即可，无需额外的 Url 处理
  */
 val AuthBgmProxyPlugin: ClientPlugin<AuthBgmProxyPluginConfig> =
     createClientPlugin("AuthBgmProxyPlugin", ::AuthBgmProxyPluginConfig) {

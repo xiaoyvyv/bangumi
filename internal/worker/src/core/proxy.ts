@@ -11,8 +11,22 @@ export async function proxy(
 	ctx?: ExecutionContext,
 ) {
 	const load = async () => {
-	const url = new URL(target);
+	const headers = proxyHeaders(req, target, anonymous);
 
+	const resp = await fetch(target, {
+		headers: headers,
+		method: req.method,
+		body: req.method === 'GET' ? undefined : req.body
+	});
+
+	return opt.transform ? opt.transform(req, resp) : resp;
+	};
+
+	return opt.cache ? withCache(req, opt.cache, load, ctx) : load();
+}
+
+export function proxyHeaders(req: Request, target: string, anonymous: boolean = false): Headers {
+	const url = new URL(target);
 	const headers = new Headers(req.headers);
 
 	headers.delete('host');
@@ -26,15 +40,5 @@ export async function proxy(
 	}
 
 	headers.set('host', url.host);
-
-	const resp = await fetch(target, {
-		headers: headers,
-		method: req.method,
-		body: req.method === 'GET' ? undefined : req.body
-	});
-
-	return opt.transform ? opt.transform(req, resp) : resp;
-	};
-
-	return opt.cache ? withCache(req, opt.cache, load, ctx) : load();
+	return headers;
 }
