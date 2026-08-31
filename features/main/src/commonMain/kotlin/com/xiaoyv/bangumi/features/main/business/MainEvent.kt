@@ -10,6 +10,8 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
  */
 sealed class MainEvent {
     sealed class UI : MainEvent() {
+        data object OnNavUp : UI()
+
         data class OnNavScreen(val screen: Screen) : UI()
     }
 

@@ -39,6 +39,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun MainRoute(
     viewModel: MainViewModel,
+    onNavUp: () -> Unit,
     onNavScreen: (Screen) -> Unit,
 ) {
     val state by viewModel.collectAsState()
@@ -48,12 +49,13 @@ fun MainRoute(
             state = this,
             onUiEvent = {
                 when (it) {
+                    MainEvent.UI.OnNavUp -> onNavUp()
                     is MainEvent.UI.OnNavScreen -> onNavScreen(it.screen)
                 }
             },
             onActionEvent = {
 
-            }
+            },
         )
     }
 }
@@ -133,7 +135,7 @@ fun MainScreen(
                         if (backStack.current != startDestination.first) {
                             backStack.moveTop(startDestination.first)
                         } else {
-                            backStack.clear()
+                            onUiEvent(MainEvent.UI.OnNavUp)
                         }
                     }
                 )

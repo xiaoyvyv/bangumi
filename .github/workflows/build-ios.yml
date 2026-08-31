@@ -22,7 +22,7 @@ jobs:
       channel: ${{ steps.version.outputs.channel }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -49,7 +49,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup JDK
         uses: actions/setup-java@v5
@@ -114,7 +114,7 @@ jobs:
           ditto -c -k --sequesterRsrc --keepParent build/ios/ipa/Payload build/ios/bangumi-ios.ipa
 
       - name: Upload unsigned IPA
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ios-ipa
           path: build/ios/bangumi-ios.ipa
@@ -129,12 +129,12 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Download IPA
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ios-ipa
           path: ios-release
@@ -149,11 +149,7 @@ jobs:
         run: |
           RELEASE_TAG="pre-release"
           RELEASE_NAME="Pre-release"
-          RELEASE_BODY="$(bash .github/scripts/release-notes.sh pre-release "${RELEASE_TAG}")
-
-          - channel：pre-release
-          - versionCode：${VERSION_CODE}
-          - versionName：${VERSION_NAME}"
+          RELEASE_BODY="$(bash .github/scripts/release-notes.sh pre-release "${RELEASE_TAG}")"
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
             gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
           else
@@ -171,10 +167,7 @@ jobs:
         run: |
           RELEASE_TAG="${GITHUB_REF_NAME}"
           RELEASE_NAME="Release ${VERSION_NAME}"
-          RELEASE_BODY="$(bash .github/scripts/release-notes.sh release "${RELEASE_TAG}")
-
-          - versionCode：${VERSION_CODE}
-          - versionName：${VERSION_NAME}"
+          RELEASE_BODY="$(bash .github/scripts/release-notes.sh release "${RELEASE_TAG}")"
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
             gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --latest --notes "${RELEASE_BODY}"
           else

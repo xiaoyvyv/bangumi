@@ -22,7 +22,7 @@ jobs:
       channel: ${{ steps.version.outputs.channel }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -64,7 +64,7 @@ jobs:
             format: msi
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup JDK
         uses: actions/setup-java@v5
@@ -87,7 +87,7 @@ jobs:
           cp "${package_path}" "${package_dir}/bangumi-${{ matrix.platform }}.${{ matrix.format }}"
 
       - name: Upload desktop package
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-${{ matrix.platform }}
           path: composeApp/build/compose/binaries/main-release/${{ matrix.format }}/bangumi-${{ matrix.platform }}.${{ matrix.format }}
@@ -102,12 +102,12 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Download desktop packages
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: desktop-*
           path: desktop-release
@@ -123,11 +123,7 @@ jobs:
         run: |
           RELEASE_TAG="pre-release"
           RELEASE_NAME="Pre-release"
-          RELEASE_BODY="$(bash .github/scripts/release-notes.sh pre-release "${RELEASE_TAG}")
-
-          - channel：pre-release
-          - versionCode：${VERSION_CODE}
-          - versionName：${VERSION_NAME}"
+          RELEASE_BODY="$(bash .github/scripts/release-notes.sh pre-release "${RELEASE_TAG}")"
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
             gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
           else
@@ -145,10 +141,7 @@ jobs:
         run: |
           RELEASE_TAG="${GITHUB_REF_NAME}"
           RELEASE_NAME="Release ${VERSION_NAME}"
-          RELEASE_BODY="$(bash .github/scripts/release-notes.sh release "${RELEASE_TAG}")
-
-          - versionCode：${VERSION_CODE}
-          - versionName：${VERSION_NAME}"
+          RELEASE_BODY="$(bash .github/scripts/release-notes.sh release "${RELEASE_TAG}")"
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
             gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --latest --notes "${RELEASE_BODY}"
           else
