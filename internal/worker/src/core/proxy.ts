@@ -18,6 +18,7 @@ export async function proxy(
 	headers.delete('host');
 	headers.delete('content-length');
 	headers.delete('connection');
+	headers.delete('baseurl');
 
 	if (anonymous) {
 		headers.delete('cookie');

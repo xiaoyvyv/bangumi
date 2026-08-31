@@ -29,13 +29,13 @@ describe('blogs handler under /p1/blogs', () => {
 	});
 
 	it('converts the JSON blog request into BGM multipart form data', async () => {
-		fetchMock.get('https://bgm.tv').intercept({
+		fetchMock.get('https://bangumi.tv').intercept({
 			path: '/blog/create',
 			method: 'POST',
 			headers: {
 				cookie: 'chii_auth=token',
-				origin: 'https://bgm.tv',
-				referer: 'https://bgm.tv/blog/create',
+				origin: 'https://bangumi.tv',
+				referer: 'https://bangumi.tv/blog/create',
 				'content-type': (value) => value.startsWith('multipart/form-data; boundary='),
 				'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:154.0) Gecko/20100101 Firefox/154.0',
 			},
@@ -51,6 +51,7 @@ describe('blogs handler under /p1/blogs', () => {
 			headers: {
 				Cookie: 'chii_auth=token',
 				'Content-Type': 'application/json',
+				BaseUrl: 'https://bangumi.tv/',
 			},
 			body: JSON.stringify({
 				title: '日志标题', content: '日志正文', turnstileToken: 'turnstile-token',
@@ -79,6 +80,23 @@ describe('blogs handler under /p1/blogs', () => {
 			body: '--test--',
 		}), env, createExecutionContext());
 		expect(wrongContentType.status).toBe(415);
+	});
+
+	it('returns the original upstream response when BGM rejects creation', async () => {
+		fetchMock.get('https://bgm.tv').intercept({
+			path: '/blog/create',
+			method: 'POST',
+		}).reply(403, 'formhash error', { headers: { 'content-type': 'text/html; charset=UTF-8' } });
+
+		const response = await worker.fetch(new IncomingRequest('http://example.com/p1/blogs', {
+			method: 'POST',
+			headers: { Cookie: 'chii_auth=token', 'Content-Type': 'application/json' },
+			body: JSON.stringify({ title: '标题', content: '正文', turnstileToken: 'token' }),
+		}), env, createExecutionContext());
+
+		expect(response.status).toBe(403);
+		expect(response.headers.get('content-type')).toContain('text/html');
+		expect(await response.text()).toBe('formhash error');
 	});
 
 	it('extracts photo icon from photos API and returns 302 redirect', async () => {

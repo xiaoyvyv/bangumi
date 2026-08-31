@@ -46,7 +46,7 @@ describe('terminal handler strictly under /p1/terminal', () => {
 			const rawHtml = `1 Bangumi娘 | Speech count:1050 | by Sai` + `\u{1F596}` + ` @ 1256570485 <br />	2 橘花 | Speech count:60 | by Sai` + `\u{1F596}` + ` @ 1256570491`;
 
 			fetchMock
-				.get('https://bgm.tv')
+				.get('https://bangumi.tv')
 				.intercept({
 					path: '/terminal',
 					method: 'POST',
@@ -60,7 +60,7 @@ describe('terminal handler strictly under /p1/terminal', () => {
 				});
 
 			const request = new IncomingRequest('http://example.com/p1/terminal/personality', {
-				headers: { Cookie: sampleCookie },
+				headers: { Cookie: sampleCookie, BaseUrl: 'https://bangumi.tv/' },
 			});
 			const ctx = createExecutionContext();
 			const response = await worker.fetch(request, env, ctx);

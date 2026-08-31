@@ -1,4 +1,4 @@
-import { UPSTREAM } from '../config';
+import { UPSTREAM, webApiBase } from '../config';
 
 const DEFAULT_COVER = 'https://bgm.tv/img/no_icon_subject.png';
 
@@ -105,16 +105,17 @@ async function handleBlogCreate(req: Request): Promise<Response> {
 	body.append('submit', '加上去');
 	for (const subjectID of request.subjectIDs) body.append('related_subject[]', String(subjectID));
 
+	const baseUrl = webApiBase(req);
 	const headers = new Headers({
 		Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 		'Accept-Language': 'zh-CN,zh;q=0.9',
 		Cookie: cookie,
-		Origin: UPSTREAM.WEB_API,
-		Referer: `${UPSTREAM.WEB_API}/blog/create`,
+		Origin: baseUrl,
+		Referer: `${baseUrl}/blog/create`,
 		'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:154.0) Gecko/20100101 Firefox/154.0',
 	});
 
-	const response = await fetch(`${UPSTREAM.WEB_API}/blog/create`, {
+	const response = await fetch(`${baseUrl}/blog/create`, {
 		method: 'POST',
 		headers,
 		body,
@@ -122,11 +123,7 @@ async function handleBlogCreate(req: Request): Promise<Response> {
 	});
 	const id = blogId(response.headers.get('location'));
 	if (id) return Response.json({ id });
-
-	return Response.json(
-		{ message: 'Blog creation was rejected by upstream' },
-		{ status: response.status >= 400 ? response.status : 502 },
-	);
+	return response;
 }
 
 interface CreateBlogEntryRequest {

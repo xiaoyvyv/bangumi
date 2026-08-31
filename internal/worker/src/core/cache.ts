@@ -1,3 +1,5 @@
+import { webApiBase } from '../config';
+
 export interface CacheOptions {
 	ttl: number;
 }
@@ -14,7 +16,8 @@ export async function withCache(
 	if (request.method !== 'GET') return load();
 
 	const cache = caches.default;
-	const cached = await cache.match(request);
+	const cacheKey = cacheRequest(request);
+	const cached = await cache.match(cacheKey);
 	if (cached) return cached;
 
 	const response = await load();
@@ -23,10 +26,16 @@ export async function withCache(
 	const headers = new Headers(response.headers);
 	headers.set('Cache-Control', `public, max-age=${options.ttl}, s-maxage=${options.ttl}`);
 	const cacheable = new Response(response.body, { status: response.status, statusText: response.statusText, headers });
-	const write = cache.put(request, cacheable.clone()).catch((error) => console.warn('Cache write failed', error));
+	const write = cache.put(cacheKey, cacheable.clone()).catch((error) => console.warn('Cache write failed', error));
 
 	if (ctx) ctx.waitUntil(write);
 	else await write;
 
 	return cacheable;
+}
+
+function cacheRequest(request: Request): Request {
+	const url = new URL(request.url);
+	url.searchParams.set('__upstream_base', webApiBase(request));
+	return new Request(url, { method: 'GET' });
 }

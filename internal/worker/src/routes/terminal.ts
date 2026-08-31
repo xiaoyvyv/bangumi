@@ -4,7 +4,7 @@ import {
 	transformTerminalSpeech,
 	transformTerminalText,
 } from '../transforms/terminal.transform';
-import { UPSTREAM } from '../config';
+import { webApiBase } from '../config';
 
 async function extractParams(req: Request): Promise<Record<string, string>> {
 	const url = new URL(req.url);
@@ -52,7 +52,7 @@ export async function handleTerminal(req: Request, env: any): Promise<Response> 
 			? pathSegments[2]
 			: '';
 
-	const targetUrl = `${UPSTREAM.WEB_API}/terminal`;
+	const targetUrl = `${webApiBase(req)}/terminal`;
 	let body = '';
 	let transform: ((req: Request, res: Response) => Promise<Response> | Response) | undefined;
 

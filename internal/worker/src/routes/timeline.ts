@@ -1,6 +1,6 @@
 import { proxy } from '../core/proxy';
 import { transformTimeline } from '../transforms/timeline.transform';
-import { UPSTREAM } from '../config';
+import { webApiBase } from '../config';
 
 
 export async function handleTimeline(req: Request, env: any) {
@@ -44,7 +44,7 @@ export async function handleTimeline(req: Request, env: any) {
 	params.set('ajax', '1');
 
 	const query = params.toString();
-	const targetUrl = UPSTREAM.WEB_API + path + `?${query}`;
+	const targetUrl = webApiBase(req) + path + `?${query}`;
 
 	return proxy(
 		req,

@@ -41,6 +41,8 @@ val AuthBgmProxyPlugin: ClientPlugin<AuthBgmProxyPluginConfig> =
             val url = request.url.toString()
 
             if (url.startsWith(config.proxyUrl, true)) {
+                request.headers["BaseUrl"] = config.bgmUrl
+
                 val cookies = client.cookies(Url(config.bgmUrl))
                 if (cookies.isNotEmpty()) {
                     val bgmCookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }

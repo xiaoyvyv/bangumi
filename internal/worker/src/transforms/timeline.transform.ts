@@ -2,7 +2,7 @@
 
 import { parseDocument } from 'htmlparser2';
 import { selectAll, selectOne } from 'css-select';
-import { UPSTREAM } from '../config';
+import { webApiBase } from '../config';
 import { removeElement, textContent } from 'domutils';
 import render from 'dom-serializer';
 import { Element, isTag } from 'domhandler';
@@ -119,7 +119,7 @@ export async function transformTimeline(req: Request, res: Response) {
 			replies: commentCnt,
 			source: {
 				name: sourceName,
-				url: sourceUrl ? UPSTREAM.WEB_API + sourceUrl : ''
+				url: sourceUrl ? webApiBase(req) + sourceUrl : ''
 			},
 			memo: memo,
 			reactions: reactions,
