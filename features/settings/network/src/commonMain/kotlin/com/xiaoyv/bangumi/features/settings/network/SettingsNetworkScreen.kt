@@ -41,6 +41,7 @@ import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkStat
 import com.xiaoyv.bangumi.features.settings.network.business.SettingsNetworkViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
+import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
@@ -121,29 +122,34 @@ private fun SettingsNetworkScreenContent(
     onActionEvent: (SettingsNetworkEvent.Action) -> Unit,
 ) {
     val settings = currentSettings()
-    val changeBgmHostDialog = rememberAlertDialogState()
-    var pendingBgmHost by remember { mutableStateOf("") }
-
-    BgmAlertDialog(
-        state = changeBgmHostDialog,
-        title = stringResource(Res.string.settings_domain_bgm_change_title),
-        text = stringResource(Res.string.settings_domain_bgm_change_desc),
-        onConfirm = {
-            onActionEvent(SettingsNetworkEvent.Action.OnUpdateBgmHost(pendingBgmHost))
-        },
-    )
 
     Column(modifier = Modifier.padding(vertical = 16.dp)) {
         SettingContainer(label = { Text(text = stringResource(Res.string.global_domain)) }) {
+            val sharedState = LocalSharedState.current
+            val changeBgmHostDialog = rememberAlertDialogState()
+            var pendingBgmHost by remember { mutableStateOf("") }
+
+            BgmAlertDialog(
+                state = changeBgmHostDialog,
+                title = stringResource(Res.string.settings_domain_bgm_change_title),
+                text = stringResource(Res.string.settings_domain_bgm_change_desc),
+                onConfirm = {
+                    onActionEvent(SettingsNetworkEvent.Action.OnUpdateBgmHost(pendingBgmHost))
+                }
+            )
+
             SettingOptionItem(
                 title = stringResource(Res.string.settings_domain_bgm),
                 shape = ListItemDefaults.segmentedShapes(0, 1),
                 value = settings.network.bgmHost,
                 items = TabTokens.settingBangumiHosts,
                 onClick = {
-                    if (it != settings.network.bgmHost) {
-                        pendingBgmHost = it
+                    pendingBgmHost = it
+
+                    if (it != settings.network.bgmHost && sharedState.isLogin) {
                         changeBgmHostDialog.show()
+                    } else {
+                        onActionEvent(SettingsNetworkEvent.Action.OnUpdateBgmHost(it))
                     }
                 }
             )
