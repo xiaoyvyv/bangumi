@@ -233,7 +233,7 @@
     <string name="global_bookmarked">已收藏</string>
     <string name="global_swap">清除</string>
     <string name="global_public">公开</string>
-    <string name="global_private">仅自己</string>
+    <string name="global_private">好友</string>
     <string name="global_update">更新</string>
     <string name="global_layout">布局</string>
     <string name="global_list">列表</string>
@@ -252,6 +252,7 @@
     <string name="global_set_wallpaper">设置壁纸</string>
     <string name="global_set_wallpaper_success">设置壁纸成功</string>
     <string name="global_choose">请选择</string>
+    <string name="global_add">添加</string>
     <string name="global_add_to_index">添加到目录</string>
     <string name="global_translate">翻译</string>
     <string name="global_translate_off">原文</string>
@@ -601,6 +602,11 @@
     <string name="publish_title_group">发表小组讨论</string>
     <string name="publish_title_subject">发表条目讨论</string>
     <string name="publish_title_comment">发表我的评论</string>
+    <string name="publish_add_subject">添加条目</string>
+    <string name="publish_add_subject_hint">输入条目名称自动搜索</string>
+    <string name="publish_add_tag">添加标签</string>
+    <string name="publish_attach_subject_cannot_remove">当前条目不可移除哦~</string>
+    <string name="publish_tag_tip">在 Bangumi 发表日志只需要在 Tag 中添加『动画 / 书籍 / 音乐 / 游戏 / 三次元』 你的日志就会出现在频道的日志汇总页面中</string>
 
 
     <string name="topic_title">详情</string>

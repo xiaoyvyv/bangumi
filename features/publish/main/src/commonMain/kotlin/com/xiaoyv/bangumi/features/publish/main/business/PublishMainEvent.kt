@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.publish.main.business
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.github.vinceglb.filekit.PlatformFile
 
@@ -23,5 +24,10 @@ sealed class PublishMainEvent {
         data class OnImagePickResult(val path: PlatformFile) : Action()
         data class OnTitleChange(val title: TextFieldValue) : Action()
         data class OnContentChange(val content: TextFieldValue) : Action()
+        data class OnAddSubject(val subject: ComposeSubject) : Action()
+        data class OnRemoveSubject(val subjectId: Long) : Action()
+        data class OnAddTags(val tags: String) : Action()
+        data class OnRemoveTag(val tag: String) : Action()
+        data class OnPublicChange(val public: Boolean) : Action()
     }
 }

@@ -83,7 +83,7 @@ private val repositoryModules = module {
     single<MikanRepository> { MikanRepositoryImpl(get(), get(), get()) }
     single<SubjectRepository> { SubjectRepositoryImpl(get(), get(), get(), get(), get()) }
     single<MonoRepository> { MonoRepositoryImpl(get(), get(), get()) }
-    single<BlogRepository> { BlogRepositoryImpl(get(), get()) }
+    single<BlogRepository> { BlogRepositoryImpl(get(), get(), get()) }
     single<UgcRepository> { UgcRepositoryImpl(get(), get(), get(), get(), get()) }
     single<TimelineRepository> { TimelineRepositoryImpl(get(), get(), get()) }
     single<ChoreRepository> { ChoreRepositoryImpl(get()) }

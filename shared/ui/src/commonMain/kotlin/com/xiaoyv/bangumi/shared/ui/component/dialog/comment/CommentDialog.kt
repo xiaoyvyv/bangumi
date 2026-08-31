@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.AddLink
@@ -62,7 +61,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -111,7 +109,6 @@ import com.xiaoyv.bangumi.shared.core.utils.rememberTvEmojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend1Emojis
 import com.xiaoyv.bangumi.shared.core.utils.rememberTvExtend2Emojis
 import com.xiaoyv.bangumi.shared.core.utils.resetSize
-import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.bbcodeToHtml
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeReply
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
@@ -137,6 +134,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 
 val commentDialogProperties = DialogProperties(
     dismissOnBackPress = true,
@@ -263,13 +261,11 @@ fun CommentDialogContent(
                 }
             )
 
-            if (!LocalInspectionMode.current && state.comment.text.isNotBlank()) {
+            if (state.comment.text.isNotBlank()) {
                 BgmTurnstile(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = ContentMarginHalf),
-                    url = WebConstant.URL_BGM_TURNSTILE,
-                    callback = "bangumi://",
                     onToken = {
                         onEvent(CommentEvent.OnReceiveTurnstileToken(it))
                     }

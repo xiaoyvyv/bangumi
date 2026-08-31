@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.api.next
 
 import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
+import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateBlogEntryRequest
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.UpdateContent
@@ -50,6 +51,12 @@ interface BlogApi {
      */
     @POST("p1/blogs")
     suspend fun createBlogEntry(@Body param: CreateBlogEntryRequest): ComposeId
+
+    /**
+     * 发布日志代理，官方私有API暂未生效
+     */
+    @POST("${WebConstant.URL_BGM_PROXY}p1/blogs")
+    suspend fun createBlogEntryByProxy(@Body param: CreateBlogEntryRequest): ComposeId
 
     /**
      * 删除日志的吐槽

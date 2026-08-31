@@ -28,6 +28,59 @@ describe('blogs handler under /p1/blogs', () => {
 		expect(response.status).toBe(404);
 	});
 
+	it('converts the JSON blog request into BGM multipart form data', async () => {
+		fetchMock.get('https://bgm.tv').intercept({
+			path: '/blog/create',
+			method: 'POST',
+			headers: {
+				cookie: 'chii_auth=token',
+				origin: 'https://bgm.tv',
+				referer: 'https://bgm.tv/blog/create',
+				'content-type': (value) => value.startsWith('multipart/form-data; boundary='),
+				'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:154.0) Gecko/20100101 Firefox/154.0',
+			},
+			body: (value) => [
+				'name="formhash"', 'turnstile-token', 'name="title"', '日志标题', 'name="content"', '日志正文',
+				'name="tags"', '音乐 游戏', 'name="public"', '0', 'name="submit"', '加上去',
+				'name="related_subject[]"', '1', '3',
+			].every((part) => value.includes(part)),
+		}).reply(302, '', { headers: { location: 'https://bgm.tv/blog/123' } });
+
+		const request = new IncomingRequest('http://example.com/p1/blogs', {
+			method: 'POST',
+			headers: {
+				Cookie: 'chii_auth=token',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				title: '日志标题', content: '日志正文', turnstileToken: 'turnstile-token',
+				tags: ['音乐', '游戏'], public: true, subjectIDs: [1, 3],
+			}),
+		});
+		const ctx = createExecutionContext();
+		const response = await worker.fetch(request, env, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(200);
+		expect(await response.json()).toEqual({ id: 123 });
+	});
+
+	it('requires a JSON request and caller cookie to create a blog', async () => {
+		const missingCookie = await worker.fetch(new IncomingRequest('http://example.com/p1/blogs', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ title: '标题', content: '正文', turnstileToken: 'token' }),
+		}), env, createExecutionContext());
+		expect(missingCookie.status).toBe(401);
+
+		const wrongContentType = await worker.fetch(new IncomingRequest('http://example.com/p1/blogs', {
+			method: 'POST',
+			headers: { Cookie: 'chii_auth=token', 'Content-Type': 'multipart/form-data; boundary=test' },
+			body: '--test--',
+		}), env, createExecutionContext());
+		expect(wrongContentType.status).toBe(415);
+	});
+
 	it('extracts photo icon from photos API and returns 302 redirect', async () => {
 		fetchMock
 			.get('https://next.bgm.tv')

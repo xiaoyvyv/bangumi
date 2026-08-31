@@ -54,6 +54,7 @@ class Navigator(startDestination: NavKey = Screen.Splash) {
             is Screen.MessageMain,
             is Screen.MessageChat,
             is Screen.Notification,
+            is Screen.PublishMain,
             is Screen.SettingsAccount,
             is Screen.SettingsBlock -> requireLogin {
                 navigateInternal(route, launchMode, stackAction)

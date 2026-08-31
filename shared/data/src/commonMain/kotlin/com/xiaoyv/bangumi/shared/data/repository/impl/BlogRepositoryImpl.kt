@@ -5,6 +5,7 @@ import com.xiaoyv.bangumi.shared.core.types.list.ListBlogType
 import com.xiaoyv.bangumi.shared.core.utils.awaitAll
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
+import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateBlogEntryRequest
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.blog.ListBlogParam
@@ -22,6 +23,7 @@ import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLi
 class BlogRepositoryImpl(
     private val client: ApiClient,
     private val pagingConfig: PagingConfig,
+    private val userManager: UserManager,
 ) : BlogRepository {
     override fun fetchBlogPager(param: ListBlogParam): MemoryPagingController<ComposeBlogDisplay, Long> {
         return createMemoryOffsetLimitPagingController(
@@ -112,13 +114,20 @@ class BlogRepositoryImpl(
     override suspend fun submitCreateBlog(
         title: String,
         content: String,
-        turnstile: String
+        turnstile: String,
+        public: Boolean,
+        tags: List<String>,
+        subjectIDs: List<Long>,
     ): Result<ComposeId> = client.requestNextBlogApi {
-        createBlogEntry(
+        // TODO createBlogEntryByProxy 这里走的 web 请求，turnstileToken 映射的 formHash，后续 PrivateApi 正常了可以移除，传真实的 turnstileToken
+        createBlogEntryByProxy(
             param = CreateBlogEntryRequest(
                 title = title,
                 content = content,
-                turnstileToken = turnstile
+                turnstileToken = userManager.userInfo.formHash,
+                public = public,
+                tags = tags.takeIf { it.isNotEmpty() },
+                subjectIDs = subjectIDs.takeIf { it.isNotEmpty() }
             )
         )
     }

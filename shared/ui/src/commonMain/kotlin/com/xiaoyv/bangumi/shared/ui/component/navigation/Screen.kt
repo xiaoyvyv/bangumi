@@ -14,6 +14,7 @@ import com.xiaoyv.bangumi.shared.core.types.TopicType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.timeline.ComposeTimeline
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
@@ -126,6 +127,7 @@ sealed class Screen(
         @PublishPostType val type: Int,
         val publishAttachId: String = "",
         val publishAttachTitle: String = "",
+        val attachSubjects: List<ComposeSubject> = emptyList(),
     ) : Screen(SCREEN_ROUTE_PUBLISH_MAIN)
 
     @Serializable

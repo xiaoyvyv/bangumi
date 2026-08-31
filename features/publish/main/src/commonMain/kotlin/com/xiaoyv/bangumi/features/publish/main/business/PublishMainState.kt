@@ -3,6 +3,9 @@ package com.xiaoyv.bangumi.features.publish.main.business
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.xiaoyv.bangumi.shared.core.types.PublishPostType
+import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.StringResource
 
 /**
@@ -17,7 +20,12 @@ data class PublishMainState(
     val title: StringResource,
     val subject: TextFieldValue = TextFieldValue(""),
     val content: TextFieldValue = TextFieldValue(""),
-    val turnstileToken: String = ""
+    val turnstileToken: String = "",
+    val turnstileRefreshKey: Long = 0,
+
+    val attachSubjects: SerializeList<ComposeSubject> = persistentListOf(),
+    val attachTags: SerializeList<String> = persistentListOf(),
+    val public: Boolean = true,
 ) {
     val canPublish: Boolean
         get() = content.text.isNotBlank() && turnstileToken.isNotBlank() && (needsTitle.not() || subject.text.isNotBlank())
@@ -29,6 +37,8 @@ data class PublishMainState(
         get() = type == PublishPostType.BLOG
                 || type == PublishPostType.TOPIC_GROUP
                 || type == PublishPostType.TOPIC_SUBJECT
+
+    companion object {
+        const val MAX_ATTACH_SUBJECT_COUNT = 5
+    }
 }
-
-

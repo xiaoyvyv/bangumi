@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.shared.ui.component.dialog.alert
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -27,6 +30,7 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
 import com.xiaoyv.bangumi.shared.core.utils.digit
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -82,17 +86,24 @@ fun BgmAlertInputDialog(
             icon = icon,
             title = data.title?.let { { Text(it) } },
             text = {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .focusRequester(focusRequester)
-                        .fillMaxWidth(),
-                    value = text,
-                    keyboardOptions = KeyboardOptions(keyboardType = if (data.onlyNumber) KeyboardType.Number else KeyboardType.Text),
-                    singleLine = data.singleLine,
-                    minLines = data.minLines,
-                    maxLines = data.maxLines,
-                    onValueChange = { text = if (data.onlyNumber) it.digit(text) else it }
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(ContentMargin)) {
+                    if (!data.subtitle.isNullOrBlank()) {
+                        Text(text = data.subtitle)
+                    }
+
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .fillMaxWidth(),
+                        value = text,
+                        shape = MaterialTheme.shapes.medium,
+                        keyboardOptions = KeyboardOptions(keyboardType = if (data.onlyNumber) KeyboardType.Number else KeyboardType.Text),
+                        singleLine = data.singleLine,
+                        minLines = data.minLines,
+                        maxLines = data.maxLines,
+                        onValueChange = { text = if (data.onlyNumber) it.digit(text) else it }
+                    )
+                }
 
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()

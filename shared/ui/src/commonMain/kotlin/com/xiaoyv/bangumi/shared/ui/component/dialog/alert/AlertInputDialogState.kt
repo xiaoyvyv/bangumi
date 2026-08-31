@@ -46,6 +46,7 @@ class AlertInputDialogState(val properties: DialogProperties) {
     data class Data(
         val value: String = "",
         val title: String? = null,
+        val subtitle: String? = null,
         val singleLine: Boolean = true,
         val onlyNumber: Boolean = false,
         val minLines: Int = 1,
@@ -59,17 +60,17 @@ class AlertInputDialogState(val properties: DialogProperties) {
 
         fun Saver(properties: DialogProperties): Saver<AlertInputDialogState, *> = Saver(
             save = { state ->
-                val d = state.data
                 listOf(
                     state.showing,
-                    d.value,
-                    d.title,
-                    d.singleLine,
-                    d.onlyNumber,
-                    d.minLines,
-                    d.maxLines,
-                    d.extraInt,
-                    d.extraString
+                    state.data.value,
+                    state.data.title,
+                    state.data.subtitle,
+                    state.data.singleLine,
+                    state.data.onlyNumber,
+                    state.data.minLines,
+                    state.data.maxLines,
+                    state.data.extraInt,
+                    state.data.extraString
                 )
             },
             restore = { list ->
@@ -78,12 +79,13 @@ class AlertInputDialogState(val properties: DialogProperties) {
                     data = Data(
                         value = list[1] as String,
                         title = list[2] as? String,
-                        singleLine = list[3] as Boolean,
-                        onlyNumber = list[4] as Boolean,
-                        minLines = list[5] as Int,
-                        maxLines = list[6] as Int,
-                        extraInt = list[7] as Int,
-                        extraString = list[8] as String
+                        subtitle = list[3] as? String,
+                        singleLine = list[4] as Boolean,
+                        onlyNumber = list[5] as Boolean,
+                        minLines = list[6] as Int,
+                        maxLines = list[7] as Int,
+                        extraInt = list[8] as Int,
+                        extraString = list[9] as String
                     )
                 }
             }

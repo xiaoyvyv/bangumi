@@ -51,7 +51,8 @@ fun SubjectDetailBlogScreen(
                     SubjectDetailEvent.UI.OnNavScreen(
                         Screen.PublishMain(
                             type = PublishPostType.BLOG,
-                            publishAttachId = state.subject.id.toString()
+                            publishAttachId = state.subject.id.toString(),
+                            attachSubjects = listOf(state.subject),
                         )
                     )
                 )

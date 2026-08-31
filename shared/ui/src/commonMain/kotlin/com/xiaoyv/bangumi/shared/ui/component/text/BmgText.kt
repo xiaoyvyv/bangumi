@@ -57,6 +57,7 @@ fun BmgTextField(
     readOnly: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 14.dp),
     autoFocus: Boolean = false,
+    focusRequester: FocusRequester = remember { FocusRequester() },
     textStyle: TextStyle = LocalTextStyle.current,
     label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
@@ -85,7 +86,6 @@ fun BmgTextField(
             colors.textColor(enabled, isError, focused)
         }
     val mergedTextStyle = textStyle.merge(TextStyle(color = textColor))
-    val focusRequester = remember { FocusRequester() }
 
     CompositionLocalProvider(LocalTextSelectionColors provides colors.textSelectionColors) {
         BasicTextField(
@@ -129,10 +129,8 @@ fun BmgTextField(
         )
     }
 
-    if (autoFocus) {
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
-        }
+    LaunchedEffect(Unit) {
+        if (autoFocus) focusRequester.requestFocus()
     }
 }
 

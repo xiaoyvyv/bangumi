@@ -30,5 +30,8 @@ interface BlogRepository {
         title: String,
         content: String,
         turnstile: String,
+        public: Boolean = true,
+        tags: List<String> = emptyList(),
+        subjectIDs: List<Long> = emptyList(),
     ): Result<ComposeId>
 }

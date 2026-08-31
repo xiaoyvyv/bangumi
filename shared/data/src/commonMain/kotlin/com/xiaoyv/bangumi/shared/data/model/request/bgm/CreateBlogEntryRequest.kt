@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 /**
  * @param title 日志标题
  * @param content 日志正文（BBCode）
- * @param turnstileToken 需要 [turnstile]
+ * @param turnstileToken 需要 `turnstile`
  * @param tags
  * @param public 公开（true）或仅好友可见（false），默认公开
  * @param subjectIDs
@@ -29,5 +29,5 @@ data class CreateBlogEntryRequest(
     val public: Boolean? = null,
 
     @SerialName("subjectIDs")
-    val subjectIDs: List<Int>? = null
+    val subjectIDs: List<Long>? = null
 )
