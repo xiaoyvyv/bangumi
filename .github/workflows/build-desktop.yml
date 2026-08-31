@@ -23,12 +23,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Resolve version
         id: version
         run: |
           COMMIT_TIMESTAMP="$(git show -s --format=%ct HEAD)"
-          VERSION_CODE="$(date -u -d "@${COMMIT_TIMESTAMP}" +%Y%m%d%H)"
+          VERSION_CODE="$(TZ=Asia/Shanghai date -d "@${COMMIT_TIMESTAMP}" +%Y%m%d%H)"
           if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             VERSION_NAME="${GITHUB_REF_NAME#v}"
             CHANNEL="release"
@@ -94,13 +96,15 @@ jobs:
   publish-desktop:
     name: Publish Desktop packages
     needs: [ prepare-version, build-desktop ]
-    if: (github.event_name == 'schedule' || github.event_name == 'push') && success()
+    if: (github.event_name == 'schedule' || github.event_name == 'push' || github.event_name == 'workflow_dispatch') && success()
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Download desktop packages
         uses: actions/download-artifact@v6
@@ -117,19 +121,15 @@ jobs:
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
         run: |
-          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="pre-release"
           RELEASE_NAME="Pre-release"
-          RELEASE_BODY="自动构建自 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
+          RELEASE_BODY="$(bash .github/scripts/release-notes.sh pre-release "${RELEASE_TAG}")
 
           - channel：pre-release
           - versionCode：${VERSION_CODE}
-          - versionName：${VERSION_NAME}
-
-          ### 本次提交
-          ${COMMIT_MESSAGE}"
+          - versionName：${VERSION_NAME}"
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
-            gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --notes "${RELEASE_BODY}"
+            gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
           else
             gh release create "${RELEASE_TAG}" --title "${RELEASE_NAME}" --prerelease --latest=false --target "${GITHUB_SHA}" --notes "${RELEASE_BODY}"
           fi
@@ -143,16 +143,12 @@ jobs:
           VERSION_CODE: ${{ needs.prepare-version.outputs.version_code }}
           VERSION_NAME: ${{ needs.prepare-version.outputs.version_name }}
         run: |
-          COMMIT_MESSAGE="$(git log -1 --format=%B)"
           RELEASE_TAG="${GITHUB_REF_NAME}"
           RELEASE_NAME="Release ${VERSION_NAME}"
-          RELEASE_BODY="正式版本 [${GITHUB_SHA}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA})
+          RELEASE_BODY="$(bash .github/scripts/release-notes.sh release "${RELEASE_TAG}")
 
           - versionCode：${VERSION_CODE}
-          - versionName：${VERSION_NAME}
-
-          ### 本次提交
-          ${COMMIT_MESSAGE}"
+          - versionName：${VERSION_NAME}"
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
             gh release edit "${RELEASE_TAG}" --title "${RELEASE_NAME}" --latest --notes "${RELEASE_BODY}"
           else

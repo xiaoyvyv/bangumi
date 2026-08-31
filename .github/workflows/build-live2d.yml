@@ -5,12 +5,12 @@ on:
     branches: [ 'main' ]
     paths:
       - 'shared/core-native/**'
-      - '.github/workflows/build_live2d.yml'
+      - '.github/workflows/build-live2d.yml'
   pull_request:
     branches: [ 'main' ]
     paths:
       - 'shared/core-native/**'
-      - '.github/workflows/build_live2d.yml'
+      - '.github/workflows/build-live2d.yml'
   workflow_dispatch:
 
 concurrency:
