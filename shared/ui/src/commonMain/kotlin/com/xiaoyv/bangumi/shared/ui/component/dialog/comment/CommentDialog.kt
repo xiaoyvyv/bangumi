@@ -72,6 +72,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import coil3.compose.AsyncImage
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.emoji_bgm
 import com.xiaoyv.bangumi.core_resource.resources.emoji_blake
@@ -485,17 +486,28 @@ fun CommentDialogPanel(
                     verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
                 ) {
                     items(emojis, key = { emoji -> emoji.smileId }) { emoji ->
-                        Image(
-                            modifier = Modifier
-                                .clip(MaterialTheme.shapes.small)
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                                .clickable { onValueChange(value.insertEmoji(emoji)) }
-                                .padding(ContentMarginHalf),
-                            painter = painterResource(emoji.image),
-                            contentScale = ContentScale.Crop,
-                            contentDescription = null
-                        )
+                        val modifier = Modifier
+                            .clip(MaterialTheme.shapes.small)
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clickable { onValueChange(value.insertEmoji(emoji)) }
+                            .padding(ContentMarginHalf)
+
+                        if (emoji.url != null) {
+                            AsyncImage(
+                                model = emoji.url,
+                                modifier = modifier,
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null,
+                            )
+                        } else {
+                            Image(
+                                modifier = modifier,
+                                painter = painterResource(requireNotNull(emoji.image)),
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null,
+                            )
+                        }
                     }
                 }
             }
