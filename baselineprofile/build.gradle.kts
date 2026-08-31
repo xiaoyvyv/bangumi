@@ -18,7 +18,7 @@ android {
     namespace = "com.bgm.baselineprofile"
 
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     compileOptions {
@@ -29,12 +29,13 @@ android {
 
     defaultConfig {
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["targetAppId"] = "com.xiaoyv.bangumi.multiplatform"
     }
 
-    targetProjectPath = ":composeApp"
+    targetProjectPath = ":android"
 
 }
 
@@ -49,14 +50,4 @@ dependencies {
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.uiautomator)
     implementation(libs.androidx.benchmark.macro.junit4)
-}
-
-androidComponents {
-    onVariants { v ->
-        val artifactsLoader = v.artifacts.getBuiltArtifactsLoader()
-        v.instrumentationRunnerArguments.put(
-            "targetAppId",
-            v.testedApks.map { artifactsLoader.load(it)?.applicationId.orEmpty() }
-        )
-    }
 }

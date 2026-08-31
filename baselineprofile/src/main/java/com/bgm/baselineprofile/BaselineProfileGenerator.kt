@@ -1,41 +1,42 @@
 package com.bgm.baselineprofile
 
-import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Direction
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiObject2
-import androidx.test.uiautomator.Until
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * This test class generates a basic startup baseline profile for the target package.
+ * 为目标应用生成启动 Baseline Profile 的测试类。
  *
- * We recommend you start with this but add important user flows to the profile to improve their performance.
- * Refer to the [baseline profile documentation](https://d.android.com/topic/performance/baselineprofiles)
- * for more information.
+ * 建议在人工录制时覆盖核心使用路径，以提升这些路径的运行性能。更多说明请参考
+ * [Baseline Profile 文档](https://d.android.com/topic/performance/baselineprofiles)。
  *
- * You can run the generator with the "Generate Baseline Profile" run configuration in Android Studio or
- * the equivalent `generateBaselineProfile` gradle task:
+ * 可以通过 Android Studio 的 “Generate Baseline Profile” 运行配置，或对应的 Gradle 任务执行生成：
  * ```
  * ./gradlew :composeApp:generateReleaseBaselineProfile
  * ```
- * The run configuration runs the Gradle task and applies filtering to run only the generators.
+ * 该运行配置会执行 Gradle 任务，并只运行 Profile 生成器。
  *
- * Check [documentation](https://d.android.com/topic/performance/benchmarking/macrobenchmark-instrumentation-args)
- * for more information about available instrumentation arguments.
+ * 可用的 instrumentation 参数请参考
+ * [Macrobenchmark 参数文档](https://d.android.com/topic/performance/benchmarking/macrobenchmark-instrumentation-args)。
  *
- * After you run the generator, you can verify the improvements running the [StartupBenchmarks] benchmark.
+ * 生成完成后，可通过 [StartupBenchmarks] 验证启动性能的改善效果。
  *
- * When using this class to generate a baseline profile, only API 33+ or rooted API 28+ are supported.
+ * 生成 Baseline Profile 仅支持 API 33+，或已 root 的 API 28+ 设备。
  *
- * The minimum required version of androidx.benchmark to generate a baseline profile is 1.2.0.
+ * 生成 Baseline Profile 所需的 androidx.benchmark 最低版本为 1.2.0。
+ *
+ * 生成器只会执行一轮。应用启动后会保留一段时间供人工操作，超时后自动完成 Profile 采集；
+ * 通过 instrumentation 参数 `manualProfileRecordingSeconds` 可调整录制时长，默认 120 秒。
+ *
+ * 执行下面的命令，用 180 秒的窗口期手动录制 Baseline Profile，优化常见的页面和启动速度；
+ * ```
+ * ./gradlew :android:generateReleaseBaselineProfile \
+ *   -Pandroid.testInstrumentationRunnerArguments.manualProfileRecordingSeconds=180
+ * ```
  **/
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -46,24 +47,24 @@ class BaselineProfileGenerator {
 
     @Test
     fun generate() {
+        val manualRecordingSeconds = InstrumentationRegistry.getArguments()
+            .getString("manualProfileRecordingSeconds")
+            ?.toLongOrNull()
+            ?.takeIf { it > 0L }
+            ?: 120L
+
         // The application id for the running build variant is read from the instrumentation arguments.
         rule.collect(
             packageName = InstrumentationRegistry.getArguments().getString("targetAppId")
                 ?: throw Exception("targetAppId not passed as instrumentation runner arg"),
-            maxIterations = 15,
-            stableIterations = 3,
+            maxIterations = 1,
+            stableIterations = 1,
             // See: https://d.android.com/topic/performance/baselineprofiles/dex-layout-optimizations
             includeInStartupProfile = true
         ) {
-            // This block defines the app's critical user journey. Here we are interested in
-            // optimizing for app startup. But you can also navigate and scroll through your most important UI.
-
-            // Start default activity for your app
             pressHome()
             startActivityAndWait()
-
-            // 交互
-            waitForHomeMainContent()
+            delay(manualRecordingSeconds * 1_000)
         }
     }
 
@@ -71,94 +72,4 @@ class BaselineProfileGenerator {
         Thread.sleep(time)
     }
 
-    fun MacrobenchmarkScope.waitForHomeMainContent() {
-        device.waitAndFind("已登录", 40_000)
-
-        listOf(
-            "新番", "排行榜", "追番进度", "年鉴", "每日放送",
-            "条目浏览", "标签", "时间胶囊", "超展开"
-        ).forEach {
-            val homePager = device.waitAndFind("home_main_pager")
-            val mainList = homePager.waitAndFind("home_main_list")
-
-            mainList.waitAndFind(it).click()
-            delay(4000)
-
-            device.pressBack()
-            delay(2000)
-        }
-
-        delay(2000)
-        val homePager = device.waitAndFind("home_main_pager")
-        val mainList = device.waitAndFind("home_main_list")
-
-        mainList.setGestureMargin(device.displayWidth / 5)
-        mainList.scroll(Direction.DOWN, 1f)
-        delay(1000)
-
-        val calendarRowToday = mainList.waitAndFind("calendar_card_row_today")
-        calendarRowToday.fling(Direction.RIGHT)
-        delay(1000)
-        calendarRowToday.fling(Direction.LEFT)
-        delay(1000)
-
-        val calendarRowTomorrow = mainList.waitAndFind("calendar_card_row_tomorrow")
-        calendarRowTomorrow.fling(Direction.RIGHT)
-        delay(1000)
-        calendarRowTomorrow.fling(Direction.LEFT)
-        delay(1000)
-
-        mainList.fling(Direction.DOWN)
-        delay(1000)
-
-        mainList.fling(Direction.UP)
-        delay(1000)
-
-        listOf("人物", "日志", "小组", "目录", "首页").forEach {
-            homePager.waitAndFind(it).click()
-            delay(2000)
-            homePager.fling(Direction.DOWN)
-            delay(2000)
-        }
-
-        device.waitAndFind("home_main_list").fling(Direction.UP)
-        device.waitForIdle()
-        delay(2000)
-        device.waitAndFind("home_main_list").scroll(Direction.DOWN, 1f)
-        device.waitForIdle()
-
-        runCatching {
-            val snacks = device.findObjects(By.desc("calendar_card_item"))
-            val index = (iteration ?: 0) % snacks.size
-            snacks[index].click()
-            delay(4000)
-
-            device.waitAndFind("角色").click()
-            delay(4000)
-
-            val characters = device.findObjects(By.desc("character_item"))
-            val characterIdx = (iteration ?: 0) % snacks.size
-            characters[characterIdx].click()
-            delay(4000)
-
-            device.waitAndFind("scrollable_tab").fling(Direction.RIGHT)
-            delay(2000)
-
-            device.waitAndFind("收藏").click()
-            delay(2000)
-
-            device.waitAndFind("user_item").click()
-            device.waitForIdle()
-        }
-    }
-
-    fun UiObject2.waitAndFind(desc: String, timeout: Long = 10_000): UiObject2 {
-        wait(Until.hasObject(By.descContains(desc)), timeout)
-        return findObject(By.descContains(desc))
-    }
-
-    fun UiDevice.waitAndFind(desc: String, timeout: Long = 10_000): UiObject2 {
-        wait(Until.hasObject(By.descContains(desc)), timeout)
-        return findObject(By.descContains(desc))
-    }
 }
