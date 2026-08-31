@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
@@ -39,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.xiaoyv.bangumi.core_resource.resources.Res
@@ -77,6 +77,8 @@ import com.xiaoyv.bangumi.shared.core.utils.toTrimString
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CollectionSubjectProgressParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.subject.SubjectBrowserBody
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.button.collectionButtonColors
 import com.xiaoyv.bangumi.shared.ui.component.chart.RatingBarChart
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
@@ -94,6 +96,7 @@ import com.xiaoyv.bangumi.shared.ui.kts.isMediumScreen
 import com.xiaoyv.bangumi.shared.ui.kts.isSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import com.xiaoyv.bangumi.shared.ui.view.episode.EpisodePager
 import com.xiaoyv.bangumi.shared.ui.view.index.IndexCardItem
 import com.xiaoyv.bangumi.shared.ui.view.mono.MonoCardItem
@@ -104,6 +107,7 @@ import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectTrackingBar
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 
 /**
  * [SubjectDetailMainScreen]
@@ -158,7 +162,6 @@ fun SubjectDetailMainScreen(
         SubjectDetailIndexList(state, onUiEvent, onActionEvent)
     }
 }
-
 
 @Composable
 private fun SubjectDetailCollection(
@@ -228,7 +231,6 @@ private fun SubjectDetailCollection(
         }
     }
 }
-
 
 @Composable
 private fun SubjectDetailEpisode(
@@ -362,7 +364,6 @@ private fun SubjectDetailEpisode(
         )
     }
 }
-
 @Composable
 private fun SubjectDetailSummary(
     state: SubjectDetailState,
@@ -392,7 +393,6 @@ private fun SubjectDetailSummary(
         }
     }
 }
-
 @Composable
 private fun SubjectDetailTag(
     state: SubjectDetailState,
@@ -427,7 +427,6 @@ private fun SubjectDetailTag(
         )
     }
 }
-
 @Composable
 private fun SubjectDetailPreview(
     state: SubjectDetailState,
@@ -472,7 +471,6 @@ private fun SubjectDetailPreview(
         }
     }
 }
-
 @Composable
 private fun SubjectDetailParade(
     state: SubjectDetailState,
@@ -543,7 +541,6 @@ private fun SubjectDetailParade(
         }
     }
 }
-
 @Composable
 private fun SubjectDetailInfo(
     state: SubjectDetailState,
@@ -573,7 +570,6 @@ private fun SubjectDetailInfo(
         }
     }
 }
-
 @Composable
 private fun SubjectDetailScore(
     state: SubjectDetailState,
@@ -642,7 +638,6 @@ private fun SubjectDetailScore(
         )
     }
 }
-
 @Composable
 @OptIn(ExperimentalGridApi::class)
 private fun SubjectDetailCharacter(
@@ -687,7 +682,6 @@ private fun SubjectDetailCharacter(
         }
     }
 }
-
 @Composable
 private fun SubjectDetailRelated(
     state: SubjectDetailState,
@@ -722,7 +716,6 @@ private fun SubjectDetailRelated(
         }
     }
 }
-
 
 @Composable
 private fun SubjectDetailIndexList(
@@ -763,5 +756,27 @@ private fun SubjectDetailIndexList(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun SubjectDetailMainScreenPreview() {
+    PreviewColumn {
+        SubjectDetailMainScreen(
+            state = SubjectDetailState(
+                id = 1,
+                subject = ComposeSubject(
+                    id = 1,
+                    name = "Subject Name",
+                    nameCn = "条目名称",
+                    summary = "这是一段条目简介。这是一段条目简介。这是一段条目简介。这是一段条目简介。这是一段条目简介。",
+                    type = SubjectType.ANIME,
+                    rating = ComposeRating(score = 8.5, total = 1000)
+                )
+            ),
+            onUiEvent = {},
+            onActionEvent = {}
+        )
     }
 }

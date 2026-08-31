@@ -71,6 +71,7 @@ import com.xiaoyv.bangumi.shared.core.types.SubjectDetailTab
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentMikanId
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubject
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
@@ -314,6 +315,7 @@ private fun SubjectDetailScreenHeader(
                         shape = MaterialTheme.shapes.small,
                         contentScale = ContentScale.Crop,
                         model = state.subject.images.displayMediumImage,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
                         contentDescription = stringResource(Res.string.global_image),
                     )
 
@@ -381,7 +383,7 @@ private fun SubjectDetailScreenHeader(
                         maxLines = 1,
                     )
                     // 日期
-                    Text(
+                    if (state.subject != ComposeSubject.Empty) Text(
                         text = state.subject.rememberDisplayDateAndType(),
                         style = MaterialTheme.typography.bodySmall,
                         color = LocalContentColor.current.copy(alpha = 0.75f),
