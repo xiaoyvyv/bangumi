@@ -127,6 +127,10 @@ kotlin {
             api(libs.androidx.datastore.core.okio)
         }
 
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+
         if (enableIos.get()) {
             iosMain.dependencies {
                 implementation(libs.sqldelight.native.driver)

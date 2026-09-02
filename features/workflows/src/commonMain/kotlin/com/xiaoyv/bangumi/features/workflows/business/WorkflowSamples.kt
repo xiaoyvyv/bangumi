@@ -56,6 +56,8 @@ import kotlinx.serialization.json.buildJsonObject
  * 每个已注册节点至少由一个样例覆盖；页面会将其直接渲染为运行入口，便于验证导入、校验、执行和副作用分发。
  */
 object WorkflowSamples {
+    private const val BILIBILI_WEB_USER_AGENT =
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:154.0) Gecko/20100101 Firefox/154.0"
     private val htmlSampleDocument = """
         <html>
           <head>
@@ -1044,12 +1046,10 @@ object WorkflowSamples {
     /**
      * 通过内置的 Bilibili WBI 签名节点搜索 Bilibili 番剧后打开首个结果。
      *
-     * 工作流首先请求 nav 接口提取实时 WBI 密钥（img_key 与 sub_key），
+     * 工作流首先初始化 Cookie 并请求 SPI 接口获取 buvid4，随后请求 nav 接口提取实时 WBI 密钥（img_key 与 sub_key），
      * 随后调用内置的 `bilibili.sign_url` 节点生成附带 `wts` 与 `w_rid` 的已加签 URL，
      * 最后发起搜索 HTTP 请求并调起首个搜索结果。
      */
-    private val ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:154.0) Gecko/20100101 Firefox/154.0"
-
     private fun searchBilibiliBangumiWithWebWbi(): ActionWorkflow = workflow(
         id = "search_bilibili_bangumi_and_open",
         name = "测试：纯工作流 WBI 签名并搜索 Bilibili 番剧",
@@ -1091,11 +1091,35 @@ object WorkflowSamples {
                     ActionHttpConfigKey.URL to "https://www.bilibili.com/",
                     ActionHttpConfigKey.METHOD to "HEAD",
                     ActionHttpConfigKey.HEADERS to JsonObject(
+                        mapOf("User-Agent" to JsonPrimitive(BILIBILI_WEB_USER_AGENT)),
+                    ),
+                    ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
+                ),
+            ),
+            node(
+                "request_bilibili_spi",
+                ActionNodeType.HTTP_REQUEST,
+                "请求 Bilibili 设备标识",
+                config(
+                    ActionHttpConfigKey.URL to "https://api.bilibili.com/x/frontend/finger/spi",
+                    ActionHttpConfigKey.METHOD to "GET",
+                    ActionHttpConfigKey.HEADERS to JsonObject(
                         mapOf(
-                            "User-Agent" to JsonPrimitive(ua),
+                            "Referer" to JsonPrimitive("https://www.bilibili.com/"),
+                            "User-Agent" to JsonPrimitive(BILIBILI_WEB_USER_AGENT),
                         ),
                     ),
                     ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
+                ),
+            ),
+            node(
+                "extract_bilibili_buvid4",
+                ActionNodeType.JSON_EXTRACT,
+                "提取 Bilibili buvid4",
+                config(
+                    ActionJsonConfigKey.SOURCE to "${'$'}{steps.request_bilibili_spi.body}",
+                    ActionJsonConfigKey.PATH to "$.data.b_4",
+                    ActionJsonConfigKey.OUTPUT_KEY to "buvid4",
                 ),
             ),
             node(
@@ -1107,8 +1131,9 @@ object WorkflowSamples {
                     ActionHttpConfigKey.METHOD to "GET",
                     ActionHttpConfigKey.HEADERS to JsonObject(
                         mapOf(
+                            "Cookie" to JsonPrimitive("buvid4=${'$'}{vars.buvid4}"),
                             "Referer" to JsonPrimitive("https://www.bilibili.com/"),
-                            "User-Agent" to JsonPrimitive(ua),
+                            "User-Agent" to JsonPrimitive(BILIBILI_WEB_USER_AGENT),
                         ),
                     ),
                     ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
@@ -1175,7 +1200,7 @@ object WorkflowSamples {
                     ActionHttpConfigKey.HEADERS to JsonObject(
                         mapOf(
                             "Referer" to JsonPrimitive("https://www.bilibili.com/"),
-                            "User-Agent" to JsonPrimitive(ua),
+                            "User-Agent" to JsonPrimitive(BILIBILI_WEB_USER_AGENT),
                         ),
                     ),
                     ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
@@ -1218,7 +1243,9 @@ object WorkflowSamples {
             edge("start", ActionControlPortId.NEXT, "input_keyword"),
             edge("input_keyword", ActionControlPortId.SUCCESS, "sanitize_keyword"),
             edge("sanitize_keyword", ActionControlPortId.NEXT, "init_bilibili_cookie"),
-            edge("init_bilibili_cookie", ActionControlPortId.SUCCESS, "request_wbi_keys"),
+            edge("init_bilibili_cookie", ActionControlPortId.SUCCESS, "request_bilibili_spi"),
+            edge("request_bilibili_spi", ActionControlPortId.SUCCESS, "extract_bilibili_buvid4"),
+            edge("extract_bilibili_buvid4", ActionControlPortId.NEXT, "request_wbi_keys"),
             edge("request_wbi_keys", ActionControlPortId.SUCCESS, "extract_img_url"),
             edge("extract_img_url", ActionControlPortId.NEXT, "extract_sub_url"),
             edge("extract_sub_url", ActionControlPortId.NEXT, "extract_img_key"),

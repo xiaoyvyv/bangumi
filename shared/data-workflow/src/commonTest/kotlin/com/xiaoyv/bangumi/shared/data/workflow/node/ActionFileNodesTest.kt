@@ -5,6 +5,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionWorkflowException
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io.fileActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io.httpActionNodeDefinitions
@@ -225,6 +226,39 @@ class ActionFileNodesTest {
         assertTrue(downloadedRequest?.useLocalCookieStorage == true)
         assertEquals("downloaded", storage.readText(workflowId, "downloads/server.txt"))
         assertEquals("server.txt", result.output.getValue("download").jsonObject.getValue("fileName").jsonPrimitive.content)
+    }
+
+    /**
+     * 普通 HTTP 节点应将声明的 Header 原样传入底层执行器。
+     */
+    @Test
+    fun httpRequestPassesConfiguredHeadersToExecutor() = runBlocking {
+        var capturedRequest: ActionHttpRequestEffect? = null
+        val executor = ActionHttpRequestExecutor { request ->
+            capturedRequest = request
+            JsonObject(emptyMap())
+        }
+        val definition = httpActionNodeDefinitions(executor, storage).associateBy { it.spec.type }
+            .getValue(ActionNodeType.HTTP_REQUEST)
+
+        definition.executor.execute(
+            ActionNode(
+                id = "request",
+                type = ActionNodeType.HTTP_REQUEST,
+                config = config(
+                    ActionHttpConfigKey.URL to "https://example.com/resource",
+                    ActionHttpConfigKey.HEADERS to JsonObject(
+                        mapOf("User-Agent" to JsonPrimitive("workflow-test-agent")),
+                    ),
+                ),
+            ),
+            context,
+        )
+
+        assertEquals(
+            "workflow-test-agent",
+            capturedRequest?.headers?.get("User-Agent")?.jsonPrimitive?.content,
+        )
     }
 
     @Test

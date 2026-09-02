@@ -53,6 +53,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionHttpRequestEffe
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpDownloadResponse
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
+import io.ktor.http.Url
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -304,6 +305,43 @@ class BuiltInActionNodeTest {
                 definition.spec,
             ),
         )
+    }
+
+    /**
+     * WBI 加签应补齐搜索接口的公共参数，并规范化签名禁止字符。
+     */
+    @Test
+    fun bilibiliWbiSignMergesPublicQueryParameters() = runBlocking {
+        val definition = builtInActionNodeDefinitions(testHttpRequestExecutor, testPreferencesStore)
+            .first { it.spec.type == ActionNodeType.BILIBILI_SIGN_URL }
+        val result = definition.executor.execute(
+            ActionNode(
+                id = "sign_bilibili_wbi",
+                type = ActionNodeType.BILIBILI_SIGN_URL,
+                config = config(
+                    ActionBilibiliConfigKey.URL to JsonPrimitive(
+                        "https://api.bilibili.com/x/web-interface/wbi/search/type?keyword=workflow!*(test)'&page=2&page_size=60&search_type=media_bangumi&w_rid=stale",
+                    ),
+                    ActionBilibiliConfigKey.OUTPUT_KEY to JsonPrimitive("signedUrl"),
+                ),
+            ),
+            ActionExecutionContext(),
+        )
+        val query = Url(result.output.getValue("signedUrl").jsonPrimitive.content).parameters
+
+        assertEquals("workflowtest", query["keyword"])
+        assertEquals("2", query["page"])
+        assertEquals("media_bangumi", query["search_type"])
+        assertEquals("24", query["dynamic_offset"])
+        assertEquals("pc", query["platform"])
+        assertEquals("totalrank", query["order"])
+        assertEquals("5654", query["ad_resource"])
+        assertEquals("333.337", query["from_spmid"])
+        assertEquals("1430654", query["web_location"])
+        assertEquals("60", query["page_size"])
+        assertTrue(query["qv_id"].orEmpty().matches(Regex("[0-9A-Za-z]{32}")))
+        assertTrue(query["wts"].orEmpty().isNotBlank())
+        assertTrue(query["w_rid"].orEmpty().isNotBlank())
     }
 
     /**

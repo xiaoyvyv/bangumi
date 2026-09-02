@@ -1,97 +1,39 @@
 package com.xiaoyv.bangumi.shared.data.api.client.cookie
 
-import com.xiaoyv.bangumi.shared.core.utils.defaultJson
-import com.xiaoyv.bangumi.shared.core.utils.printTrace
 import com.xiaoyv.bangumi.shared.libnative.System
-import io.ktor.client.plugins.cookies.CookiesStorage
-import io.ktor.client.plugins.cookies.matches
+import io.ktor.client.plugins.cookies.fillDefaults
 import io.ktor.http.Cookie
 import io.ktor.http.Url
-import io.ktor.util.date.getTimeMillis
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 /**
- * [WorkflowCookiesStorage]
- *
- * @author why
- * @since 2025/1/15
+ * 工作流使用的持久化 CookieStorage。
  */
-class WorkflowCookiesStorage : CookiesStorage {
-    private val mutex = Mutex()
+class WorkflowCookiesStorage : BaseCookiesStorage() {
+    private val queries = System.database.appWorkflowCookieQueries
 
-    private val database = System.database
+    override fun normalizeCookie(requestUrl: Url, cookie: Cookie): Cookie =
+        cookie.copy(path = cookie.path ?: "/").fillDefaults(requestUrl)
 
-    override suspend fun get(requestUrl: Url): List<Cookie> = mutex.withLock {
-        cleanupExpiredCookies(getTimeMillis())
+    override fun storedCookieJsons(): List<String?> =
+        queries.selectAll().executeAsList().map { it.cookie }
 
-        return database.appWorkflowCookieQueries.selectAll().executeAsList().mapNotNull { row ->
-            val cookie = runCatching {
-                defaultJson.decodeFromString<Cookie>(row.cookie.orEmpty())
-            }.onFailure { it.printTrace() }.getOrNull()
-            val domain = cookie?.domain
-            if (domain != null && cookie.matches(requestUrl)) cookie else null
-        }
+    override fun inTransaction(block: () -> Unit) {
+        queries.transaction { block() }
     }
 
-    override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
-        if (cookie.name.isBlank()) return
-
-        mutex.withLock {
-            database.appWorkflowCookieQueries.transaction {
-                val domain = cookie.domain.orEmpty()
-
-                // 删除旧的 Cookie
-                database.appWorkflowCookieQueries.deleteCookieByNameAndDomain(
-                    name = cookie.name,
-                    domain = domain,
-                    path = cookie.path
-                )
-
-                // 插入新的 Cookie
-                if (domain.isNotBlank()) database.appWorkflowCookieQueries.insertCookie(
-                    name = cookie.name,
-                    domain = domain,
-                    path = cookie.path,
-                    expires = cookie.maxAgeOrExpires(getTimeMillis()),
-                    cookie = defaultJson.encodeToString(cookie)
-                )
-            }
-        }
+    override fun deleteCookie(name: String, domain: String, path: String?) {
+        queries.deleteCookieByNameAndDomain(name, domain, path)
     }
 
-    override fun close() {}
-
-    suspend fun removeAll() = mutex.withLock {
-        database.appWorkflowCookieQueries.deleteAllCookie()
+    override fun insertCookie(name: String, domain: String, path: String?, expires: Long?, cookieJson: String) {
+        queries.insertCookie(name, domain, path, expires, cookieJson)
     }
 
-    /**
-     * 清理指定站点及其父域名匹配的 Cookie。
-     */
-    suspend fun removeCookies(requestUrl: Url) = mutex.withLock {
-        cleanupExpiredCookies(getTimeMillis())
-
-        database.appWorkflowCookieQueries.selectAll().executeAsList()
-            .mapNotNull { row ->
-                runCatching {
-                    defaultJson.decodeFromString<Cookie>(row.cookie.orEmpty())
-                }.onFailure { it.printTrace() }.getOrNull()
-            }
-            .filter { it.matches(requestUrl) }
-            .forEach { cookie ->
-                database.appWorkflowCookieQueries.deleteCookieByNameAndDomain(
-                    name = cookie.name,
-                    domain = cookie.domain.orEmpty(),
-                    path = cookie.path,
-                )
-            }
+    override fun deleteExpiredCookies(timestamp: Long) {
+        queries.deleteExpiredSqlCookie(timestamp)
     }
 
-    private fun cleanupExpiredCookies(timestamp: Long) {
-        database.appWorkflowCookieQueries.deleteExpiredSqlCookie(timestamp)
+    override fun clearCookies() {
+        queries.deleteAllCookie()
     }
-
-    private fun Cookie.maxAgeOrExpires(createdAt: Long): Long? =
-        maxAge?.let { createdAt + it * 1000L } ?: expires?.timestamp
 }

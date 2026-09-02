@@ -13,8 +13,8 @@ import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.prepareRequest
+import io.ktor.client.request.request
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.ContentType
 import io.ktor.http.Cookie
@@ -30,6 +30,8 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonPrimitive
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -85,14 +87,13 @@ class DefaultActionHttpRequestExecutor(
     private val anonymousHttpClient by lazy {
         httpClient.config {
             install(HttpCookies) {
-                storage = object : CookiesStorage {
-                    override suspend fun addCookie(requestUrl: Url, cookie: Cookie) = Unit
-                    override suspend fun get(requestUrl: Url): List<Cookie> = emptyList()
-                    override fun close() = Unit
-                }
+                storage = EmptyActionCookiesStorage
             }
         }
     }
+
+    private val ActionHttpRequestEffect.targetClient: HttpClient
+        get() = if (useLocalCookieStorage) httpClient else anonymousHttpClient
 
     /**
      * 执行请求并返回可写入 `steps.<nodeId>` 的标准输出。
@@ -195,17 +196,17 @@ class DefaultActionHttpRequestExecutor(
         }
     }
 
-    private suspend fun requestOnce(request: ActionHttpRequestEffect): HttpResponse {
-        return requestStatement(request).execute()
-    }
+    private suspend fun requestOnce(request: ActionHttpRequestEffect) =
+        request.targetClient.request(request.url) {
+            configureRequest(request, request.timeoutMillis)
+        }
 
     private suspend fun requestStatement(
         request: ActionHttpRequestEffect,
-        requestTimeoutMillis: Long? = request.timeoutMillis,
-    ) =
-        (if (request.useLocalCookieStorage) httpClient else anonymousHttpClient).prepareRequest(request.url) {
-            configureRequest(request, requestTimeoutMillis)
-        }
+        requestTimeoutMillis: Long? = request.timeoutMillis
+    ) = request.targetClient.prepareRequest(request.url) {
+        configureRequest(request, requestTimeoutMillis)
+    }
 
     private fun HttpRequestBuilder.configureRequest(
         request: ActionHttpRequestEffect,
@@ -213,7 +214,10 @@ class DefaultActionHttpRequestExecutor(
     ) {
         method = HttpMethod.parse(request.method)
         url { request.query.forEach { (key, value) -> parameters.append(key, value.toString().trim('"')) } }
-        request.headers.forEach { (key, value) -> headers.append(key, value.toString().trim('"')) }
+        request.headers.forEach { (key, value) ->
+            val headerValue = value.jsonPrimitive.contentOrNull ?: error("HTTP 请求头 [$key] 的值不能为空")
+            headers.append(key, headerValue)
+        }
         requestTimeoutMillis?.let { timeout { this.requestTimeoutMillis = it } }
         if (request.body !is kotlinx.serialization.json.JsonNull) {
             val encoded = when (request.bodyType) {
@@ -241,6 +245,14 @@ class DefaultActionHttpRequestExecutor(
     }
 
     private companion object {
-        const val DOWNLOAD_BUFFER_SIZE = 8 * 1024
+        const val DOWNLOAD_BUFFER_SIZE = 256 * 1024
     }
+}
+
+private object EmptyActionCookiesStorage : CookiesStorage {
+    override suspend fun addCookie(requestUrl: Url, cookie: Cookie) = Unit
+
+    override suspend fun get(requestUrl: Url): List<Cookie> = emptyList()
+
+    override fun close() = Unit
 }
