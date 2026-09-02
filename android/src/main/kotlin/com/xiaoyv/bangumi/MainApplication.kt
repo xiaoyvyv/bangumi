@@ -1,7 +1,6 @@
 package com.xiaoyv.bangumi
 
-import android.app.Application
-import com.xiaoyv.bangumi.shared.application
+import com.xiaoyv.bangumi.shared.AppApplication
 
 /**
  * [MainApplication]
@@ -9,9 +8,4 @@ import com.xiaoyv.bangumi.shared.application
  * @author why
  * @since 2025/1/13
  */
-class MainApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        application = this
-    }
-}
+class MainApplication : AppApplication()

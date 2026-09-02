@@ -34,6 +34,8 @@ expect object System {
 
     fun shareText(text: String)
 
+    fun finish()
+
     fun createHttpClient(
         hosts: Map<String, List<String>>,
         tlsFragmentationDomains: Set<String> = hosts.keys,

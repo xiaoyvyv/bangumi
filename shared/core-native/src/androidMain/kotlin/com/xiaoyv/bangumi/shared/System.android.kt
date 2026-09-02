@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared
 
-import android.app.Application
 import android.content.ClipData
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -30,7 +29,8 @@ import java.lang.System
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.ExperimentalTime
 
-lateinit var application: Application
+@Volatile
+lateinit var application: AppApplication
 
 actual val platformContext: coil3.PlatformContext
     get() = application
@@ -79,6 +79,10 @@ actual object System {
 
     actual fun createClipEntry(text: String): ClipEntry {
         return ClipEntry(ClipData.newPlainText("Copy", text))
+    }
+
+    actual fun finish() {
+        application.exitApp()
     }
 
     actual fun shareText(text: String) {

@@ -13,7 +13,7 @@ import org.koin.dsl.module
 fun KoinApplication.initializeKoin() = modules(
     commonModule,
     navigationModule,
-    *dataModules
+    *dataModules,
 )
 
 val commonModule = module {

@@ -13,6 +13,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.core)
             implementation(projects.shared.coreNative)
+            implementation(projects.shared.dataWorkflow)
         }
     }
 }

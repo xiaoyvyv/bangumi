@@ -1135,4 +1135,33 @@
 
     <!-- Web 网页浏览 -->
     <string name="web_unsupported_protocol">暂不支持处理该协议的链接（%1$s）</string>
+    <string name="workflow_title">自定义行为</string>
+    <string name="workflow_example_title">节点测试工作流</string>
+    <string name="workflow_example_description">从当前条目的中文名称生成豆瓣搜索地址，并在浏览器中打开。</string>
+    <string name="workflow_example_install">保存示例工作流</string>
+    <string name="workflow_example_run">运行测试</string>
+    <string name="workflow_example_select">选择此示例</string>
+    <string name="workflow_example_selected">当前已选择</string>
+    <string name="workflow_saved_title">已保存的工作流</string>
+    <string name="workflow_node_start">开始</string>
+    <string name="workflow_node_build_douban_url">生成豆瓣搜索地址</string>
+    <string name="workflow_node_open_browser">在浏览器中打开</string>
+    <string name="workflow_example_capability">需要权限：打开外部网页</string>
+    <string name="workflow_run_title">执行结果</string>
+    <string name="workflow_run_running">正在执行工作流…</string>
+    <string name="workflow_run_finished">执行完成。</string>
+    <string name="workflow_run_error">执行失败</string>
+    <string name="workflow_run_nodes">已执行节点：%1$s</string>
+    <string name="workflow_run_opened_url">打开地址：%1$s</string>
+    <string name="workflow_run_output">完整执行输出</string>
+    <string name="workflow_run_empty_log">选择任一测试并运行后，这里会显示完整执行日志。</string>
+    <string name="workflow_tab_all">全部</string>
+    <string name="workflow_tab_practice">业务实操</string>
+    <string name="workflow_tab_flow_control">流程控制</string>
+    <string name="workflow_tab_data">数据计算</string>
+    <string name="workflow_tab_text_net">文本网络</string>
+    <string name="workflow_tab_ui_side_effect">界面副作用</string>
+    <string name="workflow_tab_saved">已保存</string>
+    <string name="workflow_view_node_graph">节点卡片</string>
+    <string name="workflow_view_execution_log">执行日志</string>
 </resources>

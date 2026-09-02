@@ -50,7 +50,7 @@ class PreferenceStore(
     /**
      * APP 设置
      */
-    internal var settings by cacheRepository.serializable(SpKey.KEY_SETTING, ComposeSetting.Default)
+    var settings by cacheRepository.serializable(SpKey.KEY_SETTING, ComposeSetting.Default)
 
     /**
      * 上次启动 APP 的日期（格式：yyyy-MM-dd）

@@ -87,6 +87,7 @@ val stateConfiguration = SavedStateConfiguration {
             subclass(Screen.MonoBrowser::class, Screen.MonoBrowser.serializer())
             subclass(Screen.Web::class, Screen.Web.serializer())
             subclass(Screen.Calendar::class, Screen.Calendar.serializer())
+            subclass(Screen.Workflows::class, Screen.Workflows.serializer())
             subclass(Screen.DnsResolver::class, Screen.DnsResolver.serializer())
             subclass(Screen.Report::class, Screen.Report.serializer())
         }
@@ -286,4 +287,7 @@ sealed class Screen(
 
     @Serializable
     data class Calendar(val isToday: Boolean) : Screen(SCREEN_ROUTE_CALENDAR)
+
+    @Serializable
+    data class Workflows(val id: Long) : Screen(SCREEN_ROUTE_WORKFLOWS)
 }

@@ -19,5 +19,7 @@ sealed class WebEvent {
         data class OnRefresh(val loading: Boolean) : Action()
         data class OnHandleProtocol(val request: WebRequest) : Action()
         data class OnTitleChange(val title: String?) : Action()
+
+        data class OnSyncWebCookieToApiStorge(val url: String) : Action()
     }
 }

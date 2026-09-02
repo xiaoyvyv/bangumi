@@ -63,8 +63,7 @@ class DatabaseRepositoryImpl(val json: Json) : DatabaseRepository {
     }
 
     override fun getString(key: String, default: String): String {
-        val serializable = database.appSerializableQueries.selectByKey(key).executeAsOneOrNull()
-        if (serializable == null) return default
+        val serializable = database.appSerializableQueries.selectByKey(key).executeAsOneOrNull() ?: return default
         return serializable.value_
     }
 

@@ -1,0 +1,24 @@
+CREATE TABLE WorkflowCookie (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    domain TEXT NOT NULL,
+    path TEXT,
+    expires INTEGER,
+    cookie TEXT
+);
+
+selectAll:
+SELECT * FROM WorkflowCookie;
+
+deleteCookieByNameAndDomain:
+DELETE FROM WorkflowCookie WHERE name = ? AND domain = ? AND path = ?;
+
+deleteExpiredSqlCookie:
+DELETE FROM WorkflowCookie WHERE expires < ?;
+
+insertCookie:
+INSERT INTO WorkflowCookie (name, domain, path, expires, cookie)
+VALUES (?, ?, ?, ?, ?);
+
+deleteAllCookie:
+DELETE FROM WorkflowCookie;

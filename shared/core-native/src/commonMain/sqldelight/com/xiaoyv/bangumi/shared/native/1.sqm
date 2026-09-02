@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS WorkflowCookie (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    domain TEXT NOT NULL,
+    path TEXT,
+    expires INTEGER,
+    cookie TEXT
+);

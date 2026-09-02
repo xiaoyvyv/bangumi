@@ -70,6 +70,7 @@ import com.xiaoyv.bangumi.features.topic.detail.topicDetailModule
 import com.xiaoyv.bangumi.features.topic.page.topicPageModule
 import com.xiaoyv.bangumi.features.user.userModule
 import com.xiaoyv.bangumi.features.web.webModule
+import com.xiaoyv.bangumi.features.workflows.workflowsModule
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator
 import com.xiaoyv.bangumi.shared.ui.component.navigation.ScreenNavHost
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -144,7 +145,8 @@ internal val navigationModule = module {
         monoDetailModule,
         monoBrowserModule,
         webModule,
-        calendarModule
+        calendarModule,
+        workflowsModule
     )
 }
 

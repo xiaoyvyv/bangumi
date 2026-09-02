@@ -11,6 +11,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.core)
             implementation(projects.shared.data)
+            implementation(projects.shared.dataWorkflow)
 
             api(projects.shared.uiLiquid)
             api(projects.shared.uiMaterial3)

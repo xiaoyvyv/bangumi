@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.uppercaseFirstChar
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpCodeConverterFactory
 import com.xiaoyv.bangumi.shared.data.api.client.converter.HttpDocumentConverterFactory
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.EmptyCookiesStorage
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthBgmProxyPlugin
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthCompat
 import com.xiaoyv.bangumi.shared.data.api.client.plugin.AuthDouBanPlugin
@@ -30,7 +31,6 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.defaultRequest
@@ -50,7 +50,7 @@ private const val NETWORK_LOG_CHUNK_SIZE = 2_000
  * @param config 网络域名、TLS 分片和超时配置。
  * @param redirect 是否允许客户端自动处理重定向。
  * @param logLevel Debug 构建下的网络日志级别。
- * @param cookieStorage 当前客户端使用的 Cookie 存储。
+ * @param cookieStorage 当前客户端使用的 Cookie 存储；为 null 时禁用 Cookie 的读取和写入。
  * @param enableJsonContentNegotiation 是否安装 JSON 序列化支持。
  * @param block 在通用插件之后追加的业务插件配置。
  */
@@ -58,7 +58,7 @@ fun createHttpClient(
     config: ComposeSetting.NetworkConfig,
     redirect: Boolean = true,
     logLevel: LogLevel = LogLevel.ALL,
-    cookieStorage: CookiesStorage = AcceptAllCookiesStorage(),
+    cookieStorage: CookiesStorage = EmptyCookiesStorage,
     enableJsonContentNegotiation: Boolean = true,
     block: HttpClientConfig<*>.() -> Unit = {},
 ): HttpClient = System.createHttpClient(

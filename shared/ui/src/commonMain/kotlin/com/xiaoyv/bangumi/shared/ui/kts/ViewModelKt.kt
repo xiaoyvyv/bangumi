@@ -12,17 +12,13 @@ import com.xiaoyv.bangumi.shared.ui.component.popup.PopupTipState
 import org.orbitmvi.orbit.OrbitContainerHost
 import org.orbitmvi.orbit.compose.collectSideEffect
 
-
+@Suppress("ComposableNaming")
 @Composable
-fun <STATE : Any, SIDE_EFFECT : Any> OrbitContainerHost<UiState<STATE>, UiState<STATE>, UiSideEffect<SIDE_EFFECT>>.collectBaseSideEffect(
+inline fun <STATE : Any, SIDE_EFFECT : Any> OrbitContainerHost<UiState<STATE>, UiState<STATE>, UiSideEffect<SIDE_EFFECT>>.collectBaseSideEffect(
     lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
-    onToastEffect: suspend (PopupTipState, UiSideEffect.Toast<SIDE_EFFECT>) -> Unit = { state, effect ->
-        state.showToast(effect.message)
-    },
-    onLoadingEffect: suspend (PopupLoadingState, UiSideEffect.Loading<SIDE_EFFECT>) -> Unit = { state, effect ->
-        if (effect.isLoading) state.show() else state.dismiss()
-    },
-    sideEffect: (suspend (sideEffect: SIDE_EFFECT) -> Unit),
+    crossinline onToastEffect: suspend (PopupTipState, UiSideEffect.Toast<SIDE_EFFECT>) -> Unit,
+    crossinline onLoadingEffect: suspend (PopupLoadingState, UiSideEffect.Loading<SIDE_EFFECT>) -> Unit,
+    crossinline sideEffect: (suspend (sideEffect: SIDE_EFFECT) -> Unit),
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val popupTipState = LocalPopupTipState.current
@@ -36,4 +32,18 @@ fun <STATE : Any, SIDE_EFFECT : Any> OrbitContainerHost<UiState<STATE>, UiState<
             is UiSideEffect.Wrapped -> sideEffect(it.effect)
         }
     }
+}
+
+@Suppress("ComposableNaming")
+@Composable
+inline fun <STATE : Any, SIDE_EFFECT : Any> OrbitContainerHost<UiState<STATE>, UiState<STATE>, UiSideEffect<SIDE_EFFECT>>.collectBaseSideEffect(
+    lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
+    crossinline sideEffect: (suspend (sideEffect: SIDE_EFFECT) -> Unit),
+) {
+    collectBaseSideEffect(
+        lifecycleState = lifecycleState,
+        onToastEffect = { state, effect -> state.showToast(effect.message) },
+        onLoadingEffect = { state, effect -> if (effect.isLoading) state.show() else state.dismiss() },
+        sideEffect = sideEffect,
+    )
 }

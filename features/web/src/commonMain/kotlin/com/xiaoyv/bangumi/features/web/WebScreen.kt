@@ -187,6 +187,11 @@ private fun WebScreenContent(
                     drawStopIndicator = {}
                 )
             }
+            LaunchedEffect(loadingState) {
+                if (loadingState is LoadingState.Finished) {
+                    onActionEvent(WebEvent.Action.OnSyncWebCookieToApiStorge(webState.lastLoadedUrl.orEmpty()))
+                }
+            }
         }
     }
 }

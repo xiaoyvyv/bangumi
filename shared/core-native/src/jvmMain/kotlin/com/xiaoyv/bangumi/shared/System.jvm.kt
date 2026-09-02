@@ -42,6 +42,10 @@ actual object System {
         )
     }
 
+    actual fun finish() {
+
+    }
+
     @OptIn(ExperimentalComposeUiApi::class)
     actual fun createClipEntry(text: String): ClipEntry {
         return ClipEntry(nativeClipEntry = text)

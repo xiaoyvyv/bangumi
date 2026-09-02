@@ -49,6 +49,7 @@ baselineprofile = "1.5.0-rc01"
 profileinstaller = "1.4.1"
 compose-markdown = "0.44.0"
 conscrypt = "2.6.3"
+compose-kuiver = "0.4.1"
 
 [libraries]
 gradle-plugin-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin-compose-compiler" }
@@ -106,6 +107,7 @@ compose-webview = { module = "io.github.kevinnzou:compose-webview-multiplatform"
 compose-confettikit = { module = "io.github.vinceglb:confettikit", version.ref = "confettikit" }
 compose-markdown-core = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "compose-markdown" }
 compose-markdown-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "compose-markdown" }
+compose-kuiver = { module = "io.github.justdeko:kuiver", version.ref = "compose-kuiver" }
 
 # cryptohash
 cryptohash = { module = "com.appmattus.crypto:cryptohash", version.ref = "cryptohash" }
@@ -213,6 +215,7 @@ compose-common = [
     "compose-paging-compose",
     "compose-webview",
     "compose-confettikit",
+    "compose-kuiver"
 ]
 kotlinx = [
     "kotlinx-atomicfu",

@@ -42,7 +42,7 @@ fun SplashRoute(
     val baseState by viewModel.collectAsState()
     viewModel.collectBaseSideEffect { effect ->
         when (effect) {
-            is SplashSideEffect.Navigate -> onNavScreen(effect.screen)
+            is SplashSideEffect.Navigate -> onNavScreen(Screen.Workflows(0))
         }
     }
 

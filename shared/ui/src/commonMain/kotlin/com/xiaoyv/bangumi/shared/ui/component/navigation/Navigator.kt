@@ -135,7 +135,10 @@ val NavBackStack<NavKey>.current
     get() = lastOrNull() as? Screen ?: Screen.Empty
 
 fun NavBackStack<NavKey>.goBack(): Boolean {
-    if (size <= 1) return false
+    if (size <= 1) {
+        System.finish()
+        return false
+    }
     removeLastOrNull()
     return true
 }

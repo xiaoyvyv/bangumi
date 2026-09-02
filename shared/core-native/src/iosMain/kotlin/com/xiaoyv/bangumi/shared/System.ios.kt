@@ -77,6 +77,9 @@ actual object System {
 
     actual fun currentTimeMillis() = kotlin.time.Clock.System.now().toEpochMilliseconds()
 
+    actual fun finish() {
+
+    }
 
     actual fun log(tag: String, message: String) = println("[$tag]: $message")
 

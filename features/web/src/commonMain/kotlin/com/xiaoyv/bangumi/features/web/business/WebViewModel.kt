@@ -22,6 +22,8 @@ import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.usecase.PixivRepoUseCase
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import io.ktor.client.plugins.cookies.addCookie
+import io.ktor.http.Cookie
 import io.ktor.http.Url
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.getString
@@ -53,9 +55,11 @@ class WebViewModel(
         when (event) {
             is WebEvent.Action.OnHandleProtocol -> onHandleProtocol(event.request)
             is WebEvent.Action.OnTitleChange -> onTitleChange(event.title)
+            is WebEvent.Action.OnSyncWebCookieToApiStorge -> onSyncWebCookieToApiStorge(event.url)
             else -> Unit
         }
     }
+
 
     override suspend fun Syntax<UiState<WebState>, UiSideEffect<WebSideEffect>>.refreshSync() {
         runCatching { cookieStorage.get(args.url.toUrl()) }
@@ -75,6 +79,23 @@ class WebViewModel(
             "pixiv" -> onHandleProtocolForPixiv(url)
             else -> {
                 postToast { getString(Res.string.web_unsupported_protocol, url.protocol.name) }
+            }
+        }
+    }
+
+    private fun onSyncWebCookieToApiStorge(url: String) = intent {
+        val cookie = webViewCookieManager.getCookies(url).find { it.name == "cf_clearance" }
+        if (cookie != null) {
+            debugLog { "CloudFlare Cookie 同步" }
+            webViewCookieManager.getCookies(url).forEach { cookie ->
+                cookieStorage.addCookie(
+                    url, Cookie(
+                        name = cookie.name,
+                        value = cookie.value,
+                        path = cookie.path,
+                        domain = cookie.domain,
+                    )
+                )
             }
         }
     }
