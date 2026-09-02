@@ -63,8 +63,8 @@ import com.xiaoyv.bangumi.features.workflows.business.WorkflowsState
 import com.xiaoyv.bangumi.features.workflows.business.WorkflowsViewModel
 import com.xiaoyv.bangumi.features.workflows.business.component.ActionWorkflowNodeList
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStatus
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStatus
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout

@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.features.workflows.business
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
 
 /**
  * 工作流页需要由 UI 宿主完成的操作。

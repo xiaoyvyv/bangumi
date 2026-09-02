@@ -1,13 +1,13 @@
 package com.xiaoyv.bangumi.shared.data.workflow.engine.loop
 
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionContext
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopContextKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNode
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopContextKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
+import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull

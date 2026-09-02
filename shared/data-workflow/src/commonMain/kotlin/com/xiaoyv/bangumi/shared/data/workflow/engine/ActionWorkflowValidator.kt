@@ -2,14 +2,14 @@ package com.xiaoyv.bangumi.shared.data.workflow.engine
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionEdge
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNode
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionPortKind
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionPortRef
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionEdge
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionPortKind
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionPortRef
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string

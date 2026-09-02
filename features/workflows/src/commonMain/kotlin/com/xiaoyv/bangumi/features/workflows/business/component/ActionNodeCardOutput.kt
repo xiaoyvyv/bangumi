@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStep
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStep
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 /**

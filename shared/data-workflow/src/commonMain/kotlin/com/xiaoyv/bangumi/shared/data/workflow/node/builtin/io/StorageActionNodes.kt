@@ -1,18 +1,16 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionStorageConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecutionResult
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionStorageConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.nextPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.valueResult
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
+import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.JsonNull
@@ -111,6 +109,6 @@ private fun storagePreferencesClearDefinition(preferencesStore: ActionWorkflowPr
     ),
     executor = { _, _ ->
         preferencesStore.clear()
-        com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeExecutionResult("next")
+        ActionNodeExecutionResult("next")
     },
 )

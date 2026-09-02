@@ -1,19 +1,23 @@
 package com.xiaoyv.bangumi.shared.data.workflow.engine
 
 import com.xiaoyv.bangumi.shared.data.workflow.engine.loop.LoopExecutionController
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionEdge
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionContext
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionError
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionEvent
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionLog
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStatus
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStep
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionPortKind
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSideEffect
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionNodeExecutionException
+import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionWorkflowException
+import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionWorkflowTraceLogger
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionEdge
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionPortKind
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionEvent
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionError
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionLog
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStatus
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStep
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
 import kotlinx.collections.immutable.toPersistentList
@@ -167,7 +171,23 @@ class ActionWorkflowEngine(
                 definition.executor.execute(node, context)
             } catch (throwable: Throwable) {
                 if (throwable is CancellationException) throw throwable
-                val error = ActionExecutionError("node_execution_failed", throwable.message.orEmpty(), node.id)
+                val workflowEx = if (throwable is ActionWorkflowException) {
+                    throwable
+                } else {
+                    ActionNodeExecutionException(
+                        code = "node_execution_failed",
+                        messageText = throwable.message.orEmpty().ifBlank { "节点 [${node.id}] 执行抛出未捕获异常" },
+                        workflowId = workflow.id,
+                        workflowName = workflow.name,
+                        nodeId = node.id,
+                        nodeType = node.type,
+                        nodeLabel = node.label,
+                        details = mapOf("config" to node.config),
+                        cause = throwable,
+                    )
+                }
+                ActionWorkflowTraceLogger.logError(workflowEx)
+                val error = workflowEx.toExecutionError()
                 val failureOutput = errorOutput(JsonObject(emptyMap()), error)
                 steps += ActionExecutionStep(node.id, nodeStartedAt, now(), ActionControlPortId.FAILURE, failureOutput, error)
                 context = context.copy(stepOutputs = (context.stepOutputs + (node.id to failureOutput)).toPersistentMap())
@@ -343,8 +363,22 @@ class ActionWorkflowEngine(
         message: String,
         nodeId: String?,
         collector: kotlinx.coroutines.flow.FlowCollector<ActionExecutionEvent>,
+        cause: Throwable? = null,
     ) {
-        val error = ActionExecutionError(code, message, nodeId)
+        val node = nodeId?.let { workflow.nodes.find { n -> n.id == it } }
+        val workflowEx = ActionWorkflowException(
+            code = code,
+            messageText = message,
+            workflowId = workflow.id,
+            workflowName = workflow.name,
+            nodeId = nodeId,
+            nodeType = node?.type,
+            nodeLabel = node?.label,
+            details = node?.config?.let { mapOf("config" to it) } ?: emptyMap(),
+            cause = cause,
+        )
+        ActionWorkflowTraceLogger.logError(workflowEx)
+        val error = workflowEx.toExecutionError()
         collector.emit(ActionExecutionEvent.Failed(error))
         emitTerminal(workflow, startedAt, steps, ActionExecutionStatus.FAILED, collector)
     }
@@ -366,10 +400,12 @@ class ActionWorkflowEngine(
     private fun errorOutput(output: JsonObject, error: ActionExecutionError): JsonObject {
         return JsonObject(
             output + mapOf(
-                "error" to JsonObject(
+                ActionErrorKey.ERROR to JsonObject(
                     mapOf(
-                        "code" to JsonPrimitive(error.code),
-                        "message" to JsonPrimitive(error.message),
+                        ActionErrorKey.CODE to JsonPrimitive(error.code),
+                        ActionErrorKey.MESSAGE to JsonPrimitive(error.message),
+                        ActionErrorKey.NODE_ID to JsonPrimitive(error.nodeId.orEmpty()),
+                        ActionErrorKey.DETAILS to error.details,
                     )
                 ),
             )

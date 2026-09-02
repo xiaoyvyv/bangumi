@@ -7,7 +7,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.codec.ActionWorkflowCodec
 import com.xiaoyv.bangumi.shared.data.workflow.codec.ActionWorkflowImportResult
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidation
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidator
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList

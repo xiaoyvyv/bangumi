@@ -1,25 +1,25 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.builtin.data
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionMathConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.nextPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.valueResult
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
+import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonPrimitive
-
+import kotlinx.serialization.json.longOrNull
 import kotlin.math.pow
 
 /**
@@ -78,7 +78,7 @@ private fun mathSqrtDefinition() = ActionNodeDefinition(
     executor = { node, context ->
         val value = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
         require(value >= 0) { "负数不能求平方根" }
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(kotlin.math.sqrt(value)))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), kotlin.math.sqrt(value).toJsonPrimitive())
     },
 )
 
@@ -93,7 +93,7 @@ private fun mathSumDefinition() = ActionNodeDefinition(
     executor = { node, context ->
         val values = (ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUES], context) as? JsonArray).orEmpty()
         val sum = values.sumOf { it.asNumber(ActionMathConfigKey.VALUES) }
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(sum))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), sum.toJsonPrimitive())
     },
 )
 
@@ -108,7 +108,7 @@ private fun mathAvgDefinition() = ActionNodeDefinition(
     executor = { node, context ->
         val values = (ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUES], context) as? JsonArray).orEmpty()
         val avg = if (values.isEmpty()) 0.0 else values.sumOf { it.asNumber(ActionMathConfigKey.VALUES) } / values.size
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(avg))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), avg.toJsonPrimitive())
     },
 )
 
@@ -123,7 +123,7 @@ private fun mathLogDefinition() = ActionNodeDefinition(
     executor = { node, context ->
         val value = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
         require(value > 0) { "对数真数必须大于 0" }
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(kotlin.math.ln(value)))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), kotlin.math.ln(value).toJsonPrimitive())
     },
 )
 
@@ -137,7 +137,7 @@ private fun mathExpDefinition() = ActionNodeDefinition(
     ),
     executor = { node, context ->
         val value = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(kotlin.math.exp(value)))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), kotlin.math.exp(value).toJsonPrimitive())
     },
 )
 
@@ -151,7 +151,7 @@ private fun mathNegateDefinition() = ActionNodeDefinition(
     ),
     executor = { node, context ->
         val value = -ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(value))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), value.toJsonPrimitive())
     },
 )
 
@@ -168,7 +168,7 @@ private fun mathRoundDefinition() = ActionNodeDefinition(
         val decimals = node.config[ActionMathConfigKey.DECIMALS]?.let { ActionTemplateResolver.resolveElement(it, context).jsonPrimitive.content.toInt() } ?: 0
         val multiplier = 10.0.pow(decimals.toDouble())
         val rounded = kotlin.math.round(value * multiplier) / multiplier
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(rounded))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), rounded.toJsonPrimitive())
     },
 )
 
@@ -182,7 +182,7 @@ private fun mathFloorDefinition() = ActionNodeDefinition(
     ),
     executor = { node, context ->
         val value = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(kotlin.math.floor(value)))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), kotlin.math.floor(value).toJsonPrimitive())
     },
 )
 
@@ -196,7 +196,7 @@ private fun mathCeilDefinition() = ActionNodeDefinition(
     ),
     executor = { node, context ->
         val value = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(kotlin.math.ceil(value)))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), kotlin.math.ceil(value).toJsonPrimitive())
     },
 )
 
@@ -210,7 +210,7 @@ private fun mathAbsDefinition() = ActionNodeDefinition(
     ),
     executor = { node, context ->
         val value = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(kotlin.math.abs(value)))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), kotlin.math.abs(value).toJsonPrimitive())
     },
 )
 
@@ -226,7 +226,7 @@ private fun mathRandomDefinition() = ActionNodeDefinition(
         val min = node.config[ActionMathConfigKey.MIN]?.let { ActionTemplateResolver.resolveElement(it, context).asNumber(ActionMathConfigKey.MIN) } ?: 0.0
         val max = node.config[ActionMathConfigKey.MAX]?.let { ActionTemplateResolver.resolveElement(it, context).asNumber(ActionMathConfigKey.MAX) } ?: 1.0
         val randomVal = min + (max - min) * kotlin.random.Random.nextDouble()
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(randomVal))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), randomVal.toJsonPrimitive())
     },
 )
 
@@ -242,7 +242,7 @@ private fun mathClampDefinition() = ActionNodeDefinition(
         val value = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.VALUE], context).asNumber(ActionMathConfigKey.VALUE)
         val min = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.MIN], context).asNumber(ActionMathConfigKey.MIN)
         val max = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.MAX], context).asNumber(ActionMathConfigKey.MAX)
-        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(value.coerceIn(min, max)))
+        node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), value.coerceIn(min, max).toJsonPrimitive())
     },
 )
 
@@ -261,12 +261,25 @@ private fun binaryMathDefinition(
         executor = { node, context ->
             val left = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.LEFT], context).asNumber(ActionMathConfigKey.LEFT)
             val right = ActionTemplateResolver.resolveElement(node.config[ActionMathConfigKey.RIGHT], context).asNumber(ActionMathConfigKey.RIGHT)
-            node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), JsonPrimitive(operation(left, right)))
+            node.valueResult(node.config.string(ActionMathConfigKey.OUTPUT_KEY), operation(left, right).toJsonPrimitive())
         },
     )
 }
 
 internal fun JsonElement.asNumber(configKey: String): Double {
-    return jsonPrimitive.doubleOrNull ?: error("节点配置 $configKey 必须是数字")
+    val primitive = this as? JsonPrimitive ?: error("节点配置 $configKey 必须是数字，实际为: $this")
+    return primitive.doubleOrNull
+        ?: primitive.intOrNull?.toDouble()
+        ?: primitive.longOrNull?.toDouble()
+        ?: primitive.booleanOrNull?.let { if (it) 1.0 else 0.0 }
+        ?: primitive.contentOrNull?.toDoubleOrNull()
+        ?: error("节点配置 $configKey 必须是合法数字，实际为: $this")
 }
 
+internal fun Double.toJsonPrimitive(): JsonPrimitive {
+    return if (this % 1.0 == 0.0 && !this.isInfinite() && !this.isNaN()) {
+        JsonPrimitive(this.toLong())
+    } else {
+        JsonPrimitive(this)
+    }
+}

@@ -7,7 +7,55 @@
 
 ---
 
-## 应用场景
+## 目录
+
+1. [模块简介与应用场景](#模块简介与应用场景)
+2. [模块架构与分包设计](#模块架构与分包设计)
+3. [快速接入指南](#快速接入指南)
+    1. [依赖注入装配](#依赖注入装配)
+    2. [启动与消费工作流](#启动与消费工作流)
+4. [工作流 DAG 控制流与调度架构](#工作流-dag-控制流与调度架构)
+5. [模板与表达式求值引擎](#模板与表达式求值引擎)
+    1. [根命名空间与路径深层导航](#根命名空间与路径深层导航)
+    2. [完整运算语法与求值规则](#完整运算语法与求值规则)
+    3. [类型隐式强转与真值判定](#类型隐式强转与真值判定)
+6. [异常处理与诊断溯源设计](#异常处理与诊断溯源设计)
+    1. [领域异常继承体系](#领域异常继承体系)
+    2. [统一错误输出协议](#统一错误输出协议)
+    3. [高亮终端诊断日志与监听回调](#高亮终端诊断日志与监听回调)
+7. [内置节点参考手册](#内置节点参考手册)
+    1. [流程控制节点](#流程控制节点)
+    2. [逻辑判断节点](#逻辑判断节点)
+    3. [变量与数据节点](#变量与数据节点)
+    4. [网页与 HTML 解析节点](#网页与-html-解析节点)
+    5. [JSON 对象处理节点](#json-对象处理节点)
+    6. [数组集合操作节点](#数组集合操作节点)
+    7. [文本与正则处理节点](#文本与正则处理节点)
+    8. [算术数学计算节点](#算术数学计算节点)
+    9. [日期与时间节点](#日期与时间节点)
+    10. [URL 格式化与操作节点](#url-格式化与操作节点)
+    11. [结构化数据解析节点](#结构化数据解析节点)
+    12. [编解码与哈希安全节点](#编解码与哈希安全节点)
+    13. [网络 HTTP 请求节点](#网络-http-请求节点)
+    14. [本地存储节点](#本地存储节点)
+    15. [系统与 UI 交互节点](#系统与-ui-交互节点)
+8. [自定义节点扩展指南](#自定义节点扩展指南)
+9. [安全与能力治理规范](#安全与能力治理规范)
+10. [测试与质量保证](#测试与质量保证)
+
+---
+
+## 模块简介与应用场景
+
+### 设计目标
+
+- **JSON 协议为唯一事实来源**：画布渲染、列表展示与运行日志均由 `ActionWorkflow` 导出，支持标准的导入、导出与版本迁移。
+- **高内聚子包与模块化设计**：按领域划分 `definition``spec``execution` 与 `log` 四大子包，模型内不含臃肿巨型类。
+- **工业级行内表达式引擎**：内置递归下降语法解析器，全面支持四则运算、布尔逻辑、Elvis、三元选择及深度路径/括号下标读取。
+- **专业的错误诊断与溯源系统**：提供结构化异常类、标准化错误 Key 协议、高亮终端报告与可订阅的 LogListener。
+- **基础设施与 UI 隔离**：网络基础设施由外部注入，导航、弹窗、剪贴板等系统操作通过 `ActionSideEffect` 交由宿主解耦实现。
+
+### 典型应用场景
 
 通过节点编排，可以在 App 内组合出以下典型功能：
 
@@ -18,74 +66,85 @@
 
 ---
 
-## 目录
+## 模块架构与分包设计
 
-- [设计目标](#设计目标)
-- [模块边界](#模块边界)
-- [架构设计与核心机制](#架构设计与核心机制)
-- [快速接入](#快速接入)
-- [上下文与模板](#上下文与模板)
-- [控制流与错误处理](#控制流与错误处理)
-- [内置节点参考手册 (140+ Nodes)](#内置节点参考手册-140-nodes)
-    - [1. 流程控制节点 (Flow)](#1-流程控制节点-flow)
-    - [2. 逻辑判断节点 (Control)](#2-逻辑判断节点-control)
-    - [3. 变量与数据节点 (Data)](#3-变量与数据节点-data)
-    - [4. 网页与 HTML 解析节点 (HTML)](#4-网页与-html-解析节点-html)
-    - [5. JSON 对象处理节点 (Object)](#5-json-对象处理节点-object)
-    - [6. 数组集合操作节点 (Array)](#6-数组集合操作节点-array)
-    - [7. 文本与正则处理节点 (Text)](#7-文本与正则处理节点-text)
-    - [8. 算术数学计算节点 (Math)](#8-算术数学计算节点-math)
-    - [9. 日期与时间节点 (Date)](#9-日期与时间节点-date)
-    - [10. URL 格式化与操作节点 (URL)](#10-url-格式化与操作节点-url)
-    - [11. 结构化数据解析节点 (JSON / XML / CSV)](#11-结构化数据解析节点-json--xml--csv)
-    - [12. 编解码与哈希安全节点 (Codec / Crypto)](#12-编解码与哈希安全节点-codec--crypto)
-    - [13. 网络 HTTP 请求节点 (HTTP)](#13-网络-http-请求节点-http)
-    - [14. 本地存储节点 (Storage)](#14-本地存储节点-storage)
-    - [15. 系统与 UI 交互节点 (Action)](#15-系统与-ui-交互节点-action)
-- [节点扩展规范](#节点扩展规范)
-- [安全与权限规范](#安全与权限规范)
-- [测试与验证](#测试与验证)
-
----
-
-## 设计目标
-
-- **JSON 协议为唯一事实来源**：画布渲染、列表展示与运行日志均由 `ActionWorkflow` 导出，支持标准的导入、导出与版本迁移。
-- **模块化节点声明**：节点类型、端口规则与配置键由 `ActionNodeDefinition` 统一描述，扩充新节点类型时无需重构核心引擎。
-- **统一结构化上下文**：输入数据、环境变量、临时变量、步骤输出与循环状态统一使用 JSON 组织，支持全路径占位符插值。
-- **基础设施与 UI 隔离**：网络基础设施由外部注入，导航、弹窗、剪贴板等系统操作通过 `ActionSideEffect` 交由宿主解耦实现。
-- **状态感知与异常拦截**：通过 `Flow<ActionExecutionEvent>` 实时推送执行状态，捕获节点内部异常并支持错误路由，避免进程崩溃。
-- **凭据安全防护**：工作流不持久化 Token 或私有凭据，高风险平台能力须显式声明并由宿主授权。
-
----
-
-## 模块边界
+`data-workflow` 遵循清晰的领域驱动分包架构：
 
 ```text
-features / shared:data
-  ├─ 提供 HttpClient、仓库、具体触发器与 UI 副作用处理器
-  └─ 依赖 data-workflow
-
-data-workflow
-  ├─ model      工作流 JSON 协议与执行事件
-  ├─ node       节点模型、注册中心与分层定义
-  │   ├─ core       节点核心抽象 (Category, Definition, Registry, Config)
-  │   ├─ resolver   模板插值与路径解析 (TemplateResolver, JsonPath, UrlPolicy)
-  │   ├─ effect     平台副作用声明 (HttpRequest, Navigation, UiEffects)
-  │   └─ builtin    内置节点定义 (control, data, parse, io, extension)
-  ├─ engine     校验、DAG 调度、循环与错误路由
-  ├─ port       基础设施抽象接口
-  ├─ codec      导入导出与版本迁移
-  └─ di         Koin 装配入口
+com.xiaoyv.bangumi.shared.data.workflow/
+  ├── model/                       # 领域数据模型集合
+  │   ├── definition/              # 1. 工作流与有向图结构定义 (ActionWorkflow, ActionNode, ActionEdge, ActionTrigger)
+  │   ├── spec/                    # 2. 节点规格与 Key 集合 (ActionNodeType, ActionCapability, ActionNodeKeys)
+  │   ├── execution/               # 3. 运行时上下文与引擎事件 (ActionExecutionContext, ActionExecutionEvent, ActionNodeExecutionResult)
+  │   └── log/                     # 4. 持久化日志与错误描述 (ActionExecutionLog, ActionExecutionStep, ActionExecutionError)
+  ├── node/                        # 节点模型、注册中心与分层实现
+  │   ├── core/                    # 节点核心抽象 (Category, Definition, Registry, Config)
+  │   ├── resolver/                # 12级语法解析器、模板插值与路径解析 (ActionTemplateResolver, JsonPath, UrlPolicy)
+  │   ├── effect/                  # 平台副作用声明 (HttpRequest, Navigation, UiEffects)
+  │   └── builtin/                 # 140+ 内置节点定义实现 (control, data, parse, io, extension)
+  ├── engine/                      # 图校验、DAG 动态调度、循环与错误路由 (WorkflowEngine, Validator)
+  ├── exception/                   # 工业级工作流异常层次与格式化诊断日志 (ActionWorkflowException, TraceLogger)
+  ├── port/                        # 基础设施接口抽象 (HttpClientProvider)
+  ├── codec/                       # JSON 编解码与历史格式迁移器
+  └── di/                          # Koin 依赖注入装配入口
 ```
-
-`data-workflow` 不直接持久化用户工作流；数据存储由 `shared:data` 中的仓库负责。它也不包含 Compose UI 或页面导航逻辑，所有交互事件均向上抛出由宿主消费。
 
 ---
 
-## 架构设计与核心机制
+## 快速接入指南
 
-`data-workflow` 采用响应式事件驱动与 DAG 有向无环图调度相结合的系统架构，保证图计算与 UI 渲染解耦。
+### 依赖注入装配
+
+宿主模块需提供带 Cookie、网络配置等应用能力的专用 HTTP Client，使用 `actionWorkflowHttpClientQualifier` 注册，随后加载 `workflowModules`：
+
+```kotlin
+val workflowInfrastructureModule = module {
+    single(actionWorkflowHttpClientQualifier) {
+        createHttpClient(
+            config = get<PreferenceStore>().settings.network,
+            cookieStorage = get<ApiCookiesStorage>(),
+            enableJsonContentNegotiation = false,
+        )
+    }
+}
+
+startKoin {
+    modules(workflowInfrastructureModule, *workflowModules)
+}
+```
+
+### 启动与消费工作流
+
+执行时由宿主提供初始上下文和 UI 副作用处理器，消费 `Flow<ActionExecutionEvent>`：
+
+```kotlin
+val workflowEngine: ActionWorkflowEngine = get()
+
+workflowEngine.execute(
+    workflow = workflow,
+    initialContext = ActionExecutionContext(
+        input = subjectJson,
+        environment = environmentJson,
+        trigger = triggerJson,
+    ),
+    sideEffectHandler = actionSideEffectHandler,
+).collect { event ->
+    when (event) {
+        is ActionExecutionEvent.Started -> println("工作流开始运行: ${event.workflowId}")
+        is ActionExecutionEvent.NodeStarted -> println("节点开始: ${event.nodeId}")
+        is ActionExecutionEvent.NodeCompleted -> println("节点完成: ${event.nodeId}, 输出: ${event.output}")
+        is ActionExecutionEvent.SideEffectRequested -> actionSideEffectHandler.handle(event.effect)
+        is ActionExecutionEvent.Completed -> println("运行完成，状态: ${event.log.status}")
+        is ActionExecutionEvent.Failed -> println("运行失败: ${event.error.message}")
+    }
+}
+```
+
+---
+
+## 工作流 DAG 控制流与调度架构
+
+`data-workflow` 采用响应式事件驱动与 DAG 有向无环图调度相结合的系统架构：
 
 ```text
   ┌────────────────────────────────────────────────────────────────────────┐
@@ -104,10 +163,10 @@ data-workflow
   │              │                                                         │
   │              ├──────────────────────────┐                              │
   │              ▼                          ▼                              │
-  │  ┌───────────────────────┐  ┌───────────────────────────┐              │
-  │  │ ActionNodeRegistry    │  │ ActionTemplateResolver    │              │
-  │  │  (140+ 节点定义与执行) │  │  (上下文占位符插值解析)    │              │
-  │  └───────────────────────┘  └───────────────────────────┘              │
+  │  ┌───────────────────────┐  ┌───────────────────────────┐  │
+  │  │ ActionNodeRegistry    │  │ ActionTemplateResolver    │  │
+  │  │  (140+ 节点定义与执行) │  │  (上下文占位符插值解析)    │  │
+  │  └───────────────────────┘  └───────────────────────────┘  │
   └───────────────────────────────────┬────────────────────────────────────┘
                                       │  发出 ActionSideEffectRequested / 挂起等待结果
                                       ▼
@@ -117,123 +176,152 @@ data-workflow
   └────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1. 响应式事件通道 (Flow-Based Event Engine)
+### 调度核心机制
 
-- 引擎暴露 `Flow<ActionExecutionEvent>` 接口，将节点启动 (`NodeStarted`)、节点完成 (`NodeCompleted`)、副作用请求 (`SideEffectRequested`) 及运行日志 (`Completed`) 作为冷流推送到 UI 层。
-- 引擎内部基于就绪队列 (`readyQueue`) 进行动态图调度，使界面渲染、日志追踪与底层节点图计算解耦。
+1. **响应式事件通道 (Flow-Based Event Engine)**：
+    - 引擎暴露 `Flow<ActionExecutionEvent>` 接口，将节点启动 (`NodeStarted`)、节点完成 (`NodeCompleted`)、副作用请求 (`SideEffectRequested`) 及运行日志 (`Completed`) 作为冷流推送到 UI
+      层。
+    - 引擎内部基于就绪队列 (`readyQueue`) 进行动态图调度，使界面渲染、日志追踪与底层节点图计算解耦。
 
-### 2. UI 交互与异步挂起 (Side Effects & Suspend Execution)
+2. **UI 交互与异步挂起 (Side Effects & Suspend Execution)**：
+    - 引擎遵循“计算与副作用分离”原则。对于弹窗交互（如 `ui.input_dialog`、`ui.confirm`）、浏览器打开、剪贴板读写等平台操作，节点执行器构建 `ActionSideEffect` 抛出。
+    - `sideEffectHandler.handle(effect)` 为 `suspend` 函数。遇到 UI 交互时，引擎在当前节点挂起；Compose UI 响应并返回数据后，协程恢复 (**Resume**)，带入输入结果继续执行后续节点。
 
-- 引擎遵循“计算与副作用分离”原则。对于弹窗交互（如 `ui.input_dialog`、`ui.confirm`）、浏览器打开、剪贴板读写等平台操作，节点执行器构建 `ActionSideEffect` 抛出。
-- `sideEffectHandler.handle(effect)` 为 `suspend` 函数。遇到 UI 交互时，引擎在当前节点挂起；Compose UI 响应并返回数据后，协程恢复 (**Resume**)，带入输入结果继续执行后续节点。
-
-### 3. DAG 有向图与 Fork-Join 分支合流
-
-- **多路分叉 (Fan-Out)**：节点出边连接多个目标节点时，控制边激活集 (`activatedEdges`) 会同时捕获所有 downstream 分支，将它们并列压入就绪队列。
-- **多路合流 (Fan-In/Join)**：合流节点在有多条活跃入边时，调度器通过 `pendingPredecessors` 校验上游节点的完成状态，确保合流节点在所有活跃分支执行完成后仅运行一次。
-- **循环波次隔离 (Loop Wave Reset)**：对于 `loop.for_each` 等循环结构，每次进入新的 `BODY` 迭代时，引擎通过拓扑寻路清空循环体内部节点的 `executedNodes` 标记，保障循环体内部的 Join
-  节点在多轮迭代中具备独立的波次合流能力。
-
----
-
-## 快速接入
-
-宿主模块应提供带 Cookie、网络配置等应用能力的专用 HTTP Client，并使用 `actionWorkflowHttpClientQualifier` 注册。随后加载 `workflowModules`：
-
-```kotlin
-val workflowInfrastructureModule = module {
-    single(actionWorkflowHttpClientQualifier) {
-        createHttpClient(
-            config = get<PreferenceStore>().settings.network,
-            cookieStorage = get<ApiCookiesStorage>(),
-            enableJsonContentNegotiation = false,
-        )
-    }
-}
-
-startKoin {
-    modules(workflowInfrastructureModule, *workflowModules)
-}
-```
-
-执行时由宿主提供入口上下文和副作用处理器：
-
-```kotlin
-workflowEngine.execute(
-    workflow = workflow,
-    initialContext = ActionExecutionContext(
-        input = subjectJson,
-        environment = environmentJson,
-        trigger = triggerJson,
-    ),
-    sideEffectHandler = actionSideEffectHandler,
-).collect { event ->
-    // 更新运行日志、处理 ActionSideEffectRequested、展示执行状态。
-}
-```
-
----
-
-## 上下文与模板求值引擎
-
-`ActionExecutionContext` 为一次运行创建不可变快照。引擎内置了工业级的行内表达式解析器 `ActionTemplateResolver`，不仅支持上下文路径导航，还支持在 `${...}` 占位符内直接进行算术运算、比较判断、逻辑组合与 Elvis / 三元表达：
-
-### 1. 根命名空间
-
-| 路径            | 来源                | 示例                                  |
-|:--------------|:------------------|:------------------------------------|
-| `input`       | 触发方传入的业务数据        | `${input.name}`                     |
-| `environment` | 平台环境              | `${environment.locale}`             |
-| `trigger`     | 本次触发事件            | `${trigger.type}`                   |
-| `vars`        | 已执行节点写入的临时变量      | `${vars.message}`                   |
-| `steps`       | 已完成节点输出，按节点 ID 索引 | `${steps.request.body}`             |
-| `loop`        | 当前最内层循环数据         | `${loop.item.name}`、`${loop.index}` |
-
-### 2. 行内表达式运算
-
-- **行内算术运算**：`${loop.index + 1}`、`${vars.score * 0.9}`、`${vars.total - 10}`
-- **关系与条件判断**：`${loop.index > 0}`、`${vars.score >= 80}`、`${vars.tag == 'anime'}`
-- **逻辑运算符**：`${loop.index > 0 && vars.score >= 90}`
-- **Elvis 空值兜底**：`${vars.title ?: '默认标题'}`
-- **三元条件选择**：`${vars.score >= 80 ? '优秀' : '普通'}`
-- **成员方法与属性**：`${vars.items.length}`、`${vars.text.length}`
-
-未知路径或求值异常时自动安全兜底为 `JsonNull` / 空文本，保证流程不崩溃。
-
----
-
-## 控制流与错误处理
-
-端口由 `ActionNodeSpec` 声明。常用控制端口为：
-
-- `in`：输入端口（允许接收多条来自不同分支的入边以实现合流 Join）。
-- `next`：普通顺序执行端口（允许连接多个下游目标节点以实现分叉 Fan-Out）。
-- `success` / `failure`：副作用或可失败操作的结果分支。
-- `true` / `false`、`matched` / `default`：条件和匹配分支。
-
-### 专业工作流引擎与 DAG 分支/合流架构
-
-`ActionWorkflowEngine` 采用基于就绪队列（Ready Queue）与依赖边激活集（Activated Edges）的现代化有向图（DAG）调度架构，全面支持复杂业务流程的分叉与汇入：
-
-1. **多路分叉 (Forking / Fan-Out)**：
+3. **多路分叉 (Forking / Fan-Out)**：
     - 节点的单个输出端口（如 `next` 或条件端口）支持连接多个下游目标节点。
     - 当上游节点执行完成并激活输出端口时，所有关联的控制边均会被标记为激活，触发多条分支并行/顺序调度。
 
-2. **多路汇入与合流 (Merging / Fan-In / Join)**：
+4. **多路汇入与合流 (Merging / Fan-In / Join)**：
     - 下游节点的输入端口（如 `in`）支持接收多条来自不同 upstream 分支的控制边。
     - 引擎调度器会自动分析图中节点的依赖关系。当某个合流节点有多个活跃的 upstream 分支时，调度器会等待**所有已被激活的 upstream 前置分支节点全部执行完毕**（`pendingPredecessors == 0`
       ）后，再将合流节点压入就绪队列，确保合流节点**仅被触发执行一次**。
     - 对于条件分支（如 `control.if`），只有被选中的分支端口（如 `true`）所指向的控制边会被激活；未被激活的条件分支路径自动跳过，不阻塞 downstream 合流节点的唤醒。
 
-3. **分支数据快照与变量共享 (Context Accumulation)**：
-    - 执行过程中，各个分叉分支节点输出的 JSON 结构数据（通过 `outputKey`）及设置的变量（`vars`）均会增量合并至 `ActionExecutionContext` 中。
-    - 汇入节点（Join Node）可使用模板表达式（如 `${steps.node_left.result}` 与 `${steps.node_right.result}`）自由引用并整合多条分支的数据。
+---
+
+## 模板与表达式求值引擎
+
+`ActionTemplateResolver` 包含内置的递归下降语法解析器（`ExpressionParser`），可在节点配置的 `${...}` 占位符内求值并解析动态表达式。
+
+### 根命名空间与路径深层导航
+
+求值引擎支持通过点号（`.`）与括号下标（`[...]`）对 6 大根域进行无限深度的路径读取（如 `${vars.a.b.c.d}`）：
+
+| 根命名空间         | 说明                         | 示例                                                 |
+|:--------------|:---------------------------|:---------------------------------------------------|
+| `input`       | 宿主触发时传入的只读业务 JSON 数据       | `${input.subject.name_cn}`                         |
+| `environment` | 运行平台只读环境信息 (语言/平台/版本)      | `${environment.locale}`                            |
+| `trigger`     | 触发本次调度的事件数据 (类型/来源/操作)     | `${trigger.type}`                                  |
+| `vars`        | 运行期由节点写入的全局变量表             | `${vars.user.score}`、`${vars.tags[0]}`             |
+| `steps`       | 历史已执行节点的结构化输出 (按节点 ID 索引)  | `${steps.http_node.body.data.list[vars.index].id}` |
+| `loop`        | 最内层循环帧数据 (`item`, `index`) | `${loop.item.title}`、`${loop.index + 1}`           |
+
+### 完整运算语法与求值规则
+
+求值引擎按照严谨的运算符优先级由低到高（Level 1 -> Level 12）进行表达式解析：
+
+| 优先级 (Level)  | 运算符 / 语法结构                  | 运算类别         | 范例语法                                                        |
+|:-------------|:----------------------------|:-------------|:------------------------------------------------------------|
+| **Level 1**  | `cond ? trueVal : falseVal` | 三元条件选择       | `${vars.score >= 80 ? 'Pass' : 'Fail'}`                     |
+| **Level 2**  | `val ?: fallbackVal`        | Elvis 空值兜底   | `${vars.title ?: '默认标题'}`                                   |
+| **Level 3**  | `\|\|`                      | 逻辑或          | `${vars.isAdmin \|\| vars.score > 90}`                      |
+| **Level 4**  | `&&`                        | 逻辑与          | `${loop.index > 0 && vars.hasMore}`                         |
+| **Level 5**  | `==`, `!=`                  | 等于 / 不等于     | `${vars.status == 200}`、`${vars.tag != null}`               |
+| **Level 6**  | `>`, `>=`, `<`, `<=`        | 关系比较         | `${vars.count >= 10}`、`${vars.price < 50.5}`                |
+| **Level 7**  | `+`, `-`                    | 加法 / 减法 / 拼接 | `${vars.base + 10}`、`"Hello " + vars.name`                  |
+| **Level 8**  | `*`, `/`, `%`               | 乘法 / 除法 / 取模 | `${vars.width * vars.height}`、`${loop.index % 2 == 0}`      |
+| **Level 9**  | `!`, `-` (Unary)            | 逻辑非 / 一元取负   | `${!vars.isDisabled}`、`-${vars.offset}`                     |
+| **Level 10** | `.length`, `.trim`          | 成员属性与工具方法    | `${vars.items.length}`、`${vars.text.trim}`                  |
+| **Level 11** | `obj.prop`, `arr[idx]`      | 后置属性与下标选择    | `${steps.node1.list[0]}`、`${vars.map[vars.key]}`            |
+| **Level 12** | `(...)`, 字面量                | 括号分组与字面量     | `${(vars.a + vars.b) * 2}`、`'string'`、`12.34`、`true`、`null` |
+
+### 类型隐式强转与真值判定
+
+- **隐式数字强转**：字符串数字（如 `"100.5"`）参与加减乘除或数值比较时，解析器会自动转换为 `Double`，并在输出整型时自动去除小数位（如 `3.0` -> `3`）。
+- **字符串拼接**：当 `+` 运算符的左侧或右侧包含文本类型时，自动隐式将另一侧转换为文本并进行连接。
+- **真值 (Truthiness)**：在逻辑条件（`if`, `&&`, `||`, 三元表达式）中，以下值判定为 `false`，其余皆为 `true`：
+    - `null` / `JsonNull`
+    - 布尔值 `false`
+    - 数值 `0` 或 `0.0`
+    - 空文本 `""`
+    - 空数组 `[]` 或 空对象 `{}`
 
 ---
 
-## 内置节点参考手册 (140+ Nodes)
+## 异常处理与诊断溯源设计
 
-### 1. 流程控制节点 (Flow)
+当工作流运行过程中出现配置丢失、节点除零、表达式解析语法错误或网络请求故障时，系统设计了一套面向工业级开发的异常捕捉与诊断溯源架构：
+
+```text
+                               ActionWorkflowException (领域根异常)
+                                          │
+       ┌──────────────────────────┬───────┴──────────────────┬──────────────────────────┐
+       ▼                          ▼                          ▼                          ▼
+ActionNodeConfigException   ActionNodeExecutionException   ActionExpressionException   ActionWorkflowTopologyException
+ (配置缺失/格式非法)           (除零/算术溢出/网络故障)       (模板语法错误/求值失败)        (入口缺失/拓扑环路死锁)
+```
+
+### 领域异常继承体系
+
+所有引擎抛出的异常均携带丰富的排错上下文：
+
+- `code`：稳定机器可读的错误代码（如 `CONFIG_MISSING`、`DIVIDE_BY_ZERO`、`EXPRESSION_EVALUATION_FAILED`）。
+- `messageText`：人类可读的排错信息。
+- `workflowId` / `workflowName`：发生错误的目标工作流信息。
+- `nodeId` / `nodeType` / `nodeLabel`：发生错误的具体节点标识、类型与展示名称。
+- `configKey`：触发错误的配置项键名（如 `url`、`left`）。
+- `details`：运行时触发故障时的上下文 JSON 输入快照。
+- `hint`：指导开发人员解决该案例错误的“踩坑建议”提示。
+
+### 统一错误输出协议
+
+当节点触发 `failure` 分支或节点错误被捕获时，引擎通过 `toExecutionError()` 导出标准化的结构化 `JsonObject` 数据。数据 Key 规范定义在 `ActionErrorKey` 中：
+
+```json
+{
+  "error": {
+    "code": "DIVIDE_BY_ZERO",
+    "message": "数学除法计算失败：除数 right 为 0",
+    "nodeId": "node_math_divide_1",
+    "nodeType": "math.divide",
+    "nodeLabel": "除法计算",
+    "workflowId": "wf_bilibili_sync",
+    "configKey": "right",
+    "details": {
+      "left": 100,
+      "right": 0
+    },
+    "hint": "请检查除数参数是否为 0，或在除法前使用 control.if 进行判空保护。"
+  }
+}
+```
+
+### 高亮终端诊断日志与监听回调
+
+- **终端高亮控制台 (`ActionWorkflowTraceLogger`)**：在控制台会自动打印 15 行边框围合、带图标与完整诊断元信息的开发溯源报告：
+
+```text
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ ❌ [ActionWorkflow Error Trace Diagnostic]                                    │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  Workflow ID  : wf_sample_demo                                                │
+│  Node ID      : node_math_calc                                                │
+│  Node Type    : math.divide (算术除法)                                         │
+│  Error Code   : DIVIDE_BY_ZERO                                                │
+│  Config Key   : right                                                         │
+│  Message      : 除法节点计算失败，除数不能为 0                                   │
+│  Hint         : 请在除法计算前使用 control.equals 或 control.if 校验除数不为 0。    │
+└───────────────────────────────────────────────────────────────────────────────┘
+```
+
+- **全局监听器回调 (`ActionWorkflowLogListener`)**：可调用 `ActionWorkflowTraceLogger.addListener { exception -> ... }` 动态注册日志回调，无缝接入线上 App 的 APM 埋点、Sentry 异常监控系统或
+  Compose UI 调试界面面板。
+
+---
+
+## 内置节点参考手册
+
+### 流程控制节点
 
 流程控制节点用于指挥工作流的执行走向、延迟、并发及异常捕获。
 
@@ -260,7 +348,7 @@ workflowEngine.execute(
 
 ---
 
-### 2. 逻辑判断节点 (Control)
+### 逻辑判断节点
 
 用于数值、布尔值或文本条件的逻辑运算，返回 `true`/`false`。
 
@@ -281,7 +369,7 @@ workflowEngine.execute(
 
 ---
 
-### 3. 变量与数据节点 (Data)
+### 变量与数据节点
 
 用于对上下文中的全局变量进行保存、读取、转换与建模。
 
@@ -302,7 +390,7 @@ workflowEngine.execute(
 
 ---
 
-### 4. 网页与 HTML 解析节点 (HTML)
+### 网页与 HTML 解析节点
 
 通过 CSS 选择器解析网页 HTML 内容（基于 Ksoup HTML 引擎）。
 
@@ -317,7 +405,7 @@ workflowEngine.execute(
 
 ---
 
-### 5. JSON 对象处理节点 (Object)
+### JSON 对象处理节点
 
 针对字典对象 `{ "key": "value" }` 的高效操作节点。
 
@@ -338,7 +426,7 @@ workflowEngine.execute(
 
 ---
 
-### 6. 数组集合操作节点 (Array)
+### 数组集合操作节点
 
 包含 31 种数组遍历、变换、筛选与统计功能。
 
@@ -378,7 +466,7 @@ workflowEngine.execute(
 
 ---
 
-### 7. 文本与正则处理节点 (Text)
+### 文本与正则处理节点
 
 文本格式化、正则表达式查找与替换节点。
 
@@ -412,9 +500,9 @@ workflowEngine.execute(
 
 ---
 
-### 8. 算术数学计算节点 (Math)
+### 算术数学计算节点
 
-全功能算术运算与数学函数节点。
+全功能算术运算与数学函数节点。支持对包含数值的字符串和布尔值进行安全类型强转。
 
 | 节点类型 (Type)            | 算法逻辑                     | 配置参数                               |
 |:-----------------------|:-------------------------|:-----------------------------------|
@@ -434,13 +522,13 @@ workflowEngine.execute(
 | **`math.round`**       | 四舍五入到指定小数位               | `value`, `decimals`, `outputKey`   |
 | **`math.floor`**       | 向下取整                     | `value`, `outputKey`               |
 | **`math.ceil`**        | 向上取整                     | `value`, `outputKey`               |
-| **`math.abs`**         | 求绝对值 ($                  | x                                  |$) | `value`, `outputKey` |
+| **`math.abs`**         | 求绝对值 ($\mid x \mid$)     | `value`, `outputKey`               |
 | **`math.random`**      | 生成指定 `[min, max)` 范围内随机数 | `min`, `max`, `outputKey`          |
 | **`math.clamp`**       | 数值限幅约束在 `[min, max]` 区间  | `value`, `min`, `max`, `outputKey` |
 
 ---
 
-### 9. 日期与时间节点 (Date)
+### 日期与时间节点
 
 基于标准 Unix 毫秒时间戳的日期时间解析与计算。
 
@@ -457,7 +545,7 @@ workflowEngine.execute(
 
 ---
 
-### 10. URL 格式化与操作节点 (URL)
+### URL 格式化与操作节点
 
 标准 HTTP/HTTPS 地址解析与动态构建节点。
 
@@ -470,7 +558,7 @@ workflowEngine.execute(
 
 ---
 
-### 11. 结构化数据解析节点 (JSON / XML / CSV)
+### 结构化数据解析节点
 
 处理常见的结构化文本数据格式。
 
@@ -487,11 +575,11 @@ workflowEngine.execute(
 
 ---
 
-### 12. 编解码与哈希安全节点 (Codec / Crypto)
+### 编解码与哈希安全节点
 
 安全哈希加密与数据编码解码节点。
 
-#### 12.1 编码解码 (Codec)
+#### 编解码 (Codec)
 
 - **`codec.base64_encode` / `decode`**：标准 Base64 字符串编解码。
 - **`codec.base64_url_encode` / `decode`**：URL 安全的 Base64 编解码。
@@ -499,7 +587,7 @@ workflowEngine.execute(
 - **`codec.url_encode` / `decode`**：标准 URL Percent-Encoding 编解码。
 - **`codec.html_escape` / `unescape`**：HTML 转义（如将 `<` 转换为 `&lt;`）。
 
-#### 12.2 密码学与哈希 (Crypto)
+#### 密码学与哈希 (Crypto)
 
 - **`crypto.hash`**：计算摘要哈希（支持 `algorithm`: `"SHA-256"`, `"SHA-512"`, `"MD5"`, `"SHA-1"`, `"SM3"`, `"CRC32"` 等）。
 - **`crypto.hmac`**：密钥 HMAC 签名计算（`algorithm`, `secret`, `text`）。
@@ -509,7 +597,7 @@ workflowEngine.execute(
 
 ---
 
-### 13. 网络 HTTP 请求节点 (HTTP)
+### 网络 HTTP 请求节点
 
 通用的网络 HTTP API 发送节点 `http.request`。
 
@@ -533,7 +621,7 @@ workflowEngine.execute(
 
 ---
 
-### 14. 本地存储节点 (Storage)
+### 本地存储节点
 
 在客户端本地 Preferences 进行数据的持久化存储与读取。
 
@@ -545,7 +633,7 @@ workflowEngine.execute(
 
 ---
 
-### 15. 系统与 UI 交互节点 (Action)
+### 系统与 UI 交互节点
 
 与 Android/KMP 客户端系统进行底层交互的动作节点。
 
@@ -564,12 +652,12 @@ workflowEngine.execute(
 
 ---
 
-## 节点扩展规范
+## 自定义节点扩展指南
 
 扩充新节点类型时需遵循以下开发规范：
 
-1. **类型常量声明**：在 `ActionNodeType` 中定义唯一的稳定节点类型标识符（如 `plugin.example_action`）。
-2. **配置键定义**：在 `ActionNodeMetadata.kt` 中声明配置键、默认值及相关常量，避免魔法硬编码。
+1. **类型常量声明**：在 `ActionNodeType` (`com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType`) 中定义唯一的稳定节点类型标识符（如 `plugin.example_action`）。
+2. **配置键定义**：在 `ActionNodeKeys.kt` (`com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeKeys`) 中声明配置键、默认值及相关常量，避免魔法硬编码。
 3. **节点规格定义**：使用 `ActionNodeSpec` 声明输入与输出端口、必需配置键、依赖能力及版本号。
 4. **无状态执行器**：节点执行器基于 `ActionNodeExecutor` 实现，通过读取 `ActionExecutionContext` 计算并返回 `ActionNodeExecutionResult`。
 5. **版本迁移机制**：当配置协议变更时，提升 `latestVersion` 并提供相对应的 `ActionNodeMigrator` 迁移逻辑。
@@ -577,15 +665,15 @@ workflowEngine.execute(
 
 ---
 
-## 安全与权限规范
+## 安全与能力治理规范
 
-- **能力声明约束**：工作流通过 `requiredCapabilities` 声明所需能力，宿主在执行前进行权限校验与授权过滤。
+- **能力声明约束**：工作流通过 `requiredCapabilities` 声明所需能力（如 `NETWORK`, `CLIPBOARD_WRITE`），宿主在执行前进行权限校验与授权过滤。
 - **凭据脱敏防护**：工作流配置中不保存 Token、密码或密钥等敏感凭据，仅保留引用名，真实凭据由宿主独立注入。
 - **输入合法性校验**：外部 URL、应用协议及请求路径需通过宿主校验策略进行安全白名单校验。
 
 ---
 
-## 测试与验证
+## 测试与质量保证
 
 模块提供了自动化的单元测试集，覆盖全部内置节点的规格校验、模板解析、数据转换及副作用抛出：
 

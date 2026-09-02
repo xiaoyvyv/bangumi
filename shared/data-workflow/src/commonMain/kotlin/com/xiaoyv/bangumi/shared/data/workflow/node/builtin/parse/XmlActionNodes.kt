@@ -1,21 +1,18 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.builtin.parse
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.parser.Parser
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionXmlConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.nextPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.valueResult
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
+import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement

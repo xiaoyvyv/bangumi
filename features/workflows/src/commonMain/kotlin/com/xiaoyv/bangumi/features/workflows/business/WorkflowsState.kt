@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.features.workflows.business
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import kotlinx.collections.immutable.persistentListOf
 
 /**

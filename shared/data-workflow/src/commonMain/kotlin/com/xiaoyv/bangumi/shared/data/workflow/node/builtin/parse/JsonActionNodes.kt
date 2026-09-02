@@ -1,20 +1,19 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.builtin.parse
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionJsonConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecutionResult
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.nextPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.valueResult
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionJsonPath
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.JsonPrimitive
 
@@ -93,8 +92,8 @@ private fun jsonValidateDefinition() = ActionNodeDefinition(
             false
         }
         val key = node.config.string(ActionJsonConfigKey.OUTPUT_KEY)
-        com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeExecutionResult(
-            outputPortId = if (isValid) com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId.NEXT else com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId.FAILURE,
+        ActionNodeExecutionResult(
+            outputPortId = if (isValid) ActionControlPortId.NEXT else ActionControlPortId.FAILURE,
             output = kotlinx.serialization.json.buildJsonObject { put(key, JsonPrimitive(isValid)) },
             variableUpdates = kotlinx.collections.immutable.persistentMapOf(key to JsonPrimitive(isValid)),
         )
@@ -114,8 +113,8 @@ private fun jsonSchemaValidateDefinition() = ActionNodeDefinition(
         val schema = node.config[ActionJsonConfigKey.SCHEMA]?.let { ActionTemplateResolver.resolveElement(it, context) }
         val isValid = element !is kotlinx.serialization.json.JsonNull
         val key = node.config.string(ActionJsonConfigKey.OUTPUT_KEY)
-        com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeExecutionResult(
-            outputPortId = if (isValid) com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId.NEXT else com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId.FAILURE,
+        ActionNodeExecutionResult(
+            outputPortId = if (isValid) ActionControlPortId.NEXT else ActionControlPortId.FAILURE,
             output = kotlinx.serialization.json.buildJsonObject { put(key, JsonPrimitive(isValid)) },
             variableUpdates = kotlinx.collections.immutable.persistentMapOf(key to JsonPrimitive(isValid)),
         )

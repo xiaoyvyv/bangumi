@@ -1,28 +1,26 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.builtin.control
 
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecutionResult
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.data.asNumber
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeExecutionResult
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortDirection
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortSpec
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonPrimitive
 
 internal val conditionPorts = persistentListOf(
@@ -73,9 +71,7 @@ private fun conditionIfDefinition() = ActionNodeDefinition(
     ),
     executor = { node, context ->
         val condition = ActionTemplateResolver.resolveElement(node.config[ActionControlConfigKey.CONDITION], context)
-        val boolValue = condition.jsonPrimitive.booleanOrNull
-            ?: condition.jsonPrimitive.contentOrNull?.toBooleanStrictOrNull()
-            ?: false
+        val boolValue = condition.asBoolean()
         conditionResult(boolValue, condition, null)
     },
 )
@@ -142,7 +138,7 @@ private fun conditionNotDefinition() = ActionNodeDefinition(
     ),
     executor = { node, context ->
         val value = ActionTemplateResolver.resolveElement(node.config[ActionControlConfigKey.VALUE], context)
-        conditionResult(!value.jsonPrimitive.boolean, value, null)
+        conditionResult(!value.asBoolean(), value, null)
     },
 )
 
@@ -172,7 +168,7 @@ private fun numericComparisonDefinition(type: String, comparison: (Double, Doubl
 
 private fun booleanComparisonDefinition(type: String, comparison: (Boolean, Boolean) -> Boolean) =
     binaryConditionDefinition(type) { left, right ->
-        comparison(left.jsonPrimitive.boolean, right.jsonPrimitive.boolean)
+        comparison(left.asBoolean(), right.asBoolean())
     }
 
 private fun binaryConditionDefinition(
@@ -202,4 +198,13 @@ internal fun conditionResult(matched: Boolean, left: JsonElement, right: JsonEle
             put(ActionControlConfigKey.MATCHED, JsonPrimitive(matched))
         })
     )
+}
+
+internal fun JsonElement.asBoolean(): Boolean {
+    val primitive = this as? JsonPrimitive ?: return false
+    return primitive.booleanOrNull
+        ?: primitive.contentOrNull?.toBooleanStrictOrNull()
+        ?: (primitive.intOrNull?.let { it != 0 })
+        ?: (primitive.doubleOrNull?.let { it != 0.0 })
+        ?: false
 }

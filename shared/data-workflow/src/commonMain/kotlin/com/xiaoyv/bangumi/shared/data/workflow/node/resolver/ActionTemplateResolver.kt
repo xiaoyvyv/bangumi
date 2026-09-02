@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.resolver
 
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionContext
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionTemplateRoot
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionTemplateRoot
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
@@ -11,9 +11,6 @@ import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.intOrNull
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * 工业级可扩展的模板解析与表达式求值引擎。
@@ -396,8 +393,7 @@ private class ExpressionParser(
             val c = consume()
             if (c == quote) break
             if (c == '\\' && index < input.length) {
-                val escaped = consume()
-                when (escaped) {
+                when (val escaped = consume()) {
                     'n' -> sb.append('\n')
                     't' -> sb.append('\t')
                     'r' -> sb.append('\r')

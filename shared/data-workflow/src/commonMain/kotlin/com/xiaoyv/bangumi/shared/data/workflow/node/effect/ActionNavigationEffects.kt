@@ -1,10 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.effect
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
 
 /**
  * 请求宿主使用系统浏览器打开网页的副作用。

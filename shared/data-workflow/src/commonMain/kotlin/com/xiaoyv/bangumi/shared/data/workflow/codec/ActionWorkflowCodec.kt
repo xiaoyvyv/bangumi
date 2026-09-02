@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.workflow.codec
 
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidation
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidator
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json

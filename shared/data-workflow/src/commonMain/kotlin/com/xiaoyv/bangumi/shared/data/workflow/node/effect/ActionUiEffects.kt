@@ -1,12 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.effect
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSelectDialogConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSelectOutputMode
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
 
 /**
  * 请求宿主向用户显示短文本提示的副作用。

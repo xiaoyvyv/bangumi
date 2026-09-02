@@ -1,9 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.builtin
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortDirection
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortSpec
 

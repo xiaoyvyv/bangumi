@@ -1,10 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.core
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNode
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.builtInActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger

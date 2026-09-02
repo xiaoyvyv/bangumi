@@ -8,8 +8,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSelectDialogConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSelectOutputMode
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionImagePreviewEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect

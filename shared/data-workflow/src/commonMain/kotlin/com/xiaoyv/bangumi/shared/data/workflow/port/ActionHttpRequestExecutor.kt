@@ -2,8 +2,8 @@ package com.xiaoyv.bangumi.shared.data.workflow.port
 
 import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionHttpBodyType
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionHttpResponseKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionHttpRequestEffect
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

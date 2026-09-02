@@ -2,7 +2,7 @@ package com.xiaoyv.bangumi.shared.data.repository
 
 import com.xiaoyv.bangumi.shared.data.workflow.codec.ActionWorkflowImportResult
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidation
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import kotlinx.collections.immutable.ImmutableList
 
 /**

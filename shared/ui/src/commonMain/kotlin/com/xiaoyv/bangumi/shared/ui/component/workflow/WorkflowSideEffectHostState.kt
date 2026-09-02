@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect

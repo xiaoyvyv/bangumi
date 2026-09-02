@@ -19,10 +19,10 @@ import com.dk.kuiver.renderer.KuiverViewerConfig
 import com.dk.kuiver.ui.KuiverColors
 import com.dk.kuiver.ui.LocalKuiverColors
 import com.dk.kuiver.ui.StyledEdgeContent
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStep
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopConfigKey
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStep
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import kotlinx.serialization.json.JsonPrimitive
 

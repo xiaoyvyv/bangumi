@@ -10,10 +10,10 @@ import com.xiaoyv.bangumi.shared.data.repository.ActionWorkflowRepository
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectDispatcher
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowEngine
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionContext
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionEvent
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStatus
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionEvent
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStatus
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionImagePreviewEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect

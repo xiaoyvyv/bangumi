@@ -20,8 +20,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStatus
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNode
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
+import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStatus
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf

@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionControlPortId
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortSpec
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf

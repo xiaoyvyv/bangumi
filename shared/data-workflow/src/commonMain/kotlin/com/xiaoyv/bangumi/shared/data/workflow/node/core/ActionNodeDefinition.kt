@@ -1,14 +1,12 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.core
 
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.*
-import com.xiaoyv.bangumi.shared.data.workflow.node.effect.*
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionContext
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNode
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeExecutionResult
-import com.xiaoyv.bangumi.shared.data.workflow.model.ActionPortKind
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionPortKind
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecutionResult
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortConnectionLimit.UNLIMITED
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -67,7 +65,7 @@ data class ActionPortSpec(
     val id: String,
     val kind: String = ActionPortKind.CONTROL,
     val direction: String,
-    val maxConnections: Int = ActionPortConnectionLimit.UNLIMITED,
+    val maxConnections: Int = UNLIMITED,
 )
 
 /**
