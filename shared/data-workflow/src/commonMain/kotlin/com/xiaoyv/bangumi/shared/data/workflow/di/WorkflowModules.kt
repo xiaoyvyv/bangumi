@@ -7,8 +7,10 @@ import com.xiaoyv.bangumi.shared.data.workflow.codec.ActionWorkflowCodec
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowEngine
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidator
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
+import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowFileStorage
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
+import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionWorkflowFileStorage
 import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionWorkflowLogger
 import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionWorkflowPreferencesStore
 import org.koin.core.module.dsl.singleOf
@@ -23,9 +25,10 @@ private val workflowModule = module {
     singleOf(::ActionWorkflowValidator)
     singleOf(::ActionWorkflowCodec)
     single<ActionWorkflowLogger> { DefaultActionWorkflowLogger() }
-    single { ActionNodeRegistry(get(), get(), get()) }
+    single { ActionNodeRegistry(get(), get(), get(), get()) }
     single { ActionWorkflowEngine(get(), get(), System::currentTimeMillis) }
     single<ActionWorkflowPreferencesStore> { DefaultActionWorkflowPreferencesStore() }
+    single<ActionWorkflowFileStorage> { DefaultActionWorkflowFileStorage() }
 }
 
 /**

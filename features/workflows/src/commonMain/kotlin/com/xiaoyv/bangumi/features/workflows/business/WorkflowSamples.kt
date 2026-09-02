@@ -18,6 +18,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCryptoConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCsvConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation
@@ -87,7 +88,9 @@ object WorkflowSamples {
         ActionNodeType.SYNC_COOKIE,
     )
 
-    /** 所有当前内置节点的测试工作流。 */
+    /**
+     * 所有当前内置节点的测试工作流。
+     */
     val all: List<ActionWorkflow> = buildList {
         // 错误与异常故障测试样例
         add(errorDivideByZeroSample())
@@ -621,6 +624,7 @@ object WorkflowSamples {
         }))
 
         // Storage 节点
+        add(fileReadWriteSample())
         add(
             linear(
                 "storage_preferences_set",
@@ -878,7 +882,9 @@ object WorkflowSamples {
     }.toPersistentList()
 
     // https://hanime1.me/search?query=らぶみー「楓と鈴」THE+ANIMATION
-    /** 按稳定 ID 查询测试工作流。 */
+    /**
+     * 按稳定 ID 查询测试工作流。
+     */
     fun find(id: String): ActionWorkflow? = all.firstOrNull { it.id == id }
 
 
@@ -926,7 +932,9 @@ object WorkflowSamples {
         ),
     )
 
-    /** 构建 switch 节点命中案例的结构化示例。 */
+    /**
+     * 构建 switch 节点命中案例的结构化示例。
+     */
     private fun switchSample(): ActionWorkflow = workflow(
         id = "flow_switch",
         name = "测试：流程多值匹配",
@@ -947,7 +955,9 @@ object WorkflowSamples {
         edges = listOf(edge("start", ActionControlPortId.NEXT, "target"), edge("target", ActionControlPortId.MATCHED, "end")),
     )
 
-    /** 构建没有输出边的正常提前结束流程。 */
+    /**
+     * 构建没有输出边的正常提前结束流程。
+     */
     private fun terminal(id: String, name: String, type: String): ActionWorkflow = workflow(
         id = id,
         name = "测试：$name",
@@ -1836,6 +1846,37 @@ object WorkflowSamples {
             edges = listOf(edge("start", ActionControlPortId.NEXT, "target"), edge("target", outputPort, "end")),
         )
     }
+
+    /**
+     * 在同一工作流沙箱中写入日志后读取，验证文件节点的隔离存储。
+     */
+    private fun fileReadWriteSample(): ActionWorkflow = workflow(
+        id = "file_read_write",
+        name = "测试：文件沙箱读写",
+        description = "写入工作流专属日志文件后读取内容，文件不会暴露到其他工作流沙箱。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "write", ActionNodeType.FILE_WRITE_TEXT, "写入日志", config(
+                    ActionFileConfigKey.PATH to "logs/workflow.log",
+                    ActionFileConfigKey.TEXT to "Bangumi workflow started",
+                    ActionFileConfigKey.OUTPUT_KEY to "written",
+                )
+            ),
+            node(
+                "read", ActionNodeType.FILE_READ_TEXT, "读取日志", config(
+                    ActionFileConfigKey.PATH to "logs/workflow.log",
+                    ActionFileConfigKey.OUTPUT_KEY to "logContent",
+                )
+            ),
+            node("end", ActionNodeType.FLOW_END, "结束"),
+        ),
+        edges = listOf(
+            edge("start", ActionControlPortId.NEXT, "write"),
+            edge("write", ActionControlPortId.NEXT, "read"),
+            edge("read", ActionControlPortId.NEXT, "end"),
+        ),
+    )
 
     private fun condition(id: String, name: String, type: String, nodeConfig: JsonObject): ActionWorkflow = workflow(
         id = id,

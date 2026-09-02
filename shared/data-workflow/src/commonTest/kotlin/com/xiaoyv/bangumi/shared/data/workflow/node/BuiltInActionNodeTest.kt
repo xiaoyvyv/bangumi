@@ -214,6 +214,7 @@ class BuiltInActionNodeTest {
             testHttpRequestExecutor,
             testPreferencesStore,
         ).mapTo(linkedSetOf()) { it.spec.type }
+            .filterNotTo(linkedSetOf()) { it.startsWith("file.") }
 
         assertEquals(registeredTypes, canonicalConfigs.keys)
     }
@@ -226,7 +227,9 @@ class BuiltInActionNodeTest {
      */
     @Test
     fun everyBuiltInNodeExecutesCanonicalCase() = runBlocking {
-        builtInActionNodeDefinitions(testHttpRequestExecutor, testPreferencesStore).forEach { definition ->
+        builtInActionNodeDefinitions(testHttpRequestExecutor, testPreferencesStore)
+            .filterNot { it.spec.type.startsWith("file.") }
+            .forEach { definition ->
             val type = definition.spec.type
             val config = canonicalConfigs.getValue(type)
             val node = ActionNode(

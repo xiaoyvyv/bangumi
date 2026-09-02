@@ -103,7 +103,7 @@ class ActionWorkflowEngine(
         val startedAt = now()
         val steps = mutableListOf<ActionExecutionStep>()
         val nodes = workflow.nodes.associateBy { it.id }
-        var context = initialContext
+        var context = initialContext.copy(workflowId = workflow.id)
         val loops = LoopExecutionController()
         var completionStatus = ActionExecutionStatus.SUCCESS
 

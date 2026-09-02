@@ -1,7 +1,306 @@
 package com.xiaoyv.bangumi.shared.data.workflow.model.spec
 
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.COUNT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.DESCENDING
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.END
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.EXPECTED
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.FIELD_PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.INDEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.INITIAL_VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.OPERATOR
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.OTHER_VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.SIZE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.START
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey.VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayFilterOperator.EQUALS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayFilterOperator.IS_EMPTY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayFilterOperator.IS_NOT_EMPTY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayFilterOperator.IS_NOT_NULL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayFilterOperator.IS_NULL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayFilterOperator.NOT_EQUALS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionBilibiliConfigKey.IMG_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionBilibiliConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionBilibiliConfigKey.SUB_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionBilibiliConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionClipboardConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionClipboardConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCodecConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCodecConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionConfirmConfigKey.CANCEL_TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionConfirmConfigKey.CONFIRM_TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionConfirmConfigKey.MESSAGE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionConfirmConfigKey.TITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.CONDITION
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.LEFT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.MATCHED
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.MAX_STATUS_CODE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.MIN_STATUS_CODE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.RIGHT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.STATUS_CODE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCryptoConfigKey.ALGORITHM
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCryptoConfigKey.KEY_BYTES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCryptoConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCryptoConfigKey.SECRET
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCryptoConfigKey.SECRET_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCryptoConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCsvConfigKey.DELIMITER
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCsvConfigKey.HEADER_ROW
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCsvConfigKey.ITEMS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCsvConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCsvConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.ASSIGNMENTS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.FROM_PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.MERGE_STRATEGY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.OBJECT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.OBJECTS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.PATHS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.SEPARATOR
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.TEMPLATE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.TO_PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataConfigKey.VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataMergeStrategy.DEEP
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataMergeStrategy.DEEP_APPEND_ARRAYS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDataMergeStrategy.SHALLOW
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey.COUNT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey.TIMESTAMP
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey.TIMESTAMP_LEFT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey.TIMESTAMP_RIGHT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionDateConfigKey.UNIT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.CAUSE_CLASS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.CAUSE_MESSAGE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.CODE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.CONFIG
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.CONFIG_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.DETAILS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.ERROR
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.HINT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.ISSUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.MESSAGE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.NODE_ID
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.NODE_LABEL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.NODE_TYPE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.SIDE_EFFECT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.WORKFLOW_ID
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey.WORKFLOW_NAME
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.APPEND
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.FROM_PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.TO_PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.CASES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.CONDITION
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.CONDITION_MET
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.DATA
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.DELAY_MILLIS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.ERROR
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.INPUT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.LEVEL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.MATCHED
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.MESSAGE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.OUTPUT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.RESULT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.RETRY_COUNT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.RETRY_DELAY_MILLIS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.TIMEOUT_MILLIS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.VARIABLES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.WORKFLOW_ID
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.CRC32
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.MD5
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA3_224
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA3_256
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA3_384
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA3_512
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA_1
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA_224
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA_256
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA_384
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SHA_512
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHashAlgorithm.SM3
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.ATTRIBUTE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.HTML
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.NAME
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.OPERATION
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.SELECTOR
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ALL_HTML
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ALL_OUTER_HTML
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ALL_TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ATTRIBUTE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.COUNT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.EXISTS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.HTML
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.OUTER_HTML
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType.FORM_URL_ENCODED
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType.JSON
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.BODY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.BODY_TYPE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.CONTENT_TYPE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.HEADERS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.METHOD
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.QUERY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.RETRY_COUNT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.RETRY_DELAY_MILLIS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.TIMEOUT_MILLIS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.BODY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.CONTENT_TYPE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.HTML
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.IS_SUCCESS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.RAW_BODY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.STATUS_CODE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.TITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionImagePreviewConfigKey.IMAGES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionImagePreviewConfigKey.INDEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionInputDialogConfigKey.CANCEL_TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionInputDialogConfigKey.CONFIRM_TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionInputDialogConfigKey.DEFAULT_VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionInputDialogConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionInputDialogConfigKey.SUBTITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionInputDialogConfigKey.TITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey.PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey.SCHEMA
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey.SOURCE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey.CONDITION
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey.COUNT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey.ITEMS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey.LOOP_ID
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey.MAX_ITERATIONS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopContextKey.INDEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopContextKey.ITEM
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopContextKey.ITERATION
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopContextKey.LOOP
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.DECIMALS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.LEFT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.MAX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.MIN
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.RIGHT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionMathConfigKey.VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNotificationConfigKey.CONTENT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNotificationConfigKey.TITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.ENTRIES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.KEYS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.OBJECT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.OBJECTS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey.FALLBACK_URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey.URI
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenUrlConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenWebConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.CANCEL_TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.CONFIRM_TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.DEFAULT_INDICES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.DEFAULT_VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.INDEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.INDICES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.IS_MULTI_SELECT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.OPTIONS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.OUTPUT_MODE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.SUBTITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.TITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode.BOTH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode.INDEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey.CONTENT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey.TITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionStorageConfigKey.KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionStorageConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionStorageConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSyncCookieConfigKey.HEADERS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSyncCookieConfigKey.TITLE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSyncCookieConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSyncCookieConfigKey.USER_AGENT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.COUNT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.DELIMITER
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.ELLIPSIS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.END_INDEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.FRACTION_DIGITS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.GROUP_VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.IGNORE_CASE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.IS_REGEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.LIMIT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.MATCHED
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.MISSING_DELIMITER_VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.OBJECT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.PAD_CHARACTER
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.PAD_END
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.PAD_LENGTH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.PATTERN
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.REPLACEMENT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.SEPARATOR
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.START_INDEX
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.TEMPLATE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey.VALUES
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionToastConfigKey.MESSAGE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionToastConfigKey.TEXT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey.BASE_URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey.KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey.QUERY_PARAMETERS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey.VALUE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.FULL_URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.HOST
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.PORT
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.PROTOCOL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.QUERY_PARAMETERS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey.DATA
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey.TEXT
+
+
 /**
  * 节点失败与错误输出（errorOutput）以及异常诊断使用的统一 Key 常量。
+ *
+ * @property ERROR 包含错误信息的 JsonObject 根节点名
+ * @property CODE 机器可读的错误代码（Error Code）
+ * @property MESSAGE 人类可读的排错提示文本
+ * @property NODE_ID 发生错误的节点 ID
+ * @property NODE_TYPE 发生错误的节点类型
+ * @property NODE_LABEL 发生错误的节点展示名称
+ * @property WORKFLOW_ID 目标工作流 ID
+ * @property WORKFLOW_NAME 目标工作流名称
+ * @property CONFIG_KEY 触发故障的节点配置项键名
+ * @property DETAILS 异常快照与上下文数据
+ * @property CAUSE_CLASS 底层抛出的异常类名
+ * @property CAUSE_MESSAGE 底层抛出的异常描述信息
+ * @property HINT 指导解决案例错误的踩坑建议
+ * @property CONFIG 节点的输入配置快照
+ * @property SIDE_EFFECT 副作用类型标识
+ * @property ISSUES 静态校验发现的问题列表
  */
 object ActionErrorKey {
     const val ERROR = "error"
@@ -141,6 +440,7 @@ internal object ActionNodeConfigKey {
     const val RESULT = "result"
     const val CONDITION_MET = "conditionMet"
     const val GROUP_VALUES = "groupValues"
+    const val APPEND = "append"
 
     // HTTP & Response Keys
     const val RAW_BODY = "rawBody"
@@ -178,7 +478,7 @@ internal object ActionNodeConfigKey {
     const val SHA3_224 = "sha3224"
     const val SHA3_256 = "sha3256"
     const val SHA3_384 = "sha3384"
-    const val SHA3_512 = "sha3512"
+    const val SHA3_512 = "sha512"
     const val SM3 = "sm3"
     const val CRC32 = "crc32"
 
@@ -194,6 +494,30 @@ internal object ActionNodeConfigKey {
     const val BOTH = "both"
 }
 
+/**
+ * 流程控制节点的配置键。
+ *
+ * @property DELAY_MILLIS 延时等待毫秒数
+ * @property CONDITION 流程断言或分支判断条件表达式
+ * @property MESSAGE 断言失败或流程停止时的日志/提示消息
+ * @property LEVEL 日志打印输出级别
+ * @property RETRY_COUNT 失败自动重试最大次数
+ * @property RETRY_DELAY_MILLIS 每次自动重试间隔毫秒数
+ * @property TIMEOUT_MILLIS 节点/分支运行超时毫秒数
+ * @property WORKFLOW_ID 子工作流调用的工作流 ID
+ * @property OUTPUT_KEY 结果输出的目标变量 Key
+ * @property VALUE 子工作流输入或控制计算参数值
+ * @property CASES Switch 条件匹配分支键值对映射
+ * @property MATCHED 匹配到的分支名称
+ * @property DATA 断言或调试附带的数据
+ * @property VALUES 汇合节点收集的数据数组
+ * @property ERROR 异常捕获节点输出的错误对象
+ * @property VARIABLES 环境变量快照 Key
+ * @property INPUT 只读业务输入 JSON 数据 Key
+ * @property OUTPUT 子工作流返回的结果数据
+ * @property RESULT 计算运行结果 Key
+ * @property CONDITION_MET 条件断言是否成立标志
+ */
 object ActionFlowConfigKey {
     const val DELAY_MILLIS = ActionNodeConfigKey.DELAY_MILLIS
     const val CONDITION = ActionNodeConfigKey.CONDITION
@@ -217,6 +541,19 @@ object ActionFlowConfigKey {
     const val CONDITION_MET = ActionNodeConfigKey.CONDITION_MET
 }
 
+/**
+ * 条件逻辑判断节点的配置键。
+ *
+ * @property LEFT 表达式或条件比较的左操作数
+ * @property RIGHT 表达式或条件比较的右操作数
+ * @property VALUE 逻辑计算的目标操作数
+ * @property CONDITION 条件判断表达式
+ * @property MATCHED 条件判断是否匹配标志
+ * @property STATUS_CODE HTTP 状态码
+ * @property MIN_STATUS_CODE 匹配的状态码区间最小值
+ * @property MAX_STATUS_CODE 匹配的状态码区间最大值
+ * @property OUTPUT_KEY 比较/计算结果输出的目标变量 Key
+ */
 object ActionControlConfigKey {
     const val LEFT = ActionNodeConfigKey.LEFT
     const val RIGHT = ActionNodeConfigKey.RIGHT
@@ -229,6 +566,15 @@ object ActionControlConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 循环控制节点的配置键。
+ *
+ * @property COUNT 循环重复执行的目标总次数
+ * @property ITEMS 被遍历的数组/集合列表
+ * @property CONDITION 循环继续执行的条件表达式
+ * @property MAX_ITERATIONS 保护性最大循环迭代次数
+ * @property LOOP_ID 关联的目标循环 ID
+ */
 object ActionLoopConfigKey {
     const val COUNT = ActionNodeConfigKey.COUNT
     const val ITEMS = ActionNodeConfigKey.ITEMS
@@ -237,6 +583,14 @@ object ActionLoopConfigKey {
     const val LOOP_ID = ActionNodeConfigKey.LOOP_ID
 }
 
+/**
+ * 循环内部帧与上下文变量键。
+ *
+ * @property LOOP 最内层循环帧根变量名
+ * @property ITEM 当前循环迭代项
+ * @property INDEX 当前循环迭代索引（从 0 开始）
+ * @property ITERATION 当前循环迭代轮数（从 1 开始）
+ */
 object ActionLoopContextKey {
     const val LOOP = ActionNodeConfigKey.LOOP
     const val ITEM = ActionNodeConfigKey.ITEM
@@ -244,6 +598,24 @@ object ActionLoopContextKey {
     const val ITERATION = ActionNodeConfigKey.ITERATION
 }
 
+/**
+ * 变量与数据处理节点的配置键。
+ *
+ * @property TEMPLATE 包含 `${...}` 占位符的模板字符串
+ * @property KEY 保存或设置的全局变量名
+ * @property VALUE 设置的变量值或常量表达式
+ * @property VALUES 拼接/合并的多个数据值列表
+ * @property SEPARATOR 字符串拼接的分隔符
+ * @property OBJECT 被赋值或合并的目标 JSON 对象
+ * @property OBJECTS 参与合并的多个 JSON 对象列表
+ * @property PATH 深层属性读取或删除的 JSONPath
+ * @property PATHS 批量提取的 JSONPath 路径映射
+ * @property FROM_PATH 移动/重命名变量的源路径
+ * @property TO_PATH 移动/重命名变量的目标路径
+ * @property ASSIGNMENTS 批量变量赋值的键值映射表
+ * @property MERGE_STRATEGY JSON 对象合并策略（shallow / deep）
+ * @property OUTPUT_KEY 最终数据结果保存的目标变量 Key
+ */
 object ActionDataConfigKey {
     const val TEMPLATE = ActionNodeConfigKey.TEMPLATE
     const val KEY = ActionNodeConfigKey.KEY
@@ -261,12 +633,29 @@ object ActionDataConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 数据合并策略常量。
+ *
+ * @property SHALLOW 浅度合并（覆盖顶层同名属性）
+ * @property DEEP 深度合并（递归合并嵌套 JSON 对象）
+ * @property DEEP_APPEND_ARRAYS 深度合并并追加数组元素
+ */
 object ActionDataMergeStrategy {
     const val SHALLOW = ActionNodeConfigKey.SHALLOW
     const val DEEP = ActionNodeConfigKey.DEEP
     const val DEEP_APPEND_ARRAYS = ActionNodeConfigKey.DEEP_APPEND_ARRAYS
 }
 
+/**
+ * HTML DOM 解析节点的配置键。
+ *
+ * @property HTML 待解析的 HTML 网页源码文本
+ * @property SELECTOR CSS 元素选择器表达式
+ * @property OPERATION DOM 元素提取操作指令
+ * @property ATTRIBUTE 读取的 HTML 标签属性名称
+ * @property NAME 提取字段的目标名称
+ * @property OUTPUT_KEY 解析提取结果保存的目标变量 Key
+ */
 object ActionHtmlConfigKey {
     const val HTML = ActionNodeConfigKey.HTML
     const val SELECTOR = ActionNodeConfigKey.SELECTOR
@@ -276,6 +665,19 @@ object ActionHtmlConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * HTML DOM 查询操作指令常量。
+ *
+ * @property TEXT 提取第一个匹配元素的文本内容
+ * @property HTML 提取第一个匹配元素的内部 HTML 源码
+ * @property OUTER_HTML 提取第一个匹配元素的完整包含标签 HTML 源码
+ * @property ATTRIBUTE 提取第一个匹配元素的指定属性值
+ * @property COUNT 统计匹配到的 DOM 元素数量
+ * @property EXISTS 校验是否存在匹配的 DOM 元素
+ * @property ALL_TEXT 提取所有匹配元素的文本内容数组
+ * @property ALL_HTML 提取所有匹配元素的内部 HTML 源码数组
+ * @property ALL_OUTER_HTML 提取所有匹配元素的完整包含标签 HTML 源码数组
+ */
 object ActionHtmlQueryOperation {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val HTML = ActionNodeConfigKey.HTML
@@ -288,6 +690,18 @@ object ActionHtmlQueryOperation {
     const val ALL_OUTER_HTML = ActionNodeConfigKey.ALL_OUTER_HTML
 }
 
+/**
+ * JSON 对象处理节点的配置键。
+ *
+ * @property OBJECT 待操作的目标 JSON 对象
+ * @property OBJECTS 参与合并的 JSON 对象数组
+ * @property PATH 访问属性的深层路径
+ * @property KEY 提取或操作的对象属性键名
+ * @property KEYS 提取或剔除的对象属性键名数组
+ * @property VALUE 属性设置的新值
+ * @property ENTRIES 键值对 Entry 列表
+ * @property OUTPUT_KEY 处理结果保存的目标变量 Key
+ */
 object ActionObjectConfigKey {
     const val OBJECT = ActionNodeConfigKey.OBJECT
     const val OBJECTS = ActionNodeConfigKey.OBJECTS
@@ -299,6 +713,16 @@ object ActionObjectConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * URL 操作与生成节点的配置键。
+ *
+ * @property URL 待解析或修改的完整 URL 地址
+ * @property BASE_URL 构造 URL 的基础域名与路径
+ * @property QUERY_PARAMETERS Query 查询参数映射表
+ * @property KEY Query 参数的键名
+ * @property VALUE Query 参数的值
+ * @property OUTPUT_KEY URL 操作结果保存的目标变量 Key
+ */
 object ActionUrlConfigKey {
     const val URL = ActionNodeConfigKey.URL
     const val BASE_URL = ActionNodeConfigKey.BASE_URL
@@ -308,6 +732,14 @@ object ActionUrlConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * Bilibili WBI 签名节点的配置键。
+ *
+ * @property URL 待加签的原始 API URL
+ * @property IMG_KEY WBI img_key 秘钥字段
+ * @property SUB_KEY WBI sub_key 秘钥字段
+ * @property OUTPUT_KEY 签名后的 URL 保存的目标变量 Key
+ */
 object ActionBilibiliConfigKey {
     const val URL = ActionNodeConfigKey.URL
     const val IMG_KEY = ActionNodeConfigKey.IMG_KEY
@@ -315,6 +747,16 @@ object ActionBilibiliConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * URL 解析结果数据结构的字段 Key。
+ *
+ * @property PROTOCOL URL 传输协议（如 https / http）
+ * @property HOST URL 域名或 IP
+ * @property PORT 端口号
+ * @property PATH 路径部分
+ * @property FULL_URL 完整规范化 URL
+ * @property QUERY_PARAMETERS 解析出的查询参数键值对象
+ */
 object ActionUrlParsedKey {
     const val PROTOCOL = ActionNodeConfigKey.PROTOCOL
     const val HOST = ActionNodeConfigKey.HOST
@@ -324,6 +766,15 @@ object ActionUrlParsedKey {
     const val QUERY_PARAMETERS = ActionNodeConfigKey.QUERY_PARAMETERS
 }
 
+/**
+ * CSV 格式解析与生成节点的配置键。
+ *
+ * @property TEXT 待解析的 CSV 格式文本
+ * @property DELIMITER 列分隔符（默认逗号 `,`）
+ * @property HEADER_ROW 第一行是否作为标题行
+ * @property ITEMS 序列化导出为 CSV 的对象数组
+ * @property OUTPUT_KEY 解析或生成的 CSV 结果目标变量 Key
+ */
 object ActionCsvConfigKey {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val DELIMITER = ActionNodeConfigKey.DELIMITER
@@ -332,12 +783,29 @@ object ActionCsvConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * XML 格式解析与生成节点的配置键。
+ *
+ * @property TEXT 待解析的 XML 格式文本
+ * @property DATA 转为 XML 的结构化数据对象
+ * @property OUTPUT_KEY 解析/生成结果保存的目标变量 Key
+ */
 object ActionXmlConfigKey {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val DATA = ActionNodeConfigKey.DATA
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * JSON 结构化数据提取与校验节点的配置键。
+ *
+ * @property SOURCE 原始 JSON 结构化文本或对象
+ * @property PATH 属性提取的 JSONPath 表达式
+ * @property VALUE 校验的预估 JSON 值
+ * @property TEXT 待解析或反序列化的 JSON 文本
+ * @property SCHEMA 用于校验的 JSON Schema
+ * @property OUTPUT_KEY 提取/解析结果保存的目标变量 Key
+ */
 object ActionJsonConfigKey {
     const val SOURCE = ActionNodeConfigKey.SOURCE
     const val PATH = ActionNodeConfigKey.PATH
@@ -347,11 +815,27 @@ object ActionJsonConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 编解码与转码节点的配置键。
+ *
+ * @property TEXT 输入的操作文本内容
+ * @property OUTPUT_KEY 编解码转换结果保存的目标变量 Key
+ */
 object ActionCodecConfigKey {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 哈希计算与加密算法节点的配置键。
+ *
+ * @property TEXT 待进行哈希或加密计算的明文文本
+ * @property ALGORITHM 使用的哈希/对称加密算法名
+ * @property SECRET HMAC 计算使用的秘钥
+ * @property SECRET_KEY 对称加密/解密的 Key
+ * @property KEY_BYTES 秘钥 Byte 数组
+ * @property OUTPUT_KEY 计算结果保存的目标变量 Key
+ */
 object ActionCryptoConfigKey {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val ALGORITHM = ActionNodeConfigKey.ALGORITHM
@@ -361,6 +845,22 @@ object ActionCryptoConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 支持的哈希算法常量。
+ *
+ * @property SHA_256 SHA-256 摘要算法
+ * @property SHA_512 SHA-512 摘要算法
+ * @property MD5 MD5 摘要算法
+ * @property SHA_1 SHA-1 摘要算法
+ * @property SHA_224 SHA-224 摘要算法
+ * @property SHA_384 SHA-384 摘要算法
+ * @property SHA3_224 SHA3-224 摘要算法
+ * @property SHA3_256 SHA3-256 摘要算法
+ * @property SHA3_384 SHA3-384 摘要算法
+ * @property SHA3_512 SHA3-512 摘要算法
+ * @property SM3 国密 SM3 摘要算法
+ * @property CRC32 CRC32 循环冗余校验
+ */
 object ActionHashAlgorithm {
     const val SHA_256 = ActionNodeConfigKey.SHA_256
     const val SHA_512 = ActionNodeConfigKey.SHA_512
@@ -376,6 +876,33 @@ object ActionHashAlgorithm {
     const val CRC32 = ActionNodeConfigKey.CRC32
 }
 
+/**
+ * 文本与正则处理节点的配置键。
+ *
+ * @property TEXT 输入的操作目标文本
+ * @property TEMPLATE 待插值求值的文本模板
+ * @property OBJECT 占位符插值的数据对象
+ * @property VALUES 拼接的字符串数组
+ * @property OUTPUT_KEY 文本处理结果保存的目标变量 Key
+ * @property DELIMITER 文本切割的分隔符
+ * @property SEPARATOR 数组拼接连接符
+ * @property IS_REGEX 分割/替换是否使用正则模式
+ * @property LIMIT 切割产生的最大元素数量
+ * @property PATTERN 正则表达式匹配模式
+ * @property REPLACEMENT 正则匹配替换的目标文本
+ * @property START_INDEX 切片的起始字符索引
+ * @property END_INDEX 切片的结束字符索引
+ * @property MISSING_DELIMITER_VALUE 未匹配到分隔符时的默认兜底值
+ * @property ELLIPSIS 超长截断时末尾追加的省略符号
+ * @property MATCHED 正则表达式是否匹配成功标识
+ * @property GROUP_VALUES 正则捕获组提取到的文本列表
+ * @property IGNORE_CASE 匹配或比较时是否忽略大小写
+ * @property PAD_LENGTH 填充补全后的总目标长度
+ * @property PAD_CHARACTER 填充用于补全的字符
+ * @property PAD_END 是否在文本末尾填充（true 为末尾，false 为头部）
+ * @property FRACTION_DIGITS 格式化数字保留的小数位数
+ * @property COUNT 文本重复拼接的次数
+ */
 object ActionTextConfigKey {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val TEMPLATE = ActionNodeConfigKey.TEMPLATE
@@ -402,6 +929,24 @@ object ActionTextConfigKey {
     const val COUNT = ActionNodeConfigKey.COUNT
 }
 
+/**
+ * 数组与集合过滤处理节点的配置键。
+ *
+ * @property VALUES 操作的目标数组/列表
+ * @property OTHER_VALUES 参与求交集/差集/拼接的另一个数组
+ * @property VALUE 插入/追加/包含校验的目标元素
+ * @property OUTPUT_KEY 处理结果保存的目标变量 Key
+ * @property INDEX 插入/删除/获取的目标元素索引
+ * @property SIZE 截取或分块的数组段长度
+ * @property START 数组切片的起始索引
+ * @property END 数组切片的结束索引
+ * @property COUNT 取出/丢弃/采样的元素数量
+ * @property INITIAL_VALUE 归约计算的初始累计值
+ * @property FIELD_PATH 对象数组排序或过滤引用的属性路径
+ * @property OPERATOR 过滤匹配使用的判断运算符
+ * @property EXPECTED 过滤比较的目标预估值
+ * @property DESCENDING 是否降序排列（true 为降序，false 为升序）
+ */
 object ActionArrayConfigKey {
     const val VALUES = ActionNodeConfigKey.VALUES
     const val OTHER_VALUES = ActionNodeConfigKey.OTHER_VALUES
@@ -419,6 +964,16 @@ object ActionArrayConfigKey {
     const val DESCENDING = ActionNodeConfigKey.DESCENDING
 }
 
+/**
+ * 数组过滤断言判断运算符。
+ *
+ * @property EQUALS 等于
+ * @property NOT_EQUALS 不等于
+ * @property IS_NULL 为 null
+ * @property IS_NOT_NULL 不为 null
+ * @property IS_EMPTY 为空数组/字符串
+ * @property IS_NOT_EMPTY 不为空数组/字符串
+ */
 object ActionArrayFilterOperator {
     const val EQUALS = ActionNodeConfigKey.EQUALS
     const val NOT_EQUALS = ActionNodeConfigKey.NOT_EQUALS
@@ -428,6 +983,17 @@ object ActionArrayFilterOperator {
     const val IS_NOT_EMPTY = ActionNodeConfigKey.IS_NOT_EMPTY
 }
 
+/**
+ * 日期与时间处理节点的配置键。
+ *
+ * @property TEXT 待解析或格式化的日期时间字符串
+ * @property TIMESTAMP 毫秒时间戳
+ * @property TIMESTAMP_LEFT 计算相差时间的时间戳 A
+ * @property TIMESTAMP_RIGHT 计算相差时间的时间戳 B
+ * @property COUNT 增加/减少的时间偏移量
+ * @property UNIT 时间偏移或相差的单位（如 days, hours, millis）
+ * @property OUTPUT_KEY 日期处理结果保存的目标变量 Key
+ */
 object ActionDateConfigKey {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val TIMESTAMP = ActionNodeConfigKey.TIMESTAMP
@@ -438,6 +1004,18 @@ object ActionDateConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 算术与数学计算节点的配置键。
+ *
+ * @property VALUE 基础计算的目标数值
+ * @property VALUES 参与求和/求平均/求极值的数值列表
+ * @property LEFT 二元算术运算的左操作数
+ * @property RIGHT 二元算术运算的右操作数
+ * @property MIN 数值区间限制的最小值
+ * @property MAX 数值区间限制的最大值
+ * @property DECIMALS 保留舍入的小数位数
+ * @property OUTPUT_KEY 计算结果保存的目标变量 Key
+ */
 object ActionMathConfigKey {
     const val VALUE = ActionNodeConfigKey.VALUE
     const val VALUES = ActionNodeConfigKey.VALUES
@@ -449,6 +1027,21 @@ object ActionMathConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * HTTP 网络请求节点的配置键。
+ *
+ * @property URL 请求的目标 URL 地址
+ * @property METHOD HTTP 请求方法（GET, POST, PUT, DELETE 等）
+ * @property HEADERS 请求头信息映射表
+ * @property QUERY 查询参数 Query 映射表
+ * @property BODY POST/PUT 请求体内容
+ * @property BODY_TYPE 请求体数据类型（json / text / formUrlEncoded）
+ * @property CONTENT_TYPE 自定义 Content-Type Header
+ * @property TIMEOUT_MILLIS 请求超时限制毫秒数
+ * @property RETRY_COUNT 请求失败自动重试次数
+ * @property RETRY_DELAY_MILLIS 重试请求的时间间隔毫秒数
+ * @property USE_LOCAL_COOKIE_STORAGE 是否使用应用本地 Cookie 存储
+ */
 object ActionHttpConfigKey {
     const val URL = ActionNodeConfigKey.URL
     const val METHOD = ActionNodeConfigKey.METHOD
@@ -463,12 +1056,31 @@ object ActionHttpConfigKey {
     const val USE_LOCAL_COOKIE_STORAGE = ActionNodeConfigKey.USE_LOCAL_COOKIE_STORAGE
 }
 
+/**
+ * HTTP 请求 Body 类型。
+ *
+ * @property JSON JSON 格式主体 (`application/json`)
+ * @property TEXT 纯文本格式主体 (`text/plain`)
+ * @property FORM_URL_ENCODED 表单格式主体 (`application/x-www-form-urlencoded`)
+ */
 object ActionHttpBodyType {
     const val JSON = ActionNodeConfigKey.JSON
     const val TEXT = ActionNodeConfigKey.TEXT
     const val FORM_URL_ENCODED = ActionNodeConfigKey.FORM_URL_ENCODED
 }
 
+/**
+ * HTTP 响应体数据结构的字段 Key。
+ *
+ * @property STATUS_CODE 响应 HTTP 状态码（如 200, 404）
+ * @property IS_SUCCESS 请求是否成功（状态码 200..299）
+ * @property CONTENT_TYPE 响应头的 Content-Type
+ * @property RAW_BODY 原始未解析的响应体字符串
+ * @property BODY 自动解析（JSON/HTML/Text）后的响应体数据
+ * @property HTML 解析后的 Jsoup Document/HTML 标记
+ * @property TEXT 纯文本格式响应体
+ * @property TITLE 网页响应的标题内容
+ */
 object ActionHttpResponseKey {
     const val STATUS_CODE = ActionNodeConfigKey.STATUS_CODE
     const val IS_SUCCESS = ActionNodeConfigKey.IS_SUCCESS
@@ -480,35 +1092,97 @@ object ActionHttpResponseKey {
     const val TITLE = ActionNodeConfigKey.TITLE
 }
 
+/**
+ * 本地持久化存储节点的配置键。
+ *
+ * @property KEY 本地 Preferences 读写的唯一键名
+ * @property VALUE 写入本地 Preferences 的数据值
+ * @property OUTPUT_KEY 读取本地存储结果保存的目标变量 Key
+ */
 object ActionStorageConfigKey {
     const val KEY = ActionNodeConfigKey.KEY
     const val VALUE = ActionNodeConfigKey.VALUE
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 文件系统节点的配置键。
+ *
+ * @property PATH 文件或目录的目标相对路径
+ * @property FROM_PATH 复制/移动源文件或目录路径
+ * @property TO_PATH 复制/移动目标文件或目录路径
+ * @property TEXT 写入文件的文本内容
+ * @property APPEND 是否追加写入模式（true 为追加，false 为覆盖）
+ * @property OUTPUT_KEY 文件算子处理结果保存的目标变量 Key
+ */
+object ActionFileConfigKey {
+    const val PATH = ActionNodeConfigKey.PATH
+    const val FROM_PATH = ActionNodeConfigKey.FROM_PATH
+    const val TO_PATH = ActionNodeConfigKey.TO_PATH
+    const val TEXT = ActionNodeConfigKey.TEXT
+    const val APPEND = ActionNodeConfigKey.APPEND
+    const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
+}
+
+/**
+ * 外部浏览器唤起节点的配置键。
+ *
+ * @property URL 唤起外部系统浏览器打开的目标 URL
+ */
 object ActionOpenUrlConfigKey {
     const val URL = ActionNodeConfigKey.URL
 }
 
+/**
+ * 第三方 App 唤起节点的配置键。
+ *
+ * @property URI 调起第三方 App 的 Schema URI
+ * @property FALLBACK_URL 无法调起 App 时回退打开的网页 URL
+ */
 object ActionOpenAppConfigKey {
     const val URI = ActionNodeConfigKey.URI
     const val FALLBACK_URL = ActionNodeConfigKey.FALLBACK_URL
 }
 
+/**
+ * 内置 WebView 节点的配置键。
+ *
+ * @property URL 应用内 WebView 打开的目标 URL
+ */
 object ActionOpenWebConfigKey {
     const val URL = ActionNodeConfigKey.URL
 }
 
+/**
+ * Toast 提示节点的配置键。
+ *
+ * @property MESSAGE 弹出 Toast 提示的消息文本
+ * @property TEXT 弹出 Toast 提示的内容文本
+ */
 object ActionToastConfigKey {
     const val MESSAGE = ActionNodeConfigKey.MESSAGE
     const val TEXT = ActionNodeConfigKey.TEXT
 }
 
+/**
+ * 剪贴板读写节点的配置键。
+ *
+ * @property TEXT 复制到系统剪贴板的文本
+ * @property OUTPUT_KEY 读取剪贴板结果保存的目标变量 Key
+ */
 object ActionClipboardConfigKey {
     const val TEXT = ActionNodeConfigKey.TEXT
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 二次确认对话框节点的配置键。
+ *
+ * @property TITLE 弹窗标题
+ * @property MESSAGE 弹窗提示正文消息
+ * @property CONFIRM_TEXT 确认按钮文本
+ * @property CANCEL_TEXT 取消按钮文本
+ */
 object ActionConfirmConfigKey {
     const val TITLE = ActionNodeConfigKey.TITLE
     const val MESSAGE = ActionNodeConfigKey.MESSAGE
@@ -516,6 +1190,16 @@ object ActionConfirmConfigKey {
     const val CANCEL_TEXT = ActionNodeConfigKey.CANCEL_TEXT
 }
 
+/**
+ * 输入框对话框节点的配置键。
+ *
+ * @property TITLE 弹窗标题
+ * @property SUBTITLE 弹窗副标题/提示说明
+ * @property DEFAULT_VALUE 输入框初始默认文本
+ * @property CONFIRM_TEXT 确认按钮文本
+ * @property CANCEL_TEXT 取消按钮文本
+ * @property OUTPUT_KEY 用户输入文本保存的目标变量 Key
+ */
 object ActionInputDialogConfigKey {
     const val TITLE = ActionNodeConfigKey.TITLE
     const val SUBTITLE = ActionNodeConfigKey.SUBTITLE
@@ -525,6 +1209,24 @@ object ActionInputDialogConfigKey {
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
+/**
+ * 选择列表对话框节点的配置键。
+ *
+ * @property TITLE 弹窗标题
+ * @property SUBTITLE 弹窗副标题说明
+ * @property OPTIONS 可选的选项数据列表
+ * @property DEFAULT_VALUES 多选默认选中的值数组
+ * @property DEFAULT_INDICES 多选默认选中的索引数组
+ * @property IS_MULTI_SELECT 是否支持多选模式（true 为多选，false 为单选）
+ * @property OUTPUT_MODE 选择输出模式（value / index / both）
+ * @property CONFIRM_TEXT 确认按钮文本
+ * @property CANCEL_TEXT 取消按钮文本
+ * @property OUTPUT_KEY 用户选择结果保存的目标变量 Key
+ * @property VALUE 选项包含的值 Key
+ * @property VALUES 用户选中的多个值 Key
+ * @property INDEX 选项对应的索引号 Key
+ * @property INDICES 用户选中的多个索引号 Key
+ */
 object ActionSelectDialogConfigKey {
     const val TITLE = ActionNodeConfigKey.TITLE
     const val SUBTITLE = ActionNodeConfigKey.SUBTITLE
@@ -542,11 +1244,25 @@ object ActionSelectDialogConfigKey {
     const val INDICES = ActionNodeConfigKey.INDICES
 }
 
+/**
+ * 系统通知栏消息节点的配置键。
+ *
+ * @property TITLE 通知栏标题
+ * @property CONTENT 通知栏正文内容
+ */
 object ActionNotificationConfigKey {
     const val TITLE = ActionNodeConfigKey.TITLE
     const val CONTENT = ActionNodeConfigKey.CONTENT
 }
 
+/**
+ * 系统分享面板节点的配置键。
+ *
+ * @property TITLE 分享弹窗标题
+ * @property TEXT 分享的描述文本
+ * @property CONTENT 分享的主体正文
+ * @property URL 分享的链接地址
+ */
 object ActionShareConfigKey {
     const val TITLE = ActionNodeConfigKey.TITLE
     const val TEXT = ActionNodeConfigKey.TEXT
@@ -554,11 +1270,25 @@ object ActionShareConfigKey {
     const val URL = ActionNodeConfigKey.URL
 }
 
+/**
+ * 大图预览画廊节点的配置键。
+ *
+ * @property INDEX 预览时初始定位的图片索引
+ * @property IMAGES 画廊展示的图片 URL 列表
+ */
 object ActionImagePreviewConfigKey {
     const val INDEX = ActionNodeConfigKey.INDEX
     const val IMAGES = ActionNodeConfigKey.IMAGES
 }
 
+/**
+ * Web Cookie 同步节点的配置键。
+ *
+ * @property URL 需同步 Cookie 的网页 URL
+ * @property TITLE 同步 Cookie 页面展示的标题
+ * @property HEADERS 同步携带的 Header 信息
+ * @property USER_AGENT 自定义 User-Agent
+ */
 object ActionSyncCookieConfigKey {
     const val URL = ActionNodeConfigKey.URL
     const val TITLE = ActionNodeConfigKey.TITLE
@@ -566,6 +1296,13 @@ object ActionSyncCookieConfigKey {
     const val USER_AGENT = ActionNodeConfigKey.USER_AGENT
 }
 
+/**
+ * 选择对话框输出模式选项。
+ *
+ * @property VALUE 仅输出选中的 Option Value
+ * @property INDEX 仅输出选中的 Option Index
+ * @property BOTH 同时输出 Value 与 Index
+ */
 object ActionSelectOutputMode {
     const val VALUE = ActionNodeConfigKey.VALUE
     const val INDEX = ActionNodeConfigKey.INDEX

@@ -38,7 +38,8 @@
     12. [编解码与哈希安全节点](#编解码与哈希安全节点)
     13. [网络 HTTP 请求节点](#网络-http-请求节点)
     14. [本地存储节点](#本地存储节点)
-    15. [系统与 UI 交互节点](#系统与-ui-交互节点)
+   15. [文件沙箱节点](#文件沙箱节点)
+   16. [系统与 UI 交互节点](#系统与-ui-交互节点)
 8. [自定义节点扩展指南](#自定义节点扩展指南)
 9. [安全与能力治理规范](#安全与能力治理规范)
 10. [测试与质量保证](#测试与质量保证)
@@ -640,6 +641,20 @@ workflowEngine.execute(
 - **`storage.preferences_delete`**：删除本地指定 Key（`key`）。
 - **`storage.preferences_has`**：校验本地是否存在 Key（`key`）。
 - **`storage.preferences_clear`**：清空本地存储。
+
+---
+
+### 文件沙箱节点
+
+`file.*` 节点只能访问引擎配置的 `homeDir/workflowId/` 目录。路径会先标准化并验证边界：绝对路径、`..` 路径穿越以及通过符号链接离开沙箱的既有目标，都会以 `file_access_denied` 失败；文件不存在与
+IO 失败分别返回 `file_not_found`、`file_io_failed`。
+
+| 节点类型                                                       | 说明                 | 配置键                                   |
+|:-----------------------------------------------------------|:-------------------|:--------------------------------------|
+| `file.read_text`                                           | 读取 UTF-8 文本        | `path`, `outputKey`                   |
+| `file.write_text`                                          | 写入 UTF-8 文本，可追加    | `path`, `text`, `append`, `outputKey` |
+| `file.delete` / `file.exists` / `file.mkdir` / `file.list` | 删除、存在性检查、创建目录、列举目录 | `path`, `outputKey`                   |
+| `file.copy` / `file.move`                                  | 复制或移动文件、目录         | `fromPath`, `toPath`, `outputKey`     |
 
 ---
 

@@ -233,6 +233,16 @@ object ActionNodeType {
     const val STORAGE_PREFERENCES_HAS = "storage.preferences_has"
     const val STORAGE_PREFERENCES_CLEAR = "storage.preferences_clear"
 
+    // file
+    const val FILE_READ_TEXT = "file.read_text"
+    const val FILE_WRITE_TEXT = "file.write_text"
+    const val FILE_DELETE = "file.delete"
+    const val FILE_EXISTS = "file.exists"
+    const val FILE_MKDIR = "file.mkdir"
+    const val FILE_LIST = "file.list"
+    const val FILE_COPY = "file.copy"
+    const val FILE_MOVE = "file.move"
+
     // action
     const val OPEN_EXTERNAL_URL = "action.open_external_url"
     const val OPEN_EXTERNAL_APP = "action.open_external_app"

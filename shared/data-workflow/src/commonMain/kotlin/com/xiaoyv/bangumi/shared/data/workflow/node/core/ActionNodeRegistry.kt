@@ -4,6 +4,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.builtInActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
+import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowFileStorage
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
 import kotlinx.collections.immutable.toPersistentList
@@ -15,7 +16,8 @@ class ActionNodeRegistry(
     httpRequestExecutor: ActionHttpRequestExecutor,
     preferencesStore: ActionWorkflowPreferencesStore,
     logger: ActionWorkflowLogger = ActionWorkflowLogger.Default,
-    nodeDefinitions: List<ActionNodeDefinition> = builtInActionNodeDefinitions(httpRequestExecutor, preferencesStore, logger),
+    fileStorage: ActionWorkflowFileStorage = ActionWorkflowFileStorage.Default,
+    nodeDefinitions: List<ActionNodeDefinition> = builtInActionNodeDefinitions(httpRequestExecutor, preferencesStore, logger, fileStorage),
 ) {
     private val definitions = linkedMapOf<String, ActionNodeDefinition>()
 

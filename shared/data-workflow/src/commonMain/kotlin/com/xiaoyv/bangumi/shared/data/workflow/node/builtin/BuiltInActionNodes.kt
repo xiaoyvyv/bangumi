@@ -13,6 +13,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.data.mathActionNodeD
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.data.objectActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.data.textActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.extension.bilibiliActionNodeDefinitions
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io.fileActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io.httpActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io.sideEffectActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io.storageActionNodeDefinitions
@@ -28,6 +29,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
+import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowFileStorage
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
 import kotlinx.collections.immutable.persistentMapOf
@@ -42,6 +44,7 @@ fun builtInActionNodeDefinitions(
     httpRequestExecutor: ActionHttpRequestExecutor,
     preferencesStore: ActionWorkflowPreferencesStore,
     logger: ActionWorkflowLogger = ActionWorkflowLogger.Default,
+    fileStorage: ActionWorkflowFileStorage = ActionWorkflowFileStorage.Default,
 ): List<ActionNodeDefinition> = buildList {
     addAll(flowActionNodeDefinitions(logger))
     addAll(dataActionNodeDefinitions)
@@ -63,6 +66,7 @@ fun builtInActionNodeDefinitions(
     addAll(sideEffectActionNodeDefinitions)
     addAll(httpActionNodeDefinitions(httpRequestExecutor))
     addAll(storageActionNodeDefinitions(preferencesStore))
+    addAll(fileActionNodeDefinitions(fileStorage))
 }
 
 internal fun ActionNode.valueResult(

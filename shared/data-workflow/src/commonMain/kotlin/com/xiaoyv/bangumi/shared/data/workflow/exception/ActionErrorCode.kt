@@ -38,6 +38,18 @@ object ActionErrorCode {
 
     const val NODE_EXECUTION_FAILED = "node_execution_failed"
     const val NODE_EXECUTION_FAILED_MSG = "节点执行抛出未捕获异常"
+
+    const val FILE_ACCESS_DENIED = "file_access_denied"
+    const val FILE_ACCESS_DENIED_MSG = "文件操作越界或超出工作流沙箱授权范围"
+    const val FILE_ACCESS_DENIED_HINT = "工作流文件操作受限在 homeDir/workflowId/ 目录下，禁止通过 relative path (..) 越界访问。"
+
+    const val FILE_NOT_FOUND = "file_not_found"
+    const val FILE_NOT_FOUND_MSG = "指定路径的文件或目录不存在"
+    const val FILE_NOT_FOUND_HINT = "请检查文件路径是否正确，或先使用 file.exists 进行存在性校验。"
+
+    const val FILE_IO_FAILED = "file_io_failed"
+    const val FILE_IO_FAILED_MSG = "文件读写或存储操作失败"
+    const val FILE_IO_FAILED_HINT = "请检查存储空间、文件读写权限或路径格式。"
 }
 
 /**
