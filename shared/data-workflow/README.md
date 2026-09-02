@@ -68,10 +68,14 @@ features / shared:data
 
 data-workflow
   ├─ model      工作流 JSON 协议与执行事件
-  ├─ node       节点规格、内置节点和注册中心
-  ├─ engine     校验、图算法执行、循环和错误路由
-  ├─ port       可替换的基础设施边界
-  ├─ codec      导入、导出和格式迁移
+  ├─ node       节点模型、注册中心与分层定义
+  │   ├─ core       节点核心抽象 (Category, Definition, Registry, Config)
+  │   ├─ resolver   模板插值与路径解析 (TemplateResolver, JsonPath, UrlPolicy)
+  │   ├─ effect     平台副作用声明 (HttpRequest, Navigation, UiEffects)
+  │   └─ builtin    内置节点定义 (control, data, parse, io, extension)
+  ├─ engine     校验、DAG 调度、循环与错误路由
+  ├─ port       基础设施抽象接口
+  ├─ codec      导入导出与版本迁移
   └─ di         Koin 装配入口
 ```
 

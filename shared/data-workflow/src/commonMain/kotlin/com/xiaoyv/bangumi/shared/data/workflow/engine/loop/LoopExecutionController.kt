@@ -6,8 +6,8 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopContextKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
-import com.xiaoyv.bangumi.shared.data.workflow.node.support.ActionTemplateResolver
-import com.xiaoyv.bangumi.shared.data.workflow.node.support.string
+import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull

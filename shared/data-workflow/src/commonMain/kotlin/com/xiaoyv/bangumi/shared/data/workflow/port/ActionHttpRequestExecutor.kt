@@ -4,7 +4,7 @@ import com.fleeksoft.ksoup.Ksoup
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionHttpBodyType
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionHttpResponseKey
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionHttpRequestEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionHttpRequestEffect
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.cookies.CookiesStorage

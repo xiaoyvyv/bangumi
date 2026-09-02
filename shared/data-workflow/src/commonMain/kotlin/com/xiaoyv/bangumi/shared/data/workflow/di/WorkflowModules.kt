@@ -6,7 +6,7 @@ import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.data.workflow.codec.ActionWorkflowCodec
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowEngine
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidator
-import com.xiaoyv.bangumi.shared.data.workflow.node.ActionNodeRegistry
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
 import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionWorkflowLogger

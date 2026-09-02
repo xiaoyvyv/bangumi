@@ -23,7 +23,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.ActionExecutionStep
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionLoopConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionWorkflow
-import com.xiaoyv.bangumi.shared.data.workflow.node.ActionNodeRegistry
+import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import kotlinx.serialization.json.JsonPrimitive
 
 /**

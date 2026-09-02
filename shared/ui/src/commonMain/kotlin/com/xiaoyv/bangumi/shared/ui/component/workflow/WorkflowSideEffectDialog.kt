@@ -59,10 +59,10 @@ import com.multiplatform.webview.web.rememberWebViewState
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionConfirmEffect
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionInputDialogEffect
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionSelectDialogEffect
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionSyncCookieEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.delay

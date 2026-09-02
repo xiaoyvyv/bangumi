@@ -8,10 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
 import com.xiaoyv.bangumi.shared.data.workflow.model.ActionSideEffect
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionConfirmEffect
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionInputDialogEffect
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionSelectDialogEffect
-import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.effect.ActionSyncCookieEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
