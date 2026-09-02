@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.xiaoyv.bangumi.MainActivity
-import com.xiaoyv.bangumi.shared.component.DetectType
+import com.xiaoyv.bangumi.shared.libnative.component.DetectType
 
 /**
  * [DetectCharacterActivity]

@@ -12,9 +12,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
-import com.xiaoyv.bangumi.shared.component.ExternalUriHandler
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.printTrace
+import com.xiaoyv.bangumi.shared.libnative.component.ExternalUriHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

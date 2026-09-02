@@ -107,7 +107,7 @@ open class ActionWorkflowException(
                 appendLine("📍 上下文快照 : ${JsonObject(details)}")
             }
             cause?.let { c ->
-                appendLine("📍 底层异常   : ${c::class.simpleName}: ${c.message}")
+                appendLine("📍 底层异常   : ${c.stackTraceToString()}")
             }
             if (!hint.isNullOrEmpty()) {
                 appendLine("💡 排查建议   : $hint")

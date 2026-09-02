@@ -66,6 +66,7 @@ import com.xiaoyv.bangumi.shared.data.usecase.SubjectRepoUseCase
 import com.xiaoyv.bangumi.shared.data.workflow.di.workflowModules
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionHttpRequestExecutor
+import io.ktor.client.plugins.logging.LogLevel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -131,6 +132,7 @@ val workflowNetworkModule = module {
             httpClient = createHttpClient(
                 config = get<PreferenceStore>().settings.network,
                 cookieStorage = get<WorkflowCookiesStorage>(),
+                logLevel = LogLevel.HEADERS,
                 enableJsonContentNegotiation = false,
             ),
             hostCookieStorge = get<ApiCookiesStorage>()
@@ -146,4 +148,3 @@ val dataModules = arrayOf(
     workflowNetworkModule,
     *workflowModules,
 )
-

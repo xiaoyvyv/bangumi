@@ -64,7 +64,7 @@ fun builtInActionNodeDefinitions(
     addAll(xmlActionNodeDefinitions)
     addAll(bilibiliActionNodeDefinitions)
     addAll(sideEffectActionNodeDefinitions)
-    addAll(httpActionNodeDefinitions(httpRequestExecutor))
+    addAll(httpActionNodeDefinitions(httpRequestExecutor, fileStorage))
     addAll(storageActionNodeDefinitions(preferencesStore))
     addAll(fileActionNodeDefinitions(fileStorage))
 }

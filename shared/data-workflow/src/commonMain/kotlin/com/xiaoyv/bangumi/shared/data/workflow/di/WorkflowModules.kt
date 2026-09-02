@@ -2,7 +2,6 @@
 
 package com.xiaoyv.bangumi.shared.data.workflow.di
 
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.data.workflow.codec.ActionWorkflowCodec
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowEngine
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidator
@@ -13,6 +12,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesSto
 import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionWorkflowFileStorage
 import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionWorkflowLogger
 import com.xiaoyv.bangumi.shared.data.workflow.port.DefaultActionWorkflowPreferencesStore
+import com.xiaoyv.bangumi.shared.libnative.System
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 

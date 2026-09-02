@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.core.utils
 
 
-import com.xiaoyv.bangumi.shared.System
+import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

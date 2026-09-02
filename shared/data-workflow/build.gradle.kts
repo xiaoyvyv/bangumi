@@ -17,6 +17,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.core)
             implementation(projects.shared.coreNative)
+            implementation(libs.kmp.zip)
         }
 
         commonTest.dependencies {

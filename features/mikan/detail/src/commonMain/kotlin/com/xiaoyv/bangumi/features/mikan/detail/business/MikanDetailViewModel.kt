@@ -4,7 +4,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_success
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -17,6 +16,7 @@ import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
 import com.xiaoyv.bangumi.shared.data.repository.writeViewModelCache
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import org.jetbrains.compose.resources.getString
 import org.orbitmvi.orbit.syntax.Syntax

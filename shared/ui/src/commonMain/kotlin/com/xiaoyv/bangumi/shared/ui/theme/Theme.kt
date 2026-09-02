@@ -22,10 +22,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.xiaoyv.bangumi.shared.component.SideEffectForStatusBar
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
+import com.xiaoyv.bangumi.shared.libnative.component.SideEffectForStatusBar
 import org.koin.compose.KoinApplicationPreview
 import org.koin.dsl.ModuleDeclaration
 import org.koin.dsl.module

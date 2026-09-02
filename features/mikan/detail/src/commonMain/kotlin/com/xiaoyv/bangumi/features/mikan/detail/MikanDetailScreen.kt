@@ -37,8 +37,8 @@ import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailEvent
 import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailSideEffect
 import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailState
 import com.xiaoyv.bangumi.features.mikan.detail.business.MikanDetailViewModel
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen

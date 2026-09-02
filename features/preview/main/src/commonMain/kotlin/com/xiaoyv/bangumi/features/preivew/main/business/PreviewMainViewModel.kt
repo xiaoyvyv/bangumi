@@ -6,7 +6,6 @@ import com.xiaoyv.bangumi.core_resource.resources.global_save_gallery_success
 import com.xiaoyv.bangumi.core_resource.resources.global_set_wallpaper
 import com.xiaoyv.bangumi.core_resource.resources.global_set_wallpaper_success
 import com.xiaoyv.bangumi.core_resource.resources.global_share
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.postEffect
 import com.xiaoyv.bangumi.shared.core.mvi.postToast
@@ -14,6 +13,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import io.github.vinceglb.filekit.FileKit

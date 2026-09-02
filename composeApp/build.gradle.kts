@@ -14,17 +14,23 @@ plugins {
 }
 
 kotlin {
+    val enableIos = providers.gradleProperty("enableIos")
+        .map { it.toBoolean() }
+        .orElse(false)
+
     android {
         namespace = "com.xiaoyv.bangumi.compose"
     }
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
+    if (enableIos.get()) {
+        listOf(
+            iosArm64(),
+            iosSimulatorArm64()
+        ).forEach { iosTarget ->
+            iosTarget.binaries.framework {
+                baseName = "ComposeApp"
+                isStatic = true
+            }
         }
     }
 
@@ -73,6 +79,7 @@ kotlin {
             implementation(projects.features.preview.album)
             implementation(projects.features.preview.gallery)
             implementation(projects.features.preview.main)
+            implementation(projects.features.preview.video)
             implementation(projects.features.preview.text)
             implementation(projects.features.web)
             implementation(projects.features.report)

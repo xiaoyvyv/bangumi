@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.features.workflows.business
 
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionEdge
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionPortRef
@@ -42,6 +41,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionToastConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey
+import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonNull
@@ -1235,17 +1235,19 @@ object WorkflowSamples {
     )
 
     /**
-     * 搜索 Hanime 视频、解析视频详情页播放源 URL 并调起浏览器播放。
+     * 搜索 Hanime 视频、下载最高画质播放源，并可压缩后复制压缩文件路径。
      */
     private fun searchHanimeVideo(): ActionWorkflow = workflow(
         id = "hanime_search_video",
-        name = "测试：Hanime 视频检索与播放",
-        description = "搜索 Hanime 视频，提取首个搜索结果详情页链接，解析视频 source 列表中最后一条播放地址并打开外部浏览器。",
+        name = "测试：Hanime 视频检索与下载",
+        description = "搜索 Hanime 视频，提取最高画质播放源；经确认后下载到工作流文件沙箱，可选压缩并复制压缩文件路径。",
         capabilities = setOf(
             ActionCapability.INPUT_DIALOG,
             ActionCapability.NETWORK,
-            ActionCapability.OPEN_INTERNAL_WEB,
             ActionCapability.NETWORK_LOCAL_COOKIE_ACCESS,
+            ActionCapability.NETWORK_COOKIE_SYNC,
+            ActionCapability.CONFIRM_DIALOG,
+            ActionCapability.CLIPBOARD_WRITE,
         ),
         nodes = listOf(
             node("start", ActionNodeType.FLOW_START, "开始"),
@@ -1272,6 +1274,26 @@ object WorkflowSamples {
                         ),
                     ),
                     ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
+                ),
+            ),
+            node(
+                "is_hanime_cookie_forbidden",
+                ActionNodeType.HTTP_STATUS,
+                "Cookie 初始化是否被拒绝",
+                config(
+                    ActionControlConfigKey.STATUS_CODE to "${'$'}{steps.init_hanime_cookie.statusCode}",
+                    ActionControlConfigKey.MIN_STATUS_CODE to 403,
+                    ActionControlConfigKey.MAX_STATUS_CODE to 403,
+                ),
+            ),
+            node(
+                "sync_hanime_cookie",
+                ActionNodeType.SYNC_COOKIE,
+                "同步 Hanime Cookie",
+                config(
+                    ActionSyncCookieConfigKey.URL to "https://hanime1.me/",
+                    ActionSyncCookieConfigKey.TITLE to "Hanime 需要验证",
+                    ActionSyncCookieConfigKey.USER_AGENT to System.userAgent(),
                 ),
             ),
             node(
@@ -1365,13 +1387,89 @@ object WorkflowSamples {
                 ),
             ),
             node(
-                "open_video",
-                ActionNodeType.OPEN_INTERNAL_WEB,
-                "打开外部浏览器播放",
+                "confirm_download",
+                ActionNodeType.UI_CONFIRM,
+                "确认下载视频",
                 config(
-                    ActionOpenUrlConfigKey.URL to "${'$'}{vars.lastSourceUrl}",
+                    ActionConfirmConfigKey.TITLE to "下载 Hanime 视频",
+                    ActionConfirmConfigKey.MESSAGE to "是否下载当前视频文件？",
+                    ActionConfirmConfigKey.CONFIRM_TEXT to "下载",
+                    ActionConfirmConfigKey.CANCEL_TEXT to "取消",
                 ),
             ),
+            node(
+                "download_video",
+                ActionNodeType.HTTP_DOWNLOAD,
+                "下载视频文件",
+                config(
+                    ActionHttpConfigKey.URL to "${'$'}{vars.lastSourceUrl}",
+                    ActionHttpConfigKey.METHOD to "GET",
+                    ActionHttpConfigKey.HEADERS to JsonObject(
+                        mapOf(
+                            "Referer" to JsonPrimitive("${'$'}{vars.detailUrl}"),
+                            "User-Agent" to JsonPrimitive(System.userAgent()),
+                        ),
+                    ),
+                    ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
+                    ActionHttpConfigKey.PATH to "hanime/downloads",
+                    ActionHttpConfigKey.OUTPUT_KEY to "download",
+                ),
+            ),
+            node(
+                "input_archive_name",
+                ActionNodeType.UI_INPUT_DIALOG,
+                "输入压缩包名称",
+                config(
+                    ActionInputDialogConfigKey.TITLE to "是否压缩下载文件？",
+                    ActionInputDialogConfigKey.SUBTITLE to "输入压缩包名称后确认压缩；取消或留空则跳过压缩",
+                    ActionInputDialogConfigKey.OUTPUT_KEY to "archiveName",
+                    ActionInputDialogConfigKey.CONFIRM_TEXT to "压缩",
+                    ActionInputDialogConfigKey.CANCEL_TEXT to "跳过",
+                ),
+            ),
+            node(
+                "is_archive_name_empty",
+                ActionNodeType.CONDITION_IS_EMPTY,
+                "是否跳过压缩",
+                config(ActionControlConfigKey.VALUE to "${'$'}{steps.input_archive_name.archiveName}"),
+            ),
+            node(
+                "compress_video",
+                ActionNodeType.FILE_COMPRESS_ZIP,
+                "压缩下载的视频",
+                config(
+                    ActionFileConfigKey.PATHS to JsonArray(listOf(JsonPrimitive("${'$'}{steps.download_video.download.filePath}"))),
+                    ActionFileConfigKey.TO_PATH to "hanime/archives/${'$'}{steps.input_archive_name.archiveName}.zip",
+                    ActionFileConfigKey.OUTPUT_KEY to "compressed",
+                ),
+            ),
+            node(
+                "confirm_copy_archive_path",
+                ActionNodeType.UI_CONFIRM,
+                "确认复制压缩文件路径",
+                config(
+                    ActionConfirmConfigKey.TITLE to "压缩完成",
+                    ActionConfirmConfigKey.MESSAGE to "压缩完成，是否复制压缩文件路径？",
+                    ActionConfirmConfigKey.CONFIRM_TEXT to "复制路径",
+                    ActionConfirmConfigKey.CANCEL_TEXT to "完成",
+                ),
+            ),
+            node(
+                "get_working_directory",
+                ActionNodeType.FILE_GET_WORKING_DIRECTORY,
+                "获取工作流文件目录",
+                config(ActionFileConfigKey.OUTPUT_KEY to "workingDirectory"),
+            ),
+            node(
+                "copy_archive_path",
+                ActionNodeType.WRITE_CLIPBOARD,
+                "复制压缩文件路径",
+                config(
+                    ActionClipboardConfigKey.TEXT to "${'$'}{vars.workingDirectory}/hanime/archives/${'$'}{steps.input_archive_name.archiveName}.zip",
+                ),
+            ),
+            node("show_download_failed", ActionNodeType.SHOW_TOAST, "提示下载失败", config(ActionToastConfigKey.MESSAGE to "视频下载失败，请稍后重试")),
+            node("show_compress_failed", ActionNodeType.SHOW_TOAST, "提示压缩失败", config(ActionToastConfigKey.MESSAGE to "视频压缩失败，已保留下载文件")),
             node(
                 "show_no_video",
                 ActionNodeType.SHOW_TOAST,
@@ -1384,14 +1482,21 @@ object WorkflowSamples {
                 "提示未找到播放源",
                 config(ActionToastConfigKey.MESSAGE to "未找到有效的视频播放源"),
             ),
-            node("end_after_open", ActionNodeType.FLOW_END, "播放后结束"),
+            node("end_after_download", ActionNodeType.FLOW_END, "下载后结束"),
+            node("end_after_copy", ActionNodeType.FLOW_END, "复制后结束"),
+            node("end_after_download_failed", ActionNodeType.FLOW_END, "下载失败后结束"),
+            node("end_after_compress_failed", ActionNodeType.FLOW_END, "压缩失败后结束"),
             node("end_after_no_video", ActionNodeType.FLOW_END, "无视频后结束"),
             node("end_after_no_source", ActionNodeType.FLOW_END, "无源后结束"),
         ),
         edges = listOf(
             edge("start", ActionControlPortId.NEXT, "input_keyword"),
             edge("input_keyword", ActionControlPortId.SUCCESS, "init_hanime_cookie"),
-            edge("init_hanime_cookie", ActionControlPortId.SUCCESS, "search_hanime"),
+            edge("init_hanime_cookie", ActionControlPortId.SUCCESS, "is_hanime_cookie_forbidden"),
+            edge("is_hanime_cookie_forbidden", ActionControlPortId.TRUE, "sync_hanime_cookie"),
+            edge("is_hanime_cookie_forbidden", ActionControlPortId.FALSE, "search_hanime"),
+            edge("sync_hanime_cookie", ActionControlPortId.SUCCESS, "search_hanime"),
+            edge("sync_hanime_cookie", ActionControlPortId.FAILURE, "search_hanime"),
             edge("search_hanime", ActionControlPortId.SUCCESS, "extract_first_video_href"),
             edge("extract_first_video_href", ActionControlPortId.NEXT, "is_href_empty"),
             edge("is_href_empty", ActionControlPortId.TRUE, "show_no_video"),
@@ -1401,8 +1506,23 @@ object WorkflowSamples {
             edge("extract_all_sources", ActionControlPortId.NEXT, "get_last_source"),
             edge("get_last_source", ActionControlPortId.NEXT, "is_source_null"),
             edge("is_source_null", ActionControlPortId.TRUE, "show_no_source"),
-            edge("is_source_null", ActionControlPortId.FALSE, "open_video"),
-            edge("open_video", ActionControlPortId.SUCCESS, "end_after_open"),
+            edge("is_source_null", ActionControlPortId.FALSE, "confirm_download"),
+            edge("confirm_download", ActionControlPortId.SUCCESS, "download_video"),
+            edge("confirm_download", ActionControlPortId.FAILURE, "end_after_download"),
+            edge("download_video", ActionControlPortId.SUCCESS, "input_archive_name"),
+            edge("download_video", ActionControlPortId.FAILURE, "show_download_failed"),
+            edge("input_archive_name", ActionControlPortId.SUCCESS, "is_archive_name_empty"),
+            edge("input_archive_name", ActionControlPortId.FAILURE, "end_after_download"),
+            edge("is_archive_name_empty", ActionControlPortId.TRUE, "end_after_download"),
+            edge("is_archive_name_empty", ActionControlPortId.FALSE, "compress_video"),
+            edge("compress_video", ActionControlPortId.NEXT, "get_working_directory"),
+            edge("compress_video", ActionControlPortId.FAILURE, "show_compress_failed"),
+            edge("get_working_directory", ActionControlPortId.NEXT, "confirm_copy_archive_path"),
+            edge("confirm_copy_archive_path", ActionControlPortId.SUCCESS, "copy_archive_path"),
+            edge("confirm_copy_archive_path", ActionControlPortId.FAILURE, "end_after_copy"),
+            edge("copy_archive_path", ActionControlPortId.SUCCESS, "end_after_copy"),
+            edge("show_download_failed", ActionControlPortId.SUCCESS, "end_after_download_failed"),
+            edge("show_compress_failed", ActionControlPortId.SUCCESS, "end_after_compress_failed"),
             edge("show_no_video", ActionControlPortId.SUCCESS, "end_after_no_video"),
             edge("show_no_source", ActionControlPortId.SUCCESS, "end_after_no_source"),
         ),

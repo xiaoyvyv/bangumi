@@ -39,6 +39,10 @@ object ActionErrorCode {
     const val NODE_EXECUTION_FAILED = "node_execution_failed"
     const val NODE_EXECUTION_FAILED_MSG = "节点执行抛出未捕获异常"
 
+    const val WORKFLOW_ID_INVALID = "workflow_id_invalid"
+    const val WORKFLOW_ID_INVALID_MSG = "workflowId 格式不合法，仅支持英文字母、数字、下划线（_）和连字符（-）"
+    const val WORKFLOW_ID_INVALID_HINT = "请使用长度大于 0 且仅包含 A-Z、a-z、0-9、_、- 的工作流 ID。"
+
     const val FILE_ACCESS_DENIED = "file_access_denied"
     const val FILE_ACCESS_DENIED_MSG = "文件操作越界或超出工作流沙箱授权范围"
     const val FILE_ACCESS_DENIED_HINT = "工作流文件操作受限在 homeDir/workflowId/ 目录下，禁止通过 relative path (..) 越界访问。"
@@ -47,9 +51,28 @@ object ActionErrorCode {
     const val FILE_NOT_FOUND_MSG = "指定路径的文件或目录不存在"
     const val FILE_NOT_FOUND_HINT = "请检查文件路径是否正确，或先使用 file.exists 进行存在性校验。"
 
+    const val FILE_NOT_DIRECTORY = "file_not_directory"
+    const val FILE_NOT_DIRECTORY_MSG = "指定路径不是目录"
+    const val FILE_NOT_DIRECTORY_HINT = "请为 file.list 传入已存在的目录路径。"
+
     const val FILE_IO_FAILED = "file_io_failed"
     const val FILE_IO_FAILED_MSG = "文件读写或存储操作失败"
     const val FILE_IO_FAILED_HINT = "请检查存储空间、文件读写权限或路径格式。"
+
+    const val FILE_SIZE_EXCEEDED = "file_size_exceeded"
+    const val FILE_SIZE_EXCEEDED_MSG = "文件大小超过文本读取上限"
+    const val FILE_SIZE_EXCEEDED_HINT = "file.read_text 最多读取 10 MiB，请先拆分文件或改用其他处理方式。"
+
+    const val FILE_ARCHIVE_INVALID = "file_archive_invalid"
+    const val FILE_ARCHIVE_INVALID_MSG = "压缩包格式无效、已损坏或包含不安全的文件路径"
+    const val FILE_ARCHIVE_INVALID_HINT = "请使用 ZIP 格式压缩包，且压缩包内的路径不能为绝对路径或包含 ..。"
+
+    const val FILE_ARCHIVE_LIMIT_EXCEEDED = "file_archive_limit_exceeded"
+    const val FILE_ARCHIVE_LIMIT_EXCEEDED_MSG = "压缩包超过安全处理上限"
+    const val FILE_ARCHIVE_LIMIT_EXCEEDED_HINT = "单个压缩包最多 1024 MiB、最多 1,000 个条目，解压后单个文件最多 100 MiB、总计最多 200 MiB。"
+
+    const val FILE_CONTEXT_MISSING_MSG = "文件节点必须由工作流引擎执行"
+    const val HTTP_DOWNLOAD_CONTEXT_MISSING_MSG = "HTTP 下载节点必须由工作流引擎执行"
 }
 
 /**

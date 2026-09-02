@@ -33,14 +33,14 @@ import com.xiaoyv.bangumi.core_resource.resources.mikan_resource_copy_torrent
 import com.xiaoyv.bangumi.core_resource.resources.mikan_resource_detail
 import com.xiaoyv.bangumi.core_resource.resources.mikan_resource_open_way
 import com.xiaoyv.bangumi.core_resource.resources.mikan_resource_preview
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.magnetHash
 import com.xiaoyv.bangumi.shared.data.model.response.mikan.ComposeMikanResource
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
+import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
-import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource

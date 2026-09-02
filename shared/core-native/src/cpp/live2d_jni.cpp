@@ -14,17 +14,18 @@ extern "C" {
 
 
 JNIEXPORT jlong JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeCreate(JNIEnv *env, jobject thiz) {
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeCreate(JNIEnv *env, jobject thiz) {
     return reinterpret_cast<jlong>(live2d_create());
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeDestroy(JNIEnv *env, jobject thiz, jlong handle) {
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeDestroy(JNIEnv * env , jobject thiz, jlong
+handle ) {
     live2d_destroy(reinterpret_cast<Live2DHandle>(handle));
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeLoadModel(
+        Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeLoadModel(
         JNIEnv *env, jobject thiz, jlong handle, jstring model_dir, jstring model_json_name) {
     if (!handle || !model_dir || !model_json_name) return JNI_FALSE;
     const char *c_model_dir = env->GetStringUTFChars(model_dir, nullptr);
@@ -39,7 +40,7 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeLoadModel(
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeLoadModelFromZip(
+        Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeLoadModelFromZip(
         JNIEnv *env, jobject thiz, jlong handle, jstring zip_file_path, jstring work_dir, jstring model_name) {
     if (!handle || !zip_file_path || !work_dir || !model_name) return JNI_FALSE;
     const char *c_zip_path = env->GetStringUTFChars(zip_file_path, nullptr);
@@ -56,7 +57,7 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeLoadModelFromZ
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeSetMotion(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeSetMotion(
         JNIEnv *env, jobject thiz, jlong handle, jstring group, jint index) {
     if (!handle || !group) return;
     const char *c_group = env->GetStringUTFChars(group, nullptr);
@@ -65,7 +66,7 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeSetMotion(
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeSetExpression(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeSetExpression(
         JNIEnv *env, jobject thiz, jlong handle, jstring expression_id) {
     if (!handle || !expression_id) return;
     const char *c_expr = env->GetStringUTFChars(expression_id, nullptr);
@@ -74,7 +75,7 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeSetExpression(
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeGetMotions(
+        Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeGetMotions(
         JNIEnv *env, jobject thiz, jlong handle) {
     int count = live2d_get_motion_count(reinterpret_cast<Live2DHandle>(handle));
     jclass stringClass = env->FindClass("java/lang/String");
@@ -87,7 +88,7 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeGetMotions(
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeGetExpressions(
+        Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeGetExpressions(
         JNIEnv *env, jobject thiz, jlong handle) {
     int count = live2d_get_expression_count(reinterpret_cast<Live2DHandle>(handle));
     jclass stringClass = env->FindClass("java/lang/String");
@@ -100,25 +101,25 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeGetExpressions
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnSurfaceCreated(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeOnSurfaceCreated(
         JNIEnv *env, jobject thiz, jlong handle) {
     live2d_on_surface_created(reinterpret_cast<Live2DHandle>(handle));
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnSurfaceChanged(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeOnSurfaceChanged(
         JNIEnv *env, jobject thiz, jlong handle, jint width, jint height) {
     live2d_on_surface_changed(reinterpret_cast<Live2DHandle>(handle), width, height);
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnDrawFrame(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeOnDrawFrame(
         JNIEnv *env, jobject thiz, jlong handle) {
     live2d_on_draw_frame(reinterpret_cast<Live2DHandle>(handle));
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeRenderPixels(
+        Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeRenderPixels(
         JNIEnv *env, jobject thiz, jlong handle, jint width, jint height, jintArray out_pixels) {
     if (!handle || width <= 0 || height <= 0 || !out_pixels) return JNI_FALSE;
     jint *pixels = env->GetIntArrayElements(out_pixels, nullptr);
@@ -131,25 +132,25 @@ Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeRenderPixels(
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnTouch(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeOnTouch(
         JNIEnv *env, jobject thiz, jlong handle, jfloat x, jfloat y, jint phase) {
     live2d_on_touch(reinterpret_cast<Live2DHandle>(handle), x, y, phase);
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeOnDrag(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeOnDrag(
         JNIEnv *env, jobject thiz, jlong handle, jfloat x, jfloat y) {
     live2d_on_drag(reinterpret_cast<Live2DHandle>(handle), x, y);
 }
 
 JNIEXPORT void JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeResetDrag(
+Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeResetDrag(
         JNIEnv *env, jobject thiz, jlong handle) {
     live2d_reset_drag(reinterpret_cast<Live2DHandle>(handle));
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_xiaoyv_bangumi_shared_component_Live2DNativeBridge_nativeHitTest(
+        Java_com_xiaoyv_bangumi_shared_libnative_component_Live2DNativeBridge_nativeHitTest(
         JNIEnv *env, jobject thiz, jlong handle, jfloat x, jfloat y) {
     if (!handle) return nullptr;
     const char *hitArea = live2d_hit_test(reinterpret_cast<Live2DHandle>(handle), x, y);

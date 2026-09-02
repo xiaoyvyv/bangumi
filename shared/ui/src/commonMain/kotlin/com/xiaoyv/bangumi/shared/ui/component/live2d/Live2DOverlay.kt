@@ -21,9 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.shared.component.Live2D
-import com.xiaoyv.bangumi.shared.component.live2DOverlayGesture
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
+import com.xiaoyv.bangumi.shared.libnative.component.Live2D
+import com.xiaoyv.bangumi.shared.libnative.component.live2DOverlayGesture
 import com.xiaoyv.bangumi.shared.resource.copyToDir
 import com.xiaoyv.bangumi.shared.ui.theme.currentInDarkTheme
 import io.github.vinceglb.filekit.FileKit

@@ -225,6 +225,7 @@ object ActionNodeType {
 
     // http
     const val HTTP_REQUEST = "http.request"
+    const val HTTP_DOWNLOAD = "http.download"
 
     // storage
     const val STORAGE_PREFERENCES_GET = "storage.preferences_get"
@@ -242,6 +243,10 @@ object ActionNodeType {
     const val FILE_LIST = "file.list"
     const val FILE_COPY = "file.copy"
     const val FILE_MOVE = "file.move"
+    const val FILE_COMPRESS_ZIP = "file.compress_zip"
+    const val FILE_EXTRACT_ZIP = "file.extract_zip"
+    const val FILE_CREATE = "file.create"
+    const val FILE_GET_WORKING_DIRECTORY = "file.get_working_directory"
 
     // action
     const val OPEN_EXTERNAL_URL = "action.open_external_url"

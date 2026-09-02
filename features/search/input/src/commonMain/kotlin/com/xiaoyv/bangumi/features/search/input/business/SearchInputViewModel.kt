@@ -2,7 +2,6 @@ package com.xiaoyv.bangumi.features.search.input.business
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
@@ -12,6 +11,7 @@ import com.xiaoyv.bangumi.shared.core.utils.asTextFieldValue
 import com.xiaoyv.bangumi.shared.core.utils.limit
 import com.xiaoyv.bangumi.shared.core.utils.mutableStateFlowOf
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.ktor.util.date.getTimeMillis
 import kotlinx.coroutines.flow.debounce

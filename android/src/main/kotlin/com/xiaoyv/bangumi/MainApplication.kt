@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi
 
-import com.xiaoyv.bangumi.shared.AppApplication
+import com.xiaoyv.bangumi.shared.libnative.AppApplication
 
 /**
  * [MainApplication]

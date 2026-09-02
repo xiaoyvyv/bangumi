@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.shared.data.repository.impl
 
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.repository.DatabaseRepository
+import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 

@@ -28,7 +28,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.index.ComposeIndex
-import com.xiaoyv.bangumi.shared.ui.component.image.BlurImage
+import com.xiaoyv.bangumi.shared.ui.platform.component.image.BlurImage
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import org.koin.compose.currentKoinScope
 import kotlin.math.sqrt

@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import coil3.compose.AsyncImagePainter
+import com.xiaoyv.bangumi.shared.ui.platform.component.image.computeAverageLuminance
 
 /**
  * 用于背景区域根据模糊背景图的明暗自动决定文字颜色。
@@ -56,11 +57,3 @@ fun rememberImageColorState(): ImageColorState {
         ImageColorState(if (inDarkTheme) Color.White else Color.Black)
     }
 }
-
-/**
- * 从 Coil3 Image 中计算平均亮度（0.0 ~ 1.0）
- * 使用相对亮度公式: L = 0.299*R + 0.587*G + 0.114*B
- *
- * 平台实现需要从 coil3.Image 中提取像素数据进行计算
- */
-expect fun computeAverageLuminance(image: coil3.Image): Float

@@ -5,8 +5,8 @@ kotlin-compose-compiler = "2.4.10"
 kotlin-serialization = "1.11.0"
 kotlin-datetime = "0.8.0"
 kotlin-atomicfu = "0.33.0"
-kotlin-immutable = "0.5.1"
-agp = "9.4.0-rc02"
+kotlin-immutable = "0.5.2"
+agp = "9.4.0"
 compose-multiplatform = "1.12.0"
 compose-material3 = "1.12.0-alpha03"
 compose-material-icon = "1.7.3"
@@ -37,6 +37,7 @@ sqldelight = "2.3.2"
 compose-webview = "2.0.3"
 vico = "2.5.2"
 file-kit = "0.15.0"
+kmp-zip = "0.15.0"
 krop = "0.2.0"
 kotlinx-coroutines = "1.11.0"
 confettikit = "0.9.0"
@@ -45,11 +46,13 @@ junit-android = "1.3.0"
 espressoCore = "3.7.0"
 uiautomator = "2.4.0"
 benchmarkMacroJunit4 = "1.4.1"
-baselineprofile = "1.5.0-rc01"
+baselineprofile = "1.5.0-rc02"
 profileinstaller = "1.4.1"
-compose-markdown = "0.44.0"
+compose-markdown = "0.45.0"
 conscrypt = "2.6.3"
 compose-kuiver = "0.4.1"
+mediamp = "0.3.2"
+avifCoder = "3.0.0-alpha07"
 
 [libraries]
 gradle-plugin-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin-compose-compiler" }
@@ -108,6 +111,7 @@ compose-confettikit = { module = "io.github.vinceglb:confettikit", version.ref =
 compose-markdown-core = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "compose-markdown" }
 compose-markdown-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "compose-markdown" }
 compose-kuiver = { module = "io.github.justdeko:kuiver", version.ref = "compose-kuiver" }
+compose-mediamp-all = { module = "org.openani.mediamp:mediamp-all", version.ref = "mediamp" }
 
 # cryptohash
 cryptohash = { module = "com.appmattus.crypto:cryptohash", version.ref = "cryptohash" }
@@ -188,9 +192,12 @@ vico-multiplatform-m3 = { group = "com.patrykandpatrick.vico", name = "multiplat
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "file-kit" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "file-kit" }
 filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "file-kit" }
+kmp-zip = { module = "no.synth:kmp-zip", version.ref = "kmp-zip" }
 
 krop = { module = "com.attafitamim.krop:core", version.ref = "krop" }
 krop-file = { module = "com.attafitamim.krop:extensions-filekit", version.ref = "krop" }
+
+avif-coder = { module = "io.github.awxkee:avif-coder-coil", version.ref = "avifCoder" }
 
 
 [bundles]
@@ -215,7 +222,8 @@ compose-common = [
     "compose-paging-compose",
     "compose-webview",
     "compose-confettikit",
-    "compose-kuiver"
+    "compose-kuiver",
+    "compose-mediamp-all"
 ]
 kotlinx = [
     "kotlinx-atomicfu",

@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.shared.data.api.client.cookie
 
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.printTrace
+import com.xiaoyv.bangumi.shared.libnative.System
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.client.plugins.cookies.matches
 import io.ktor.http.Cookie

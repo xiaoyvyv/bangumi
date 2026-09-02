@@ -27,7 +27,7 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
-import com.xiaoyv.bangumi.shared.sni.AntiSniWebProxy
+import com.xiaoyv.bangumi.shared.libnative.sni.AntiSniWebProxy
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf

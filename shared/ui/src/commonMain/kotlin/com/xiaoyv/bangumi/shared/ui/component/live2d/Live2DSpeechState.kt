@@ -8,11 +8,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.component.Live2DState
-import com.xiaoyv.bangumi.shared.component.rememberLive2DState
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.repository.TerminalRepository
+import com.xiaoyv.bangumi.shared.libnative.System
+import com.xiaoyv.bangumi.shared.libnative.component.Live2DState
+import com.xiaoyv.bangumi.shared.libnative.component.rememberLive2DState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -2,13 +2,13 @@ package com.xiaoyv.bangumi.shared.data.manager.shared
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.xiaoyv.bangumi.shared.AppVersion
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
 import com.xiaoyv.bangumi.shared.data.repository.MikanRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
+import com.xiaoyv.bangumi.shared.libnative.AppVersion
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay

@@ -96,6 +96,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.AP
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.FROM_PATH
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.OUTPUT_KEY
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.PATH
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.PATHS
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.TEXT
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFileConfigKey.TO_PATH
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey.CASES
@@ -151,8 +152,11 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType.TEX
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.BODY
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.BODY_TYPE
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.CONTENT_TYPE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.FILE_NAME
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.HEADERS
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.METHOD
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.OUTPUT_KEY
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.PATH
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.QUERY
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.RETRY_COUNT
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.RETRY_DELAY_MILLIS
@@ -161,6 +165,8 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.UR
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.BODY
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.CONTENT_TYPE
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.FILE_NAME
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.FILE_PATH
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.HTML
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.IS_SUCCESS
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey.RAW_BODY
@@ -361,6 +367,8 @@ internal object ActionNodeConfigKey {
     const val RETRY_COUNT = "retryCount"
     const val RETRY_DELAY_MILLIS = "retryDelayMillis"
     const val USE_LOCAL_COOKIE_STORAGE = "useLocalCookieStorage"
+    const val FILE_NAME = "fileName"
+    const val FILE_PATH = "filePath"
     const val COUNT = "count"
     const val ITEMS = "items"
     const val MAX_ITERATIONS = "maxIterations"
@@ -1041,6 +1049,9 @@ object ActionMathConfigKey {
  * @property RETRY_COUNT 请求失败自动重试次数
  * @property RETRY_DELAY_MILLIS 重试请求的时间间隔毫秒数
  * @property USE_LOCAL_COOKIE_STORAGE 是否使用应用本地 Cookie 存储
+ * @property PATH 下载文件保存的目录相对路径
+ * @property FILE_NAME 下载文件名，省略时根据响应头、URL 或 MIME 类型自动推断
+ * @property OUTPUT_KEY 下载结果保存的目标变量 Key
  */
 object ActionHttpConfigKey {
     const val URL = ActionNodeConfigKey.URL
@@ -1054,6 +1065,9 @@ object ActionHttpConfigKey {
     const val RETRY_COUNT = ActionNodeConfigKey.RETRY_COUNT
     const val RETRY_DELAY_MILLIS = ActionNodeConfigKey.RETRY_DELAY_MILLIS
     const val USE_LOCAL_COOKIE_STORAGE = ActionNodeConfigKey.USE_LOCAL_COOKIE_STORAGE
+    const val PATH = ActionNodeConfigKey.PATH
+    const val FILE_NAME = ActionNodeConfigKey.FILE_NAME
+    const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
 /**
@@ -1080,6 +1094,8 @@ object ActionHttpBodyType {
  * @property HTML 解析后的 Jsoup Document/HTML 标记
  * @property TEXT 纯文本格式响应体
  * @property TITLE 网页响应的标题内容
+ * @property FILE_NAME 下载文件名
+ * @property FILE_PATH 下载文件在工作流文件沙箱内的相对路径
  */
 object ActionHttpResponseKey {
     const val STATUS_CODE = ActionNodeConfigKey.STATUS_CODE
@@ -1090,6 +1106,8 @@ object ActionHttpResponseKey {
     const val HTML = ActionNodeConfigKey.HTML
     const val TEXT = ActionNodeConfigKey.TEXT
     const val TITLE = ActionNodeConfigKey.TITLE
+    const val FILE_NAME = ActionNodeConfigKey.FILE_NAME
+    const val FILE_PATH = ActionNodeConfigKey.FILE_PATH
 }
 
 /**
@@ -1109,6 +1127,7 @@ object ActionStorageConfigKey {
  * 文件系统节点的配置键。
  *
  * @property PATH 文件或目录的目标相对路径
+ * @property PATHS 待压缩的文件或目录相对路径列表
  * @property FROM_PATH 复制/移动源文件或目录路径
  * @property TO_PATH 复制/移动目标文件或目录路径
  * @property TEXT 写入文件的文本内容
@@ -1117,6 +1136,7 @@ object ActionStorageConfigKey {
  */
 object ActionFileConfigKey {
     const val PATH = ActionNodeConfigKey.PATH
+    const val PATHS = ActionNodeConfigKey.PATHS
     const val FROM_PATH = ActionNodeConfigKey.FROM_PATH
     const val TO_PATH = ActionNodeConfigKey.TO_PATH
     const val TEXT = ActionNodeConfigKey.TEXT

@@ -49,12 +49,19 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.avif.coder)
             implementation(libs.androidx.webkit)
             implementation(libs.conscrypt.android)
         }
 
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native.driver)
+            implementation(libs.ktor.client.darwin)
+        }
+
         jvmMain.dependencies {
             implementation(libs.conscrypt.openjdk)
+            implementation("com.github.ustc-zzzz:avif-imageio-native-reader:master-SNAPSHOT")
         }
     }
 }

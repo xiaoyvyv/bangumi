@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.features.workflows.business.component
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.CallSplit
 import androidx.compose.material.icons.rounded.AccountTree
-import androidx.compose.material.icons.rounded.CallSplit
 import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.DataObject
 import androidx.compose.material.icons.rounded.DateRange
@@ -33,7 +33,7 @@ object ActionNodeCardStyle {
      */
     fun getCategoryIcon(category: String): ImageVector = when (category.lowercase()) {
         ActionNodeCategory.FLOW -> Icons.Rounded.AccountTree
-        ActionNodeCategory.CONTROL -> Icons.Rounded.CallSplit
+        ActionNodeCategory.CONTROL -> Icons.AutoMirrored.Rounded.CallSplit
         ActionNodeCategory.LOOP -> Icons.Rounded.Repeat
         ActionNodeCategory.DATA, ActionNodeCategory.OBJECT -> Icons.Rounded.DataObject
         ActionNodeCategory.TEXT -> Icons.Rounded.TextFields

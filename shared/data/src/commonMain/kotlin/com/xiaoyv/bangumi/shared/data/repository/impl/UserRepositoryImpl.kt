@@ -2,8 +2,6 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.PagingConfig
 import com.fleeksoft.ksoup.Ksoup
-import com.xiaoyv.bangumi.shared.System
-import com.xiaoyv.bangumi.shared.component.toPinYin
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
 import com.xiaoyv.bangumi.shared.core.types.EditInfoType
 import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
@@ -43,6 +41,8 @@ import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryOffsetLimitPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
+import com.xiaoyv.bangumi.shared.libnative.System
+import com.xiaoyv.bangumi.shared.libnative.component.toPinYin
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.statement.bodyAsText

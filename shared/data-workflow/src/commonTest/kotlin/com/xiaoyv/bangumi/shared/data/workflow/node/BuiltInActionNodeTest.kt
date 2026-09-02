@@ -49,6 +49,8 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.builtInActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionHttpRequestEffect
+import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpDownloadResponse
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
 import kotlinx.collections.immutable.persistentListOf
@@ -214,7 +216,7 @@ class BuiltInActionNodeTest {
             testHttpRequestExecutor,
             testPreferencesStore,
         ).mapTo(linkedSetOf()) { it.spec.type }
-            .filterNotTo(linkedSetOf()) { it.startsWith("file.") }
+            .filterNotTo(linkedSetOf()) { it.startsWith("file.") || it == ActionNodeType.HTTP_DOWNLOAD }
 
         assertEquals(registeredTypes, canonicalConfigs.keys)
     }
@@ -228,7 +230,7 @@ class BuiltInActionNodeTest {
     @Test
     fun everyBuiltInNodeExecutesCanonicalCase() = runBlocking {
         builtInActionNodeDefinitions(testHttpRequestExecutor, testPreferencesStore)
-            .filterNot { it.spec.type.startsWith("file.") }
+            .filterNot { it.spec.type.startsWith("file.") || it.spec.type == ActionNodeType.HTTP_DOWNLOAD }
             .forEach { definition ->
             val type = definition.spec.type
             val config = canonicalConfigs.getValue(type)
@@ -356,12 +358,22 @@ class BuiltInActionNodeTest {
 
     private companion object {
         private val array = JsonArray(listOf(JsonPrimitive("value"), JsonPrimitive("other")))
-        private val testHttpRequestExecutor = ActionHttpRequestExecutor {
-            buildJsonObject {
+        private val testHttpRequestExecutor = object : ActionHttpRequestExecutor {
+            override suspend fun execute(request: ActionHttpRequestEffect) = buildJsonObject {
                 put(ActionHttpResponseKey.STATUS_CODE, JsonPrimitive(200))
                 put(ActionHttpResponseKey.IS_SUCCESS, JsonPrimitive(true))
                 put(ActionHttpResponseKey.BODY, JsonObject(mapOf("ok" to JsonPrimitive(true))))
             }
+
+            override suspend fun download(
+                request: ActionHttpRequestEffect,
+                onResponse: suspend (ActionHttpDownloadResponse) -> Unit,
+                consumeChunk: suspend (ByteArray) -> Unit,
+            ) = ActionHttpDownloadResponse(
+                statusCode = 200,
+                contentType = "application/octet-stream",
+                contentDisposition = "attachment; filename=download.bin",
+            )
         }
         private val testPreferences = mutableMapOf<String, kotlinx.serialization.json.JsonElement>()
         private val testPreferencesStore = object : ActionWorkflowPreferencesStore {

@@ -17,7 +17,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeBangumiStatus
 import com.xiaoyv.bangumi.shared.data.model.response.trace.MicrosoftTranslate
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
-import com.xiaoyv.bangumi.shared.platformContext
+import com.xiaoyv.bangumi.shared.libnative.platformContext
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.ImageFormat
 import io.github.vinceglb.filekit.PlatformFile

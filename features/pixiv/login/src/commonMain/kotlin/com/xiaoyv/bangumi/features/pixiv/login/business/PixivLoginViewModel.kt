@@ -8,7 +8,7 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.errMsg
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
-import com.xiaoyv.bangumi.shared.sni.AntiSniWebProxy
+import com.xiaoyv.bangumi.shared.libnative.sni.AntiSniWebProxy
 
 /**
  * [PixivLoginViewModel]

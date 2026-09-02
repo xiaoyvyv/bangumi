@@ -2,7 +2,6 @@
 
 package com.xiaoyv.bangumi.shared.data.api.client
 
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.uppercaseFirstChar
@@ -19,7 +18,8 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSetting
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
-import com.xiaoyv.bangumi.shared.systemDevice
+import com.xiaoyv.bangumi.shared.libnative.System
+import com.xiaoyv.bangumi.shared.libnative.systemDevice
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClient

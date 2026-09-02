@@ -34,8 +34,8 @@ import com.xiaoyv.bangumi.features.web.business.WebSideEffect
 import com.xiaoyv.bangumi.features.web.business.WebState
 import com.xiaoyv.bangumi.features.web.business.WebViewModel
 import com.xiaoyv.bangumi.features.web.internal.createWebRequestInterceptor
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout

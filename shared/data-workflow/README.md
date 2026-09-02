@@ -649,12 +649,27 @@ workflowEngine.execute(
 `file.*` 节点只能访问引擎配置的 `homeDir/workflowId/` 目录。路径会先标准化并验证边界：绝对路径、`..` 路径穿越以及通过符号链接离开沙箱的既有目标，都会以 `file_access_denied` 失败；文件不存在与
 IO 失败分别返回 `file_not_found`、`file_io_failed`。
 
+`file.extract_zip` 会拒绝绝对路径和包含 `..` 的 ZIP 条目，并限制压缩包输入为 100 MiB、解压总量为 200 MiB、单个文件为 100 MiB、条目数为 1,000；超出限制会返回
+`file_archive_limit_exceeded`。
+
 | 节点类型                                                       | 说明                 | 配置键                                   |
 |:-----------------------------------------------------------|:-------------------|:--------------------------------------|
 | `file.read_text`                                           | 读取 UTF-8 文本        | `path`, `outputKey`                   |
 | `file.write_text`                                          | 写入 UTF-8 文本，可追加    | `path`, `text`, `append`, `outputKey` |
+| `file.create`                                              | 创建空文件，不覆盖已有内容      | `path`, `outputKey`                   |
+| `file.get_working_directory`                               | 获取当前工作流沙箱目录绝对路径    | `outputKey`                           |
 | `file.delete` / `file.exists` / `file.mkdir` / `file.list` | 删除、存在性检查、创建目录、列举目录 | `path`, `outputKey`                   |
 | `file.copy` / `file.move`                                  | 复制或移动文件、目录         | `fromPath`, `toPath`, `outputKey`     |
+| `file.compress_zip`                                        | 将文件或目录压缩为 ZIP      | `paths`, `toPath`, `outputKey`        |
+| `file.extract_zip`                                         | 将 ZIP 安全解压到目标目录    | `fromPath`, `toPath`, `outputKey`     |
+
+### HTTP 下载节点
+
+`http.download` 复用 `http.request` 的 `url`、`method`、`headers`、`query`、`body`、超时、重试与 `useLocalCookieStorage` 配置；`headers` 中可直接提供 `Cookie`，或启用本地 Cookie 存储。额外配置
+`path` 指定文件沙箱内保存目录、`outputKey` 接收下载结果，`fileName` 可选。
+
+未设置 `fileName` 时，文件名按 `Content-Disposition` 响应头、URL 最后一段路径、`download_<时间戳>.<MIME 扩展名>` 的顺序推断。输出包含 `statusCode`、`isSuccess`、`contentType`、`fileName`
+与 `filePath`。
 
 ---
 

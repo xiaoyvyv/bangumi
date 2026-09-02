@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.ui.component.image
 
-import androidx.annotation.IntRange
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -36,7 +35,6 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
@@ -52,20 +50,11 @@ import com.xiaoyv.bangumi.shared.core.utils.KotlinThumbHash
 import com.xiaoyv.bangumi.shared.core.utils.noNull
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.BgmProgressIndicator
 import com.xiaoyv.bangumi.shared.ui.component.space.BrushVerticalTransparentToHalfBlack
+import com.xiaoyv.bangumi.shared.ui.platform.component.image.rgbaToImageBitmap
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.io.encoding.Base64
-
-/**
- * 将 RGBA 字节数组转换为 Compose ImageBitmap
- *
- * @param width 图片宽度
- * @param height 图片高度
- * @param rgba 原始像素数据 (R, G, B, A, R, G, B, A...)
- */
-expect fun rgbaToImageBitmap(width: Int, height: Int, rgba: ByteArray): ImageBitmap?
-
 
 @Composable
 fun produceThumbHashImage(key: Any?): ImageBitmap? {
@@ -84,33 +73,6 @@ fun produceThumbHashImage(key: Any?): ImageBitmap? {
     }
     return imageBitmap
 }
-
-/**
- * Android API31及以下，使用半透明蒙层兼容实现，避免 blur 无效果更突兀问题
- */
-expect fun Modifier.fastBlur(radius: Dp): Modifier
-
-/**
- * @androidRadius   仅 Android 端 API<32 生效，Android API>=32 及其它平台都是用 radius 控制
- * @androidSampling 仅 Android 端 API<32 生效，Android API>=32 及其它平台都是用 radius 控制
- */
-@Composable
-expect fun BlurImage(
-    model: Any?,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    transform: (State) -> State = DefaultTransform,
-    onState: ((State) -> Unit)? = null,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Crop,
-    alpha: Float = DefaultAlpha,
-    colorFilter: ColorFilter? = null,
-    filterQuality: FilterQuality = DefaultFilterQuality,
-    clipToBounds: Boolean = true,
-    radius: Dp = 50.dp,
-    @IntRange(0, 25) androidRadius: Int = 5,
-    androidSampling: Float = 5f,
-)
 
 @Composable
 fun StateImage(

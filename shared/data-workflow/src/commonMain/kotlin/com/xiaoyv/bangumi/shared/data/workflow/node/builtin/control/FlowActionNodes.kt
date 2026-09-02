@@ -17,7 +17,6 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResol
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.buildJsonObject
@@ -219,7 +218,7 @@ private fun flowCatchDefinition() = ActionNodeDefinition(
         outputPorts = persistentListOf(nextPort),
     ),
     executor = { _, context ->
-        val lastOutput = context.stepOutputs.values.lastOrNull() as? JsonObject
+        val lastOutput = context.stepOutputs.values.lastOrNull()
         val error = lastOutput?.get(ActionFlowConfigKey.ERROR) ?: buildJsonObject {
             put(ActionFlowConfigKey.MESSAGE, JsonPrimitive("Caught exception"))
         }

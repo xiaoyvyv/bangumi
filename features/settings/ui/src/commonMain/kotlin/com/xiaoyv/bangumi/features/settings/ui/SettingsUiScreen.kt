@@ -3,7 +3,6 @@ package com.xiaoyv.bangumi.features.settings.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Scaffold
@@ -25,21 +24,21 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_indication
 import com.xiaoyv.bangumi.core_resource.resources.settings_navigation_animation
 import com.xiaoyv.bangumi.core_resource.resources.settings_performance
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme
+import com.xiaoyv.bangumi.core_resource.resources.settings_time_machine_grid_limit
 import com.xiaoyv.bangumi.core_resource.resources.settings_top_app_bar_scroll_up
 import com.xiaoyv.bangumi.core_resource.resources.settings_top_app_bar_scroll_up_desc
-import com.xiaoyv.bangumi.core_resource.resources.settings_time_machine_grid_limit
 import com.xiaoyv.bangumi.core_resource.resources.settings_tracking_desc
 import com.xiaoyv.bangumi.core_resource.resources.settings_tracking_desc_desc
 import com.xiaoyv.bangumi.core_resource.resources.settings_ui
 import com.xiaoyv.bangumi.features.settings.ui.business.SettingsUiEvent
 import com.xiaoyv.bangumi.features.settings.ui.business.SettingsUiState
 import com.xiaoyv.bangumi.features.settings.ui.business.SettingsUiViewModel
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -54,6 +53,7 @@ import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 
 @Composable
 fun SettingsUiRoute(

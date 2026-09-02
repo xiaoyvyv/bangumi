@@ -3,19 +3,18 @@
 package com.xiaoyv.bangumi.shared.data.model.response.bgm.user
 
 import androidx.compose.runtime.Immutable
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.UserGroup
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeDateLong
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.native.SqlUser
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
-import kotlin.jvm.JvmStatic
 
 @Immutable
 @Serializable

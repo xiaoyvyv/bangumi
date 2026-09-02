@@ -4,7 +4,6 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.paging.PagingConfig
 import com.appmattus.crypto.Algorithm
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivArtworkSearchType
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
@@ -21,6 +20,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivUser
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
+import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
 import kotlinx.collections.immutable.persistentListOf

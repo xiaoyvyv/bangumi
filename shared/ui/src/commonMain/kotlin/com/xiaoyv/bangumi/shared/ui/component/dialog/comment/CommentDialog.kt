@@ -71,7 +71,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.emoji_bgm
@@ -121,6 +120,8 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.BmgTextField
 import com.xiaoyv.bangumi.shared.ui.component.turnstile.BgmTurnstile
+import com.xiaoyv.bangumi.shared.ui.platform.component.dialog.comment.TransparentDialog
+import com.xiaoyv.bangumi.shared.ui.platform.component.dialog.comment.commentDialogProperties
 import com.xiaoyv.bangumi.shared.ui.theme.BgmDefaultIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -136,19 +137,6 @@ import org.koin.core.parameter.parametersOf
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
-
-val commentDialogProperties = DialogProperties(
-    dismissOnBackPress = true,
-    dismissOnClickOutside = true,
-    usePlatformDefaultWidth = false,
-)
-
-@Composable
-expect fun TransparentDialog(
-    onDismissRequest: () -> Unit,
-    properties: DialogProperties = commentDialogProperties,
-    content: @Composable () -> Unit,
-)
 
 @Composable
 fun CommentDialog(

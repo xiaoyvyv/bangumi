@@ -10,7 +10,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.shared.coreNative)
-            api(projects.shared.coreAvif)
             api(projects.shared.coreResource)
         }
     }

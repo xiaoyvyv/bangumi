@@ -35,7 +35,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,7 +65,6 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffec
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -294,35 +292,19 @@ fun WorkflowSelectAlertDialog(
  * 弹出时以 BottomSheet 展现网页同步界面，点击确定或关闭操作后，均会回调触发 Cookie 同步与弹窗关闭。
  *
  * @param effect Cookie 同步 SideEffect 数据模型
- * @param onConfirm 确定按钮点击回调（触发 Cookie 同步与出队）
- * @param onCancel 关闭按钮或划走关闭回调（触发 Cookie 同步与出队）
+ * @param onDismiss 划走关闭回调（触发 Cookie 同步与出队）
  */
 @Composable
 fun WorkflowSyncCookieBottomSheetDialog(
     effect: ActionSyncCookieEffect,
-    onConfirm: () -> Unit,
-    onCancel: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
     val sheetState = rememberBottomSheetState(initialValue = Hidden, setOf(Hidden, Expanded))
-    val coroutineScope = rememberCoroutineScope()
     var isTouchInsideWebView by remember { mutableStateOf(false) }
-
-    val handleConfirm = {
-        coroutineScope.launch {
-            sheetState.hide()
-            onConfirm()
-        }
-    }
-    val handleCancel = {
-        coroutineScope.launch {
-            sheetState.hide()
-            onCancel()
-        }
-    }
 
     ModalBottomSheet(
         modifier = Modifier.statusBarsPadding(),
-        onDismissRequest = onCancel,
+        onDismissRequest = onDismiss,
         sheetState = sheetState,
         sheetGesturesEnabled = !isTouchInsideWebView,
         properties = ModalBottomSheetProperties(
@@ -350,12 +332,16 @@ fun WorkflowSyncCookieBottomSheetDialog(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
-                Text(
-                    modifier = Modifier.padding(top = ContentMarginHalf, bottom = ContentMarginHalf),
-                    text = "适用于处理人机验证、登录网页等，让后续请求（请求节点需声明启用Cookie）持有网页的身份和验证信息，操作完成关闭即可",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(top = ContentMarginHalf, bottom = ContentMarginHalf),
+                        text = "适用于处理人机验证、登录网页等，让后续请求（请求节点需声明启用Cookie）持有网页的身份和验证信息，操作完成关闭即可",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
             }
 
             Box(
@@ -382,6 +368,7 @@ fun WorkflowSyncCookieBottomSheetDialog(
                         customUserAgentString = effect.userAgent
                     }
                 )
+
                 WebView(
                     modifier = Modifier.fillMaxSize(),
                     state = state,

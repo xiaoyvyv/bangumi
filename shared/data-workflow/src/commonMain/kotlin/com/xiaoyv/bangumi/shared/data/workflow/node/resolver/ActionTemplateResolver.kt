@@ -481,7 +481,6 @@ private class ExpressionParser(
                     else -> JsonNull
                 }
             }
-            else -> JsonNull
         }
     }
 

@@ -9,9 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.xiaoyv.bangumi.shared.component.ActionHandler
-import com.xiaoyv.bangumi.shared.component.EmptyActionHandler
-import com.xiaoyv.bangumi.shared.component.rememberActionHandler
 import com.xiaoyv.bangumi.shared.core.types.BgmPathType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.TopicType
@@ -19,6 +16,9 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.toLongValue
 import com.xiaoyv.bangumi.shared.core.utils.toUrl
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
+import com.xiaoyv.bangumi.shared.libnative.component.ActionHandler
+import com.xiaoyv.bangumi.shared.libnative.component.EmptyActionHandler
+import com.xiaoyv.bangumi.shared.libnative.component.rememberActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.collections.immutable.persistentListOf

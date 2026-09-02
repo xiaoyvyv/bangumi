@@ -29,9 +29,6 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.image_detect
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_character
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
-import com.xiaoyv.bangumi.shared.avif.AvifDecoderFactory
-import com.xiaoyv.bangumi.shared.component.DetectType
-import com.xiaoyv.bangumi.shared.component.LaunchReceiveShareImageEffect
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.LocalPersonalState
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
@@ -40,7 +37,10 @@ import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedViewModel
 import com.xiaoyv.bangumi.shared.data.manager.shared.SharedEvent
 import com.xiaoyv.bangumi.shared.data.manager.shared.SharedViewModel
-import com.xiaoyv.bangumi.shared.gif.addPlatformGifSupport
+import com.xiaoyv.bangumi.shared.libnative.avif.AvifDecoderFactory
+import com.xiaoyv.bangumi.shared.libnative.component.DetectType
+import com.xiaoyv.bangumi.shared.libnative.component.LaunchReceiveShareImageEffect
+import com.xiaoyv.bangumi.shared.libnative.gif.addPlatformGifSupport
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.action.rememberAppActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog

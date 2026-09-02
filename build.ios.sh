@@ -15,7 +15,7 @@ cd "${PROJECT_ROOT}"
 mkdir -p "${OUTPUT_DIR}"
 
 echo "Build iOS Release IPA: ${VERSION_NAME} (${VERSION_CODE})"
-./gradlew :shared:core-native:generateDummyFramework
+./gradlew :shared:core-native:generateDummyFramework -PenableIos=true
 pod install --project-directory=iosApp
 
 xcodebuild \

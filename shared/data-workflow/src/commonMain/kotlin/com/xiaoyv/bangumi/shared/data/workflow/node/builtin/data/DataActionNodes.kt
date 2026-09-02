@@ -278,7 +278,6 @@ private fun dataToBooleanDefinition() = ActionNodeDefinition(
             is JsonPrimitive -> element.content.lowercase().toBooleanStrictOrNull() ?: (element.content != "0" && element.content.isNotEmpty())
             is JsonArray -> element.isNotEmpty()
             is JsonObject -> element.isNotEmpty()
-            else -> false
         }
         node.valueResult(node.config.string(ActionDataConfigKey.OUTPUT_KEY), JsonPrimitive(bool))
     },

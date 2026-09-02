@@ -98,7 +98,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Generate Kotlin framework for CocoaPods
-        run: ./gradlew :shared:core-native:generateDummyFramework
+        run: ./gradlew :shared:core-native:generateDummyFramework -PenableIos=true
 
       - name: Install CocoaPods dependencies
         run: pod install --project-directory=iosApp

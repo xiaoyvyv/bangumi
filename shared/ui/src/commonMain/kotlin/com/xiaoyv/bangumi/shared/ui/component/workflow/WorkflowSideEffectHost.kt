@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalHapticFeedback
+import com.multiplatform.webview.cookie.WebViewCookieManager
+import com.xiaoyv.bangumi.shared.data.api.client.cookie.WorkflowCookiesStorage
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
@@ -26,11 +28,14 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionVibrateEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionWriteClipboardEffect
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
+import io.ktor.client.plugins.cookies.addCookie
+import io.ktor.http.Cookie
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import org.koin.compose.koinInject
 
 /**
  * 工作流 SideEffect 宿主容器（零参数默认实现版本）。
@@ -91,11 +96,10 @@ fun WorkflowSideEffectHost(
                 onCancel = onCancel,
             )
         },
-        syncCookieDialogSlot = { effect, onConfirm, onCancel ->
+        syncCookieDialogSlot = { effect, onDismiss ->
             WorkflowSyncCookieBottomSheetDialog(
                 effect = effect,
-                onConfirm = onConfirm,
-                onCancel = onCancel,
+                onDismiss = onDismiss,
             )
         },
         modifier = modifier,
@@ -155,7 +159,6 @@ fun WorkflowSideEffectHost(
     syncCookieDialogSlot: @Composable (
         effect: ActionSyncCookieEffect,
         onConfirm: () -> Unit,
-        onCancel: () -> Unit,
     ) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -336,20 +339,30 @@ fun WorkflowSideEffectHost(
         )
     }
 
-    // 由 UI 层渲染 Cookie 同步 BottomSheet 弹窗，并在确定或关闭时处理 onResult
+    // 由 UI 层渲染 Cookie 同步 BottomSheet 弹窗，并在关闭时处理 onResult
     hostState.currentSyncCookieData?.let { syncCookieData ->
-        syncCookieDialogSlot(
-            syncCookieData.effect,
-            {
-                hostState.popSyncCookieData { data ->
+        val workflowCookiesStorage = koinInject<WorkflowCookiesStorage>()
+
+        val callback = {
+            hostState.popSyncCookieData { data ->
+                coroutineScope.launch {
+                    val webViewCookieManager = WebViewCookieManager()
+                    val cookies = webViewCookieManager.getCookies(data.effect.url)
+                    cookies.forEach { cookie ->
+                        workflowCookiesStorage.addCookie(
+                            data.effect.url, Cookie(
+                                name = cookie.name,
+                                value = cookie.value,
+                                path = cookie.path,
+                                domain = cookie.domain,
+                            )
+                        )
+                    }
                     data.onResult(ActionSideEffectResult.Success(buildJsonObject { }))
                 }
-            },
-            {
-                hostState.popSyncCookieData { data ->
-                    data.onResult(ActionSideEffectResult.Cancelled)
-                }
-            },
-        )
+            }
+        }
+
+        syncCookieDialogSlot(syncCookieData.effect, callback)
     }
 }

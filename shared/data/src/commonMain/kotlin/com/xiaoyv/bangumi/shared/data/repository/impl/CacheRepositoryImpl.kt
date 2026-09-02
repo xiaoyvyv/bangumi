@@ -4,8 +4,8 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
+import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking

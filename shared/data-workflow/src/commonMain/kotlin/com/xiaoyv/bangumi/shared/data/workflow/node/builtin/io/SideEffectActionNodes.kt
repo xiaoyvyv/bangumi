@@ -296,9 +296,9 @@ private fun imagePreviewDefinition() =
 
 private fun syncCookieDefinition() =
     sideEffectDefinition(
-        ActionNodeType.SYNC_COOKIE,
-        ActionSyncCookieConfigKey.URL,
-        setOf(ActionCapability.NETWORK_COOKIE_SYNC),
+        type = ActionNodeType.SYNC_COOKIE,
+        requiredConfigKey = ActionSyncCookieConfigKey.URL,
+        capabilities = setOf(ActionCapability.NETWORK_COOKIE_SYNC),
     ) { config, context ->
         val url = ActionTemplateResolver.resolveText(config.string(ActionSyncCookieConfigKey.URL), context).also(ActionUrlPolicy::requireHttpUrl)
         val title = config[ActionSyncCookieConfigKey.TITLE]?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }.orEmpty()

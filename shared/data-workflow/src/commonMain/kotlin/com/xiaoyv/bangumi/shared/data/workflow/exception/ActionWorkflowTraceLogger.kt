@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.workflow.exception
 
-import com.xiaoyv.bangumi.shared.System
+import com.xiaoyv.bangumi.shared.libnative.System
 
 /**
  * 工业级工作流统一诊断日志输出接口与日志器。

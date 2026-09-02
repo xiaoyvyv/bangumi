@@ -2,8 +2,8 @@
 
 package com.xiaoyv.bangumi.shared.core.utils
 
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.AppDsl
+import com.xiaoyv.bangumi.shared.libnative.System
 
 @AppDsl
 data class LogScope(private var tag: String = "BangumiApp") {

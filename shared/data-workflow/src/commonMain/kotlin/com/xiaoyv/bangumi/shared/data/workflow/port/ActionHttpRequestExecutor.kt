@@ -7,11 +7,15 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpResponseKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionHttpRequestEffect
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpTimeoutConfig
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.timeout
-import io.ktor.client.request.request
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.prepareRequest
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.ContentType
 import io.ktor.http.Cookie
 import io.ktor.http.HttpHeaders
@@ -20,6 +24,7 @@ import io.ktor.http.Parameters
 import io.ktor.http.Url
 import io.ktor.http.contentType
 import io.ktor.http.formUrlEncode
+import io.ktor.utils.io.readAvailable
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.JsonObject
@@ -41,8 +46,27 @@ fun interface ActionHttpRequestExecutor {
      * @return 标准化的 HTTP 响应输出。
      */
     suspend fun execute(request: ActionHttpRequestEffect): JsonObject
+
+    /**
+     * 通过响应通道分块读取下载内容。
+     */
+    suspend fun download(
+        request: ActionHttpRequestEffect,
+        onResponse: suspend (ActionHttpDownloadResponse) -> Unit,
+        consumeChunk: suspend (ByteArray) -> Unit,
+    ): ActionHttpDownloadResponse {
+        error("当前 HTTP 请求执行器不支持文件下载")
+    }
 }
 
+/**
+ * HTTP 下载响应。
+ */
+data class ActionHttpDownloadResponse(
+    val statusCode: Int,
+    val contentType: String,
+    val contentDisposition: String?,
+)
 
 /**
  * 工作流内置 HTTP 请求执行器。
@@ -93,40 +117,56 @@ class DefaultActionHttpRequestExecutor(
         throw checkNotNull(lastFailure)
     }
 
+    override suspend fun download(
+        request: ActionHttpRequestEffect,
+        onResponse: suspend (ActionHttpDownloadResponse) -> Unit,
+        consumeChunk: suspend (ByteArray) -> Unit,
+    ): ActionHttpDownloadResponse {
+        var lastFailure: Throwable? = null
+        repeat(request.retryCount.coerceAtLeast(0) + 1) { attempt ->
+            try {
+                val output = requestStatement(
+                    request = request,
+                    requestTimeoutMillis = HttpTimeoutConfig.INFINITE_TIMEOUT_MS,
+                ).execute { response ->
+                    val responseOutput = ActionHttpDownloadResponse(
+                        statusCode = response.status.value,
+                        contentType = response.headers[HttpHeaders.ContentType].orEmpty(),
+                        contentDisposition = response.headers[HttpHeaders.ContentDisposition],
+                    )
+                    if (responseOutput.statusCode in 500..599 && attempt < request.retryCount) {
+                        return@execute responseOutput
+                    }
+                    onResponse(responseOutput)
+                    val channel = response.bodyAsChannel()
+                    val buffer = ByteArray(DOWNLOAD_BUFFER_SIZE)
+                    while (true) {
+                        val count = channel.readAvailable(buffer)
+                        if (count <= 0) break
+                        consumeChunk(buffer.copyOf(count))
+                    }
+                    responseOutput
+                }
+                if (output.statusCode in 500..599 && attempt < request.retryCount) {
+                    if (request.retryDelayMillis > 0) delay(request.retryDelayMillis.milliseconds)
+                    return@repeat
+                }
+                return output
+            } catch (throwable: Throwable) {
+                if (throwable is CancellationException) throw throwable
+                lastFailure = throwable
+                if (attempt >= request.retryCount) throw throwable
+                if (request.retryDelayMillis > 0) delay(request.retryDelayMillis.milliseconds)
+            }
+        }
+        throw checkNotNull(lastFailure)
+    }
+
     /**
      * 执行一次 HTTP 请求，并规范化响应体。
      */
     private suspend fun executeOnce(request: ActionHttpRequestEffect): JsonObject {
-        val httpClient = if (request.useLocalCookieStorage) httpClient else anonymousHttpClient
-        val response = httpClient.request(request.url) {
-            method = HttpMethod.parse(request.method)
-            url { request.query.forEach { (key, value) -> parameters.append(key, value.toString().trim('"')) } }
-            request.headers.forEach { (key, value) -> headers.append(key, value.toString().trim('"')) }
-            request.timeoutMillis?.let { timeout { requestTimeoutMillis = it } }
-            if (request.body !is kotlinx.serialization.json.JsonNull) {
-                val encoded = when (request.bodyType) {
-                    ActionHttpBodyType.FORM_URL_ENCODED -> Parameters.build {
-                        val form = request.body as? JsonObject ?: error("formUrlEncoded 请求体必须是 JSON 对象")
-                        form.forEach { (key, value) ->
-                            append(key, value.toString().trim('"'))
-                        }
-                    }.formUrlEncode()
-
-                    ActionHttpBodyType.TEXT -> request.body.toString().trim('"')
-                    else -> request.body.toString()
-                }
-                contentType(
-                    ContentType.parse(
-                        request.contentType ?: when (request.bodyType) {
-                            ActionHttpBodyType.FORM_URL_ENCODED -> ContentType.Application.FormUrlEncoded.toString()
-                            ActionHttpBodyType.TEXT -> ContentType.Text.Plain.toString()
-                            else -> ContentType.Application.Json.toString()
-                        },
-                    ),
-                )
-                setBody(encoded)
-            }
-        }
+        val response = requestOnce(request)
         val rawBody: String = response.body()
         val responseContentType = response.headers[HttpHeaders.ContentType].orEmpty()
         val body = when {
@@ -153,5 +193,54 @@ class DefaultActionHttpRequestExecutor(
             put(ActionHttpResponseKey.RAW_BODY, JsonPrimitive(rawBody))
             put(ActionHttpResponseKey.BODY, body)
         }
+    }
+
+    private suspend fun requestOnce(request: ActionHttpRequestEffect): HttpResponse {
+        return requestStatement(request).execute()
+    }
+
+    private suspend fun requestStatement(
+        request: ActionHttpRequestEffect,
+        requestTimeoutMillis: Long? = request.timeoutMillis,
+    ) =
+        (if (request.useLocalCookieStorage) httpClient else anonymousHttpClient).prepareRequest(request.url) {
+            configureRequest(request, requestTimeoutMillis)
+        }
+
+    private fun HttpRequestBuilder.configureRequest(
+        request: ActionHttpRequestEffect,
+        requestTimeoutMillis: Long?,
+    ) {
+        method = HttpMethod.parse(request.method)
+        url { request.query.forEach { (key, value) -> parameters.append(key, value.toString().trim('"')) } }
+        request.headers.forEach { (key, value) -> headers.append(key, value.toString().trim('"')) }
+        requestTimeoutMillis?.let { timeout { this.requestTimeoutMillis = it } }
+        if (request.body !is kotlinx.serialization.json.JsonNull) {
+            val encoded = when (request.bodyType) {
+                ActionHttpBodyType.FORM_URL_ENCODED -> Parameters.build {
+                    val form = request.body as? JsonObject ?: error("formUrlEncoded 请求体必须是 JSON 对象")
+                    form.forEach { (key, value) ->
+                        append(key, value.toString().trim('"'))
+                    }
+                }.formUrlEncode()
+
+                ActionHttpBodyType.TEXT -> request.body.toString().trim('"')
+                else -> request.body.toString()
+            }
+            contentType(
+                ContentType.parse(
+                    request.contentType ?: when (request.bodyType) {
+                        ActionHttpBodyType.FORM_URL_ENCODED -> ContentType.Application.FormUrlEncoded.toString()
+                        ActionHttpBodyType.TEXT -> ContentType.Text.Plain.toString()
+                        else -> ContentType.Application.Json.toString()
+                    },
+                ),
+            )
+            setBody(encoded)
+        }
+    }
+
+    private companion object {
+        const val DOWNLOAD_BUFFER_SIZE = 8 * 1024
     }
 }

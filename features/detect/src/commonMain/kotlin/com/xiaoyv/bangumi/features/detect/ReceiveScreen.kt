@@ -45,7 +45,6 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberBottomSheetState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -86,13 +85,13 @@ import com.xiaoyv.bangumi.core_resource.resources.image_detect_start
 import com.xiaoyv.bangumi.features.detect.business.ReceiveEvent
 import com.xiaoyv.bangumi.features.detect.business.ReceiveState
 import com.xiaoyv.bangumi.features.detect.business.ReceiveViewModel
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.clickWithoutRipped
 import com.xiaoyv.bangumi.shared.core.utils.formatHMS
 import com.xiaoyv.bangumi.shared.core.utils.toFixed
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceCharacter
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceMoe
+import com.xiaoyv.bangumi.shared.libnative.System
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState

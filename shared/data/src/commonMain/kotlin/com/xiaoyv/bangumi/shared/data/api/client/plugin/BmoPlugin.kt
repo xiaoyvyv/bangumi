@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api.client.plugin
 
 import com.xiaoyv.bangumi.core_resource.resources.Res
-import com.xiaoyv.bangumi.shared.core.bmo.BmoAssetManager
+import com.xiaoyv.bangumi.shared.libnative.core.bmo.BmoAssetManager
 import io.ktor.client.call.HttpClientCall
 import io.ktor.client.plugins.api.ClientPlugin
 import io.ktor.client.plugins.api.Send

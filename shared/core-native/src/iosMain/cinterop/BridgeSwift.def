@@ -1,4 +1,4 @@
 language = Objective-C
-package = com.xiaoyv.bangumi.shared
+package = com.xiaoyv.bangumi.shared.libnative
 headers = Bangumi-Swift.h
 compilerOpts = -framework UIKit

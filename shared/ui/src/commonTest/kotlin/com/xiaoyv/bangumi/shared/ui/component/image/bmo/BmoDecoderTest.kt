@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.ui.component.image.bmo
 
-import com.xiaoyv.bangumi.shared.core.bmo.BmoDecoder
+import com.xiaoyv.bangumi.shared.libnative.core.bmo.BmoDecoder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

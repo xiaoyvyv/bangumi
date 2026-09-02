@@ -113,7 +113,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Build desktop package
-        run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS "-PappVersionCode=${{ needs.prepare-version.outputs.version_code }}" "-PappVersionName=${{ needs.prepare-version.outputs.version_name }}"
+        run: ./gradlew :composeApp:packageReleaseDistributionForCurrentOS -PenableIos=false "-PappVersionCode=${{ needs.prepare-version.outputs.version_code }}" "-PappVersionName=${{ needs.prepare-version.outputs.version_name }}"
 
       - name: Rename desktop package
         shell: bash

@@ -3,7 +3,6 @@
 package com.xiaoyv.bangumi.shared.data.parser.bgm
 
 import com.fleeksoft.ksoup.nodes.Element
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
@@ -32,6 +31,7 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectW
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
+import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap

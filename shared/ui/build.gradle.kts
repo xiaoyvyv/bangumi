@@ -13,6 +13,7 @@ kotlin {
             implementation(projects.shared.data)
             implementation(projects.shared.dataWorkflow)
 
+            api(projects.shared.uiPlatform)
             api(projects.shared.uiLiquid)
             api(projects.shared.uiMaterial3)
         }
@@ -22,4 +23,3 @@ kotlin {
         }
     }
 }
-

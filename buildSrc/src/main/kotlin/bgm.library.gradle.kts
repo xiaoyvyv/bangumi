@@ -14,6 +14,10 @@ plugins {
 
 
 kotlin {
+    val enableIos = providers.gradleProperty("enableIos")
+        .map { it.toBoolean() }
+        .orElse(false)
+
     compilerOptions {
         freeCompilerArgs.addAll(
             "-Xexpect-actual-classes"
@@ -24,8 +28,10 @@ kotlin {
 
     applyDefaultHierarchyTemplate()
 
-    iosArm64()
-    iosSimulatorArm64()
+    if (enableIos.get()) {
+        iosArm64()
+        iosSimulatorArm64()
+    }
 
     jvm {
         compilerOptions {
@@ -121,10 +127,12 @@ kotlin {
             api(libs.androidx.datastore.core.okio)
         }
 
-        iosMain.dependencies {
-            implementation(libs.sqldelight.native.driver)
+        if (enableIos.get()) {
+            iosMain.dependencies {
+                implementation(libs.sqldelight.native.driver)
 
-            implementation(libs.ktor.client.darwin)
+                implementation(libs.ktor.client.darwin)
+            }
         }
 
         jvmMain.dependencies {

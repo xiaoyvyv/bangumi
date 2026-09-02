@@ -2,10 +2,10 @@ package com.xiaoyv.bangumi.shared.data.workflow.port
 
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.xiaoyv.bangumi.shared.System
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore.Companion.KEY_PREFIX
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore.Companion.storageKey
+import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.JsonElement
 
