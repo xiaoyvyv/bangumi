@@ -17,6 +17,9 @@ object ActionErrorKey {
     const val CAUSE_CLASS = "causeClass"
     const val CAUSE_MESSAGE = "causeMessage"
     const val HINT = "hint"
+    const val CONFIG = "config"
+    const val SIDE_EFFECT = "sideEffect"
+    const val ISSUES = "issues"
 }
 
 /**
@@ -62,6 +65,7 @@ internal object ActionNodeConfigKey {
     const val COUNT = "count"
     const val ITEMS = "items"
     const val MAX_ITERATIONS = "maxIterations"
+    const val LOOP = "loop"
     const val LOOP_ID = "loopId"
     const val TEXT = "text"
     const val DELIMITER = "delimiter"
@@ -234,6 +238,7 @@ object ActionLoopConfigKey {
 }
 
 object ActionLoopContextKey {
+    const val LOOP = ActionNodeConfigKey.LOOP
     const val ITEM = ActionNodeConfigKey.ITEM
     const val INDEX = ActionNodeConfigKey.INDEX
     const val ITERATION = ActionNodeConfigKey.ITERATION

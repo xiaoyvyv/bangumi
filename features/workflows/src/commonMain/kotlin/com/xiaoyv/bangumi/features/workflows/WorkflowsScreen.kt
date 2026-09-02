@@ -47,6 +47,7 @@ import com.xiaoyv.bangumi.core_resource.resources.workflow_run_title
 import com.xiaoyv.bangumi.core_resource.resources.workflow_saved_title
 import com.xiaoyv.bangumi.core_resource.resources.workflow_tab_all
 import com.xiaoyv.bangumi.core_resource.resources.workflow_tab_data
+import com.xiaoyv.bangumi.core_resource.resources.workflow_tab_error
 import com.xiaoyv.bangumi.core_resource.resources.workflow_tab_flow_control
 import com.xiaoyv.bangumi.core_resource.resources.workflow_tab_practice
 import com.xiaoyv.bangumi.core_resource.resources.workflow_tab_saved
@@ -151,6 +152,7 @@ private enum class WorkflowCategory {
     DATA_MATH,
     TEXT_NET,
     UI_SIDE_EFFECT,
+    ERROR_TEST,
     SAVED;
 
     fun matches(workflow: ActionWorkflow, isSaved: Boolean): Boolean {
@@ -186,6 +188,13 @@ private enum class WorkflowCategory {
                         it.type.startsWith("system.") || it.type.startsWith("storage.") ||
                         it.type.startsWith("bilibili.")
             }
+
+            ERROR_TEST -> workflow.id.contains("error") ||
+                    workflow.name.contains("错误") ||
+                    workflow.name.contains("异常") ||
+                    workflow.name.contains("故障") ||
+                    workflow.name.contains("失败") ||
+                    workflow.name.contains("越界")
         }
     }
 }
@@ -221,6 +230,7 @@ private fun WorkflowsScreenContent(
                             WorkflowCategory.DATA_MATH -> stringResource(Res.string.workflow_tab_data)
                             WorkflowCategory.TEXT_NET -> stringResource(Res.string.workflow_tab_text_net)
                             WorkflowCategory.UI_SIDE_EFFECT -> stringResource(Res.string.workflow_tab_ui_side_effect)
+                            WorkflowCategory.ERROR_TEST -> stringResource(Res.string.workflow_tab_error)
                             WorkflowCategory.SAVED -> stringResource(Res.string.workflow_tab_saved)
                         }
                         Tab(

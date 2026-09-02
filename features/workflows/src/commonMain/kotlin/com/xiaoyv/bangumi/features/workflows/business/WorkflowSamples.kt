@@ -89,6 +89,16 @@ object WorkflowSamples {
 
     /** 所有当前内置节点的测试工作流。 */
     val all: List<ActionWorkflow> = buildList {
+        // 错误与异常故障测试样例
+        add(errorDivideByZeroSample())
+        add(errorSqrtNegativeSample())
+        add(errorAssertFailedSample())
+        add(errorJsonParseMalformedSample())
+        add(errorArrayOutOfBoundsSample())
+        add(errorUrlParseMalformedSample())
+        add(errorHtmlSelectorInvalidSample())
+        add(errorMissingConfigSample())
+
         // 复合遍历业务实操样例
         add(subjectTagsToToast())
         add(searchBilibiliBangumiWithWebWbi())
@@ -1028,6 +1038,8 @@ object WorkflowSamples {
      * 随后调用内置的 `bilibili.sign_url` 节点生成附带 `wts` 与 `w_rid` 的已加签 URL，
      * 最后发起搜索 HTTP 请求并调起首个搜索结果。
      */
+    private val ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:154.0) Gecko/20100101 Firefox/154.0"
+
     private fun searchBilibiliBangumiWithWebWbi(): ActionWorkflow = workflow(
         id = "search_bilibili_bangumi_and_open",
         name = "测试：纯工作流 WBI 签名并搜索 Bilibili 番剧",
@@ -1070,7 +1082,7 @@ object WorkflowSamples {
                     ActionHttpConfigKey.METHOD to "HEAD",
                     ActionHttpConfigKey.HEADERS to JsonObject(
                         mapOf(
-                            "User-Agent" to JsonPrimitive(System.userAgent()),
+                            "User-Agent" to JsonPrimitive(ua),
                         ),
                     ),
                     ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
@@ -1086,7 +1098,7 @@ object WorkflowSamples {
                     ActionHttpConfigKey.HEADERS to JsonObject(
                         mapOf(
                             "Referer" to JsonPrimitive("https://www.bilibili.com/"),
-                            "User-Agent" to JsonPrimitive(System.userAgent()),
+                            "User-Agent" to JsonPrimitive(ua),
                         ),
                     ),
                     ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
@@ -1153,7 +1165,7 @@ object WorkflowSamples {
                     ActionHttpConfigKey.HEADERS to JsonObject(
                         mapOf(
                             "Referer" to JsonPrimitive("https://www.bilibili.com/"),
-                            "User-Agent" to JsonPrimitive(System.userAgent()),
+                            "User-Agent" to JsonPrimitive(ua),
                         ),
                     ),
                     ActionHttpConfigKey.USE_LOCAL_COOKIE_STORAGE to true,
@@ -1842,6 +1854,140 @@ object WorkflowSamples {
             node("control", controlType, "循环控制", config(ActionLoopConfigKey.LOOP_ID to "loop")), node("end", ActionNodeType.FLOW_END, "结束"),
         ),
         edges = listOf(edge("start", ActionControlPortId.NEXT, "loop"), edge("loop", ActionControlPortId.BODY, "control"), edge("loop", ActionControlPortId.COMPLETED, "end")),
+    )
+
+    // 错误与异常故障测试样例构建方法
+    private fun errorDivideByZeroSample(): ActionWorkflow = workflow(
+        id = "error_divide_by_zero",
+        name = "错误测试：除零故障",
+        description = "验证 math.divide 节点在除数为 0 时的除零拦截与格式化日志报告。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "divide",
+                ActionNodeType.MATH_DIVIDE,
+                "除法运算",
+                config(ActionMathConfigKey.LEFT to 100, ActionMathConfigKey.RIGHT to 0, ActionMathConfigKey.OUTPUT_KEY to "res")
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "divide")),
+    )
+
+    private fun errorSqrtNegativeSample(): ActionWorkflow = workflow(
+        id = "error_sqrt_negative",
+        name = "错误测试：负数平方根",
+        description = "验证 math.sqrt 节点传入负数时的非法参数校验与排查建议提示。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "sqrt",
+                ActionNodeType.MATH_SQRT,
+                "平方根运算",
+                config(ActionMathConfigKey.VALUE to -9.0, ActionMathConfigKey.OUTPUT_KEY to "res")
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "sqrt")),
+    )
+
+    private fun errorAssertFailedSample(): ActionWorkflow = workflow(
+        id = "error_assert_failed",
+        name = "错误测试：流程断言失败",
+        description = "验证 flow.assert 表达式计算为 false 时的异常断言抛出与失败事件分发。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "assert",
+                ActionNodeType.FLOW_ASSERT,
+                "检查状态",
+                config(ActionFlowConfigKey.CONDITION to "\${1 == 2}", ActionFlowConfigKey.MESSAGE to "用户权限校验失败")
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "assert")),
+    )
+
+    private fun errorJsonParseMalformedSample(): ActionWorkflow = workflow(
+        id = "error_json_parse_malformed",
+        name = "错误测试：损坏的 JSON 格式",
+        description = "验证 json.parse 节点遇到非法 JSON 结构时的 JsonDecodingException 捕获。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "json_parse",
+                ActionNodeType.JSON_PARSE,
+                "解析 JSON",
+                config(ActionJsonConfigKey.TEXT to "{invalid_json_text:", ActionJsonConfigKey.OUTPUT_KEY to "res")
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "json_parse")),
+    )
+
+    private fun errorArrayOutOfBoundsSample(): ActionWorkflow = workflow(
+        id = "error_array_out_of_bounds",
+        name = "错误测试：数组下标越界",
+        description = "验证 array.remove_at 节点删除超限 index 时的越界防护。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "array_remove",
+                ActionNodeType.ARRAY_REMOVE_AT,
+                "删除元素",
+                config(ActionArrayConfigKey.VALUES to buildJsonArray { add(JsonPrimitive("item1")) }, ActionArrayConfigKey.INDEX to 99, ActionArrayConfigKey.OUTPUT_KEY to "res")
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "array_remove")),
+    )
+
+    private fun errorUrlParseMalformedSample(): ActionWorkflow = workflow(
+        id = "error_url_parse_malformed",
+        name = "错误测试：非法 URL 解析",
+        description = "验证 url.parse 节点处理损坏 URL 时的 URLParserException 异常捕获。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "url_parse",
+                ActionNodeType.URL_PARSE,
+                "解析 URL",
+                config(ActionUrlConfigKey.URL to "ht tps://invalid url string", ActionUrlConfigKey.OUTPUT_KEY to "res")
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "url_parse")),
+    )
+
+    private fun errorHtmlSelectorInvalidSample(): ActionWorkflow = workflow(
+        id = "error_html_selector_invalid",
+        name = "错误测试：非法 CSS 选择器",
+        description = "验证 html.query 节点在选择器语法错误时的 SelectorParseException 拦截。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "html_query",
+                ActionNodeType.HTML_QUERY,
+                "DOM 查询",
+                config(
+                    ActionHtmlConfigKey.HTML to "<div>text</div>",
+                    ActionHtmlConfigKey.SELECTOR to ":::bad_selector:::",
+                    ActionHtmlConfigKey.OPERATION to "text",
+                    ActionHtmlConfigKey.OUTPUT_KEY to "res",
+                )
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "html_query")),
+    )
+
+    private fun errorMissingConfigSample(): ActionWorkflow = workflow(
+        id = "error_missing_config",
+        name = "错误测试：缺少必需配置项",
+        description = "验证节点缺少必需配置项时，校验器 (Validator) 在静态校验阶段的拦截。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "template",
+                ActionNodeType.TEMPLATE,
+                "模板替换",
+                config(ActionDataConfigKey.OUTPUT_KEY to "res")
+            ),
+        ),
+        edges = listOf(edge("start", ActionControlPortId.NEXT, "template")),
     )
 
     private fun workflow(id: String, name: String, description: String, capabilities: Set<String> = emptySet(), nodes: List<ActionNode>, edges: List<ActionEdge>) = ActionWorkflow(

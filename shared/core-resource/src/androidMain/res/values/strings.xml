@@ -1161,6 +1161,7 @@
     <string name="workflow_tab_data">数据计算</string>
     <string name="workflow_tab_text_net">文本网络</string>
     <string name="workflow_tab_ui_side_effect">界面副作用</string>
+    <string name="workflow_tab_error">错误测试</string>
     <string name="workflow_tab_saved">已保存</string>
     <string name="workflow_view_node_graph">节点卡片</string>
     <string name="workflow_view_execution_log">执行日志</string>

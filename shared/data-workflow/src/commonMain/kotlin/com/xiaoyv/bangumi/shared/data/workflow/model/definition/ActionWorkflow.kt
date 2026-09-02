@@ -19,7 +19,6 @@ data class ActionWorkflow(
     val entryNodeId: String = "",
     val globalErrorNodeId: String? = null,
     val requiredCapabilities: SerializeList<String> = persistentListOf(),
-    val triggers: SerializeList<ActionTrigger> = persistentListOf(),
     val nodes: SerializeList<ActionNode> = persistentListOf(),
     val edges: SerializeList<ActionEdge> = persistentListOf(),
 ) {

@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.workflow.engine
 
 import com.xiaoyv.bangumi.shared.data.workflow.engine.loop.LoopExecutionController
+import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionErrorCode
 import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionNodeExecutionException
 import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionWorkflowException
 import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionWorkflowTraceLogger
@@ -17,6 +18,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStep
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopContextKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
@@ -65,15 +67,36 @@ class ActionWorkflowEngine(
     ): Flow<ActionExecutionEvent> = flow {
         val validation = validator.validate(workflow)
         if (!validation.isValid) {
-            emit(
-                ActionExecutionEvent.Failed(
-                    ActionExecutionError("invalid_workflow", validation.issues.joinToString { it.message }),
-                )
+            val firstIssue = validation.issues.firstOrNull()
+            val issueNode = firstIssue?.nodeId?.let { id -> workflow.nodes.find { it.id == id } }
+            val workflowEx = ActionWorkflowException(
+                code = ActionErrorCode.INVALID_WORKFLOW,
+                messageText = validation.issues.joinToString("; ") { issue ->
+                    val nodePrefix = issue.nodeId?.let { "节点 [$it]: " } ?: ""
+                    "$nodePrefix${issue.message}"
+                },
+                workflowId = workflow.id,
+                workflowName = workflow.name,
+                nodeId = firstIssue?.nodeId,
+                nodeType = issueNode?.type,
+                nodeLabel = issueNode?.label,
+                details = mapOf(ActionErrorKey.ISSUES to JsonPrimitive(validation.issues.joinToString { it.message })),
+                hint = ActionErrorCode.INVALID_WORKFLOW_HINT
             )
+            ActionWorkflowTraceLogger.logError(workflowEx)
+            emit(ActionExecutionEvent.Failed(workflowEx.toExecutionError()))
             return@flow
         }
         if (!workflow.enabled) {
-            emit(ActionExecutionEvent.Failed(ActionExecutionError("workflow_disabled", "工作流已禁用")))
+            val workflowEx = ActionWorkflowException(
+                code = ActionErrorCode.WORKFLOW_DISABLED,
+                messageText = ActionErrorCode.WORKFLOW_DISABLED_MSG,
+                workflowId = workflow.id,
+                workflowName = workflow.name,
+                hint = ActionErrorCode.WORKFLOW_DISABLED_HINT
+            )
+            ActionWorkflowTraceLogger.logError(workflowEx)
+            emit(ActionExecutionEvent.Failed(workflowEx.toExecutionError()))
             return@flow
         }
 
@@ -99,17 +122,17 @@ class ActionWorkflowEngine(
 
         while (readyQueue.isNotEmpty()) {
             if (++stepCount > maxStepCount) {
-                emitFailure(workflow, startedAt, steps, "step_limit", "工作流执行步骤超过上限", readyQueue.firstOrNull(), this)
+                emitFailure(workflow, startedAt, steps, ActionErrorCode.STEP_LIMIT, ActionErrorCode.STEP_LIMIT_MSG, readyQueue.firstOrNull(), this)
                 return@flow
             }
 
             val currentNodeId = readyQueue.removeFirst()
             val node = nodes[currentNodeId] ?: run {
-                emitFailure(workflow, startedAt, steps, "missing_node", "找不到待执行节点", currentNodeId, this)
+                emitFailure(workflow, startedAt, steps, ActionErrorCode.MISSING_NODE, ActionErrorCode.MISSING_NODE_MSG, currentNodeId, this)
                 return@flow
             }
             val definition = registry.find(node.type) ?: run {
-                emitFailure(workflow, startedAt, steps, "unknown_node", "不支持节点类型：${node.type}", node.id, this)
+                emitFailure(workflow, startedAt, steps, ActionErrorCode.UNKNOWN_NODE, "${ActionErrorCode.UNKNOWN_NODE_MSG}：${node.type}", node.id, this)
                 return@flow
             }
 
@@ -141,13 +164,21 @@ class ActionWorkflowEngine(
                     if (failureTarget !in readyQueue) readyQueue.add(failureTarget)
                     continue
                 }
-                emitFailure(workflow, startedAt, steps, "loop_execution_failed", throwable.message.orEmpty(), node.id, this)
+                emitFailure(
+                    workflow,
+                    startedAt,
+                    steps,
+                    ActionErrorCode.LOOP_EXECUTION_FAILED,
+                    throwable.message.orEmpty().ifBlank { ActionErrorCode.LOOP_EXECUTION_FAILED_MSG },
+                    node.id,
+                    this
+                )
                 return@flow
             }
 
             if (loopTransition != null) {
                 context = loopTransition.context
-                val loopOutput = JsonObject(mapOf("loop" to context.loop))
+                val loopOutput = JsonObject(mapOf(ActionLoopContextKey.LOOP to context.loop))
                 steps += ActionExecutionStep(node.id, nodeStartedAt, now(), loopTransition.outputPortId, loopOutput)
                 emit(ActionExecutionEvent.NodeCompleted(node.id, loopTransition.outputPortId, loopOutput))
                 executedNodes += node.id
@@ -171,21 +202,17 @@ class ActionWorkflowEngine(
                 definition.executor.execute(node, context)
             } catch (throwable: Throwable) {
                 if (throwable is CancellationException) throw throwable
-                val workflowEx = if (throwable is ActionWorkflowException) {
-                    throwable
-                } else {
-                    ActionNodeExecutionException(
-                        code = "node_execution_failed",
-                        messageText = throwable.message.orEmpty().ifBlank { "节点 [${node.id}] 执行抛出未捕获异常" },
-                        workflowId = workflow.id,
-                        workflowName = workflow.name,
-                        nodeId = node.id,
-                        nodeType = node.type,
-                        nodeLabel = node.label,
-                        details = mapOf("config" to node.config),
-                        cause = throwable,
-                    )
-                }
+                val workflowEx = throwable as? ActionWorkflowException ?: ActionNodeExecutionException(
+                    code = ActionErrorCode.NODE_EXECUTION_FAILED,
+                    messageText = throwable.message.orEmpty().ifBlank { "节点 [${node.id}] ${ActionErrorCode.NODE_EXECUTION_FAILED_MSG}" },
+                    workflowId = workflow.id,
+                    workflowName = workflow.name,
+                    nodeId = node.id,
+                    nodeType = node.type,
+                    nodeLabel = node.label,
+                    details = mapOf(ActionErrorKey.CONFIG to node.config),
+                    cause = throwable,
+                )
                 ActionWorkflowTraceLogger.logError(workflowEx)
                 val error = workflowEx.toExecutionError()
                 val failureOutput = errorOutput(JsonObject(emptyMap()), error)
@@ -219,7 +246,7 @@ class ActionWorkflowEngine(
                     sideEffectHandler.handle(result.sideEffect)
                 } catch (throwable: Throwable) {
                     if (throwable is CancellationException) throw throwable
-                    ActionSideEffectResult.Failure(throwable.message ?: "副作用执行异常")
+                    ActionSideEffectResult.Failure(throwable.message ?: ActionErrorCode.SIDE_EFFECT_FAILED_MSG)
                 }
                 when (effectResult) {
                     is ActionSideEffectResult.Success -> {
@@ -227,7 +254,7 @@ class ActionWorkflowEngine(
                     }
 
                     ActionSideEffectResult.Cancelled -> {
-                        val error = ActionExecutionError("side_effect_cancelled", "用户取消了操作", node.id)
+                        val error = ActionExecutionError(ActionErrorCode.SIDE_EFFECT_CANCELLED, ActionErrorCode.SIDE_EFFECT_CANCELLED_MSG, node.id)
                         steps += ActionExecutionStep(node.id, nodeStartedAt, now(), error = error)
                         emit(ActionExecutionEvent.Failed(error))
                         emitTerminal(workflow, startedAt, steps, ActionExecutionStatus.CANCELLED, this)
@@ -235,7 +262,18 @@ class ActionWorkflowEngine(
                     }
 
                     is ActionSideEffectResult.Failure -> {
-                        val error = ActionExecutionError("side_effect_failed", effectResult.message, node.id)
+                        val workflowEx = ActionWorkflowException(
+                            code = ActionErrorCode.SIDE_EFFECT_FAILED,
+                            messageText = effectResult.message,
+                            workflowId = workflow.id,
+                            workflowName = workflow.name,
+                            nodeId = node.id,
+                            nodeType = node.type,
+                            nodeLabel = node.label,
+                            details = mapOf(ActionErrorKey.SIDE_EFFECT to JsonPrimitive(result.sideEffect::class.simpleName ?: "unknown")),
+                        )
+                        ActionWorkflowTraceLogger.logError(workflowEx)
+                        val error = workflowEx.toExecutionError()
                         val failureOutput = errorOutput(output, error)
                         steps += ActionExecutionStep(node.id, nodeStartedAt, now(), ActionControlPortId.FAILURE, failureOutput, error)
                         context = context.copy(stepOutputs = (context.stepOutputs + (node.id to failureOutput)).toPersistentMap())
@@ -279,7 +317,7 @@ class ActionWorkflowEngine(
             // 检查并入队就绪的下游节点（完美支持 Fork-Join 多路分叉与汇入合流）
             val targetNodeIds = outgoingEdges.map { it.target.nodeId }.distinct()
             for (targetId in targetNodeIds) {
-                if (isNodeReadyToExecute(targetId, activatedEdges, executedNodes, readyQueue, incomingControlEdges)) {
+                if (isNodeReadyToExecute(targetId, activatedEdges, executedNodes, incomingControlEdges)) {
                     if (targetId !in readyQueue) {
                         readyQueue.add(targetId)
                     }
@@ -298,7 +336,6 @@ class ActionWorkflowEngine(
         nodeId: String,
         activatedEdges: Set<String>,
         executedNodes: Set<String>,
-        readyQueue: Collection<String>,
         incomingControlEdges: Map<String, List<ActionEdge>>,
     ): Boolean {
         val incoming = incomingControlEdges[nodeId].orEmpty()
@@ -374,7 +411,7 @@ class ActionWorkflowEngine(
             nodeId = nodeId,
             nodeType = node?.type,
             nodeLabel = node?.label,
-            details = node?.config?.let { mapOf("config" to it) } ?: emptyMap(),
+            details = node?.config?.let { mapOf(ActionErrorKey.CONFIG to it) } ?: emptyMap(),
             cause = cause,
         )
         ActionWorkflowTraceLogger.logError(workflowEx)

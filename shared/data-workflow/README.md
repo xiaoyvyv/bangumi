@@ -250,46 +250,56 @@ workflowEngine.execute(
 
 ## 异常处理与诊断溯源设计
 
-当工作流运行过程中出现配置丢失、节点除零、表达式解析语法错误或网络请求故障时，系统设计了一套面向工业级开发的异常捕捉与诊断溯源架构：
+当工作流运行过程中出现配置丢失、节点除零、选择器解析语法错误或网络请求故障时，系统设计了一套面向工业级开发的异常捕捉、错误代码收归与诊断溯源架构：
 
 ```text
                                ActionWorkflowException (领域根异常)
                                           │
-       ┌──────────────────────────┬───────┴──────────────────┬──────────────────────────┐
-       ▼                          ▼                          ▼                          ▼
-ActionNodeConfigException   ActionNodeExecutionException   ActionExpressionException   ActionWorkflowTopologyException
- (配置缺失/格式非法)           (除零/算术溢出/网络故障)       (模板语法错误/求值失败)        (入口缺失/拓扑环路死锁)
+                                          ▼
+                             ActionNodeExecutionException
+                                 (节点执行未捕获异常)
 ```
 
 ### 领域异常继承体系
 
 所有引擎抛出的异常均携带丰富的排错上下文：
 
-- `code`：稳定机器可读的错误代码（如 `CONFIG_MISSING`、`DIVIDE_BY_ZERO`、`EXPRESSION_EVALUATION_FAILED`）。
+- `code`：稳定机器可读的错误代码（统一收归在 `ActionErrorCode` 或 `ActionValidationCode` 中，如 `invalid_workflow`、`step_limit`、`node_execution_failed`）。
 - `messageText`：人类可读的排错信息。
 - `workflowId` / `workflowName`：发生错误的目标工作流信息。
 - `nodeId` / `nodeType` / `nodeLabel`：发生错误的具体节点标识、类型与展示名称。
-- `configKey`：触发错误的配置项键名（如 `url`、`left`）。
+- `configKey`：触发错误的配置项键名（如 `url`、`right`）。
 - `details`：运行时触发故障时的上下文 JSON 输入快照。
-- `hint`：指导开发人员解决该案例错误的“踩坑建议”提示。
+- `hint`：指导开发人员解决该案例错误的“踩坑建议”提示（如 `ActionErrorCode.INVALID_WORKFLOW_HINT`）。
+
+### 统一 Error Code 与 Message 集中注册表
+
+所有的 Error Code、Validation Issue Code 以及对应的默认中文 Message（`*_MSG`）和 Hint（`*_HINT`）统一收归在 `com.xiaoyv.bangumi.shared.data.workflow.exception.ActionErrorCode.kt` 中：
+
+- **`ActionErrorCode`**：引擎运行时异常代码注册表（如 `INVALID_WORKFLOW`、`WORKFLOW_DISABLED`、`STEP_LIMIT`、`MISSING_NODE`、`UNKNOWN_NODE`、`LOOP_EXECUTION_FAILED`、
+  `SIDE_EFFECT_CANCELLED`、`SIDE_EFFECT_FAILED`、`NODE_EXECUTION_FAILED`）。
+- **`ActionValidationCode`**：静态拓扑与图校验 Issue 代码注册表（包含 `UNSUPPORTED_FORMAT`、`DUPLICATE_NODE_ID`、`INVALID_ENTRY`、`INVALID_ERROR_NODE`、`MISSING_CONFIG`、`CONTROL_CYCLE` 等
+  26 个校验规则代码）。
 
 ### 统一错误输出协议
 
-当节点触发 `failure` 分支或节点错误被捕获时，引擎通过 `toExecutionError()` 导出标准化的结构化 `JsonObject` 数据。数据 Key 规范定义在 `ActionErrorKey` 中：
+当节点触发 `failure` 分支或节点错误被捕获时，引擎通过 `toExecutionError()` 导出标准化的结构化 `JsonObject` 数据。数据 Key 规范集中定义在 `ActionErrorKey` 中：
 
 ```json
 {
   "error": {
-    "code": "DIVIDE_BY_ZERO",
-    "message": "数学除法计算失败：除数 right 为 0",
-    "nodeId": "node_math_divide_1",
+    "code": "node_execution_failed",
+    "message": "节点 [divide_node] 节点执行抛出未捕获异常",
+    "nodeId": "divide_node",
     "nodeType": "math.divide",
     "nodeLabel": "除法计算",
     "workflowId": "wf_bilibili_sync",
     "configKey": "right",
     "details": {
-      "left": 100,
-      "right": 0
+      "config": {
+        "left": 100,
+        "right": 0
+      }
     },
     "hint": "请检查除数参数是否为 0，或在除法前使用 control.if 进行判空保护。"
   }
@@ -298,24 +308,24 @@ ActionNodeConfigException   ActionNodeExecutionException   ActionExpressionExcep
 
 ### 高亮终端诊断日志与监听回调
 
-- **终端高亮控制台 (`ActionWorkflowTraceLogger`)**：在控制台会自动打印 15 行边框围合、带图标与完整诊断元信息的开发溯源报告：
+- **终端高亮控制台 (`ActionWorkflowTraceLogger`)**：在控制台会自动打印格式化、带图标与完整诊断元信息的开发溯源报告：
 
 ```text
-┌───────────────────────────────────────────────────────────────────────────────┐
-│ ❌ [ActionWorkflow Error Trace Diagnostic]                                    │
-├───────────────────────────────────────────────────────────────────────────────┤
-│  Workflow ID  : wf_sample_demo                                                │
-│  Node ID      : node_math_calc                                                │
-│  Node Type    : math.divide (算术除法)                                         │
-│  Error Code   : DIVIDE_BY_ZERO                                                │
-│  Config Key   : right                                                         │
-│  Message      : 除法节点计算失败，除数不能为 0                                   │
-│  Hint         : 请在除法计算前使用 control.equals 或 control.if 校验除数不为 0。    │
-└───────────────────────────────────────────────────────────────────────────────┘
+================================================================================
+❌ [WORKFLOW ERROR TRACE] 工作流执行异常溯源报告
+--------------------------------------------------------------------------------
+📍 工作流标识 : [wf_sample_demo] 示例工作流
+📍 节点标识   : [node_math_calc]
+📍 节点类型   : math.divide (算术除法)
+📍 错误代码   : node_execution_failed
+📍 错误原因   : 节点 [node_math_calc] 节点执行抛出未捕获异常
+📍 上下文快照 : {"config":{"left":100,"right":0}}
+📍 底层异常   : IllegalArgumentException: 除数不能为 0
+💡 排查建议   : 请在除法计算前使用 control.if 校验除数不为 0。
+================================================================================
 ```
 
-- **全局监听器回调 (`ActionWorkflowLogListener`)**：可调用 `ActionWorkflowTraceLogger.addListener { exception -> ... }` 动态注册日志回调，无缝接入线上 App 的 APM 埋点、Sentry 异常监控系统或
-  Compose UI 调试界面面板。
+- **全局监听器回调 (`ActionWorkflowLogListener`)**：使用 `ActionWorkflowTraceLogger.addListener { tag, priority, message -> ... }` 动态注册异常日志回调。
 
 ---
 

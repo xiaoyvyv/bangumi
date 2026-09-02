@@ -1,6 +1,5 @@
 package com.xiaoyv.bangumi.shared.data.workflow.exception
 
-import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionError
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionErrorKey
 import kotlinx.serialization.json.JsonElement
@@ -12,7 +11,7 @@ import kotlinx.serialization.json.buildJsonObject
  * 工业级工作流统一异常根类。
  *
  * 封装了全局可追溯诊断元数据：
- * - [code]：机器可读的诊断错误码（如 `NODE_CONFIG_MISSING`, `MATH_DIVIDE_BY_ZERO`）
+ * - [code]：机器可读的诊断错误码（如 `NODE_EXECUTION_FAILED`, `WORKFLOW_DISABLED`）
  * - [messageText]：清晰的中文错误描述
  * - [workflowId]：产生错误的工作流 ID
  * - [workflowName]：工作流名称
@@ -36,6 +35,26 @@ open class ActionWorkflowException(
     val hint: String? = null,
     cause: Throwable? = null,
 ) : RuntimeException(buildErrorMessage(code, nodeId, messageText), cause) {
+
+    /**
+     * 补充工作流 ID 与名称元数据，确保任何深层抛出的领域异常在引擎层面都能完整溯源。
+     */
+    fun withWorkflowInfo(workflowId: String, workflowName: String): ActionWorkflowException {
+        if (this.workflowId == workflowId && this.workflowName == workflowName) return this
+        return ActionWorkflowException(
+            code = code,
+            messageText = messageText,
+            workflowId = this.workflowId ?: workflowId,
+            workflowName = this.workflowName ?: workflowName,
+            nodeId = nodeId,
+            nodeType = nodeType,
+            nodeLabel = nodeLabel,
+            configKey = configKey,
+            details = details,
+            hint = hint,
+            cause = cause,
+        )
+    }
 
     /**
      * 转换为可随工作流事件广播和 JSON 序列化的 [ActionExecutionError]。
@@ -106,27 +125,10 @@ open class ActionWorkflowException(
 }
 
 /**
- * 节点配置错误异常。
- */
-class ActionNodeConfigException(
-    code: String = "NODE_CONFIG_ERROR",
-    messageText: String,
-    workflowId: String? = null,
-    workflowName: String? = null,
-    nodeId: String? = null,
-    nodeType: String? = null,
-    nodeLabel: String? = null,
-    configKey: String? = null,
-    details: Map<String, JsonElement> = emptyMap(),
-    hint: String? = null,
-    cause: Throwable? = null,
-) : ActionWorkflowException(code, messageText, workflowId, workflowName, nodeId, nodeType, nodeLabel, configKey, details, hint, cause)
-
-/**
  * 节点运行时执行异常。
  */
 class ActionNodeExecutionException(
-    code: String = "NODE_EXECUTION_ERROR",
+    code: String = ActionErrorCode.NODE_EXECUTION_FAILED,
     messageText: String,
     workflowId: String? = null,
     workflowName: String? = null,
@@ -138,76 +140,3 @@ class ActionNodeExecutionException(
     hint: String? = null,
     cause: Throwable? = null,
 ) : ActionWorkflowException(code, messageText, workflowId, workflowName, nodeId, nodeType, nodeLabel, configKey, details, hint, cause)
-
-/**
- * 模板或表达式解析求值异常。
- */
-class ActionExpressionException(
-    code: String = "EXPRESSION_EVALUATION_ERROR",
-    messageText: String,
-    val expression: String,
-    nodeId: String? = null,
-    cause: Throwable? = null,
-) : ActionWorkflowException(
-    code = code,
-    messageText = messageText,
-    nodeId = nodeId,
-    details = mapOf("expression" to JsonPrimitive(expression)),
-    cause = cause,
-)
-
-/**
- * 拓扑结构与图校验异常。
- */
-class ActionWorkflowTopologyException(
-    code: String = "TOPOLOGY_ERROR",
-    messageText: String,
-    workflowId: String? = null,
-    nodeId: String? = null,
-    details: Map<String, JsonElement> = emptyMap(),
-) : ActionWorkflowException(code, messageText, workflowId, null, nodeId, null, null, null, details, null, null)
-
-/**
- * 为 [ActionNode] 抛出带有节点元数据的配置异常。
- */
-fun ActionNode.configError(
-    key: String,
-    message: String,
-    hint: String? = null,
-    cause: Throwable? = null,
-): Nothing {
-    throw ActionNodeConfigException(
-        code = "NODE_CONFIG_INVALID",
-        messageText = message,
-        nodeId = id,
-        nodeType = type,
-        nodeLabel = label,
-        configKey = key,
-        details = mapOf("config" to config),
-        hint = hint,
-        cause = cause,
-    )
-}
-
-/**
- * 为 [ActionNode] 抛出带有节点元数据的运行时执行异常。
- */
-fun ActionNode.executionError(
-    code: String,
-    message: String,
-    configKey: String? = null,
-    hint: String? = null,
-    cause: Throwable? = null,
-): Nothing {
-    throw ActionNodeExecutionException(
-        code = code,
-        messageText = message,
-        nodeId = id,
-        nodeType = type,
-        nodeLabel = label,
-        configKey = configKey,
-        details = mapOf("config" to config),
-        hint = hint,
-        cause = cause,
-    )
-}

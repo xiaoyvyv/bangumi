@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.workflow.exception
 
+import com.xiaoyv.bangumi.shared.System
+
 /**
  * 工业级工作流统一诊断日志输出接口与日志器。
  */
@@ -17,7 +19,7 @@ object ActionWorkflowTraceLogger {
     init {
         // 默认控制台输出监听器
         listeners.add { level, tag, message ->
-            println("[$tag] [$level] $message")
+            System.log(tag, "[$level] $message")
         }
     }
 
@@ -29,16 +31,34 @@ object ActionWorkflowTraceLogger {
         listeners.remove(listener)
     }
 
-    fun logError(exception: ActionWorkflowException) {
-        val formattedLog = exception.buildFormattedTraceLog()
+    fun logDebug(tag: String, message: String) {
         listeners.forEach { listener ->
-            listener.onLog(ActionWorkflowLogLevel.ERROR, "BangumiWorkflowTrace", formattedLog)
+            listener.onLog(ActionWorkflowLogLevel.DEBUG, tag, message)
         }
     }
 
     fun logInfo(tag: String, message: String) {
         listeners.forEach { listener ->
             listener.onLog(ActionWorkflowLogLevel.INFO, tag, message)
+        }
+    }
+
+    fun logWarn(tag: String, message: String) {
+        listeners.forEach { listener ->
+            listener.onLog(ActionWorkflowLogLevel.WARN, tag, message)
+        }
+    }
+
+    fun logError(exception: ActionWorkflowException) {
+        val formattedLog = exception.buildFormattedTraceLog()
+        listeners.forEach { listener ->
+            listener.onLog(ActionWorkflowLogLevel.ERROR, "ActionWorkflowEngine", formattedLog)
+        }
+    }
+
+    fun logError(tag: String, message: String) {
+        listeners.forEach { listener ->
+            listener.onLog(ActionWorkflowLogLevel.ERROR, tag, message)
         }
     }
 }

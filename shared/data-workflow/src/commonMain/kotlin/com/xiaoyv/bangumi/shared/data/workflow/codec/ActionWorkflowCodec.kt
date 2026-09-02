@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.workflow.codec
 
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidation
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidator
+import com.xiaoyv.bangumi.shared.data.workflow.exception.ActionErrorCode
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import kotlinx.serialization.SerializationException
@@ -41,14 +42,13 @@ class ActionWorkflowCodec(
      */
     fun import(raw: String): ActionWorkflowImportResult {
         val migrated = runCatching { migrate(json.parseToJsonElement(raw).jsonObject) }
-            .getOrElse { return ActionWorkflowImportResult.Failure("invalid_json", it.message.orEmpty()) }
+            .getOrElse { return ActionWorkflowImportResult.Failure(ActionErrorCode.INVALID_JSON, it.message.orEmpty().ifBlank { ActionErrorCode.INVALID_JSON_MSG }) }
         val workflow = runCatching {
             registry.migrate(json.decodeFromJsonElement(ActionWorkflow.serializer(), migrated))
+        }.getOrElse { error ->
+            val message = (error as? SerializationException)?.message.orEmpty().ifBlank { ActionErrorCode.INVALID_WORKFLOW_MSG }
+            return ActionWorkflowImportResult.Failure(ActionErrorCode.INVALID_WORKFLOW, message)
         }
-            .getOrElse { error ->
-                val message = (error as? SerializationException)?.message.orEmpty()
-                return ActionWorkflowImportResult.Failure("invalid_workflow", message)
-            }
         val validation = validator.validate(workflow)
         return if (validation.isValid) ActionWorkflowImportResult.Success(workflow) else ActionWorkflowImportResult.Invalid(workflow, validation)
     }
