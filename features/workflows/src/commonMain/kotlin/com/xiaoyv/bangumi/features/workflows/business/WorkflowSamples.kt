@@ -1705,11 +1705,10 @@ object WorkflowSamples {
             ),
             node(
                 "check_condition",
-                ActionNodeType.CONDITION_GREATER_THAN,
-                "条件过滤 (Index > 0)",
+                ActionNodeType.CONDITION_IF,
+                "条件过滤 (\${loop.index > 0})",
                 config(
-                    ActionControlConfigKey.LEFT to "\${loop.index}",
-                    ActionControlConfigKey.RIGHT to 0,
+                    ActionControlConfigKey.CONDITION to "\${loop.index > 0}",
                 ),
             ),
             node(
@@ -1717,7 +1716,7 @@ object WorkflowSamples {
                 ActionNodeType.TEMPLATE,
                 "循环内分支A: 格式化名称",
                 config(
-                    ActionDataConfigKey.TEMPLATE to "[No.\${loop.iteration}] \${loop.item}",
+                    ActionDataConfigKey.TEMPLATE to "[No.\${loop.index + 1}] \${loop.item}",
                     ActionDataConfigKey.OUTPUT_KEY to "formatted_name",
                 ),
             ),

@@ -174,9 +174,11 @@ workflowEngine.execute(
 
 ---
 
-## 上下文与模板
+## 上下文与模板求值引擎
 
-`ActionExecutionContext` 为一次运行创建不可变快照，模板支持以下根命名空间（占位符格式 `${vars.xxx}`）：
+`ActionExecutionContext` 为一次运行创建不可变快照。引擎内置了工业级的行内表达式解析器 `ActionTemplateResolver`，不仅支持上下文路径导航，还支持在 `${...}` 占位符内直接进行算术运算、比较判断、逻辑组合与 Elvis / 三元表达：
+
+### 1. 根命名空间
 
 | 路径            | 来源                | 示例                                  |
 |:--------------|:------------------|:------------------------------------|
@@ -187,7 +189,16 @@ workflowEngine.execute(
 | `steps`       | 已完成节点输出，按节点 ID 索引 | `${steps.request.body}`             |
 | `loop`        | 当前最内层循环数据         | `${loop.item.name}`、`${loop.index}` |
 
-未知路径解析为 JSON `null`，以便可选字段缺失时流程仍能用条件节点自行处理。
+### 2. 行内表达式运算
+
+- **行内算术运算**：`${loop.index + 1}`、`${vars.score * 0.9}`、`${vars.total - 10}`
+- **关系与条件判断**：`${loop.index > 0}`、`${vars.score >= 80}`、`${vars.tag == 'anime'}`
+- **逻辑运算符**：`${loop.index > 0 && vars.score >= 90}`
+- **Elvis 空值兜底**：`${vars.title ?: '默认标题'}`
+- **三元条件选择**：`${vars.score >= 80 ? '优秀' : '普通'}`
+- **成员方法与属性**：`${vars.items.length}`、`${vars.text.length}`
+
+未知路径或求值异常时自动安全兜底为 `JsonNull` / 空文本，保证流程不崩溃。
 
 ---
 
