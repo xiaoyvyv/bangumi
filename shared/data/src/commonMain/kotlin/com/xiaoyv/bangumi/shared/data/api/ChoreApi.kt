@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api
 
-import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
+import com.xiaoyv.bangumi.shared.data.marker.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeParade
 import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeAppRelease
 import com.xiaoyv.bangumi.shared.data.model.response.chore.ComposeBangumiStatus

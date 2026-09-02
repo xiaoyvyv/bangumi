@@ -2,7 +2,7 @@
 
 package com.xiaoyv.bangumi.shared.data.api
 
-import com.xiaoyv.bangumi.shared.core.types.AppDsl
+import com.xiaoyv.bangumi.shared.data.marker.AppApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceCharacter
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceMoe
 import de.jensklingenberg.ktorfit.http.Body
@@ -17,7 +17,7 @@ import io.ktor.client.request.forms.MultiPartFormDataContent
  * @author why
  * @since 2025/1/25
  */
-@AppDsl
+@AppApiDsl
 interface TraceApi {
 
 

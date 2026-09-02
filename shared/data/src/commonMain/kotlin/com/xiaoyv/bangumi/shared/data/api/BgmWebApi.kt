@@ -3,9 +3,9 @@
 package com.xiaoyv.bangumi.shared.data.api
 
 import com.fleeksoft.ksoup.nodes.Document
-import com.xiaoyv.bangumi.shared.core.types.AppWebApiDsl
 import com.xiaoyv.bangumi.shared.core.types.SubjectWebPath
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
+import com.xiaoyv.bangumi.shared.data.marker.AppWebApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeDollarItem
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus

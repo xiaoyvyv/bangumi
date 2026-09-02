@@ -1,9 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
-import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
+import com.xiaoyv.bangumi.shared.data.marker.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.ClearNoticeRequest
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.NextWebLoginParam

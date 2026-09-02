@@ -1,9 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
-import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.core.types.TimelineCat
 import com.xiaoyv.bangumi.shared.core.types.TimelineTarget
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
+import com.xiaoyv.bangumi.shared.data.marker.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateCommentParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.LikeCommentParam
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeId

@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.api.pixiv
 
-import com.xiaoyv.bangumi.shared.core.types.AppDsl
+import com.xiaoyv.bangumi.shared.data.marker.AppPixivApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.model.SearchIllustrations
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
@@ -10,7 +10,7 @@ import de.jensklingenberg.ktorfit.http.Query
  *
  * @since 2025/5/26
  */
-@AppDsl
+@AppPixivApiDsl
 interface PixivApi {
     /**
      * 搜索插画作品。

@@ -3,7 +3,6 @@
 package com.xiaoyv.bangumi.shared.data.parser.bgm
 
 import com.fleeksoft.ksoup.nodes.Element
-import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.fromJson
@@ -17,6 +16,7 @@ import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthDayRegex
 import com.xiaoyv.bangumi.shared.core.utils.infoYearMonthRegex
 import com.xiaoyv.bangumi.shared.core.utils.parseStar
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
+import com.xiaoyv.bangumi.shared.data.marker.AppParserDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeRating
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeTag

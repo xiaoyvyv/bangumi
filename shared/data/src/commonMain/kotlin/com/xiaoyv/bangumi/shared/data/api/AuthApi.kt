@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api
 
-import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
+import com.xiaoyv.bangumi.shared.data.marker.AppApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import de.jensklingenberg.ktorfit.http.Field
@@ -14,7 +14,7 @@ import io.ktor.util.date.getTimeMillis
  *
  * 此 API 所在的 HttpClient 是匿名的，仅做数据请求使用，未包含任何用户信息
  */
-@AppDsl
+@AppApiDsl
 interface AuthApi {
     /**
      * 番组计划

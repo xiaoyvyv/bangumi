@@ -2,7 +2,6 @@
 
 package com.xiaoyv.bangumi.shared.data.api.client
 
-import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.api.AuthApi
 import com.xiaoyv.bangumi.shared.data.api.BgmWebApi
@@ -60,11 +59,11 @@ import com.xiaoyv.bangumi.shared.data.api.pixiv.createPixivAjaxApi
 import com.xiaoyv.bangumi.shared.data.api.pixiv.createPixivApi
 import com.xiaoyv.bangumi.shared.data.constant.WebConstant
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
+import com.xiaoyv.bangumi.shared.data.marker.AppHttpDsl
 import com.xiaoyv.bangumi.shared.data.repository.impl.UserRepositoryImpl.Companion.createBgmToken
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
@@ -74,7 +73,7 @@ import kotlin.coroutines.CoroutineContext
  * @author why
  * @since 2025/1/14
  */
-@AppDsl
+@AppHttpDsl
 class ApiClient(
     private val cookieStorage: ApiCookiesStorage,
     private val preferenceStore: PreferenceStore,

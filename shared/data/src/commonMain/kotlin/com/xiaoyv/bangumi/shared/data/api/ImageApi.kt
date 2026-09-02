@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.api
 
-import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
+import com.xiaoyv.bangumi.shared.data.marker.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeAnimePicture
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposePixivImage
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposePixivImageBody

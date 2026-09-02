@@ -3,8 +3,8 @@
 package com.xiaoyv.bangumi.shared.data.parser.bgm
 
 import com.fleeksoft.ksoup.nodes.Element
-import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
+import com.xiaoyv.bangumi.shared.data.marker.AppParserDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroup
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeGroupHomepage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeImages

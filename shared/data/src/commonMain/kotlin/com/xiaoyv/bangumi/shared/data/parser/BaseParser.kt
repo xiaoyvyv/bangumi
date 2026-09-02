@@ -6,9 +6,9 @@ import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.parse_data_none
 import com.xiaoyv.bangumi.shared.core.exception.ApiException
 import com.xiaoyv.bangumi.shared.core.exception.ApiHttpException
-import com.xiaoyv.bangumi.shared.core.types.AppParserDsl
 import com.xiaoyv.bangumi.shared.core.utils.fetchStyleBackgroundUrl
 import com.xiaoyv.bangumi.shared.core.utils.sanitizeImageUrl
+import com.xiaoyv.bangumi.shared.data.marker.AppParserDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmojiParam
 import org.jetbrains.compose.resources.getString
 

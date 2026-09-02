@@ -105,7 +105,7 @@ class WorkflowsViewModel(
         ).collect { event ->
             val output = event.toOutputLine()
             debugLog {
-                setTag { "ActionWorkflow" }
+                tag = "ActionWorkflow"
                 output
             }
             when (event) {

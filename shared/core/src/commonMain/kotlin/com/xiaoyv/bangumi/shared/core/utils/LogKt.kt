@@ -2,22 +2,18 @@
 
 package com.xiaoyv.bangumi.shared.core.utils
 
-import com.xiaoyv.bangumi.shared.core.types.AppDsl
 import com.xiaoyv.bangumi.shared.libnative.System
 
-@AppDsl
-data class LogScope(private var tag: String = "BangumiApp") {
-    fun setTag(block: () -> String) {
-        tag = block()
-    }
+@DslMarker
+annotation class LogScopeDsl
 
-    fun getTag() = tag
-}
+@LogScopeDsl
+data class LogScope(var tag: String = "BangumiApp")
 
 inline fun debugLog(crossinline message: LogScope.() -> Any) {
     if (System.isDebugType) {
         val logScope = LogScope()
         val content = logScope.message()
-        System.log(logScope.getTag(), if (content is Throwable) content.stackTraceToString() else content.toString())
+        System.log(logScope.tag, if (content is Throwable) content.stackTraceToString() else content.toString())
     }
 }

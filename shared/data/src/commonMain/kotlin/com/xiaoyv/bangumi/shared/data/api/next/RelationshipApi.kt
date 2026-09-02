@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.api.next
 
-import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
+import com.xiaoyv.bangumi.shared.data.marker.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlocklist
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeStatus

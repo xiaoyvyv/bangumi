@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.api.app
 
-import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
+import com.xiaoyv.bangumi.shared.data.marker.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeAppPage
 import com.xiaoyv.bangumi.shared.data.model.response.base.ComposeAppResponse
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeSearchIndex

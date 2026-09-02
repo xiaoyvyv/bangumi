@@ -284,7 +284,7 @@ private object NetworkLogger : Logger {
             while (start < line.length) {
                 val end = minOf(start + NETWORK_LOG_CHUNK_SIZE, line.length)
                 debugLog {
-                    setTag { "Network" }
+                    tag = "Network"
                     line.substring(start, end)
                 }
                 start = end

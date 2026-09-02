@@ -2,17 +2,16 @@
 
 package com.xiaoyv.bangumi.shared.data.api.pixiv
 
-import com.xiaoyv.bangumi.shared.core.types.AppDsl
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchAiType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchDefaults
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchMode
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchOrder
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRating
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRatio
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustrationSearchType
-import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchAiType
-import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchDefaults
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingContentType
 import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingMode
-import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
+import com.xiaoyv.bangumi.shared.data.marker.AppPixivApiDsl
 import com.xiaoyv.bangumi.shared.data.model.request.pixiv.PixivAddTagRequest
 import com.xiaoyv.bangumi.shared.data.model.request.pixiv.PixivBookmarkRequest
 import com.xiaoyv.bangumi.shared.data.model.request.pixiv.PixivDeleteIllustsBookmarkRequest
@@ -77,7 +76,7 @@ import de.jensklingenberg.ktorfit.http.Query
  * Pixiv WebAjax Ktrofit API 定义接口
  * 整合了插画、小说、用户、收藏、搜索、系列、评论、标签及排行榜等全部 WebAjax 端点
  */
-@AppDsl
+@AppPixivApiDsl
 interface PixivAjaxApi {
 
     // ==================== 插画 / 漫画 API ====================

@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api.magnet
 
 import com.fleeksoft.ksoup.nodes.Document
-import com.xiaoyv.bangumi.shared.core.types.AppJsonApiDsl
+import com.xiaoyv.bangumi.shared.data.marker.AppJsonApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.trace.ComposeTraceName
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path

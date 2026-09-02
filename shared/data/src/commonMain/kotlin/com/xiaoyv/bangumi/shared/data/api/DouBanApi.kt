@@ -1,6 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.api
 
-import com.xiaoyv.bangumi.shared.core.types.AppDsl
+import com.xiaoyv.bangumi.shared.data.marker.AppApiDsl
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanPhoto
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSearch
 import com.xiaoyv.bangumi.shared.data.model.response.db.ComposeDoubanSuggest
@@ -14,7 +14,7 @@ import de.jensklingenberg.ktorfit.http.Query
  * @author why
  * @since 2025/1/25
  */
-@AppDsl
+@AppApiDsl
 interface DouBanApi {
 
     @GET("https://frodo.douban.com/api/v2/search/suggestion")
