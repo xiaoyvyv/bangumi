@@ -1,8 +1,8 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node
 
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
-import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowEngine
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowValidator
+import com.xiaoyv.bangumi.shared.data.workflow.engine.runtime.ActionWorkflowEngine
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionEdge
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionPortRef
@@ -39,6 +39,8 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenUrlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenWebConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionStorageConfigKey
@@ -50,6 +52,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.builtInActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionHttpRequestEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpDownloadResponse
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
@@ -68,6 +71,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.time.TimeSource
 
 /**
  * 内置节点的契约测试。
@@ -206,6 +210,119 @@ class BuiltInActionNodeTest {
         val joinStep = completedEvent.log.steps.firstOrNull { it.nodeId == "node_join" }
         assertNotNull(joinStep)
         assertEquals("Combined: LeftValue & RightValue", joinStep.output.getValue("result").jsonPrimitive.content)
+    }
+
+    /**
+     * 进度弹窗的停止结果应当作为节点失败处理，并沿 failure 出口继续执行。
+     */
+    @Test
+    fun progressDialogStopRoutesToFailurePort() = runBlocking {
+        val workflow = ActionWorkflow(
+            id = "test_progress_dialog_stop",
+            name = "Progress Dialog Stop Test",
+            entryNodeId = "progress",
+            requiredCapabilities = persistentListOf(ActionCapability.PROGRESS_DIALOG),
+            nodes = persistentListOf(
+                ActionNode(
+                    id = "progress",
+                    type = ActionNodeType.UI_PROGRESS_DIALOG,
+                    config = config(ActionProgressDialogConfigKey.MESSAGE to JsonPrimitive("正在处理")),
+                ),
+                ActionNode(
+                    id = "failure_handler",
+                    type = ActionNodeType.SET_VARIABLE,
+                    config = config(
+                        ActionDataConfigKey.KEY to JsonPrimitive("stopHandled"),
+                        ActionDataConfigKey.VALUE to JsonPrimitive(true),
+                    ),
+                ),
+            ),
+            edges = persistentListOf(
+                ActionEdge(
+                    id = "progress_failure",
+                    source = ActionPortRef("progress", ActionControlPortId.FAILURE),
+                    target = ActionPortRef("failure_handler", ActionControlPortId.IN),
+                ),
+            ),
+        )
+        val registry = ActionNodeRegistry(testHttpRequestExecutor, testPreferencesStore)
+        val engine = ActionWorkflowEngine(registry, ActionWorkflowValidator(registry), now = { 1000L })
+
+        val events = engine.execute(
+            workflow = workflow,
+            initialContext = ActionExecutionContext(),
+            sideEffectHandler = { effect ->
+                if (effect is ActionProgressDialogEffect) {
+                    ActionSideEffectResult.Failure("用户停止了进度任务")
+                } else {
+                    ActionSideEffectResult.Success()
+                }
+            },
+        ).toList()
+
+        assertTrue(
+            events.filterIsInstance<ActionExecutionEvent.NodeCompleted>().any {
+                it.nodeId == "progress" && it.outputPortId == ActionControlPortId.FAILURE
+            },
+        )
+        assertTrue(
+            events.filterIsInstance<ActionExecutionEvent.NodeCompleted>().any { it.nodeId == "failure_handler" },
+        )
+        assertEquals(
+            ActionExecutionStatus.FAILED,
+            events.filterIsInstance<ActionExecutionEvent.Completed>().single().log.status,
+        )
+    }
+
+    /**
+     * flow.parallel 的 branches 应并发执行，并在共同 flow.join 后继续后续节点。
+     */
+    @Test
+    fun flowParallelWaitsForTheLongestBranchInsteadOfAddingDurations() = runBlocking {
+        val workflow = ActionWorkflow(
+            id = "test_flow_parallel",
+            name = "Flow Parallel Test",
+            entryNodeId = "start",
+            nodes = persistentListOf(
+                ActionNode(id = "start", type = ActionNodeType.FLOW_START),
+                ActionNode(id = "parallel", type = ActionNodeType.FLOW_PARALLEL),
+                ActionNode(
+                    id = "short_delay",
+                    type = ActionNodeType.FLOW_DELAY,
+                    config = config(ActionFlowConfigKey.DELAY_MILLIS to JsonPrimitive(100)),
+                ),
+                ActionNode(
+                    id = "long_delay",
+                    type = ActionNodeType.FLOW_DELAY,
+                    config = config(ActionFlowConfigKey.DELAY_MILLIS to JsonPrimitive(300)),
+                ),
+                ActionNode(
+                    id = "join",
+                    type = ActionNodeType.FLOW_JOIN,
+                    config = config(
+                        ActionFlowConfigKey.VALUES to JsonArray(emptyList()),
+                        ActionFlowConfigKey.OUTPUT_KEY to JsonPrimitive("joined"),
+                    ),
+                ),
+                ActionNode(id = "end", type = ActionNodeType.FLOW_END),
+            ),
+            edges = persistentListOf(
+                ActionEdge("start_parallel", source = ActionPortRef("start", ActionControlPortId.NEXT), target = ActionPortRef("parallel", ActionControlPortId.IN)),
+                ActionEdge("parallel_short", source = ActionPortRef("parallel", ActionControlPortId.BRANCHES), target = ActionPortRef("short_delay", ActionControlPortId.IN)),
+                ActionEdge("parallel_long", source = ActionPortRef("parallel", ActionControlPortId.BRANCHES), target = ActionPortRef("long_delay", ActionControlPortId.IN)),
+                ActionEdge("short_join", source = ActionPortRef("short_delay", ActionControlPortId.NEXT), target = ActionPortRef("join", ActionControlPortId.IN)),
+                ActionEdge("long_join", source = ActionPortRef("long_delay", ActionControlPortId.NEXT), target = ActionPortRef("join", ActionControlPortId.IN)),
+                ActionEdge("join_end", source = ActionPortRef("join", ActionControlPortId.NEXT), target = ActionPortRef("end", ActionControlPortId.IN)),
+            ),
+        )
+        val registry = ActionNodeRegistry(testHttpRequestExecutor, testPreferencesStore)
+        val engine = ActionWorkflowEngine(registry, ActionWorkflowValidator(registry), now = { 0L })
+        val mark = TimeSource.Monotonic.markNow()
+        val events = engine.execute(workflow, ActionExecutionContext(), sideEffectHandler = { ActionSideEffectResult.Success() }).toList()
+
+        assertTrue(mark.elapsedNow().inWholeMilliseconds < 380, "并发段耗时不应累加为 400ms")
+        assertTrue(events.filterIsInstance<ActionExecutionEvent.NodeCompleted>().any { it.nodeId == "join" })
+        assertEquals(ActionExecutionStatus.SUCCESS, events.filterIsInstance<ActionExecutionEvent.Completed>().single().log.status)
     }
 
     /**
@@ -1138,6 +1255,11 @@ class BuiltInActionNodeTest {
             ActionNodeType.SYSTEM_VIBRATE to config(),
             ActionNodeType.UI_INPUT_DIALOG to config(
                 ActionInputDialogConfigKey.OUTPUT_KEY to JsonPrimitive(outputKey),
+            ),
+            ActionNodeType.UI_PROGRESS_DIALOG to config(
+                ActionProgressDialogConfigKey.MODE to JsonPrimitive(ActionProgressDialogMode.DETERMINATE),
+                ActionProgressDialogConfigKey.PROGRESS to JsonPrimitive(1),
+                ActionProgressDialogConfigKey.MAX_PROGRESS to JsonPrimitive(2),
             ),
             ActionNodeType.UI_SELECT_DIALOG to config(
                 ActionSelectDialogConfigKey.OPTIONS to buildJsonArray {

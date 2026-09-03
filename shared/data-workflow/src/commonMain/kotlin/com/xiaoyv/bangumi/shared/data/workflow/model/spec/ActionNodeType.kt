@@ -258,6 +258,7 @@ object ActionNodeType {
     const val UI_CONFIRM = "ui.confirm"
     const val UI_INPUT_DIALOG = "ui.input_dialog"
     const val UI_SELECT_DIALOG = "ui.select_dialog"
+    const val UI_PROGRESS_DIALOG = "ui.progress_dialog"
     const val SYSTEM_SHARE = "system.share"
     const val SYSTEM_NOTIFICATION = "system.notification"
     const val SYSTEM_VIBRATE = "system.vibrate"

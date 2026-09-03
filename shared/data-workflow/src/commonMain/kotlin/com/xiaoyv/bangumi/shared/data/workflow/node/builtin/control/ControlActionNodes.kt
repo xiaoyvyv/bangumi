@@ -4,13 +4,12 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecuti
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.conditionPorts
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.data.asNumber
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortDirection
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.JsonElement
@@ -22,11 +21,6 @@ import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonPrimitive
-
-internal val conditionPorts = persistentListOf(
-    ActionPortSpec(id = ActionControlPortId.TRUE, direction = ActionPortDirection.OUTPUT),
-    ActionPortSpec(id = ActionControlPortId.FALSE, direction = ActionPortDirection.OUTPUT),
-)
 
 /**
  * 控制分支的内置节点。
@@ -103,10 +97,7 @@ private fun conditionEqualsDefinition() = ActionNodeDefinition(
         type = ActionNodeType.CONDITION_EQUALS,
         category = ActionNodeCategory.CONTROL,
         inputPorts = persistentListOf(inPort),
-        outputPorts = persistentListOf(
-            ActionPortSpec(id = "true", direction = ActionPortDirection.OUTPUT),
-            ActionPortSpec(id = "false", direction = ActionPortDirection.OUTPUT),
-        ),
+        outputPorts = conditionPorts,
         requiredConfigKeys = setOf(ActionControlConfigKey.LEFT, ActionControlConfigKey.RIGHT),
     ),
     executor = { node, context ->

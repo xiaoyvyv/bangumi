@@ -4,14 +4,14 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecuti
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionLoopConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.bodyPort
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.completedPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.failurePort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.loopControlInPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortConnectionLimit
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortDirection
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortSpec
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -43,8 +43,8 @@ private fun loopDefinition(type: String, requiredConfigKeys: Set<String>): Actio
         category = ActionNodeCategory.LOOP,
         inputPorts = persistentListOf(inPort),
         outputPorts = persistentListOf(
-            ActionPortSpec(id = ActionControlPortId.BODY, direction = ActionPortDirection.OUTPUT),
-            ActionPortSpec(id = ActionControlPortId.COMPLETED, direction = ActionPortDirection.OUTPUT),
+            bodyPort,
+            completedPort,
             failurePort,
         ),
         requiredConfigKeys = requiredConfigKeys,
@@ -56,13 +56,7 @@ private fun controlDefinition(type: String): ActionNodeDefinition = ActionNodeDe
     spec = ActionNodeSpec(
         type = type,
         category = ActionNodeCategory.LOOP,
-        inputPorts = persistentListOf(
-            ActionPortSpec(
-                id = ActionControlPortId.IN,
-                direction = ActionPortDirection.INPUT,
-                maxConnections = ActionPortConnectionLimit.UNLIMITED,
-            ),
-        ),
+        inputPorts = persistentListOf(loopControlInPort),
         requiredConfigKeys = setOf(ActionLoopConfigKey.LOOP_ID),
     ),
     executor = { _, _ -> ActionNodeExecutionResult(outputPortId = "") },

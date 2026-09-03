@@ -14,6 +14,8 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNotificationConf
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenUrlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenWebConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey
@@ -33,6 +35,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionNotificationEff
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionOpenExternalAppEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionOpenExternalUrlEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionOpenInternalWebEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionReadClipboardEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogOption
@@ -68,6 +71,7 @@ internal val sideEffectActionNodeDefinitions: List<ActionNodeDefinition> = listO
     readClipboardDefinition(),
     vibrateDefinition(),
     inputDialogDefinition(),
+    progressDialogDefinition(),
     selectDialogDefinition(),
     imagePreviewDefinition(),
     syncCookieDefinition(),
@@ -188,6 +192,47 @@ private fun inputDialogDefinition() = ActionNodeDefinition(
         )
     },
 )
+
+private fun progressDialogDefinition() = ActionNodeDefinition(
+    spec = ActionNodeSpec(
+        type = ActionNodeType.UI_PROGRESS_DIALOG,
+        category = ActionNodeCategory.ACTION,
+        inputPorts = persistentListOf(inPort),
+        outputPorts = persistentListOf(successPort, failurePort),
+        requiredCapabilities = setOf(ActionCapability.PROGRESS_DIALOG),
+    ),
+    executor = { node, context ->
+        val title = node.config[ActionProgressDialogConfigKey.TITLE]
+            ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+            .orEmpty()
+        val message = node.config[ActionProgressDialogConfigKey.MESSAGE]
+            ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+            .orEmpty()
+        val mode = node.config[ActionProgressDialogConfigKey.MODE]
+            ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+            .orEmpty()
+            .ifBlank { ActionProgressDialogMode.INDETERMINATE }
+        require(mode in setOf(ActionProgressDialogMode.INDETERMINATE, ActionProgressDialogMode.DETERMINATE)) {
+            "进度模式仅支持 ${ActionProgressDialogMode.INDETERMINATE} 或 ${ActionProgressDialogMode.DETERMINATE}"
+        }
+        val progress = resolveProgressValue(node.config[ActionProgressDialogConfigKey.PROGRESS], context, 0f)
+        val maxProgress = resolveProgressValue(node.config[ActionProgressDialogConfigKey.MAX_PROGRESS], context, 1f)
+        if (mode == ActionProgressDialogMode.DETERMINATE) {
+            require(maxProgress > 0f && progress in 0f..maxProgress) { "精确进度必须满足 0 ≤ progress ≤ maxProgress，且 maxProgress > 0" }
+        }
+        ActionNodeExecutionResult(
+            outputPortId = ActionControlPortId.SUCCESS,
+            sideEffect = ActionProgressDialogEffect(title, message, mode, progress, maxProgress),
+        )
+    },
+)
+
+private fun resolveProgressValue(element: JsonElement?, context: ActionExecutionContext, defaultValue: Float): Float =
+    element?.let { ActionTemplateResolver.resolveElement(it, context) }
+        ?.jsonPrimitive
+        ?.contentOrNull
+        ?.toFloatOrNull()
+        ?: defaultValue
 
 private fun selectDialogDefinition() = ActionNodeDefinition(
     spec = ActionNodeSpec(

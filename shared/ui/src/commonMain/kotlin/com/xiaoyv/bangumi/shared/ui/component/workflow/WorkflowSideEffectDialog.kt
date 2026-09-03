@@ -58,8 +58,11 @@ import com.multiplatform.webview.web.rememberWebViewState
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
+import com.xiaoyv.bangumi.core_resource.resources.workflow_progress_stop
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -67,6 +70,72 @@ import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.milliseconds
+
+/**
+ * 工作流活动进度任务的聚合对话框。
+ *
+ * 对话框不可通过返回键或点击外部区域关闭；每个任务仅能通过自身的停止按钮结束。
+ */
+@Composable
+fun WorkflowProgressAlertDialog(
+    tasks: List<WorkflowSideEffectData<ActionProgressDialogEffect>>,
+    onStop: (String) -> Unit,
+) {
+    val stopText = stringResource(Res.string.workflow_progress_stop)
+    AlertDialog(
+        onDismissRequest = {},
+        title = null,
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                tasks.forEachIndexed { index, task ->
+                    val effect = task.effect
+                    if (index > 0) {
+                        androidx.compose.material3.HorizontalDivider(
+                            modifier = Modifier.padding(vertical = ContentMarginHalf),
+                        )
+                    }
+                    if (effect.title.isNotBlank()) {
+                        Text(text = effect.title, style = MaterialTheme.typography.titleSmall)
+                    }
+                    if (effect.message.isNotBlank()) {
+                        Text(
+                            text = effect.message,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = ContentMarginHalf),
+                        )
+                    }
+                    if (effect.mode == ActionProgressDialogMode.DETERMINATE) {
+                        LinearProgressIndicator(
+                            progress = { (effect.progress / effect.maxProgress).coerceIn(0f, 1f) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = ContentMarginHalf),
+                        )
+                    } else {
+                        LinearProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = ContentMarginHalf),
+                        )
+                    }
+                    TextButton(
+                        onClick = { onStop(task.id) },
+                        modifier = Modifier.align(Alignment.End),
+                    ) {
+                        Text(text = stopText)
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {},
+    )
+}
 
 /**
  * 工作流内置的原生 Compose Material3 二次确认对话框。

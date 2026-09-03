@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -56,6 +57,12 @@ class WorkflowSideEffectHostState {
      * Cookie 同步 BottomSheet 弹窗队列。
      */
     var syncCookieQueue by mutableStateOf<List<WorkflowSideEffectData<ActionSyncCookieEffect>>>(emptyList())
+        private set
+
+    /**
+     * 当前活动的进度任务。所有任务由一个对话框聚合展示。
+     */
+    var progressTasks by mutableStateOf<List<WorkflowSideEffectData<ActionProgressDialogEffect>>>(emptyList())
         private set
 
     /**
@@ -132,6 +139,11 @@ class WorkflowSideEffectHostState {
                     syncCookieQueue = syncCookieQueue + data
                 }
 
+                is ActionProgressDialogEffect -> {
+                    val data = WorkflowSideEffectData(entryId, effect, onResult)
+                    progressTasks = progressTasks + data
+                }
+
                 else -> {
                     val data = WorkflowSideEffectData(entryId, effect, onResult)
                     oneShotQueue = oneShotQueue + data
@@ -143,6 +155,7 @@ class WorkflowSideEffectHostState {
                 inputQueue = inputQueue.filterNot { it.id == entryId }
                 selectQueue = selectQueue.filterNot { it.id == entryId }
                 syncCookieQueue = syncCookieQueue.filterNot { it.id == entryId }
+                progressTasks = progressTasks.filterNot { it.id == entryId }
                 oneShotQueue = oneShotQueue.filterNot { it.id == entryId }
             }
         }
@@ -204,6 +217,15 @@ class WorkflowSideEffectHostState {
     }
 
     /**
+     * 停止指定进度任务，并将失败结果精确返回至触发该任务的节点。
+     */
+    fun stopProgressTask(id: String, onStopped: (WorkflowSideEffectData<ActionProgressDialogEffect>) -> Unit) {
+        val task = progressTasks.firstOrNull { it.id == id } ?: return
+        progressTasks = progressTasks.filterNot { it.id == id }
+        onStopped(task)
+    }
+
+    /**
      * 清空所有 SideEffect 队列。
      */
     fun clear() {
@@ -211,6 +233,7 @@ class WorkflowSideEffectHostState {
         inputQueue = emptyList()
         selectQueue = emptyList()
         syncCookieQueue = emptyList()
+        progressTasks = emptyList()
         oneShotQueue = emptyList()
     }
 }

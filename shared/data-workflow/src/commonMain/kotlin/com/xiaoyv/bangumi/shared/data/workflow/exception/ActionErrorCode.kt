@@ -157,4 +157,19 @@ object ActionValidationCode {
 
     const val LOOP_CONTROL_OUT_OF_SCOPE = "loop_control_out_of_scope"
     const val LOOP_CONTROL_OUT_OF_SCOPE_MSG = "循环控制节点必须位于其 loopId 的循环体内"
+
+    const val PARALLEL_MISSING_BRANCH = "parallel_missing_branch"
+    const val PARALLEL_MISSING_BRANCH_MSG = "flow.parallel 必须至少连接一条 branches 出口"
+
+    const val PARALLEL_JOIN_MISSING = "parallel_join_missing"
+    const val PARALLEL_JOIN_MISSING_MSG = "flow.parallel 的所有分支必须汇入同一个 flow.join"
+
+    const val PARALLEL_JOIN_AMBIGUOUS = "parallel_join_ambiguous"
+    const val PARALLEL_JOIN_AMBIGUOUS_MSG = "flow.parallel 分支不能汇入多个 flow.join"
+
+    const val PARALLEL_NESTED = "parallel_nested"
+    const val PARALLEL_NESTED_MSG = "flow.parallel 的分支内暂不支持嵌套 flow.parallel"
+
+    const val JOIN_NOT_PAIRED = "join_not_paired"
+    const val JOIN_NOT_PAIRED_MSG = "flow.join 必须作为某个 flow.parallel 的共同汇合点"
 }

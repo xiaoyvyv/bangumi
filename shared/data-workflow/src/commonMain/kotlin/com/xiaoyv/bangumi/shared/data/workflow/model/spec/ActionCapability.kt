@@ -14,6 +14,7 @@ object ActionCapability {
     const val CONFIRM_DIALOG = "confirm_dialog"
     const val INPUT_DIALOG = "input_dialog"
     const val SELECT_DIALOG = "select_dialog"
+    const val PROGRESS_DIALOG = "progress_dialog"
     const val SHARE = "share"
     const val NOTIFICATION = "notification"
     const val IMAGE_PREVIEW = "image_preview"

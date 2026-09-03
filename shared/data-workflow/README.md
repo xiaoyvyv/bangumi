@@ -83,12 +83,41 @@ com.xiaoyv.bangumi.shared.data.workflow/
   │   ├── resolver/                # 12级语法解析器、模板插值与路径解析 (ActionTemplateResolver, JsonPath, UrlPolicy)
   │   ├── effect/                  # 平台副作用声明 (HttpRequest, Navigation, UiEffects)
   │   └── builtin/                 # 140+ 内置节点定义实现 (control, data, parse, io, extension)
-  ├── engine/                      # 图校验、DAG 动态调度、循环与错误路由 (WorkflowEngine, Validator)
+  ├── engine/                      # 工作流运行时内核，禁止反向依赖 UI / repository
+  │   ├── ActionWorkflowValidator  # 工作流结构及 flow.parallel / flow.join 静态校验
+  │   ├── ActionSideEffectDispatcher # 平台副作用请求的调度与执行结果协议
+  │   └── runtime/                 # DAG 调度的全部内部实现，避免单文件目录
+  │       ├── ActionWorkflowEngine # 公共执行入口：创建事件流并编排调度
+  │       ├── ActionParallelExecutor # flow.parallel 并发域执行与上下文合并
+  │       ├── LoopExecutionController # 循环帧栈、迭代与中断控制
+  │       ├── WorkflowRuntimeGraph # 控制边查询、就绪判断与循环体拓扑遍历
+  │       ├── ActionWorkflowFailureRouter # failure 出口优先级解析
+  │       └── ActionExecutionEventEmitter # 运行事件、终态日志与结构化错误输出
   ├── exception/                   # 工业级工作流异常层次与格式化诊断日志 (ActionWorkflowException, TraceLogger)
   ├── port/                        # 基础设施接口抽象 (HttpClientProvider)
   ├── codec/                       # JSON 编解码与历史格式迁移器
   └── di/                          # Koin 依赖注入装配入口
 ```
+
+### 引擎运行期职责与依赖方向
+
+`engine` 的公共入口只有 `runtime/ActionWorkflowEngine`。它负责验证工作流、维护就绪队列和发出执行事件；不直接实现并发遍历、图查询、错误出口选择或平台副作用。
+
+```text
+ActionWorkflowEngine
+  ├── ActionWorkflowValidator                静态结构校验
+  ├── runtime/WorkflowRuntimeGraph           控制边拓扑与节点就绪判断
+  ├── runtime/LoopExecutionController        循环状态转换
+  ├── runtime/ActionParallelExecutor         flow.parallel 分支并发与汇合
+  ├── runtime/ActionWorkflowFailureRouter    failure 出口优先级解析
+  ├── runtime/ActionExecutionEventEmitter    Flow 事件与最终执行日志构造
+  └── ActionSideEffectDispatcher              宿主副作用的请求和执行结果
+```
+
+- `runtime` 只能依赖模型、节点注册中心与上述运行期协作组件，不能依赖 UI、repository 或平台实现。
+- `parallel` 仅执行由 `flow.parallel` 至唯一 `flow.join` 构成的并发域；工作流整体的队列调度仍归 `ActionWorkflowEngine`。
+- `error` 只解析路由，不创建或记录异常；异常输出和终态事件由 `event` 统一负责，避免多个分支产生不一致日志。
+- `sideeffect` 保持平台无关：引擎只消费 `ActionSideEffectHandler` 的结果，宿主决定如何显示对话框、通知或进度。
 
 ---
 

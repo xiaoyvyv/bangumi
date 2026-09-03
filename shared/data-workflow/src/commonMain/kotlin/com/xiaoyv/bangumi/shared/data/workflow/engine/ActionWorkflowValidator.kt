@@ -68,6 +68,7 @@ class ActionWorkflowValidator(private val registry: ActionNodeRegistry) {
             }
             validateEdges(workflow.edges, nodes, this)
             validateLoops(workflow, this)
+            validateParallelScopes(workflow, this)
             workflow.edges.filter { it.kind == ActionPortKind.DATA }.forEach { edge ->
                 add(error(ActionValidationCode.UNSUPPORTED_DATA_EDGE, ActionValidationCode.UNSUPPORTED_DATA_EDGE_MSG, edgeId = edge.id))
             }
@@ -192,6 +193,73 @@ class ActionWorkflowValidator(private val registry: ActionNodeRegistry) {
                 }
             }
         }
+    }
+
+    /**
+     * 校验 flow.parallel 与 flow.join 组成的并发域。
+     */
+    private fun validateParallelScopes(workflow: ActionWorkflow, issues: MutableList<ActionValidationIssue>) {
+        val nodes = workflow.nodes.associateBy { it.id }
+        val pairedJoins = mutableSetOf<String>()
+        workflow.nodes.filter { it.type == ActionNodeType.FLOW_PARALLEL }.forEach { parallel ->
+            val roots = workflow.edges.filter {
+                it.kind == ActionPortKind.CONTROL && it.source.nodeId == parallel.id && it.source.portId == ActionControlPortId.BRANCHES
+            }.map { it.target.nodeId }.distinct()
+            if (roots.isEmpty()) {
+                issues += error(ActionValidationCode.PARALLEL_MISSING_BRANCH, ActionValidationCode.PARALLEL_MISSING_BRANCH_MSG, parallel.id)
+                return@forEach
+            }
+            val joins = roots.map { reachableJoinNodes(workflow, it, nodes) }
+            if (joins.any { it.isEmpty() }) {
+                issues += error(ActionValidationCode.PARALLEL_JOIN_MISSING, ActionValidationCode.PARALLEL_JOIN_MISSING_MSG, parallel.id)
+                return@forEach
+            }
+            val commonJoins = joins.reduce { left, right -> left intersect right }
+            when {
+                commonJoins.isEmpty() -> issues += error(ActionValidationCode.PARALLEL_JOIN_MISSING, ActionValidationCode.PARALLEL_JOIN_MISSING_MSG, parallel.id)
+                commonJoins.size > 1 -> issues += error(ActionValidationCode.PARALLEL_JOIN_AMBIGUOUS, ActionValidationCode.PARALLEL_JOIN_AMBIGUOUS_MSG, parallel.id)
+                else -> pairedJoins += commonJoins.single()
+            }
+            if (roots.any { hasNestedParallel(workflow, it, nodes) }) {
+                issues += error(ActionValidationCode.PARALLEL_NESTED, ActionValidationCode.PARALLEL_NESTED_MSG, parallel.id)
+            }
+        }
+        workflow.nodes.filter { it.type == ActionNodeType.FLOW_JOIN && it.id !in pairedJoins }.forEach { join ->
+            issues += error(ActionValidationCode.JOIN_NOT_PAIRED, ActionValidationCode.JOIN_NOT_PAIRED_MSG, join.id)
+        }
+    }
+
+    private fun reachableJoinNodes(workflow: ActionWorkflow, startId: String, nodes: Map<String, ActionNode>): Set<String> {
+        val visited = mutableSetOf<String>()
+        val queue = ArrayDeque<String>().apply { add(startId) }
+        val joins = mutableSetOf<String>()
+        while (queue.isNotEmpty()) {
+            val nodeId = queue.removeFirst()
+            if (!visited.add(nodeId)) continue
+            val node = nodes[nodeId] ?: continue
+            if (node.type == ActionNodeType.FLOW_JOIN) {
+                joins += nodeId
+            } else {
+                workflow.edges.filter { it.kind == ActionPortKind.CONTROL && it.source.nodeId == nodeId }
+                    .forEach { edge -> queue.add(edge.target.nodeId) }
+            }
+        }
+        return joins
+    }
+
+    private fun hasNestedParallel(workflow: ActionWorkflow, startId: String, nodes: Map<String, ActionNode>): Boolean {
+        val visited = mutableSetOf<String>()
+        val queue = ArrayDeque<String>().apply { add(startId) }
+        while (queue.isNotEmpty()) {
+            val nodeId = queue.removeFirst()
+            if (!visited.add(nodeId)) continue
+            val node = nodes[nodeId] ?: continue
+            if (node.type == ActionNodeType.FLOW_JOIN) continue
+            if (node.type == ActionNodeType.FLOW_PARALLEL) return true
+            workflow.edges.filter { it.kind == ActionPortKind.CONTROL && it.source.nodeId == nodeId }
+                .forEach { edge -> queue.add(edge.target.nodeId) }
+        }
+        return false
     }
 
     private fun canReachLoopControl(

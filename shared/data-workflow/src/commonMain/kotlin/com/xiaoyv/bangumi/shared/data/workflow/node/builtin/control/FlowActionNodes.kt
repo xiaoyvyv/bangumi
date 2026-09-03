@@ -4,14 +4,18 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecuti
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionFlowConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.branchesPort
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.catchPort
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.defaultPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.failurePort
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.finallyPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.matchedPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.nextPort
+import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.tryPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeCategory
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeDefinition
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortDirection
-import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionPortSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger
@@ -66,14 +70,8 @@ private fun flowSwitchDefinition() = ActionNodeDefinition(
         category = ActionNodeCategory.FLOW,
         inputPorts = persistentListOf(inPort),
         outputPorts = persistentListOf(
-            ActionPortSpec(
-                id = ActionControlPortId.MATCHED,
-                direction = ActionPortDirection.OUTPUT,
-            ),
-            ActionPortSpec(
-                id = ActionControlPortId.DEFAULT,
-                direction = ActionPortDirection.OUTPUT,
-            ),
+            matchedPort,
+            defaultPort,
         ),
         requiredConfigKeys = setOf(ActionFlowConfigKey.VALUE, ActionFlowConfigKey.CASES),
     ),
@@ -201,9 +199,9 @@ private fun flowTryDefinition() = ActionNodeDefinition(
         category = ActionNodeCategory.FLOW,
         inputPorts = persistentListOf(inPort),
         outputPorts = persistentListOf(
-            ActionPortSpec(id = ActionControlPortId.TRY, direction = ActionPortDirection.OUTPUT),
-            ActionPortSpec(id = ActionControlPortId.CATCH, direction = ActionPortDirection.OUTPUT),
-            ActionPortSpec(id = ActionControlPortId.FINALLY, direction = ActionPortDirection.OUTPUT),
+            tryPort,
+            catchPort,
+            finallyPort,
             nextPort,
         ),
     ),
@@ -283,11 +281,11 @@ private fun flowParallelDefinition() = ActionNodeDefinition(
         category = ActionNodeCategory.FLOW,
         inputPorts = persistentListOf(inPort),
         outputPorts = persistentListOf(
-            ActionPortSpec(id = ActionControlPortId.BRANCHES, direction = ActionPortDirection.OUTPUT),
-            nextPort,
+            branchesPort,
+            failurePort,
         ),
     ),
-    executor = { _, _ -> ActionNodeExecutionResult(outputPortId = ActionControlPortId.NEXT) },
+    executor = { _, _ -> ActionNodeExecutionResult(outputPortId = ActionControlPortId.BRANCHES) },
 )
 
 private fun flowJoinDefinition() = ActionNodeDefinition(

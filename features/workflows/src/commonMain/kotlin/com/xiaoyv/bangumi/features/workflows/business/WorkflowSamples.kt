@@ -33,6 +33,8 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenUrlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenWebConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionStorageConfigKey
@@ -81,6 +83,7 @@ object WorkflowSamples {
         ActionNodeType.READ_CLIPBOARD,
         ActionNodeType.UI_CONFIRM,
         ActionNodeType.UI_INPUT_DIALOG,
+        ActionNodeType.UI_PROGRESS_DIALOG,
         ActionNodeType.UI_SELECT_DIALOG,
         ActionNodeType.SYSTEM_SHARE,
         ActionNodeType.SYSTEM_NOTIFICATION,
@@ -120,6 +123,7 @@ object WorkflowSamples {
         add(terminal("flow_stop", "提前结束流程", ActionNodeType.FLOW_STOP))
         add(switchSample())
         add(forkAndJoinSample())
+        add(parallelTimingSample())
 
         // Control 节点
         add(condition("control_if", "条件分支", ActionNodeType.CONDITION_IF, config(ActionControlConfigKey.CONDITION to true)))
@@ -715,6 +719,21 @@ object WorkflowSamples {
                     ActionInputDialogConfigKey.OUTPUT_KEY to "userNote"
                 ),
                 setOf(ActionCapability.INPUT_DIALOG)
+            )
+        )
+        add(
+            linear(
+                "ui_progress_dialog",
+                "可停止精确进度弹窗",
+                ActionNodeType.UI_PROGRESS_DIALOG,
+                config(
+                    ActionProgressDialogConfigKey.TITLE to "下载视频",
+                    ActionProgressDialogConfigKey.MESSAGE to "正在写入本地文件",
+                    ActionProgressDialogConfigKey.MODE to ActionProgressDialogMode.DETERMINATE,
+                    ActionProgressDialogConfigKey.PROGRESS to 35,
+                    ActionProgressDialogConfigKey.MAX_PROGRESS to 100,
+                ),
+                setOf(ActionCapability.PROGRESS_DIALOG),
             )
         )
         add(
@@ -1788,6 +1807,36 @@ object WorkflowSamples {
             edge("node_right", ActionControlPortId.NEXT, "node_join"),
             edge("node_join", ActionControlPortId.NEXT, "toast"),
             edge("toast", ActionControlPortId.SUCCESS, "end"),
+        ),
+    )
+
+    /**
+     * 验证 flow.parallel 的 branches 出口会并发执行，并在共同的 flow.join 汇合。
+     */
+    private fun parallelTimingSample(): ActionWorkflow = workflow(
+        id = "flow_parallel_timing",
+        name = "并发分支耗时测试",
+        description = "两条分支分别等待 1 秒与 3 秒，工作流会在共同 flow.join 汇合；总耗时应接近 3 秒，而非 4 秒。",
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node("parallel", ActionNodeType.FLOW_PARALLEL, "并发分支"),
+            node("short_delay", ActionNodeType.FLOW_DELAY, "短任务", config(ActionFlowConfigKey.DELAY_MILLIS to 1_000L)),
+            node("long_delay", ActionNodeType.FLOW_DELAY, "长任务", config(ActionFlowConfigKey.DELAY_MILLIS to 3_000L)),
+            node(
+                "join",
+                ActionNodeType.FLOW_JOIN,
+                "等待全部完成",
+                config(ActionFlowConfigKey.VALUES to JsonArray(emptyList()), ActionFlowConfigKey.OUTPUT_KEY to "parallelResult"),
+            ),
+            node("end", ActionNodeType.FLOW_END, "结束"),
+        ),
+        edges = listOf(
+            edge("start", ActionControlPortId.NEXT, "parallel"),
+            edge("parallel", ActionControlPortId.BRANCHES, "short_delay"),
+            edge("parallel", ActionControlPortId.BRANCHES, "long_delay"),
+            edge("short_delay", ActionControlPortId.NEXT, "join"),
+            edge("long_delay", ActionControlPortId.NEXT, "join"),
+            edge("join", ActionControlPortId.NEXT, "end"),
         ),
     )
 

@@ -1,8 +1,12 @@
 package com.xiaoyv.bangumi.features.workflows.business
 
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionCapability
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionControlPortId
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionJsonConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.test.Test
@@ -74,6 +78,41 @@ class WorkflowSamplesTest {
         assertEquals(
             "extract_bilibili_buvid4",
             workflow.edges.first { it.source.nodeId == "request_bilibili_spi" }.target.nodeId,
+        )
+    }
+
+    /**
+     * 进度弹窗样例应声明能力，并携带精确模式所需的完整进度配置。
+     */
+    @Test
+    fun progressDialogSampleUsesDeterminateConfiguration() {
+        val workflow = WorkflowSamples.all.first { it.id == "workflow_sample_ui_progress_dialog" }
+        val progressNode = workflow.nodes.single { it.type == ActionNodeType.UI_PROGRESS_DIALOG }
+
+        assertEquals(true, workflow.requiredCapabilities.contains(ActionCapability.PROGRESS_DIALOG))
+        assertEquals(ActionProgressDialogMode.DETERMINATE, progressNode.config[ActionProgressDialogConfigKey.MODE]?.jsonPrimitive?.content)
+        assertEquals("35", progressNode.config[ActionProgressDialogConfigKey.PROGRESS]?.jsonPrimitive?.content)
+        assertEquals("100", progressNode.config[ActionProgressDialogConfigKey.MAX_PROGRESS]?.jsonPrimitive?.content)
+    }
+
+    /**
+     * 并发耗时样例必须从 branches 出口启动两条分支，并汇入同一个 flow.join。
+     */
+    @Test
+    fun parallelTimingSampleUsesBranchesAndJoin() {
+        val workflow = WorkflowSamples.all.first { it.id == "workflow_sample_flow_parallel_timing" }
+        val parallel = workflow.nodes.single { it.type == ActionNodeType.FLOW_PARALLEL }
+        val join = workflow.nodes.single { it.type == ActionNodeType.FLOW_JOIN }
+
+        assertEquals(
+            setOf("short_delay", "long_delay"),
+            workflow.edges.filter { it.source.nodeId == parallel.id && it.source.portId == ActionControlPortId.BRANCHES }
+                .mapTo(linkedSetOf()) { it.target.nodeId },
+        )
+        assertEquals(
+            setOf("short_delay", "long_delay"),
+            workflow.edges.filter { it.target.nodeId == join.id }
+                .mapTo(linkedSetOf()) { it.source.nodeId },
         )
     }
 }

@@ -9,7 +9,7 @@ import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.repository.ActionWorkflowRepository
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectDispatcher
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
-import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionWorkflowEngine
+import com.xiaoyv.bangumi.shared.data.workflow.engine.runtime.ActionWorkflowEngine
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionEvent
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
@@ -21,6 +21,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionNotificationEff
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionOpenExternalAppEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionOpenExternalUrlEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionOpenInternalWebEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionReadClipboardEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionShareEffect
@@ -89,6 +90,7 @@ class WorkflowsViewModel(
                     is ActionConfirmEffect,
                     is ActionReadClipboardEffect,
                     is ActionInputDialogEffect,
+                    is ActionProgressDialogEffect,
                     is ActionSelectDialogEffect,
                     is ActionSyncCookieEffect -> {
                         activeSideEffectDispatcher.awaitUiResult(effectId) {

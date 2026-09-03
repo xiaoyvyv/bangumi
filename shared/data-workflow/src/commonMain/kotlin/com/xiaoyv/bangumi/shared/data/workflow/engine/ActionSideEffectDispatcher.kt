@@ -1,8 +1,10 @@
 package com.xiaoyv.bangumi.shared.data.workflow.engine
 
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.json.JsonObject
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -59,4 +61,20 @@ class ActionSideEffectDispatcher {
         @OptIn(ExperimentalUuidApi::class)
         fun generateSideEffectId(): String = "se_${++autoCounter}_${Uuid.random().toHexString()}"
     }
+}
+
+/**
+ * 工作流副作用的宿主执行契约。
+ */
+fun interface ActionSideEffectHandler {
+    suspend fun handle(effect: ActionSideEffect): ActionSideEffectResult
+}
+
+/**
+ * 宿主执行副作用后返回给工作流引擎的结果。
+ */
+sealed interface ActionSideEffectResult {
+    data class Success(val output: JsonObject = JsonObject(emptyMap())) : ActionSideEffectResult
+    data object Cancelled : ActionSideEffectResult
+    data class Failure(val message: String) : ActionSideEffectResult
 }

@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.workflow.node.effect
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
 
@@ -92,6 +93,20 @@ data class ActionInputDialogEffect(
 ) : ActionSideEffect
 
 /**
+ * 请求宿主显示可停止的工作流进度任务。
+ *
+ * 进度任务会一直保持活动状态，直到用户停止它；停止将作为副作用失败返回执行器，从而进入节点的 failure 出口。
+ */
+@Immutable
+data class ActionProgressDialogEffect(
+    val title: String = "",
+    val message: String = "",
+    val mode: String = ActionProgressDialogMode.INDETERMINATE,
+    val progress: Float = 0f,
+    val maxProgress: Float = 1f,
+) : ActionSideEffect
+
+/**
  * 请求宿主调起全屏图片预览的副作用。
  *
  * @property index 初始展示的图片索引
@@ -164,4 +179,3 @@ data class ActionSyncCookieEffect(
     val headers: Map<String, String> = emptyMap(),
     val userAgent: String = "",
 ) : ActionSideEffect
-

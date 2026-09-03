@@ -1,4 +1,4 @@
-package com.xiaoyv.bangumi.shared.data.workflow.engine.loop
+package com.xiaoyv.bangumi.shared.data.workflow.engine.runtime
 
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
@@ -61,13 +61,13 @@ internal class LoopExecutionController {
 
     fun breakLoop(loopId: String, context: ActionExecutionContext): LoopTransition {
         requireActive(loopId)
-        val frame = frames.removeLast()
+        val frame = requireNotNull(frames.removeLastOrNull())
         return LoopTransition(ActionControlPortId.COMPLETED, frame.completedNodeId, context.copy(loop = frame.outerLoop))
     }
 
     fun abort(loopId: String, context: ActionExecutionContext): ActionExecutionContext {
         val frame = frames.lastOrNull()?.takeIf { it.loopNodeId == loopId } ?: return context
-        frames.removeLast()
+        frames.removeLastOrNull()
         return context.copy(loop = frame.outerLoop)
     }
 
@@ -84,7 +84,7 @@ internal class LoopExecutionController {
             else -> false
         }
         if (!hasNext) {
-            frames.removeLast()
+            frames.removeLastOrNull()
             return LoopTransition(ActionControlPortId.COMPLETED, frame.completedNodeId, context.copy(loop = frame.outerLoop))
         }
         require(frame.iteration < frame.maxIterations) { "循环超过 maxIterations 上限" }
