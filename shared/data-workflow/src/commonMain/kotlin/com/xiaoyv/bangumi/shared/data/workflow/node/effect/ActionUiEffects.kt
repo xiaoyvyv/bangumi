@@ -130,6 +130,18 @@ data class ActionImagePreviewEffect(
 ) : ActionSideEffect
 
 /**
+ * 请求宿主调起全屏视频播放预览的副作用。
+ *
+ * @property url 视频 URL
+ * @property headers 视频请求携带的自定义请求头
+ */
+@Immutable
+data class ActionVideoPreviewEffect(
+    val url: String = "",
+    val headers: Map<String, String> = emptyMap(),
+) : ActionSideEffect
+
+/**
  * 列表选择对话框的单项选项模型。
  *
  * @param title 选项展示给用户的标题文本

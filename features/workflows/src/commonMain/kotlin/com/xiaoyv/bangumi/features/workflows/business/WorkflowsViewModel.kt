@@ -26,6 +26,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEff
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionShareEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionShowToastEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionVideoPreviewEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionWriteClipboardEffect
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -207,6 +208,7 @@ class WorkflowsViewModel(
         is ActionShareEffect -> "系统分享 \"${effect.text}\""
         is ActionNotificationEffect -> "发送通知 \"${effect.content}\""
         is ActionImagePreviewEffect -> "预览图片 (共 ${effect.images.size} 张, 当前: ${effect.index})"
+        is ActionVideoPreviewEffect -> "预览视频 ${effect.url}"
         is ActionSyncCookieEffect -> "同步 Cookie ${effect.url}"
         else -> effect::class.simpleName.orEmpty()
     }

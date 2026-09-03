@@ -50,16 +50,19 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSyncCookieConfig
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionToastConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionVideoPreviewConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.builtInActionNodeDefinitions
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeRegistry
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionHttpRequestEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionVideoPreviewEffect
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpDownloadResponse
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
 import io.ktor.http.Url
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonArray
@@ -294,6 +297,54 @@ class BuiltInActionNodeTest {
         assertEquals(60f, updateEffect.progress)
 
         assertEquals(ActionProgressDialogAction.DISMISS, dismissEffect.action)
+    }
+
+    /**
+     * 视频预览节点应当正确解析 URL 与 Headers 并派发 ActionVideoPreviewEffect 副作用。
+     */
+    @Test
+    fun videoPreviewEmitsEffectWithResolvedUrlAndHeaders() = runBlocking {
+        val workflow = ActionWorkflow(
+            id = "test_video_preview",
+            name = "Video Preview Test",
+            entryNodeId = "video_preview",
+            requiredCapabilities = persistentListOf(ActionCapability.VIDEO_PREVIEW),
+            nodes = persistentListOf(
+                ActionNode(
+                    id = "video_preview",
+                    type = ActionNodeType.VIDEO_PREVIEW,
+                    config = config(
+                        ActionVideoPreviewConfigKey.URL to JsonPrimitive("https://example.com/stream/\${vars.id}.mp4"),
+                        ActionVideoPreviewConfigKey.HEADERS to buildJsonObject {
+                            put("Referer", JsonPrimitive("https://example.com"))
+                            put("User-Agent", JsonPrimitive("BangumiClient/1.0"))
+                        },
+                    ),
+                ),
+            ),
+        )
+        val registry = ActionNodeRegistry(testHttpRequestExecutor, testPreferencesStore)
+        val engine = ActionWorkflowEngine(registry, ActionWorkflowValidator(registry), now = { 1000L })
+
+        val sideEffects = mutableListOf<ActionSideEffect>()
+        val events = engine.execute(
+            workflow = workflow,
+            initialContext = ActionExecutionContext(variables = persistentMapOf("id" to JsonPrimitive("12345"))),
+            sideEffectHandler = { effect ->
+                sideEffects.add(effect)
+                ActionSideEffectResult.Success()
+            },
+        ).toList()
+
+        assertEquals(
+            ActionExecutionStatus.SUCCESS,
+            events.filterIsInstance<ActionExecutionEvent.Completed>().single().log.status,
+        )
+        assertEquals(1, sideEffects.size)
+        val effect = sideEffects.single() as ActionVideoPreviewEffect
+        assertEquals("https://example.com/stream/12345.mp4", effect.url)
+        assertEquals("https://example.com", effect.headers["Referer"])
+        assertEquals("BangumiClient/1.0", effect.headers["User-Agent"])
     }
 
     /**
@@ -941,6 +992,12 @@ class BuiltInActionNodeTest {
             ActionNodeType.IMAGE_PREVIEW to config(
                 ActionImagePreviewConfigKey.INDEX to JsonPrimitive(0),
                 ActionImagePreviewConfigKey.IMAGES to JsonArray(listOf(JsonPrimitive("https://lain.bgm.tv/pic/cover/l/00/00/1.jpg"))),
+            ),
+            ActionNodeType.VIDEO_PREVIEW to config(
+                ActionVideoPreviewConfigKey.URL to JsonPrimitive("https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/uni-app-video-courses.mp4"),
+                ActionVideoPreviewConfigKey.HEADERS to buildJsonObject {
+                    put("User-Agent", JsonPrimitive("Mozilla/5.0"))
+                },
             ),
             ActionNodeType.SYNC_COOKIE to config(
                 ActionSyncCookieConfigKey.URL to JsonPrimitive("https://bgm.tv"),

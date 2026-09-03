@@ -18,4 +18,5 @@ object ActionCapability {
     const val SHARE = "share"
     const val NOTIFICATION = "notification"
     const val IMAGE_PREVIEW = "image_preview"
+    const val VIDEO_PREVIEW = "video_preview"
 }

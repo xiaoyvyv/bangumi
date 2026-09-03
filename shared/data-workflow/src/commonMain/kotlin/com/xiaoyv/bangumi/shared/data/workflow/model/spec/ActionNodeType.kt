@@ -265,6 +265,7 @@ object ActionNodeType {
     const val SYSTEM_NOTIFICATION = "system.notification"
     const val SYSTEM_VIBRATE = "system.vibrate"
     const val IMAGE_PREVIEW = "ui.image_preview"
+    const val VIDEO_PREVIEW = "ui.video_preview"
     const val SYNC_COOKIE = "action.sync_cookie"
 
     // bilibili

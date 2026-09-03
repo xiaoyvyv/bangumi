@@ -143,4 +143,15 @@ class WorkflowSamplesTest {
         assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.FLOW_JOIN })
         assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.UI_PROGRESS_DISMISS })
     }
+
+    /**
+     * 视频预览样例应正确配置 ui.video_preview 节点并声明 VIDEO_PREVIEW 能力。
+     */
+    @Test
+    fun videoPreviewSampleConfiguresCorrectNodeAndCapability() {
+        val workflow = WorkflowSamples.all.first { it.id == "workflow_sample_video_preview" }
+
+        assertEquals(true, workflow.requiredCapabilities.contains(ActionCapability.VIDEO_PREVIEW))
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.VIDEO_PREVIEW })
+    }
 }

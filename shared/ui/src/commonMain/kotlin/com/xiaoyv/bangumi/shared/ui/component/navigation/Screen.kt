@@ -274,6 +274,9 @@ sealed class Screen(
     }
 
     @Serializable
+    data class PreviewVideo(val videoUrl: String, val headers: Map<String, String> = mapOf()) : Screen(SCREEN_ROUTE_PREVIEW_VIDEO)
+
+    @Serializable
     data class MonoDetail(val id: Long, @field:MonoType val type: Int) : Screen(SCREEN_ROUTE_MONO)
 
     @Serializable

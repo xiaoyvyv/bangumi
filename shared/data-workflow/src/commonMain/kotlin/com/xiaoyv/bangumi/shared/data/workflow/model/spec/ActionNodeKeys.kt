@@ -290,6 +290,8 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.PAT
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.PORT
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.PROTOCOL
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlParsedKey.QUERY_PARAMETERS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionVideoPreviewConfigKey.HEADERS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionVideoPreviewConfigKey.URL
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey.DATA
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey.OUTPUT_KEY
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey.TEXT
@@ -1349,6 +1351,17 @@ object ActionShareConfigKey {
 object ActionImagePreviewConfigKey {
     const val INDEX = ActionNodeConfigKey.INDEX
     const val IMAGES = ActionNodeConfigKey.IMAGES
+}
+
+/**
+ * 视频预览节点的配置键。
+ *
+ * @property URL 视频流或文件 URL
+ * @property HEADERS 播放请求携带的可选 Header 信息
+ */
+object ActionVideoPreviewConfigKey {
+    const val URL = ActionNodeConfigKey.URL
+    const val HEADERS = ActionNodeConfigKey.HEADERS
 }
 
 /**

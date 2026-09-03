@@ -23,6 +23,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionShareConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSyncCookieConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionToastConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionVideoPreviewConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.failurePort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.inPort
 import com.xiaoyv.bangumi.shared.data.workflow.node.builtin.successPort
@@ -45,6 +46,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionShareEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionShowToastEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionVibrateEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionVideoPreviewEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionWriteClipboardEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionUrlPolicy
@@ -78,6 +80,7 @@ internal val sideEffectActionNodeDefinitions: List<ActionNodeDefinition> = listO
     progressDismissDefinition(),
     selectDialogDefinition(),
     imagePreviewDefinition(),
+    videoPreviewDefinition(),
     syncCookieDefinition(),
 )
 
@@ -428,6 +431,23 @@ private fun imagePreviewDefinition() =
             else -> emptyList()
         }
         ActionImagePreviewEffect(index = index, images = images)
+    }
+
+private fun videoPreviewDefinition() =
+    sideEffectDefinition(
+        type = ActionNodeType.VIDEO_PREVIEW,
+        requiredConfigKey = ActionVideoPreviewConfigKey.URL,
+        capabilities = setOf(ActionCapability.VIDEO_PREVIEW),
+    ) { config, context ->
+        val url = ActionTemplateResolver.resolveText(config.string(ActionVideoPreviewConfigKey.URL), context)
+        require(url.isNotBlank()) { "视频 URL 不能为空" }
+        val headersElement = config[ActionVideoPreviewConfigKey.HEADERS]?.let { ActionTemplateResolver.resolveElement(it, context) } as? JsonObject
+        val headers = headersElement?.entries?.associate { (k, v) ->
+            val resolvedKey = ActionTemplateResolver.resolveText(k, context)
+            val resolvedVal = ActionTemplateResolver.resolveText(v.jsonPrimitive.contentOrNull.orEmpty(), context)
+            resolvedKey to resolvedVal
+        }.orEmpty()
+        ActionVideoPreviewEffect(url = url, headers = headers)
     }
 
 private fun syncCookieDefinition() =

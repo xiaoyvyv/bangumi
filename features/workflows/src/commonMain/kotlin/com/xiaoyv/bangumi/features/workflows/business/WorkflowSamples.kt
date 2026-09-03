@@ -42,6 +42,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSyncCookieConfig
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionTextConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionToastConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionUrlConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionVideoPreviewConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionXmlConfigKey
 import com.xiaoyv.bangumi.shared.libnative.System
 import kotlinx.collections.immutable.toPersistentList
@@ -92,6 +93,7 @@ object WorkflowSamples {
         ActionNodeType.SYSTEM_VIBRATE,
         ActionNodeType.HTTP_REQUEST,
         ActionNodeType.IMAGE_PREVIEW,
+        ActionNodeType.VIDEO_PREVIEW,
         ActionNodeType.SYNC_COOKIE,
     )
 
@@ -888,6 +890,21 @@ object WorkflowSamples {
                     ActionImagePreviewConfigKey.IMAGES to JsonArray(listOf(JsonPrimitive("https://lain.bgm.tv/pic/photo/l/47/7e/837364_do644.jpg"))),
                 ),
                 setOf(ActionCapability.IMAGE_PREVIEW)
+            )
+        )
+
+        add(
+            linear(
+                "video_preview",
+                "视频预览",
+                ActionNodeType.VIDEO_PREVIEW,
+                config(
+                    ActionVideoPreviewConfigKey.URL to "https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/uni-app-video-courses.mp4",
+                    ActionVideoPreviewConfigKey.HEADERS to buildJsonObject {
+                        put("User-Agent", JsonPrimitive("Mozilla/5.0"))
+                    },
+                ),
+                setOf(ActionCapability.VIDEO_PREVIEW)
             )
         )
     }.toPersistentList()

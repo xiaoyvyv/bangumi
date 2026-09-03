@@ -1166,4 +1166,10 @@
     <string name="workflow_view_node_graph">节点卡片</string>
     <string name="workflow_view_execution_log">执行日志</string>
     <string name="workflow_progress_stop">停止</string>
+    <string name="video_speed">倍速</string>
+    <string name="video_portrait">竖屏</string>
+    <string name="video_reload">重新加载</string>
+    <string name="video_paused">暂停中</string>
+    <string name="video_brightness">亮度 %1$d%</string>
+    <string name="video_volume">音量 %1$d%</string>
 </resources>

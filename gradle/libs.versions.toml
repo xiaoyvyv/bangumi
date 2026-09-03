@@ -112,6 +112,7 @@ compose-markdown-core = { module = "com.mikepenz:multiplatform-markdown-renderer
 compose-markdown-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "compose-markdown" }
 compose-kuiver = { module = "io.github.justdeko:kuiver", version.ref = "compose-kuiver" }
 compose-mediamp-all = { module = "org.openani.mediamp:mediamp-all", version.ref = "mediamp" }
+compose-mediamp-runtime = { module = "org.openani.mediamp:mediamp-mpv-runtime", version.ref = "mediamp" }
 
 # cryptohash
 cryptohash = { module = "com.appmattus.crypto:cryptohash", version.ref = "cryptohash" }
@@ -224,7 +225,7 @@ compose-common = [
     "compose-webview",
     "compose-confettikit",
     "compose-kuiver",
-    "compose-mediamp-all"
+    "compose-mediamp-all",
 ]
 kotlinx = [
     "kotlinx-atomicfu",

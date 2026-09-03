@@ -145,7 +145,7 @@ abstract class GenerateMviTask : DefaultTask() {
                     "\n" +
                     "    override fun onEvent(event: ${mName}Event.Action) {\n" +
                     "        when (event) {\n" +
-                    "            is ${mName}Event.Action.OnRefresh -> refresh(loading = event.loading)\n" +
+                    "            is ${mName}Event.Action.OnRefresh -> refresh(event.loading)\n" +
                     "        }\n" +
                     "    }\n" +
                     "\n" +

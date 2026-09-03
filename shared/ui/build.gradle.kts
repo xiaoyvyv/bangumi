@@ -16,6 +16,7 @@ kotlin {
             api(projects.shared.uiPlatform)
             api(projects.shared.uiLiquid)
             api(projects.shared.uiMaterial3)
+            api(projects.shared.uiVideo)
         }
 
         commonTest.dependencies {

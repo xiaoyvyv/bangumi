@@ -25,6 +25,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionShareEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionShowToastEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionVibrateEffect
+import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionVideoPreviewEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionWriteClipboardEffect
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
@@ -72,6 +73,7 @@ fun WorkflowSideEffectHost(
         },
         onOpenInternalWeb = { url -> actionHandler.openBgmLink(url) },
         onImagePreview = actionHandler::openImages,
+        onVideoPreview = actionHandler::openVideo,
         onShareText = actionHandler::shareContent,
         onSendNotification = { _, _ -> },
         onVibrate = { hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress) },
@@ -138,6 +140,7 @@ fun WorkflowSideEffectHost(
     onOpenExternalApp: (uri: String, fallbackUrl: String?) -> Unit,
     onOpenInternalWeb: (url: String) -> Unit,
     onImagePreview: (images: List<String>, index: Int) -> Unit,
+    onVideoPreview: (url: String, headers: Map<String, String>) -> Unit = { _, _ -> },
     onShareText: (text: String) -> Unit,
     onSendNotification: (title: String, content: String) -> Unit,
     onVibrate: () -> Unit,
@@ -219,6 +222,13 @@ fun WorkflowSideEffectHost(
 
             is ActionImagePreviewEffect -> {
                 onImagePreview(effect.images, effect.index)
+                hostState.popOneShotData { data ->
+                    data.onResult(ActionSideEffectResult.Success(buildJsonObject { }))
+                }
+            }
+
+            is ActionVideoPreviewEffect -> {
+                onVideoPreview(effect.url, effect.headers)
                 hostState.popOneShotData { data ->
                     data.onResult(ActionSideEffectResult.Success(buildJsonObject { }))
                 }

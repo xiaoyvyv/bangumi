@@ -64,6 +64,9 @@ class AppActionHandler(val actionHandler: ActionHandler) {
 
     fun openImages(urls: List<String>, index: Int = 0) = onNavScreen.invoke(Screen.PreviewMain(index, urls))
 
+    fun openVideo(url: String, headers: Map<String, String> = emptyMap()) =
+        onNavScreen.invoke(Screen.PreviewVideo(url, headers))
+
     fun openBgmLink(titleLink: String, jumpWeb: Boolean = true): Boolean {
         debugLog { "Handle Url: $titleLink" }
 

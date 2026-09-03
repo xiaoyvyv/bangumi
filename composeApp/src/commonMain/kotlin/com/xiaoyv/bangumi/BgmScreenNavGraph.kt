@@ -43,6 +43,7 @@ import com.xiaoyv.bangumi.features.pixiv.user.setting.pixivUserSettingModule
 import com.xiaoyv.bangumi.features.preivew.album.previewAlbumModule
 import com.xiaoyv.bangumi.features.preivew.gallery.previewTextModule
 import com.xiaoyv.bangumi.features.preivew.main.previewMainModule
+import com.xiaoyv.bangumi.features.preivew.video.previewVideoModule
 import com.xiaoyv.bangumi.features.publish.main.publishMainModule
 import com.xiaoyv.bangumi.features.report.reportModule
 import com.xiaoyv.bangumi.features.search.input.searchInputModule
@@ -142,6 +143,7 @@ internal val navigationModule = module {
         subjectDetailModule,
         subjectBrowserModule,
         previewMainModule,
+        previewVideoModule,
         monoDetailModule,
         monoBrowserModule,
         webModule,

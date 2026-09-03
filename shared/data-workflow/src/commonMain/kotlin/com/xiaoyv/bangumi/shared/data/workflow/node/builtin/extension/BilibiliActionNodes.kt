@@ -133,6 +133,10 @@ internal object BilibiliUtils {
         putIfAbsent("source_tag", "3")
         putIfAbsent("web_location", "1430654")
         putIfAbsent("qv_id", randomQueryViewId())
+        val page = get("page")?.toIntOrNull() ?: 1
+        if (page > 1) {
+            putIfAbsent("dynamic_offset", ((page - 1) * 24).toString())
+        }
     }
 
     internal fun randomQueryViewId(): String = buildString(BILIBILI_QUERY_VIEW_ID_LENGTH) {

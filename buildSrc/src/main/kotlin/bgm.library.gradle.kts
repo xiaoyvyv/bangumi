@@ -145,6 +145,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.sqlite.driver)
             implementation(libs.tinypinyin.jvm)
+            runtimeOnly(libs.compose.mediamp.runtime)
         }
 
         all {

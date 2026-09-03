@@ -1,11 +1,13 @@
 package com.xiaoyv.bangumi
 
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.LocalWindow
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
@@ -44,7 +46,9 @@ fun main() {
             alwaysOnTop = false,
             state = windowState
         ) {
-            App()
+            CompositionLocalProvider(LocalWindow provides window) {
+                App()
+            }
         }
     }
 }
