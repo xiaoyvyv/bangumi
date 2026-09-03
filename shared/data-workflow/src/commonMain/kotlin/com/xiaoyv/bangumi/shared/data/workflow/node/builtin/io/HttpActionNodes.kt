@@ -23,7 +23,6 @@ import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowFileStorage
 import io.ktor.http.Url
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
@@ -119,7 +118,6 @@ private fun httpDownloadDefinition(
         ActionNodeExecutionResult(
             outputPortId = ActionControlPortId.SUCCESS,
             output = JsonObject(mapOf(outputKey to output)),
-            variableUpdates = persistentMapOf(outputKey to output),
         )
     },
     capabilityResolver = httpCapabilityResolver,

@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.ui.component.workflow
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -43,6 +45,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -51,6 +54,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.multiplatform.webview.web.LoadingState
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewNavigator
@@ -65,6 +69,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogE
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSelectDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionSyncCookieEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginGrid
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
@@ -264,12 +269,13 @@ fun WorkflowSelectAlertDialog(
     }
 
     var selectedIndices by remember(effect) { mutableStateOf(initialIndices) }
+    val multiSelectMode = effect.isMultiSelect
 
     AlertDialog(
         onDismissRequest = onCancel,
-        title = if (effect.title.isNotBlank()) {
+        title = if (effect.title.isBlank()) null else {
             { Text(text = effect.title) }
-        } else null,
+        },
         text = {
             Column(
                 modifier = Modifier
@@ -281,33 +287,38 @@ fun WorkflowSelectAlertDialog(
                         text = effect.subtitle,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier.padding(bottom = ContentMarginHalf)
                     )
                 }
 
                 effect.options.forEachIndexed { index, option ->
                     val isSelected = selectedIndices.contains(index)
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(vertical = ContentMarginGrid, horizontal = ContentMarginHalf)
                             .clickable {
-                                if (effect.isMultiSelect) {
-                                    selectedIndices = if (isSelected) {
-                                        selectedIndices - index
-                                    } else {
-                                        selectedIndices + index
-                                    }
+                                if (multiSelectMode) {
+                                    selectedIndices = (if (isSelected) selectedIndices - index else selectedIndices + index)
                                 } else {
                                     onConfirm(listOf(index), listOf(option.value))
                                 }
-                            }
-                            .padding(vertical = 12.dp, horizontal = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(ContentMarginGrid)
                     ) {
-                        if (effect.isMultiSelect) {
+                        if (multiSelectMode) {
                             Checkbox(
                                 checked = isSelected,
                                 onCheckedChange = null
+                            )
+                        } else if (option.image.isNotBlank()) {
+                            AsyncImage(
+                                model = option.image,
+                                modifier = Modifier.size(30.dp, 40.dp),
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null
                             )
                         } else {
                             RadioButton(
@@ -319,14 +330,13 @@ fun WorkflowSelectAlertDialog(
                         Text(
                             text = option.title.ifBlank { option.value },
                             style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(start = 12.dp)
                         )
                     }
                 }
             }
         },
         confirmButton = {
-            if (effect.isMultiSelect) {
+            if (multiSelectMode) {
                 TextButton(
                     onClick = {
                         val orderedIndices = selectedIndices.toList()
@@ -339,7 +349,7 @@ fun WorkflowSelectAlertDialog(
             }
         },
         dismissButton = {
-            if (effect.isMultiSelect) {
+            if (multiSelectMode) {
                 TextButton(onClick = onCancel) {
                     Text(text = effect.cancelText.ifBlank { defaultCancelText })
                 }

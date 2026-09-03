@@ -137,15 +137,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.NA
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.OPERATION
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.OUTPUT_KEY
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlConfigKey.SELECTOR
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ALL_HTML
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ALL_OUTER_HTML
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ALL_TEXT
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.ATTRIBUTE
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.COUNT
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.EXISTS
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.HTML
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.OUTER_HTML
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHtmlQueryOperation.TEXT
+
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType.FORM_URL_ENCODED
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType.JSON
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionHttpBodyType.TEXT
@@ -352,6 +344,7 @@ internal object ActionNodeConfigKey {
     const val ENTRIES = "entries"
     const val VALUE = "value"
     const val VALUES = "values"
+    const val IMAGE = "image"
     const val INDICES = "indices"
     const val OUTPUT_KEY = "outputKey"
     const val CONDITION = "condition"
@@ -514,6 +507,9 @@ internal object ActionNodeConfigKey {
 
     const val IMAGES = "images"
     const val BOTH = "both"
+    const val CLASS_NAME = "className"
+    const val ELEMENT = "element"
+    const val ELEMENTS = "elements"
 }
 
 /**
@@ -679,38 +675,20 @@ object ActionDataMergeStrategy {
  * @property OUTPUT_KEY 解析提取结果保存的目标变量 Key
  */
 object ActionHtmlConfigKey {
+    const val SOURCE = ActionNodeConfigKey.SOURCE
     const val HTML = ActionNodeConfigKey.HTML
+    const val ELEMENT = ActionNodeConfigKey.ELEMENT
+    const val ELEMENTS = ActionNodeConfigKey.ELEMENTS
     const val SELECTOR = ActionNodeConfigKey.SELECTOR
     const val OPERATION = ActionNodeConfigKey.OPERATION
     const val ATTRIBUTE = ActionNodeConfigKey.ATTRIBUTE
     const val NAME = ActionNodeConfigKey.NAME
+    const val BASE_URL = ActionNodeConfigKey.BASE_URL
+    const val INDEX = ActionNodeConfigKey.INDEX
+    const val CLASS_NAME = ActionNodeConfigKey.CLASS_NAME
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
 }
 
-/**
- * HTML DOM 查询操作指令常量。
- *
- * @property TEXT 提取第一个匹配元素的文本内容
- * @property HTML 提取第一个匹配元素的内部 HTML 源码
- * @property OUTER_HTML 提取第一个匹配元素的完整包含标签 HTML 源码
- * @property ATTRIBUTE 提取第一个匹配元素的指定属性值
- * @property COUNT 统计匹配到的 DOM 元素数量
- * @property EXISTS 校验是否存在匹配的 DOM 元素
- * @property ALL_TEXT 提取所有匹配元素的文本内容数组
- * @property ALL_HTML 提取所有匹配元素的内部 HTML 源码数组
- * @property ALL_OUTER_HTML 提取所有匹配元素的完整包含标签 HTML 源码数组
- */
-object ActionHtmlQueryOperation {
-    const val TEXT = ActionNodeConfigKey.TEXT
-    const val HTML = ActionNodeConfigKey.HTML
-    const val OUTER_HTML = ActionNodeConfigKey.OUTER_HTML
-    const val ATTRIBUTE = ActionNodeConfigKey.ATTRIBUTE
-    const val COUNT = ActionNodeConfigKey.COUNT
-    const val EXISTS = ActionNodeConfigKey.EXISTS
-    const val ALL_TEXT = ActionNodeConfigKey.ALL_TEXT
-    const val ALL_HTML = ActionNodeConfigKey.ALL_HTML
-    const val ALL_OUTER_HTML = ActionNodeConfigKey.ALL_OUTER_HTML
-}
 
 /**
  * JSON 对象处理节点的配置键。
@@ -1273,6 +1251,7 @@ object ActionSelectDialogConfigKey {
     const val CANCEL_TEXT = ActionNodeConfigKey.CANCEL_TEXT
     const val OUTPUT_KEY = ActionNodeConfigKey.OUTPUT_KEY
     const val VALUE = ActionNodeConfigKey.VALUE
+    const val IMAGE = ActionNodeConfigKey.IMAGE
     const val VALUES = ActionNodeConfigKey.VALUES
     const val INDEX = ActionNodeConfigKey.INDEX
     const val INDICES = ActionNodeConfigKey.INDICES

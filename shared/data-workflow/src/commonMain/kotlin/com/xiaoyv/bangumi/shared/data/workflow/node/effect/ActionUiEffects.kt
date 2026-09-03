@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogAction
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
-import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
 
 /**
@@ -152,12 +151,8 @@ data class ActionVideoPreviewEffect(
 data class ActionSelectDialogOption(
     val title: String = "",
     val value: String = "",
-) {
-    companion object {
-        const val KEY_TITLE = ActionSelectDialogConfigKey.TITLE
-        const val KEY_VALUE = ActionSelectDialogConfigKey.VALUE
-    }
-}
+    val image: String = "",
+)
 
 /**
  * 请求宿主弹出单选/多选列表选择对话框的副作用。

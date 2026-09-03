@@ -1,131 +1,602 @@
 # data-workflow
 
-`data-workflow` 是 Bangumi Multiplatform 项目中用于行为编排与自动化处理的核心工作流引擎模块。
-
-它基于 **DAG (有向无环图) 事件驱动架构**，将复杂的业务逻辑（如多接口并发请求、数据提取与清洗、条件分支判断、UI 弹窗交互及系统操作）抽象为可序列化的 JSON 工作流协议。无论是在 App
-内执行跨数据源番剧比对，还是批处理条目信息，均可通过可视化节点图驱动。
+`data-workflow` 是 Bangumi Multiplatform 项目中的声明式工作流编排与执行引擎。模块基于有向无环图（DAG）模型，将网络请求、数据转换、流程分支、UI 交互及系统动作抽象为结构化协议，支持运行期调度与状态追踪。
 
 ---
 
 ## 目录
 
-1. [模块简介与应用场景](#模块简介与应用场景)
-2. [模块架构与分包设计](#模块架构与分包设计)
-3. [快速接入指南](#快速接入指南)
-    1. [依赖注入装配](#依赖注入装配)
-    2. [启动与消费工作流](#启动与消费工作流)
-4. [工作流 DAG 控制流与调度架构](#工作流-dag-控制流与调度架构)
-5. [模板与表达式求值引擎](#模板与表达式求值引擎)
-    1. [根命名空间与路径深层导航](#根命名空间与路径深层导航)
-    2. [完整运算语法与求值规则](#完整运算语法与求值规则)
-    3. [类型隐式强转与真值判定](#类型隐式强转与真值判定)
-6. [异常处理与诊断溯源设计](#异常处理与诊断溯源设计)
-    1. [领域异常继承体系](#领域异常继承体系)
-    2. [统一错误输出协议](#统一错误输出协议)
-    3. [高亮终端诊断日志与监听回调](#高亮终端诊断日志与监听回调)
-7. [内置节点参考手册](#内置节点参考手册)
-    1. [流程控制节点](#流程控制节点)
-    2. [逻辑判断节点](#逻辑判断节点)
-    3. [变量与数据节点](#变量与数据节点)
-    4. [网页与 HTML 解析节点](#网页与-html-解析节点)
-    5. [JSON 对象处理节点](#json-对象处理节点)
-    6. [数组集合操作节点](#数组集合操作节点)
-    7. [文本与正则处理节点](#文本与正则处理节点)
-    8. [算术数学计算节点](#算术数学计算节点)
-    9. [日期与时间节点](#日期与时间节点)
-    10. [URL 格式化与操作节点](#url-格式化与操作节点)
-    11. [结构化数据解析节点](#结构化数据解析节点)
-    12. [编解码与哈希安全节点](#编解码与哈希安全节点)
-    13. [网络 HTTP 请求节点](#网络-http-请求节点)
-    14. [本地存储节点](#本地存储节点)
-   15. [文件沙箱节点](#文件沙箱节点)
-   16. [系统与 UI 交互节点](#系统与-ui-交互节点)
-8. [自定义节点扩展指南](#自定义节点扩展指南)
-9. [安全与能力治理规范](#安全与能力治理规范)
-10. [测试与质量保证](#测试与质量保证)
+1. [架构与分包设计](#1-架构与分包设计)
+   1. [分包结构](#11-分包结构)
+   2. [模块职责与依赖约束](#12-模块职责与依赖约束)
+2. [执行模型与调度架构](#2-执行模型与调度架构)
+   1. [调度机制与生命周期](#21-调度机制与生命周期)
+   2. [分支与合流 (Fork & Join)](#22-分支与合流-fork--join)
+   3. [平台副作用与挂起执行](#23-平台副作用与挂起执行)
+3. [模板与表达式引擎](#3-模板与表达式引擎)
+   1. [命名空间访问](#31-命名空间访问)
+   2. [运算符优先级与语法规则](#32-运算符优先级与语法规则)
+   3. [类型转换与真值判定](#33-类型转换与真值判定)
+4. [内置节点参考规范](#4-内置节点参考规范)
+   1. [流程控制与分支 (`flow.*`)](#41-流程控制与分支-flow)
+   2. [逻辑判断 (`control.*`)](#42-逻辑判断-control)
+   3. [上下文与变量操作 (`data.*`)](#43-上下文与变量操作-data)
+   4. [JSON 对象操作 (`object.*`)](#44-json-对象操作-object)
+   5. [数组集合操作 (`array.*`)](#45-数组集合操作-array)
+   6. [文本与正则处理 (`text.*`)](#46-文本与正则处理-text)
+   7. [数值与数学计算 (`math.*`)](#47-数值与数学计算-math)
+   8. [日期与时间 (`date.*`)](#48-日期与时间-date)
+   9. [URL 解析与构建 (`url.*`)](#49-url-解析与构建-url)
+   10. [结构化数据解析 (`json.*`, `xml.*`, `csv.*`)](#410-结构化数据解析-json-xml-csv)
+   11. [编解码与摘要哈希 (`codec.*`, `crypto.*`)](#411-编解码与摘要哈希-codec-crypto)
+   12. [HTML 解析与抽取 (`html.*`)](#412-html-解析与抽取-html)
+   13. [网络与下载 (`http.*`)](#413-网络与下载-http)
+   14. [本地持久化存储 (`storage.*`)](#414-本地持久化存储-storage)
+   15. [文件系统沙箱 (`file.*`)](#415-文件系统沙箱-file)
+   16. [客户端动作与 UI 交互 (`action.*`, `ui.*`, `system.*`, `image.*`, `video.*`)](#416-客户端动作与-ui-交互-action-ui-system-image-video)
+5. [错误处理与诊断体系](#5-错误处理与诊断体系)
+   1. [异常模型与继承层次](#51-异常模型与继承层次)
+   2. [错误码分类规范](#52-错误码分类规范)
+   3. [结构化错误输出协议](#53-结构化错误输出协议)
+   4. [诊断追踪与日志监听](#54-诊断追踪与日志监听)
+6. [接入与扩展开发](#6-接入与扩展开发)
+   1. [依赖注入装配](#61-依赖注入装配)
+   2. [执行与事件消费](#62-执行与事件消费)
+   3. [自定义节点开发规范](#63-自定义节点开发规范)
+   4. [测试验证](#64-测试验证)
 
 ---
 
-## 模块简介与应用场景
+## 1. 架构与分包设计
 
-### 设计目标
+### 1.1 分包结构
 
-- **JSON 协议为唯一事实来源**：画布渲染、列表展示与运行日志均由 `ActionWorkflow` 导出，支持标准的导入、导出与版本迁移。
-- **高内聚子包与模块化设计**：按领域划分 `definition``spec``execution` 与 `log` 四大子包，模型内不含臃肿巨型类。
-- **工业级行内表达式引擎**：内置递归下降语法解析器，全面支持四则运算、布尔逻辑、Elvis、三元选择及深度路径/括号下标读取。
-- **专业的错误诊断与溯源系统**：提供结构化异常类、标准化错误 Key 协议、高亮终端报告与可订阅的 LogListener。
-- **基础设施与 UI 隔离**：网络基础设施由外部注入，导航、弹窗、剪贴板等系统操作通过 `ActionSideEffect` 交由宿主解耦实现。
-
-### 典型应用场景
-
-通过节点编排，可以在 App 内组合出以下典型功能：
-
-- **多数据源并发聚合**：向 Bilibili、MangaDex 等多个第三方 API 发起请求，自动提取关联番剧元数据并计算匹配度。
-- **网页数据提取与 Cookie 同步**：借助内置 WebView 与 HTML 选择器，解析网页中的标签与文本内容，并完成账号 Cookie 的同步。
-- **数据清洗与自动化批处理**：遍历追番列表，对 CSV / XML / JSON 结构化数据进行筛选（如过滤高分作品），自动弹出系统通知或调起画廊预览。
-- **响应式 UI 交互与快捷流**：在流程中挂起并唤起自定义输入框、二次确认框、剪贴板读写与震动反馈，将用户交互结果作为后续节点的输入。
-
----
-
-## 模块架构与分包设计
-
-`data-workflow` 遵循清晰的领域驱动分包架构：
+`data-workflow` 采用分层领域架构，核心代码组织如下：
 
 ```text
 com.xiaoyv.bangumi.shared.data.workflow/
-  ├── model/                       # 领域数据模型集合
-  │   ├── definition/              # 1. 工作流与有向图结构定义 (ActionWorkflow, ActionNode, ActionEdge, ActionTrigger)
-  │   ├── spec/                    # 2. 节点规格与 Key 集合 (ActionNodeType, ActionCapability, ActionNodeKeys)
-  │   ├── execution/               # 3. 运行时上下文与引擎事件 (ActionExecutionContext, ActionExecutionEvent, ActionNodeExecutionResult)
-  │   └── log/                     # 4. 持久化日志与错误描述 (ActionExecutionLog, ActionExecutionStep, ActionExecutionError)
-  ├── node/                        # 节点模型、注册中心与分层实现
-  │   ├── core/                    # 节点核心抽象 (Category, Definition, Registry, Config)
-  │   ├── resolver/                # 12级语法解析器、模板插值与路径解析 (ActionTemplateResolver, JsonPath, UrlPolicy)
-  │   ├── effect/                  # 平台副作用声明 (HttpRequest, Navigation, UiEffects)
-  │   └── builtin/                 # 140+ 内置节点定义实现 (control, data, parse, io, extension)
-  ├── engine/                      # 工作流运行时内核，禁止反向依赖 UI / repository
-  │   ├── ActionWorkflowValidator  # 工作流结构及 flow.parallel / flow.join 静态校验
-  │   ├── ActionSideEffectDispatcher # 平台副作用请求的调度与执行结果协议
-  │   └── runtime/                 # DAG 调度的全部内部实现，避免单文件目录
-  │       ├── ActionWorkflowEngine # 公共执行入口：创建事件流并编排调度
-  │       ├── ActionParallelExecutor # flow.parallel 并发域执行与上下文合并
-  │       ├── LoopExecutionController # 循环帧栈、迭代与中断控制
-  │       ├── WorkflowRuntimeGraph # 控制边查询、就绪判断与循环体拓扑遍历
-  │       ├── ActionWorkflowFailureRouter # failure 出口优先级解析
-  │       └── ActionExecutionEventEmitter # 运行事件、终态日志与结构化错误输出
-  ├── exception/                   # 工业级工作流异常层次与格式化诊断日志 (ActionWorkflowException, TraceLogger)
-  ├── port/                        # 基础设施接口抽象 (HttpClientProvider)
-  ├── codec/                       # JSON 编解码与历史格式迁移器
-  └── di/                          # Koin 依赖注入装配入口
+  ├── model/                       # 领域数据模型
+  │   ├── definition/              # 工作流拓扑定义 (ActionWorkflow, ActionNode, ActionEdge, ActionTrigger)
+  │   ├── spec/                    # 规格常量与键名 (ActionNodeType, ActionCapability, ActionNodeKeys)
+  │   ├── execution/               # 运行时状态 (ActionExecutionContext, ActionExecutionEvent, ActionNodeExecutionResult)
+  │   └── log/                     # 日志与错误描述 (ActionExecutionLog, ActionExecutionStep, ActionExecutionError)
+  ├── node/                        # 节点抽象与实现
+  │   ├── core/                    # 注册中心与元信息 (ActionNodeRegistry, ActionNodeDefinition, ActionNodeSpec)
+  │   ├── resolver/                # 表达式语法解析与插值 (ActionTemplateResolver, JsonPath)
+  │   ├── effect/                  # 平台副作用接口定义 (ActionSideEffect, ActionSideEffectHandler)
+  │   └── builtin/                 # 内置节点实现 (按 control, data, parse, io, extension 模块组织)
+  ├── engine/                      # 运行时调度内核
+  │   ├── ActionWorkflowValidator  # 工作流静态拓扑校验器
+  │   ├── ActionSideEffectDispatcher # 副作用分发调度
+  │   └── runtime/                 # 调度执行实现
+  │       ├── ActionWorkflowEngine # 引擎主入口与事件流构造
+  │       ├── WorkflowRuntimeGraph # 依赖分析与就绪队列计算
+  │       ├── ActionParallelExecutor # 并发域执行与上下文归并
+  │       ├── LoopExecutionController # 循环迭代栈管理
+  │       ├── ActionWorkflowFailureRouter # failure 出口解析
+  │       └── ActionExecutionEventEmitter # 终态事件与日志生成
+  ├── exception/                   # 异常体系与诊断追踪 (ActionWorkflowException, ActionWorkflowTraceLogger)
+  ├── port/                        # 外部基础设施抽象接口 (HttpClientProvider)
+  ├── codec/                       # 格式序列化与协议版本迁移
+  └── di/                          # Koin 依赖注入配置
 ```
 
-### 引擎运行期职责与依赖方向
+### 1.2 模块职责与依赖约束
 
-`engine` 的公共入口只有 `runtime/ActionWorkflowEngine`。它负责验证工作流、维护就绪队列和发出执行事件；不直接实现并发遍历、图查询、错误出口选择或平台副作用。
-
-```text
-ActionWorkflowEngine
-  ├── ActionWorkflowValidator                静态结构校验
-  ├── runtime/WorkflowRuntimeGraph           控制边拓扑与节点就绪判断
-  ├── runtime/LoopExecutionController        循环状态转换
-  ├── runtime/ActionParallelExecutor         flow.parallel 分支并发与汇合
-  ├── runtime/ActionWorkflowFailureRouter    failure 出口优先级解析
-  ├── runtime/ActionExecutionEventEmitter    Flow 事件与最终执行日志构造
-  └── ActionSideEffectDispatcher              宿主副作用的请求和执行结果
-```
-
-- `runtime` 只能依赖模型、节点注册中心与上述运行期协作组件，不能依赖 UI、repository 或平台实现。
-- `parallel` 仅执行由 `flow.parallel` 至唯一 `flow.join` 构成的并发域；工作流整体的队列调度仍归 `ActionWorkflowEngine`。
-- `error` 只解析路由，不创建或记录异常；异常输出和终态事件由 `event` 统一负责，避免多个分支产生不一致日志。
-- `sideeffect` 保持平台无关：引擎只消费 `ActionSideEffectHandler` 的结果，宿主决定如何显示对话框、通知或进度。
+1. **单向依赖控制**：`engine.runtime` 仅依赖领域模型、节点注册中心及内部运行期组件，禁止反向依赖 UI 表现层与具体业务仓库。
+2. **副作用抽象隔离**：平台相关能力（如窗口弹窗、剪贴板读写、系统浏览器调起）通过 `ActionSideEffect` 声明，由宿主环境实现并注入 `ActionSideEffectHandler`，保证引擎核心纯粹性。
+3. **并发作用域限定**：`flow.parallel` 至其对应的 `flow.join` 构成封闭的局部并发域，由 `ActionParallelExecutor` 执行多路调度，工作流全局拓扑依然由 `ActionWorkflowEngine` 统一调度。
 
 ---
 
-## 快速接入指南
+## 2. 执行模型与调度架构
 
-### 依赖注入装配
+### 2.1 调度机制与生命周期
 
-宿主模块需提供带 Cookie、网络配置等应用能力的专用 HTTP Client，使用 `actionWorkflowHttpClientQualifier` 注册，随后加载 `workflowModules`：
+引擎调度基于就绪队列状态机驱动。整体执行模型如下：
+
+```text
+       ┌────────────────────────┐
+       │   入参校验与静态图检查   │ (ActionWorkflowValidator)
+       └───────────┬────────────┘
+                   ▼
+       ┌────────────────────────┐
+       │     初始化执行上下文     │ (ActionExecutionContext)
+       └───────────┬────────────┘
+                   ▼
+  ┌───────────▶ 就绪队列提取节点 ◀───────────┐
+  │            └───────────┬────────────┘           │
+  │                        ▼                        │
+  │            ┌────────────────────────┐           │
+  │            │  配置插值与表达式求值   │           │
+  │            └───────────┬────────────┘           │
+  │                        ▼                        │
+  │            ┌────────────────────────┐           │
+  │            │       执行节点行为      │           │
+  │            └───────────┬────────────┘           │
+  │                        ▼                        │
+  │            ┌────────────────────────┐           │
+  │            │ 更新变量表与步骤历史记录 │           │
+  │            └───────────┬────────────┘           │
+  │                        ▼                        │
+  │            ┌────────────────────────┐           │
+  │            │ 下游控制边计算与入队   │───────────┘
+  │            └───────────┬────────────┘
+  │                        ▼
+  │               队列为空或遇终止节点
+  │                        ▼
+  │            ┌────────────────────────┐
+  └────────────│ 构造终态日志并派发事件 │
+               └────────────────────────┘
+```
+
+1. **响应式事件流**：引擎执行入口返回 `Flow<ActionExecutionEvent>`，外部调用方通过订阅该流获取 `NodeStarted`、`NodeCompleted`、`SideEffectRequested`、`Completed` 及 `Failed` 等生命周期事件。
+2. **就绪状态判定**：仅当节点的所有必要前置依赖分支均已完成或被满足时，节点才进入就绪队列。
+
+### 2.2 分支与合流 (Fork & Join)
+
+- **分支 (Fan-Out)**：节点的单一输出端口支持连接多条出边。上游端口触发后，所有关联的出边目标节点按就绪状态调度执行。
+- **合流 (Fan-In)**：节点的输入端口支持连接多条入边。当节点存在多个活跃前置路径时，调度器等待所有处于激活状态的前置分支执行完毕（`pendingPredecessors == 0`
+  ）后，该合流节点仅被触发一次。未被激活的条件分支自动跳过，不阻塞合流节点的唤醒。
+
+### 2.3 平台副作用与挂起执行
+
+当节点执行需要与客户端环境交互（如二次确认、文本输入、对话框展示）时，执行器生成 `ActionSideEffect` 并挂起：
+
+1. 引擎触发 `ActionExecutionEvent.SideEffectRequested` 并调用 `ActionSideEffectHandler.handle(effect)`。
+2. 宿主端（如 Compose UI）消费该事件并渲染对应界面。
+3. 用户完成交互后，Handler 返回响应结果，协程恢复并继续后续节点流程。
+
+---
+
+## 3. 模板与表达式引擎
+
+工作流节点配置项中支持使用 `${...}` 占位符引用动态变量或内联表达式，由 `ActionTemplateResolver` 负责语法解析与求值。
+
+### 3.1 命名空间访问
+
+表达式支持通过点号（`.`）与下标（`[...]`）访问以下 6 个命名空间：
+
+| 命名空间              | 作用说明                             | 访问示例                                   |
+|:------------------|:---------------------------------|:---------------------------------------|
+| **`input`**       | 外部触发工作流时传入的只读业务输入数据              | `${input.subjectId}`                   |
+| **`environment`** | 宿主平台只读环境上下文（语言、平台版本等）            | `${environment.platform}`              |
+| **`trigger`**     | 触发源元数据（触发类型、来源组件等）               | `${trigger.name}`                      |
+| **`vars`**        | 工作流全局运行时变量字典                     | `${vars.pageIndex}`、`${vars.items[0]}` |
+| **`steps`**       | 已执行节点的输出结果集合（以节点 ID 为索引）         | `${steps.http_get.body.data}`          |
+| **`loop`**        | 当前所在最内层循环帧数据（含 `item` 与 `index`） | `${loop.item.id}`、`${loop.index}`      |
+
+### 3.2 运算符优先级与语法规则
+
+表达式解析器按以下优先级顺序（从低到高）求值：
+
+| 优先级    | 运算类型         | 运算符 / 语法                     | 示例                                                |
+|:-------|:-------------|:-----------------------------|:--------------------------------------------------|
+| **1**  | 条件选择         | `? :` (三元运算符)                | `${vars.score >= 60 ? "及格" : "未及格"}`              |
+| **2**  | 空值兜底         | `?:` (Elvis 运算符)             | `${vars.name ?: "默认值"}`                           |
+| **3**  | 逻辑或          | `\|\|`                       | `${vars.a \|\| vars.b}`                           |
+| **4**  | 逻辑与          | `&&`                         | `${vars.isReady && vars.hasMore}`                 |
+| **5**  | 等值判断         | `==`, `!=`                   | `${vars.status == 200}`                           |
+| **6**  | 比较运算         | `>`, `>=`, `<`, `<=`         | `${vars.count > 0}`                               |
+| **7**  | 加法 / 减法      | `+`, `-` (二元加减与字符串拼接)        | `${vars.offset + 10}`、`"Page: " + vars.page`      |
+| **8**  | 乘法 / 除法 / 取模 | `*`, `/`, `%`                | `${vars.width * vars.height}`、`${loop.index % 2}` |
+| **9**  | 一元运算         | `!`, `-` (逻辑非 / 取负)          | `${!vars.enabled}`、`-${vars.delta}`               |
+| **10** | 成员访问         | `.length`, `.trim` 等通用属性     | `${vars.title.length}`                            |
+| **11** | 属性与下标访问      | `.property`, `[index]`       | `${steps.req.body.list[0]}`                       |
+| **12** | 括号与字面量       | `(...)`, 字符串, 数字, 布尔, `null` | `${(vars.a + vars.b) * 2}`、`'text'`、`123`         |
+
+### 3.3 类型转换与真值判定
+
+1. **数值强转**：字符串数值参与数学运算或数值比较时自动转换为浮点数处理；整数运算结果自动规整为整型。
+2. **字符串连接**：二元 `+` 运算中若任一操作数为字符串，另一操作数自动转为字符串后连接。
+3. **真值判定 (Truthiness)**：在逻辑运算符与条件节点中，以下值判定为 `false`，其余值均判定为 `true`：
+   - `null` / `JsonNull`
+   - 布尔值 `false`
+   - 数字 `0` 或 `0.0`
+   - 空字符串 `""`
+   - 空数组 `[]`
+   - 空对象 `{}`
+
+---
+
+## 4. 内置节点参考规范
+
+### 4.1 流程控制与分支 (`flow.*`)
+
+| 节点类型                  | 功能说明                  | 主要配置键                            | 输出端口                       |
+|:----------------------|:----------------------|:---------------------------------|:---------------------------|
+| **`flow.start`**      | 工作流执行起点               | 无                                | `next`                     |
+| **`flow.end`**        | 工作流正常终止点              | 无                                | 无                          |
+| **`flow.delay`**      | 阻塞挂起指定时长              | `delayMillis` (Long)             | `next`                     |
+| **`flow.stop`**       | 中断并退出工作流              | `message` (String, 可选)           | 无                          |
+| **`flow.assert`**     | 条件断言，表达式为 false 时抛出异常 | `condition` (Boolean/String)     | `next`                     |
+| **`flow.switch`**     | 多分支条件路由               | `cases` (Map<String, String>)    | 匹配的 branch key 或 `default` |
+| **`flow.log`**        | 打印调试日志信息              | `message`, `level`               | `next`                     |
+| **`flow.debug`**      | 调试断点信息输出              | `message`                        | `next`                     |
+| **`flow.try`**        | 异常捕获保护作用域起点           | 无                                | `try`                      |
+| **`flow.catch`**      | 异常处理分支入口              | 无                                | `catch`                    |
+| **`flow.finally`**    | 最终执行收尾分支入口            | 无                                | `finally`                  |
+| **`flow.call`**       | 调用子工作流                | `workflowId`, `outputKey`        | `next`                     |
+| **`flow.return`**     | 子工作流返回数据              | `output`                         | 无                          |
+| **`flow.parallel`**   | 并行分支起点                | 无                                | `branches`                 |
+| **`flow.join`**       | 并行分支汇合点               | `values`                         | `next`                     |
+| **`flow.retry`**      | 失败重试执行器               | `retryCount`, `retryDelayMillis` | `next`                     |
+| **`flow.timeout`**    | 超时控制作用域               | `timeoutMillis`                  | `next`                     |
+| **`flow.rate_limit`** | 限流等待控制                | `delayMillis`                    | `next`                     |
+
+### 4.2 逻辑判断 (`control.*`)
+
+| 节点类型                                 | 功能说明                     | 必需配置键                        | 输出数据                                        |
+|:-------------------------------------|:-------------------------|:-----------------------------|:--------------------------------------------|
+| **`control.if`**                     | 条件分支路由                   | `condition`                  | 沿 `matched` (true) 或 `default` (false) 端口输出 |
+| **`control.equals`**                 | 相等比较 (`left == right`)   | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.not_equals`**             | 不等比较 (`left != right`)   | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.greater_than`**           | 大于比较 (`left > right`)    | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.greater_than_or_equals`** | 大于等于比较 (`left >= right`) | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.less_than`**              | 小于比较 (`left < right`)    | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.less_than_or_equals`**    | 小于等于比较 (`left <= right`) | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.and`**                    | 逻辑与 (`left && right`)    | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.or`**                     | 逻辑或 (`left \|\| right`)  | `left`, `right`, `outputKey` | 布尔值                                         |
+| **`control.not`**                    | 逻辑非 (`!value`)           | `value`, `outputKey`         | 布尔值                                         |
+| **`control.is_null`**                | 空值判断 (`value == null`)   | `value`, `outputKey`         | 布尔值                                         |
+| **`control.is_empty`**               | 空集合或空字符串判断               | `value`, `outputKey`         | 布尔值                                         |
+
+### 4.3 上下文与变量操作 (`data.*`)
+
+| 节点类型                  | 功能说明          | 配置参数                                 | 写入目标               |
+|:----------------------|:--------------|:-------------------------------------|:-------------------|
+| **`data.set_var`**    | 设置单个变量        | `key`, `value`                       | `vars.<key>`       |
+| **`data.get_var`**    | 读取单个变量        | `key`, `outputKey`                   | `vars.<outputKey>` |
+| **`data.remove_var`** | 删除单个变量        | `key`                                | 移除 `vars.<key>`    |
+| **`data.merge_vars`** | 合并字典至全局变量表    | `values`                             | 写入 `vars`          |
+| **`data.clear_vars`** | 清空全局变量表       | 无                                    | 清空 `vars`          |
+| **`data.map_fields`** | 对对象字段进行提取与重命名 | `object`, `assignments`, `outputKey` | `vars.<outputKey>` |
+| **`data.template`**   | 文本模版渲染        | `template`, `outputKey`              | `vars.<outputKey>` |
+| **`data.to_number`**  | 强制转换为数值类型     | `value`, `outputKey`                 | `vars.<outputKey>` |
+| **`data.to_string`**  | 强制转换为字符串类型    | `value`, `outputKey`                 | `vars.<outputKey>` |
+| **`data.to_boolean`** | 强制转换为布尔类型     | `value`, `outputKey`                 | `vars.<outputKey>` |
+| **`data.type_of`**    | 获取数据类型描述      | `value`, `outputKey`                 | `vars.<outputKey>` |
+| **`data.uuid`**       | 生成 UUID 字符串   | `outputKey`                          | `vars.<outputKey>` |
+
+### 4.4 JSON 对象操作 (`object.*`)
+
+| 节点类型                      | 功能说明                       | 必需配置键                                 | 输出数据    |
+|:--------------------------|:---------------------------|:--------------------------------------|:--------|
+| **`object.get`**          | 读取深层路径属性                   | `object`, `path`, `outputKey`         | 属性值     |
+| **`object.set`**          | 设置对象键值对                    | `object`, `key`, `value`, `outputKey` | 新对象     |
+| **`object.remove`**       | 删除对象指定键                    | `object`, `key`, `outputKey`          | 新对象     |
+| **`object.omit`**         | 剔除指定键列表                    | `object`, `keys`, `outputKey`         | 新对象     |
+| **`object.pick`**         | 仅保留指定键列表                   | `object`, `keys`, `outputKey`         | 新对象     |
+| **`object.merge`**        | 合并多个对象                     | `objects`, `outputKey`                | 合并后的新对象 |
+| **`object.keys`**         | 获取所有键名列表                   | `object`, `outputKey`                 | 字符串数组   |
+| **`object.values`**       | 获取所有属性值列表                  | `object`, `outputKey`                 | 元素数组    |
+| **`object.entries`**      | 转换为键值对数组 (`[[k, v], ...]`) | `object`, `outputKey`                 | 二维数组    |
+| **`object.from_entries`** | 键值对数组还原为对象                 | `entries`, `outputKey`                | 对象      |
+| **`object.has_key`**      | 判断是否包含指定键                  | `object`, `key`, `outputKey`          | 布尔值     |
+| **`object.is_empty`**     | 判断是否为空对象 (`{}`)            | `object`, `outputKey`                 | 布尔值     |
+
+### 4.5 数组集合操作 (`array.*`)
+
+| 节点类型                        | 功能说明          | 必需配置键                                           | 输出数据         |
+|:----------------------------|:--------------|:------------------------------------------------|:-------------|
+| **`array.length`**          | 获取数组长度        | `values`, `outputKey`                           | 整数           |
+| **`array.create`**          | 创建数组          | `values`, `outputKey`                           | 数组           |
+| **`array.append`**          | 尾部添加元素        | `values`, `value`, `outputKey`                  | 新数组          |
+| **`array.insert_at`**       | 指定位置插入元素      | `values`, `index`, `value`, `outputKey`         | 新数组          |
+| **`array.remove_at`**       | 删除指定下标元素      | `values`, `index`, `outputKey`                  | 新数组          |
+| **`array.filter`**          | 按条件过滤元素       | `values`, `operator`, `expected`, `outputKey`   | 过滤后的新数组      |
+| **`array.map`**             | 提取元素指定字段生成新数组 | `values`, `fieldPath`, `outputKey`              | 新数组          |
+| **`array.flat_map`**        | 提取字段并扁平化      | `values`, `fieldPath`, `outputKey`              | 一维新数组        |
+| **`array.concat`**          | 拼接多个数组        | `values`, `outputKey`                           | 拼接后的新数组      |
+| **`array.zip`**             | 双数组打包为元组数组    | `values`, `otherValues`, `outputKey`            | 二维元组数组       |
+| **`array.take`**            | 获取前 N 个元素     | `values`, `count`, `outputKey`                  | 截取后的新数组      |
+| **`array.drop`**            | 跳过前 N 个元素     | `values`, `count`, `outputKey`                  | 截取后的新数组      |
+| **`array.contains`**        | 检查是否包含目标元素    | `values`, `value`, `outputKey`                  | 布尔值          |
+| **`array.find`**            | 查找首个满足条件的元素   | `values`, `fieldPath`, `expected`, `outputKey`  | 元素或 `null`   |
+| **`array.distinct`**        | 元素去重          | `values`, `outputKey`                           | 去重后的新数组      |
+| **`array.sort`**            | 数组排序          | `values`, `outputKey`                           | 排序后的新数组      |
+| **`array.reverse`**         | 反转数组          | `values`, `outputKey`                           | 反转后的新数组      |
+| **`array.slice`**           | 切片截取区间元素      | `values`, `startIndex`, `endIndex`, `outputKey` | 截取后的新数组      |
+| **`array.flatten`**         | 嵌套数组扁平化       | `values`, `outputKey`                           | 一维数组         |
+| **`array.group_by`**        | 按指定字段分组       | `values`, `fieldPath`, `outputKey`              | 键值映射字典       |
+| **`array.first`**           | 获取首个元素        | `values`, `outputKey`                           | 元素或 `null`   |
+| **`array.last`**            | 获取末尾元素        | `values`, `outputKey`                           | 元素或 `null`   |
+| **`array.sum`**             | 数值求和          | `values`, `outputKey`                           | 数值           |
+| **`array.avg`**             | 数值求平均值        | `values`, `outputKey`                           | 数值           |
+| **`array.min`** / **`max`** | 查找最小值 / 最大值   | `values`, `outputKey`                           | 数值           |
+| **`array.chunk`**           | 数组按大小分块       | `values`, `size`, `outputKey`                   | 二维数组         |
+| **`array.shuffle`**         | 随机打乱顺序        | `values`, `outputKey`                           | 新数组          |
+| **`array.sample`**          | 随机采样单个元素      | `values`, `outputKey`                           | 元素或 `null`   |
+| **`array.index_of`**        | 查找元素首个下标      | `values`, `value`, `outputKey`                  | 索引值（未找到为 -1） |
+| **`array.intersection`**    | 两个数组求交集       | `values`, `otherValues`, `outputKey`            | 交集数组         |
+| **`array.difference`**      | 两个数组求差集       | `values`, `otherValues`, `outputKey`            | 差集数组         |
+
+### 4.6 文本与正则处理 (`text.*`)
+
+| 节点类型                        | 功能说明        | 配置参数                                             | 输出数据        |
+|:----------------------------|:------------|:-------------------------------------------------|:------------|
+| **`text.length`**           | 计算字符长度      | `text`, `outputKey`                              | 整数          |
+| **`text.trim`**             | 去除首尾空白字符    | `text`, `outputKey`                              | 字符串         |
+| **`text.lowercase`**        | 转为小写字母      | `text`, `outputKey`                              | 字符串         |
+| **`text.uppercase`**        | 转为大写字母      | `text`, `outputKey`                              | 字符串         |
+| **`text.capitalize`**       | 首字母大写       | `text`, `outputKey`                              | 字符串         |
+| **`text.repeat`**           | 重复拼接 N 次    | `text`, `count`, `outputKey`                     | 字符串         |
+| **`text.reverse`**          | 反转字符顺序      | `text`, `outputKey`                              | 字符串         |
+| **`text.index_of`**         | 查找子串首个下标    | `text`, `pattern`, `outputKey`                   | 整数（未找到为 -1） |
+| **`text.template`**         | 变量插值渲染      | `template`, `object`, `outputKey`                | 渲染后的字符串     |
+| **`text.split`**            | 按分隔符切分为数组   | `text`, `delimiter`, `outputKey`                 | 字符串数组       |
+| **`text.regex_match`**      | 正则匹配与分组捕获   | `text`, `pattern`, `outputKey`                   | 匹配结果对象      |
+| **`text.match_all`**        | 正则全局匹配列表    | `text`, `pattern`, `outputKey`                   | 匹配项数组       |
+| **`text.substring`**        | 按照下标截取子串    | `text`, `startIndex`, `endIndex`, `outputKey`    | 字符串         |
+| **`text.substring_before`** | 截取分隔符之前的文本  | `text`, `delimiter`, `outputKey`                 | 字符串         |
+| **`text.substring_after`**  | 截取分隔符之后的文本  | `text`, `delimiter`, `outputKey`                 | 字符串         |
+| **`text.replace`**          | 静态字符替换      | `text`, `pattern`, `replacement`, `outputKey`    | 字符串         |
+| **`text.replace_regex`**    | 正则表达式替换     | `text`, `pattern`, `replacement`, `outputKey`    | 字符串         |
+| **`text.join`**             | 使用指定连接符拼接数组 | `values`, `separator`, `outputKey`               | 字符串         |
+| **`text.pad`**              | 文本填充对齐      | `text`, `padLength`, `padCharacter`, `outputKey` | 字符串         |
+| **`text.format_number`**    | 数值格式化小数位    | `value`, `fractionDigits`, `outputKey`           | 字符串         |
+| **`text.contains`**         | 检查是否包含子串    | `text`, `pattern`, `outputKey`                   | 布尔值         |
+| **`text.starts_with`**      | 检查是否以前缀开头   | `text`, `pattern`, `outputKey`                   | 布尔值         |
+| **`text.ends_with`**        | 检查是否以后缀结尾   | `text`, `pattern`, `outputKey`                   | 布尔值         |
+| **`text.slugify`**          | 生成 URL 别名格式 | `text`, `outputKey`                              | 字符串         |
+| **`text.truncate`**         | 超长截断与省略号补充  | `text`, `limit`, `outputKey`                     | 截断字符串       |
+
+### 4.7 数值与数学计算 (`math.*`)
+
+| 节点类型                       | 功能说明                     | 配置参数                               | 输出数据           |
+|:---------------------------|:-------------------------|:-----------------------------------|:---------------|
+| **`math.add`**             | 加法运算 (`left + right`)    | `left`, `right`, `outputKey`       | 数值             |
+| **`math.subtract`**        | 减法运算 (`left - right`)    | `left`, `right`, `outputKey`       | 数值             |
+| **`math.multiply`**        | 乘法运算 (`left * right`)    | `left`, `right`, `outputKey`       | 数值             |
+| **`math.divide`**          | 除法运算 (`left / right`)    | `left`, `right`, `outputKey`       | 数值（除数为 0 抛出异常） |
+| **`math.modulo`**          | 取模运算 (`left % right`)    | `left`, `right`, `outputKey`       | 数值（模数为 0 抛出异常） |
+| **`math.min`** / **`max`** | 取两数中较小 / 较大值             | `left`, `right`, `outputKey`       | 数值             |
+| **`math.pow`**             | 幂运算 ($left^{right}$)     | `left`, `right`, `outputKey`       | 数值             |
+| **`math.sqrt`**            | 平方根运算 ($\sqrt{x}$)       | `value`, `outputKey`               | 数值（负数开方抛出异常）   |
+| **`math.sum`**             | 列表元素累加求和                 | `values`, `outputKey`              | 数值             |
+| **`math.avg`**             | 列表元素计算平均值                | `values`, `outputKey`              | 数值             |
+| **`math.log`**             | 计算自然对数 $\ln(x)$          | `value`, `outputKey`               | 数值             |
+| **`math.exp`**             | 计算自然指数 $e^x$             | `value`, `outputKey`               | 数值             |
+| **`math.negate`**          | 数值取反 (`-value`)          | `value`, `outputKey`               | 数值             |
+| **`math.round`**           | 四舍五入保留指定小数位              | `value`, `decimals`, `outputKey`   | 数值             |
+| **`math.floor`**           | 向下取整                     | `value`, `outputKey`               | 整数             |
+| **`math.ceil`**            | 向上取整                     | `value`, `outputKey`               | 整数             |
+| **`math.abs`**             | 计算绝对值                    | `value`, `outputKey`               | 数值             |
+| **`math.random`**          | 生成指定区间 `[min, max)` 伪随机数 | `min`, `max`, `outputKey`          | 数值             |
+| **`math.clamp`**           | 数值区间截断约束                 | `value`, `min`, `max`, `outputKey` | 数值             |
+
+### 4.8 日期与时间 (`date.*`)
+
+| 节点类型                     | 功能说明                 | 必需配置键                                                  | 输出数据                 |
+|:-------------------------|:---------------------|:-------------------------------------------------------|:---------------------|
+| **`date.now`**           | 获取系统当前时间戳 (毫秒)       | `outputKey`                                            | Long 毫秒值             |
+| **`date.format`**        | 时间戳格式化为 ISO 8601 字符串 | `timestamp`, `outputKey`                               | 格式化日期字符串             |
+| **`date.parse`**         | 日期字符串解析为时间戳          | `text`, `outputKey`                                    | Long 毫秒值             |
+| **`date.add`**           | 增加指定时间跨度             | `timestamp`, `count`, `unit`, `outputKey`              | Long 毫秒值             |
+| **`date.subtract`**      | 减少指定时间跨度             | `timestamp`, `count`, `unit`, `outputKey`              | Long 毫秒值             |
+| **`date.diff`**          | 计算两时间戳差值             | `timestampLeft`, `timestampRight`, `unit`, `outputKey` | 数值                   |
+| **`date.relative_time`** | 转换为相对时间描述            | `timestamp`, `outputKey`                               | 相对时间字符串 (如 `"5分钟前"`) |
+| **`date.get_component`** | 提取时间分量 (年月日时分秒)      | `timestamp`, `outputKey`                               | 时间分量字典               |
+
+### 4.9 URL 解析与构建 (`url.*`)
+
+| 节点类型                      | 功能说明                    | 必需配置键                                     | 输出数据           |
+|:--------------------------|:------------------------|:------------------------------------------|:---------------|
+| **`url.parse`**           | 解析 URL 结构 (协议、域名、路径、参数) | `url`, `outputKey`                        | URL 组成对象       |
+| **`url.build`**           | 由基准路径与参数对象构造完整 URL      | `baseUrl`, `queryParameters`, `outputKey` | 完整 URL 字符串     |
+| **`url.set_query_param`** | 设置或覆盖 URL 查询参数          | `url`, `key`, `value`, `outputKey`        | 新 URL 字符串      |
+| **`url.get_query_param`** | 读取 URL 指定查询参数值          | `url`, `key`, `outputKey`                 | 参数值字符串或 `null` |
+
+### 4.10 结构化数据解析 (`json.*`, `xml.*`, `csv.*`)
+
+| 节点类型                 | 功能说明                  | 必需配置键                         | 输出数据                             |
+|:---------------------|:----------------------|:------------------------------|:---------------------------------|
+| **`json.parse`**     | JSON 文本反序列化为对象或数组     | `text`, `outputKey`           | JsonElement 结构                   |
+| **`json.stringify`** | 对象序列化为 JSON 文本        | `value`, `outputKey`          | 字符串                              |
+| **`json.extract`**   | 按 JSONPath 表达式提取节点    | `source`, `path`, `outputKey` | 匹配到的节点值                          |
+| **`json.validate`**  | 校验文本是否为合法 JSON        | `text`, `outputKey`           | 布尔值                              |
+| **`xml.parse`**      | XML/RSS 文本解析为 JSON 结构 | `text`, `outputKey`           | JsonObject 结构                    |
+| **`xml.stringify`**  | JSON 结构序列化为 XML 文本    | `data`, `outputKey`           | XML 字符串                          |
+| **`csv.parse`**      | CSV 表格解析为对象记录数组       | `text`, `outputKey`           | 字典列表 `List<Map<String, String>>` |
+| **`csv.stringify`**  | 记录数组转换为 CSV 文本        | `items`, `outputKey`          | CSV 格式文本                         |
+
+### 4.11 编解码与摘要哈希 (`codec.*`, `crypto.*`)
+
+| 节点类型                                         | 功能说明                                | 必需配置键                                      | 输出数据          |
+|:---------------------------------------------|:------------------------------------|:-------------------------------------------|:--------------|
+| **`codec.base64_encode`** / **`decode`**     | 标准 Base64 编解码                       | `text`, `outputKey`                        | 字符串           |
+| **`codec.base64_url_encode`** / **`decode`** | URL 安全的 Base64 编解码                  | `text`, `outputKey`                        | 字符串           |
+| **`codec.hex_encode`** / **`decode`**        | 十六进制 (Hex) 编解码                      | `text`, `outputKey`                        | 字符串           |
+| **`codec.url_encode`** / **`decode`**        | URL 百分号编解码                          | `text`, `outputKey`                        | 字符串           |
+| **`codec.html_escape`** / **`unescape`**     | HTML 字符实体转义与反转义                     | `text`, `outputKey`                        | 字符串           |
+| **`crypto.hash`**                            | 计算哈希摘要 (支持 SHA-256, SHA-512, MD5 等) | `text`, `algorithm`, `outputKey`           | 哈希十六进制字符串     |
+| **`crypto.hmac`**                            | 计算 HMAC 签名                          | `text`, `secret`, `algorithm`, `outputKey` | 签名十六进制字符串     |
+| **`crypto.encrypt`** / **`decrypt`**         | AES 对称加密与解密                         | `text`, `key`, `algorithm`, `outputKey`    | 密文 / 明文字符串    |
+| **`crypto.random_bytes`**                    | 生成指定长度伪随机字节串                        | `length`, `outputKey`                      | 十六进制随机字符串     |
+| **`crypto.uuid`**                            | 生成标准 UUID V4 标识                     | `outputKey`                                | 36 位 UUID 字符串 |
+
+### 4.12 HTML 解析与抽取 (`html.*`)
+
+HTML 解析节点基于 **Ksoup** 引擎构建，负责 DOM 树的解析、选择器检索、层次遍历与数据抽取。
+
+#### 数据契约与行为规范
+
+- **输入类型**：支持标准 HTML 文档、HTML 片段字符串或 HTML 字符串数组。
+- **输出格式**：
+   - 元素定位（如 `html.parse`、`html.select_first`、`html.parent` 等）：输出为 HTML 字符串（未匹配时为 `null`）。
+   - 元素集合（如 `html.select`、`html.children` 等）：输出为 HTML 字符串数组 `List<String>`（未匹配时为空数组 `[]`）。
+   - 属性与内容提取（如 `html.text`、`html.attr` 等）：输入为单元素时输出对应标量值；输入为元素数组时输出对应的标量值数组。
+- **选择器规范**：支持标准 CSS 选择器语法，语法非法时抛出异常。
+
+#### 节点规格详情
+
+| 节点类型                     | 功能说明                              | 配置参数                                             | 输出数据                             |
+|:-------------------------|:----------------------------------|:-------------------------------------------------|:---------------------------------|
+| **`html.parse`**         | 解析 HTML 源码并输出规范化文档字符串             | `html` / `source` (String), `outputKey`          | Document 完整 HTML 字符串             |
+| **`html.remove`**        | 根据 CSS 选择器剔除匹配标签                  | `source`, `selector` (String), `outputKey`       | 剔除后的 HTML 字符串                    |
+| **`html.select`**        | 执行 CSS 选择器匹配，返回所有匹配项的 HTML 源码列表   | `source`, `selector`, `outputKey`                | 匹配元素的 HTML 字符串数组 `List<String>`  |
+| **`html.select_first`**  | 执行 CSS 选择器匹配，返回首个匹配项的 HTML 源码     | `source`, `selector`, `outputKey`                | 首个匹配项 HTML 字符串；未匹配为 `null`       |
+| **`html.parent`**        | 获取当前元素的直接父级元素 HTML                | `source`, `outputKey`                            | 父级 HTML 字符串；无父级为 `null`          |
+| **`html.children`**      | 获取当前元素的全部直接子元素 HTML 列表            | `source`, `outputKey`                            | 子元素 HTML 字符串数组                   |
+| **`html.first`**         | 获取元素集合中的首个元素                      | `source`, `outputKey`                            | 首个元素 HTML；空集合为 `null`            |
+| **`html.last`**          | 获取元素集合中的末尾元素                      | `source`, `outputKey`                            | 末尾元素 HTML；空集合为 `null`            |
+| **`html.get`**           | 按 0 起始索引获取集合中指定位置元素               | `source`, `index` (Int), `outputKey`             | 目标元素 HTML；越界为 `null`             |
+| **`html.size`**          | 统计元素集合中包含的节点数量                    | `source`, `outputKey`                            | 元素数量 (Int)                       |
+| **`html.attr`**          | 提取指定属性名称的值                        | `source`, `attribute` (String), `outputKey`      | 属性值字符串（多元素时为字符串数组）               |
+| **`html.tag`**           | 提取元素的小写标签名称                       | `source`, `outputKey`                            | 标签名字符串（多元素时为字符串数组）               |
+| **`html.text`**          | 提取节点及其子树的纯文本内容                    | `source`, `outputKey`                            | 纯文本字符串（多元素时为字符串数组）               |
+| **`html.data`**          | 提取 `<script>` 或 `<style>` 标签的内部数据 | `source`, `outputKey`                            | 原始字符数据字符串                        |
+| **`html.value`**         | 提取表单输入控件的值                        | `source`, `outputKey`                            | 控件取值字符串                          |
+| **`html.id`**            | 提取元素的 `id` 属性                     | `source`, `outputKey`                            | ID 字符串（未声明为空字符串）                 |
+| **`html.html`**          | 提取元素的内部 HTML (`innerHTML`)        | `source`, `outputKey`                            | 内部 HTML 字符串                      |
+| **`html.outer_html`**    | 提取包含标签自身的完整 HTML (`outerHTML`)    | `source`, `outputKey`                            | 完整 HTML 字符串                      |
+| **`html.has_class`**     | 校验元素是否包含指定 CSS 类名                 | `source`, `className` (String), `outputKey`      | 布尔值 `true` / `false`             |
+| **`html.map`**           | 对集合内每个元素执行指定提取操作并收集为数组            | `source`, `operation`, `attribute?`, `outputKey` | 结果数组 `JsonArray<String>`         |
+| **`html.table_to_json`** | 将 `<table>` 元素解析为结构化字典列表          | `html`, `selector?` (默认 `"table"`), `outputKey`  | 字典数组 `List<Map<String, String>>` |
+
+### 4.13 网络与下载 (`http.*`)
+
+| 节点类型                | 功能说明             | 配置参数                                                                                                               | 输出结构说明                                                                  |
+|:--------------------|:-----------------|:-------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------|
+| **`http.request`**  | 发起 HTTP/HTTPS 请求 | `url`, `method` (GET/POST/PUT/DELETE), `headers?`, `query?`, `body?`, `timeoutMillis?`, `retryCount?`, `outputKey` | 包含 `statusCode` (Int), `isSuccess` (Boolean), `body` (解析后对象), `headers` |
+| **`http.download`** | 下载远程网络文件并写入沙箱目录  | 同 `http.request`，附加 `path` (保存目录), `fileName?` (可选文件名), `outputKey`                                                | 包含 `statusCode`, `isSuccess`, `filePath` (沙箱相对路径), `fileName`           |
+
+### 4.14 本地持久化存储 (`storage.*`)
+
+| 节点类型                             | 功能说明                | 配置参数                        | 访问目标             |
+|:---------------------------------|:--------------------|:----------------------------|:-----------------|
+| **`storage.preferences_get`**    | 读取 Preferences 存储数据 | `key`, `outputKey`          | 读取本地 Preferences |
+| **`storage.preferences_set`**    | 写入 Preferences 键值对  | `key`, `value`, `outputKey` | 写入本地 Preferences |
+| **`storage.preferences_delete`** | 删除指定 Preferences 键  | `key`                       | 移除指定 Key         |
+| **`storage.preferences_has`**    | 检查指定键是否存在           | `key`, `outputKey`          | 返回布尔值            |
+| **`storage.preferences_clear`**  | 清空当前工作流的本地存储        | 无                           | 清空 Preferences   |
+
+### 4.15 文件系统沙箱 (`file.*`)
+
+所有文件系统节点均运行于沙箱隔离环境中，仅允许访问工作流独占的 `workflowId/` 目录。路径越界或包含 `..` 穿越行为将被拒绝并抛出 `file_access_denied` 错误。
+
+| 节点类型                             | 功能说明                          | 必需配置键                                  |
+|:---------------------------------|:------------------------------|:---------------------------------------|
+| **`file.read_text`**             | 读取沙箱内 UTF-8 文本文件              | `path`, `outputKey`                    |
+| **`file.write_text`**            | 写入 UTF-8 文本（支持 `append` 追加模式） | `path`, `text`, `append?`, `outputKey` |
+| **`file.create`**                | 创建空文件（不覆盖已有文件）                | `path`, `outputKey`                    |
+| **`file.get_working_directory`** | 获取当前工作流沙箱目录的绝对路径              | `outputKey`                            |
+| **`file.delete`**                | 删除沙箱内的文件或空目录                  | `path`, `outputKey`                    |
+| **`file.exists`**                | 检查指定路径的文件或目录是否存在              | `path`, `outputKey`                    |
+| **`file.mkdir`**                 | 递归创建目录                        | `path`, `outputKey`                    |
+| **`file.list`**                  | 列举指定目录下的全部子项名称                | `path`, `outputKey`                    |
+| **`file.copy`**                  | 复制文件或目录                       | `fromPath`, `toPath`, `outputKey`      |
+| **`file.move`**                  | 移动或重命名文件或目录                   | `fromPath`, `toPath`, `outputKey`      |
+| **`file.compress_zip`**          | 将文件或目录列表压缩为 ZIP 包             | `paths`, `toPath`, `outputKey`         |
+| **`file.extract_zip`**           | 安全解压 ZIP 包（带包大小与解压条目限制）       | `fromPath`, `toPath`, `outputKey`      |
+
+### 4.16 客户端动作与 UI 交互 (`action.*`, `ui.*`, `system.*`, `image.*`, `video.*`)
+
+#### 客户端系统动作节点 (`action.*`)
+
+| 节点类型                           | 功能说明                            | 配置参数                 | 触发机制             | 所需能力                                     |
+|:-------------------------------|:--------------------------------|:---------------------|:-----------------|:-----------------------------------------|
+| **`action.open_internal_web`** | 在应用内置 WebView 容器中打开网页           | `url` (必填), `title?` | 派发 UI 路由副作用      | `NETWORK`                                |
+| **`action.open_external_url`** | 唤起系统默认浏览器打开 URL                 | `url` (必填)           | 派发系统浏览器调用副作用     | 无                                        |
+| **`action.open_external_app`** | 唤起第三方 App 协议或 URI Scheme        | `uri` (必填)           | 派发系统协议调用副作用      | 无                                        |
+| **`action.sync_cookie`**       | 打开内置 WebView 交互登录并同步 Cookie 至本地 | `url` (必填), `title?` | 同步写入本地 CookieJar | `NETWORK`, `NETWORK_LOCAL_COOKIE_ACCESS` |
+| **`action.show_toast`**        | 弹出系统 Toast 轻量提示                 | `message` (必填)       | 派发 UI Toast 副作用  | 无                                        |
+| **`action.write_clipboard`**   | 写入文本到系统剪贴板                      | `text` (必填)          | 派发系统剪贴板写入副作用     | `CLIPBOARD_WRITE`                        |
+| **`action.read_clipboard`**    | 读取系统剪贴板文本                       | `outputKey`          | 派发系统剪贴板读取副作用     | `CLIPBOARD_READ`                         |
+
+#### 用户界面交互对话框节点 (`ui.*`)
+
+| 节点类型                      | 功能说明               | 配置参数                                                                                      | 控制流与输出行为                             |
+|:--------------------------|:-------------------|:------------------------------------------------------------------------------------------|:-------------------------------------|
+| **`ui.confirm`**          | 弹出二次确认弹窗，挂起等待用户操作  | `message` (必填), `title?`                                                                  | 确认沿 `success` 端口继续；取消沿 `cancel` 端口继续 |
+| **`ui.input_dialog`**     | 弹出单行文本输入框，挂起等待用户输入 | `title?`, `defaultValue?`, `outputKey`                                                    | `output.<outputKey>` 接收用户输入的字符串      |
+| **`ui.select_dialog`**    | 弹出单选列表对话框供用户选择     | `options` (Array<Object>), `title?`, `outputKey`                                          | `output.<outputKey>` 接收选中的选项值        |
+| **`ui.progress_dialog`**  | 显示全局进度弹窗           | `title?`, `message?`, `mode` (`determinate`/`indeterminate`), `progress?`, `maxProgress?` | 派发弹窗创建副作用，流程非阻塞推进                    |
+| **`ui.progress_update`**  | 更新现有进度弹窗显示内容与数值    | `message?`, `progress?`                                                                   | 派发更新副作用，流程非阻塞推进                      |
+| **`ui.progress_dismiss`** | 关闭并销毁当前全局进度弹窗      | 无                                                                                         | 派发销毁副作用，流程非阻塞推进                      |
+
+#### 硬件与多媒体节点 (`system.*`, `image.*`, `video.*`)
+
+| 节点类型                      | 功能说明          | 配置参数                                      | 触发机制      |
+|:--------------------------|:--------------|:------------------------------------------|:----------|
+| **`system.share`**        | 唤起系统原生分享面板    | `text` (必填)                               | 派发系统分享副作用 |
+| **`system.notification`** | 发送系统通知栏消息     | `content` (必填), `title?`                  | 派发系统通知副作用 |
+| **`system.vibrate`**      | 触发设备触觉震动      | 无                                         | 派发硬件震动副作用 |
+| **`image.preview`**       | 唤起应用全屏大图预览画廊  | `images` (Array<String>), `index?` (默认 0) | 派发画廊查看副作用 |
+| **`video.preview`**       | 唤起应用内置播放器全屏播放 | `url` (必填), `headers?`                    | 派发视频播放副作用 |
+
+---
+
+## 5. 错误处理与诊断体系
+
+### 5.1 异常模型与继承层次
+
+引擎通过结构化异常体系管理静态拓扑错误与运行期故障：
+
+```text
+               ActionWorkflowException (领域异常抽象基类)
+                          │
+         ┌────────────────┴────────────────┐
+         ▼                                 ▼
+ActionValidationException         ActionNodeExecutionException
+ (拓扑结构与静态配置校验不通过)         (节点运行期抛出未捕获异常)
+```
+
+所有抛出异常均携带结构化诊断字段：
+
+- `code`: 机器可读的错误标识码（如 `invalid_workflow`、`node_execution_failed`）。
+- `message`: 人类可读的错误描述信息。
+- `workflowId` / `workflowName`: 发生异常的工作流标识与名称。
+- `nodeId` / `nodeType` / `nodeLabel`: 触发异常的节点标识、类型与展示名称。
+- `configKey`: 触发校验失败的具体配置键（可选）。
+- `details`: 发生异常时的输入与配置快照（`JsonObject`）。
+- `hint`: 排查指导建议字符串。
+
+### 5.2 错误码分类规范
+
+错误码统一收归于 `ActionErrorCode.kt`：
+
+1. **运行时错误 (`ActionErrorCode`)**：包含 `INVALID_WORKFLOW`、`WORKFLOW_DISABLED`、`STEP_LIMIT`、`MISSING_NODE`、`UNKNOWN_NODE`、`LOOP_EXECUTION_FAILED`、`SIDE_EFFECT_CANCELLED`、
+   `SIDE_EFFECT_FAILED`、`NODE_EXECUTION_FAILED` 等。
+2. **静态校验错误 (`ActionValidationCode`)**：包含 `UNSUPPORTED_FORMAT`、`DUPLICATE_NODE_ID`、`INVALID_ENTRY`、`MISSING_CONFIG`、`CONTROL_CYCLE`、`JOIN_WITHOUT_PARALLEL` 等 26 项拓扑与参数规则。
+
+### 5.3 结构化错误输出协议
+
+当工作流执行失败或进入 `failure` 端口时，引擎通过 `toExecutionError()` 导出标准 JSON 对象供下游消费与持久化存储：
+
+```json
+{
+   "error": {
+      "code": "node_execution_failed",
+      "message": "节点 [divide_node] 执行抛出未捕获异常",
+      "nodeId": "divide_node",
+      "nodeType": "math.divide",
+      "nodeLabel": "除法计算",
+      "workflowId": "wf_sample",
+      "configKey": "right",
+      "details": {
+         "config": {
+            "left": 100,
+            "right": 0
+         }
+      },
+      "hint": "除数不能为 0，请在除法前通过 control.if 校验。"
+   }
+}
+```
+
+### 5.4 诊断追踪与日志监听
+
+- **控制台跟踪输出 (`ActionWorkflowTraceLogger`)**：在开发与调试模式下，引擎在控制台输出带节点元数据与建议的错误报告。
+- **全局日志监听器 (`ActionWorkflowLogListener`)**：通过 `ActionWorkflowTraceLogger.addListener { tag, priority, message -> ... }` 接入外部日志系统或上报服务。
+
+---
+
+## 6. 接入与扩展开发
+
+### 6.1 依赖注入装配
+
+宿主模块需提供支持 Cookie 存储与配置管理的 HTTP Client，通过专用 Qualifier 注册后加载工作流模块：
 
 ```kotlin
 val workflowInfrastructureModule = module {
@@ -143,9 +614,9 @@ startKoin {
 }
 ```
 
-### 启动与消费工作流
+### 6.2 执行与事件消费
 
-执行时由宿主提供初始上下文和 UI 副作用处理器，消费 `Flow<ActionExecutionEvent>`：
+外部业务层通过注入 `ActionWorkflowEngine` 启动执行，并消费 Flow 收集各阶段事件：
 
 ```kotlin
 val workflowEngine: ActionWorkflowEngine = get()
@@ -153,602 +624,42 @@ val workflowEngine: ActionWorkflowEngine = get()
 workflowEngine.execute(
     workflow = workflow,
     initialContext = ActionExecutionContext(
-        input = subjectJson,
-        environment = environmentJson,
-        trigger = triggerJson,
+       input = inputPayload,
+       environment = environmentData,
+       trigger = triggerMetadata,
     ),
-    sideEffectHandler = actionSideEffectHandler,
+   sideEffectHandler = sideEffectHandler,
 ).collect { event ->
     when (event) {
-        is ActionExecutionEvent.Started -> println("工作流开始运行: ${event.workflowId}")
-        is ActionExecutionEvent.NodeStarted -> println("节点开始: ${event.nodeId}")
-        is ActionExecutionEvent.NodeCompleted -> println("节点完成: ${event.nodeId}, 输出: ${event.output}")
-        is ActionExecutionEvent.SideEffectRequested -> actionSideEffectHandler.handle(event.effect)
-        is ActionExecutionEvent.Completed -> println("运行完成，状态: ${event.log.status}")
-        is ActionExecutionEvent.Failed -> println("运行失败: ${event.error.message}")
+       is ActionExecutionEvent.Started -> println("工作流启动: ${event.workflowId}")
+       is ActionExecutionEvent.NodeStarted -> println("节点启动: ${event.nodeId}")
+       is ActionExecutionEvent.NodeCompleted -> println("节点完成: ${event.nodeId}")
+       is ActionExecutionEvent.SideEffectRequested -> sideEffectHandler.handle(event.effect)
+       is ActionExecutionEvent.Completed -> println("执行完成，状态: ${event.log.status}")
+       is ActionExecutionEvent.Failed -> println("执行失败: ${event.error.message}")
     }
 }
 ```
 
----
+### 6.3 自定义节点开发规范
 
-## 工作流 DAG 控制流与调度架构
+扩展新节点时遵循以下开发步骤：
 
-`data-workflow` 采用响应式事件驱动与 DAG 有向无环图调度相结合的系统架构：
+1. **声明节点标识**：在 `ActionNodeType` 中添加唯一常量（如 `const val CUSTOM_ACTION = "custom.action"`）。
+2. **定义配置键**：在 `ActionNodeKeys.kt` 中声明配置参数名与默认值常量，避免硬编码。
+3. **编写规格定义**：使用 `ActionNodeSpec` 声明输入端口、输出端口、必需配置参数及依赖权限。
+4. **实现执行逻辑**：继承 `ActionNodeExecutor`，从 `ActionExecutionContext` 读取参数，计算并返回 `ActionNodeExecutionResult`。
+5. **注册与迁移**：在注册中心注册节点定义。当节点协议发生破坏性变更时，递增版本号并编写 `ActionNodeMigrator`。
+6. **编写单元测试**：在测试目录对应功能测试套件中添加规格与边界覆盖测试。
 
-```text
-  ┌────────────────────────────────────────────────────────────────────────┐
-  │                           UI & 业务接入层                                │
-  │ (WorkflowsScreen / WorkflowSideEffectHost / ActionWorkflowRepository)  │
-  └───────────────────────────────────┬────────────────────────────────────┘
-                                      │  传递 ActionWorkflow / 消费 Flow<ActionExecutionEvent>
-                                      ▼
-  ┌────────────────────────────────────────────────────────────────────────┐
-  │                        data-workflow 领域引擎                           │
-  │                                                                        │
-  │  ┌───────────────────────┐              ┌───────────────────────────┐  │
-  │  │ ActionWorkflowEngine  │─────────────▶│  LoopExecutionController  │  │
-  │  │  (DAG 就绪队列状态机)   │              │     (循环帧栈与迭代器)     │  │
-  │  └───────────┬───────────┘              └───────────────────────────┘  │
-  │              │                                                         │
-  │              ├──────────────────────────┐                              │
-  │              ▼                          ▼                              │
-  │  ┌───────────────────────┐  ┌───────────────────────────┐  │
-  │  │ ActionNodeRegistry    │  │ ActionTemplateResolver    │  │
-  │  │  (140+ 节点定义与执行) │  │  (上下文占位符插值解析)    │  │
-  │  └───────────────────────┘  └───────────────────────────┘  │
-  └───────────────────────────────────┬────────────────────────────────────┘
-                                      │  发出 ActionSideEffectRequested / 挂起等待结果
-                                      ▼
-  ┌────────────────────────────────────────────────────────────────────────┐
-  │                         ActionSideEffectHandler                        │
-  │            (系统 Toast / 确认框 / 输入框 / 剪贴板 / Web 弹窗)             │
-  └────────────────────────────────────────────────────────────────────────┘
-```
+### 6.4 测试验证
 
-### 调度核心机制
-
-1. **响应式事件通道 (Flow-Based Event Engine)**：
-    - 引擎暴露 `Flow<ActionExecutionEvent>` 接口，将节点启动 (`NodeStarted`)、节点完成 (`NodeCompleted`)、副作用请求 (`SideEffectRequested`) 及运行日志 (`Completed`) 作为冷流推送到 UI
-      层。
-    - 引擎内部基于就绪队列 (`readyQueue`) 进行动态图调度，使界面渲染、日志追踪与底层节点图计算解耦。
-
-2. **UI 交互与异步挂起 (Side Effects & Suspend Execution)**：
-    - 引擎遵循“计算与副作用分离”原则。对于弹窗交互（如 `ui.input_dialog`、`ui.confirm`）、浏览器打开、剪贴板读写等平台操作，节点执行器构建 `ActionSideEffect` 抛出。
-    - `sideEffectHandler.handle(effect)` 为 `suspend` 函数。遇到 UI 交互时，引擎在当前节点挂起；Compose UI 响应并返回数据后，协程恢复 (**Resume**)，带入输入结果继续执行后续节点。
-
-3. **多路分叉 (Forking / Fan-Out)**：
-    - 节点的单个输出端口（如 `next` 或条件端口）支持连接多个下游目标节点。
-    - 当上游节点执行完成并激活输出端口时，所有关联的控制边均会被标记为激活，触发多条分支并行/顺序调度。
-
-4. **多路汇入与合流 (Merging / Fan-In / Join)**：
-    - 下游节点的输入端口（如 `in`）支持接收多条来自不同 upstream 分支的控制边。
-    - 引擎调度器会自动分析图中节点的依赖关系。当某个合流节点有多个活跃的 upstream 分支时，调度器会等待**所有已被激活的 upstream 前置分支节点全部执行完毕**（`pendingPredecessors == 0`
-      ）后，再将合流节点压入就绪队列，确保合流节点**仅被触发执行一次**。
-    - 对于条件分支（如 `control.if`），只有被选中的分支端口（如 `true`）所指向的控制边会被激活；未被激活的条件分支路径自动跳过，不阻塞 downstream 合流节点的唤醒。
-
----
-
-## 模板与表达式求值引擎
-
-`ActionTemplateResolver` 包含内置的递归下降语法解析器（`ExpressionParser`），可在节点配置的 `${...}` 占位符内求值并解析动态表达式。
-
-### 根命名空间与路径深层导航
-
-求值引擎支持通过点号（`.`）与括号下标（`[...]`）对 6 大根域进行无限深度的路径读取（如 `${vars.a.b.c.d}`）：
-
-| 根命名空间         | 说明                         | 示例                                                 |
-|:--------------|:---------------------------|:---------------------------------------------------|
-| `input`       | 宿主触发时传入的只读业务 JSON 数据       | `${input.subject.name_cn}`                         |
-| `environment` | 运行平台只读环境信息 (语言/平台/版本)      | `${environment.locale}`                            |
-| `trigger`     | 触发本次调度的事件数据 (类型/来源/操作)     | `${trigger.type}`                                  |
-| `vars`        | 运行期由节点写入的全局变量表             | `${vars.user.score}`、`${vars.tags[0]}`             |
-| `steps`       | 历史已执行节点的结构化输出 (按节点 ID 索引)  | `${steps.http_node.body.data.list[vars.index].id}` |
-| `loop`        | 最内层循环帧数据 (`item`, `index`) | `${loop.item.title}`、`${loop.index + 1}`           |
-
-### 完整运算语法与求值规则
-
-求值引擎按照严谨的运算符优先级由低到高（Level 1 -> Level 12）进行表达式解析：
-
-| 优先级 (Level)  | 运算符 / 语法结构                  | 运算类别         | 范例语法                                                        |
-|:-------------|:----------------------------|:-------------|:------------------------------------------------------------|
-| **Level 1**  | `cond ? trueVal : falseVal` | 三元条件选择       | `${vars.score >= 80 ? 'Pass' : 'Fail'}`                     |
-| **Level 2**  | `val ?: fallbackVal`        | Elvis 空值兜底   | `${vars.title ?: '默认标题'}`                                   |
-| **Level 3**  | `\|\|`                      | 逻辑或          | `${vars.isAdmin \|\| vars.score > 90}`                      |
-| **Level 4**  | `&&`                        | 逻辑与          | `${loop.index > 0 && vars.hasMore}`                         |
-| **Level 5**  | `==`, `!=`                  | 等于 / 不等于     | `${vars.status == 200}`、`${vars.tag != null}`               |
-| **Level 6**  | `>`, `>=`, `<`, `<=`        | 关系比较         | `${vars.count >= 10}`、`${vars.price < 50.5}`                |
-| **Level 7**  | `+`, `-`                    | 加法 / 减法 / 拼接 | `${vars.base + 10}`、`"Hello " + vars.name`                  |
-| **Level 8**  | `*`, `/`, `%`               | 乘法 / 除法 / 取模 | `${vars.width * vars.height}`、`${loop.index % 2 == 0}`      |
-| **Level 9**  | `!`, `-` (Unary)            | 逻辑非 / 一元取负   | `${!vars.isDisabled}`、`-${vars.offset}`                     |
-| **Level 10** | `.length`, `.trim`          | 成员属性与工具方法    | `${vars.items.length}`、`${vars.text.trim}`                  |
-| **Level 11** | `obj.prop`, `arr[idx]`      | 后置属性与下标选择    | `${steps.node1.list[0]}`、`${vars.map[vars.key]}`            |
-| **Level 12** | `(...)`, 字面量                | 括号分组与字面量     | `${(vars.a + vars.b) * 2}`、`'string'`、`12.34`、`true`、`null` |
-
-### 类型隐式强转与真值判定
-
-- **隐式数字强转**：字符串数字（如 `"100.5"`）参与加减乘除或数值比较时，解析器会自动转换为 `Double`，并在输出整型时自动去除小数位（如 `3.0` -> `3`）。
-- **字符串拼接**：当 `+` 运算符的左侧或右侧包含文本类型时，自动隐式将另一侧转换为文本并进行连接。
-- **真值 (Truthiness)**：在逻辑条件（`if`, `&&`, `||`, 三元表达式）中，以下值判定为 `false`，其余皆为 `true`：
-    - `null` / `JsonNull`
-    - 布尔值 `false`
-    - 数值 `0` 或 `0.0`
-    - 空文本 `""`
-    - 空数组 `[]` 或 空对象 `{}`
-
----
-
-## 异常处理与诊断溯源设计
-
-当工作流运行过程中出现配置丢失、节点除零、选择器解析语法错误或网络请求故障时，系统设计了一套面向工业级开发的异常捕捉、错误代码收归与诊断溯源架构：
-
-```text
-                               ActionWorkflowException (领域根异常)
-                                          │
-                                          ▼
-                             ActionNodeExecutionException
-                                 (节点执行未捕获异常)
-```
-
-### 领域异常继承体系
-
-所有引擎抛出的异常均携带丰富的排错上下文：
-
-- `code`：稳定机器可读的错误代码（统一收归在 `ActionErrorCode` 或 `ActionValidationCode` 中，如 `invalid_workflow`、`step_limit`、`node_execution_failed`）。
-- `messageText`：人类可读的排错信息。
-- `workflowId` / `workflowName`：发生错误的目标工作流信息。
-- `nodeId` / `nodeType` / `nodeLabel`：发生错误的具体节点标识、类型与展示名称。
-- `configKey`：触发错误的配置项键名（如 `url`、`right`）。
-- `details`：运行时触发故障时的上下文 JSON 输入快照。
-- `hint`：指导开发人员解决该案例错误的“踩坑建议”提示（如 `ActionErrorCode.INVALID_WORKFLOW_HINT`）。
-
-### 统一 Error Code 与 Message 集中注册表
-
-所有的 Error Code、Validation Issue Code 以及对应的默认中文 Message（`*_MSG`）和 Hint（`*_HINT`）统一收归在 `com.xiaoyv.bangumi.shared.data.workflow.exception.ActionErrorCode.kt` 中：
-
-- **`ActionErrorCode`**：引擎运行时异常代码注册表（如 `INVALID_WORKFLOW`、`WORKFLOW_DISABLED`、`STEP_LIMIT`、`MISSING_NODE`、`UNKNOWN_NODE`、`LOOP_EXECUTION_FAILED`、
-  `SIDE_EFFECT_CANCELLED`、`SIDE_EFFECT_FAILED`、`NODE_EXECUTION_FAILED`）。
-- **`ActionValidationCode`**：静态拓扑与图校验 Issue 代码注册表（包含 `UNSUPPORTED_FORMAT`、`DUPLICATE_NODE_ID`、`INVALID_ENTRY`、`INVALID_ERROR_NODE`、`MISSING_CONFIG`、`CONTROL_CYCLE` 等
-  26 个校验规则代码）。
-
-### 统一错误输出协议
-
-当节点触发 `failure` 分支或节点错误被捕获时，引擎通过 `toExecutionError()` 导出标准化的结构化 `JsonObject` 数据。数据 Key 规范集中定义在 `ActionErrorKey` 中：
-
-```json
-{
-  "error": {
-    "code": "node_execution_failed",
-    "message": "节点 [divide_node] 节点执行抛出未捕获异常",
-    "nodeId": "divide_node",
-    "nodeType": "math.divide",
-    "nodeLabel": "除法计算",
-    "workflowId": "wf_bilibili_sync",
-    "configKey": "right",
-    "details": {
-      "config": {
-        "left": 100,
-        "right": 0
-      }
-    },
-    "hint": "请检查除数参数是否为 0，或在除法前使用 control.if 进行判空保护。"
-  }
-}
-```
-
-### 高亮终端诊断日志与监听回调
-
-- **终端高亮控制台 (`ActionWorkflowTraceLogger`)**：在控制台会自动打印格式化、带图标与完整诊断元信息的开发溯源报告：
-
-```text
-================================================================================
-❌ [WORKFLOW ERROR TRACE] 工作流执行异常溯源报告
---------------------------------------------------------------------------------
-📍 工作流标识 : [wf_sample_demo] 示例工作流
-📍 节点标识   : [node_math_calc]
-📍 节点类型   : math.divide (算术除法)
-📍 错误代码   : node_execution_failed
-📍 错误原因   : 节点 [node_math_calc] 节点执行抛出未捕获异常
-📍 上下文快照 : {"config":{"left":100,"right":0}}
-📍 底层异常   : IllegalArgumentException: 除数不能为 0
-💡 排查建议   : 请在除法计算前使用 control.if 校验除数不为 0。
-================================================================================
-```
-
-- **全局监听器回调 (`ActionWorkflowLogListener`)**：使用 `ActionWorkflowTraceLogger.addListener { tag, priority, message -> ... }` 动态注册异常日志回调。
-
----
-
-## 内置节点参考手册
-
-### 流程控制节点
-
-流程控制节点用于指挥工作流的执行走向、延迟、并发及异常捕获。
-
-| 节点类型 (Type)           | 作用描述             | 必需配置键                            | 常用输出端口                       |
-|:----------------------|:-----------------|:---------------------------------|:-----------------------------|
-| **`flow.start`**      | 工作流起始点           | 无                                | `next`                       |
-| **`flow.end`**        | 工作流正常结束点         | 无                                | 无 (流程终止)                     |
-| **`flow.delay`**      | 延时等待指定时间         | `delayMillis` (毫秒)               | `next`                       |
-| **`flow.stop`**       | 强制打断并终止流程        | `message` (可选原因)                 | 无                            |
-| **`flow.assert`**     | 条件断言校验 (失败则抛出异常) | `condition`                      | `next`                       |
-| **`flow.switch`**     | 多路多条件分支路由        | `cases` (分支对象)                   | 匹配到的 `branchKey` 或 `default` |
-| **`flow.log`**        | 打印日志信息           | `message`, `level`               | `next`                       |
-| **`flow.debug`**      | 流程调试断点输出         | `message`                        | `next`                       |
-| **`flow.try`**        | 捕获异常起始节点         | 无                                | `try`                        |
-| **`flow.catch`**      | 捕获异常入口           | 无                                | `catch`                      |
-| **`flow.finally`**    | 最终必执行收尾节点        | 无                                | `finally`                    |
-| **`flow.call`**       | 调用执行子工作流         | `workflowId`, `outputKey`        | `next`                       |
-| **`flow.return`**     | 子工作流返回结果         | `output`                         | 无                            |
-| **`flow.parallel`**   | 并行多线程分支起点        | 无                                | `branches`                   |
-| **`flow.join`**       | 等待多线程分支完全接合      | `values`                         | `next`                       |
-| **`flow.retry`**      | 失败自动重试机制         | `retryCount`, `retryDelayMillis` | `next`                       |
-| **`flow.timeout`**    | 超时控制挂起           | `timeoutMillis`                  | `next`                       |
-| **`flow.rate_limit`** | 限流控制保护           | `delayMillis`                    | `next`                       |
-
----
-
-### 逻辑判断节点
-
-用于数值、布尔值或文本条件的逻辑运算，返回 `true`/`false`。
-
-| 节点类型 (Type)                          | 说明                               | 必需配置键                        | 输出端口                  |
-|:-------------------------------------|:---------------------------------|:-----------------------------|:----------------------|
-| **`control.if`**                     | 条件判断 (真走 `matched`，假走 `default`) | `condition`                  | `matched` / `default` |
-| **`control.equals`**                 | 判断两值相等                           | `left`, `right`, `outputKey` | `next`                |
-| **`control.not_equals`**             | 判断两值不相等                          | `left`, `right`, `outputKey` | `next`                |
-| **`control.greater_than`**           | 大于判断 (`left > right`)            | `left`, `right`, `outputKey` | `next`                |
-| **`control.greater_than_or_equals`** | 大于等于判断 (`left >= right`)         | `left`, `right`, `outputKey` | `next`                |
-| **`control.less_than`**              | 小于判断 (`left < right`)            | `left`, `right`, `outputKey` | `next`                |
-| **`control.less_than_or_equals`**    | 小于等于判断 (`left <= right`)         | `left`, `right`, `outputKey` | `next`                |
-| **`control.and`**                    | 逻辑与 (两值均为 true)                  | `left`, `right`, `outputKey` | `next`                |
-| **`control.or`**                     | 逻辑或 (有一值为 true 即可)               | `left`, `right`, `outputKey` | `next`                |
-| **`control.not`**                    | 逻辑非 (布尔值取反)                      | `value`, `outputKey`         | `next`                |
-| **`control.is_null`**                | 判断值是否为 null                      | `value`, `outputKey`         | `next`                |
-| **`control.is_empty`**               | 判断文本或数组是否为空                      | `value`, `outputKey`         | `next`                |
-
----
-
-### 变量与数据节点
-
-用于对上下文中的全局变量进行保存、读取、转换与建模。
-
-| 节点类型 (Type)           | 作用描述             | 必需配置键                                | 写入变量               |
-|:----------------------|:-----------------|:-------------------------------------|:-------------------|
-| **`data.set_var`**    | 设置单个变量           | `key`, `value`                       | `vars.<key>`       |
-| **`data.get_var`**    | 读取单个变量           | `key`, `outputKey`                   | `vars.<outputKey>` |
-| **`data.remove_var`** | 删除指定变量           | `key`                                | 移除 `vars.<key>`    |
-| **`data.merge_vars`** | 批量合并对象字典到全局变量    | `values`                             | 合并至 `vars`         |
-| **`data.clear_vars`** | 清空所有全局上下文变量      | 无                                    | 清空 `vars`          |
-| **`data.map_fields`** | 对 JSON 对象字段映射重命名 | `object`, `assignments`, `outputKey` | `vars.<outputKey>` |
-| **`data.template`**   | 变量文本插值模板         | `template`, `outputKey`              | `vars.<outputKey>` |
-| **`data.to_number`**  | 强制转换为数字类型        | `value`, `outputKey`                 | `vars.<outputKey>` |
-| **`data.to_string`**  | 强制转换为文本类型        | `value`, `outputKey`                 | `vars.<outputKey>` |
-| **`data.to_boolean`** | 强制转换为布尔类型        | `value`, `outputKey`                 | `vars.<outputKey>` |
-| **`data.type_of`**    | 检测变量数据类型         | `value`, `outputKey`                 | `vars.<outputKey>` |
-| **`data.uuid`**       | 生成全局唯一 UUID 字符串  | `outputKey`                          | `vars.<outputKey>` |
-
----
-
-### 网页与 HTML 解析节点
-
-通过 CSS 选择器解析网页 HTML 内容（基于 Ksoup HTML 引擎）。
-
-| 节点类型 (Type)             | 说明                               | 必需配置键                           | 输出数据                   |
-|:------------------------|:---------------------------------|:--------------------------------|:-----------------------|
-| **`html.query`**        | CSS 选择器提取单项文本/属性                 | `html`, `selector`, `outputKey` | `"文本内容"`               |
-| **`html.query_all`**    | CSS 选择器提取多项数组                    | `html`, `selector`, `outputKey` | `["条目1", "条目2"]`       |
-| **`html.title`**        | 快捷获取网页 `<title>`                 | `html`, `outputKey`             | `"网页标题"`               |
-| **`html.text`**         | 剔除标签提取纯文本                        | `html`, `outputKey`             | `"纯文本"`                |
-| **`html.meta_content`** | 提取 `<meta name="xxx">` 的 content | `html`, `name`, `outputKey`     | `"Meta 内容"`            |
-| **`html.links`**        | 提取网页内部所有超链接列表                    | `html`, `outputKey`             | `["https://...", ...]` |
-
----
-
-### JSON 对象处理节点
-
-针对字典对象 `{ "key": "value" }` 的高效操作节点。
-
-| 节点类型 (Type)               | 说明                         | 必需配置键                                 |
-|:--------------------------|:---------------------------|:--------------------------------------|
-| **`object.get`**          | JSONPath 或点号读取深度属性         | `object`, `path`, `outputKey`         |
-| **`object.set`**          | 设置/覆盖对象属性键值对               | `object`, `key`, `value`, `outputKey` |
-| **`object.remove`**       | 删除指定属性键                    | `object`, `key`, `outputKey`          |
-| **`object.omit`**         | 批量剔除指定 Key 列表              | `object`, `keys`, `outputKey`         |
-| **`object.pick`**         | 仅挑选保留指定 Key 列表             | `object`, `keys`, `outputKey`         |
-| **`object.merge`**        | 多个 JSON 对象列表深度合并           | `objects`, `outputKey`                |
-| **`object.keys`**         | 获取对象的所有 Key 列表             | `object`, `outputKey`                 |
-| **`object.values`**       | 获取对象的所有属性值列表               | `object`, `outputKey`                 |
-| **`object.entries`**      | 转为 `[[key, val]]` 元组数组     | `object`, `outputKey`                 |
-| **`object.from_entries`** | `[[key, val]]` 还原为 JSON 对象 | `entries`, `outputKey`                |
-| **`object.has_key`**      | 校验对象是否包含指定 Key             | `object`, `key`, `outputKey`          |
-| **`object.is_empty`**     | 判断对象是否为空对象 (`{}`)          | `object`, `outputKey`                 |
-
----
-
-### 数组集合操作节点
-
-包含 31 种数组遍历、变换、筛选与统计功能。
-
-| 节点类型 (Type)                 | 作用说明                             | 必需配置键                                           |
-|:----------------------------|:---------------------------------|:------------------------------------------------|
-| **`array.length`**          | 获取数组元素长度                         | `values`, `outputKey`                           |
-| **`array.create`**          | 快速创建空数组或预设数组                     | `values`, `outputKey`                           |
-| **`array.append`**          | 数组尾部追加新元素                        | `values`, `value`, `outputKey`                  |
-| **`array.insert_at`**       | 指定下标位置插入元素                       | `values`, `index`, `value`, `outputKey`         |
-| **`array.remove_at`**       | 删除指定下标的元素                        | `values`, `index`, `outputKey`                  |
-| **`array.filter`**          | 按照条件筛选数组 (`equals`, `contains`等) | `values`, `operator`, `expected`, `outputKey`   |
-| **`array.map`**             | 提取数组内部项属性生成新数组                   | `values`, `fieldPath`, `outputKey`              |
-| **`array.flat_map`**        | 映射后自动扁平化拉平                       | `values`, `fieldPath`, `outputKey`              |
-| **`array.concat`**          | 连接拼接多个数组                         | `values`, `outputKey`                           |
-| **`array.zip`**             | 两个数组交错打包 `[[a1,b1], [a2,b2]]`    | `values`, `otherValues`, `outputKey`            |
-| **`array.take`**            | 提取数组的前 N 个元素                     | `values`, `count`, `outputKey`                  |
-| **`array.drop`**            | 跳过数组的前 N 个元素                     | `values`, `count`, `outputKey`                  |
-| **`array.contains`**        | 校验数组是否包含目标值                      | `values`, `value`, `outputKey`                  |
-| **`array.find`**            | 查找首个满足条件的元素                      | `values`, `fieldPath`, `expected`, `outputKey`  |
-| **`array.distinct`**        | 数组元素去重                           | `values`, `outputKey`                           |
-| **`array.sort`**            | 数组元素排序 (升序/降序)                   | `values`, `outputKey`                           |
-| **`array.reverse`**         | 反转数组项顺序                          | `values`, `outputKey`                           |
-| **`array.slice`**           | 数组范围切片截取                         | `values`, `startIndex`, `endIndex`, `outputKey` |
-| **`array.flatten`**         | 多维嵌套数组拉平为一维                      | `values`, `outputKey`                           |
-| **`array.group_by`**        | 按对象的特定字段分组为 Map                  | `values`, `fieldPath`, `outputKey`              |
-| **`array.first`**           | 获取数组第一个元素                        | `values`, `outputKey`                           |
-| **`array.last`**            | 获取数组最后一个元素                       | `values`, `outputKey`                           |
-| **`array.sum`**             | 数值数组求和                           | `values`, `outputKey`                           |
-| **`array.avg`**             | 数值数组求平均值                         | `values`, `outputKey`                           |
-| **`array.min`** / **`max`** | 数值数组求最小值 / 最大值                   | `values`, `outputKey`                           |
-| **`array.chunk`**           | 将大数组按固定大小分块                      | `values`, `size`, `outputKey`                   |
-| **`array.shuffle`**         | 随机打乱数组                           | `values`, `outputKey`                           |
-| **`array.sample`**          | 从数组中随机抽取一个样本                     | `values`, `outputKey`                           |
-| **`array.index_of`**        | 查找元素在数组中的下标                      | `values`, `value`, `outputKey`                  |
-| **`array.intersection`**    | 两个数组求交集                          | `values`, `otherValues`, `outputKey`            |
-| **`array.difference`**      | 两个数组求差集                          | `values`, `otherValues`, `outputKey`            |
-
----
-
-### 文本与正则处理节点
-
-文本格式化、正则表达式查找与替换节点。
-
-| 节点类型 (Type)                 | 作用描述                | 必需配置键                                            |
-|:----------------------------|:--------------------|:-------------------------------------------------|
-| **`text.length`**           | 统计文本字符长度            | `text`, `outputKey`                              |
-| **`text.trim`**             | 去除文本首尾空白字符          | `text`, `outputKey`                              |
-| **`text.lowercase`**        | 转小写字母               | `text`, `outputKey`                              |
-| **`text.uppercase`**        | 转大写字母               | `text`, `outputKey`                              |
-| **`text.capitalize`**       | 首字母转大写              | `text`, `outputKey`                              |
-| **`text.repeat`**           | 重复拼接文本 N 次          | `text`, `count`, `outputKey`                     |
-| **`text.reverse`**          | 反转文本字符串             | `text`, `outputKey`                              |
-| **`text.index_of`**         | 查找子串下标              | `text`, `pattern`, `outputKey`                   |
-| **`text.template`**         | 基于对象的 `${var}` 模版渲染 | `template`, `object`, `outputKey`                |
-| **`text.split`**            | 分割文本为字符串数组          | `text`, `delimiter`, `outputKey`                 |
-| **`text.regex_match`**      | 正则表达式匹配校验与分组提取      | `text`, `pattern`, `outputKey`                   |
-| **`text.match_all`**        | 正则全文多次匹配查找列表        | `text`, `pattern`, `outputKey`                   |
-| **`text.substring`**        | 子串截取                | `text`, `startIndex`, `endIndex`, `outputKey`    |
-| **`text.substring_before`** | 截取指定分隔符之前的文本        | `text`, `delimiter`, `outputKey`                 |
-| **`text.substring_after`**  | 截取指定分隔符之后的文本        | `text`, `delimiter`, `outputKey`                 |
-| **`text.replace`**          | 静态普通文本替换            | `text`, `pattern`, `replacement`, `outputKey`    |
-| **`text.replace_regex`**    | 正则表达式替换             | `text`, `pattern`, `replacement`, `outputKey`    |
-| **`text.join`**             | 用指定分隔符连接字符串数组       | `values`, `separator`, `outputKey`               |
-| **`text.pad`**              | 头部/尾部补充对齐填充         | `text`, `padLength`, `padCharacter`, `outputKey` |
-| **`text.format_number`**    | 格式化保留小数位数           | `value`, `fractionDigits`, `outputKey`           |
-| **`text.contains`**         | 校验文本是否包含子串          | `text`, `pattern`, `outputKey`                   |
-| **`text.starts_with`**      | 校验文本前缀              | `text`, `pattern`, `outputKey`                   |
-| **`text.ends_with`**        | 校验文本后缀              | `text`, `pattern`, `outputKey`                   |
-| **`text.slugify`**          | 生成 URL Slug 字符串     | `text`, `outputKey`                              |
-| **`text.truncate`**         | 超长文本截断加上 `...`      | `text`, `limit`, `outputKey`                     |
-
----
-
-### 算术数学计算节点
-
-全功能算术运算与数学函数节点。支持对包含数值的字符串和布尔值进行安全类型强转。
-
-| 节点类型 (Type)            | 算法逻辑                     | 配置参数                               |
-|:-----------------------|:-------------------------|:-----------------------------------|
-| **`math.add`**         | 加法运算 (`left + right`)    | `left`, `right`, `outputKey`       |
-| **`math.subtract`**    | 减法运算 (`left - right`)    | `left`, `right`, `outputKey`       |
-| **`math.multiply`**    | 乘法运算 (`left * right`)    | `left`, `right`, `outputKey`       |
-| **`math.divide`**      | 除法运算 (`left / right`)    | `left`, `right`, `outputKey`       |
-| **`math.modulo`**      | 取模/求余运算 (`left % right`) | `left`, `right`, `outputKey`       |
-| **`math.min` / `max`** | 比较两数求较小/较大者              | `left`, `right`, `outputKey`       |
-| **`math.pow`**         | 幂运算 ($left^{right}$)     | `left`, `right`, `outputKey`       |
-| **`math.sqrt`**        | 非负数求平方根 ($\sqrt{x}$)     | `value`, `outputKey`               |
-| **`math.sum`**         | 多数值集合列表累加求和              | `values`, `outputKey`              |
-| **`math.avg`**         | 多数值集合列表求平均值              | `values`, `outputKey`              |
-| **`math.log`**         | 计算自然对数 $\ln(x)$          | `value`, `outputKey`               |
-| **`math.exp`**         | 计算指数 $e^x$               | `value`, `outputKey`               |
-| **`math.negate`**      | 数值取负数 (`-value`)         | `value`, `outputKey`               |
-| **`math.round`**       | 四舍五入到指定小数位               | `value`, `decimals`, `outputKey`   |
-| **`math.floor`**       | 向下取整                     | `value`, `outputKey`               |
-| **`math.ceil`**        | 向上取整                     | `value`, `outputKey`               |
-| **`math.abs`**         | 求绝对值 ($\mid x \mid$)     | `value`, `outputKey`               |
-| **`math.random`**      | 生成指定 `[min, max)` 范围内随机数 | `min`, `max`, `outputKey`          |
-| **`math.clamp`**       | 数值限幅约束在 `[min, max]` 区间  | `value`, `min`, `max`, `outputKey` |
-
----
-
-### 日期与时间节点
-
-基于标准 Unix 毫秒时间戳的日期时间解析与计算。
-
-| 节点类型 (Type)              | 说明                  | 必需配置键                                                  | 输出示例                                |
-|:-------------------------|:--------------------|:-------------------------------------------------------|:------------------------------------|
-| **`date.now`**           | 获取系统当前时刻时间戳 (毫秒)    | `outputKey`                                            | `1700000000000`                     |
-| **`date.format`**        | 时间戳转 ISO 标准日期字符串    | `timestamp`, `outputKey`                               | `"2026-09-01T04:15:00Z"`            |
-| **`date.parse`**         | 日期字符串解析为毫秒时间戳       | `text`, `outputKey`                                    | `1700000000000`                     |
-| **`date.add`**           | 增加指定时间 (天/小时/分钟/毫秒) | `timestamp`, `count`, `unit`, `outputKey`              | 新毫秒时间戳                              |
-| **`date.subtract`**      | 减少指定时间              | `timestamp`, `count`, `unit`, `outputKey`              | 新毫秒时间戳                              |
-| **`date.diff`**          | 计算两个时间戳之间的差值        | `timestampLeft`, `timestampRight`, `unit`, `outputKey` | 差值数字                                |
-| **`date.relative_time`** | 人性化相对时间             | `timestamp`, `outputKey`                               | `"5分钟前"`, `"刚刚"`                    |
-| **`date.get_component`** | 提取年月日时分秒独立分量对象      | `timestamp`, `outputKey`                               | `{"year":2026, "month":9, "day":1}` |
-
----
-
-### URL 格式化与操作节点
-
-标准 HTTP/HTTPS 地址解析与动态构建节点。
-
-| 节点类型 (Type)               | 说明                                                        | 必需配置键                                     |
-|:--------------------------|:----------------------------------------------------------|:------------------------------------------|
-| **`url.parse`**           | 将 URL 拆解为 protocol, host, port, path 和 queryParameters 对象 | `url`, `outputKey`                        |
-| **`url.build`**           | 由 baseUrl 与 queryParameters 字典自动组装标准 URL                  | `baseUrl`, `queryParameters`, `outputKey` |
-| **`url.set_query_param`** | 在给定 URL 动态追加/替换/删除 Query 查询参数                             | `url`, `key`, `value`, `outputKey`        |
-| **`url.get_query_param`** | 读取给定 URL 中指定 Key 的 Query 查询参数值                            | `url`, `key`, `outputKey`                 |
-
----
-
-### 结构化数据解析节点
-
-处理常见的结构化文本数据格式。
-
-| 节点类型 (Type)          | 格式说明                         | 必需配置键                         |
-|:---------------------|:-----------------------------|:------------------------------|
-| **`json.parse`**     | 将 JSON 字符串解析为 JSON 对象/数组     | `text`, `outputKey`           |
-| **`json.stringify`** | 将 JSON 对象/数组序列化为字符串          | `value`, `outputKey`          |
-| **`json.extract`**   | 通过 JSONPath 直接提取 JSON 节点     | `source`, `path`, `outputKey` |
-| **`json.validate`**  | 校验字符串是否为合法的 JSON 格式          | `text`, `outputKey`           |
-| **`xml.parse`**      | 将 XML/RSS 文本解析为 JSON 对象结构    | `text`, `outputKey`           |
-| **`xml.stringify`**  | 将 JSON 对象递归生成 XML 字符串        | `data`, `outputKey`           |
-| **`csv.parse`**      | 将 CSV 表格文本解析为对象数组 `[{}, {}]` | `text`, `outputKey`           |
-| **`csv.stringify`**  | 将对象数组 `[{}, {}]` 导出为 CSV 文本  | `items`, `outputKey`          |
-
----
-
-### 编解码与哈希安全节点
-
-安全哈希加密与数据编码解码节点。
-
-#### 编解码 (Codec)
-
-- **`codec.base64_encode` / `decode`**：标准 Base64 字符串编解码。
-- **`codec.base64_url_encode` / `decode`**：URL 安全的 Base64 编解码。
-- **`codec.hex_encode` / `decode`**：十六进制 Hex 编解码。
-- **`codec.url_encode` / `decode`**：标准 URL Percent-Encoding 编解码。
-- **`codec.html_escape` / `unescape`**：HTML 转义（如将 `<` 转换为 `&lt;`）。
-
-#### 密码学与哈希 (Crypto)
-
-- **`crypto.hash`**：计算摘要哈希（支持 `algorithm`: `"SHA-256"`, `"SHA-512"`, `"MD5"`, `"SHA-1"`, `"SM3"`, `"CRC32"` 等）。
-- **`crypto.hmac`**：密钥 HMAC 签名计算（`algorithm`, `secret`, `text`）。
-- **`crypto.encrypt` / `decrypt`**：AES 加密/解密（`algorithm`: `"AES"`, `key`, `text`）。
-- **`crypto.random_bytes`**：生成指定长度的安全伪随机字节串。
-- **`crypto.uuid`**：生成随机 UUID V4 唯一标识字符串。
-
----
-
-### 网络 HTTP 请求节点
-
-通用的网络 HTTP API 发送节点 `http.request`。
-
-```json
-{
-  "type": "http.request",
-  "config": {
-    "url": "https://api.bgm.tv/v0/subjects/${vars.subjectId}",
-    "method": "GET",
-    "headers": {
-      "User-Agent": "Xiaoyv/Bangumi-Client"
-    },
-    "timeoutMillis": 5000,
-    "retryCount": 2,
-    "outputKey": "apiResult"
-  }
-}
-```
-
-**输出格式**：包含 `statusCode` (如 200), `isSuccess` (true), `body` (自动解析后的响应体)。
-
----
-
-### 本地存储节点
-
-在客户端本地 Preferences 进行数据的持久化存储与读取。
-
-- **`storage.preferences_get`**：按 Key 读取本地存储值（`key`, `outputKey`）。
-- **`storage.preferences_set`**：按 Key 保存数据到本地（`key`, `value`, `outputKey`）。
-- **`storage.preferences_delete`**：删除本地指定 Key（`key`）。
-- **`storage.preferences_has`**：校验本地是否存在 Key（`key`）。
-- **`storage.preferences_clear`**：清空本地存储。
-
----
-
-### 文件沙箱节点
-
-`file.*` 节点只能访问引擎配置的 `homeDir/workflowId/` 目录。路径会先标准化并验证边界：绝对路径、`..` 路径穿越以及通过符号链接离开沙箱的既有目标，都会以 `file_access_denied` 失败；文件不存在与
-IO 失败分别返回 `file_not_found`、`file_io_failed`。
-
-`file.extract_zip` 会拒绝绝对路径和包含 `..` 的 ZIP 条目，并限制压缩包输入为 100 MiB、解压总量为 200 MiB、单个文件为 100 MiB、条目数为 1,000；超出限制会返回
-`file_archive_limit_exceeded`。
-
-| 节点类型                                                       | 说明                 | 配置键                                   |
-|:-----------------------------------------------------------|:-------------------|:--------------------------------------|
-| `file.read_text`                                           | 读取 UTF-8 文本        | `path`, `outputKey`                   |
-| `file.write_text`                                          | 写入 UTF-8 文本，可追加    | `path`, `text`, `append`, `outputKey` |
-| `file.create`                                              | 创建空文件，不覆盖已有内容      | `path`, `outputKey`                   |
-| `file.get_working_directory`                               | 获取当前工作流沙箱目录绝对路径    | `outputKey`                           |
-| `file.delete` / `file.exists` / `file.mkdir` / `file.list` | 删除、存在性检查、创建目录、列举目录 | `path`, `outputKey`                   |
-| `file.copy` / `file.move`                                  | 复制或移动文件、目录         | `fromPath`, `toPath`, `outputKey`     |
-| `file.compress_zip`                                        | 将文件或目录压缩为 ZIP      | `paths`, `toPath`, `outputKey`        |
-| `file.extract_zip`                                         | 将 ZIP 安全解压到目标目录    | `fromPath`, `toPath`, `outputKey`     |
-
-### HTTP 下载节点
-
-`http.download` 复用 `http.request` 的 `url`、`method`、`headers`、`query`、`body`、超时、重试与 `useLocalCookieStorage` 配置；`headers` 中可直接提供 `Cookie`，或启用本地 Cookie 存储。额外配置
-`path` 指定文件沙箱内保存目录、`outputKey` 接收下载结果，`fileName` 可选。
-
-未设置 `fileName` 时，文件名按 `Content-Disposition` 响应头、URL 最后一段路径、`download_<时间戳>.<MIME 扩展名>` 的顺序推断。输出包含 `statusCode`、`isSuccess`、`contentType`、`fileName`
-与 `filePath`。
-
----
-
-### 系统与 UI 交互节点
-
-与 Android/KMP 客户端系统进行底层交互的动作节点。
-
-| 节点类型 (Type)                    | 动作类型              | 参数键         |
-|:-------------------------------|:------------------|:------------|
-| **`action.open_external_url`** | 唤起系统浏览器打开 URL     | `url`       |
-| **`action.open_external_app`** | 唤起第三方 App 协议      | `uri`       |
-| **`action.open_internal_web`** | 在应用内 WebView 打开网页 | `url`       |
-| **`action.show_toast`**        | 弹出系统 Toast 提示     | `message`   |
-| **`action.write_clipboard`**   | 复制文本到系统剪贴板        | `text`      |
-| **`action.read_clipboard`**    | 读取系统剪贴板文本         | `outputKey` |
-| **`ui.confirm`**               | 弹出二次确认弹窗对话框       | `message`   |
-| **`system.share`**             | 唤起系统原生的分享面板       | `text`      |
-| **`system.notification`**      | 发送系统通知栏消息         | `content`   |
-| **`system.vibrate`**           | 触发设备触觉震动反馈        | 无           |
-
----
-
-## 自定义节点扩展指南
-
-扩充新节点类型时需遵循以下开发规范：
-
-1. **类型常量声明**：在 `ActionNodeType` (`com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeType`) 中定义唯一的稳定节点类型标识符（如 `plugin.example_action`）。
-2. **配置键定义**：在 `ActionNodeKeys.kt` (`com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNodeKeys`) 中声明配置键、默认值及相关常量，避免魔法硬编码。
-3. **节点规格定义**：使用 `ActionNodeSpec` 声明输入与输出端口、必需配置键、依赖能力及版本号。
-4. **无状态执行器**：节点执行器基于 `ActionNodeExecutor` 实现，通过读取 `ActionExecutionContext` 计算并返回 `ActionNodeExecutionResult`。
-5. **版本迁移机制**：当配置协议变更时，提升 `latestVersion` 并提供相对应的 `ActionNodeMigrator` 迁移逻辑。
-6. **自动化测试集**：在 `BuiltInActionNodeTest` 中添加单节点覆盖测试，并在 `WorkflowSamples` 中注册可视化运行样例。
-
----
-
-## 安全与能力治理规范
-
-- **能力声明约束**：工作流通过 `requiredCapabilities` 声明所需能力（如 `NETWORK`, `CLIPBOARD_WRITE`），宿主在执行前进行权限校验与授权过滤。
-- **凭据脱敏防护**：工作流配置中不保存 Token、密码或密钥等敏感凭据，仅保留引用名，真实凭据由宿主独立注入。
-- **输入合法性校验**：外部 URL、应用协议及请求路径需通过宿主校验策略进行安全白名单校验。
-
----
-
-## 测试与质量保证
-
-模块提供了自动化的单元测试集，覆盖全部内置节点的规格校验、模板解析、数据转换及副作用抛出：
+模块提供完备的单元测试集，覆盖全部节点行为、拓扑分支与表达式计算：
 
 ```bash
-./gradlew :shared:data-workflow:jvmTest --no-daemon
-./gradlew :features:workflows:compileKotlinJvm --no-daemon
-```
+# 运行 data-workflow 模块单测
+./gradlew :shared:data-workflow:jvmTest
 
-单元测试通过 Fake/Mock 组件隔绝对外网络请求与本地存储访问，确保测试运行环境完全隔离与可重复。
+# 验证 workflows 业务样例模块编译
+./gradlew :features:workflows:compileKotlinJvm
+```

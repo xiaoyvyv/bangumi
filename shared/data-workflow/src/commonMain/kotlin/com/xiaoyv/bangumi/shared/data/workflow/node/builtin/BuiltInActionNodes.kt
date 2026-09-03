@@ -32,7 +32,6 @@ import com.xiaoyv.bangumi.shared.data.workflow.port.ActionHttpRequestExecutor
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowFileStorage
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowLogger
 import com.xiaoyv.bangumi.shared.data.workflow.port.ActionWorkflowPreferencesStore
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -77,7 +76,6 @@ internal fun ActionNode.valueResult(
     return ActionNodeExecutionResult(
         outputPortId = "next",
         output = JsonObject(mapOf(key to value)),
-        variableUpdates = persistentMapOf(key to value),
     )
 }
 

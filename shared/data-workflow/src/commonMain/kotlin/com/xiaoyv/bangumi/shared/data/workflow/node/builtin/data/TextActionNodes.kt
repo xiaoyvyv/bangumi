@@ -13,7 +13,6 @@ import com.xiaoyv.bangumi.shared.data.workflow.node.core.ActionNodeSpec
 import com.xiaoyv.bangumi.shared.data.workflow.node.core.string
 import com.xiaoyv.bangumi.shared.data.workflow.node.resolver.ActionTemplateResolver
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -133,8 +132,10 @@ private fun textRegexMatchDefinition() = ActionNodeDefinition(
             output = kotlinx.serialization.json.buildJsonObject {
                 put(ActionTextConfigKey.MATCHED, JsonPrimitive(match != null))
                 put(ActionTextConfigKey.GROUP_VALUES, groups)
+                if (key.isNotBlank()) {
+                    put(key, groups)
+                }
             },
-            variableUpdates = persistentMapOf(key to groups),
         )
     },
 )

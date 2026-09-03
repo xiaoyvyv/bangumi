@@ -95,7 +95,6 @@ private fun jsonValidateDefinition() = ActionNodeDefinition(
         ActionNodeExecutionResult(
             outputPortId = if (isValid) ActionControlPortId.NEXT else ActionControlPortId.FAILURE,
             output = kotlinx.serialization.json.buildJsonObject { put(key, JsonPrimitive(isValid)) },
-            variableUpdates = kotlinx.collections.immutable.persistentMapOf(key to JsonPrimitive(isValid)),
         )
     },
 )
@@ -116,7 +115,6 @@ private fun jsonSchemaValidateDefinition() = ActionNodeDefinition(
         ActionNodeExecutionResult(
             outputPortId = if (isValid) ActionControlPortId.NEXT else ActionControlPortId.FAILURE,
             output = kotlinx.serialization.json.buildJsonObject { put(key, JsonPrimitive(isValid)) },
-            variableUpdates = kotlinx.collections.immutable.persistentMapOf(key to JsonPrimitive(isValid)),
         )
     },
 )

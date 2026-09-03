@@ -53,7 +53,7 @@ private fun templateDefinition() = ActionNodeDefinition(
     executor = { node, context ->
         val key = node.config.string(ActionDataConfigKey.OUTPUT_KEY)
         val value = ActionTemplateResolver.resolveText(node.config.string(ActionDataConfigKey.TEMPLATE), context)
-        ActionNodeExecutionResult("next", JsonObject(mapOf(key to JsonPrimitive(value))), persistentMapOf(key to JsonPrimitive(value)))
+        ActionNodeExecutionResult("next", JsonObject(mapOf(key to JsonPrimitive(value))))
     },
 )
 

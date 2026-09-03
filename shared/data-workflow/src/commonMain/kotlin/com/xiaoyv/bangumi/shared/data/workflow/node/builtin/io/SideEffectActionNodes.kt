@@ -382,11 +382,13 @@ private fun parseSelectOptions(
     return element.mapNotNull { item ->
         when (item) {
             is JsonObject -> {
-                val rawTitle = item[ActionSelectDialogOption.KEY_TITLE]?.jsonPrimitive?.contentOrNull.orEmpty()
-                val rawValue = item[ActionSelectDialogOption.KEY_VALUE]?.jsonPrimitive?.contentOrNull.orEmpty()
+                val rawTitle = item[ActionSelectDialogConfigKey.TITLE]?.jsonPrimitive?.contentOrNull.orEmpty()
+                val rawValue = item[ActionSelectDialogConfigKey.VALUE]?.jsonPrimitive?.contentOrNull.orEmpty()
+                val rawImage = item[ActionSelectDialogConfigKey.IMAGE]?.jsonPrimitive?.contentOrNull.orEmpty()
                 val title = ActionTemplateResolver.resolveText(rawTitle, context)
                 val value = ActionTemplateResolver.resolveText(rawValue, context)
-                ActionSelectDialogOption(title = title, value = value)
+                val image = ActionTemplateResolver.resolveText(rawImage, context)
+                ActionSelectDialogOption(title = title, value = value, image = image)
             }
 
             is JsonPrimitive -> {

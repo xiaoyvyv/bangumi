@@ -255,7 +255,6 @@ private fun flowCallDefinition() = ActionNodeDefinition(
                 put(ActionFlowConfigKey.WORKFLOW_ID, JsonPrimitive(workflowId))
                 put(key, inputData)
             },
-            variableUpdates = kotlinx.collections.immutable.persistentMapOf(key to inputData),
         )
     },
 )
@@ -302,7 +301,6 @@ private fun flowJoinDefinition() = ActionNodeDefinition(
         ActionNodeExecutionResult(
             outputPortId = ActionControlPortId.NEXT,
             output = buildJsonObject { put(key, values) },
-            variableUpdates = kotlinx.collections.immutable.persistentMapOf(key to values),
         )
     },
 )
