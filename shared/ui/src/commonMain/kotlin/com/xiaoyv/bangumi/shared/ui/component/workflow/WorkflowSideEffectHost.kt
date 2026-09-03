@@ -366,14 +366,10 @@ fun WorkflowSideEffectHost(
         syncCookieDialogSlot(syncCookieData.effect, callback)
     }
 
+    // 进度框显示
     if (hostState.progressTasks.isNotEmpty()) {
         WorkflowProgressAlertDialog(
             tasks = hostState.progressTasks,
-            onStop = { taskId ->
-                hostState.stopProgressTask(taskId) { task ->
-                    task.onResult(ActionSideEffectResult.Failure("用户停止了进度任务"))
-                }
-            },
         )
     }
 }

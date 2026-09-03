@@ -84,6 +84,8 @@ object WorkflowSamples {
         ActionNodeType.UI_CONFIRM,
         ActionNodeType.UI_INPUT_DIALOG,
         ActionNodeType.UI_PROGRESS_DIALOG,
+        ActionNodeType.UI_PROGRESS_UPDATE,
+        ActionNodeType.UI_PROGRESS_DISMISS,
         ActionNodeType.UI_SELECT_DIALOG,
         ActionNodeType.SYSTEM_SHARE,
         ActionNodeType.SYSTEM_NOTIFICATION,
@@ -721,21 +723,9 @@ object WorkflowSamples {
                 setOf(ActionCapability.INPUT_DIALOG)
             )
         )
-        add(
-            linear(
-                "ui_progress_dialog",
-                "可停止精确进度弹窗",
-                ActionNodeType.UI_PROGRESS_DIALOG,
-                config(
-                    ActionProgressDialogConfigKey.TITLE to "下载视频",
-                    ActionProgressDialogConfigKey.MESSAGE to "正在写入本地文件",
-                    ActionProgressDialogConfigKey.MODE to ActionProgressDialogMode.DETERMINATE,
-                    ActionProgressDialogConfigKey.PROGRESS to 35,
-                    ActionProgressDialogConfigKey.MAX_PROGRESS to 100,
-                ),
-                setOf(ActionCapability.PROGRESS_DIALOG),
-            )
-        )
+        add(progressDialogLifecycleSample())
+        add(progressDialogLoopSample())
+        add(progressDialogParallelSample())
         add(
             linear(
                 "ui_select_dialog_single",
@@ -2071,6 +2061,289 @@ object WorkflowSamples {
             edge("start", ActionControlPortId.NEXT, "write"),
             edge("write", ActionControlPortId.NEXT, "read"),
             edge("read", ActionControlPortId.NEXT, "end"),
+        ),
+    )
+
+    /**
+     * 进度弹窗的完整生命周期工作流：请求展示 -> 延时 -> 更新进度 -> 延时 -> 关闭弹窗 -> Toast 提示。
+     */
+    private fun progressDialogLifecycleSample(): ActionWorkflow = workflow(
+        id = "ui_progress_dialog",
+        name = "测试：进度弹窗生命周期",
+        description = "演示进度弹窗的非阻塞生命周期：启动展示 -> 动态更新 -> 关闭弹窗。",
+        capabilities = setOf(ActionCapability.PROGRESS_DIALOG),
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "show_progress",
+                ActionNodeType.UI_PROGRESS_DIALOG,
+                "展示进度",
+                config(
+                    ActionProgressDialogConfigKey.TITLE to "下载视频",
+                    ActionProgressDialogConfigKey.MESSAGE to "正在连接服务器 (35%)",
+                    ActionProgressDialogConfigKey.MODE to ActionProgressDialogMode.DETERMINATE,
+                    ActionProgressDialogConfigKey.PROGRESS to 35,
+                    ActionProgressDialogConfigKey.MAX_PROGRESS to 100,
+                ),
+            ),
+            node(
+                "delay_1",
+                ActionNodeType.FLOW_DELAY,
+                "模拟连接耗时",
+                config(ActionFlowConfigKey.DELAY_MILLIS to 1000),
+            ),
+            node(
+                "update_progress",
+                ActionNodeType.UI_PROGRESS_UPDATE,
+                "更新进度",
+                config(
+                    ActionProgressDialogConfigKey.MESSAGE to "正在写入本地文件 (80%)",
+                    ActionProgressDialogConfigKey.PROGRESS to 80,
+                ),
+            ),
+            node(
+                "delay_2",
+                ActionNodeType.FLOW_DELAY,
+                "模拟写入耗时",
+                config(ActionFlowConfigKey.DELAY_MILLIS to 1000),
+            ),
+            node(
+                "dismiss_progress",
+                ActionNodeType.UI_PROGRESS_DISMISS,
+                "关闭进度",
+                config(),
+            ),
+            node(
+                "finish_toast",
+                ActionNodeType.SHOW_TOAST,
+                "完成提示",
+                config(ActionToastConfigKey.MESSAGE to "视频下载完成！"),
+            ),
+            node("end", ActionNodeType.FLOW_END, "结束"),
+        ),
+        edges = listOf(
+            edge("start", ActionControlPortId.NEXT, "show_progress"),
+            edge("show_progress", ActionControlPortId.SUCCESS, "delay_1"),
+            edge("delay_1", ActionControlPortId.NEXT, "update_progress"),
+            edge("update_progress", ActionControlPortId.SUCCESS, "delay_2"),
+            edge("delay_2", ActionControlPortId.NEXT, "dismiss_progress"),
+            edge("dismiss_progress", ActionControlPortId.SUCCESS, "finish_toast"),
+            edge("finish_toast", ActionControlPortId.SUCCESS, "end"),
+        ),
+    )
+
+    /**
+     * 进度弹窗循环动态刷新工作流：
+     * 展示进度 -> 循环 10 次 (间隔 100ms 增加 10% 进度并实时刷新 UI) -> 达到 100% 退出循环 -> 关闭弹窗 -> Toast 提示。
+     */
+    private fun progressDialogLoopSample(): ActionWorkflow = workflow(
+        id = "ui_progress_dialog_loop",
+        name = "测试：进度弹窗循环刷新",
+        description = "演示进度弹窗在循环中每 100ms 动态累加进度并实时刷新 UI，直到 100% 后自动关闭。",
+        capabilities = setOf(ActionCapability.PROGRESS_DIALOG),
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "init_progress",
+                ActionNodeType.SET_VARIABLE,
+                "初始化进度",
+                config(
+                    ActionDataConfigKey.KEY to "progress",
+                    ActionDataConfigKey.VALUE to 0,
+                ),
+            ),
+            node(
+                "show_progress",
+                ActionNodeType.UI_PROGRESS_DIALOG,
+                "展示进度弹窗",
+                config(
+                    ActionProgressDialogConfigKey.TITLE to "模拟下载中",
+                    ActionProgressDialogConfigKey.MESSAGE to "准备开始...",
+                    ActionProgressDialogConfigKey.MODE to ActionProgressDialogMode.DETERMINATE,
+                    ActionProgressDialogConfigKey.PROGRESS to 0,
+                    ActionProgressDialogConfigKey.MAX_PROGRESS to 100,
+                ),
+            ),
+            node(
+                "loop",
+                ActionNodeType.LOOP_REPEAT,
+                "下载进度循环",
+                config(
+                    ActionLoopConfigKey.COUNT to 10,
+                    ActionLoopConfigKey.MAX_ITERATIONS to 20,
+                ),
+            ),
+            node(
+                "delay",
+                ActionNodeType.FLOW_DELAY,
+                "模拟 100ms 耗时",
+                config(ActionFlowConfigKey.DELAY_MILLIS to 100),
+            ),
+            node(
+                "add_progress",
+                ActionNodeType.MATH_ADD,
+                "进度加 10",
+                config(
+                    ActionMathConfigKey.LEFT to "\${vars.progress}",
+                    ActionMathConfigKey.RIGHT to 10,
+                    ActionMathConfigKey.OUTPUT_KEY to "progress",
+                ),
+            ),
+            node(
+                "update_progress",
+                ActionNodeType.UI_PROGRESS_UPDATE,
+                "刷新进度 UI",
+                config(
+                    ActionProgressDialogConfigKey.MESSAGE to "已下载 \${vars.progress}%",
+                    ActionProgressDialogConfigKey.PROGRESS to "\${vars.progress}",
+                ),
+            ),
+            node(
+                "loop_control",
+                ActionNodeType.LOOP_NEXT,
+                "继续下一次循环",
+                config(ActionLoopConfigKey.LOOP_ID to "loop"),
+            ),
+            node(
+                "dismiss_progress",
+                ActionNodeType.UI_PROGRESS_DISMISS,
+                "关闭进度",
+                config(),
+            ),
+            node(
+                "finish_toast",
+                ActionNodeType.SHOW_TOAST,
+                "完成提示",
+                config(ActionToastConfigKey.MESSAGE to "模拟下载完成 (100%)！"),
+            ),
+            node("end", ActionNodeType.FLOW_END, "结束"),
+        ),
+        edges = listOf(
+            edge("start", ActionControlPortId.NEXT, "init_progress"),
+            edge("init_progress", ActionControlPortId.NEXT, "show_progress"),
+            edge("show_progress", ActionControlPortId.SUCCESS, "loop"),
+            edge("loop", ActionControlPortId.BODY, "delay"),
+            edge("delay", ActionControlPortId.NEXT, "add_progress"),
+            edge("add_progress", ActionControlPortId.NEXT, "update_progress"),
+            edge("update_progress", ActionControlPortId.SUCCESS, "loop_control"),
+            edge("loop", ActionControlPortId.COMPLETED, "dismiss_progress"),
+            edge("dismiss_progress", ActionControlPortId.SUCCESS, "finish_toast"),
+            edge("finish_toast", ActionControlPortId.SUCCESS, "end"),
+        ),
+    )
+
+    /**
+     * 进度弹窗并发双分支下载与合并工作流：
+     * 展示进度 (0%) -> flow.parallel 分出两个并发任务分支：
+     *   - 分支 1 (视频流)：耗时 600ms 后更新进度到 45% -> 汇入 flow.join
+     *   - 分支 2 (音频流)：耗时 1200ms 后更新进度到 90% -> 汇入 flow.join
+     * -> flow.join 汇合全部任务 -> 更新进度到 100% -> 关闭弹窗 -> Toast 提示。
+     */
+    private fun progressDialogParallelSample(): ActionWorkflow = workflow(
+        id = "ui_progress_dialog_parallel",
+        name = "测试：并发分支进度弹窗",
+        description = "演示通过 flow.parallel 并发执行两条任务分支并异步刷新进度，最后在 flow.join 汇合后关闭弹窗。",
+        capabilities = setOf(ActionCapability.PROGRESS_DIALOG),
+        nodes = listOf(
+            node("start", ActionNodeType.FLOW_START, "开始"),
+            node(
+                "show_progress",
+                ActionNodeType.UI_PROGRESS_DIALOG,
+                "展示并发下载弹窗",
+                config(
+                    ActionProgressDialogConfigKey.TITLE to "多资源并发下载",
+                    ActionProgressDialogConfigKey.MESSAGE to "启动并发下载任务...",
+                    ActionProgressDialogConfigKey.MODE to ActionProgressDialogMode.DETERMINATE,
+                    ActionProgressDialogConfigKey.PROGRESS to 0,
+                    ActionProgressDialogConfigKey.MAX_PROGRESS to 100,
+                ),
+            ),
+            node("parallel", ActionNodeType.FLOW_PARALLEL, "启动并发任务"),
+            // 分支 1：视频流
+            node(
+                "download_video",
+                ActionNodeType.FLOW_DELAY,
+                "下载视频流 (600ms)",
+                config(ActionFlowConfigKey.DELAY_MILLIS to 600),
+            ),
+            node(
+                "update_video",
+                ActionNodeType.UI_PROGRESS_UPDATE,
+                "更新视频下载进度",
+                config(
+                    ActionProgressDialogConfigKey.MESSAGE to "视频流下载完成 (45%)",
+                    ActionProgressDialogConfigKey.PROGRESS to 45,
+                ),
+            ),
+            // 分支 2：音频流
+            node(
+                "download_audio",
+                ActionNodeType.FLOW_DELAY,
+                "下载音频流 (1200ms)",
+                config(ActionFlowConfigKey.DELAY_MILLIS to 1200),
+            ),
+            node(
+                "update_audio",
+                ActionNodeType.UI_PROGRESS_UPDATE,
+                "更新音频下载进度",
+                config(
+                    ActionProgressDialogConfigKey.MESSAGE to "音频与字幕下载完成 (90%)",
+                    ActionProgressDialogConfigKey.PROGRESS to 90,
+                ),
+            ),
+            // 汇合
+            node(
+                "join",
+                ActionNodeType.FLOW_JOIN,
+                "等待并发分支汇合",
+                config(
+                    ActionFlowConfigKey.VALUES to JsonArray(emptyList()),
+                    ActionFlowConfigKey.OUTPUT_KEY to "joinResult",
+                ),
+            ),
+            node(
+                "update_complete",
+                ActionNodeType.UI_PROGRESS_UPDATE,
+                "完成合并",
+                config(
+                    ActionProgressDialogConfigKey.MESSAGE to "资源下载与合并完成 (100%)",
+                    ActionProgressDialogConfigKey.PROGRESS to 100,
+                ),
+            ),
+            node(
+                "delay_finish",
+                ActionNodeType.FLOW_DELAY,
+                "稍作停留",
+                config(ActionFlowConfigKey.DELAY_MILLIS to 400),
+            ),
+            node(
+                "dismiss_progress",
+                ActionNodeType.UI_PROGRESS_DISMISS,
+                "关闭进度",
+                config(),
+            ),
+            node(
+                "finish_toast",
+                ActionNodeType.SHOW_TOAST,
+                "完成提示",
+                config(ActionToastConfigKey.MESSAGE to "全部并发资源下载合并完毕！"),
+            ),
+            node("end", ActionNodeType.FLOW_END, "结束"),
+        ),
+        edges = listOf(
+            edge("start", ActionControlPortId.NEXT, "show_progress"),
+            edge("show_progress", ActionControlPortId.SUCCESS, "parallel"),
+            edge("parallel", ActionControlPortId.BRANCHES, "download_video"),
+            edge("parallel", ActionControlPortId.BRANCHES, "download_audio"),
+            edge("download_video", ActionControlPortId.NEXT, "update_video"),
+            edge("update_video", ActionControlPortId.SUCCESS, "join"),
+            edge("download_audio", ActionControlPortId.NEXT, "update_audio"),
+            edge("update_audio", ActionControlPortId.SUCCESS, "join"),
+            edge("join", ActionControlPortId.NEXT, "update_complete"),
+            edge("update_complete", ActionControlPortId.SUCCESS, "delay_finish"),
+            edge("delay_finish", ActionControlPortId.NEXT, "dismiss_progress"),
+            edge("dismiss_progress", ActionControlPortId.SUCCESS, "finish_toast"),
+            edge("finish_toast", ActionControlPortId.SUCCESS, "end"),
         ),
     )
 

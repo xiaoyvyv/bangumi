@@ -1,5 +1,6 @@
 package com.xiaoyv.bangumi.shared.data.workflow.node.builtin.io
 
+import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionNode
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionNodeExecutionResult
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
@@ -14,6 +15,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionNotificationConf
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenUrlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenWebConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogAction
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
@@ -72,6 +74,8 @@ internal val sideEffectActionNodeDefinitions: List<ActionNodeDefinition> = listO
     vibrateDefinition(),
     inputDialogDefinition(),
     progressDialogDefinition(),
+    progressUpdateDefinition(),
+    progressDismissDefinition(),
     selectDialogDefinition(),
     imagePreviewDefinition(),
     syncCookieDefinition(),
@@ -193,6 +197,86 @@ private fun inputDialogDefinition() = ActionNodeDefinition(
     },
 )
 
+/**
+ * 解析并构建进度对话框节点的执行结果。
+ *
+ * @param defaultAction 当未显式指定 action 时使用的默认操作
+ * @param node 节点模型
+ * @param context 执行上下文
+ */
+private fun buildProgressDialogResult(
+    defaultAction: String,
+    node: ActionNode,
+    context: ActionExecutionContext,
+): ActionNodeExecutionResult {
+    val action = node.config[ActionProgressDialogConfigKey.ACTION]
+        ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+        .orEmpty()
+        .ifBlank { defaultAction }
+    require(
+        action in setOf(
+            ActionProgressDialogAction.SHOW,
+            ActionProgressDialogAction.UPDATE,
+            ActionProgressDialogAction.DISMISS,
+        )
+    ) {
+        "进度操作仅支持 ${ActionProgressDialogAction.SHOW}、${ActionProgressDialogAction.UPDATE} 或 ${ActionProgressDialogAction.DISMISS}"
+    }
+
+    val taskId = node.config[ActionProgressDialogConfigKey.TASK_ID]
+        ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+        .orEmpty()
+
+    if (action == ActionProgressDialogAction.DISMISS) {
+        return ActionNodeExecutionResult(
+            outputPortId = ActionControlPortId.SUCCESS,
+            sideEffect = ActionProgressDialogEffect(
+                action = ActionProgressDialogAction.DISMISS,
+                taskId = taskId,
+            ),
+        )
+    }
+
+    val title = node.config[ActionProgressDialogConfigKey.TITLE]
+        ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+        .orEmpty()
+    val message = node.config[ActionProgressDialogConfigKey.MESSAGE]
+        ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+        .orEmpty()
+    val mode = node.config[ActionProgressDialogConfigKey.MODE]
+        ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
+        .orEmpty()
+        .ifBlank { ActionProgressDialogMode.INDETERMINATE }
+    require(mode in setOf(ActionProgressDialogMode.INDETERMINATE, ActionProgressDialogMode.DETERMINATE)) {
+        "进度模式仅支持 ${ActionProgressDialogMode.INDETERMINATE} 或 ${ActionProgressDialogMode.DETERMINATE}"
+    }
+    val progress = if (action == ActionProgressDialogAction.UPDATE) {
+        resolveProgressValueOrNull(node.config[ActionProgressDialogConfigKey.PROGRESS], context)
+    } else {
+        resolveProgressValue(node.config[ActionProgressDialogConfigKey.PROGRESS], context, 0f)
+    }
+    val maxProgress = if (action == ActionProgressDialogAction.UPDATE) {
+        resolveProgressValueOrNull(node.config[ActionProgressDialogConfigKey.MAX_PROGRESS], context)
+    } else {
+        resolveProgressValue(node.config[ActionProgressDialogConfigKey.MAX_PROGRESS], context, 1f)
+    }
+    if (mode == ActionProgressDialogMode.DETERMINATE && progress != null && maxProgress != null) {
+        require(maxProgress > 0f && progress in 0f..maxProgress) { "精确进度必须满足 0 ≤ progress ≤ maxProgress，且 maxProgress > 0" }
+    }
+    return ActionNodeExecutionResult(
+        outputPortId = ActionControlPortId.SUCCESS,
+        sideEffect = ActionProgressDialogEffect(
+            action = action,
+            taskId = taskId,
+            title = title,
+            message = message,
+            mode = mode,
+            progress = progress,
+            maxProgress = maxProgress,
+        ),
+    )
+}
+
 private fun progressDialogDefinition() = ActionNodeDefinition(
     spec = ActionNodeSpec(
         type = ActionNodeType.UI_PROGRESS_DIALOG,
@@ -202,37 +286,44 @@ private fun progressDialogDefinition() = ActionNodeDefinition(
         requiredCapabilities = setOf(ActionCapability.PROGRESS_DIALOG),
     ),
     executor = { node, context ->
-        val title = node.config[ActionProgressDialogConfigKey.TITLE]
-            ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
-            .orEmpty()
-        val message = node.config[ActionProgressDialogConfigKey.MESSAGE]
-            ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
-            .orEmpty()
-        val mode = node.config[ActionProgressDialogConfigKey.MODE]
-            ?.let { ActionTemplateResolver.resolveText(it.jsonPrimitive.content, context) }
-            .orEmpty()
-            .ifBlank { ActionProgressDialogMode.INDETERMINATE }
-        require(mode in setOf(ActionProgressDialogMode.INDETERMINATE, ActionProgressDialogMode.DETERMINATE)) {
-            "进度模式仅支持 ${ActionProgressDialogMode.INDETERMINATE} 或 ${ActionProgressDialogMode.DETERMINATE}"
-        }
-        val progress = resolveProgressValue(node.config[ActionProgressDialogConfigKey.PROGRESS], context, 0f)
-        val maxProgress = resolveProgressValue(node.config[ActionProgressDialogConfigKey.MAX_PROGRESS], context, 1f)
-        if (mode == ActionProgressDialogMode.DETERMINATE) {
-            require(maxProgress > 0f && progress in 0f..maxProgress) { "精确进度必须满足 0 ≤ progress ≤ maxProgress，且 maxProgress > 0" }
-        }
-        ActionNodeExecutionResult(
-            outputPortId = ActionControlPortId.SUCCESS,
-            sideEffect = ActionProgressDialogEffect(title, message, mode, progress, maxProgress),
-        )
+        buildProgressDialogResult(ActionProgressDialogAction.SHOW, node, context)
+    },
+)
+
+private fun progressUpdateDefinition() = ActionNodeDefinition(
+    spec = ActionNodeSpec(
+        type = ActionNodeType.UI_PROGRESS_UPDATE,
+        category = ActionNodeCategory.ACTION,
+        inputPorts = persistentListOf(inPort),
+        outputPorts = persistentListOf(successPort, failurePort),
+        requiredCapabilities = setOf(ActionCapability.PROGRESS_DIALOG),
+    ),
+    executor = { node, context ->
+        buildProgressDialogResult(ActionProgressDialogAction.UPDATE, node, context)
+    },
+)
+
+private fun progressDismissDefinition() = ActionNodeDefinition(
+    spec = ActionNodeSpec(
+        type = ActionNodeType.UI_PROGRESS_DISMISS,
+        category = ActionNodeCategory.ACTION,
+        inputPorts = persistentListOf(inPort),
+        outputPorts = persistentListOf(successPort, failurePort),
+        requiredCapabilities = setOf(ActionCapability.PROGRESS_DIALOG),
+    ),
+    executor = { node, context ->
+        buildProgressDialogResult(ActionProgressDialogAction.DISMISS, node, context)
     },
 )
 
 private fun resolveProgressValue(element: JsonElement?, context: ActionExecutionContext, defaultValue: Float): Float =
+    resolveProgressValueOrNull(element, context) ?: defaultValue
+
+private fun resolveProgressValueOrNull(element: JsonElement?, context: ActionExecutionContext): Float? =
     element?.let { ActionTemplateResolver.resolveElement(it, context) }
         ?.jsonPrimitive
         ?.contentOrNull
         ?.toFloatOrNull()
-        ?: defaultValue
 
 private fun selectDialogDefinition() = ActionNodeDefinition(
     spec = ActionNodeSpec(

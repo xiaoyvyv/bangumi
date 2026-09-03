@@ -58,7 +58,6 @@ import com.multiplatform.webview.web.rememberWebViewState
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
-import com.xiaoyv.bangumi.core_resource.resources.workflow_progress_stop
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect
@@ -74,14 +73,14 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * 工作流活动进度任务的聚合对话框。
  *
- * 对话框不可通过返回键或点击外部区域关闭；每个任务仅能通过自身的停止按钮结束。
+ * 对话框不可通过返回键或点击外部区域关闭，展示当前所有进行中的进度任务。
+ *
+ * @param tasks 当前活动的进度任务列表
  */
 @Composable
 fun WorkflowProgressAlertDialog(
     tasks: List<WorkflowSideEffectData<ActionProgressDialogEffect>>,
-    onStop: (String) -> Unit,
 ) {
-    val stopText = stringResource(Res.string.workflow_progress_stop)
     AlertDialog(
         onDismissRequest = {},
         title = null,
@@ -111,7 +110,7 @@ fun WorkflowProgressAlertDialog(
                     }
                     if (effect.mode == ActionProgressDialogMode.DETERMINATE) {
                         LinearProgressIndicator(
-                            progress = { (effect.progress / effect.maxProgress).coerceIn(0f, 1f) },
+                            progress = { ((effect.progress ?: 0f) / (effect.maxProgress ?: 1f)).coerceIn(0f, 1f) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = ContentMarginHalf),
@@ -122,12 +121,6 @@ fun WorkflowProgressAlertDialog(
                                 .fillMaxWidth()
                                 .padding(top = ContentMarginHalf),
                         )
-                    }
-                    TextButton(
-                        onClick = { onStop(task.id) },
-                        modifier = Modifier.align(Alignment.End),
-                    ) {
-                        Text(text = stopText)
                     }
                 }
             }

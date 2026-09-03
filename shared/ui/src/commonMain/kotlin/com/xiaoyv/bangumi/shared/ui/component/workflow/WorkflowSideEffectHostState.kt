@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.xiaoyv.bangumi.shared.data.workflow.engine.ActionSideEffectResult
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogAction
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionConfirmEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionInputDialogEffect
 import com.xiaoyv.bangumi.shared.data.workflow.node.effect.ActionProgressDialogEffect
@@ -104,12 +105,18 @@ class WorkflowSideEffectHostState {
     /**
      * 分发并处理一个 [ActionSideEffect]。
      *
-     * 该方法为挂起函数，直接挂起调用协程，直至 UI 消费完成或弹窗返回后恢复协程并返回 [ActionSideEffectResult]。
+     * 该方法对于弹窗等需要用户交互的副作用会挂起调用协程，直至 UI 消费完成或弹窗返回后恢复协程并返回 [ActionSideEffectResult]。
+     * 对于进度弹窗（[ActionProgressDialogEffect]），为非阻塞操作，立即更新状态并返回成功。
      *
      * @param effect 工作流节点发出的 SideEffect
      * @return 节点执行结果 [ActionSideEffectResult]
      */
     suspend fun dispatch(effect: ActionSideEffect): ActionSideEffectResult {
+        if (effect is ActionProgressDialogEffect) {
+            applyProgressEffect(effect)
+            return ActionSideEffectResult.Success()
+        }
+
         return suspendCancellableCoroutine { continuation ->
             val entryId = "${effect::class.simpleName}_${++sideEffectIdCounter}"
             val onResult: (ActionSideEffectResult) -> Unit = { result ->
@@ -139,11 +146,6 @@ class WorkflowSideEffectHostState {
                     syncCookieQueue = syncCookieQueue + data
                 }
 
-                is ActionProgressDialogEffect -> {
-                    val data = WorkflowSideEffectData(entryId, effect, onResult)
-                    progressTasks = progressTasks + data
-                }
-
                 else -> {
                     val data = WorkflowSideEffectData(entryId, effect, onResult)
                     oneShotQueue = oneShotQueue + data
@@ -155,8 +157,67 @@ class WorkflowSideEffectHostState {
                 inputQueue = inputQueue.filterNot { it.id == entryId }
                 selectQueue = selectQueue.filterNot { it.id == entryId }
                 syncCookieQueue = syncCookieQueue.filterNot { it.id == entryId }
-                progressTasks = progressTasks.filterNot { it.id == entryId }
                 oneShotQueue = oneShotQueue.filterNot { it.id == entryId }
+            }
+        }
+    }
+
+    /**
+     * 应用进度对话框副作用，非阻塞地更新进度任务状态。
+     *
+     * @param effect 进度对话框副作用
+     */
+    private fun applyProgressEffect(effect: ActionProgressDialogEffect) {
+        val taskId = effect.taskId.ifBlank { "default" }
+        when (effect.action) {
+            ActionProgressDialogAction.DISMISS -> {
+                progressTasks = if (effect.taskId.isBlank() && progressTasks.size <= 1) {
+                    emptyList()
+                } else {
+                    progressTasks.filterNot { it.id == taskId }
+                }
+            }
+
+            ActionProgressDialogAction.UPDATE -> {
+                val existingIndex = if (effect.taskId.isBlank() && progressTasks.size == 1) {
+                    0
+                } else {
+                    progressTasks.indexOfFirst { it.id == taskId }
+                }
+                if (existingIndex >= 0) {
+                    val old = progressTasks[existingIndex]
+                    val updatedEffect = old.effect.copy(
+                        title = effect.title.ifBlank { old.effect.title },
+                        message = effect.message.ifBlank { old.effect.message },
+                        mode = effect.mode.ifBlank { old.effect.mode },
+                        progress = effect.progress ?: old.effect.progress,
+                        maxProgress = effect.maxProgress ?: old.effect.maxProgress,
+                    )
+                    progressTasks = progressTasks.toMutableList().apply {
+                        set(existingIndex, old.copy(effect = updatedEffect))
+                    }
+                } else {
+                    val normalizedEffect = effect.copy(
+                        progress = effect.progress ?: 0f,
+                        maxProgress = effect.maxProgress ?: 1f,
+                    )
+                    val data = WorkflowSideEffectData(taskId, normalizedEffect) {}
+                    progressTasks = progressTasks + data
+                }
+            }
+
+            else -> {
+                val normalizedEffect = effect.copy(
+                    progress = effect.progress ?: 0f,
+                    maxProgress = effect.maxProgress ?: 1f,
+                )
+                val data = WorkflowSideEffectData(taskId, normalizedEffect) {}
+                val existingIndex = progressTasks.indexOfFirst { it.id == taskId }
+                progressTasks = if (existingIndex >= 0) {
+                    progressTasks.toMutableList().apply { set(existingIndex, data) }
+                } else {
+                    progressTasks + data
+                }
             }
         }
     }
@@ -214,15 +275,6 @@ class WorkflowSideEffectHostState {
         val current = currentOneShotData ?: return
         oneShotQueue = oneShotQueue.drop(1)
         onPopped(current)
-    }
-
-    /**
-     * 停止指定进度任务，并将失败结果精确返回至触发该任务的节点。
-     */
-    fun stopProgressTask(id: String, onStopped: (WorkflowSideEffectData<ActionProgressDialogEffect>) -> Unit) {
-        val task = progressTasks.firstOrNull { it.id == id } ?: return
-        progressTasks = progressTasks.filterNot { it.id == id }
-        onStopped(task)
     }
 
     /**

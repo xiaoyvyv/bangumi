@@ -218,10 +218,12 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey.URI
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenUrlConfigKey.URL
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenWebConfigKey.URL
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey.ACTION
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey.MAX_PROGRESS
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey.MESSAGE
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey.MODE
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey.PROGRESS
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey.TASK_ID
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey.TITLE
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.CANCEL_TEXT
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey.CONFIRM_TEXT
@@ -450,6 +452,8 @@ internal object ActionNodeConfigKey {
     const val PROGRESS = "progress"
     const val MAX_PROGRESS = "maxProgress"
     const val PROGRESS_MODE = "progressMode"
+    const val ACTION = "action"
+    const val TASK_ID = "taskId"
     const val CONTENT = "content"
     const val ERROR = "error"
     const val VARIABLES = "variables"
@@ -1275,6 +1279,8 @@ object ActionSelectDialogConfigKey {
 /**
  * 进度对话框节点的配置键。
  *
+ * @property ACTION 进度对话框的操作动作，支持 show、update、dismiss
+ * @property TASK_ID 进度任务的唯一标识（可选，默认用于匹配单个或特定任务）
  * @property TITLE 进度任务标题
  * @property MESSAGE 进度任务说明
  * @property MODE 进度显示模式，支持普通与精确模式
@@ -1282,11 +1288,22 @@ object ActionSelectDialogConfigKey {
  * @property MAX_PROGRESS 精确模式的总进度
  */
 object ActionProgressDialogConfigKey {
+    const val ACTION = ActionNodeConfigKey.ACTION
+    const val TASK_ID = ActionNodeConfigKey.TASK_ID
     const val TITLE = ActionNodeConfigKey.TITLE
     const val MESSAGE = ActionNodeConfigKey.MESSAGE
     const val MODE = ActionNodeConfigKey.PROGRESS_MODE
     const val PROGRESS = ActionNodeConfigKey.PROGRESS
     const val MAX_PROGRESS = ActionNodeConfigKey.MAX_PROGRESS
+}
+
+/**
+ * 进度对话框操作动作。
+ */
+object ActionProgressDialogAction {
+    const val SHOW = "show"
+    const val UPDATE = "update"
+    const val DISMISS = "dismiss"
 }
 
 /**

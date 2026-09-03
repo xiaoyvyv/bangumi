@@ -115,4 +115,32 @@ class WorkflowSamplesTest {
                 .mapTo(linkedSetOf()) { it.source.nodeId },
         )
     }
+
+    /**
+     * 进度弹窗循环刷新样例应闭环包含初始化、展示、循环刷新与关闭节点。
+     */
+    @Test
+    fun progressDialogLoopSampleConfiguresLoopAndDismiss() {
+        val workflow = WorkflowSamples.all.first { it.id == "workflow_sample_ui_progress_dialog_loop" }
+
+        assertEquals(true, workflow.requiredCapabilities.contains(ActionCapability.PROGRESS_DIALOG))
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.UI_PROGRESS_DIALOG })
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.LOOP_REPEAT })
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.UI_PROGRESS_UPDATE })
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.UI_PROGRESS_DISMISS })
+    }
+
+    /**
+     * 进度弹窗并发分支样例应正确连接 flow.parallel 与 flow.join 并派发进度更新。
+     */
+    @Test
+    fun progressDialogParallelSampleConfiguresParallelAndJoin() {
+        val workflow = WorkflowSamples.all.first { it.id == "workflow_sample_ui_progress_dialog_parallel" }
+
+        assertEquals(true, workflow.requiredCapabilities.contains(ActionCapability.PROGRESS_DIALOG))
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.UI_PROGRESS_DIALOG })
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.FLOW_PARALLEL })
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.FLOW_JOIN })
+        assertEquals(true, workflow.nodes.any { it.type == ActionNodeType.UI_PROGRESS_DISMISS })
+    }
 }

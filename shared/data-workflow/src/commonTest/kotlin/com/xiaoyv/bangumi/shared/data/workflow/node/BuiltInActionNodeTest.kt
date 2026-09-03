@@ -9,6 +9,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionPortRef
 import com.xiaoyv.bangumi.shared.data.workflow.model.definition.ActionWorkflow
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionContext
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionExecutionEvent
+import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
 import com.xiaoyv.bangumi.shared.data.workflow.model.log.ActionExecutionStatus
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionArrayConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionBilibiliConfigKey
@@ -39,6 +40,7 @@ import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionObjectConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenAppConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenUrlConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionOpenWebConfigKey
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogAction
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
@@ -213,65 +215,85 @@ class BuiltInActionNodeTest {
     }
 
     /**
-     * 进度弹窗的停止结果应当作为节点失败处理，并沿 failure 出口继续执行。
+     * 进度弹窗节点应当按序发出 SHOW、UPDATE、DISMISS 副作用，并且均沿 success 出口非阻塞推进。
      */
     @Test
-    fun progressDialogStopRoutesToFailurePort() = runBlocking {
+    fun progressDialogSupportsLifecycleAndRoutesToSuccess() = runBlocking {
         val workflow = ActionWorkflow(
-            id = "test_progress_dialog_stop",
-            name = "Progress Dialog Stop Test",
-            entryNodeId = "progress",
+            id = "test_progress_dialog_lifecycle",
+            name = "Progress Dialog Lifecycle Test",
+            entryNodeId = "progress_show",
             requiredCapabilities = persistentListOf(ActionCapability.PROGRESS_DIALOG),
             nodes = persistentListOf(
                 ActionNode(
-                    id = "progress",
+                    id = "progress_show",
                     type = ActionNodeType.UI_PROGRESS_DIALOG,
-                    config = config(ActionProgressDialogConfigKey.MESSAGE to JsonPrimitive("正在处理")),
+                    config = config(
+                        ActionProgressDialogConfigKey.TITLE to JsonPrimitive("下载测试"),
+                        ActionProgressDialogConfigKey.MESSAGE to JsonPrimitive("开始下载"),
+                        ActionProgressDialogConfigKey.MODE to JsonPrimitive(ActionProgressDialogMode.DETERMINATE),
+                        ActionProgressDialogConfigKey.PROGRESS to JsonPrimitive(0),
+                        ActionProgressDialogConfigKey.MAX_PROGRESS to JsonPrimitive(100),
+                    ),
                 ),
                 ActionNode(
-                    id = "failure_handler",
-                    type = ActionNodeType.SET_VARIABLE,
+                    id = "progress_update",
+                    type = ActionNodeType.UI_PROGRESS_UPDATE,
                     config = config(
-                        ActionDataConfigKey.KEY to JsonPrimitive("stopHandled"),
-                        ActionDataConfigKey.VALUE to JsonPrimitive(true),
+                        ActionProgressDialogConfigKey.MESSAGE to JsonPrimitive("已完成 60%"),
+                        ActionProgressDialogConfigKey.PROGRESS to JsonPrimitive(60),
                     ),
+                ),
+                ActionNode(
+                    id = "progress_dismiss",
+                    type = ActionNodeType.UI_PROGRESS_DISMISS,
+                    config = config(),
                 ),
             ),
             edges = persistentListOf(
                 ActionEdge(
-                    id = "progress_failure",
-                    source = ActionPortRef("progress", ActionControlPortId.FAILURE),
-                    target = ActionPortRef("failure_handler", ActionControlPortId.IN),
+                    id = "e1",
+                    source = ActionPortRef("progress_show", ActionControlPortId.SUCCESS),
+                    target = ActionPortRef("progress_update", ActionControlPortId.IN),
+                ),
+                ActionEdge(
+                    id = "e2",
+                    source = ActionPortRef("progress_update", ActionControlPortId.SUCCESS),
+                    target = ActionPortRef("progress_dismiss", ActionControlPortId.IN),
                 ),
             ),
         )
         val registry = ActionNodeRegistry(testHttpRequestExecutor, testPreferencesStore)
         val engine = ActionWorkflowEngine(registry, ActionWorkflowValidator(registry), now = { 1000L })
 
+        val sideEffects = mutableListOf<ActionSideEffect>()
         val events = engine.execute(
             workflow = workflow,
             initialContext = ActionExecutionContext(),
             sideEffectHandler = { effect ->
-                if (effect is ActionProgressDialogEffect) {
-                    ActionSideEffectResult.Failure("用户停止了进度任务")
-                } else {
-                    ActionSideEffectResult.Success()
-                }
+                sideEffects.add(effect)
+                ActionSideEffectResult.Success()
             },
         ).toList()
 
-        assertTrue(
-            events.filterIsInstance<ActionExecutionEvent.NodeCompleted>().any {
-                it.nodeId == "progress" && it.outputPortId == ActionControlPortId.FAILURE
-            },
-        )
-        assertTrue(
-            events.filterIsInstance<ActionExecutionEvent.NodeCompleted>().any { it.nodeId == "failure_handler" },
-        )
         assertEquals(
-            ActionExecutionStatus.FAILED,
+            ActionExecutionStatus.SUCCESS,
             events.filterIsInstance<ActionExecutionEvent.Completed>().single().log.status,
         )
+        assertEquals(3, sideEffects.size)
+        val showEffect = sideEffects[0] as ActionProgressDialogEffect
+        val updateEffect = sideEffects[1] as ActionProgressDialogEffect
+        val dismissEffect = sideEffects[2] as ActionProgressDialogEffect
+
+        assertEquals(ActionProgressDialogAction.SHOW, showEffect.action)
+        assertEquals("下载测试", showEffect.title)
+        assertEquals(0f, showEffect.progress)
+
+        assertEquals(ActionProgressDialogAction.UPDATE, updateEffect.action)
+        assertEquals("已完成 60%", updateEffect.message)
+        assertEquals(60f, updateEffect.progress)
+
+        assertEquals(ActionProgressDialogAction.DISMISS, dismissEffect.action)
     }
 
     /**
@@ -1261,6 +1283,11 @@ class BuiltInActionNodeTest {
                 ActionProgressDialogConfigKey.PROGRESS to JsonPrimitive(1),
                 ActionProgressDialogConfigKey.MAX_PROGRESS to JsonPrimitive(2),
             ),
+            ActionNodeType.UI_PROGRESS_UPDATE to config(
+                ActionProgressDialogConfigKey.MESSAGE to JsonPrimitive("已完成 50%"),
+                ActionProgressDialogConfigKey.PROGRESS to JsonPrimitive(50),
+            ),
+            ActionNodeType.UI_PROGRESS_DISMISS to config(),
             ActionNodeType.UI_SELECT_DIALOG to config(
                 ActionSelectDialogConfigKey.OPTIONS to buildJsonArray {
                     add(buildJsonObject {

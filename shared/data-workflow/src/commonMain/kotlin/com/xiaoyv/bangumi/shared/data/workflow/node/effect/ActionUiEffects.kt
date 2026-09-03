@@ -2,6 +2,7 @@ package com.xiaoyv.bangumi.shared.data.workflow.node.effect
 
 import androidx.compose.runtime.Immutable
 import com.xiaoyv.bangumi.shared.data.workflow.model.execution.ActionSideEffect
+import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogAction
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionProgressDialogMode
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectDialogConfigKey
 import com.xiaoyv.bangumi.shared.data.workflow.model.spec.ActionSelectOutputMode
@@ -93,17 +94,27 @@ data class ActionInputDialogEffect(
 ) : ActionSideEffect
 
 /**
- * 请求宿主显示可停止的工作流进度任务。
+ * 请求宿主展示、更新或关闭工作流进度任务的副作用。
  *
- * 进度任务会一直保持活动状态，直到用户停止它；停止将作为副作用失败返回执行器，从而进入节点的 failure 出口。
+ * 该副作用为非阻塞操作，立即返回成功。支持跨节点生命周期（展示 -> 更新 -> 关闭）。
+ *
+ * @property action 操作类型，支持 [ActionProgressDialogAction.SHOW]、[ActionProgressDialogAction.UPDATE]、[ActionProgressDialogAction.DISMISS]
+ * @property taskId 进度任务的唯一标识（为空时作用于默认或当前单个任务）
+ * @property title 进度弹窗标题
+ * @property message 进度说明文本
+ * @property mode 进度模式，支持普通（indeterminate）与精确（determinate）模式
+ * @property progress 当前进度值
+ * @property maxProgress 最大进度值
  */
 @Immutable
 data class ActionProgressDialogEffect(
+    val action: String = ActionProgressDialogAction.SHOW,
+    val taskId: String = "",
     val title: String = "",
     val message: String = "",
     val mode: String = ActionProgressDialogMode.INDETERMINATE,
-    val progress: Float = 0f,
-    val maxProgress: Float = 1f,
+    val progress: Float? = null,
+    val maxProgress: Float? = null,
 ) : ActionSideEffect
 
 /**
