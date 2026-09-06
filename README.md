@@ -1,64 +1,101 @@
-# Bangumi for Android [![GitHub stars](https://img.shields.io/github/stars/xiaoyvyv/bangumi.svg)](https://github.com/xiaoyvyv/bangumi)
-Bangumi for Android - A full-featured unofficial android native application for the bangumi.tv
+<div align="center">
 
-`main` 分支为原生View实现，已停止维护，请查看最新的 `multiplatform` 分支，使用现代化的 `compose` 实现！ 
+  <a href="https://bgm.tv">
+    <img src="https://github.com/xiaoyvyv/bangumi/blob/main/app/src/main/ic_launcher-playstore.png?raw=true" width="128" height="128" alt="Bangumi Logo" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);" />
+  </a>
 
-`multiplatform` -> [multiplatform](https://github.com/xiaoyvyv/bangumi/tree/multiplatform)，multiplatform 测试包请查阅 actions 构建产物 [bangumi actions](https://github.com/xiaoyvyv/bangumi/actions)
+  <h1 align="center">Bangumi Multiplatform</h1>
 
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://github.com/xiaoyvyv/bangumi/workflows/Android%20CI/badge.svg)](https://github.com/xiaoyvyv/bangumi/actions)
-[![GitHub all releases](https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total)](https://github.com/xiaoyvyv/bangumi)
+  <p align="center">
+    <b>基于 Kotlin Multiplatform (KMP) & Compose Multiplatform 打造的 Bangumi.tv 跨平台全功能客户端</b>
+  </p>
 
-<img src="https://github.com/xiaoyvyv/bangumi/blob/main/app/src/main/ic_launcher-playstore.png?raw=true" height="200" width="200" style="display:block; border:1px solid #000;border-radius: 12px;">
+  <p align="center">
+    <a href="https://github.com/xiaoyvyv/bangumi"><img src="https://img.shields.io/github/stars/xiaoyvyv/bangumi.svg?style=for-the-badge&logo=github&color=FF69B4" alt="GitHub stars"></a>
+    <a href="https://github.com/xiaoyvyv/bangumi/actions"><img src="https://img.shields.io/github/actions/workflow/status/xiaoyvyv/bangumi/android.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=Build" alt="Build Status"></a>
+    <a href="https://github.com/xiaoyvyv/bangumi/releases"><img src="https://img.shields.io/github/v/release/xiaoyvyv/bangumi?style=for-the-badge&logo=github&color=0080FF" alt="Latest Release"></a>
+    <a href="https://github.com/xiaoyvyv/bangumi/releases"><img src="https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total?style=for-the-badge&color=2E8B57" alt="Downloads"></a>
+    <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=for-the-badge" alt="License: GPL-3.0"></a>
+  </p>
 
-<a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi"><img alt="Get it on Google Play" height="80" src="/lib-doc/images/playstore_badge.png"></a>
+  <p align="center">
+    <a href="https://github.com/xiaoyvyv/bangumi/releases"><b>📱 下载 Release APK</b></a> &nbsp;•&nbsp;
+    <a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi"><b>🛒 Google Play</b></a> &nbsp;•&nbsp;
+    <a href="https://qm.qq.com/q/YomiSMeyUs"><b>💬 QQ 交流群</b></a> &nbsp;•&nbsp;
+    <a href="https://docs.qq.com/sheet/DYk9hdG92dFVtTFlt?tab=koxolo"><b>🌐 多语言贡献</b></a>
+  </p>
 
-大家好，各位阿宅、二次元迷们，我是一位热爱动漫文化的安卓开发者，很高兴向大家宣布，我为 https://bgm.tv 这个网站打造了一款全新的 安卓原生客户端！
+  <p align="center">
+    <code>Android</code> &nbsp;•&nbsp; <code>iOS</code> &nbsp;•&nbsp; <code>Desktop (JVM)</code>
+  </p>
 
-这款APP不仅完美呈现了 BGM.TV 的所有功能，更为用户提供了更便捷、更流畅的使用体验。
+</div>
 
-### Bangumi
-[https://bgm.tv](https://bgm.tv)
+---
 
-[https://bangumi.tv](https://bangumi.tv)
+**Bangumi Multiplatform** 是一款基于 **Kotlin Multiplatform (KMP)** 与 **Compose Multiplatform** 构建的 [Bangumi.tv (番组计划)](https://bgm.tv) 第三方全功能跨平台客户端。
 
-### 项目地址
+本项目采用现代化的 **MVI 架构** 与 **模块化设计**，支持 **Android**、**iOS** 以及 **Desktop (JVM)** 多端运行。不仅完整覆盖了 BGM.TV 的日常使用与社区功能，更内置了强大的 *
+*自动化工作流引擎 (Workflow Engine)**、**Live2D 动态看板娘** 及多维度的番剧衍生资源聚合。
 
-🚩Source Code: [https://github.com/xiaoyvyv/bangumi](https://github.com/xiaoyvyv/bangumi)
+---
 
-🚩Github Release: [Github-Release](https://github.com/xiaoyvyv/bangumi/releases)
+> [!NOTE]
+> 💡 **版本演进说明**：原基于传统 Android View 视图架构实现的版本（已归档在 [`view`](https://github.com/xiaoyvyv/bangumi/tree/view) 分支，停止维护）。全平台最新版本已全面升级并转向现代化的
+**Compose Multiplatform** 架构，目前直接在主分支 [`main`](https://github.com/xiaoyvyv/bangumi/tree/main)
+> 上重构与持续迭代，提供更极致的渲染性能与多端跨平台体验！测试包请查阅 [GitHub Actions 构建产物](https://github.com/xiaoyvyv/bangumi/actions)。
 
-🔨贡献多语言本地化🔨 [多语言本地化文档](https://docs.qq.com/sheet/DYk9hdG92dFVtTFlt?tab=koxolo)
+---
 
-### 功能介绍
+## 🌟 核心特性
 
-**1. 全面覆盖 BGM.TV 的全部功能**
+- **跨平台体验 (KMP + Compose Multiplatform)**：基于 Compose 声明式 UI 开发，多端共享核心业务逻辑，极致流畅。
+- **全面覆盖 Bangumi 核心功能**：
+  - **进度管理**：追番、看剧、读漫画、玩游戏状态一键更新与进度格子管理。
+  - **条目与角色**：详尽的动画/书籍/三次元/游戏/音乐条目信息、角色图鉴、演职员与关系网。
+  - **社区交流**：热门小组话题、时间线动态、日志、条目吐槽、评论回复与消息通知。
+  - **探索发现**：每日放送日历、排行榜、搜条目/搜角色/搜目录、巡礼地图等。
+- **强大的 Workflow 自动化工作流引擎**：
+  - 声明式 DAG 节点编排，支持并行执行、分支合流（Fork/Join）、循环遍历与状态追踪。
+  - 内置网络请求、HTML/JSON 解析、正则表达式提取、变量上下文及自定义 UI 交互副作用。
+- **生动有趣的 Live2D 看板娘**：支持 Live2D 交互、模型更换及个性化配置。
+- **衍生资源聚合与发现**：
+  - 整合 **Mikan 蜜柑计划** 磁力资源及字幕组展开。
+  - 整合 **Anime-Pictures** 及 **Pixiv** 高清插画/作品预览。
+  - 图片/视频媒体预览与内置播放组件。
+- **个性化定制与隐私安全**：
+  - 支持 Material Design 3 动态主题配色、暗黑模式及多种视觉外观定制。
+  - 代码完全开源，无广告、不收集隐私，数据多端无缝同步。
 
-我开发的这款安卓原生客户端不是一个简单的浏览器封装，也不是一些跨平台的框架，而是将 BGM.TV 的丰富功能全部通过安卓原生开发实现，是的基本上是全部功能。
+---
 
-你可以轻松地查看番剧、动画、漫画等各种资源，快速了解最新的番剧更新和热门小组话题。
+## 🏗️ 架构设计
 
-更有精准的搜索功能，让你在移动端找动动小手指就可以找到心仪的番剧。
+项目采用严格的 **模块化设计** 与 **MVI (Model-View-Intent)** 架构：
 
-**2. 极佳的用户体验**
+```
+bangumi-multiplatform/
+├── composeApp/             # Compose Multiplatform 桌面/通用入口
+├── android/                # Android 壳工程与 Application 配置
+├── iosApp/                 # iOS Xcode 工程入口
+├── shared/                 # 核心共享组件与基础库
+│   ├── core/               # 基础公共类、MVI 架构基类、通用工具与类型定义
+│   ├── core-native/        # C++ / Native 扩展（Live2D 渲染引擎等）
+│   ├── core-resource/      # 共享图片、图标、多语言 Strings 资源
+│   ├── data/               # 网络请求(Ktorfit/Ktor)、数据模型(DTO)、数据库与存储
+│   ├── data-workflow/      # Workflow 工作流 DAG 执行引擎
+│   ├── ui/                 # 共享 UI 组件、导航路由定义
+│   ├── ui-platform/       # 平台差异化 UI 兼容组件
+│   ├── ui-material3/       # Material Design 3 主题与样式库
+│   └── ui-video/           # 视频播放器与全屏控制器组件
+└── features/               # 独立业务功能模块（如 home, subject, workflow, settings 等）
+```
 
-在设计这款客户端时，参考同类的其它作者的客户端，发现页面流畅度是非常影响用户体验的。
-我注重了用户体验的细节，在使用过程中极致流畅，界面简洁清晰，操作简单直观，让你能够更专注地享受BGM的番剧世界。
+- **MVI 架构**：依托 [Orbit MVI](https://github.com/orbit-mvi/orbit-mvi) 框架，遵循 `State` -> `Event/Intent` -> `SideEffect` 响应式数据流。
+- **网络层**：基于 [Ktor 3](https://ktor.io/) 与 [Ktorfit](https://filippobest.github.io/ktorfit/) 构建类型安全的 API 请求体系。
+- **依赖注入**：基于 [Koin](https://insert-koin.io/) 实现跨平台依赖注入。
 
-同时，为了保障用户的隐私和安全，此App完全开源，不用担心你的隐私问题。
-
-**3. 个性化设置**
-
-为了让你更好日常使用，你可以自定义设置诸如 Bangumi 娘、动态主题、进度格子、动画等，让客户端更符合你的个性化需求。
-
-**4. 多平台同步，随时随地畅享动漫乐趣**
-
-此App支持多平台同步，你在手机上的浏览记录和收藏内容都可以与电脑端同步，让你在不同设备间无缝切换，始终保持最新的动漫资讯和观看记录。
-
-**5. 持续更新，更多功能敬请期待**
-
-我将持续关注用户的反馈和建议，不断优化和更新客户端，为大家提供更好的服务。
-未来，我还计划加入更多有趣的功能，让这款安卓原生客户端成为每位动漫迷手机上的必备利器！
+---
 
 **部分页面截图预览**
 
@@ -67,23 +104,49 @@ Bangumi for Android - A full-featured unofficial android native application for 
 ![https://img.xiaoyv.com.cn/image/bangumi/poster-3.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-3.jpg?_)
 ![https://img.xiaoyv.com.cn/image/bangumi/poster-4.jpg](https://img.xiaoyv.com.cn/image/bangumi/poster-4.jpg?_)
 
-最后，感谢大家的支持和厚爱，希望我的安卓原生原生客户端能为大家带来更丰富、更愉悦的Bgm体验。
+---
 
-快来下载安装吧，一起探索 BGM.TV 的精彩世界！
+## 🚀 编译与构建
 
-如果有任何建议或问题，欢迎随时与我联系，让我们共同打造这个客户端的美好未来。谢谢！
+### 准备工作
 
-### Deadline
-~~预计首个版本开发周期 3 个月 (2024年2月下旬)！~~
+- JDK 17 及以上
+- Android Studio (最新 Canary/RC 版本推荐，需安装 Kotlin 及 Multiplatform 插件)
+- Xcode (仅编译 iOS 版本需要)
 
-进度超出预期，于2023年11月20多号开始开发，`2023-12-19` `v1.0.0` 发布，开发周期半个月多点，官网全功能覆盖95%
+### Gradle 编译命令
+
+- **Android**：
+  ```bash
+  ./gradlew :android:assembleDebug
+  ```
+- **Desktop (JVM)**：
+  ```bash
+  ./gradlew :composeApp:run
+  ```
+- **构建测试与验证**：
+  ```bash
+  ./gradlew :shared:data:kspCommonMainKotlinMetadata
+  ```
+
+---
+
+## 🤝 贡献与反馈
+
+欢迎大家提出 Bug 反馈、功能建议或提交 PR！
+
+- **QQ 讨论群**：[671395625](https://qm.qq.com/q/YomiSMeyUs)（欢迎交流与反馈问题）
+- **多语言本地化翻译**：[多语言本地化在线文档](https://docs.qq.com/sheet/DYk9hdG92dFVtTFlt?tab=koxolo)
+- **GitHub Issues**：[提交 Issue](https://github.com/xiaoyvyv/bangumi/issues)
 
 开发人员：
 
-小玉: [https://bangumi.tv/user/837364](https://bangumi.tv/user/837364)
+- 小玉: [https://bangumi.tv/user/837364](https://bangumi.tv/user/837364)
 
-QQ讨论群：
+喜欢这个项目的话，欢迎在 GitHub 上点个 ⭐ **Star** 支持一下！
 
-[671395625](https://qm.qq.com/q/YomiSMeyUs)，欢迎大家积极讨论和反馈问题。
+---
 
-各位姥爷喜欢的话不妨在 Github 上面点个 Star 非常感谢！
+## 📜 开源协议
+
+本项目采用 [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0) 开源协议。
