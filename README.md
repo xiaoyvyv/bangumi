@@ -1,7 +1,7 @@
 <div align="center">
 
   <a href="https://bgm.tv">
-    <img src="https://github.com/xiaoyvyv/bangumi/blob/main/app/src/main/ic_launcher-playstore.png?raw=true" width="128" height="128" alt="Bangumi Logo" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);" />
+    <img src="android/src/main/ic_launcher-playstore.png" width="128" height="128" alt="Bangumi Logo" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);" />
   </a>
 
   <h1 align="center">Bangumi Multiplatform</h1>
@@ -12,7 +12,7 @@
 
   <p align="center">
     <a href="https://github.com/xiaoyvyv/bangumi"><img src="https://img.shields.io/github/stars/xiaoyvyv/bangumi.svg?style=for-the-badge&logo=github&color=FF69B4" alt="GitHub stars"></a>
-    <a href="https://github.com/xiaoyvyv/bangumi/actions"><img src="https://img.shields.io/github/actions/workflow/status/xiaoyvyv/bangumi/android.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=Build" alt="Build Status"></a>
+    <a href="https://github.com/xiaoyvyv/bangumi/actions"><img src="https://img.shields.io/github/actions/workflow/status/xiaoyvyv/bangumi/build.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=Build" alt="Build Status"></a>
     <a href="https://github.com/xiaoyvyv/bangumi/releases"><img src="https://img.shields.io/github/v/release/xiaoyvyv/bangumi?style=for-the-badge&logo=github&color=0080FF" alt="Latest Release"></a>
     <a href="https://github.com/xiaoyvyv/bangumi/releases"><img src="https://img.shields.io/github/downloads/xiaoyvyv/bangumi/total?style=for-the-badge&color=2E8B57" alt="Downloads"></a>
     <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=for-the-badge" alt="License: GPL-3.0"></a>
@@ -22,7 +22,7 @@
     <a href="https://github.com/xiaoyvyv/bangumi/releases"><b>📱 下载 Release APK</b></a> &nbsp;•&nbsp;
     <a href="https://play.google.com/store/apps/details?id=com.xiaoyv.bangumi"><b>🛒 Google Play</b></a> &nbsp;•&nbsp;
     <a href="https://qm.qq.com/q/YomiSMeyUs"><b>💬 QQ 交流群</b></a> &nbsp;•&nbsp;
-    <a href="https://docs.qq.com/sheet/DYk9hdG92dFVtTFlt?tab=koxolo"><b>🌐 多语言贡献</b></a>
+    <a href="shared/core-resource/src/androidMain/res/values/strings.xml"><b>🌐 多语言贡献</b></a>
   </p>
 
   <p align="center">
@@ -136,7 +136,7 @@ bangumi-multiplatform/
 欢迎大家提出 Bug 反馈、功能建议或提交 PR！
 
 - **QQ 讨论群**：[671395625](https://qm.qq.com/q/YomiSMeyUs)（欢迎交流与反馈问题）
-- **多语言本地化翻译**：[多语言本地化在线文档](https://docs.qq.com/sheet/DYk9hdG92dFVtTFlt?tab=koxolo)
+- **多语言本地化翻译**：[Strings 资源文件 (`strings.xml`)](shared/core-resource/src/androidMain/res/values/strings.xml)
 - **GitHub Issues**：[提交 Issue](https://github.com/xiaoyvyv/bangumi/issues)
 
 开发人员：
