@@ -35,8 +35,9 @@
 
 **Bangumi Multiplatform** 是一款基于 **Kotlin Multiplatform (KMP)** 与 **Compose Multiplatform** 构建的 [Bangumi.tv (番组计划)](https://bgm.tv) 第三方全功能跨平台客户端。
 
-本项目采用现代化的 **MVI 架构** 与 **模块化设计**，支持 **Android**、**iOS** 以及 **Desktop (JVM)** 多端运行。不仅完整覆盖了 BGM.TV 的日常使用与社区功能，更内置了强大的 *
-*自动化工作流引擎 (Workflow Engine)**、**Live2D 动态看板娘** 及多维度的番剧衍生资源聚合。
+本项目采用现代化的 **MVI 架构** 与 **模块化设计**，支持 **Android**、**iOS** 以及 **Desktop (JVM)** 多端运行。
+
+不仅完整覆盖了 BGM.TV 的日常使用与社区功能，更内置了强大的 **自动化工作流引擎 [Workflow Engine](https://github.com/xiaoyvyv/workflow-cmp)**、**Live2D 动态看板娘** 及多维度的番剧衍生资源聚合。
 
 ---
 
