@@ -44,9 +44,9 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.component.text.BgmLinkedText
 import com.xiaoyv.bangumi.shared.ui.component.text.StarColor
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
-import com.xiaoyv.bangumi.shared.ui.theme.BorderStrokeVariant
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
+import com.xiaoyv.bangumi.shared.ui.theme.ThinBorderStrokeVariant
 import org.jetbrains.compose.resources.stringResource
 
 val LocalCommentSubjectType = compositionLocalOf { SubjectType.UNKNOWN }
@@ -82,7 +82,7 @@ fun CommentReplyItem(
                         .size(44.dp)
                         .clickWithoutRipped { onClickUser(item.user.username) },
                     shape = MaterialTheme.shapes.small,
-                    border = BorderStrokeVariant,
+                    border = ThinBorderStrokeVariant,
                     model = item.user.avatar.displayMediumImage,
                 )
             }
@@ -183,7 +183,7 @@ private fun ComposeReplyItemHeader(
                 .size(28.dp)
                 .clickWithoutRipped { onClickUser(item.user.username) },
             shape = MaterialTheme.shapes.small,
-            border = BorderStrokeVariant,
+            border = ThinBorderStrokeVariant,
             model = item.user.avatar.displayMediumImage
         )
 

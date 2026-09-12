@@ -19,6 +19,7 @@ import com.xiaoyv.bangumi.shared.data.parser.bgm.SubjectParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.TopicTableParser
 import com.xiaoyv.bangumi.shared.data.parser.bgm.UserParser
 import com.xiaoyv.bangumi.shared.data.repository.ActionWorkflowRepository
+import com.xiaoyv.bangumi.shared.data.repository.AniListRepository
 import com.xiaoyv.bangumi.shared.data.repository.BlogRepository
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.ChoreRepository
@@ -40,6 +41,7 @@ import com.xiaoyv.bangumi.shared.data.repository.UgcRepository
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createPagingConfig
 import com.xiaoyv.bangumi.shared.data.repository.impl.ActionWorkflowRepositoryImpl
+import com.xiaoyv.bangumi.shared.data.repository.impl.AniListRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.BlogRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.CacheRepositoryImpl
 import com.xiaoyv.bangumi.shared.data.repository.impl.ChoreRepositoryImpl
@@ -102,6 +104,7 @@ private val repositoryModules = module {
     single<IndexRepository> { IndexRepositoryImpl(get(), get(), get(), get()) }
     single<TerminalRepository> { TerminalRepositoryImpl(get()) }
     single<ActionWorkflowRepository> { ActionWorkflowRepositoryImpl(get(), get(), get()) }
+    single<AniListRepository> { AniListRepositoryImpl(get()) }
 }
 
 

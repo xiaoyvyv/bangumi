@@ -9,6 +9,8 @@ import com.xiaoyv.bangumi.shared.data.api.ChoreApi
 import com.xiaoyv.bangumi.shared.data.api.DouBanApi
 import com.xiaoyv.bangumi.shared.data.api.ImageApi
 import com.xiaoyv.bangumi.shared.data.api.TraceApi
+import com.xiaoyv.bangumi.shared.data.api.anilist.AniListApi
+import com.xiaoyv.bangumi.shared.data.api.anilist.createAniListApi
 import com.xiaoyv.bangumi.shared.data.api.app.AppApi
 import com.xiaoyv.bangumi.shared.data.api.app.createAppApi
 import com.xiaoyv.bangumi.shared.data.api.client.cookie.ApiCookiesStorage
@@ -206,10 +208,12 @@ class ApiClient(
     val pixivAjaxApi: PixivAjaxApi by lazy { pixivAjaxKtorfit.createPixivAjaxApi() }
     val dbApi: DouBanApi by lazy { dbApiKtorfit.createDouBanApi() }
     val choreApi: ChoreApi by lazy { appApiKtorfit.createChoreApi() }
+    val aniListApi: AniListApi by lazy { appApiKtorfit.createAniListApi() }
 
     suspend fun <R> requestAuthApi(block: suspend AuthApi.() -> R) = requestApi(authApi, block = block)
 
     suspend fun <R> requestChoreApi(block: suspend ChoreApi.() -> R) = requestApi(choreApi, block = block)
+    suspend fun <R> requestAniListApi(block: suspend AniListApi.() -> R) = requestApi(aniListApi, block = block)
     suspend fun <R> requestTraceApi(block: suspend TraceApi.() -> R) = requestApi(traceApi, block = block)
     suspend fun <R> requestImageApi(block: suspend ImageApi.() -> R) = requestApi(imageApi, block = block)
     suspend fun <R> requestDouBanApi(block: suspend DouBanApi.() -> R) = requestApi(dbApi, block = block)

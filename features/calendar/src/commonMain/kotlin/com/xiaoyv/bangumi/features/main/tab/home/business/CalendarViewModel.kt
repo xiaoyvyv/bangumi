@@ -6,6 +6,7 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.data.repository.AniListRepository
 import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
 import com.xiaoyv.bangumi.shared.data.repository.SubjectRepository
 import com.xiaoyv.bangumi.shared.data.repository.readViewModelCache
@@ -24,6 +25,7 @@ class CalendarViewModel(
     private val args: Screen.Calendar,
     private val cacheRepository: CacheRepository,
     private val subjectRepository: SubjectRepository,
+    private val aniListRepository: AniListRepository
 ) : BaseViewModel<CalendarState, CalendarSideEffect, CalendarEvent.Action>() {
 
     private val cacheKey = byteArrayPreferencesKey(name = "calendar:${args.isToday}")
@@ -63,6 +65,7 @@ class CalendarViewModel(
             }
 
         saveCache()
+
     }
 
     private fun onChangeLayoutMode() = intent {

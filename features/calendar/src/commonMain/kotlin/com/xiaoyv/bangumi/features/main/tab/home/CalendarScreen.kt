@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,8 +30,10 @@ import com.xiaoyv.bangumi.features.main.tab.home.business.CalendarState
 import com.xiaoyv.bangumi.features.main.tab.home.business.CalendarViewModel
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.currentWeekDay
+import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeHomeSection
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.subject.ComposeSubjectRelation
+import com.xiaoyv.bangumi.shared.data.repository.AniListRepository
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
@@ -47,6 +50,7 @@ import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectLineItem
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -156,6 +160,29 @@ private fun CalendarScreenPage(
                     onClick = { onUiEvent(CalendarEvent.UI.OnNavScreen(Screen.SubjectDetail(it.subject.id))) }
                 )
             }
+        }
+
+        val aniListRepository = koinInject<AniListRepository>()
+        LaunchedEffect(Unit) {
+            val subjects = sections.map { it.subject }
+            aniListRepository.fetchAniListMediaBySubjects(subjects)
+                .onFailure { debugLog { it } }
+                .onSuccess {
+                    it.forEach { (lng, listMedia) ->
+                        val subject = subjects.find { subject -> subject.id == lng }
+                        debugLog {
+                            buildString {
+                                append(subject?.displayName)
+                                append(", ")
+                                append(listMedia.nextAiringEpisode)
+                                append(", ")
+                                append(listMedia.nextAiringEpisode)
+                                append(", ")
+                                append(listMedia.airingSchedule)
+                            }
+                        }
+                    }
+                }
         }
     } else {
         val lazyListState = rememberScrollUpLazyListState()

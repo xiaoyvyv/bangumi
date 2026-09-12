@@ -137,6 +137,7 @@ data class ComposeSubject(
      * 本地填充，针对条目格子列表
      */
     @SerialName("episodes") val episodes: SerializeList<ComposeEpisode> = persistentListOf(),
+    @SerialName("aniAirMills") val aniAirMills: String = "",
 ) {
     val displayName: String get() = nameCn.ifBlank { name }
     val displayRateTotalCount: Int get() = rating.total
