@@ -29,22 +29,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivIllustCard
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import kotlin.math.abs
 
 @Composable
-fun PixivRankingItem(
-    item: ComposePixivRankingContent,
+fun PixivIllustItem(
+    item: ComposePixivIllustCard,
     modifier: Modifier = Modifier,
-    onClick: (ComposePixivRankingContent) -> Unit = {},
+    onClick: (ComposePixivIllustCard) -> Unit = {},
 ) {
-    val pageCount = item.illust_page_count.toIntOrNull() ?: 1
-    val isNew = item.yes_rank == 0
-    val rankDiff = item.yes_rank - item.rank
-    val isUgoira = item.illust_type == "2"
+    val pageCount = item.pageCount
+    val isNew = item.yesRank == 0
+    val rankDiff = item.yesRank - item.rank
+    val isUgoira = item.illustType == "2"
 
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
@@ -183,10 +183,10 @@ fun PixivRankingItem(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    if (item.profile_img.isNotBlank()) {
+                    if (item.profileImg.isNotBlank()) {
                         AsyncImage(
-                            model = item.profile_img,
-                            contentDescription = item.user_name,
+                            model = item.profileImg,
+                            contentDescription = item.userName,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(20.dp)
@@ -196,7 +196,7 @@ fun PixivRankingItem(
                     }
 
                     Text(
-                        text = item.user_name,
+                        text = item.userName,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -211,32 +211,32 @@ fun PixivRankingItem(
 
 @Preview
 @Composable
-private fun PixivRankingItemPreview() {
+private fun PixivIllustItemPreview() {
     PreviewColumn {
-        PixivRankingItem(
+        PixivIllustItem(
             modifier = Modifier.padding(ContentMarginHalf),
-            item = ComposePixivRankingContent(
+            item = ComposePixivIllustCard(
                 title = "作品标题作品标题作品标题作品标题",
-                user_name = "画师名称",
+                userName = "画师名称",
                 url = "",
-                profile_img = "",
+                profileImg = "",
                 rank = 1,
-                yes_rank = 2,
-                illust_page_count = "3",
-                illust_type = "0"
+                yesRank = 2,
+                pageCount = 3,
+                illustType = "0"
             )
         )
-        PixivRankingItem(
+        PixivIllustItem(
             modifier = Modifier.padding(ContentMarginHalf),
-            item = ComposePixivRankingContent(
+            item = ComposePixivIllustCard(
                 title = "动图作品示例",
-                user_name = "画师名称",
+                userName = "画师名称",
                 url = "",
-                profile_img = "",
+                profileImg = "",
                 rank = 4,
-                yes_rank = 0,
-                illust_page_count = "1",
-                illust_type = "2"
+                yesRank = 0,
+                pageCount = 1,
+                illustType = "2"
             )
         )
     }

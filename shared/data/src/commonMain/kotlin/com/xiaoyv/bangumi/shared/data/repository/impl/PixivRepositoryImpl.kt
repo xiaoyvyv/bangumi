@@ -11,12 +11,12 @@ import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.manager.app.PreferenceStore
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.ChallengeParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.IllustSearchBody
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivIllustCard
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustDetailBody
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustSimple
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivPageInfo
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivTagInfoBody
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivUserInfoBody
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.toIllustCard
 import com.xiaoyv.bangumi.shared.data.repository.PixivRepository
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
 import com.xiaoyv.bangumi.shared.data.repository.datasource.createMemoryPageLimitPagingController
@@ -65,10 +65,10 @@ class PixivRepositoryImpl(
         content: String,
         mode: String,
         date: String?,
-    ): MemoryPagingController<ComposePixivRankingContent, Long> {
+    ): MemoryPagingController<ComposePixivIllustCard, Long> {
         return createMemoryPageLimitPagingController(
             pagingConfig = pagingConfig,
-            idSelector = { it.illust_id },
+            idSelector = { it.id },
             onLoadData = { page ->
                 client.requestPixivAjaxApi {
                     getIllustRanking(
@@ -76,16 +76,16 @@ class PixivRepositoryImpl(
                         content = content,
                         date = date.takeIf { it.orEmpty().isNotBlank() },
                         page = page
-                    ).contents
+                    ).contents.map { it.toIllustCard() }
                 }.getOrThrow()
             }
         )
     }
 
-    override fun fetchIllustSearchPager(search: IllustSearchBody): MemoryPagingController<ComposePixivRankingContent, Long> {
+    override fun fetchIllustSearchPager(search: IllustSearchBody): MemoryPagingController<ComposePixivIllustCard, Long> {
         return createMemoryPageLimitPagingController(
             pagingConfig = pagingConfig,
-            idSelector = { it.illust_id },
+            idSelector = { it.id },
             onLoadData = { page ->
                 client.requestPixivAjaxApi {
                     val response = when (search.artworkType) {
@@ -133,7 +133,7 @@ class PixivRepositoryImpl(
                     } else {
                         response.body?.illust
                     }
-                    artwork?.data.orEmpty().map { it.toRankingContent() }
+                    artwork?.data.orEmpty().map { it.toIllustCard() }
                 }.getOrThrow()
             },
         )
@@ -165,26 +165,5 @@ class PixivRepositoryImpl(
         return client.requestPixivAjaxApi {
             getTagInfo(tag).body ?: throw IllegalStateException("Tag info body is null")
         }
-    }
-
-    private fun ComposePixivIllustSimple.toRankingContent(): ComposePixivRankingContent {
-        return ComposePixivRankingContent(
-            title = title,
-            date = createDate,
-            tags = tags,
-            url = url,
-            illust_type = illustType.toString(),
-            illust_page_count = pageCount.toString(),
-            user_name = userName,
-            profile_img = profileImageUrl,
-            illust_id = id,
-            width = width,
-            height = height,
-            user_id = userId,
-            is_masked = isMasked,
-            is_bookmarked = (bookmarkData?.id ?: 0) > 0,
-            bookmarkable = isBookmarkable,
-            bookmark_id = bookmarkData?.id ?: 0,
-        )
     }
 }

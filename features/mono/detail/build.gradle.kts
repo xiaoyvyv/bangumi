@@ -15,6 +15,7 @@ kotlin {
             implementation(projects.features.preview.album)
             implementation(projects.features.subject.page)
             implementation(projects.features.index.page)
+            implementation(projects.features.pixiv.illust.page)
         }
     }
 }

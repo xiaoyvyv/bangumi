@@ -53,6 +53,7 @@ import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailIndexScreen
 import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailMainScreen
 import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailPicturesScreen
 import com.xiaoyv.bangumi.features.mono.detail.page.MonoDetailWorksScreen
+import com.xiaoyv.bangumi.features.pixiv.illust.page.IllustPageRoute
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.rememberInterceptEvent
 import com.xiaoyv.bangumi.shared.core.types.ButtonType
@@ -60,8 +61,14 @@ import com.xiaoyv.bangumi.shared.core.types.IndexCatType
 import com.xiaoyv.bangumi.shared.core.types.MonoDetailTab
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.PublishPostType
+import com.xiaoyv.bangumi.shared.core.types.list.ListIllustType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchMode
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRating
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustrationSearchType
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedState
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.IndexCreateParam
+import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.IllustSearchBody
+import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.ListIllustParam
 import com.xiaoyv.bangumi.shared.data.model.response.image.ComposeGallery
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
@@ -416,11 +423,17 @@ private fun MonoDetailScreenContent(
                 onActionEvent = onActionEvent
             )
 
-            MonoDetailTab.PIXIV -> MonoDetailPicturesScreen(
-                state = state,
-                imageItems = pixivImageItems,
-                onUiEvent = onUiEvent,
-                onActionEvent = onActionEvent
+            MonoDetailTab.PIXIV -> IllustPageRoute(
+                param = ListIllustParam(
+                    type = ListIllustType.SEARCH,
+                    search = IllustSearchBody(
+                        keyword = state.mono.name,
+                        rating = PixivIllustSearchRating.ALL,
+                        searchMode = PixivIllustSearchMode.TAG_PARTIAL,
+                        illustrationType = PixivIllustrationSearchType.ILLUST,
+                    )
+                ),
+                onNavScreen = { onUiEvent(MonoDetailEvent.UI.OnNavScreen(it)) }
             )
 
             MonoDetailTab.INDEX -> MonoDetailIndexScreen(

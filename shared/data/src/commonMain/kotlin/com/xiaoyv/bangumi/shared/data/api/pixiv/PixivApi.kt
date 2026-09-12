@@ -1,7 +1,7 @@
 package com.xiaoyv.bangumi.shared.data.api.pixiv
 
 import com.xiaoyv.bangumi.shared.data.marker.AppPixivApiDsl
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.model.SearchIllustrations
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.model.UserInfoDetailed
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
 
@@ -34,16 +34,19 @@ interface PixivApi {
      * @param searchAiType 是否显示 AI 生成作品，0 过滤，1 显示，默认为 null（不指定）。
      * @param offset 翻页偏移量，用于分页查询，默认为 null。
      */
-    @GET("v1/search/illust")
-    suspend fun searchIllust(
-        @Query("word") word: String,
-        @Query("search_target") searchTarget: String = "exact_match_for_tags", // enum可定义: partial_match_for_tags, exact_match_for_tags, title_and_caption
-        @Query("sort") sort: String = "date_desc", // enum: date_desc, date_asc, popular_desc
-        @Query("duration") duration: String? = null, // enum: within_last_day, within_last_week, within_last_month
-        @Query("start_date") startDate: String? = null, // 格式: yyyy-MM-dd
-        @Query("end_date") endDate: String? = null, // 格式: yyyy-MM-dd
-        @Query("filter") filter: String = "for_ios",
-        @Query("search_ai_type") searchAiType: Int? = null,
-        @Query("offset") offset: Int? = null,
-    ): SearchIllustrations
+//    @GET("v1/search/illust")
+//    suspend fun searchIllust(
+//        @Query("word") word: String,
+//        @Query("search_target") searchTarget: String = "exact_match_for_tags", // enum可定义: partial_match_for_tags, exact_match_for_tags, title_and_caption
+//        @Query("sort") sort: String = "date_desc", // enum: date_desc, date_asc, popular_desc
+//        @Query("duration") duration: String? = null, // enum: within_last_day, within_last_week, within_last_month
+//        @Query("start_date") startDate: String? = null, // 格式: yyyy-MM-dd
+//        @Query("end_date") endDate: String? = null, // 格式: yyyy-MM-dd
+//        @Query("filter") filter: String = "for_ios",
+//        @Query("search_ai_type") searchAiType: Int? = null,
+//        @Query("offset") offset: Int? = null,
+//    ): SearchIllustrations
+
+    @GET("v1/user/detail")
+    suspend fun userDetail(@Query("user_id") userId: Int): UserInfoDetailed
 }

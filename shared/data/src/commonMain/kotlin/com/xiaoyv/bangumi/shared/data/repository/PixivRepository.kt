@@ -5,10 +5,10 @@ import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivRankingMode
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.ChallengeParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.IllustSearchBody
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivIllustCard
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivToken
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivIllustDetailBody
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivPageInfo
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivTagInfoBody
 import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivUserInfoBody
 import com.xiaoyv.bangumi.shared.data.repository.datasource.MemoryPagingController
@@ -30,9 +30,9 @@ interface PixivRepository {
         @PixivRankingContentType content: String = PixivRankingContentType.ALL,
         @PixivRankingMode mode: String = PixivRankingMode.DAILY,
         date: String? = null,
-    ): MemoryPagingController<ComposePixivRankingContent, Long>
+    ): MemoryPagingController<ComposePixivIllustCard, Long>
 
-    fun fetchIllustSearchPager(search: IllustSearchBody): MemoryPagingController<ComposePixivRankingContent, Long>
+    fun fetchIllustSearchPager(search: IllustSearchBody): MemoryPagingController<ComposePixivIllustCard, Long>
 
     suspend fun fetchIllustDetail(illustId: Long): Result<ComposePixivIllustDetailBody>
 

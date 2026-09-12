@@ -22,7 +22,7 @@ import com.xiaoyv.bangumi.features.pixiv.illust.page.business.koinIllustPageView
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.utils.ignoreLazyGridContentPadding
 import com.xiaoyv.bangumi.shared.data.model.request.list.pixiv.ListIllustParam
-import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax.ComposePixivRankingContent
+import com.xiaoyv.bangumi.shared.data.model.response.pixiv.ComposePixivIllustCard
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyColumn
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLazyVerticalGrid
@@ -33,7 +33,7 @@ import com.xiaoyv.bangumi.shared.ui.kts.HideInPreview
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
-import com.xiaoyv.bangumi.shared.ui.view.pixiv.PixivRankingItem
+import com.xiaoyv.bangumi.shared.ui.view.pixiv.PixivIllustItem
 import kotlinx.coroutines.flow.flowOf
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -68,7 +68,7 @@ fun IllustPageRoute(
 @Composable
 private fun IllustPageScreen(
     uiState: UiState<IllustPageState>,
-    pagingItems: LazyPagingItems<ComposePixivRankingContent>,
+    pagingItems: LazyPagingItems<ComposePixivIllustCard>,
     header: (@Composable () -> Unit)? = null,
     headerSticky: Boolean = false,
     onUiEvent: (IllustPageEvent.UI) -> Unit,
@@ -93,7 +93,7 @@ private fun IllustPageScreen(
 @Composable
 private fun IllustPageScreenContent(
     state: IllustPageState,
-    pagingItems: LazyPagingItems<ComposePixivRankingContent>,
+    pagingItems: LazyPagingItems<ComposePixivIllustCard>,
     header: (@Composable () -> Unit)? = null,
     headerSticky: Boolean = false,
     onUiEvent: (IllustPageEvent.UI) -> Unit,
@@ -122,15 +122,15 @@ private fun IllustPageScreenContent(
             horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             contentPadding = PaddingValues(ContentMarginHalf),
-            key = { item, _ -> item.illust_id },
+            key = { item, _ -> item.id },
             contentType = { CONTENT_TYPE_PIXIV_RANKING }
         ) { item, _ ->
-            PixivRankingItem(
+            PixivIllustItem(
                 modifier = Modifier.fillMaxWidth(),
                 item = item,
                 onClick = { clickedItem ->
-                    if (clickedItem.illust_id > 0) {
-                        onUiEvent(IllustPageEvent.UI.OnNavScreen(Screen.PixivIllust(clickedItem.illust_id)))
+                    if (clickedItem.id > 0) {
+                        onUiEvent(IllustPageEvent.UI.OnNavScreen(Screen.PixivIllust(clickedItem.id)))
                     }
                 }
             )
@@ -148,17 +148,17 @@ private fun IllustPageScreenContent(
                 }
             },
             modifier = Modifier.fillMaxSize(),
-            key = { item, _ -> item.illust_id },
+            key = { item, _ -> item.id },
             contentType = { CONTENT_TYPE_PIXIV_RANKING }
         ) { item, _ ->
-            PixivRankingItem(
+            PixivIllustItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = ContentMargin, vertical = ContentMarginHalf),
                 item = item,
                 onClick = { clickedItem ->
-                    if (clickedItem.illust_id > 0) {
-                        onUiEvent(IllustPageEvent.UI.OnNavScreen(Screen.PixivIllust(clickedItem.illust_id)))
+                    if (clickedItem.id > 0) {
+                        onUiEvent(IllustPageEvent.UI.OnNavScreen(Screen.PixivIllust(clickedItem.id)))
                     }
                 }
             )
@@ -172,7 +172,7 @@ private fun PreviewIllustPageScreen() {
     PreviewColumn(modifier = Modifier.fillMaxSize()) {
         IllustPageScreen(
             uiState = UiState(IllustPageState()),
-            pagingItems = flowOf(PagingData.from(listOf(ComposePixivRankingContent(title = "Preview Illust")))).collectAsLazyPagingItems(),
+            pagingItems = flowOf(PagingData.from(listOf(ComposePixivIllustCard(title = "Preview Illust")))).collectAsLazyPagingItems(),
             onUiEvent = {},
             onActionEvent = {}
         )

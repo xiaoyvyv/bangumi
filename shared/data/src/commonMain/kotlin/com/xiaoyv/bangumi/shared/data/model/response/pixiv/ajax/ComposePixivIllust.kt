@@ -1,9 +1,9 @@
 package com.xiaoyv.bangumi.shared.data.model.response.pixiv.ajax
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.utils.serialization.FlexibleLongSerializer
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
-import com.xiaoyv.bangumi.shared.core.utils.serialization.FlexibleLongSerializer
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.SerialName
@@ -21,6 +21,7 @@ data class ComposePixivIllustSimple(
     @SerialName("restrict") val restrict: Int = 0,
     @SerialName("sl") val sl: Int = 0,
     @SerialName("url") val url: String = "",
+    @SerialName("urls") val urls: SerializeMap<String, String> = persistentMapOf(),
     @SerialName("description") val description: String = "",
     @SerialName("tags") val tags: SerializeList<String> = persistentListOf(),
     @Serializable(FlexibleLongSerializer::class)
@@ -41,7 +42,6 @@ data class ComposePixivIllustSimple(
     @SerialName("visibilityScope") val visibilityScope: Int = 0,
     @SerialName("profileImageUrl") val profileImageUrl: String = "",
     @SerialName("type") val type: String = "",
-    @SerialName("urls") val urls: SerializeMap<String, String> = persistentMapOf(),
     @SerialName("seriesId") val seriesId: Long = 0,
     @SerialName("seriesTitle") val seriesTitle: String = ""
 ) {

@@ -3,9 +3,13 @@ package com.xiaoyv.bangumi.shared.data.repository.impl
 import androidx.compose.ui.graphics.Color
 import androidx.paging.PagingConfig
 import com.xiaoyv.bangumi.shared.core.types.list.ListAlbumType
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchMode
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustSearchRating
+import com.xiaoyv.bangumi.shared.core.types.pixiv.PixivIllustrationSearchType
 import com.xiaoyv.bangumi.shared.core.utils.parseHtmlHexColor
 import com.xiaoyv.bangumi.shared.core.utils.runResult
 import com.xiaoyv.bangumi.shared.core.utils.toApiOffset
+import com.xiaoyv.bangumi.shared.core.utils.toApiPage
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
 import com.xiaoyv.bangumi.shared.data.model.request.list.album.ListAlbumParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeMono
@@ -79,20 +83,22 @@ class ImageRepositoryImpl(
             idSelector = { it.id },
             onLoadData = { key ->
                 val offset = key ?: 0
-                val illusts = client.requestPixivApi {
-                    searchIllust(
-                        word = tag,
-                        searchTarget = "keyword",
-                        offset = offset
-                    ).illusts.orEmpty()
+                val illusts = client.requestPixivAjaxApi {
+                    searchIllustrations(
+                        keyword = tag,
+                        mode = PixivIllustSearchRating.ALL,
+                        searchMode = PixivIllustSearchMode.TAG_TITLE_AND_CAPTION,
+                        type = PixivIllustrationSearchType.ILLUST,
+                        page = offset.toApiPage(pagingConfig.pageSize)
+                    ).body?.illust?.data.orEmpty()
                 }.getOrThrow()
 
                 val items = illusts.map {
                     ComposeGallery(
                         id = it.id.toString(),
                         type = ListAlbumType.PIVIX,
-                        image = it.imageUrls.medium,
-                        original = it.imageUrls.large,
+                        image = it.url,
+                        original = it.url,
                         width = it.width,
                         height = it.height,
                         count = it.pageCount

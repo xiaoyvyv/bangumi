@@ -48,6 +48,7 @@ data class MonoDetailState(
     @SerialName("comments") val comments: SerializeList<ComposeReply> = persistentListOf(),
 ) {
 
+
     @Composable
     fun rememberTabs() = remember(type) {
         if (type == MonoType.PERSON) {
