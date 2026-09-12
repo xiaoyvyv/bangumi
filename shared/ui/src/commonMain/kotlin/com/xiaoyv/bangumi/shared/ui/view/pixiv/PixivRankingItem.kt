@@ -66,7 +66,8 @@ fun PixivIllustItem(
                 StateImage(
                     model = item.url,
                     contentDescription = item.title,
-                    modifier = Modifier.matchParentSize()
+                    modifier = Modifier.matchParentSize(),
+                    alignment = Alignment.TopCenter,
                 )
 
                 if (isUgoira) {

@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,6 +51,7 @@ import com.xiaoyv.bangumi.shared.ui.component.layout.BgmCollapsingScaffold
 import com.xiaoyv.bangumi.shared.ui.component.layout.rememberCollapsingScaffoldState
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.tab.rememberButtonTypeMenu
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
@@ -294,8 +297,12 @@ private fun PixivIllustScreenContent(
     state: PixivIllustState,
     onUiEvent: (PixivIllustEvent.UI) -> Unit,
 ) {
+    val lazyListState = rememberLazyListState(
+        cacheWindow = LazyLayoutCacheWindow(2f, 3f)
+    )
+
     LazyColumn(
-        state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(),
+        state = rememberScrollUpLazyListState(lazyListState),
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = ContentMargin),
     ) {
