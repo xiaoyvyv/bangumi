@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -300,11 +303,12 @@ private fun PixivIllustScreenContent(
     val lazyListState = rememberLazyListState(
         cacheWindow = LazyLayoutCacheWindow(2f, 3f)
     )
+    val navBottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
     LazyColumn(
         state = rememberScrollUpLazyListState(lazyListState),
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = ContentMargin),
+        contentPadding = PaddingValues(top = ContentMargin, bottom = ContentMargin + navBottomPadding),
     ) {
         if (state.pages.isNotEmpty()) {
             val previewUrls = state.pages.map { page -> page.urls.original.ifBlank { page.urls.regular } }

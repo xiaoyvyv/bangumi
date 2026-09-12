@@ -3,6 +3,7 @@ package com.xiaoyv.bangumi.shared.data.api.client.cookie
 import com.xiaoyv.bangumi.shared.core.utils.defaultJson
 import com.xiaoyv.bangumi.shared.core.utils.printTrace
 import io.ktor.client.plugins.cookies.CookiesStorage
+import io.ktor.client.plugins.cookies.fillDefaults
 import io.ktor.client.plugins.cookies.matches
 import io.ktor.http.Cookie
 import io.ktor.http.Url
@@ -72,7 +73,8 @@ abstract class BaseCookiesStorage : CookiesStorage {
     /**
      * 为不同用途的 CookieStorage 提供必要的默认属性补全策略。
      */
-    protected open fun normalizeCookie(requestUrl: Url, cookie: Cookie): Cookie = cookie
+    protected open fun normalizeCookie(requestUrl: Url, cookie: Cookie): Cookie =
+        cookie.copy(path = cookie.path ?: "/").fillDefaults(requestUrl)
 
     protected abstract fun storedCookieJsons(): List<String?>
 

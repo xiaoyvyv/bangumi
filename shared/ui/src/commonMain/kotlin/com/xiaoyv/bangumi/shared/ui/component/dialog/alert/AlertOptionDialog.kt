@@ -42,7 +42,8 @@ fun <Key : Any> AlertOptionDialog(
                 .height(IntrinsicSize.Min)
                 .clip(AlertDialogDefaults.shape)
                 .background(AlertDialogDefaults.containerColor)
-                .padding(top = 12.dp, bottom = 20.dp)
+                .padding(top = 12.dp, bottom = 20.dp),
+            containerColor = null
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 if (title != null) Text(

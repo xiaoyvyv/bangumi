@@ -7,13 +7,11 @@ import com.xiaoyv.bangumi.shared.core.utils.blankImageUrlRegex
 import com.xiaoyv.bangumi.shared.data.manager.app.UserManager
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.http.encodeURLPath
 import org.koin.mp.KoinPlatform
 
 object ImageInterceptor : Interceptor {
-    private const val DOU_BAN_UA = "api-client/1 com.douban.frodo/7.65.0(277) " +
-            "Android/33 product/coral vendor/Google model/Pixel 4 XL brand/google  rom/android  network/wifi  " +
-            "udid/0643fa6abfd3eaff076ff3ee603211ded11fc344  platform/mobile nd/1"
+    private const val DOU_BAN_UA =
+        "api-client/1 com.douban.frodo/7.133.0(361) Android/36  udid/1741fb3b9fbeccd7ab183ae025c88b0be11b41b5  douban_udid/25066f2ce5455eae4feec44dc5dfe1c3fb0fb873 model/25098PN5AC brand/Xiaomi  rom/miui6  network/wifi  platform/mobile  foldable/0 nd/1 product/pandora vendor/Xiaomi udid/1741fb3b9fbeccd7ab183ae025c88b0be11b41b5"
 
     private const val HOST_PIXIV_IMAGE = "i.pximg.net"
 
@@ -42,7 +40,6 @@ object ImageInterceptor : Interceptor {
                     .newBuilder()
                     .httpHeaders(
                         chain.request.httpHeaders.newBuilder()
-                            .set(HttpHeaders.Referrer, data.encodeURLPath())
                             .set(HttpHeaders.Accept, ContentType.Image.Any.toString())
                             .set(HttpHeaders.UserAgent, DOU_BAN_UA)
                             .build()

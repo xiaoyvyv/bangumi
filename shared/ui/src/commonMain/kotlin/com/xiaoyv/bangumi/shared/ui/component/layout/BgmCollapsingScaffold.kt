@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -138,7 +137,7 @@ fun BgmCollapsingScaffold(
     modifier: Modifier = Modifier,
     state: ScrollState = rememberScrollState(),
     collapsingState: BgmCollapsingScaffoldState = rememberCollapsingScaffoldState(),
-    windowInsets: WindowInsets = WindowInsets.navigationBars,
+    windowInsets: WindowInsets = WindowInsets(0, 0, 0, 0),
     collapse: @Composable BoxScope.(pinPadding: PaddingValues) -> Unit,
     topBar: @Composable (BoxScope.(progress: () -> Float) -> Unit)? = null,
     overlay: @Composable (() -> Unit)? = null,

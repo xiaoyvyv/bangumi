@@ -24,6 +24,7 @@ actual fun SideEffectForStatusBar(darkTheme: Boolean) {
         }
         SideEffect {
             controller.isAppearanceLightStatusBars = !darkTheme
+            controller.isAppearanceLightNavigationBars = !darkTheme
         }
     }
 }

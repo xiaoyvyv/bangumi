@@ -1,12 +1,18 @@
 package com.xiaoyv.bangumi.shared.data.api.client.cookie
 
 import com.xiaoyv.bangumi.shared.libnative.System
+import io.ktor.client.plugins.cookies.fillDefaults
+import io.ktor.http.Cookie
+import io.ktor.http.Url
 
 /**
  * 主业务 API 使用的持久化 CookieStorage。
  */
 class ApiCookiesStorage : BaseCookiesStorage() {
     private val queries = System.database.appCookieQueries
+
+    override fun normalizeCookie(requestUrl: Url, cookie: Cookie): Cookie =
+        cookie.copy(path = cookie.path ?: "/").fillDefaults(requestUrl)
 
     override fun storedCookieJsons(): List<String?> =
         queries.selectAll().executeAsList().map { it.cookie }

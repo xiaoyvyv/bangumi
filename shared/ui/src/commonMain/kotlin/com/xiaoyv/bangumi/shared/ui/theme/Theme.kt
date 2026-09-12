@@ -18,6 +18,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -126,6 +127,7 @@ fun BgmAppTheme(
     minWidthDp: Dp = 375.dp,
     darkTheme: Boolean = currentInDarkTheme(),
     modifier: Modifier = Modifier,
+    containerColor: Color? = MaterialTheme.colorScheme.background,
     content: @Composable BoxScope.() -> Unit,
 ) = MinWidthDensityProvider(minWidthDp) {
     SideEffectForStatusBar(darkTheme)
@@ -149,7 +151,7 @@ fun BgmAppTheme(
                 }
             ) {
                 Box(
-                    modifier = modifier,
+                    modifier = if (containerColor == null) modifier else modifier.background(containerColor),
                     content = content
                 )
             }
