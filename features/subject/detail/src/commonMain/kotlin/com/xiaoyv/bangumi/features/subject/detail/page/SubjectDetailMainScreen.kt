@@ -439,7 +439,7 @@ private fun SubjectDetailPreview(
             .padding(vertical = ContentMargin),
         title = stringResource(Res.string.global_preview),
         action = stringResource(Res.string.subject_action_more),
-        onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnSelectedPageType(SubjectDetailTab.INDEX)) }
+        onActionClick = { onUiEvent(SubjectDetailEvent.UI.OnSelectedPageType(SubjectDetailTab.PREVIEW)) }
     ) {
         LazyRow(
             modifier = Modifier
