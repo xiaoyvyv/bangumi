@@ -3,8 +3,31 @@ package com.xiaoyv.bangumi.shared.ui.theme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalInspectionMode
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 val typography = Typography()
+
+/**
+ * 将 Miuix 字体角色桥接给尚未替换的 Material 组件。
+ */
+@Composable
+internal fun miuixAppTypography(): Typography = Typography(
+    displayLarge = typography.displayLarge,
+    displayMedium = typography.displayMedium,
+    displaySmall = typography.displaySmall,
+    headlineLarge = MiuixTheme.textStyles.title1,
+    headlineMedium = MiuixTheme.textStyles.title2,
+    headlineSmall = MiuixTheme.textStyles.title3,
+    titleLarge = MiuixTheme.textStyles.title3,
+    titleMedium = MiuixTheme.textStyles.headline1,
+    titleSmall = MiuixTheme.textStyles.subtitle,
+    bodyLarge = MiuixTheme.textStyles.main,
+    bodyMedium = MiuixTheme.textStyles.body1,
+    bodySmall = MiuixTheme.textStyles.body2,
+    labelLarge = MiuixTheme.textStyles.button,
+    labelMedium = MiuixTheme.textStyles.footnote1,
+    labelSmall = MiuixTheme.textStyles.footnote2,
+)
 
 /*@Composable
 fun loadAppFont(): FontFamily {

@@ -13,13 +13,9 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.LineStyle
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -52,6 +48,7 @@ import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.subjectBrowserSortTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
+import com.xiaoyv.bangumi.shared.ui.view.BgmFilterChip
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -211,26 +208,21 @@ private fun SubjectBrowserScreenContent(
                     }
                 )
 
-                AssistChip(
+                BgmFilterChip(
                     onClick = { yearPickerDialogState.show() },
-                    colors = AssistChipDefaults.assistChipColors(labelColor = MaterialTheme.colorScheme.onSurfaceVariant),
-                    label = {
-                        Text(
-                            text = buildString {
-                                append(stringResource(Res.string.global_date))
-                                append(" ")
+                    label = buildString {
+                        append(stringResource(Res.string.global_date))
+                        append(" ")
 
-                                val year = param.browser.year
-                                val month = param.browser.month
-                                if (year == 0 && month == 0) {
-                                    append(stringResource(Res.string.global_all))
-                                } else {
-                                    if (year > 0) append("$year${stringResource(Res.string.subject_browser_year_unit)}")
-                                    if (month > 0) append("$month${stringResource(Res.string.subject_browser_month_unit)}")
-                                }
-                            }
-                        )
-                    }
+                        val year = param.browser.year
+                        val month = param.browser.month
+                        if (year == 0 && month == 0) {
+                            append(stringResource(Res.string.global_all))
+                        } else {
+                            if (year > 0) append("$year${stringResource(Res.string.subject_browser_year_unit)}")
+                            if (month > 0) append("$month${stringResource(Res.string.subject_browser_month_unit)}")
+                        }
+                    },
                 )
             }
         }

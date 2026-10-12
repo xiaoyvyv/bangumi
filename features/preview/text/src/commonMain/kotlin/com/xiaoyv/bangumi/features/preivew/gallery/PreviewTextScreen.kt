@@ -18,7 +18,7 @@ import androidx.compose.material.icons.rounded.Undo
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier

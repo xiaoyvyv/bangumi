@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -121,7 +122,7 @@ fun <T : Any> StateLazyVerticalGrid(
                 columns = columns,
                 state = state,
                 userScrollEnabled = pagingItems.itemCount > 0,
-                contentPadding = contentPadding,
+                contentPadding = floatingContentPadding(contentPadding),
                 reverseLayout = reverseLayout,
                 verticalArrangement = verticalArrangement,
                 horizontalArrangement = horizontalArrangement,

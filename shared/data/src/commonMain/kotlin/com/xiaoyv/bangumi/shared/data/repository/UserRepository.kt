@@ -10,6 +10,7 @@ import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.NextWebLoginParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlocklist
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
@@ -40,6 +41,19 @@ interface UserRepository {
     suspend fun fetchUserHomeInfo(): Result<ComposeHome>
 
     suspend fun fetchUserInfo(username: String): Result<ComposeUser>
+
+    /**
+     * 获取当前账号的绝交用户 ID 列表。
+     */
+    suspend fun fetchUserBlocklist(): Result<ComposeBlocklist>
+
+    /**
+     * 设置与指定用户的绝交关系，返回服务端更新后的完整列表。
+     *
+     * @param username 用户名或用户 ID。
+     * @param blocked 是否绝交，为 false 时取消绝交。
+     */
+    suspend fun submitUserBlock(username: String, blocked: Boolean): Result<ComposeBlocklist>
 
     suspend fun fetchSelfFriends(): Result<List<ComposeFriend>>
 

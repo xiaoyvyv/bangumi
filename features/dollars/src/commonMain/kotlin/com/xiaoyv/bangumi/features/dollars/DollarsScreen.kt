@@ -21,9 +21,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -141,7 +142,8 @@ private fun DollarsScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(listState)
+            state = com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState(listState),
+            contentPadding = floatingContentPadding(),
         ) {
             items(state.items) {
                 DollarsScreenContentItem(it, onUiEvent, onActionEvent)

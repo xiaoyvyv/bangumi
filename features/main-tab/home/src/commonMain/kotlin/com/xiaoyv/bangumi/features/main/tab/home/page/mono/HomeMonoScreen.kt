@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -71,7 +72,7 @@ private fun HomeMonoScreenContent(
         modifier = Modifier.fillMaxSize(),
         state = rememberScrollUpLazyGridState(),
         columns = gridCells,
-        contentPadding = PaddingValues(start = ContentMarginGrid, end = ContentMarginGrid, bottom = ContentMarginGrid),
+        contentPadding = floatingContentPadding(PaddingValues(start = ContentMarginGrid, end = ContentMarginGrid, bottom = ContentMarginGrid)),
         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
         verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
     ) {

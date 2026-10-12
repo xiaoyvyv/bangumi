@@ -15,7 +15,7 @@ import androidx.compose.material.icons.rounded.BookmarkAdded
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
+import com.xiaoyv.bangumi.shared.ui.view.BgmListItem as ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme

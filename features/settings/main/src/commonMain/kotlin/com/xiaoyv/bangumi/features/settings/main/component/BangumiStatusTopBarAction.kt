@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.features.settings.main.component
 
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -89,13 +92,18 @@ fun BangumiStatusTopBarAction(
     val unknownText = stringResource(Res.string.global_unknown)
 
     var expanded by remember { mutableStateOf(false) }
+    val openingFeedback = rememberMenuHapticFeedback()
+    val selectionFeedback = rememberMenuHapticFeedback(HapticFeedbackType.Confirm)
 
     LaunchedEffect(expanded) {
         if (expanded) onActionEvent(SettingsMainEvent.Action.OnFetchBangumiStatus)
     }
 
     Box(modifier = modifier) {
-        IconButton(onClick = { expanded = true }) {
+        IconButton(onClick = {
+            openingFeedback()
+            expanded = true
+        }) {
             Box(modifier = Modifier.size(iconSize)) {
                 val status = data?.status?.takeIf { it.isNotBlank() }
                 val indicatorStatus = if (requestFailed) null else status
@@ -155,6 +163,7 @@ fun BangumiStatusTopBarAction(
 
                             TextButton(
                                 onClick = {
+                                    selectionFeedback()
                                     expanded = false
                                     actionHandler.openInBrowser(WebConstant.URL_BGM_STATUS_WEB)
                                 },

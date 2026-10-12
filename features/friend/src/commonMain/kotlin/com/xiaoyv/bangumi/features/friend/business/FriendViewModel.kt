@@ -10,11 +10,14 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.types.list.ListUserType
+import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserDisplay
 import com.xiaoyv.bangumi.shared.data.repository.UserRepository
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import org.orbitmvi.orbit.syntax.Syntax
@@ -37,9 +40,20 @@ fun koinFriendViewModel(param: ListUserParam): FriendViewModel {
 class FriendViewModel(
     private val userRepository: UserRepository,
     private val param: ListUserParam,
+    private val personalStateStore: PersonalStateStore,
 ) : BaseViewModel<FriendState, FriendSideEffect, FriendEvent.Action>() {
     private val userPager = userRepository.fetchUserPager(param)
     val users = userPager.flow.cachedIn(viewModelScope)
+
+    init {
+        if (param.type == ListUserType.USER_BLOCKLIST) {
+            viewModelScope.launch {
+                personalStateStore.onUserBlocklistUpdated.collect {
+                    if (param.ui.pageMode) userPager.refresh() else refresh(contentLoading = false)
+                }
+            }
+        }
+    }
 
     override fun initBaseState(): UiState<FriendState> = if (param.ui.pageMode) {
         UiState(createInitialState())

@@ -53,8 +53,14 @@ conscrypt = "2.6.3"
 compose-kuiver = "0.4.1"
 mediamp = "0.3.2"
 avifCoder = "3.0.0-alpha07"
+miuix = "0.9.4"
+reorderable = "3.1.0"
 
 [libraries]
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
+miuix-ui = { module = "top.yukonga.miuix.kmp:miuix-ui", version.ref = "miuix" }
+miuix-preference = { module = "top.yukonga.miuix.kmp:miuix-preference", version.ref = "miuix" }
+miuix-icons = { module = "top.yukonga.miuix.kmp:miuix-icons", version.ref = "miuix" }
 gradle-plugin-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin-compose-compiler" }
 gradle-plugin-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 gradle-plugin-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }

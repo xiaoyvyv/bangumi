@@ -174,6 +174,7 @@ private fun SubjectDetailCollection(
 
     BgmAlertDialog(
         state = deleteConfirmDialogState,
+        isDestructive = true,
         title = stringResource(Res.string.collect_cancel_title),
         text = stringResource(Res.string.collect_cancel_message),
         onConfirm = {

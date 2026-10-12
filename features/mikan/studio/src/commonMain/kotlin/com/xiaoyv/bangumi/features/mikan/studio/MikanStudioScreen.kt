@@ -10,9 +10,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
+import com.xiaoyv.bangumi.shared.ui.view.BgmListItem as ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable

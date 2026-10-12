@@ -25,6 +25,7 @@ import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 /**
  * [UserState]
@@ -37,6 +38,8 @@ import kotlinx.serialization.Serializable
 data class UserState(
     @SerialName("username") val username: String = "",
     @SerialName("user") val user: ComposeUser = ComposeUser.Empty,
+    @Transient val isBlocked: Boolean? = null,
+    @Transient val isUpdatingBlock: Boolean = false,
     @SerialName("time_machine") val timeMachine: SerializeList<ComposeSection<ComposeSubject>> = persistentListOf(),
 
     /**

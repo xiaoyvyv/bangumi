@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.shared.ui.component.emoji
 
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
@@ -47,6 +50,7 @@ fun PopupReaction(
     properties: PopupProperties = PopupProperties(focusable = true),
     onClick: (String) -> Unit = {},
 ) {
+    val selectionFeedback = rememberMenuHapticFeedback(HapticFeedbackType.Confirm)
     DropdownMenu(
         expanded = state.expanded,
         onDismissRequest = { state.dismiss() },
@@ -63,6 +67,7 @@ fun PopupReaction(
                 IconButton(
                     modifier = Modifier.resetSize(),
                     onClick = {
+                        selectionFeedback()
                         onClick(it.key)
                         state.dismiss()
                     }

@@ -70,6 +70,11 @@ sealed interface AppEvent {
      * 动态/时间线数据删除事件
      */
     data class TimelineDeleted(val id: Long) : AppEvent
+
+    /**
+     * 绝交列表更新事件，通知列表页和其它用户详情同步关系。
+     */
+    data class UserBlocklistUpdated(val ids: Set<Long>) : AppEvent
 }
 
 /**
@@ -123,6 +128,16 @@ class PersonalStateStore {
     val onMonoUpdated = events.filterIsInstance<AppEvent.MonoUpdated>()
     val onTimelineUpdated = events.filterIsInstance<AppEvent.TimelineUpdated>()
     val onTimelineDeleted = events.filterIsInstance<AppEvent.TimelineDeleted>()
+    val onUserBlocklistUpdated = events.filterIsInstance<AppEvent.UserBlocklistUpdated>()
+
+    /**
+     * 发布服务端确认的绝交列表更新。
+     *
+     * @param ids 当前绝交用户的 ID 集合。
+     */
+    fun emitUserBlocklistUpdated(ids: Set<Long>) {
+        _events.tryEmit(AppEvent.UserBlocklistUpdated(ids))
+    }
 
     /**
      * 发送发布成功事件

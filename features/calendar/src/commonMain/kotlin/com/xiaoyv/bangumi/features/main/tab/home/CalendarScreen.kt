@@ -15,7 +15,8 @@ import androidx.compose.material.icons.rounded.LineStyle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -150,7 +151,7 @@ private fun CalendarScreenPage(
             state = lazyGridState,
             horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf),
-            contentPadding = PaddingValues(ContentMarginGrid)
+            contentPadding = floatingContentPadding(PaddingValues(ContentMarginGrid))
         ) {
             items(sections) {
                 SubjectCardItem(
@@ -189,6 +190,7 @@ private fun CalendarScreenPage(
 
         LazyColumn(
             state = lazyListState,
+            contentPadding = floatingContentPadding(),
             modifier = Modifier.fillMaxSize()
         ) {
             items(sections) {

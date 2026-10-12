@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.rounded.Topic
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
+import com.xiaoyv.bangumi.shared.ui.view.BgmListItem as ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard

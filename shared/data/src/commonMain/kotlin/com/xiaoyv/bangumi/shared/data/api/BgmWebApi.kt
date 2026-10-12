@@ -20,6 +20,7 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import de.jensklingenberg.ktorfit.http.QueryMap
+import de.jensklingenberg.ktorfit.http.Url
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.date.getTimeMillis
@@ -165,6 +166,35 @@ interface BgmWebApi {
      */
     @GET("user/{username}")
     suspend fun fetchUserHomepage(@Path("username", encoded = true) username: String): Document
+
+    /**
+     * 获取隐私设置页面中的绝交表单和取消绝交链接。
+     */
+    @GET("settings/privacy")
+    suspend fun fetchUserPrivacyPage(): Document
+
+    /**
+     * 使用网站的绝交表单，仅提交指定用户的绝交操作。
+     *
+     * @param username 用户名。
+     * @param formhash 当前隐私页面提供的表单校验值。
+     * @param submit 网站绝交表单的提交标记。
+     */
+    @FormUrlEncoded
+    @POST("settings/privacy")
+    suspend fun submitUserBlock(
+        @Field("ignore_user") username: String,
+        @Field("formhash") formhash: String,
+        @Field("submit_ignore") submit: String = "submit_ignore",
+    ): Document
+
+    /**
+     * 请求隐私页面中指定用户的取消绝交链接。
+     *
+     * @param url 从当前登录页面解析得到的同源操作链接。
+     */
+    @GET
+    suspend fun submitUserUnblock(@Url url: String): Document
 
     /**
      * 登录地址

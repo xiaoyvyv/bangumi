@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.shared.ui.view.magnet
 
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -54,6 +56,7 @@ fun MikanMagnetItem(
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
     val actionDialog = rememberAlertDialogState()
+    val openingFeedback = rememberMenuHapticFeedback()
     val scope = rememberCoroutineScope()
     val clipboard = LocalClipboard.current
     val uriHandler = LocalUriHandler.current
@@ -89,7 +92,12 @@ fun MikanMagnetItem(
 
     OutlinedCard(
         modifier = modifier,
-        onClick = { if (checkMode) onCheckedChange(!checked) else actionDialog.show() }
+        onClick = {
+            if (checkMode) onCheckedChange(!checked) else {
+                openingFeedback()
+                actionDialog.show()
+            }
+        }
     ) {
         Row(modifier = Modifier.padding(ContentMargin)) {
             Column(

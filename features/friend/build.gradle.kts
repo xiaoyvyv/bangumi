@@ -9,6 +9,9 @@ kotlin {
     }
 
     sourceSets {
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
         commonMain.dependencies {
             implementation(projects.shared.core)
             implementation(projects.shared.data)

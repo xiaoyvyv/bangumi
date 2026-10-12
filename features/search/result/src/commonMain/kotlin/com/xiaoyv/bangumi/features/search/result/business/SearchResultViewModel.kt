@@ -34,6 +34,8 @@ import com.xiaoyv.bangumi.shared.data.model.request.list.tag.TagSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.TopicSearchBody
 import com.xiaoyv.bangumi.shared.data.model.ui.PageUI
+import com.xiaoyv.bangumi.shared.data.repository.CacheRepository
+import com.xiaoyv.bangumi.shared.data.manager.app.SearchPreferences
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import kotlinx.collections.immutable.persistentListOf
@@ -46,9 +48,13 @@ import kotlinx.collections.immutable.persistentListOf
  */
 class SearchResultViewModel(
     private val args: Screen.SearchResult,
+    cacheRepository: CacheRepository,
 ) : BaseViewModel<SearchResultState, SearchResultSideEffect, SearchResultEvent.Action>() {
+    private val searchPreferences = SearchPreferences(cacheRepository)
+
     override fun createInitialState() = SearchResultState(
         query = args.query,
+        selectedType = searchPreferences.searchType,
         tabs = persistentListOf(
             ComposeTextTab(SearchType.SUBJECT, Res.string.global_subject),
             ComposeTextTab(SearchType.CHARACTER, Res.string.global_character),
@@ -68,7 +74,7 @@ class SearchResultViewModel(
             search = SubjectSearchBody(
                 keyword = args.query,
                 filter = SubjectSearchBody.SubjectSearchFilter(
-                    type = persistentListOf(SubjectType.ANIME),
+                    type = persistentListOf(searchPreferences.subjectType),
                     nsfw = true
                 )
             )
@@ -114,6 +120,7 @@ class SearchResultViewModel(
 
     override fun onEvent(event: SearchResultEvent.Action) {
         when (event) {
+            is SearchResultEvent.Action.OnChangeSearchType -> onChangeSearchType(event.type)
             is SearchResultEvent.Action.OnRefresh -> refresh(event.loading)
             is SearchResultEvent.Action.OnUpdateLayout -> onUpdateLayout(event.ui)
             is SearchResultEvent.Action.OnUpdateSearchSubjectParam -> onUpdateSearchSubjectParam(event.body)
@@ -122,6 +129,11 @@ class SearchResultViewModel(
             is SearchResultEvent.Action.OnUpdateSearchIndexParam -> onUpdateSearchIndexParam(event.body)
             is SearchResultEvent.Action.OnUpdateSearchTagParam -> onUpdateSearchTagParam(event.body)
         }
+    }
+
+    private fun onChangeSearchType(@SearchType type: String) = intent {
+        searchPreferences.searchType = type
+        reduceData { state.copy(selectedType = searchPreferences.searchType) }
     }
 
     private fun onUpdateLayout(ui: PageUI) = intent {
@@ -157,6 +169,7 @@ class SearchResultViewModel(
     }
 
     private fun onUpdateSearchSubjectParam(body: SubjectSearchBody) = intent {
+        body.filter.type?.firstOrNull()?.let { searchPreferences.subjectType = it }
         reduceData { state.copy(subjectParam = state.subjectParam.copy(search = body)) }
     }
 }

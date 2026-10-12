@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.search.result.business
 
+import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.types.SearchType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.IndexSearchBody
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.MonoSearchBody
@@ -22,6 +24,8 @@ sealed class SearchResultEvent {
     }
 
     sealed class Action : SearchResultEvent() {
+        @Immutable
+        data class OnChangeSearchType(@field:SearchType val type: String) : Action()
         data class OnRefresh(val loading: Boolean) : Action()
         data class OnUpdateLayout(val ui: PageUI) : Action()
         data class OnUpdateSearchSubjectParam(val body: SubjectSearchBody) : Action()

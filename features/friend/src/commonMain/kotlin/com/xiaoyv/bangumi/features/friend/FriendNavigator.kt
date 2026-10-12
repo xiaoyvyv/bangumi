@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val friendModule = module {
     viewModel { (param: ListUserParam) ->
-        FriendViewModel(userRepository = get(), param = param)
+        FriendViewModel(userRepository = get(), param = param, personalStateStore = get())
     }
 }

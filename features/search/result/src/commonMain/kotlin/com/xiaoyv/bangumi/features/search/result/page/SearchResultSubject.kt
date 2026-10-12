@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AssistChip
+import com.xiaoyv.bangumi.shared.ui.view.BgmFilterChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -107,9 +107,9 @@ fun SearchResultSubject(
                 onActionEvent = onActionEvent
             )
 
-            AssistChip(
+            BgmFilterChip(
                 onClick = { advanceDialogState.show() },
-                label = { Text(stringResource(Res.string.search_advanced_filter)) }
+                label = stringResource(Res.string.search_advanced_filter),
             )
 
             DropMenuChip(

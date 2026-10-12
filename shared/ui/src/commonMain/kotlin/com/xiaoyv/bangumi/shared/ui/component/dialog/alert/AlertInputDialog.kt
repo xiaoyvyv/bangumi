@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -31,6 +30,11 @@ import com.xiaoyv.bangumi.core_resource.resources.global_cancel
 import com.xiaoyv.bangumi.core_resource.resources.global_confirm
 import com.xiaoyv.bangumi.shared.core.utils.digit
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.isMiuixUi
+import com.xiaoyv.bangumi.shared.ui.view.BgmAlertSurface
+import top.yukonga.miuix.kmp.basic.TextField as MiuixTextField
+import top.yukonga.miuix.kmp.basic.TextButton as MiuixTextButton
+import top.yukonga.miuix.kmp.basic.ButtonDefaults as MiuixButtonDefaults
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -54,33 +58,43 @@ fun BgmAlertInputDialog(
             mutableStateOf(TextFieldValue(data.value, TextRange(data.value.length)))
         }
 
-        AlertDialog(
-            modifier = modifier.padding(WindowInsets.ime.asPaddingValues()),
+        BgmAlertSurface(
+            show = state.showing,
+            modifier = if (isMiuixUi()) modifier else modifier.padding(WindowInsets.ime.asPaddingValues()),
             onDismissRequest = { state.dismiss() },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        state.dismiss()
-                        scope.launch {
-                            delay(200.milliseconds)
-                            onConfirm(data.copy(value = text.text.trim()))
-                        }
-                    },
-                    content = { Text(confirm) }
-                )
+                val onClick: () -> Unit = {
+                    state.dismiss()
+                    scope.launch {
+                        delay(200.milliseconds)
+                        onConfirm(data.copy(value = text.text.trim()))
+                    }
+                }
+                if (isMiuixUi()) {
+                    MiuixTextButton(
+                        text = confirm,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = MiuixButtonDefaults.textButtonColorsPrimary(),
+                        onClick = onClick,
+                    )
+                } else {
+                    TextButton(onClick = onClick, content = { Text(confirm) })
+                }
             },
             dismissButton = cancel?.let {
                 {
-                    TextButton(
-                        onClick = {
-                            state.dismiss()
-                            scope.launch {
-                                delay(200.milliseconds)
-                                onCancel()
-                            }
-                        },
-                        content = { Text(cancel) }
-                    )
+                    val onClick: () -> Unit = {
+                        state.dismiss()
+                        scope.launch {
+                            delay(200.milliseconds)
+                            onCancel()
+                        }
+                    }
+                    if (isMiuixUi()) {
+                        MiuixTextButton(text = cancel, modifier = Modifier.fillMaxWidth(), onClick = onClick)
+                    } else {
+                        TextButton(onClick = onClick, content = { Text(cancel) })
+                    }
                 }
             },
             icon = icon,
@@ -91,7 +105,17 @@ fun BgmAlertInputDialog(
                         Text(text = data.subtitle)
                     }
 
-                    OutlinedTextField(
+                    if (isMiuixUi()) {
+                        MiuixTextField(
+                            modifier = Modifier.focusRequester(focusRequester).fillMaxWidth(),
+                            value = text,
+                            keyboardOptions = KeyboardOptions(keyboardType = if (data.onlyNumber) KeyboardType.Number else KeyboardType.Text),
+                            singleLine = data.singleLine,
+                            minLines = data.minLines,
+                            maxLines = data.maxLines,
+                            onValueChange = { text = if (data.onlyNumber) it.digit(text) else it },
+                        )
+                    } else OutlinedTextField(
                         modifier = Modifier
                             .focusRequester(focusRequester)
                             .fillMaxWidth(),

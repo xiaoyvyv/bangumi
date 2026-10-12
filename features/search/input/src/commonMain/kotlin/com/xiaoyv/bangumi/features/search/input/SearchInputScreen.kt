@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.features.search.input
 
+import com.xiaoyv.bangumi.shared.ui.theme.isMiuixUi
+import com.xiaoyv.bangumi.shared.ui.view.BgmSearchInputBar
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +28,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -107,38 +110,54 @@ private fun SearchInputScreen(
                     .windowInsetsPadding(TopAppBarDefaults.windowInsets)
                     .height(TopAppBarDefaults.TopAppBarExpandedHeight)
             ) {
-                uiState.data.run {
-                    SearchInputBar(
+                if (isMiuixUi()) {
+                    BgmSearchInputBar(
+                        modifier = Modifier.align(Alignment.Center),
+                        query = uiState.data.query.text,
+                        label = stringResource(Res.string.global_search),
+                        searchIcon = BgmIcons.Search,
+                        backIcon = Icons.AutoMirrored.Rounded.ArrowBack,
+                        backLabel = stringResource(Res.string.global_back),
+                        clearLabel = stringResource(Res.string.global_clear),
+                        clearIcon = BgmIcons.Close,
+                        onQueryChange = { onActionEvent(SearchInputEvent.Action.OnQueryChange(it.asTextFieldValue())) },
+                        onSearch = { onActionEvent(SearchInputEvent.Action.OnSearch) },
+                        onBack = { onUiEvent(SearchInputEvent.UI.OnNavUp) },
+                    )
+                } else {
+                    uiState.data.run {
+                        SearchInputBar(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Center),
+                            state = this,
+                            onActionEvent = onActionEvent,
+                        )
+                    }
+
+                    IconButton(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.Center),
-                        state = this,
-                        onActionEvent = onActionEvent,
-                    )
-                }
+                            .align(Alignment.CenterStart)
+                            .padding(start = 4.dp),
+                        onClick = { onUiEvent(SearchInputEvent.UI.OnNavUp) },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = stringResource(Res.string.global_back),
+                        )
+                    }
 
-                IconButton(
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 4.dp),
-                    onClick = { onUiEvent(SearchInputEvent.UI.OnNavUp) },
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = stringResource(Res.string.global_back),
-                    )
-                }
-
-                IconButton(
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 4.dp),
-                    onClick = { onActionEvent(SearchInputEvent.Action.OnSearch) },
-                ) {
-                    Icon(
-                        imageVector = BgmIcons.Search,
-                        contentDescription = stringResource(Res.string.global_search),
-                    )
+                    IconButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 4.dp),
+                        onClick = { onActionEvent(SearchInputEvent.Action.OnSearch) },
+                    ) {
+                        Icon(
+                            imageVector = BgmIcons.Search,
+                            contentDescription = stringResource(Res.string.global_search),
+                        )
+                    }
                 }
             }
         }
@@ -228,6 +247,7 @@ private fun SearchInputHistory(
 
     BgmAlertDialog(
         state = clearHistoryDialogState,
+        isDestructive = true,
         text = stringResource(Res.string.search_clear_history_confirm),
         onConfirm = { onActionEvent(SearchInputEvent.Action.OnClearHistory) },
     )

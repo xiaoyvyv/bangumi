@@ -26,11 +26,18 @@ fun rememberSheetDialogState(
         enabledValues = if (skipPartiallyExpanded) setOf(SheetValue.Hidden, SheetValue.Expanded) else setOf(SheetValue.Hidden, SheetValue.PartiallyExpanded, SheetValue.Expanded),
         confirmValueChange = { if (dragCancelable && ime.getBottom(density) == 0) true else it != SheetValue.Hidden }
     )
-    return remember { BottomSheetDialogState(sheetState, cancelable) }
+    return remember(sheetState, cancelable, dragCancelable, skipPartiallyExpanded) {
+        BottomSheetDialogState(sheetState, cancelable, dragCancelable, skipPartiallyExpanded)
+    }
 }
 
 @Stable
-class BottomSheetDialogState(val sheetState: SheetState, val cancelable: Boolean) {
+class BottomSheetDialogState(
+    val sheetState: SheetState,
+    val cancelable: Boolean,
+    val dragCancelable: Boolean = true,
+    val skipPartiallyExpanded: Boolean = true,
+) {
     var showing by mutableStateOf(false)
         private set
 
@@ -43,7 +50,7 @@ class BottomSheetDialogState(val sheetState: SheetState, val cancelable: Boolean
     }
 
     suspend fun dismissNow() {
-        sheetState.hide()
+        if (sheetState.isVisible) sheetState.hide()
         showing = false
     }
 }

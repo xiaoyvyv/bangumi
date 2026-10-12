@@ -1,6 +1,7 @@
 package com.xiaoyv.bangumi.features.search.result.business
 
 import androidx.compose.runtime.Immutable
+import com.xiaoyv.bangumi.shared.core.types.SearchType
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeList
 import com.xiaoyv.bangumi.shared.data.model.request.list.index.ListIndexParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
@@ -19,6 +20,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 data class SearchResultState(
     val query: String = "",
+    @field:SearchType val selectedType: String = SearchType.SUBJECT,
     val tabs: SerializeList<ComposeTextTab<String>> = persistentListOf(),
     val filterSubjectSort: SerializeList<ComposeTextTab<String>> = persistentListOf(),
 

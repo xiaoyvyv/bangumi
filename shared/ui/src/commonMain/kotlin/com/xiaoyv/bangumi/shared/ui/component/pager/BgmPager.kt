@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -62,9 +63,10 @@ fun rememberPagerState(
     pageCount: () -> Int,
 ): PagerState {
     val pagerState = rememberPagerState(initialPage.coerceAtLeast(0), initialPageOffsetFraction, pageCount)
-    LaunchedEffect(Unit) {
+    val currentOnPageChange by rememberUpdatedState(onPageChange)
+    LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect {
-            onPageChange(it)
+            currentOnPageChange(it)
         }
     }
     return pagerState

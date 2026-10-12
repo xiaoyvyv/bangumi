@@ -404,6 +404,13 @@
     <string name="settings_appearance">外观</string>
     <string name="settings_content">内容</string>
     <string name="settings_deeplink">深度链接</string>
+    <string name="settings_ui_style">界面风格</string>
+    <string name="settings_ui_style_material3">Material 3</string>
+    <string name="settings_ui_style_miuix">Miuix</string>
+    <string name="settings_theme_color">主题色</string>
+    <string name="settings_theme_color_reset">恢复默认粉色</string>
+    <string name="settings_monet_theme">莫奈取色</string>
+    <string name="settings_monet_theme_desc">开启后使用所选主题色生成动态配色</string>
     <string name="settings_theme">主题</string>
     <string name="settings_theme_system">跟随系统</string>
     <string name="settings_theme_light">明亮</string>
@@ -840,6 +847,13 @@
     <string name="action_block_message">确认与该用户绝交？\n绝交后将不再看到用户的所有话题、评论、日志、私信、提醒</string>
     <string name="action_block_error">绝交失败</string>
     <string name="action_block_success">绝交成功</string>
+    <string name="action_unblock">取消绝交</string>
+    <string name="action_unblock_message">确认取消与该用户的绝交关系？</string>
+    <string name="action_unblock_success">已取消绝交</string>
+    <string name="action_unblock_error">取消绝交失败</string>
+    <string name="user_block_form_error">无法读取网站绝交表单</string>
+    <string name="user_block_form_hash_error">无法读取网站表单校验值</string>
+    <string name="user_unblock_link_error">网站取消绝交链接无效</string>
     <string name="action_report">报告疑虑</string>
     <string name="action_report_target">举报</string>
     <string name="action_report_type_user">用户</string>
@@ -1118,6 +1132,7 @@
 
     <!-- 条目模块 -->
     <string name="subject_browser_year_unit">年</string>
+    <string name="subject_browser_date_select">选择日期</string>
     <string name="subject_browser_month_unit">月</string>
     <string name="subject_ep_resource_search">资源检索</string>
 
@@ -1172,4 +1187,9 @@
     <string name="video_paused">暂停中</string>
     <string name="video_brightness">亮度 %1$d%</string>
     <string name="video_volume">音量 %1$d%</string>
+    <string name="settings_home_shortcuts">首页快捷入口</string>
+    <string name="settings_home_shortcuts_sheet">首页快捷入口显示与排序</string>
+    <string name="settings_home_shortcuts_summary">自定义排序或隐藏入口</string>
+    <string name="settings_home_shortcuts_reorder">拖动排序</string>
+    <string name="global_restore">还原</string>
 </resources>

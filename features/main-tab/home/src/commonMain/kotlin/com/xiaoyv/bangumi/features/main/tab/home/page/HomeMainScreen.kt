@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,7 +35,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.calendar_today_title
@@ -58,10 +59,13 @@ import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpLazyListState
 import com.xiaoyv.bangumi.shared.ui.component.space.LayoutGridWidth
 import com.xiaoyv.bangumi.shared.ui.component.text.SectionTitle
-import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.mainHomeActions
+import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
+import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeDrawableTab
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.kts.isExtraSmallScreen
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.theme.typography
 import com.xiaoyv.bangumi.shared.ui.view.subject.SubjectCardItem
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -82,6 +86,11 @@ fun HomeMainScreen(
     onUiEvent: (HomeEvent.UI) -> Unit,
     onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
+    val ui = currentSettings().ui
+    val visibleHomeActions = remember(ui.hiddenHomeShortcuts, ui.homeShortcutOrder) {
+        TabTokens.orderedHomeActions(ui.homeShortcutOrder)
+            .filter { it.type.toString() !in ui.hiddenHomeShortcuts }
+    }
     StateLayout(
         modifier = Modifier.fillMaxSize(),
         uiState = uiState,
@@ -93,13 +102,16 @@ fun HomeMainScreen(
                 .fillMaxSize()
                 .semantics { contentDescription = "home_main_list" },
             state = rememberScrollUpLazyListState(),
+            contentPadding = floatingContentPadding(),
             verticalArrangement = Arrangement.spacedBy(ContentMarginHalf)
         ) {
             item(key = CONTENT_TYPE_BANNER, contentType = CONTENT_TYPE_BANNER) {
                 HomeMainBanner(state, onUiEvent, onActionEvent)
             }
-            item(key = CONTENT_TYPE_ACTION, contentType = CONTENT_TYPE_ACTION) {
-                HomeMainAction(state, onUiEvent, onActionEvent)
+            if (visibleHomeActions.isNotEmpty()) {
+                item(key = CONTENT_TYPE_ACTION, contentType = CONTENT_TYPE_ACTION) {
+                    HomeMainAction(visibleHomeActions, onUiEvent)
+                }
             }
             item(key = CONTENT_TYPE_CALENDAR, contentType = CONTENT_TYPE_CALENDAR) {
                 HomeMainCalendar(state, onUiEvent, onActionEvent)
@@ -146,9 +158,8 @@ fun HomeMainBanner(
 
 @Composable
 fun HomeMainAction(
-    state: HomeState,
+    actions: List<ComposeDrawableTab>,
     onUiEvent: (HomeEvent.UI) -> Unit,
-    onActionEvent: (HomeEvent.Action) -> Unit,
 ) {
     val space = if (isExtraSmallScreen) 16.dp else 24.dp
     val scope = rememberCoroutineScope()
@@ -161,7 +172,7 @@ fun HomeMainAction(
             .fillMaxWidth()
             .padding(ContentMargin),
     ) {
-        mainHomeActions.forEach {
+        actions.forEach {
             val label = stringResource(it.label)
 
             Column(
@@ -230,12 +241,14 @@ fun HomeMainAction(
                     }
                 }
                 Text(
+                    modifier = Modifier.fillMaxWidth(),
                     text = label,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
+                    fontSize = typography.bodySmall.fontSize,
+                    lineHeight = typography.bodySmall.lineHeight,
                     fontWeight = FontWeight.Normal,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    textAlign = TextAlign.Center,
                 )
             }
         }

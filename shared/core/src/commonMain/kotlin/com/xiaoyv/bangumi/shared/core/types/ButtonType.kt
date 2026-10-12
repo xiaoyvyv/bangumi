@@ -6,6 +6,8 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.action_report
+import com.xiaoyv.bangumi.core_resource.resources.action_block
+import com.xiaoyv.bangumi.core_resource.resources.action_unblock
 import com.xiaoyv.bangumi.core_resource.resources.global_add_to_index
 import com.xiaoyv.bangumi.core_resource.resources.global_copy
 import com.xiaoyv.bangumi.core_resource.resources.global_copy_link
@@ -37,12 +39,14 @@ enum class ButtonType(val label: StringResource) {
     CopyNameCn(Res.string.global_copy_name_cn),
     SortDesc(Res.string.global_sort_desc),
     SortAsc(Res.string.global_sort_asc),
-    Delete(Res.string.global_delete);
+    Delete(Res.string.global_delete),
+    Block(Res.string.action_block),
+    Unblock(Res.string.action_unblock);
 
     fun contentColor(colorScheme: ColorScheme): Color {
         return when (this) {
             Report -> colorScheme.error
-            Delete -> colorScheme.error
+            Delete, Block -> colorScheme.error
             else -> colorScheme.onSurface
         }
     }

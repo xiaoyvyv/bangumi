@@ -24,6 +24,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +37,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.action_block
+import com.xiaoyv.bangumi.core_resource.resources.action_block_message
+import com.xiaoyv.bangumi.core_resource.resources.action_unblock
+import com.xiaoyv.bangumi.core_resource.resources.action_unblock_message
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentUser
+import com.xiaoyv.bangumi.shared.data.manager.shared.currentLogin
 import com.xiaoyv.bangumi.core_resource.resources.global_avatar
 import com.xiaoyv.bangumi.core_resource.resources.global_blog
 import com.xiaoyv.bangumi.core_resource.resources.global_collection
@@ -58,6 +66,8 @@ import com.xiaoyv.bangumi.shared.core.utils.formatDate
 import com.xiaoyv.bangumi.shared.ui.component.action.LocalActionHandler
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.chip.DropMenuActionButton
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
+import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.image.ImageColorState
 import com.xiaoyv.bangumi.shared.ui.component.image.StateImage
 import com.xiaoyv.bangumi.shared.ui.component.image.rememberImageColorState
@@ -115,6 +125,18 @@ private fun UserScreen(
     val imageColorState = rememberImageColorState()
     val collapsingState = rememberCollapsingScaffoldState()
     val tabs = uiState.data.rememberTabs()
+    val blockDialogState = rememberAlertDialogState()
+    var pendingBlocked by remember { mutableStateOf(false) }
+    val showRelationship = currentLogin() && uiState.data.user.id != currentUser().id && uiState.data.isBlocked != null
+
+    BgmAlertDialog(
+        state = blockDialogState,
+        title = stringResource(if (pendingBlocked) Res.string.action_block else Res.string.action_unblock),
+        text = stringResource(if (pendingBlocked) Res.string.action_block_message else Res.string.action_unblock_message),
+        confirm = stringResource(if (pendingBlocked) Res.string.action_block else Res.string.action_unblock),
+        isDestructive = pendingBlocked,
+        onConfirm = { onActionEvent(UserEvent.Action.OnChangeBlock(pendingBlocked)) },
+    )
     val initialPage = remember(initialTab, tabs) {
         val idx = tabs.indexOfFirst { it.type == initialTab }
         if (idx >= 0) idx else 0
@@ -158,16 +180,23 @@ private fun UserScreen(
                         val actionHandler = LocalActionHandler.current
 
                         DropMenuActionButton(
-                            options = rememberButtonTypeMenu {
+                            options = rememberButtonTypeMenu(key = isBlocked to showRelationship) {
                                 add(ButtonType.Share)
                                 add(ButtonType.CopyLink)
                                 add(ButtonType.OpenInBrowser)
+                                if (showRelationship) add(if (isBlocked == true) ButtonType.Unblock else ButtonType.Block)
                             }
                         ) { item ->
                             when (item.type) {
                                 ButtonType.Share -> actionHandler.shareContent(user.shareUrl)
                                 ButtonType.OpenInBrowser -> actionHandler.openInBrowser(user.shareUrl)
                                 ButtonType.CopyLink -> actionHandler.copyContent(user.shareUrl)
+                                ButtonType.Block, ButtonType.Unblock -> {
+                                    if (!isUpdatingBlock) {
+                                        pendingBlocked = item.type == ButtonType.Block
+                                        blockDialogState.show()
+                                    }
+                                }
                                 else -> Unit
                             }
                         }

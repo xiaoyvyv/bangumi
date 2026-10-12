@@ -3,6 +3,8 @@ package com.xiaoyv.bangumi.features.user.business
 import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.lifecycle.viewModelScope
 import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.action_block_success
+import com.xiaoyv.bangumi.core_resource.resources.action_unblock_success
 import com.xiaoyv.bangumi.core_resource.resources.user_no_collection_type
 import com.xiaoyv.bangumi.core_resource.resources.user_subject_title
 import com.xiaoyv.bangumi.shared.core.mvi.BaseViewModel
@@ -10,6 +12,8 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiSideEffect
 import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.mvi.reduceData
 import com.xiaoyv.bangumi.shared.core.mvi.reduceError
+import com.xiaoyv.bangumi.shared.core.mvi.postToast
+import com.xiaoyv.bangumi.shared.core.mvi.withActionLoading
 import com.xiaoyv.bangumi.shared.core.types.CollectionType
 import com.xiaoyv.bangumi.shared.core.types.SubjectType
 import com.xiaoyv.bangumi.shared.core.utils.ResultZip2
@@ -59,6 +63,16 @@ class UserViewModel(
                 saveCache()
             }
             .launchIn(viewModelScope)
+
+        personalStateStore.onUserBlocklistUpdated
+            .onEach { event ->
+                intent {
+                    if (state.data.isBlocked != null) {
+                        reduceData { state.copy(isBlocked = state.user.id in event.ids) }
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun initBaseState() = readViewModelCache(
@@ -83,6 +97,7 @@ class UserViewModel(
     override fun onEvent(event: UserEvent.Action) {
         when (event) {
             is UserEvent.Action.OnRefresh -> refresh(contentLoading = event.loading)
+            is UserEvent.Action.OnChangeBlock -> onChangeBlock(event.blocked)
             is UserEvent.Action.OnChangeSubjectTypeFilter -> onChangeSubjectTypeFilter(event.type)
             is UserEvent.Action.OnChangeCollectionTypeFilter -> onChangeCollectionTypeFilter(event.type)
             is UserEvent.Action.OnChangeCollectionSortFilter -> onChangeCollectionSortFilter(event.type)
@@ -95,8 +110,37 @@ class UserViewModel(
             .onSuccess {
                 reduceData { state.copy(user = it) }
 
+                refreshBlockState(it)
+
                 refreshTimeMachine()
             }
+    }
+
+    private suspend fun Syntax<UiState<UserState>, UiSideEffect<UserSideEffect>>.refreshBlockState(user: ComposeUser) {
+        if (!userManager.isLogin || user.id == userManager.userInfo.id) {
+            reduceData { state.copy(isBlocked = null) }
+            return
+        }
+        userRepository.fetchUserBlocklist()
+            .onSuccess { list -> reduceData { state.copy(isBlocked = user.id in list.blocklist) } }
+    }
+
+    private fun onChangeBlock(blocked: Boolean) = intent {
+        val user = state.data.user
+        if (!userManager.isLogin || user.id == userManager.userInfo.id || state.data.isUpdatingBlock) return@intent
+        if (state.data.isBlocked == null || state.data.isBlocked == blocked) return@intent
+        reduceData { state.copy(isUpdatingBlock = true) }
+        try {
+            withActionLoading {
+                userRepository.submitUserBlock(user.username.ifBlank { user.id.toString() }, blocked)
+            }.onSuccess { list ->
+                reduceData { state.copy(isBlocked = user.id in list.blocklist) }
+                personalStateStore.emitUserBlocklistUpdated(list.blocklist.toSet())
+                postToast { getString(if (blocked) Res.string.action_block_success else Res.string.action_unblock_success) }
+            }
+        } finally {
+            reduceData { state.copy(isUpdatingBlock = false) }
+        }
     }
 
     private fun onChangeCollectionSortFilter(type: String) = intent {

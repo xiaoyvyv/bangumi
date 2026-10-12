@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.xiaoyv.bangumi.features.mono.page.MonoPageRoute
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailEvent
 import com.xiaoyv.bangumi.features.subject.detail.business.SubjectDetailState
+import com.xiaoyv.bangumi.shared.core.types.MonoCastType
 import com.xiaoyv.bangumi.shared.core.types.MonoType
 import com.xiaoyv.bangumi.shared.core.types.list.ListMonoType
 import com.xiaoyv.bangumi.shared.data.model.request.list.mono.ListMonoParam
@@ -24,10 +25,10 @@ fun SubjectDetailCharacterScreen(
     BgmChipHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         tabs = subjectCharacterRoleFilters,
-        initialPage = 1
+        initialPage = subjectCharacterRoleFilters.indexOfFirst { it.type == MonoCastType.UNKNOWN }.coerceAtLeast(0)
     ) {
         MonoPageRoute(
-            param = remember {
+            param = remember(state.id, it) {
                 ListMonoParam(
                     ui = PageUI(gridLayout = true),
                     type = ListMonoType.SUBJECT_CHARACTER,

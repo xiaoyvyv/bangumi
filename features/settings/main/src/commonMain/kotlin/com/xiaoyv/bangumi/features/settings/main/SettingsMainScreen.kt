@@ -26,7 +26,7 @@ import androidx.compose.material.icons.rounded.Source
 import androidx.compose.material.icons.rounded.TableBar
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -280,6 +280,7 @@ private fun SettingsMainScreenContent(
                 state = confirmLogoutDialog,
                 title = stringResource(Res.string.settings_logout),
                 text = stringResource(Res.string.settings_logout_desc),
+                isDestructive = true,
                 onConfirm = {
                     onActionEvent(SettingsMainEvent.Action.OnLogout)
                 }

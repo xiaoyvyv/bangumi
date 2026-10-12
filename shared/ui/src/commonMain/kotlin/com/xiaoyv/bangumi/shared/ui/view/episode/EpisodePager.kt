@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.shared.ui.view.episode
 
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+
 import androidx.annotation.IntRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -217,6 +220,7 @@ private fun BoxScope.EpisodeCell(
     val isSplitter = item.splitter != null
     val showTypeBadge = !isSplitter && item.episodeType != EpisodeType.TYPE_MAIN
     var expanded by remember { mutableStateOf(false) }
+    val openingFeedback = rememberMenuHapticFeedback()
 
     Box(
         modifier = Modifier
@@ -224,7 +228,10 @@ private fun BoxScope.EpisodeCell(
             .clip(MaterialTheme.shapes.small)
             .background(if (isSplitter) MaterialTheme.colorScheme.secondaryContainer else buttonColors.containerColor)
             .border(1.dp, if (isSplitter) Color.Transparent else buttonColors.borderColor, MaterialTheme.shapes.small)
-            .clickable(enabled = !isSplitter) { expanded = true },
+            .clickable(enabled = !isSplitter) {
+                openingFeedback()
+                expanded = true
+            },
         contentAlignment = Alignment.Center
     ) {
         if (showTypeBadge) {
@@ -286,6 +293,7 @@ fun EpisodeDropMenu(
     offset: DpOffset = DpOffset(0.dp, 0.dp),
     content: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
+    val selectionFeedback = rememberMenuHapticFeedback(HapticFeedbackType.Confirm)
     DropdownMenu(
         modifier = modifier,
         expanded = expanded,
@@ -308,6 +316,7 @@ fun EpisodeDropMenu(
 
             DropdownMenuItem(
                 onClick = {
+                    selectionFeedback()
                     onDismissRequest()
                     when (it.type) {
                         EpisodeActionMenu.WISH -> onEpisodeChange(listOf(item), CollectionEpisodeType.WISH)
@@ -360,6 +369,7 @@ fun EpisodeDropMenu(
 
         DropdownMenuItem(
             onClick = {
+                selectionFeedback()
                 onDismissRequest()
                 onClickEpisode()
             },

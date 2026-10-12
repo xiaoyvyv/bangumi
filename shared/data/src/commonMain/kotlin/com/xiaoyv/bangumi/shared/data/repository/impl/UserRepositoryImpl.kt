@@ -20,6 +20,7 @@ import com.xiaoyv.bangumi.shared.data.model.request.bgm.CreateReportParam
 import com.xiaoyv.bangumi.shared.data.model.request.bgm.NextWebLoginParam
 import com.xiaoyv.bangumi.shared.data.model.request.list.user.ListUserParam
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeAuthToken
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeBlocklist
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeEmptyBody
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposeFriend
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.ComposePage
@@ -63,6 +64,10 @@ class UserRepositoryImpl(
     private val pagingConfig: PagingConfig,
 ) : UserRepository {
 
+    private val blocklistUpdater by lazy {
+        UserBlocklistUpdater(client.nextRelationshipApi, client.nextUserApi, client.bgmWebApi, userParser)
+    }
+
     override fun fetchUserPmConversationPager(): MemoryPagingController<ComposePmConversation, Long> {
         return createMemoryPageLimitPagingController(
             idSelector = { it.id },
@@ -83,6 +88,14 @@ class UserRepositoryImpl(
 
     override suspend fun fetchUserHomeInfo(): Result<ComposeHome> = client.requestNextHomeApi {
         getHome()
+    }
+
+    override suspend fun fetchUserBlocklist(): Result<ComposeBlocklist> = client.requestNextRelationshipApi {
+        getBlocklist()
+    }
+
+    override suspend fun submitUserBlock(username: String, blocked: Boolean): Result<ComposeBlocklist> = runResult {
+        blocklistUpdater.update(username, blocked)
     }
 
     override suspend fun submitReport(
@@ -117,9 +130,14 @@ class UserRepositoryImpl(
             }
 
             ListUserType.USER_BLOCKLIST -> {
-                client.nextRelationshipApi.getBlocklist().blocklist
-                    .map { id -> ComposeUserDisplay(user = ComposeUser(id = id, nickname = "ID:$id")) }
-                    .let { ComposePage(result = it, total = it.size) }
+                val ids = client.nextRelationshipApi.getBlocklist().blocklist
+                val users = ids.drop(offset).take(limit).map { id ->
+                    val user = client.requestNextUserApi { getUser(id.toString()) }.getOrElse {
+                        ComposeUser(id = id, username = id.toString(), nickname = "ID:$id")
+                    }
+                    ComposeUserDisplay(user = user)
+                }
+                ComposePage(result = users, total = ids.size)
             }
 
             ListUserType.GROUP_MEMBER -> {

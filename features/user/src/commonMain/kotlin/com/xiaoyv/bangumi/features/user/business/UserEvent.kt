@@ -19,6 +19,7 @@ sealed class UserEvent {
 
     sealed class Action : UserEvent() {
         data class OnRefresh(val loading: Boolean) : Action()
+        data class OnChangeBlock(val blocked: Boolean) : Action()
 
         data class OnChangeSubjectTypeFilter(@field:SubjectType val type: Int) : Action()
         data class OnChangeCollectionTypeFilter(@field:CollectionType val type: Int) : Action()

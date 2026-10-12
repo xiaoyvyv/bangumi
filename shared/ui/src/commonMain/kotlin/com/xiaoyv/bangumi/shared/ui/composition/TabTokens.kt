@@ -101,6 +101,8 @@ import com.xiaoyv.bangumi.core_resource.resources.settings_privacy_scope_none
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_dark
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_light
 import com.xiaoyv.bangumi.core_resource.resources.settings_theme_system
+import com.xiaoyv.bangumi.core_resource.resources.settings_ui_style_material3
+import com.xiaoyv.bangumi.core_resource.resources.settings_ui_style_miuix
 import com.xiaoyv.bangumi.core_resource.resources.timeline_friend_title
 import com.xiaoyv.bangumi.core_resource.resources.timeline_status
 import com.xiaoyv.bangumi.core_resource.resources.timeline_timeline
@@ -144,6 +146,7 @@ import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingUiStyle
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupMemberRole
 import com.xiaoyv.bangumi.shared.data.model.emnu.GroupSortType
@@ -357,6 +360,19 @@ object TabTokens {
         createFeature(FeatureType.TYPE_PIXIV, Res.drawable.ic_pixiv),
     )
 
+    /**
+     * 按用户保存的顺序排列首页快捷入口，未出现的入口排在后面。
+     *
+     * @param order 已保存的入口 id
+     */
+    fun orderedHomeActions(order: List<String>): List<ComposeDrawableTab> {
+        if (order.isEmpty()) return mainHomeActions
+        val byId = mainHomeActions.associateBy { it.type.toString() }
+        val known = order.distinct().mapNotNull { byId[it] }
+        val rest = mainHomeActions.filter { it.type.toString() !in order }
+        return known + rest
+    }
+
     val mainHomeBlogFilters = persistentListOf(
         ComposeTextTab(SubjectType.ANIME, Res.string.global_anime),
         ComposeTextTab(SubjectType.BOOK, Res.string.global_book),
@@ -492,6 +508,11 @@ object TabTokens {
     val settingUpdateChannels = persistentListOf(
         ComposeTextTab(SettingUpdateChannel.RELEASE, labelText = "Release"),
         ComposeTextTab(SettingUpdateChannel.PREVIEW, labelText = "Preview"),
+    )
+
+    val settingUiStyleItems = persistentListOf(
+        ComposeTextTab(SettingUiStyle.MATERIAL3, Res.string.settings_ui_style_material3),
+        ComposeTextTab(SettingUiStyle.MIUIX, Res.string.settings_ui_style_miuix),
     )
 
     val settingThemeItems = persistentListOf(

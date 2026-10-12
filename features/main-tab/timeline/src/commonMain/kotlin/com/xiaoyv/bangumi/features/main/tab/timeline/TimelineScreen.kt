@@ -6,7 +6,7 @@ import androidx.compose.material.icons.rounded.Create
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,6 +37,8 @@ import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens.timelineTabs
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
+import com.xiaoyv.bangumi.shared.ui.view.BgmFloatingActionButton
+import com.xiaoyv.bangumi.core_resource.resources.timeline_add_publish
 import com.xiaoyv.bangumi.shared.ui.theme.PreviewColumn
 import org.jetbrains.compose.resources.stringResource
 import org.orbitmvi.orbit.compose.collectAsState
@@ -90,18 +92,23 @@ private fun TimelineScreen(
                         IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.SearchInput())) }) {
                             Icon(BgmIcons.Search, contentDescription = null)
                         }
-                        IconButton(onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.PublishMain(PublishPostType.TIMELINE_STATUS))) }) {
-                            Icon(BgmIcons.Create, contentDescription = null)
-                        }
                         DropMenuActionButton(
                             options = uiState.data.actions,
+                            current = state.selectedMode,
                             onOptionClick = { mode ->
                                 onActionEvent(TimelineEvent.Action.OnChangeTimeline(mode.type))
                             }
                         )
                     }
                 )
-            }
+            },
+            floatingActionButton = {
+                BgmFloatingActionButton(
+                    onClick = { onUiEvent(TimelineEvent.UI.OnNavScreen(Screen.PublishMain(PublishPostType.TIMELINE_STATUS))) },
+                ) {
+                    Icon(BgmIcons.Create, contentDescription = stringResource(Res.string.timeline_add_publish))
+                }
+            },
         ) {
             TimelineScreenContent(
                 modifier = Modifier.padding(it),

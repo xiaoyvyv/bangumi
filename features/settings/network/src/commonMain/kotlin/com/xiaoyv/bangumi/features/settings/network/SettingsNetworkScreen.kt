@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -131,6 +131,7 @@ private fun SettingsNetworkScreenContent(
 
             BgmAlertDialog(
                 state = changeBgmHostDialog,
+                isDestructive = true,
                 title = stringResource(Res.string.settings_domain_bgm_change_title),
                 text = stringResource(Res.string.settings_domain_bgm_change_desc),
                 onConfirm = {

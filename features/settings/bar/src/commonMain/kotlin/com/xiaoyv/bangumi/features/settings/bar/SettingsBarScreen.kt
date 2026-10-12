@@ -5,15 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpScrollState as rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -36,13 +33,10 @@ import com.xiaoyv.bangumi.shared.core.mvi.UiState
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.data.manager.shared.currentSettings
 import com.xiaoyv.bangumi.shared.ui.component.bar.BgmLargeTopAppBar
-import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertOptionDialog
-import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.rememberAlertDialogState
+import androidx.compose.material3.TopAppBarDefaults
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingContainer
-import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItem
-import com.xiaoyv.bangumi.shared.ui.component.settings.SettingItemTrailing
 import com.xiaoyv.bangumi.shared.ui.component.settings.SettingOptionItem
 import com.xiaoyv.bangumi.shared.ui.composition.TabTokens
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
@@ -82,7 +76,7 @@ private fun SettingsBarScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Scaffold(
+    BgmScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -128,30 +122,24 @@ private fun SettingsBarScreenContent(
             )
         }
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_bar_boot)) }) {
-            val chooseDefaultTabDialogState = rememberAlertDialogState()
-            AlertOptionDialog(
-                title = stringResource(Res.string.settings_bar_boot_default),
-                state = chooseDefaultTabDialogState,
-                items = TabTokens.mainTabIndex,
-                onClick = { tab, index ->
-                    onActionEvent(SettingsBarEvent.Action.OnUpdate(settings.homeTab.copy(defaultSelected = tab.type)))
-                }
-            )
-            SettingItem(
+            SettingOptionItem(
                 title = stringResource(Res.string.settings_bar_boot_default),
                 shape = ListItemDefaults.segmentedShapes(0, 1),
-                trailingContent = {
-                    SettingItemTrailing(
-                        text = TabTokens.mainTabIndex.getOrNull(settings.homeTab.defaultSelected)?.displayText().orEmpty()
+                value = TabTokens.mainTabIndex
+                    .getOrNull(settings.homeTab.defaultSelected)
+                    ?.displayText()
+                    .orEmpty(),
+                items = TabTokens.mainTabIndex,
+                onClick = { selected ->
+                    onActionEvent(
+                        SettingsBarEvent.Action.OnUpdate(
+                            settings.homeTab.copy(defaultSelected = selected)
+                        )
                     )
                 },
-                onClick = { chooseDefaultTabDialogState.show() }
             )
         }
         SettingContainer(label = { Text(text = stringResource(Res.string.settings_bar_tab)) }) {
-            val chooseTabFeatureDialogState = rememberAlertDialogState()
-            var changeTabIndex by remember { mutableStateOf(0) }
-
             val tabs = remember(settings.homeTab) {
                 persistentListOf(
                     settings.homeTab.tab1 to Res.string.settings_bar_1,
@@ -162,37 +150,26 @@ private fun SettingsBarScreenContent(
                 )
             }
 
-
-            AlertOptionDialog(
-                title = stringResource(Res.string.settings_bar_tab),
-                state = chooseTabFeatureDialogState,
-                items = TabTokens.mainTabFeatures,
-                onClick = { tab, index ->
-                    val updated = when (changeTabIndex) {
-                        0 -> settings.homeTab.copy(tab1 = tab.type)
-                        1 -> settings.homeTab.copy(tab2 = tab.type)
-                        2 -> settings.homeTab.copy(tab3 = tab.type)
-                        3 -> settings.homeTab.copy(tab4 = tab.type)
-                        4 -> settings.homeTab.copy(tab5 = tab.type)
-                        else -> settings.homeTab
-                    }
-                    onActionEvent(SettingsBarEvent.Action.OnUpdate(updated))
-                }
-            )
-
             tabs.forEachIndexed { index, tab ->
-                SettingItem(
+                SettingOptionItem(
                     title = stringResource(tab.second),
                     shape = ListItemDefaults.segmentedShapes(index, tabs.size),
-                    trailingContent = {
-                        SettingItemTrailing(
-                            text = TabTokens.mainTabFeatures.find { it.type == tab.first }?.displayText().orEmpty()
-                        )
+                    value = TabTokens.mainTabFeatures
+                        .find { it.type == tab.first }
+                        ?.displayText()
+                        .orEmpty(),
+                    items = TabTokens.mainTabFeatures,
+                    onClick = { selected ->
+                        val updated = when (index) {
+                            0 -> settings.homeTab.copy(tab1 = selected)
+                            1 -> settings.homeTab.copy(tab2 = selected)
+                            2 -> settings.homeTab.copy(tab3 = selected)
+                            3 -> settings.homeTab.copy(tab4 = selected)
+                            4 -> settings.homeTab.copy(tab5 = selected)
+                            else -> settings.homeTab
+                        }
+                        onActionEvent(SettingsBarEvent.Action.OnUpdate(updated))
                     },
-                    onClick = {
-                        changeTabIndex = index
-                        chooseTabFeatureDialogState.show()
-                    }
                 )
             }
         }

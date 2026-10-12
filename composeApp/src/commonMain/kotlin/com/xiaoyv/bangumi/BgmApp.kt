@@ -3,7 +3,9 @@
 package com.xiaoyv.bangumi
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
@@ -30,6 +32,7 @@ import com.xiaoyv.bangumi.core_resource.resources.image_detect
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_character
 import com.xiaoyv.bangumi.core_resource.resources.image_detect_subject
 import com.xiaoyv.bangumi.shared.data.api.client.ApiClient
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.data.manager.app.LocalPersonalState
 import com.xiaoyv.bangumi.shared.data.manager.app.PersonalStateStore
 import com.xiaoyv.bangumi.shared.data.manager.shared.LocalSharedModelStoreOwner
@@ -51,6 +54,7 @@ import com.xiaoyv.bangumi.shared.ui.component.live2d.LocalLive2DSpeechController
 import com.xiaoyv.bangumi.shared.ui.component.live2d.rememberLive2DSpeechState
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Navigator
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
+import com.xiaoyv.bangumi.shared.ui.component.navigation.current
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupLoadingState
 import com.xiaoyv.bangumi.shared.ui.component.popup.LocalPopupTipState
 import com.xiaoyv.bangumi.shared.ui.component.popup.PopupLoadingScreen
@@ -62,6 +66,10 @@ import com.xiaoyv.bangumi.shared.ui.component.scroll.LocalScrollUpState
 import com.xiaoyv.bangumi.shared.ui.component.scroll.rememberScrollUpState
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmAppTheme
+import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
+import com.xiaoyv.bangumi.shared.ui.kts.isWideScreen
+import com.xiaoyv.bangumi.shared.ui.view.navigation.FloatingBottomBarDefaults
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingBottomBarBottomPadding
 import kotlinx.collections.immutable.persistentListOf
 import okio.FileSystem
 import org.jetbrains.compose.resources.stringResource
@@ -154,10 +162,17 @@ fun App() = KoinApplication(configuration = koinConfiguration(declaration = { in
             PopupLoadingScreen(popupLoadingState)
 
             // Toast
+            val snackbarBottom = if (
+                navigator.backStack.current == Screen.Main && !isWideScreen &&
+                sharedState.settings.homeTab.appearance == SettingBottomBarAppearance.LIQUID_GLASS
+            ) {
+                FloatingBottomBarDefaults.Height + floatingBottomBarBottomPadding() + ContentMarginHalf
+            } else {
+                WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 56.dp
+            }
             SnackbarHost(
                 modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(bottom = 56.dp)
+                    .padding(bottom = snackbarBottom)
                     .align(Alignment.BottomCenter),
                 hostState = popupTipState.state,
                 snackbar = { PopupTipContent(it) }

@@ -7,6 +7,8 @@ object SpKey {
     const val KEY_USER_AGREE_PRIVACY = "key_user_agree_privacy"
     const val KEY_USER_FIRST_USE = "key_user_first_use"
     const val KEY_SETTING = "key_setting"
+    const val KEY_LAST_SEARCH_TYPE = "key_last_search_type"
+    const val KEY_LAST_SEARCH_SUBJECT_TYPE = "key_last_search_subject_type"
     const val KEY_LAST_LAUNCH_DATE = "key_last_launch_date"
     const val KEY_LAST_BGM_HOST_CHECK_TIME = "key_last_bgm_host_check_time"
 }

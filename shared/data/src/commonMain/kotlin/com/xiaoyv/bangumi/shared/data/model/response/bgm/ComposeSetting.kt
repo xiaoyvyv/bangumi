@@ -8,6 +8,7 @@ import com.xiaoyv.bangumi.shared.core.types.settings.SettingBottomBarAppearance
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingIndication
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingNavigationAnimation
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingTheme
+import com.xiaoyv.bangumi.shared.core.types.settings.SettingUiStyle
 import com.xiaoyv.bangumi.shared.core.types.settings.SettingUpdateChannel
 import com.xiaoyv.bangumi.shared.core.utils.serialization.SerializeMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -54,8 +55,14 @@ data class ComposeSetting(
     @Serializable
     @Immutable
     data class UIConfig(
+        @field:SettingUiStyle
+        @SerialName("style") val style: Int = SettingUiStyle.MATERIAL3,
+
         @field:SettingTheme
         @SerialName("theme") val theme: Int = SettingTheme.SYSTEM,
+
+        @SerialName("themeColor") val themeColor: Long = DefaultThemeColor,
+        @SerialName("monetTheme") val monetTheme: Boolean = false,
 
         @SerialName("filterDeleteComment") val filterDeleteComment: Boolean = false,
         @SerialName("filterBlockUserComment") val filterBlockUserComment: Boolean = false,
@@ -74,8 +81,12 @@ data class ComposeSetting(
 
         @SerialName("timeMachineGridLimit") val timeMachineGridLimit: Int = 10,
         @SerialName("trackingGridLineLimit") val trackingGridLineLimit: Int = 4,
+        @SerialName("hiddenHomeShortcuts") val hiddenHomeShortcuts: List<String> = emptyList(),
+        @SerialName("homeShortcutOrder") val homeShortcutOrder: List<String> = emptyList(),
     ) {
         companion object {
+            const val DefaultThemeColor: Long = 0xFFB44C71
+
             val Default = UIConfig()
         }
     }

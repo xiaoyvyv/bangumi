@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -96,7 +97,8 @@ private fun HomeGroupHotScreenContent(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        state = rememberScrollUpLazyListState()
+        state = rememberScrollUpLazyListState(),
+        contentPadding = floatingContentPadding(),
     ) {
         stickyHeader(key = "h1", contentType = CONTENT_TYPE_HEADER) {
             SectionTitle(

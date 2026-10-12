@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.friend
 
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -14,7 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ListItem
+import com.xiaoyv.bangumi.shared.ui.view.BgmListItem as ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -131,19 +133,20 @@ private fun FriendScreenPage(
 }
 
 @Composable
-private fun FriendScreenContent(
+internal fun FriendScreenContent(
     state: FriendState,
     onUiEvent: (FriendEvent.UI) -> Unit,
     onActionEvent: (FriendEvent.Action) -> Unit,
+    listState: LazyListState = rememberScrollUpLazyListState(),
 ) {
-    val listState = rememberScrollUpLazyListState()
     var selectedKey by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // 左侧好友列表
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = listState
+            state = listState,
+            contentPadding = floatingContentPadding(),
         ) {
             state.friends.fastForEach { item ->
                 when (item) {

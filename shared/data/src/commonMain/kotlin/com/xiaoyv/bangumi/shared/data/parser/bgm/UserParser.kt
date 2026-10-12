@@ -3,6 +3,10 @@
 package com.xiaoyv.bangumi.shared.data.parser.bgm
 
 import com.fleeksoft.ksoup.nodes.Element
+import com.xiaoyv.bangumi.core_resource.resources.Res
+import com.xiaoyv.bangumi.core_resource.resources.user_block_form_error
+import com.xiaoyv.bangumi.core_resource.resources.user_block_form_hash_error
+import com.xiaoyv.bangumi.core_resource.resources.user_unblock_link_error
 import com.xiaoyv.bangumi.shared.core.utils.debugLog
 import com.xiaoyv.bangumi.shared.core.utils.firsTextNode
 import com.xiaoyv.bangumi.shared.core.utils.hrefId
@@ -17,12 +21,15 @@ import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmMessage
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmMessageDetail
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.pm.ComposePmThread
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUser
+import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserBlockForm
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserEdit
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserServicesEdit
 import com.xiaoyv.bangumi.shared.data.model.response.bgm.user.ComposeUserStats
 import com.xiaoyv.bangumi.shared.data.parser.BaseParser
+import io.ktor.http.Url
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
+import org.jetbrains.compose.resources.getString
 
 /**
  * [UserParser]
@@ -230,6 +237,38 @@ class UserParser : BaseParser() {
         return ComposePrivacy(
             blocklist = blocklist
         )
+    }
+
+    /**
+     * 解析绝交表单及指定用户所在行的取消链接，不复用缓存中的表单校验值。
+     *
+     * @param user 需要修改关系的用户，用用户名和用户 ID 匹配页面链接。
+     */
+    suspend fun Element.fetchUserBlockFormConverted(user: ComposeUser): ComposeUserBlockForm {
+        requireLogin()
+        requireNoError()
+        val form = select("form").firstOrNull { it.select("[name=ignore_user]").isNotEmpty() }
+        requireNotNull(form) { getString(Res.string.user_block_form_error) }
+        val formHash = form.select("[name=formhash]").attr("value")
+        require(formHash.isNotBlank()) { getString(Res.string.user_block_form_hash_error) }
+
+        val identifiers = setOf(user.username, user.id.toString())
+        val row = select("table.settings tr").firstOrNull { row ->
+            row.select("a[href]").any { link ->
+                link.attr("href").substringBefore('?').trimEnd('/').let { href ->
+                    link.closest("tr") == row && href.contains("/user/") && href.substringAfterLast('/') in identifiers
+                }
+            }
+        }
+        val unblockUrl = row?.select("a.tip_i[href]")?.firstOrNull { it.closest("tr") == row }?.let { link ->
+            val base = Url(baseUri())
+            val target = Url(link.absUrl("href"))
+            require(target.protocol == base.protocol && target.host == base.host && target.port == base.port) {
+                getString(Res.string.user_unblock_link_error)
+            }
+            target.toString()
+        }
+        return ComposeUserBlockForm(formHash = formHash, unblockUrl = unblockUrl)
     }
 
     suspend fun Element.sendUpdateUserInfoConverted() {

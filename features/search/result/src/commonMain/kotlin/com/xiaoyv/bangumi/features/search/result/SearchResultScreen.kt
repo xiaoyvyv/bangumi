@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +30,7 @@ import com.xiaoyv.bangumi.shared.ui.component.bar.BgmTopAppBar
 import com.xiaoyv.bangumi.shared.ui.component.layout.state.StateLayout
 import com.xiaoyv.bangumi.shared.ui.component.navigation.Screen
 import com.xiaoyv.bangumi.shared.ui.component.pager.BgmTabHorizontalPager
+import com.xiaoyv.bangumi.shared.ui.component.pager.rememberPagerState
 import com.xiaoyv.bangumi.shared.ui.kts.collectBaseSideEffect
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIcons
 import org.jetbrains.compose.resources.stringResource
@@ -98,6 +99,15 @@ private fun SearchResultScreenContent(
     BgmTabHorizontalPager(
         modifier = Modifier.fillMaxSize(),
         tabs = state.tabs,
+        pagerState = rememberPagerState(
+            initialPage = state.tabs.indexOfFirst { it.type == state.selectedType }.coerceAtLeast(0),
+            onPageChange = { index ->
+                state.tabs.getOrNull(index)?.let {
+                    onActionEvent(SearchResultEvent.Action.OnChangeSearchType(it.type))
+                }
+            },
+            pageCount = { state.tabs.size },
+        ),
     ) {
         when (state.tabs[it].type) {
             SearchType.SUBJECT -> SearchResultSubject(state, onUiEvent, onActionEvent)

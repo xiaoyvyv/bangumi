@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import com.xiaoyv.bangumi.shared.ui.view.navigation.floatingContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -312,7 +313,7 @@ private fun <T : Any> StateLazyLayoutImpl(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     state = state as LazyListState,
-                    contentPadding = contentPadding,
+                    contentPadding = floatingContentPadding(contentPadding),
                     reverseLayout = reverseLayout,
                     userScrollEnabled = userScrollEnabled,
                     verticalArrangement = listVerticalArrangement,
@@ -347,7 +348,7 @@ private fun <T : Any> StateLazyLayoutImpl(
                     modifier = Modifier.fillMaxSize(),
                     columns = columns,
                     state = state as LazyStaggeredGridState,
-                    contentPadding = contentPadding,
+                    contentPadding = floatingContentPadding(contentPadding),
                     userScrollEnabled = userScrollEnabled,
                     reverseLayout = reverseLayout,
                     horizontalArrangement = gridHorizontalArrangement,

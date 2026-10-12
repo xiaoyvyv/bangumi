@@ -3,7 +3,7 @@ package com.xiaoyv.bangumi.features.topic.page
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.ui.Modifier
 import com.xiaoyv.bangumi.features.topic.page.business.TopicPageViewModel
 import com.xiaoyv.bangumi.shared.data.model.request.list.topic.ListTopicParam

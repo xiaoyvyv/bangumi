@@ -1,5 +1,7 @@
 package com.xiaoyv.bangumi.features.topic.detail
 
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -404,6 +406,7 @@ private fun TopicDetailScreenContent(
 
     BgmAlertDialog(
         state = deleteDialogState,
+        isDestructive = true,
         text = stringResource(Res.string.comment_delete_confirm),
         confirm = stringResource(Res.string.global_delete),
         onConfirm = {
@@ -568,6 +571,7 @@ private fun TopicDetailScreenRecationButton(
     onActionEvent: (TopicDetailEvent.Action) -> Unit,
 ) {
     val reactionState = rememberPopupReactionState()
+    val openingFeedback = rememberMenuHapticFeedback()
 
     Box(modifier = modifier) {
         PopupReaction(
@@ -584,7 +588,10 @@ private fun TopicDetailScreenRecationButton(
         )
 
         TextButton(
-            onClick = { reactionState.show() },
+            onClick = {
+                openingFeedback()
+                reactionState.show()
+            },
             colors = ButtonDefaults.textButtonColors(
                 contentColor = Color(0xFFFF80AB),
             )

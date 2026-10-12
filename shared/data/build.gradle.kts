@@ -15,5 +15,10 @@ kotlin {
             implementation(projects.shared.coreNative)
             implementation(projects.shared.dataWorkflow)
         }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.ktor.client.mock)
+        }
     }
 }

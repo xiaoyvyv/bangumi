@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.features.subject.detail.page
 
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -72,6 +75,8 @@ fun SubjectDetailEpisodeScreen(
     val listState = rememberScrollUpLazyListState()
     val totalCount = items.size
     val showSlider = totalCount > 40
+    val openingFeedback = rememberMenuHapticFeedback()
+    val selectionFeedback = rememberMenuHapticFeedback(HapticFeedbackType.Confirm)
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -103,7 +108,10 @@ fun SubjectDetailEpisodeScreen(
                                 subjectType = state.subject.type,
                                 item = episode,
                                 contentPadding = PaddingValues(horizontal = ContentMargin, vertical = 12.dp),
-                                onClick = { expanded = true }
+                                onClick = {
+                                    openingFeedback()
+                                    expanded = true
+                                }
                             )
 
                             EpisodeDropMenu(
@@ -121,6 +129,7 @@ fun SubjectDetailEpisodeScreen(
                                 content = {
                                     DropdownMenuItem(
                                         onClick = {
+                                            selectionFeedback()
                                             expanded = false
                                             onUiEvent(SubjectDetailEvent.UI.OnNavScreen(Screen.Garden(state.magnetQuery(episode))))
                                         },

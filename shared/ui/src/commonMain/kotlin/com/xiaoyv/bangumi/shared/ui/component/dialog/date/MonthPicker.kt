@@ -32,10 +32,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xiaoyv.bangumi.core_resource.resources.Res
 import com.xiaoyv.bangumi.core_resource.resources.global_all
+import com.xiaoyv.bangumi.core_resource.resources.global_cancel
+import com.xiaoyv.bangumi.core_resource.resources.global_confirm
+import com.xiaoyv.bangumi.core_resource.resources.subject_browser_date_select
+import com.xiaoyv.bangumi.core_resource.resources.subject_browser_month_unit
+import com.xiaoyv.bangumi.core_resource.resources.subject_browser_year_unit
 import com.xiaoyv.bangumi.shared.core.utils.currentYear
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.AlertDialogState
 import com.xiaoyv.bangumi.shared.ui.component.dialog.alert.BgmAlertDialog
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.isMiuixUi
+import com.xiaoyv.bangumi.shared.ui.view.MiuixMonthPicker
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -149,6 +156,19 @@ fun MonthPicker(
     wheelHeight: Dp = 200.dp,
     wheelVisibleCount: Int = 5,
 ) {
+    if (isMiuixUi()) {
+        MiuixMonthPicker(
+            show = dialogState.showing,
+            currentMonth = currentMonth,
+            currentYear = currentYear,
+            onConfirm = onConfirm,
+            onDismiss = dialogState::dismiss,
+            wheelHeight = wheelHeight,
+            wheelVisibleCount = wheelVisibleCount,
+        )
+        return
+    }
+
     var month by remember { mutableStateOf(currentMonth) }
     var year by remember { mutableStateOf(currentYear) }
     val years = remember {
@@ -164,7 +184,7 @@ fun MonthPicker(
         title = {
             Text(
                 modifier = Modifier.padding(vertical = 12.dp),
-                text = "选择日期"
+                text = stringResource(Res.string.subject_browser_date_select)
             )
         },
         text = {
@@ -182,7 +202,7 @@ fun MonthPicker(
                     onItemSelected = { year = it },
                     visibleCount = wheelVisibleCount,
                     itemHeight = wheelHeight / wheelVisibleCount,
-                    onItemLabel = { if (it == 0) stringResource(Res.string.global_all) else "${it}年" }
+                    onItemLabel = { if (it == 0) stringResource(Res.string.global_all) else "$it${stringResource(Res.string.subject_browser_year_unit)}" }
                 )
 
                 WheelPicker(
@@ -192,7 +212,7 @@ fun MonthPicker(
                     onItemSelected = { month = it },
                     visibleCount = wheelVisibleCount,
                     itemHeight = wheelHeight / wheelVisibleCount,
-                    onItemLabel = { if (it == 0) stringResource(Res.string.global_all) else "${it}月" }
+                    onItemLabel = { if (it == 0) stringResource(Res.string.global_all) else "$it${stringResource(Res.string.subject_browser_month_unit)}" }
                 )
             }
         },
@@ -205,7 +225,7 @@ fun MonthPicker(
                     dialogState.dismiss()
                 }
             ) {
-                Text(text = "取消")
+                Text(text = stringResource(Res.string.global_cancel))
             }
         },
         confirm = {
@@ -215,7 +235,7 @@ fun MonthPicker(
                     dialogState.dismiss()
                 }
             ) {
-                Text(text = "确定")
+                Text(text = stringResource(Res.string.global_confirm))
             }
         }
     )

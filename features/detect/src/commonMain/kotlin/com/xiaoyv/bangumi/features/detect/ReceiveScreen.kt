@@ -1,5 +1,8 @@
 package com.xiaoyv.bangumi.features.detect
 
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -40,7 +43,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
+import com.xiaoyv.bangumi.shared.ui.view.BgmScaffold as Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -207,6 +210,7 @@ private fun ReceiveScreenContent(
     onActionEvent: (ReceiveEvent.Action) -> Unit,
 ) {
     val modelDialogState = rememberAlertDialogState()
+    val modelOpeningFeedback = rememberMenuHapticFeedback()
 
     AdaptiveTwoPanel(
         modifier = Modifier.fillMaxSize(),
@@ -260,7 +264,10 @@ private fun ReceiveScreenContent(
                     Text(
                         modifier = Modifier
                             .align(Alignment.Start)
-                            .clickWithoutRipped { modelDialogState.show() },
+                            .clickWithoutRipped {
+                                modelOpeningFeedback()
+                                modelDialogState.show()
+                            },
                         text = stringResource(
                             Res.string.image_detect_character_change_model,
                             stringResource(it)
@@ -632,6 +639,8 @@ private inline fun DetectCharacterItem(
 
             item.character?.fastForEach { character ->
                 var expanded by remember { mutableStateOf(false) }
+                val openingFeedback = rememberMenuHapticFeedback()
+                val selectionFeedback = rememberMenuHapticFeedback(HapticFeedbackType.Confirm)
                 val clipboard = LocalClipboard.current
                 val scope = rememberCoroutineScope()
 
@@ -640,7 +649,10 @@ private inline fun DetectCharacterItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(MaterialTheme.shapes.small)
-                            .clickable { expanded = true }
+                            .clickable {
+                                openingFeedback()
+                                expanded = true
+                            }
                             .padding(ContentMarginHalf),
                         text = buildAnnotatedString {
                             withStyle(spanStyle) { append(stringResource(Res.string.image_detect_character_prefix)) }
@@ -659,6 +671,7 @@ private inline fun DetectCharacterItem(
                         state.itemActions.forEachIndexed { index, title ->
                             DropdownMenuItem(
                                 onClick = {
+                                    selectionFeedback()
                                     when (state.itemActions[index].type) {
                                         0 -> onUiEvent(
                                             ReceiveEvent.UI.OnNavScreen(

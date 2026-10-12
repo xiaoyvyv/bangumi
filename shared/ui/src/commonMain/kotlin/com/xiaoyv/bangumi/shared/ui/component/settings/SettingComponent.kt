@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,17 @@ import com.xiaoyv.bangumi.shared.ui.component.divider.BgmHorizontalDivider
 import com.xiaoyv.bangumi.shared.ui.component.tab.ComposeTextTab
 import com.xiaoyv.bangumi.shared.ui.theme.BgmIconsMirrored
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMargin
+import com.xiaoyv.bangumi.shared.ui.theme.isMiuixUi
+import top.yukonga.miuix.kmp.basic.BasicComponent as MiuixBasicComponent
+import top.yukonga.miuix.kmp.basic.BasicComponentDefaults as MiuixBasicComponentDefaults
+import top.yukonga.miuix.kmp.basic.Card as MiuixCard
+import top.yukonga.miuix.kmp.basic.Icon as MiuixIcon
+import top.yukonga.miuix.kmp.basic.Text as MiuixText
+import top.yukonga.miuix.kmp.preference.ArrowPreference as MiuixArrowPreference
+import top.yukonga.miuix.kmp.preference.WindowDropdownPreference as MiuixWindowDropdownPreference
+import com.xiaoyv.bangumi.shared.ui.view.rememberMenuHapticFeedback
+import top.yukonga.miuix.kmp.preference.SwitchPreference as MiuixSwitchPreference
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import com.xiaoyv.bangumi.shared.ui.theme.ContentMarginHalf
 
 /**
@@ -55,6 +67,17 @@ fun SettingContainer(
     label: @Composable (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    if (isMiuixUi()) {
+        MiuixSettingContainer(
+            modifier = modifier,
+            verticalArrangement = verticalArrangement,
+            horizontalAlignment = horizontalAlignment,
+            label = label,
+            content = content,
+        )
+        return
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -94,6 +117,49 @@ fun SettingContainer(
 }
 
 @Composable
+private fun MiuixSettingContainer(
+    modifier: Modifier,
+    verticalArrangement: Arrangement.Vertical,
+    horizontalAlignment: Alignment.Horizontal,
+    label: @Composable (() -> Unit)?,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier),
+        verticalArrangement = verticalArrangement,
+        horizontalAlignment = horizontalAlignment,
+    ) {
+        if (label != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ContentMargin * 2)
+                    .padding(top = ContentMargin, bottom = ContentMarginHalf),
+            ) {
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.bodyMedium.copy(
+                        color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                    ),
+                    content = label,
+                )
+            }
+        }
+        MiuixCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = ContentMargin)
+                .padding(bottom = ContentMargin),
+            insideMargin = PaddingValues(0.dp),
+            content = content,
+        )
+    }
+}
+
+private val DefaultSettingTrailing: @Composable () -> Unit = { SettingItemTrailing() }
+
+@Composable
 fun SettingItem(
     modifier: Modifier = Modifier,
     title: String,
@@ -109,9 +175,7 @@ fun SettingItem(
             )
         }
     },
-    trailingContent: @Composable (() -> Unit)? = {
-        SettingItemTrailing()
-    },
+    trailingContent: @Composable (() -> Unit)? = DefaultSettingTrailing,
     supportingContent: @Composable (() -> Unit)? = null,
     divider: Boolean = false,
     colors: ListItemColors = ListItemDefaults.segmentedColors(
@@ -120,6 +184,37 @@ fun SettingItem(
     textStyle: TextStyle = LocalTextStyle.current,
     onClick: () -> Unit = {},
 ) {
+    if (isMiuixUi()) {
+        val titleColor = if (textStyle.color != Color.Unspecified) {
+            MiuixBasicComponentDefaults.titleColor(color = textStyle.color)
+        } else {
+            MiuixBasicComponentDefaults.titleColor()
+        }
+        if (trailingContent === DefaultSettingTrailing && supportingContent == null) {
+            MiuixArrowPreference(
+                modifier = modifier,
+                title = title,
+                titleColor = titleColor,
+                startAction = leadingContent,
+                onClick = onClick,
+                enabled = enabled,
+            )
+        } else {
+            MiuixBasicComponent(
+                modifier = modifier,
+                title = title,
+                titleColor = titleColor,
+                startAction = leadingContent,
+                endActions = trailingContent?.let { { it() } },
+                bottomAction = supportingContent,
+                onClick = onClick,
+                enabled = enabled,
+            )
+        }
+        if (divider) BgmHorizontalDivider()
+        return
+    }
+
     SegmentedListItem(
         modifier = Modifier
             .padding(vertical = 1.dp)
@@ -154,7 +249,22 @@ fun <T : Any> SettingOptionItem(
     items: SerializeList<ComposeTextTab<T>>,
     onClick: (T) -> Unit,
 ) {
+    if (isMiuixUi()) {
+        val labels = items.map { it.displayText() }
+        MiuixWindowDropdownPreference(
+            title = title,
+            summary = description,
+            items = labels,
+            selectedIndex = labels.indexOf(value),
+            onSelectedIndexChange = { index ->
+                items.getOrNull(index)?.let { onClick(it.type) }
+            },
+        )
+        return
+    }
+
     val dialogState = rememberAlertDialogState()
+    val openingFeedback = rememberMenuHapticFeedback()
 
     AlertOptionDialog(
         title = title,
@@ -170,7 +280,10 @@ fun <T : Any> SettingOptionItem(
         title = title,
         shape = shape,
         trailingContent = { SettingItemTrailing(text = value) },
-        onClick = { dialogState.show() }
+        onClick = {
+            openingFeedback()
+            dialogState.show()
+        }
     )
 }
 
@@ -182,6 +295,16 @@ fun SettingSwitchItem(
     value: Boolean,
     onValueChange: (Boolean) -> Unit,
 ) {
+    if (isMiuixUi()) {
+        MiuixSwitchPreference(
+            checked = value,
+            onCheckedChange = onValueChange,
+            title = title,
+            summary = description,
+        )
+        return
+    }
+
     SettingItem(
         title = title,
         shape = shape,
@@ -228,6 +351,32 @@ fun SettingItemTrailing(
     text: String? = null,
     imageVector: ImageVector? = BgmIconsMirrored.KeyboardArrowRight,
 ) {
+    if (isMiuixUi()) {
+        Row(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (!text.isNullOrBlank()) {
+                MiuixText(
+                    modifier = Modifier.widthIn(max = 120.dp),
+                    text = text,
+                    style = MiuixTheme.textStyles.body2,
+                    color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            if (imageVector != null) {
+                MiuixIcon(
+                    imageVector = imageVector,
+                    contentDescription = text.orEmpty(),
+                )
+            }
+        }
+        return
+    }
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(ContentMarginHalf),

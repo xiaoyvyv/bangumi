@@ -17,6 +17,9 @@ kotlin {
             api(projects.shared.uiLiquid)
             api(projects.shared.uiMaterial3)
             api(projects.shared.uiVideo)
+            api(libs.miuix.ui)
+            api(libs.miuix.preference)
+            api(libs.miuix.icons)
         }
 
         commonTest.dependencies {

@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import com.xiaoyv.bangumi.shared.ui.view.navigation.LocalFloatingContentBottomPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +41,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.dp
+import com.xiaoyv.bangumi.shared.ui.view.navigation.LocalMainBottomBarOverlap
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.abs
@@ -145,6 +149,7 @@ fun BgmCollapsingScaffold(
 ) {
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
+    val bottomBarOverlap = LocalMainBottomBarOverlap.current
 
     var minHeightPx by rememberSaveable { mutableIntStateOf(0) }
     var maxHeightPx by rememberSaveable { mutableIntStateOf(0) }
@@ -343,7 +348,11 @@ fun BgmCollapsingScaffold(
         // --- 测量 Content 区域 ---
         val contentConstraints = constraints.copy(minHeight = 0)
         val contentPlaceable = subcompose(BgmCollapsingSlot.CONTENT) {
-            CompositionLocalProvider(LocalCollapsingPullRefresh provides isAtTop) {
+            CompositionLocalProvider(
+                LocalCollapsingPullRefresh provides isAtTop,
+                LocalMainBottomBarOverlap provides 0.dp,
+                LocalFloatingContentBottomPadding provides maxOf(bottomBarOverlap, LocalFloatingContentBottomPadding.current),
+            ) {
                 Box(modifier = contentDragModifier) {
                     content(scrollProgressLambda)
                 }
@@ -352,7 +361,11 @@ fun BgmCollapsingScaffold(
 
         // --- 测量 Overlay ---
         val overlayPlaceable = subcompose(BgmCollapsingSlot.OVERLAY) {
-            if (overlay != null) overlay()
+            if (overlay != null) {
+                Box(Modifier.fillMaxSize().padding(bottom = bottomBarOverlap)) {
+                    CompositionLocalProvider(LocalMainBottomBarOverlap provides 0.dp) { overlay() }
+                }
+            }
         }.firstOrNull()?.measure(constraints)
 
         // --- 布局 (Layout) ---
